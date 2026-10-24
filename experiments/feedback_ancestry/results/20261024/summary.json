@@ -1,0 +1,468 @@
+{
+  "schema_version": "feedback-ancestry-summary/1",
+  "cases": {
+    "healthy": {
+      "application_completion_ns": 401735,
+      "statistics": {
+        "marked_packets": 77,
+        "notices": 28,
+        "immediate": 16,
+        "periodic": 12,
+        "all_marked_bytes_acked": 28,
+        "all_marked_works_acked": 10,
+        "source_no_outstanding_bytes": 5,
+        "marked_packets_with_other_streams_queued": 71
+      },
+      "by_np_kind": {
+        "immediate": {
+          "notices": 16,
+          "all_marked_bytes_acked": 16,
+          "all_marked_works_acked": 0,
+          "source_no_outstanding_bytes": 0
+        },
+        "periodic": {
+          "notices": 12,
+          "all_marked_bytes_acked": 12,
+          "all_marked_works_acked": 10,
+          "source_no_outstanding_bytes": 5
+        }
+      },
+      "first_ce_sites": {
+        "9:3": {
+          "marked_packets": 10,
+          "with_other_streams_queued": 10,
+          "more_other_than_own_stream_bytes": 6
+        },
+        "8:3": {
+          "marked_packets": 49,
+          "with_other_streams_queued": 46,
+          "more_other_than_own_stream_bytes": 32
+        },
+        "12:4": {
+          "marked_packets": 18,
+          "with_other_streams_queued": 15,
+          "more_other_than_own_stream_bytes": 6
+        }
+      },
+      "critical_works": {
+        "99": {
+          "work": 99,
+          "name": "L1.dispatch.2-0.send",
+          "stream": 8,
+          "ready_ns": 256948,
+          "first_tx_ns": 256948,
+          "first_rate_bps": 18823242187,
+          "in_final_declared_frontier": true,
+          "prior_cnp_count": 3,
+          "last_prior_notice": {
+            "uid": 1891,
+            "batch": "immediate",
+            "generated_ns": 232539,
+            "received_ns": 239354,
+            "before_work_ready_ns": 17594,
+            "members": 1,
+            "work_origins": [
+              {
+                "work": 94,
+                "graph_id": "g0.w1",
+                "name": "L0.combine.2-0.send"
+              }
+            ],
+            "rate_before_bps": 37500000000,
+            "rate_after_bps": 18823242187,
+            "all_marked_bytes_acked": true,
+            "active_works": [
+              94
+            ]
+          }
+        },
+        "108": {
+          "work": 108,
+          "name": "L1.dispatch.0-2.send",
+          "stream": 2,
+          "ready_ns": 247881,
+          "first_tx_ns": 248207,
+          "first_rate_bps": 9411621093,
+          "in_final_declared_frontier": false,
+          "prior_cnp_count": 4,
+          "last_prior_notice": {
+            "uid": 1777,
+            "batch": "immediate",
+            "generated_ns": 221461,
+            "received_ns": 229751,
+            "before_work_ready_ns": 18130,
+            "members": 1,
+            "work_origins": [
+              {
+                "work": 90,
+                "graph_id": "g0.w1",
+                "name": "L0.combine.0-2.send"
+              }
+            ],
+            "rate_before_bps": 18750000000,
+            "rate_after_bps": 9411621093,
+            "all_marked_bytes_acked": true,
+            "active_works": [
+              90
+            ]
+          }
+        },
+        "132": {
+          "work": 132,
+          "name": "L1.combine.2-0.send",
+          "stream": 8,
+          "ready_ns": 326426,
+          "first_tx_ns": 326426,
+          "first_rate_bps": 28161621093,
+          "in_final_declared_frontier": false,
+          "prior_cnp_count": 3,
+          "last_prior_notice": {
+            "uid": 1891,
+            "batch": "immediate",
+            "generated_ns": 232539,
+            "received_ns": 239354,
+            "before_work_ready_ns": 87072,
+            "members": 1,
+            "work_origins": [
+              {
+                "work": 94,
+                "graph_id": "g0.w1",
+                "name": "L0.combine.2-0.send"
+              }
+            ],
+            "rate_before_bps": 37500000000,
+            "rate_after_bps": 18823242187,
+            "all_marked_bytes_acked": true,
+            "active_works": [
+              94
+            ]
+          }
+        }
+      },
+      "cnp_reverse_queue_wait_ns": 14262,
+      "cnp_physical_hops": 142
+    },
+    "live-delayed": {
+      "application_completion_ns": 452119,
+      "statistics": {
+        "marked_packets": 92,
+        "notices": 29,
+        "immediate": 15,
+        "periodic": 14,
+        "all_marked_bytes_acked": 27,
+        "all_marked_works_acked": 11,
+        "source_no_outstanding_bytes": 5,
+        "marked_packets_with_other_streams_queued": 86
+      },
+      "by_np_kind": {
+        "immediate": {
+          "notices": 15,
+          "all_marked_bytes_acked": 13,
+          "all_marked_works_acked": 1,
+          "source_no_outstanding_bytes": 0
+        },
+        "periodic": {
+          "notices": 14,
+          "all_marked_bytes_acked": 14,
+          "all_marked_works_acked": 10,
+          "source_no_outstanding_bytes": 5
+        }
+      },
+      "first_ce_sites": {
+        "12:4": {
+          "marked_packets": 4,
+          "with_other_streams_queued": 2,
+          "more_other_than_own_stream_bytes": 0
+        },
+        "8:4": {
+          "marked_packets": 59,
+          "with_other_streams_queued": 55,
+          "more_other_than_own_stream_bytes": 40
+        },
+        "11:1": {
+          "marked_packets": 22,
+          "with_other_streams_queued": 22,
+          "more_other_than_own_stream_bytes": 16
+        },
+        "13:4": {
+          "marked_packets": 6,
+          "with_other_streams_queued": 6,
+          "more_other_than_own_stream_bytes": 2
+        },
+        "9:3": {
+          "marked_packets": 1,
+          "with_other_streams_queued": 1,
+          "more_other_than_own_stream_bytes": 0
+        }
+      },
+      "critical_works": {
+        "99": {
+          "work": 99,
+          "name": "L1.dispatch.2-0.send",
+          "stream": 8,
+          "ready_ns": 315062,
+          "first_tx_ns": 315062,
+          "first_rate_bps": 7177872145,
+          "in_final_declared_frontier": true,
+          "prior_cnp_count": 5,
+          "last_prior_notice": {
+            "uid": 1804,
+            "batch": "periodic",
+            "generated_ns": 260103,
+            "received_ns": 267924,
+            "before_work_ready_ns": 47138,
+            "members": 10,
+            "work_origins": [
+              {
+                "work": 80,
+                "graph_id": "g0.w1",
+                "name": "L0.dispatch.2-0.send"
+              }
+            ],
+            "rate_before_bps": 14245532833,
+            "rate_after_bps": 7177872145,
+            "all_marked_bytes_acked": true,
+            "active_works": [
+              94
+            ]
+          }
+        },
+        "108": {
+          "work": 108,
+          "name": "L1.dispatch.0-2.send",
+          "stream": 2,
+          "ready_ns": 290745,
+          "first_tx_ns": 290908,
+          "first_rate_bps": 21875000000,
+          "in_final_declared_frontier": false,
+          "prior_cnp_count": 3,
+          "last_prior_notice": {
+            "uid": 884,
+            "batch": "periodic",
+            "generated_ns": 119486,
+            "received_ns": 126310,
+            "before_work_ready_ns": 164435,
+            "members": 12,
+            "work_origins": [
+              {
+                "work": 20,
+                "graph_id": "g0.w0",
+                "name": "L0.combine.0-2.send"
+              }
+            ],
+            "rate_before_bps": 25000000000,
+            "rate_after_bps": 12500000000,
+            "all_marked_bytes_acked": true,
+            "active_works": [
+              20,
+              28
+            ]
+          }
+        },
+        "132": {
+          "work": 132,
+          "name": "L1.combine.2-0.send",
+          "stream": 8,
+          "ready_ns": 346556,
+          "first_tx_ns": 361589,
+          "first_rate_bps": 10711702489,
+          "in_final_declared_frontier": false,
+          "prior_cnp_count": 5,
+          "last_prior_notice": {
+            "uid": 1804,
+            "batch": "periodic",
+            "generated_ns": 260103,
+            "received_ns": 267924,
+            "before_work_ready_ns": 78632,
+            "members": 10,
+            "work_origins": [
+              {
+                "work": 80,
+                "graph_id": "g0.w1",
+                "name": "L0.dispatch.2-0.send"
+              }
+            ],
+            "rate_before_bps": 14245532833,
+            "rate_after_bps": 7177872145,
+            "all_marked_bytes_acked": true,
+            "active_works": [
+              94
+            ]
+          }
+        }
+      },
+      "cnp_reverse_queue_wait_ns": 29277,
+      "cnp_physical_hops": 154
+    },
+    "live-instant": {
+      "application_completion_ns": 463884,
+      "statistics": {
+        "marked_packets": 79,
+        "notices": 27,
+        "immediate": 13,
+        "periodic": 14,
+        "all_marked_bytes_acked": 25,
+        "all_marked_works_acked": 10,
+        "source_no_outstanding_bytes": 4,
+        "marked_packets_with_other_streams_queued": 71
+      },
+      "by_np_kind": {
+        "immediate": {
+          "notices": 13,
+          "all_marked_bytes_acked": 11,
+          "all_marked_works_acked": 0,
+          "source_no_outstanding_bytes": 0
+        },
+        "periodic": {
+          "notices": 14,
+          "all_marked_bytes_acked": 14,
+          "all_marked_works_acked": 10,
+          "source_no_outstanding_bytes": 4
+        }
+      },
+      "first_ce_sites": {
+        "13:4": {
+          "marked_packets": 4,
+          "with_other_streams_queued": 4,
+          "more_other_than_own_stream_bytes": 2
+        },
+        "12:4": {
+          "marked_packets": 8,
+          "with_other_streams_queued": 5,
+          "more_other_than_own_stream_bytes": 2
+        },
+        "8:4": {
+          "marked_packets": 46,
+          "with_other_streams_queued": 43,
+          "more_other_than_own_stream_bytes": 28
+        },
+        "11:1": {
+          "marked_packets": 19,
+          "with_other_streams_queued": 19,
+          "more_other_than_own_stream_bytes": 18
+        },
+        "9:4": {
+          "marked_packets": 2,
+          "with_other_streams_queued": 0,
+          "more_other_than_own_stream_bytes": 0
+        }
+      },
+      "critical_works": {
+        "99": {
+          "work": 99,
+          "name": "L1.dispatch.2-0.send",
+          "stream": 8,
+          "ready_ns": 318390,
+          "first_tx_ns": 318390,
+          "first_rate_bps": 4724120813,
+          "in_final_declared_frontier": false,
+          "prior_cnp_count": 5,
+          "last_prior_notice": {
+            "uid": 1780,
+            "batch": "periodic",
+            "generated_ns": 265098,
+            "received_ns": 273566,
+            "before_work_ready_ns": 44824,
+            "members": 7,
+            "work_origins": [
+              {
+                "work": 80,
+                "graph_id": "g0.w1",
+                "name": "L0.dispatch.2-0.send"
+              }
+            ],
+            "rate_before_bps": 9411621093,
+            "rate_after_bps": 4724120813,
+            "all_marked_bytes_acked": true,
+            "active_works": [
+              94
+            ]
+          }
+        },
+        "108": {
+          "work": 108,
+          "name": "L1.dispatch.0-2.send",
+          "stream": 2,
+          "ready_ns": 320008,
+          "first_tx_ns": 320334,
+          "first_rate_bps": 11022782325,
+          "in_final_declared_frontier": true,
+          "prior_cnp_count": 4,
+          "last_prior_notice": {
+            "uid": 1903,
+            "batch": "immediate",
+            "generated_ns": 280932,
+            "received_ns": 288396,
+            "before_work_ready_ns": 31612,
+            "members": 1,
+            "work_origins": [
+              {
+                "work": 90,
+                "graph_id": "g0.w1",
+                "name": "L0.combine.0-2.send"
+              }
+            ],
+            "rate_before_bps": 21875000000,
+            "rate_after_bps": 11022782325,
+            "all_marked_bytes_acked": true,
+            "active_works": [
+              90
+            ]
+          }
+        },
+        "132": {
+          "work": 132,
+          "name": "L1.combine.2-0.send",
+          "stream": 8,
+          "ready_ns": 395345,
+          "first_tx_ns": 395345,
+          "first_rate_bps": 8239746023,
+          "in_final_declared_frontier": true,
+          "prior_cnp_count": 5,
+          "last_prior_notice": {
+            "uid": 1780,
+            "batch": "periodic",
+            "generated_ns": 265098,
+            "received_ns": 273566,
+            "before_work_ready_ns": 121779,
+            "members": 7,
+            "work_origins": [
+              {
+                "work": 80,
+                "graph_id": "g0.w1",
+                "name": "L0.dispatch.2-0.send"
+              }
+            ],
+            "rate_before_bps": 9411621093,
+            "rate_after_bps": 4724120813,
+            "all_marked_bytes_acked": true,
+            "active_works": [
+              94
+            ]
+          }
+        }
+      },
+      "cnp_reverse_queue_wait_ns": 25598,
+      "cnp_physical_hops": 142
+    }
+  },
+  "totals": {
+    "marked_packets": 248,
+    "notices": 84,
+    "immediate": 44,
+    "periodic": 40,
+    "all_marked_bytes_acked": 80,
+    "all_marked_works_acked": 31,
+    "source_no_outstanding_bytes": 14,
+    "marked_packets_with_other_streams_queued": 228
+  },
+  "new_network_executions": 0,
+  "inference": "delivery confirmation and congestion feedback have distinct meanings; a completed marked packet/work does not invalidate QP congestion feedback",
+  "excluded_claims": [
+    "unsafe CNP discard",
+    "unique counterfactual queue contribution",
+    "hardware calibration",
+    "modern GIN equivalence",
+    "paper novelty"
+  ]
+}

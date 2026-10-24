@@ -1,0 +1,18 @@
+{
+  "platform": "f32586917d3335150596a0d0a28c0549b2eb4823",
+  "native_commit": "68a07f7d5e53bbe97d275af41d4964ad01b864f3",
+  "source_sha256": {
+    "backend/rdma/dcqcn_reference.hh": "b80eac69407c3d1fd670bb2c5da9a27a04b67faa6a83b322f61673b84bbfc60c",
+    "backend/rdma/persistent_streams.cc": "90a894ac5f51ea8b82d9a3eae8342f0b961a81adfce8150d84fb9a291a7f8e10",
+    "third_party/LLMServingSim/astra-sim/extern/network_backend/ns-3/src/point-to-point/model/switch-node.cc": "f8b72cacbfe1d2d228f2acc4d231d9c1ff1168c29a5eba591b293ef3f33add2e",
+    "third_party/LLMServingSim/astra-sim/extern/network_backend/ns-3/src/point-to-point/model/switch-mmu.cc": "95243e0f3f2d15e0ea87990e01731fad92984e8ec9a6bb00872ee6bf50070a25",
+    "third_party/LLMServingSim/astra-sim/extern/network_backend/ns-3/src/point-to-point/model/qbb-net-device.cc": "d05db77ce5a5386c74064f7436f3f2d1ee35f50829a62999354f2c2eaa4ce23b",
+    "backend/rdma/fabric.cc": "3fc5ca6b07c29140328d4e5a31af999ea589fe309fda31d2e9849b3b34e2f8c9"
+  },
+  "paper_sha256": {
+    "dcqcn2015.pdf": "879074a33b78ceb93f9f66d59b217fba9e7621320cc68bc47914747cf5cf31f8",
+    "dcqcn2015.txt": "8e24d0ed58449e08dbee0b985e8f531dc423903fc7bbb7eba1c356a2ae577ef6"
+  },
+  "prior_archive_sha256": "789de4affb50322a30c28b90c6c6d3e19acc8489348ed47263f768b0128f164f",
+  "prior_members_verified": 201
+}

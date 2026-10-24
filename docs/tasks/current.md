@@ -13,7 +13,11 @@
 
 ## 当前范围和预算
 
-当前研究`in_progress`：[拥塞通知来源与应用阶段](../../experiments/feedback_ancestry/protocol.md)，固定平台`f325869`。只读上轮三份修复后结果，沿真实CNP→全部NP标记成员→首次CE位置/实际数据队列→work字节区间核来源，独立重建RP更新；不把前序反馈自动称过期或可丢弃。新300受监控秒/192MiB，单命令60秒/1GiB/地址2GiB/96MiB，网络预算0，不改平台/依赖、不构建下载/GPU/push。
+当前研究`completed`：[拥塞通知来源与应用阶段](../../experiments/feedback_ancestry/protocol.md)，固定平台`f325869`。只读三份已封存结果，逐一核对84个CNP、248个唯一CE包、438个通知物理发送跳及4,874条RP控制记录。80个通知到达时标记字节已ACK，31个对应work全部完成，14个QP已发布字节全部确认；健康条件16个立即通知全部满足“标记字节已ACK”，否定用此条件安全丢弃通知。work108/132分别继承work90/80所产生反馈后的限速；跨阶段状态不证明反馈错误，也不授权重置QP。228个标记点还有其他流排队，只证明同存，不是独立可消除损失。
+
+11类篡改拒绝、原论文式1—4有理数/整数状态核验及13依赖通过；新研究源码根/空cwd三份JSON逐字节一致，无新网络。131成员/19,298,998B证据包压缩3,496,077B，逐成员核验后保存`runs/feedback_ancestry_checkpoint_20261024/`。12份本阶段终态监控累计24.59秒、峰值127.58MiB，原件/恢复/归档/持久/源码加1MiB收据预留计55.45MiB，另预留10秒管理；保持300秒/192MiB与单命令60秒/1GiB/地址2GiB/96MiB、网络预算0，无遗留受监控PID。初版收尾误将3份复制的历史probe计入本阶段，原收据/归档保留，最终按注册命令排除并更正；分析/核验/摘要及实际复算源码未改，无网络重跑。capture未序列化CNP fid，关联依赖实际IP/UID及生成stream/fid；随机标记抽样未重建，不声称完整bit解码或硬件校准。见[入口](../../experiments/feedback_ancestry/README.md)、[核验](../../experiments/feedback_ancestry/results/20261024/verification.json)、[恢复](../../experiments/feedback_ancestry/results/20261024/replay.json)、[收尾](../../experiments/feedback_ancestry/results/20261024/closeout.json)及[中文报告](../reviews/拥塞反馈来源与跨阶段限速_20261024.md)。
+
+下一门槛：先核真实provider的context/QP复用、空闲状态和QoS，按同资源、同信息保留通用调度/恢复强基线；不开发未经依据的“删除旧反馈/按阶段重置QP”。现代推理、匹配校准、独立留出、完整千卡和论文主创新仍缺，整体目标继续`in_progress`。本阶段不改平台/依赖、不构建下载/GPU/push。
 
 当前研究`completed`：[源NIC修复后的完整应用判别](../../experiments/nic_wakeup_effect/protocol.md)，固定平台验收`eaba713`、原生`68a07f7`。三次新网络已关闭，旧三结果只读；原始work/mapping/拓扑逐字节相同、协议/计算/恢复参数保持。健康/延迟/立即改路应用由397.733/446.808/455.794us变为401.735/452.119/463.884us，逆序8.986→11.765us；不能把局部修复当应用加速。work99的29包/57,344B连续且无本段重发，源初始声明速率变低，限速间隔合计增大；立即条件最终最晚前驱由work123改为work132，work99不再在其最终前驱集合中。
 

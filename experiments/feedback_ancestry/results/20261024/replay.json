@@ -1,0 +1,59 @@
+{
+  "passed": true,
+  "archive_sha256": "c4ec1376415f29976c722d5db995e161ba9badbbee6a47c04a7162a644c99f8f",
+  "members_verified": 115,
+  "three_json_reports_byte_identical": true,
+  "new_source_root": true,
+  "empty_cwd": true,
+  "network_executions": 0,
+  "imports": "restored research source only; no old repository/platform/fixtures/tests/native runtime or network",
+  "commands": [
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "experiments.feedback_ancestry.analyze",
+        "--inputs",
+        "/dev/shm/moe-feedback-ancestry-20261024/restored/evidence/inputs",
+        "--output",
+        "/dev/shm/moe-feedback-ancestry-20261024/restored/analysis.json"
+      ],
+      "cwd": "/dev/shm/moe-feedback-ancestry-20261024/restored/empty-cwd",
+      "pythonpath": "/dev/shm/moe-feedback-ancestry-20261024/restored/source",
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "experiments.feedback_ancestry.verify",
+        "--inputs",
+        "/dev/shm/moe-feedback-ancestry-20261024/restored/evidence/inputs",
+        "--analysis",
+        "/dev/shm/moe-feedback-ancestry-20261024/restored/analysis.json",
+        "--output",
+        "/dev/shm/moe-feedback-ancestry-20261024/restored/verification-complete.json"
+      ],
+      "cwd": "/dev/shm/moe-feedback-ancestry-20261024/restored/empty-cwd",
+      "pythonpath": "/dev/shm/moe-feedback-ancestry-20261024/restored/source",
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "experiments.feedback_ancestry.summary",
+        "--analysis",
+        "/dev/shm/moe-feedback-ancestry-20261024/restored/analysis.json",
+        "--output",
+        "/dev/shm/moe-feedback-ancestry-20261024/restored/summary.json"
+      ],
+      "cwd": "/dev/shm/moe-feedback-ancestry-20261024/restored/empty-cwd",
+      "pythonpath": "/dev/shm/moe-feedback-ancestry-20261024/restored/source",
+      "exit_code": 0
+    }
+  ]
+}

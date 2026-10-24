@@ -1,0 +1,96 @@
+{
+  "passed": true,
+  "cases": {
+    "healthy": {
+      "passed": true,
+      "marked_packets": 77,
+      "notices": 28,
+      "cnp_physical_hops": 142,
+      "rp_state_records": 1581,
+      "original_np_partition": true,
+      "queue_data_inventory_and_first_ce": true,
+      "actual_ack_prefixes": true,
+      "rational_alpha_and_integer_rate_oracle": true,
+      "routes": {
+        "passed": true,
+        "enqueues_verified_by_protocol": {
+          "17": 5812,
+          "252": 5812,
+          "255": 114
+        },
+        "local_drop_causes": {},
+        "no_postfailure_tx_on_failed_ports": true,
+        "no_enqueue_timestamp_tie": true,
+        "cnp_identity_scope": "actual IP/UID plus generated stream/fid projection; packet capture does not serialize fid"
+      }
+    },
+    "live-delayed": {
+      "passed": true,
+      "marked_packets": 92,
+      "notices": 29,
+      "cnp_physical_hops": 154,
+      "rp_state_records": 1662,
+      "original_np_partition": true,
+      "queue_data_inventory_and_first_ce": true,
+      "actual_ack_prefixes": true,
+      "rational_alpha_and_integer_rate_oracle": true,
+      "routes": {
+        "passed": true,
+        "enqueues_verified_by_protocol": {
+          "17": 6056,
+          "252": 5615,
+          "253": 336,
+          "255": 125
+        },
+        "local_drop_causes": {
+          "queue_close": 9,
+          "no_live_old_candidate": 21
+        },
+        "no_postfailure_tx_on_failed_ports": true,
+        "no_enqueue_timestamp_tie": true,
+        "cnp_identity_scope": "actual IP/UID plus generated stream/fid projection; packet capture does not serialize fid"
+      }
+    },
+    "live-instant": {
+      "passed": true,
+      "marked_packets": 79,
+      "notices": 27,
+      "cnp_physical_hops": 142,
+      "rp_state_records": 1631,
+      "original_np_partition": true,
+      "queue_data_inventory_and_first_ce": true,
+      "actual_ack_prefixes": true,
+      "rational_alpha_and_integer_rate_oracle": true,
+      "routes": {
+        "passed": true,
+        "enqueues_verified_by_protocol": {
+          "17": 5940,
+          "252": 5626,
+          "253": 279,
+          "255": 115
+        },
+        "local_drop_causes": {
+          "queue_close": 9
+        },
+        "no_postfailure_tx_on_failed_ports": true,
+        "no_enqueue_timestamp_tie": true,
+        "cnp_identity_scope": "actual IP/UID plus generated stream/fid projection; packet capture does not serialize fid"
+      }
+    }
+  },
+  "mutations_rejected": [
+    "notification_member",
+    "first_ce",
+    "queue_bytes",
+    "work_range",
+    "rp_rate",
+    "ack_prefix",
+    "physical_wait",
+    "summary_count",
+    "critical_rate",
+    "critical_frontier",
+    "work_label"
+  ],
+  "network_executions": 0,
+  "limitations": "paper-defined functional recurrence and existing simulation records, not hardware calibration or safe CNP-discard policy"
+}

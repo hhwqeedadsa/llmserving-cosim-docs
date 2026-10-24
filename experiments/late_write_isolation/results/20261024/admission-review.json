@@ -1,0 +1,31 @@
+{
+  "result": {
+    "condition": "fast-shared",
+    "new_committed": false,
+    "old_applied_ns": 6036,
+    "old_completed_ns": 12060,
+    "rejected_new_ns": 100000,
+    "remaining_original_conditions_unexecuted": 4,
+    "source_exhaustion_tested": false,
+    "source_packets": 1,
+    "stale_write_hypothesis_tested": false,
+    "status": "stopped_on_frontend_admission"
+  },
+  "tampering": [
+    {
+      "kind": "invent_committed_new",
+      "reason": "uncommitted rejected final command",
+      "rejected": true
+    },
+    {
+      "kind": "wrong_memory",
+      "reason": "target bytes",
+      "rejected": true
+    },
+    {
+      "kind": "early_callback",
+      "reason": "fabricated observation",
+      "rejected": true
+    }
+  ]
+}

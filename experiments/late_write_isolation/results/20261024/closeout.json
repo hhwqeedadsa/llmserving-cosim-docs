@@ -1,0 +1,40 @@
+{
+  "allocated_bytes_before_receipts": 860160,
+  "apparent_bytes_before_receipts": 434053,
+  "archive_bytes": 51606,
+  "archive_sha256": "f9d19105e43a0b5c7e6e3f7831fd0c4367bd921cfa3ac49212130cacdce3e815",
+  "completed_matrix": false,
+  "conservative_nested_monitored_seconds": 3.987950252369046,
+  "libraries_unchanged": 8,
+  "limit_bytes": 67108864,
+  "limit_monitored_seconds": 300,
+  "monitor_statuses": {
+    "child_failed": 4,
+    "completed": 7
+  },
+  "monitors": 11,
+  "monitors_paths": [
+    "/dev/shm/moe-late-write-20261024/admission-monitor/probe.json",
+    "/dev/shm/moe-late-write-20261024/checkpoint-monitor/probe.json",
+    "/dev/shm/moe-late-write-20261024/gate-driver-monitor/probe.json",
+    "/dev/shm/moe-late-write-20261024/offline-monitor/probe.json",
+    "/dev/shm/moe-late-write-20261024/persist-monitor/probe.json",
+    "/dev/shm/moe-late-write-20261024/restore-monitor/probe.json",
+    "/dev/shm/moe-late-write-20261024/safe-driver-monitor/probe.json",
+    "/dev/shm/moe-late-write-20261024/stop-review-monitor/probe.json",
+    "/dev/shm/moe-late-write-20261024/monitors/fast-shared/probe.json",
+    "/dev/shm/moe-late-write-20261024/monitors/safe-late-isolated/probe.json",
+    "/dev/shm/moe-late-write-20261024-prepare-monitor/probe.json"
+  ],
+  "native_hash_unchanged": true,
+  "network_reruns": 0,
+  "offline_bytes_identical": true,
+  "peak_sampled_rss_bytes": 416223232,
+  "platform_sources_unchanged": 27,
+  "receipt_allowance_bytes": 65536,
+  "remaining_live_pids": [],
+  "root_free_bytes": 84614426624,
+  "schema_version": "late-write-stopped-closeout/1",
+  "source_exhaustion_or_stale_overwrite_proven": false,
+  "tmpfs_free_bytes": 257435455488
+}

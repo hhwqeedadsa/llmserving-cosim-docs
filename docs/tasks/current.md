@@ -13,6 +13,8 @@
 
 ## 当前范围和预算
 
+[失败后晚到写入研究已负面收尾](../../experiments/late_write_isolation/README.md)，平台固定`2cfbaf8`且27份平台源码/程序/8库身份保持。首个fast-shared漏写既存副作用依赖，100us新写被Python拒绝，原生记录控制器EOF；旧写正常6036ns应用/12060ns完成。原矩阵停止、4条件未执行。[修订](../../experiments/late_write_isolation/amendment.md)首个独立槽条件又在建网时因PFC headroom拒绝：交换机8需9,503,884B>8,388,608B，无回调/数据包/result，另一修订条件未执行。两次失败不能支持覆盖、源耗尽或安全策略收益；没有放宽保护、扩容或重跑。独立实包/回调/内存核验及3类篡改拒绝完成；51,606B离线包在`runs/late_write_isolation_checkpoint_20261024/`，新源码根/空cwd复算逐字节一致。11份监控（4个child_failed含两层嵌套）保守累计3.99秒、峰值396.94MiB，原件/恢复/持久包分配块860,160B+64KiB收据预留；300秒/64MiB、每命令60秒/1GiB/2GiB/16MiB及磁盘预留保持，无遗留PID。见[核验](../../experiments/late_write_isolation/results/20261024/stop-review.json)及[收尾](../../experiments/late_write_isolation/results/20261024/closeout.json)。下一项独立平台改进为启动前联合检查拓扑延迟/带宽/交换机容量，不把输入错误当研究发现或论文贡献。
+
 从`8ddd2c6`完成[有界复制型事务缓冲](bounded_copied_buffers_spec.md)平台增量：注册窗口、每源重传副本、累计目标请求缓存和本地copy快照分别限额；实际完整ACK清空副本并驱动同源背压，失败资源与默认完整结果保持。9项新功能/1项旧对照、10类原生拒绝、7项新单元及34项既有事务检查、4组相关流程和13固定依赖检查通过。故障规则误填源node0的两次执行保留为诊断，其中一次NACK断言失败；只修正接收node4后执行tail/middle两条件，各实际drop一次，middle实收NACK，未重跑不受影响网络或扩限。独立重放全部12份实际结果、76次源发送/24次目标副作用，3类篡改被拒绝。1012成员检查点含两入口/8固定库，在新源码根/空cwd的2次公开实网与离线审计复算一致；4类恶意恢复输入在创建输出目录前被拒绝。持久压缩包12,210,070B在`runs/bounded_buffers_checkpoint_20261024/`，见[验收](../../fixtures/bounded_buffers/README.md)、[恢复](../../fixtures/bounded_buffers/recovery.json)、[收尾](../../fixtures/bounded_buffers/closeout.json)及[报告](../reviews/有界复制缓冲与实际ACK回收_20261024.md)。
 
 本阶段62份原始监控的嵌套保守累计117.68秒（不是日历wall），原件/恢复/归档/持久副本分配块约124.56MiB，峰值采样632.55MiB，无受监控进程遗留；600秒/256MiB、每命令60秒/1GiB/地址2GiB/64MiB及tmpfs8GiB/根分区64MiB预留保持。5布局消费者/3入口增量构建，旧库/旧程序及已构建源码身份保持；无安装下载/GPU/依赖变化或旧Prefill/千卡失败/研究矩阵重跑，仅本地提交、不push。缓存保留至会话销毁，仍有操作数上限；命名内容限额不等于总RSS/HBM，不是论文机制贡献。

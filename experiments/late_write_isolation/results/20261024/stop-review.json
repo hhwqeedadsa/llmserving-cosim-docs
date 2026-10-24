@@ -1,0 +1,72 @@
+{
+  "amended_conditions_complete": false,
+  "first_case": {
+    "condition": "fast-shared",
+    "new_committed": false,
+    "old_applied_ns": 6036,
+    "old_completed_ns": 12060,
+    "rejected_new_ns": 100000,
+    "remaining_original_conditions_unexecuted": 4,
+    "source_exhaustion_tested": false,
+    "source_packets": 1,
+    "stale_write_hypothesis_tested": false,
+    "status": "stopped_on_frontend_admission"
+  },
+  "monitors": [
+    {
+      "case": "fast-shared",
+      "status": "child_failed",
+      "wall_seconds": 0.6569644454866648
+    },
+    {
+      "case": "safe-late-isolated",
+      "status": "child_failed",
+      "wall_seconds": 0.6531624682247639
+    }
+  ],
+  "next_action": "frontload joint topology/protocol capacity checks; redesign admissible boundary tests separately",
+  "original_conditions_complete": false,
+  "reason": "experiment inputs omitted existing effect-order proof and exceeded fixed MMU headroom capacity; no platform protection weakened, no resource increase or network rerun",
+  "safety_baseline_performance_evaluated": false,
+  "schema_version": "late-write-stopped-study/1",
+  "second_case": {
+    "callbacks": 0,
+    "invalid_switches": [
+      {
+        "admissible": false,
+        "buffer_bytes": 8388608,
+        "headroom_bytes": 9487500,
+        "node": 8,
+        "ports": [
+          {
+            "headroom_bytes": 9375000,
+            "link_id": 0,
+            "port": 1
+          },
+          {
+            "headroom_bytes": 37500,
+            "link_id": 1,
+            "port": 2
+          },
+          {
+            "headroom_bytes": 37500,
+            "link_id": 8,
+            "port": 3
+          },
+          {
+            "headroom_bytes": 37500,
+            "link_id": 9,
+            "port": 4
+          }
+        ],
+        "reserve_bytes": 16384
+      }
+    ],
+    "name": "safe-late-isolated",
+    "result_json_produced": false,
+    "source_packets": 0,
+    "status": "native_construction_rejected"
+  },
+  "source_exhaustion_proven": false,
+  "stale_overwrite_proven": false
+}

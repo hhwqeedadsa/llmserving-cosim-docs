@@ -1,0 +1,1232 @@
+{
+  "schema_version": "nic-wakeup-effect-summary/1",
+  "new_networks": 3,
+  "immutable_old_results": 3,
+  "cases": {
+    "old-healthy": {
+      "application_completion_ns": 397733,
+      "physical_finish_ns": 401871,
+      "source_payload_bytes": 2609152,
+      "unique_payload_bytes": 2609152,
+      "repeated_payload_bytes": 0,
+      "timeouts": 0,
+      "final_declared_frontier": [
+        {
+          "work": 17,
+          "event": "accepted",
+          "name": "L0.dispatch.3-0.send"
+        },
+        {
+          "work": 20,
+          "event": "accepted",
+          "name": "L0.combine.0-2.send"
+        },
+        {
+          "work": 40,
+          "event": "accepted",
+          "name": "L1.dispatch.2-0.send"
+        },
+        {
+          "work": 42,
+          "event": "acked",
+          "name": "L1.combine.0-1.send"
+        },
+        {
+          "work": 80,
+          "event": "accepted",
+          "name": "L0.dispatch.2-0.send"
+        },
+        {
+          "work": 90,
+          "event": "accepted",
+          "name": "L0.combine.0-2.send"
+        },
+        {
+          "work": 99,
+          "event": "accepted",
+          "name": "L1.dispatch.2-0.send"
+        },
+        {
+          "work": 123,
+          "event": "acked",
+          "name": "L1.combine.0-2.send"
+        }
+      ]
+    },
+    "old-live-delayed": {
+      "application_completion_ns": 446808,
+      "physical_finish_ns": 446808,
+      "source_payload_bytes": 2726512,
+      "unique_payload_bytes": 2609152,
+      "repeated_payload_bytes": 117360,
+      "timeouts": 0,
+      "final_declared_frontier": [
+        {
+          "work": 17,
+          "event": "accepted",
+          "name": "L0.dispatch.3-0.send"
+        },
+        {
+          "work": 21,
+          "event": "accepted",
+          "name": "L0.combine.0-3.send"
+        },
+        {
+          "work": 54,
+          "event": "accepted",
+          "name": "L1.dispatch.3-2.send"
+        },
+        {
+          "work": 59,
+          "event": "acked",
+          "name": "L1.combine.2-3.send"
+        },
+        {
+          "work": 80,
+          "event": "accepted",
+          "name": "L0.dispatch.2-0.send"
+        },
+        {
+          "work": 90,
+          "event": "accepted",
+          "name": "L0.combine.0-2.send"
+        },
+        {
+          "work": 99,
+          "event": "accepted",
+          "name": "L1.dispatch.2-0.send"
+        },
+        {
+          "work": 123,
+          "event": "acked",
+          "name": "L1.combine.0-2.send"
+        }
+      ]
+    },
+    "old-live-instant": {
+      "application_completion_ns": 455794,
+      "physical_finish_ns": 455794,
+      "source_payload_bytes": 2659168,
+      "unique_payload_bytes": 2609152,
+      "repeated_payload_bytes": 50016,
+      "timeouts": 0,
+      "final_declared_frontier": [
+        {
+          "work": 17,
+          "event": "accepted",
+          "name": "L0.dispatch.3-0.send"
+        },
+        {
+          "work": 21,
+          "event": "accepted",
+          "name": "L0.combine.0-3.send"
+        },
+        {
+          "work": 54,
+          "event": "accepted",
+          "name": "L1.dispatch.3-2.send"
+        },
+        {
+          "work": 59,
+          "event": "acked",
+          "name": "L1.combine.2-3.send"
+        },
+        {
+          "work": 80,
+          "event": "accepted",
+          "name": "L0.dispatch.2-0.send"
+        },
+        {
+          "work": 90,
+          "event": "accepted",
+          "name": "L0.combine.0-2.send"
+        },
+        {
+          "work": 99,
+          "event": "accepted",
+          "name": "L1.dispatch.2-0.send"
+        },
+        {
+          "work": 123,
+          "event": "acked",
+          "name": "L1.combine.0-2.send"
+        }
+      ]
+    },
+    "fixed-healthy": {
+      "application_completion_ns": 401735,
+      "physical_finish_ns": 401908,
+      "source_payload_bytes": 2609152,
+      "unique_payload_bytes": 2609152,
+      "repeated_payload_bytes": 0,
+      "timeouts": 0,
+      "final_declared_frontier": [
+        {
+          "work": 3,
+          "event": "accepted",
+          "name": "L0.dispatch.0-2.send"
+        },
+        {
+          "work": 24,
+          "event": "accepted",
+          "name": "L0.combine.2-0.send"
+        },
+        {
+          "work": 28,
+          "event": "accepted",
+          "name": "L1.dispatch.0-2.send"
+        },
+        {
+          "work": 59,
+          "event": "acked",
+          "name": "L1.combine.2-3.send"
+        },
+        {
+          "work": 76,
+          "event": "accepted",
+          "name": "L0.dispatch.1-0.send"
+        },
+        {
+          "work": 90,
+          "event": "accepted",
+          "name": "L0.combine.0-2.send"
+        },
+        {
+          "work": 99,
+          "event": "accepted",
+          "name": "L1.dispatch.2-0.send"
+        },
+        {
+          "work": 123,
+          "event": "acked",
+          "name": "L1.combine.0-2.send"
+        }
+      ]
+    },
+    "fixed-live-delayed": {
+      "application_completion_ns": 452119,
+      "physical_finish_ns": 452119,
+      "source_payload_bytes": 2724512,
+      "unique_payload_bytes": 2609152,
+      "repeated_payload_bytes": 115360,
+      "timeouts": 0,
+      "final_declared_frontier": [
+        {
+          "work": 17,
+          "event": "accepted",
+          "name": "L0.dispatch.3-0.send"
+        },
+        {
+          "work": 21,
+          "event": "accepted",
+          "name": "L0.combine.0-3.send"
+        },
+        {
+          "work": 54,
+          "event": "accepted",
+          "name": "L1.dispatch.3-2.send"
+        },
+        {
+          "work": 56,
+          "event": "acked",
+          "name": "L1.combine.2-0.send"
+        },
+        {
+          "work": 80,
+          "event": "accepted",
+          "name": "L0.dispatch.2-0.send"
+        },
+        {
+          "work": 90,
+          "event": "accepted",
+          "name": "L0.combine.0-2.send"
+        },
+        {
+          "work": 99,
+          "event": "accepted",
+          "name": "L1.dispatch.2-0.send"
+        },
+        {
+          "work": 123,
+          "event": "acked",
+          "name": "L1.combine.0-2.send"
+        }
+      ]
+    },
+    "fixed-live-instant": {
+      "application_completion_ns": 463884,
+      "physical_finish_ns": 463884,
+      "source_payload_bytes": 2669168,
+      "unique_payload_bytes": 2609152,
+      "repeated_payload_bytes": 60016,
+      "timeouts": 0,
+      "final_declared_frontier": [
+        {
+          "work": 17,
+          "event": "accepted",
+          "name": "L0.dispatch.3-0.send"
+        },
+        {
+          "work": 21,
+          "event": "accepted",
+          "name": "L0.combine.0-3.send"
+        },
+        {
+          "work": 54,
+          "event": "accepted",
+          "name": "L1.dispatch.3-2.send"
+        },
+        {
+          "work": 59,
+          "event": "acked",
+          "name": "L1.combine.2-3.send"
+        },
+        {
+          "work": 72,
+          "event": "accepted",
+          "name": "L0.dispatch.0-2.send"
+        },
+        {
+          "work": 94,
+          "event": "accepted",
+          "name": "L0.combine.2-0.send"
+        },
+        {
+          "work": 108,
+          "event": "accepted",
+          "name": "L1.dispatch.0-2.send"
+        },
+        {
+          "work": 132,
+          "event": "acked",
+          "name": "L1.combine.2-0.send"
+        }
+      ]
+    }
+  },
+  "within_version_contrasts": {
+    "old": {
+      "instant_minus_delayed_ns": 8986,
+      "delayed_fault_increment_ns": 49075,
+      "instant_fault_increment_ns": 58061
+    },
+    "fixed": {
+      "instant_minus_delayed_ns": 11765,
+      "delayed_fault_increment_ns": 50384,
+      "instant_fault_increment_ns": 62149
+    }
+  },
+  "work99_source_trains": {
+    "old-live-delayed": {
+      "work": 99,
+      "stream": 8,
+      "ready_ns": 319820,
+      "first_tx_ns": 319820,
+      "last_tx_ns": 342379,
+      "accepted_ns": 362160,
+      "acked_ns": 368507,
+      "packet_count": 29,
+      "bytes": 57344,
+      "source_train_span_ns": 22559,
+      "adjusted_eligibility_intervals_ns": 14552,
+      "after_eligibility_ns": 8007,
+      "physical_service_after_eligibility_ns": 511,
+      "idle_after_eligibility_ns": 7496,
+      "first_declared_rate_bps": 23986785846,
+      "piecewise_eligibility": {
+        "eligible_ns": 7784,
+        "busy_while_eligible_ns": 511,
+        "idle_while_eligible_ns": 7273,
+        "retrospective_overcount_ns": 223
+      }
+    },
+    "old-live-instant": {
+      "work": 99,
+      "stream": 8,
+      "ready_ns": 323639,
+      "first_tx_ns": 323639,
+      "last_tx_ns": 364304,
+      "accepted_ns": 374830,
+      "acked_ns": 380902,
+      "packet_count": 29,
+      "bytes": 57344,
+      "source_train_span_ns": 40665,
+      "adjusted_eligibility_intervals_ns": 28973,
+      "after_eligibility_ns": 11692,
+      "physical_service_after_eligibility_ns": 556,
+      "idle_after_eligibility_ns": 11136,
+      "first_declared_rate_bps": 11108393886,
+      "piecewise_eligibility": {
+        "eligible_ns": 11214,
+        "busy_while_eligible_ns": 385,
+        "idle_while_eligible_ns": 10829,
+        "retrospective_overcount_ns": 478
+      }
+    },
+    "fixed-live-delayed": {
+      "work": 99,
+      "stream": 8,
+      "ready_ns": 315062,
+      "first_tx_ns": 315062,
+      "last_tx_ns": 360558,
+      "accepted_ns": 379778,
+      "acked_ns": 385850,
+      "packet_count": 29,
+      "bytes": 57344,
+      "source_train_span_ns": 45496,
+      "adjusted_eligibility_intervals_ns": 44832,
+      "after_eligibility_ns": 664,
+      "physical_service_after_eligibility_ns": 664,
+      "idle_after_eligibility_ns": 0,
+      "first_declared_rate_bps": 7177872145,
+      "piecewise_eligibility": {
+        "eligible_ns": 664,
+        "busy_while_eligible_ns": 664,
+        "idle_while_eligible_ns": 0,
+        "retrospective_overcount_ns": 0
+      }
+    },
+    "fixed-live-instant": {
+      "work": 99,
+      "stream": 8,
+      "ready_ns": 318390,
+      "first_tx_ns": 318390,
+      "last_tx_ns": 385543,
+      "accepted_ns": 393531,
+      "acked_ns": 399603,
+      "packet_count": 29,
+      "bytes": 57344,
+      "source_train_span_ns": 67153,
+      "adjusted_eligibility_intervals_ns": 66170,
+      "after_eligibility_ns": 983,
+      "physical_service_after_eligibility_ns": 5,
+      "idle_after_eligibility_ns": 978,
+      "first_declared_rate_bps": 4724120813,
+      "piecewise_eligibility": {
+        "eligible_ns": 1,
+        "busy_while_eligible_ns": 1,
+        "idle_while_eligible_ns": 0,
+        "retrospective_overcount_ns": 982
+      }
+    }
+  },
+  "paired_interventions": [
+    {
+      "before": "old-healthy",
+      "after": "fixed-healthy",
+      "application_delta_ns": 4002,
+      "payload_delta_bytes": 0,
+      "selected_writes": [
+        {
+          "work": 24,
+          "name": "L0.combine.2-0.send",
+          "ready_delta_ns": 0,
+          "receive_delta_ns": 0,
+          "ack_delta_ns": 0,
+          "witness_send_after_ready_delta_ns": 0,
+          "witness_queue_delta_ns": 0,
+          "witness_transit_delta_ns": 0,
+          "final_declared_frontier_events": [
+            "accepted"
+          ]
+        },
+        {
+          "work": 72,
+          "name": "L0.dispatch.0-2.send",
+          "ready_delta_ns": -2836,
+          "receive_delta_ns": -3391,
+          "ack_delta_ns": -3391,
+          "witness_send_after_ready_delta_ns": -3831,
+          "witness_queue_delta_ns": 3276,
+          "witness_transit_delta_ns": 0,
+          "final_declared_frontier_events": []
+        },
+        {
+          "work": 94,
+          "name": "L0.combine.2-0.send",
+          "ready_delta_ns": -3391,
+          "receive_delta_ns": -5035,
+          "ack_delta_ns": -5035,
+          "witness_send_after_ready_delta_ns": -9474,
+          "witness_queue_delta_ns": 7830,
+          "witness_transit_delta_ns": 0,
+          "final_declared_frontier_events": []
+        },
+        {
+          "work": 99,
+          "name": "L1.dispatch.2-0.send",
+          "ready_delta_ns": -9333,
+          "receive_delta_ns": -9364,
+          "ack_delta_ns": -8592,
+          "witness_send_after_ready_delta_ns": 2181,
+          "witness_queue_delta_ns": -2212,
+          "witness_transit_delta_ns": 0,
+          "final_declared_frontier_events": [
+            "accepted"
+          ]
+        },
+        {
+          "work": 108,
+          "name": "L1.dispatch.0-2.send",
+          "ready_delta_ns": -5035,
+          "receive_delta_ns": 9976,
+          "ack_delta_ns": 9976,
+          "witness_send_after_ready_delta_ns": 29468,
+          "witness_queue_delta_ns": -14457,
+          "witness_transit_delta_ns": 0,
+          "final_declared_frontier_events": []
+        },
+        {
+          "work": 123,
+          "name": "L1.combine.0-2.send",
+          "ready_delta_ns": -9364,
+          "receive_delta_ns": 4002,
+          "ack_delta_ns": 4002,
+          "witness_send_after_ready_delta_ns": 13366,
+          "witness_queue_delta_ns": 0,
+          "witness_transit_delta_ns": 0,
+          "final_declared_frontier_events": [
+            "acked"
+          ]
+        },
+        {
+          "work": 132,
+          "name": "L1.combine.2-0.send",
+          "ready_delta_ns": 9976,
+          "receive_delta_ns": 10291,
+          "ack_delta_ns": 10421,
+          "witness_send_after_ready_delta_ns": 1326,
+          "witness_queue_delta_ns": -1011,
+          "witness_transit_delta_ns": 0,
+          "final_declared_frontier_events": []
+        }
+      ]
+    },
+    {
+      "before": "old-live-delayed",
+      "after": "fixed-live-delayed",
+      "application_delta_ns": 5311,
+      "payload_delta_bytes": -2000,
+      "selected_writes": [
+        {
+          "work": 24,
+          "name": "L0.combine.2-0.send",
+          "ready_delta_ns": 1306,
+          "receive_delta_ns": -16,
+          "ack_delta_ns": 15,
+          "witness_send_after_ready_delta_ns": -9828,
+          "witness_queue_delta_ns": 8506,
+          "witness_transit_delta_ns": 0,
+          "final_declared_frontier_events": []
+        },
+        {
+          "work": 72,
+          "name": "L0.dispatch.0-2.send",
+          "ready_delta_ns": 1289,
+          "receive_delta_ns": -94,
+          "ack_delta_ns": -679,
+          "witness_send_after_ready_delta_ns": -8773,
+          "witness_queue_delta_ns": 7390,
+          "witness_transit_delta_ns": 0,
+          "final_declared_frontier_events": []
+        },
+        {
+          "work": 94,
+          "name": "L0.combine.2-0.send",
+          "ready_delta_ns": -94,
+          "receive_delta_ns": 9157,
+          "ack_delta_ns": 9193,
+          "witness_send_after_ready_delta_ns": 25579,
+          "witness_queue_delta_ns": -16328,
+          "witness_transit_delta_ns": 0,
+          "final_declared_frontier_events": []
+        },
+        {
+          "work": 99,
+          "name": "L1.dispatch.2-0.send",
+          "ready_delta_ns": -4758,
+          "receive_delta_ns": 17618,
+          "ack_delta_ns": 17343,
+          "witness_send_after_ready_delta_ns": 22937,
+          "witness_queue_delta_ns": -561,
+          "witness_transit_delta_ns": 0,
+          "final_declared_frontier_events": [
+            "accepted"
+          ]
+        },
+        {
+          "work": 108,
+          "name": "L1.dispatch.0-2.send",
+          "ready_delta_ns": 9157,
+          "receive_delta_ns": 1524,
+          "ack_delta_ns": 1110,
+          "witness_send_after_ready_delta_ns": -13336,
+          "witness_queue_delta_ns": 5703,
+          "witness_transit_delta_ns": 0,
+          "final_declared_frontier_events": []
+        },
+        {
+          "work": 123,
+          "name": "L1.combine.0-2.send",
+          "ready_delta_ns": 17618,
+          "receive_delta_ns": 5311,
+          "ack_delta_ns": 5311,
+          "witness_send_after_ready_delta_ns": -12307,
+          "witness_queue_delta_ns": 0,
+          "witness_transit_delta_ns": 0,
+          "final_declared_frontier_events": [
+            "acked"
+          ]
+        },
+        {
+          "work": 132,
+          "name": "L1.combine.2-0.send",
+          "ready_delta_ns": 1524,
+          "receive_delta_ns": 9243,
+          "ack_delta_ns": 10158,
+          "witness_send_after_ready_delta_ns": 35093,
+          "witness_queue_delta_ns": -27374,
+          "witness_transit_delta_ns": 0,
+          "final_declared_frontier_events": []
+        }
+      ]
+    },
+    {
+      "before": "old-live-instant",
+      "after": "fixed-live-instant",
+      "application_delta_ns": 8090,
+      "payload_delta_bytes": 10000,
+      "selected_writes": [
+        {
+          "work": 24,
+          "name": "L0.combine.2-0.send",
+          "ready_delta_ns": 0,
+          "receive_delta_ns": 84,
+          "ack_delta_ns": 0,
+          "witness_send_after_ready_delta_ns": -9160,
+          "witness_queue_delta_ns": 9244,
+          "witness_transit_delta_ns": 0,
+          "final_declared_frontier_events": []
+        },
+        {
+          "work": 72,
+          "name": "L0.dispatch.0-2.send",
+          "ready_delta_ns": 44,
+          "receive_delta_ns": -1319,
+          "ack_delta_ns": -1260,
+          "witness_send_after_ready_delta_ns": -8753,
+          "witness_queue_delta_ns": 7390,
+          "witness_transit_delta_ns": 0,
+          "final_declared_frontier_events": [
+            "accepted"
+          ]
+        },
+        {
+          "work": 94,
+          "name": "L0.combine.2-0.send",
+          "ready_delta_ns": -1319,
+          "receive_delta_ns": 40475,
+          "ack_delta_ns": 38903,
+          "witness_send_after_ready_delta_ns": 48169,
+          "witness_queue_delta_ns": -6375,
+          "witness_transit_delta_ns": 0,
+          "final_declared_frontier_events": [
+            "accepted"
+          ]
+        },
+        {
+          "work": 99,
+          "name": "L1.dispatch.2-0.send",
+          "ready_delta_ns": -5249,
+          "receive_delta_ns": 18701,
+          "ack_delta_ns": 18701,
+          "witness_send_after_ready_delta_ns": 26488,
+          "witness_queue_delta_ns": -2538,
+          "witness_transit_delta_ns": 0,
+          "final_declared_frontier_events": []
+        },
+        {
+          "work": 108,
+          "name": "L1.dispatch.0-2.send",
+          "ready_delta_ns": 40475,
+          "receive_delta_ns": 41807,
+          "ack_delta_ns": 40109,
+          "witness_send_after_ready_delta_ns": 1332,
+          "witness_queue_delta_ns": 0,
+          "witness_transit_delta_ns": 0,
+          "final_declared_frontier_events": [
+            "accepted"
+          ]
+        },
+        {
+          "work": 123,
+          "name": "L1.combine.0-2.send",
+          "ready_delta_ns": 18701,
+          "receive_delta_ns": 7650,
+          "ack_delta_ns": 7650,
+          "witness_send_after_ready_delta_ns": -11051,
+          "witness_queue_delta_ns": 0,
+          "witness_transit_delta_ns": 0,
+          "final_declared_frontier_events": []
+        },
+        {
+          "work": 132,
+          "name": "L1.combine.2-0.send",
+          "ready_delta_ns": 41807,
+          "receive_delta_ns": 48181,
+          "ack_delta_ns": 45764,
+          "witness_send_after_ready_delta_ns": 6930,
+          "witness_queue_delta_ns": -556,
+          "witness_transit_delta_ns": 0,
+          "final_declared_frontier_events": [
+            "acked"
+          ]
+        }
+      ]
+    },
+    {
+      "before": "old-live-delayed",
+      "after": "old-live-instant",
+      "application_delta_ns": 8986,
+      "payload_delta_bytes": -67344,
+      "selected_writes": [
+        {
+          "work": 24,
+          "name": "L0.combine.2-0.send",
+          "ready_delta_ns": -3792,
+          "receive_delta_ns": -9142,
+          "ack_delta_ns": -9291,
+          "witness_send_after_ready_delta_ns": -652,
+          "witness_queue_delta_ns": -4698,
+          "witness_transit_delta_ns": 0,
+          "final_declared_frontier_events": []
+        },
+        {
+          "work": 72,
+          "name": "L0.dispatch.0-2.send",
+          "ready_delta_ns": -1943,
+          "receive_delta_ns": -1963,
+          "ack_delta_ns": -2607,
+          "witness_send_after_ready_delta_ns": -20,
+          "witness_queue_delta_ns": 0,
+          "witness_transit_delta_ns": 0,
+          "final_declared_frontier_events": []
+        },
+        {
+          "work": 94,
+          "name": "L0.combine.2-0.send",
+          "ready_delta_ns": -1963,
+          "receive_delta_ns": -2055,
+          "ack_delta_ns": -2719,
+          "witness_send_after_ready_delta_ns": 10215,
+          "witness_queue_delta_ns": -10307,
+          "witness_transit_delta_ns": 0,
+          "final_declared_frontier_events": []
+        },
+        {
+          "work": 99,
+          "name": "L1.dispatch.2-0.send",
+          "ready_delta_ns": 3819,
+          "receive_delta_ns": 12670,
+          "ack_delta_ns": 12395,
+          "witness_send_after_ready_delta_ns": 18106,
+          "witness_queue_delta_ns": -9255,
+          "witness_transit_delta_ns": 0,
+          "final_declared_frontier_events": [
+            "accepted"
+          ]
+        },
+        {
+          "work": 108,
+          "name": "L1.dispatch.0-2.send",
+          "ready_delta_ns": -2055,
+          "receive_delta_ns": 8506,
+          "ack_delta_ns": 7571,
+          "witness_send_after_ready_delta_ns": 13570,
+          "witness_queue_delta_ns": -3009,
+          "witness_transit_delta_ns": 0,
+          "final_declared_frontier_events": []
+        },
+        {
+          "work": 123,
+          "name": "L1.combine.0-2.send",
+          "ready_delta_ns": 12670,
+          "receive_delta_ns": 8986,
+          "ack_delta_ns": 8986,
+          "witness_send_after_ready_delta_ns": -3684,
+          "witness_queue_delta_ns": 0,
+          "witness_transit_delta_ns": 0,
+          "final_declared_frontier_events": [
+            "acked"
+          ]
+        },
+        {
+          "work": 132,
+          "name": "L1.combine.2-0.send",
+          "ready_delta_ns": 8506,
+          "receive_delta_ns": 10535,
+          "ack_delta_ns": 11847,
+          "witness_send_after_ready_delta_ns": 28909,
+          "witness_queue_delta_ns": -26880,
+          "witness_transit_delta_ns": 0,
+          "final_declared_frontier_events": []
+        }
+      ]
+    },
+    {
+      "before": "old-healthy",
+      "after": "old-live-delayed",
+      "application_delta_ns": 49075,
+      "payload_delta_bytes": 117360,
+      "selected_writes": [
+        {
+          "work": 24,
+          "name": "L0.combine.2-0.send",
+          "ready_delta_ns": -4065,
+          "receive_delta_ns": 3990,
+          "ack_delta_ns": 6089,
+          "witness_send_after_ready_delta_ns": 13354,
+          "witness_queue_delta_ns": -5299,
+          "witness_transit_delta_ns": 0,
+          "final_declared_frontier_events": []
+        },
+        {
+          "work": 72,
+          "name": "L0.dispatch.0-2.send",
+          "ready_delta_ns": 23552,
+          "receive_delta_ns": 20622,
+          "ack_delta_ns": 21405,
+          "witness_send_after_ready_delta_ns": -1568,
+          "witness_queue_delta_ns": -1362,
+          "witness_transit_delta_ns": 0,
+          "final_declared_frontier_events": []
+        },
+        {
+          "work": 94,
+          "name": "L0.combine.2-0.send",
+          "ready_delta_ns": 20622,
+          "receive_delta_ns": 28672,
+          "ack_delta_ns": 30908,
+          "witness_send_after_ready_delta_ns": -3669,
+          "witness_queue_delta_ns": 11719,
+          "witness_transit_delta_ns": 0,
+          "final_declared_frontier_events": []
+        },
+        {
+          "work": 99,
+          "name": "L1.dispatch.2-0.send",
+          "ready_delta_ns": 53539,
+          "receive_delta_ns": 54496,
+          "ack_delta_ns": 54771,
+          "witness_send_after_ready_delta_ns": -350,
+          "witness_queue_delta_ns": 1307,
+          "witness_transit_delta_ns": 0,
+          "final_declared_frontier_events": [
+            "accepted"
+          ]
+        },
+        {
+          "work": 108,
+          "name": "L1.dispatch.0-2.send",
+          "ready_delta_ns": 28672,
+          "receive_delta_ns": 28582,
+          "ack_delta_ns": 31215,
+          "witness_send_after_ready_delta_ns": 11358,
+          "witness_queue_delta_ns": -11448,
+          "witness_transit_delta_ns": 0,
+          "final_declared_frontier_events": []
+        },
+        {
+          "work": 123,
+          "name": "L1.combine.0-2.send",
+          "ready_delta_ns": 54496,
+          "receive_delta_ns": 49075,
+          "ack_delta_ns": 49075,
+          "witness_send_after_ready_delta_ns": -5421,
+          "witness_queue_delta_ns": 0,
+          "witness_transit_delta_ns": 0,
+          "final_declared_frontier_events": [
+            "acked"
+          ]
+        },
+        {
+          "work": 132,
+          "name": "L1.combine.2-0.send",
+          "ready_delta_ns": 28582,
+          "receive_delta_ns": 37096,
+          "ack_delta_ns": 38201,
+          "witness_send_after_ready_delta_ns": 2424,
+          "witness_queue_delta_ns": 6090,
+          "witness_transit_delta_ns": 0,
+          "final_declared_frontier_events": []
+        }
+      ]
+    },
+    {
+      "before": "old-healthy",
+      "after": "old-live-instant",
+      "application_delta_ns": 58061,
+      "payload_delta_bytes": 50016,
+      "selected_writes": [
+        {
+          "work": 24,
+          "name": "L0.combine.2-0.send",
+          "ready_delta_ns": -7857,
+          "receive_delta_ns": -5152,
+          "ack_delta_ns": -3202,
+          "witness_send_after_ready_delta_ns": 12702,
+          "witness_queue_delta_ns": -9997,
+          "witness_transit_delta_ns": 0,
+          "final_declared_frontier_events": []
+        },
+        {
+          "work": 72,
+          "name": "L0.dispatch.0-2.send",
+          "ready_delta_ns": 21609,
+          "receive_delta_ns": 18659,
+          "ack_delta_ns": 18798,
+          "witness_send_after_ready_delta_ns": -1588,
+          "witness_queue_delta_ns": -1362,
+          "witness_transit_delta_ns": 0,
+          "final_declared_frontier_events": []
+        },
+        {
+          "work": 94,
+          "name": "L0.combine.2-0.send",
+          "ready_delta_ns": 18659,
+          "receive_delta_ns": 26617,
+          "ack_delta_ns": 28189,
+          "witness_send_after_ready_delta_ns": 6546,
+          "witness_queue_delta_ns": 1412,
+          "witness_transit_delta_ns": 0,
+          "final_declared_frontier_events": []
+        },
+        {
+          "work": 99,
+          "name": "L1.dispatch.2-0.send",
+          "ready_delta_ns": 57358,
+          "receive_delta_ns": 67166,
+          "ack_delta_ns": 67166,
+          "witness_send_after_ready_delta_ns": 17756,
+          "witness_queue_delta_ns": -7948,
+          "witness_transit_delta_ns": 0,
+          "final_declared_frontier_events": [
+            "accepted"
+          ]
+        },
+        {
+          "work": 108,
+          "name": "L1.dispatch.0-2.send",
+          "ready_delta_ns": 26617,
+          "receive_delta_ns": 37088,
+          "ack_delta_ns": 38786,
+          "witness_send_after_ready_delta_ns": 24928,
+          "witness_queue_delta_ns": -14457,
+          "witness_transit_delta_ns": 0,
+          "final_declared_frontier_events": []
+        },
+        {
+          "work": 123,
+          "name": "L1.combine.0-2.send",
+          "ready_delta_ns": 67166,
+          "receive_delta_ns": 58061,
+          "ack_delta_ns": 58061,
+          "witness_send_after_ready_delta_ns": -9105,
+          "witness_queue_delta_ns": 0,
+          "witness_transit_delta_ns": 0,
+          "final_declared_frontier_events": [
+            "acked"
+          ]
+        },
+        {
+          "work": 132,
+          "name": "L1.combine.2-0.send",
+          "ready_delta_ns": 37088,
+          "receive_delta_ns": 47631,
+          "ack_delta_ns": 50048,
+          "witness_send_after_ready_delta_ns": 31333,
+          "witness_queue_delta_ns": -20790,
+          "witness_transit_delta_ns": 0,
+          "final_declared_frontier_events": []
+        }
+      ]
+    },
+    {
+      "before": "fixed-live-delayed",
+      "after": "fixed-live-instant",
+      "application_delta_ns": 11765,
+      "payload_delta_bytes": -55344,
+      "selected_writes": [
+        {
+          "work": 24,
+          "name": "L0.combine.2-0.send",
+          "ready_delta_ns": -5098,
+          "receive_delta_ns": -9042,
+          "ack_delta_ns": -9306,
+          "witness_send_after_ready_delta_ns": 16,
+          "witness_queue_delta_ns": -3960,
+          "witness_transit_delta_ns": 0,
+          "final_declared_frontier_events": []
+        },
+        {
+          "work": 72,
+          "name": "L0.dispatch.0-2.send",
+          "ready_delta_ns": -3188,
+          "receive_delta_ns": -3188,
+          "ack_delta_ns": -3188,
+          "witness_send_after_ready_delta_ns": 0,
+          "witness_queue_delta_ns": 0,
+          "witness_transit_delta_ns": 0,
+          "final_declared_frontier_events": [
+            "accepted"
+          ]
+        },
+        {
+          "work": 94,
+          "name": "L0.combine.2-0.send",
+          "ready_delta_ns": -3188,
+          "receive_delta_ns": 29263,
+          "ack_delta_ns": 26991,
+          "witness_send_after_ready_delta_ns": 32805,
+          "witness_queue_delta_ns": -354,
+          "witness_transit_delta_ns": 0,
+          "final_declared_frontier_events": [
+            "accepted"
+          ]
+        },
+        {
+          "work": 99,
+          "name": "L1.dispatch.2-0.send",
+          "ready_delta_ns": 3328,
+          "receive_delta_ns": 13753,
+          "ack_delta_ns": 13753,
+          "witness_send_after_ready_delta_ns": 21657,
+          "witness_queue_delta_ns": -11232,
+          "witness_transit_delta_ns": 0,
+          "final_declared_frontier_events": []
+        },
+        {
+          "work": 108,
+          "name": "L1.dispatch.0-2.send",
+          "ready_delta_ns": 29263,
+          "receive_delta_ns": 48789,
+          "ack_delta_ns": 46570,
+          "witness_send_after_ready_delta_ns": 28238,
+          "witness_queue_delta_ns": -8712,
+          "witness_transit_delta_ns": 0,
+          "final_declared_frontier_events": [
+            "accepted"
+          ]
+        },
+        {
+          "work": 123,
+          "name": "L1.combine.0-2.send",
+          "ready_delta_ns": 13753,
+          "receive_delta_ns": 11325,
+          "ack_delta_ns": 11325,
+          "witness_send_after_ready_delta_ns": -2428,
+          "witness_queue_delta_ns": 0,
+          "witness_transit_delta_ns": 0,
+          "final_declared_frontier_events": []
+        },
+        {
+          "work": 132,
+          "name": "L1.combine.2-0.send",
+          "ready_delta_ns": 48789,
+          "receive_delta_ns": 49473,
+          "ack_delta_ns": 47453,
+          "witness_send_after_ready_delta_ns": 746,
+          "witness_queue_delta_ns": -62,
+          "witness_transit_delta_ns": 0,
+          "final_declared_frontier_events": [
+            "acked"
+          ]
+        }
+      ]
+    },
+    {
+      "before": "fixed-healthy",
+      "after": "fixed-live-delayed",
+      "application_delta_ns": 50384,
+      "payload_delta_bytes": 115360,
+      "selected_writes": [
+        {
+          "work": 24,
+          "name": "L0.combine.2-0.send",
+          "ready_delta_ns": -2759,
+          "receive_delta_ns": 3974,
+          "ack_delta_ns": 6104,
+          "witness_send_after_ready_delta_ns": 3526,
+          "witness_queue_delta_ns": 3207,
+          "witness_transit_delta_ns": 0,
+          "final_declared_frontier_events": []
+        },
+        {
+          "work": 72,
+          "name": "L0.dispatch.0-2.send",
+          "ready_delta_ns": 27677,
+          "receive_delta_ns": 23919,
+          "ack_delta_ns": 24117,
+          "witness_send_after_ready_delta_ns": -6510,
+          "witness_queue_delta_ns": 2752,
+          "witness_transit_delta_ns": 0,
+          "final_declared_frontier_events": []
+        },
+        {
+          "work": 94,
+          "name": "L0.combine.2-0.send",
+          "ready_delta_ns": 23919,
+          "receive_delta_ns": 42864,
+          "ack_delta_ns": 45136,
+          "witness_send_after_ready_delta_ns": 31384,
+          "witness_queue_delta_ns": -12439,
+          "witness_transit_delta_ns": 0,
+          "final_declared_frontier_events": []
+        },
+        {
+          "work": 99,
+          "name": "L1.dispatch.2-0.send",
+          "ready_delta_ns": 58114,
+          "receive_delta_ns": 81478,
+          "ack_delta_ns": 80706,
+          "witness_send_after_ready_delta_ns": 20406,
+          "witness_queue_delta_ns": 2958,
+          "witness_transit_delta_ns": 0,
+          "final_declared_frontier_events": [
+            "accepted"
+          ]
+        },
+        {
+          "work": 108,
+          "name": "L1.dispatch.0-2.send",
+          "ready_delta_ns": 42864,
+          "receive_delta_ns": 20130,
+          "ack_delta_ns": 22349,
+          "witness_send_after_ready_delta_ns": -31446,
+          "witness_queue_delta_ns": 8712,
+          "witness_transit_delta_ns": 0,
+          "final_declared_frontier_events": []
+        },
+        {
+          "work": 123,
+          "name": "L1.combine.0-2.send",
+          "ready_delta_ns": 81478,
+          "receive_delta_ns": 50384,
+          "ack_delta_ns": 50384,
+          "witness_send_after_ready_delta_ns": -31094,
+          "witness_queue_delta_ns": 0,
+          "witness_transit_delta_ns": 0,
+          "final_declared_frontier_events": [
+            "acked"
+          ]
+        },
+        {
+          "work": 132,
+          "name": "L1.combine.2-0.send",
+          "ready_delta_ns": 20130,
+          "receive_delta_ns": 36048,
+          "ack_delta_ns": 37938,
+          "witness_send_after_ready_delta_ns": 36191,
+          "witness_queue_delta_ns": -20273,
+          "witness_transit_delta_ns": 0,
+          "final_declared_frontier_events": []
+        }
+      ]
+    },
+    {
+      "before": "fixed-healthy",
+      "after": "fixed-live-instant",
+      "application_delta_ns": 62149,
+      "payload_delta_bytes": 60016,
+      "selected_writes": [
+        {
+          "work": 24,
+          "name": "L0.combine.2-0.send",
+          "ready_delta_ns": -7857,
+          "receive_delta_ns": -5068,
+          "ack_delta_ns": -3202,
+          "witness_send_after_ready_delta_ns": 3542,
+          "witness_queue_delta_ns": -753,
+          "witness_transit_delta_ns": 0,
+          "final_declared_frontier_events": []
+        },
+        {
+          "work": 72,
+          "name": "L0.dispatch.0-2.send",
+          "ready_delta_ns": 24489,
+          "receive_delta_ns": 20731,
+          "ack_delta_ns": 20929,
+          "witness_send_after_ready_delta_ns": -6510,
+          "witness_queue_delta_ns": 2752,
+          "witness_transit_delta_ns": 0,
+          "final_declared_frontier_events": [
+            "accepted"
+          ]
+        },
+        {
+          "work": 94,
+          "name": "L0.combine.2-0.send",
+          "ready_delta_ns": 20731,
+          "receive_delta_ns": 72127,
+          "ack_delta_ns": 72127,
+          "witness_send_after_ready_delta_ns": 64189,
+          "witness_queue_delta_ns": -12793,
+          "witness_transit_delta_ns": 0,
+          "final_declared_frontier_events": [
+            "accepted"
+          ]
+        },
+        {
+          "work": 99,
+          "name": "L1.dispatch.2-0.send",
+          "ready_delta_ns": 61442,
+          "receive_delta_ns": 95231,
+          "ack_delta_ns": 94459,
+          "witness_send_after_ready_delta_ns": 42063,
+          "witness_queue_delta_ns": -8274,
+          "witness_transit_delta_ns": 0,
+          "final_declared_frontier_events": []
+        },
+        {
+          "work": 108,
+          "name": "L1.dispatch.0-2.send",
+          "ready_delta_ns": 72127,
+          "receive_delta_ns": 68919,
+          "ack_delta_ns": 68919,
+          "witness_send_after_ready_delta_ns": -3208,
+          "witness_queue_delta_ns": 0,
+          "witness_transit_delta_ns": 0,
+          "final_declared_frontier_events": [
+            "accepted"
+          ]
+        },
+        {
+          "work": 123,
+          "name": "L1.combine.0-2.send",
+          "ready_delta_ns": 95231,
+          "receive_delta_ns": 61709,
+          "ack_delta_ns": 61709,
+          "witness_send_after_ready_delta_ns": -33522,
+          "witness_queue_delta_ns": 0,
+          "witness_transit_delta_ns": 0,
+          "final_declared_frontier_events": []
+        },
+        {
+          "work": 132,
+          "name": "L1.combine.2-0.send",
+          "ready_delta_ns": 68919,
+          "receive_delta_ns": 85521,
+          "ack_delta_ns": 85391,
+          "witness_send_after_ready_delta_ns": 36937,
+          "witness_queue_delta_ns": -20335,
+          "witness_transit_delta_ns": 0,
+          "final_declared_frontier_events": [
+            "acked"
+          ]
+        }
+      ]
+    }
+  ],
+  "scope": "four fixed MMLU requests, two layers/two steps legacy contribution-copy and declared compute; no modern calibration or holdout",
+  "limitations": "one fixed legacy sample; local correctness repair is not an application acceleration, hardware result or paper novelty"
+}

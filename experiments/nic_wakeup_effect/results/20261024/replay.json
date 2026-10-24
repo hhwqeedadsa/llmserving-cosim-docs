@@ -1,0 +1,120 @@
+{
+  "passed": true,
+  "archive_sha256": "11b545994e70849e502efe22cc9128a624972d399e4a61d52de2ec608f56b722",
+  "members_verified": 191,
+  "six_reports_byte_identical": true,
+  "new_research_source_root": true,
+  "empty_cwd": true,
+  "network_executions": 0,
+  "imports": "restored research source only; no old repository, platform, fixtures, tests, native programs/libraries",
+  "commands": [
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "experiments.nic_wakeup_effect.analyze",
+        "--observed",
+        "/dev/shm/moe-nic-wakeup-effect-20261024/restored/evidence/inputs/observed",
+        "--planned",
+        "/dev/shm/moe-nic-wakeup-effect-20261024/restored/evidence/planned",
+        "--network",
+        "/dev/shm/moe-nic-wakeup-effect-20261024/restored/evidence/network",
+        "--baseline",
+        "/dev/shm/moe-nic-wakeup-effect-20261024/restored/evidence/inputs/baseline",
+        "--output",
+        "/dev/shm/moe-nic-wakeup-effect-20261024/restored/analysis.json"
+      ],
+      "cwd": "/dev/shm/moe-nic-wakeup-effect-20261024/restored/empty-cwd",
+      "pythonpath": "/dev/shm/moe-nic-wakeup-effect-20261024/restored/source",
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "experiments.nic_wakeup_effect.verify",
+        "--stage",
+        "/dev/shm/moe-nic-wakeup-effect-20261024/restored/evidence",
+        "--analysis",
+        "/dev/shm/moe-nic-wakeup-effect-20261024/restored/analysis.json",
+        "--output",
+        "/dev/shm/moe-nic-wakeup-effect-20261024/restored/verification.json"
+      ],
+      "cwd": "/dev/shm/moe-nic-wakeup-effect-20261024/restored/empty-cwd",
+      "pythonpath": "/dev/shm/moe-nic-wakeup-effect-20261024/restored/source",
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "experiments.nic_wakeup_effect.eligibility",
+        "--stage",
+        "/dev/shm/moe-nic-wakeup-effect-20261024/restored/evidence",
+        "--analysis",
+        "/dev/shm/moe-nic-wakeup-effect-20261024/restored/analysis.json",
+        "--output",
+        "/dev/shm/moe-nic-wakeup-effect-20261024/restored/eligibility.json"
+      ],
+      "cwd": "/dev/shm/moe-nic-wakeup-effect-20261024/restored/empty-cwd",
+      "pythonpath": "/dev/shm/moe-nic-wakeup-effect-20261024/restored/source",
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "experiments.nic_wakeup_effect.verify_eligibility",
+        "--stage",
+        "/dev/shm/moe-nic-wakeup-effect-20261024/restored/evidence",
+        "--analysis",
+        "/dev/shm/moe-nic-wakeup-effect-20261024/restored/analysis.json",
+        "--eligibility",
+        "/dev/shm/moe-nic-wakeup-effect-20261024/restored/eligibility.json",
+        "--output",
+        "/dev/shm/moe-nic-wakeup-effect-20261024/restored/eligibility-verification.json"
+      ],
+      "cwd": "/dev/shm/moe-nic-wakeup-effect-20261024/restored/empty-cwd",
+      "pythonpath": "/dev/shm/moe-nic-wakeup-effect-20261024/restored/source",
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "experiments.nic_wakeup_effect.summary",
+        "--analysis",
+        "/dev/shm/moe-nic-wakeup-effect-20261024/restored/analysis.json",
+        "--eligibility",
+        "/dev/shm/moe-nic-wakeup-effect-20261024/restored/eligibility.json",
+        "--output",
+        "/dev/shm/moe-nic-wakeup-effect-20261024/restored/summary-final.json"
+      ],
+      "cwd": "/dev/shm/moe-nic-wakeup-effect-20261024/restored/empty-cwd",
+      "pythonpath": "/dev/shm/moe-nic-wakeup-effect-20261024/restored/source",
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "experiments.nic_wakeup_effect.diagnostics",
+        "--stage",
+        "/dev/shm/moe-nic-wakeup-effect-20261024/restored/evidence",
+        "--analysis",
+        "/dev/shm/moe-nic-wakeup-effect-20261024/restored/analysis.json",
+        "--output",
+        "/dev/shm/moe-nic-wakeup-effect-20261024/restored/diagnostics.json"
+      ],
+      "cwd": "/dev/shm/moe-nic-wakeup-effect-20261024/restored/empty-cwd",
+      "pythonpath": "/dev/shm/moe-nic-wakeup-effect-20261024/restored/source",
+      "exit_code": 0
+    }
+  ]
+}

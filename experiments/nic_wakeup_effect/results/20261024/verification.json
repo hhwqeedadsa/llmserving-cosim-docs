@@ -1,0 +1,283 @@
+{
+  "passed": true,
+  "cases": {
+    "old-healthy": {
+      "original_graph_and_transport": {
+        "messages": 76,
+        "original_nodes": 216,
+        "local_work": 70,
+        "group_completion_ns": 397733,
+        "source_packets": 1352,
+        "physical_transmissions": 14466,
+        "physical_drops": 0,
+        "packet_events": 52404,
+        "window_never_binding": true,
+        "actual_callbacks": true,
+        "all_original_dependencies": true
+      },
+      "routes": {
+        "passed": true,
+        "enqueues_verified_by_protocol": {
+          "17": 5812,
+          "252": 5812,
+          "255": 112
+        },
+        "local_drop_causes": {},
+        "no_postfailure_tx_on_failed_ports": true,
+        "no_enqueue_timestamp_tie": true,
+        "cnp_identity_scope": "actual IP/UID plus generated stream/fid projection; packet capture does not serialize fid"
+      },
+      "mechanism": {
+        "passed": true,
+        "writes": 76,
+        "hops": 328,
+        "repeated_payload_bytes": 0,
+        "nonservice_wait_ns": 0
+      },
+      "grace": {
+        "events": 1364,
+        "arms": 0,
+        "progress_cancellations": 0,
+        "retries": 0,
+        "rtos": 0
+      }
+    },
+    "old-live-delayed": {
+      "original_graph_and_transport": {
+        "messages": 76,
+        "original_nodes": 216,
+        "local_work": 70,
+        "group_completion_ns": 446808,
+        "source_packets": 1412,
+        "physical_transmissions": 14950,
+        "physical_drops": 3,
+        "packet_events": 54200,
+        "window_never_binding": true,
+        "actual_callbacks": true,
+        "all_original_dependencies": true
+      },
+      "routes": {
+        "passed": true,
+        "enqueues_verified_by_protocol": {
+          "17": 6061,
+          "252": 5620,
+          "253": 336,
+          "255": 118
+        },
+        "local_drop_causes": {
+          "queue_close": 9,
+          "no_live_old_candidate": 21
+        },
+        "no_postfailure_tx_on_failed_ports": true,
+        "no_enqueue_timestamp_tie": true,
+        "cnp_identity_scope": "actual IP/UID plus generated stream/fid projection; packet capture does not serialize fid"
+      },
+      "mechanism": {
+        "passed": true,
+        "writes": 76,
+        "hops": 328,
+        "repeated_payload_bytes": 117360,
+        "nonservice_wait_ns": 0
+      },
+      "grace": {
+        "events": 1395,
+        "arms": 4,
+        "progress_cancellations": 0,
+        "retries": 4,
+        "rtos": 0
+      }
+    },
+    "old-live-instant": {
+      "original_graph_and_transport": {
+        "messages": 76,
+        "original_nodes": 216,
+        "local_work": 70,
+        "group_completion_ns": 455794,
+        "source_packets": 1378,
+        "physical_transmissions": 14672,
+        "physical_drops": 3,
+        "packet_events": 53173,
+        "window_never_binding": true,
+        "actual_callbacks": true,
+        "all_original_dependencies": true
+      },
+      "routes": {
+        "passed": true,
+        "enqueues_verified_by_protocol": {
+          "17": 5915,
+          "252": 5601,
+          "253": 279,
+          "255": 115
+        },
+        "local_drop_causes": {
+          "queue_close": 9
+        },
+        "no_postfailure_tx_on_failed_ports": true,
+        "no_enqueue_timestamp_tie": true,
+        "cnp_identity_scope": "actual IP/UID plus generated stream/fid projection; packet capture does not serialize fid"
+      },
+      "mechanism": {
+        "passed": true,
+        "writes": 76,
+        "hops": 328,
+        "repeated_payload_bytes": 50016,
+        "nonservice_wait_ns": 0
+      },
+      "grace": {
+        "events": 1381,
+        "arms": 7,
+        "progress_cancellations": 4,
+        "retries": 3,
+        "rtos": 0
+      }
+    },
+    "fixed-healthy": {
+      "original_graph_and_transport": {
+        "messages": 76,
+        "original_nodes": 216,
+        "local_work": 70,
+        "group_completion_ns": 401735,
+        "source_packets": 1352,
+        "physical_transmissions": 14470,
+        "physical_drops": 0,
+        "packet_events": 52416,
+        "window_never_binding": true,
+        "actual_callbacks": true,
+        "all_original_dependencies": true
+      },
+      "routes": {
+        "passed": true,
+        "enqueues_verified_by_protocol": {
+          "17": 5812,
+          "252": 5812,
+          "255": 114
+        },
+        "local_drop_causes": {},
+        "no_postfailure_tx_on_failed_ports": true,
+        "no_enqueue_timestamp_tie": true,
+        "cnp_identity_scope": "actual IP/UID plus generated stream/fid projection; packet capture does not serialize fid"
+      },
+      "mechanism": {
+        "passed": true,
+        "writes": 76,
+        "hops": 328,
+        "repeated_payload_bytes": 0,
+        "nonservice_wait_ns": 0
+      },
+      "grace": {
+        "events": 1364,
+        "arms": 0,
+        "progress_cancellations": 0,
+        "retries": 0,
+        "rtos": 0
+      }
+    },
+    "fixed-live-delayed": {
+      "original_graph_and_transport": {
+        "messages": 76,
+        "original_nodes": 216,
+        "local_work": 70,
+        "group_completion_ns": 452119,
+        "source_packets": 1411,
+        "physical_transmissions": 14946,
+        "physical_drops": 3,
+        "packet_events": 54186,
+        "window_never_binding": true,
+        "actual_callbacks": true,
+        "all_original_dependencies": true
+      },
+      "routes": {
+        "passed": true,
+        "enqueues_verified_by_protocol": {
+          "17": 6056,
+          "252": 5615,
+          "253": 336,
+          "255": 125
+        },
+        "local_drop_causes": {
+          "queue_close": 9,
+          "no_live_old_candidate": 21
+        },
+        "no_postfailure_tx_on_failed_ports": true,
+        "no_enqueue_timestamp_tie": true,
+        "cnp_identity_scope": "actual IP/UID plus generated stream/fid projection; packet capture does not serialize fid"
+      },
+      "mechanism": {
+        "passed": true,
+        "writes": 76,
+        "hops": 328,
+        "repeated_payload_bytes": 115360,
+        "nonservice_wait_ns": 0
+      },
+      "grace": {
+        "events": 1394,
+        "arms": 4,
+        "progress_cancellations": 0,
+        "retries": 4,
+        "rtos": 0
+      }
+    },
+    "fixed-live-instant": {
+      "original_graph_and_transport": {
+        "messages": 76,
+        "original_nodes": 216,
+        "local_work": 70,
+        "group_completion_ns": 463884,
+        "source_packets": 1383,
+        "physical_transmissions": 14732,
+        "physical_drops": 3,
+        "packet_events": 53393,
+        "window_never_binding": true,
+        "actual_callbacks": true,
+        "all_original_dependencies": true
+      },
+      "routes": {
+        "passed": true,
+        "enqueues_verified_by_protocol": {
+          "17": 5940,
+          "252": 5626,
+          "253": 279,
+          "255": 115
+        },
+        "local_drop_causes": {
+          "queue_close": 9
+        },
+        "no_postfailure_tx_on_failed_ports": true,
+        "no_enqueue_timestamp_tie": true,
+        "cnp_identity_scope": "actual IP/UID plus generated stream/fid projection; packet capture does not serialize fid"
+      },
+      "mechanism": {
+        "passed": true,
+        "writes": 76,
+        "hops": 328,
+        "repeated_payload_bytes": 60016,
+        "nonservice_wait_ns": 0
+      },
+      "grace": {
+        "events": 1386,
+        "arms": 7,
+        "progress_cancellations": 4,
+        "retries": 3,
+        "rtos": 0
+      }
+    }
+  },
+  "all_original_nodes_dependencies_and_writes": true,
+  "work_mapping_topology_byte_identical": true,
+  "all_actual_enqueue_bfs_hash": true,
+  "work99_four_trains_independently_checked": true,
+  "mutations_rejected": [
+    "ack_time",
+    "queue_wait",
+    "feedback_hex",
+    "grace_deadline",
+    "dependency",
+    "service_owner",
+    "retry_outcome",
+    "train_due",
+    "train_idle",
+    "train_service"
+  ],
+  "network_executions": 0,
+  "scope": "six application cases; actual packet and queue checks, source interval accounting; no fixture/platform decoder or external library reads"
+}

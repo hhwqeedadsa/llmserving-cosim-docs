@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "cases": 4,
+  "chronological_rate_and_physical_intersections": true,
+  "continuous_source_bytes_no_retry_no_pfc": true,
+  "mutations_rejected": [
+    "past_rate",
+    "eligibility",
+    "physical_busy"
+  ],
+  "network_executions": 0
+}

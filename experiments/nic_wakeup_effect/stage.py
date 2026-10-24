@@ -25,5 +25,7 @@ def run(repo, s, label, command, network=False, cwd=None, environment=None):
     rows.append(dict(label=label, command=cmd, cwd=str(cwd or repo), network=network, status='started'))
     save(s/'commands.json', rows)
     r = subprocess.run(cmd, cwd=cwd or repo, env=env, timeout=65)
-    rows[-1].update(status='terminal', exit_code=r.returncode); save(s/'commands.json', rows)
+    rows = load(s/'commands.json')
+    entry = next(x for x in rows if x['label'] == label)
+    entry.update(status='terminal', exit_code=r.returncode); save(s/'commands.json', rows)
     assert r.returncode == 0, label+': failure preserved; no retry of successful networks'

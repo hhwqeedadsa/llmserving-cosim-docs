@@ -1,0 +1,69 @@
+{
+  "schema_version": "nic-wakeup-effect-closeout/1",
+  "ended_utc": "2026-10-24T21:00:30.403964+00:00",
+  "platform_commit": "eaba7130a9bb665ac57313ed6196edd6fc0fd165",
+  "native_patch_commit": "68a07f7",
+  "research_stage_complete": true,
+  "overall_paper_goal_complete": false,
+  "new_actual_networks": 3,
+  "immutable_saved_baselines": 3,
+  "network_phase_closed": true,
+  "successful_network_reruns": 0,
+  "original_terminal_monitors": 25,
+  "conservative_cumulative_monitored_seconds_including_nested": 132.19467976130545,
+  "final_management_seconds_reserved": 10,
+  "peak_sampled_group_rss_bytes": 546361344,
+  "stage_restored_archives_persistent_sources_apparent_bytes": 114336147,
+  "stage_restored_archives_persistent_sources_allocated_bytes": 115232768,
+  "source_and_receipt_reserve_bytes": 2097152,
+  "total_charged_with_reserve_bytes": 117329920,
+  "limits": {
+    "cumulative_seconds": 600,
+    "cumulative_bytes": 402653184,
+    "per_command_seconds": 60,
+    "rss_bytes": 1073741824,
+    "address_bytes": 2147483648,
+    "artifact_bytes": 134217728,
+    "max_new_networks": 3,
+    "max_sim_ns": 5000000,
+    "result_bytes": 16777216
+  },
+  "remaining_monitored_live_pids": [],
+  "preserved_failures": {
+    "execution_driver": "v1 healthy library assertion included system libraries; actual healthy network succeeded",
+    "monitor_ledger": "outer driver overwrote nested command rows; original ledger kept and nested rows reconstructed from terminal probe.json",
+    "interactive_read": "diagnostic cat attempted nonexistent command.json; probe.json contains authoritative command",
+    "no_successful_network_rerun": true
+  },
+  "failed_registered_command_labels": [
+    "execute-three-cases"
+  ],
+  "archive": {
+    "sha256": "789de4affb50322a30c28b90c6c6d3e19acc8489348ed47263f768b0128f164f",
+    "members": 201,
+    "uncompressed_bytes": 47436371,
+    "compressed_bytes": 4856217,
+    "native_runtime_bundled": false
+  },
+  "evidence": {
+    "all_members_hash_verified": true,
+    "final_sources_equal_current": true,
+    "replay_executed_verified_v1": true,
+    "final_replay_sources_equal_v1": true,
+    "six_json_reports_byte_identical": true,
+    "original_work_mapping_topology_byte_identical": true,
+    "semantic_tamper_classes": 10,
+    "piecewise_eligibility_tamper_classes": 3,
+    "reused_archive_parser_unsafe_classes": 8,
+    "runtime": {
+      "passed": true,
+      "backend_sha256": "0b4a06d8f0424962fb5ca9b15dbc455a0f78b086ef8bab125c00958716d8e777",
+      "libraries": 8,
+      "platform_and_native_sources_and_build_inputs_unchanged": true,
+      "network_executions": 0
+    },
+    "fixed_dependencies": "13 checkouts agree"
+  },
+  "platform_dependencies_builds_installs_downloads_gpu_push": false,
+  "scope": "four MMLU requests, legacy two-layer/two-step graph, declared uncalibrated compute/DCQCN; no holdout, full thousand-GPU inference or novelty"
+}

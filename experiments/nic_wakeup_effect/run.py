@@ -22,23 +22,32 @@ def identity(repo, runtime):
 def main():
     p = argparse.ArgumentParser()
     for k in ('repository', 'stage', 'backend', 'build-identity'): p.add_argument('--'+k, type=Path, required=True)
+    p.add_argument('--resume', action='store_true')
     a = p.parse_args(); repo = a.repository.resolve(); s = a.stage.resolve(); obs = s/'inputs/observed'; idx = load(obs/'index.json')
     assert all(sha(s/'inputs'/n)==h for n,h in load(s/'inputs/provenance.json')['files'].items())
     runtime = dict(platform_commit=idx['platform_commit'],backend=str(a.backend.resolve()),sha256=sha(a.backend),build_identity=load(a.build_identity))
     identity(repo,runtime); save(s/'runtime.json',runtime)
-    cli=[sys.executable,'-B','-m','moe_ub_cosim','scaleout'];(s/'planned').mkdir();(s/'network').mkdir()
-    run(repo,s,'topology',[*cli,'topology','--config',obs/'topology.json','--output',s/'topology'])
+    cli=[sys.executable,'-B','-m','moe_ub_cosim','scaleout']
+    if not a.resume:
+        (s/'planned').mkdir();(s/'network').mkdir()
+    if not a.resume:
+        run(repo,s,'topology',[*cli,'topology','--config',obs/'topology.json','--output',s/'topology'])
     assert (s/'topology/topology.json').read_bytes()==(s/'inputs/baseline/topology.json').read_bytes()
     for case in idx['cases']:
-        run(repo,s,case+'-plan',[*cli,'rdma-causal-plan','--config',obs/idx['plan'],'--topology',s/'topology',
+        if not a.resume: run(repo,s,case+'-plan',[*cli,'rdma-causal-plan','--config',obs/idx['plan'],'--topology',s/'topology',
             '--protocol',obs/(case+'-protocol.json'),'--output',s/'planned'/case])
         for name in ('work.json','mapping.json'):
             assert (s/'planned'/case/name).read_bytes()==(s/'inputs/baseline'/case/name).read_bytes(), name+': input changed'
     for case in idx['cases']:
-        run(repo,s,case+'-network',[*cli,'rdma-stream-probe','--topology',s/'topology','--protocol',obs/(case+'-protocol.json'),
+        if a.resume and (s/'network'/case).exists():
+            report=load(s/(case+'-network-monitor/probe.json'))
+            assert report['status']=='completed' and report['child_exit_code']==0 and not report['remaining_live_group_pids']
+            expected=[*cli,'rdma-stream-probe','--topology',s/'topology','--protocol',obs/(case+'-protocol.json'),'--config',s/'planned'/case/'work.json','--backend',a.backend,'--output',s/'network'/case]
+            assert report['command']==list(map(str,expected))
+        else: run(repo,s,case+'-network',[*cli,'rdma-stream-probe','--topology',s/'topology','--protocol',obs/(case+'-protocol.json'),
             '--config',s/'planned'/case/'work.json','--backend',a.backend,'--output',s/'network'/case],True)
         r=load(s/'network'/case/'result.json');assert r['passed'] and r['packet_capture']['complete']
-        assert set(r['loaded_libraries'])==set(runtime['build_identity']['libraries'])
+        assert {p for p in r['loaded_libraries'] if Path(p).name.startswith('libns3.')}==set(runtime['build_identity']['libraries'])
     save(s/'identity.json',identity(repo,runtime))
     save(s/'run.json',dict(passed=True,new_actual_networks=3,immutable_saved_baselines=3,phase_closed=True,
         planned_work_mapping_and_topology_byte_identical=True,successful_network_reruns=0))

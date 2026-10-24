@@ -1,0 +1,1337 @@
+{
+  "passed": true,
+  "platform_commit": "2dc9eb71a801eb88e8757bb33324e8b2729ab2d3",
+  "actual_network_executions": 4,
+  "cases": {
+    "healthy-gbn": {
+      "all_work_accepted_ns": 138887,
+      "all_work_ack_ns": 144955,
+      "tx_payload_bytes": 1070336,
+      "unique_bytes": 1070336,
+      "timeouts": 0,
+      "source_model_bytes_by_protocol": {
+        "17": 1110296,
+        "252": 53280,
+        "253": 0,
+        "255": 1632
+      },
+      "sum_per_stream_peak_reorder_bytes": 0,
+      "last_accepted_streams": [
+        7
+      ],
+      "last_acked_streams": [
+        7
+      ],
+      "pfc_pause_callbacks": 0
+    },
+    "failed-gbn": {
+      "all_work_accepted_ns": 159945,
+      "all_work_ack_ns": 163983,
+      "tx_payload_bytes": 1636432,
+      "unique_bytes": 1070336,
+      "timeouts": 0,
+      "source_model_bytes_by_protocol": {
+        "17": 1697524,
+        "252": 64800,
+        "253": 528,
+        "255": 1824
+      },
+      "sum_per_stream_peak_reorder_bytes": 0,
+      "last_accepted_streams": [
+        4
+      ],
+      "last_acked_streams": [
+        4
+      ],
+      "pfc_pause_callbacks": 0
+    },
+    "healthy-selective": {
+      "all_work_accepted_ns": 138992,
+      "all_work_ack_ns": 145064,
+      "tx_payload_bytes": 1070336,
+      "unique_bytes": 1070336,
+      "timeouts": 0,
+      "source_model_bytes_by_protocol": {
+        "17": 1110296,
+        "252": 55500,
+        "253": 0,
+        "255": 1632
+      },
+      "sum_per_stream_peak_reorder_bytes": 0,
+      "last_accepted_streams": [
+        7
+      ],
+      "last_acked_streams": [
+        7
+      ],
+      "pfc_pause_callbacks": 0
+    },
+    "failed-selective": {
+      "all_work_accepted_ns": 141539,
+      "all_work_ack_ns": 145579,
+      "tx_payload_bytes": 1530184,
+      "unique_bytes": 1070336,
+      "timeouts": 0,
+      "source_model_bytes_by_protocol": {
+        "17": 1587316,
+        "252": 62100,
+        "253": 7100,
+        "255": 1680
+      },
+      "sum_per_stream_peak_reorder_bytes": 136104,
+      "last_accepted_streams": [
+        4
+      ],
+      "last_acked_streams": [
+        4
+      ],
+      "pfc_pause_callbacks": 0
+    }
+  },
+  "fault_effect": {
+    "gbn": {
+      "accepted_delta_ns": 21058,
+      "acked_delta_ns": 19028,
+      "extra_payload_bytes": 566096
+    },
+    "selective": {
+      "accepted_delta_ns": 2547,
+      "acked_delta_ns": 515,
+      "extra_payload_bytes": 459848
+    }
+  },
+  "all_stream_comparisons": [
+    {
+      "timer": "gbn",
+      "stream": 1,
+      "category": "direct_drop",
+      "ack_delta_ns": -3494,
+      "accepted_delta_ns": -3697,
+      "extra_tx_payload_bytes": 84784,
+      "witness_same_offset": true,
+      "witness_source_tx_delta_ns": 11757,
+      "witness_queue_delta_ns": -15454,
+      "witness_nonqueue_delta_ns": 0
+    },
+    {
+      "timer": "gbn",
+      "stream": 2,
+      "category": "direct_drop",
+      "ack_delta_ns": 17076,
+      "accepted_delta_ns": 16808,
+      "extra_tx_payload_bytes": 84784,
+      "witness_same_offset": true,
+      "witness_source_tx_delta_ns": 26202,
+      "witness_queue_delta_ns": -9394,
+      "witness_nonqueue_delta_ns": 0
+    },
+    {
+      "timer": "gbn",
+      "stream": 3,
+      "category": "direct_drop",
+      "ack_delta_ns": 13202,
+      "accepted_delta_ns": 12919,
+      "extra_tx_payload_bytes": 100248,
+      "witness_same_offset": true,
+      "witness_source_tx_delta_ns": 31376,
+      "witness_queue_delta_ns": -18457,
+      "witness_nonqueue_delta_ns": 0
+    },
+    {
+      "timer": "gbn",
+      "stream": 4,
+      "category": "direct_drop",
+      "ack_delta_ns": 81402,
+      "accepted_delta_ns": 81402,
+      "extra_tx_payload_bytes": 136176,
+      "witness_same_offset": true,
+      "witness_source_tx_delta_ns": 46470,
+      "witness_queue_delta_ns": 34932,
+      "witness_nonqueue_delta_ns": 0
+    },
+    {
+      "timer": "gbn",
+      "stream": 6,
+      "category": "no_drop_off_failed_edge_same_paths",
+      "ack_delta_ns": -36258,
+      "accepted_delta_ns": -36754,
+      "extra_tx_payload_bytes": 0,
+      "witness_same_offset": true,
+      "witness_source_tx_delta_ns": -52,
+      "witness_queue_delta_ns": -36702,
+      "witness_nonqueue_delta_ns": 0
+    },
+    {
+      "timer": "gbn",
+      "stream": 7,
+      "category": "no_drop_off_failed_edge_same_paths",
+      "ack_delta_ns": -42798,
+      "accepted_delta_ns": -43015,
+      "extra_tx_payload_bytes": 0,
+      "witness_same_offset": true,
+      "witness_source_tx_delta_ns": 3839,
+      "witness_queue_delta_ns": -46854,
+      "witness_nonqueue_delta_ns": 0
+    },
+    {
+      "timer": "gbn",
+      "stream": 8,
+      "category": "no_drop_off_failed_edge_same_paths",
+      "ack_delta_ns": 67981,
+      "accepted_delta_ns": 67330,
+      "extra_tx_payload_bytes": 0,
+      "witness_same_offset": true,
+      "witness_source_tx_delta_ns": -32,
+      "witness_queue_delta_ns": 67362,
+      "witness_nonqueue_delta_ns": 0
+    },
+    {
+      "timer": "gbn",
+      "stream": 9,
+      "category": "no_drop_off_failed_edge_same_paths",
+      "ack_delta_ns": 8280,
+      "accepted_delta_ns": 9530,
+      "extra_tx_payload_bytes": 0,
+      "witness_same_offset": true,
+      "witness_source_tx_delta_ns": -32,
+      "witness_queue_delta_ns": 9562,
+      "witness_nonqueue_delta_ns": 0
+    },
+    {
+      "timer": "gbn",
+      "stream": 11,
+      "category": "no_drop_off_failed_edge_same_paths",
+      "ack_delta_ns": -692,
+      "accepted_delta_ns": -692,
+      "extra_tx_payload_bytes": 0,
+      "witness_same_offset": true,
+      "witness_source_tx_delta_ns": -190,
+      "witness_queue_delta_ns": -502,
+      "witness_nonqueue_delta_ns": 0
+    },
+    {
+      "timer": "gbn",
+      "stream": 12,
+      "category": "direct_drop",
+      "ack_delta_ns": 38577,
+      "accepted_delta_ns": 37534,
+      "extra_tx_payload_bytes": 160104,
+      "witness_same_offset": true,
+      "witness_source_tx_delta_ns": 39701,
+      "witness_queue_delta_ns": -2167,
+      "witness_nonqueue_delta_ns": 0
+    },
+    {
+      "timer": "gbn",
+      "stream": 13,
+      "category": "no_drop_off_failed_edge_same_paths",
+      "ack_delta_ns": 8313,
+      "accepted_delta_ns": 7838,
+      "extra_tx_payload_bytes": 0,
+      "witness_same_offset": true,
+      "witness_source_tx_delta_ns": -20,
+      "witness_queue_delta_ns": 7858,
+      "witness_nonqueue_delta_ns": 0
+    },
+    {
+      "timer": "gbn",
+      "stream": 14,
+      "category": "no_drop_off_failed_edge_same_paths",
+      "ack_delta_ns": 4021,
+      "accepted_delta_ns": 3952,
+      "extra_tx_payload_bytes": 0,
+      "witness_same_offset": true,
+      "witness_source_tx_delta_ns": -20,
+      "witness_queue_delta_ns": 3972,
+      "witness_nonqueue_delta_ns": 0
+    },
+    {
+      "timer": "selective",
+      "stream": 1,
+      "category": "direct_drop",
+      "ack_delta_ns": -20698,
+      "accepted_delta_ns": -20972,
+      "extra_tx_payload_bytes": 79784,
+      "witness_same_offset": false,
+      "witness_source_tx_delta_ns": 7365,
+      "witness_queue_delta_ns": -28767,
+      "witness_nonqueue_delta_ns": 430
+    },
+    {
+      "timer": "selective",
+      "stream": 2,
+      "category": "direct_drop",
+      "ack_delta_ns": -2131,
+      "accepted_delta_ns": -2359,
+      "extra_tx_payload_bytes": 72320,
+      "witness_same_offset": false,
+      "witness_source_tx_delta_ns": 19730,
+      "witness_queue_delta_ns": -22863,
+      "witness_nonqueue_delta_ns": 774
+    },
+    {
+      "timer": "selective",
+      "stream": 3,
+      "category": "direct_drop",
+      "ack_delta_ns": -10862,
+      "accepted_delta_ns": -11134,
+      "extra_tx_payload_bytes": 87784,
+      "witness_same_offset": false,
+      "witness_source_tx_delta_ns": 19168,
+      "witness_queue_delta_ns": -31076,
+      "witness_nonqueue_delta_ns": 774
+    },
+    {
+      "timer": "selective",
+      "stream": 4,
+      "category": "direct_drop",
+      "ack_delta_ns": 62799,
+      "accepted_delta_ns": 62851,
+      "extra_tx_payload_bytes": 113248,
+      "witness_same_offset": false,
+      "witness_source_tx_delta_ns": 41744,
+      "witness_queue_delta_ns": 20677,
+      "witness_nonqueue_delta_ns": 430
+    },
+    {
+      "timer": "selective",
+      "stream": 6,
+      "category": "no_drop_off_failed_edge_same_paths",
+      "ack_delta_ns": -36293,
+      "accepted_delta_ns": -36772,
+      "extra_tx_payload_bytes": 0,
+      "witness_same_offset": true,
+      "witness_source_tx_delta_ns": -52,
+      "witness_queue_delta_ns": -36720,
+      "witness_nonqueue_delta_ns": 0
+    },
+    {
+      "timer": "selective",
+      "stream": 7,
+      "category": "no_drop_off_failed_edge_same_paths",
+      "ack_delta_ns": -42788,
+      "accepted_delta_ns": -43019,
+      "extra_tx_payload_bytes": 0,
+      "witness_same_offset": true,
+      "witness_source_tx_delta_ns": 3857,
+      "witness_queue_delta_ns": -46876,
+      "witness_nonqueue_delta_ns": 0
+    },
+    {
+      "timer": "selective",
+      "stream": 8,
+      "category": "no_drop_off_failed_edge_same_paths",
+      "ack_delta_ns": 61500,
+      "accepted_delta_ns": 61213,
+      "extra_tx_payload_bytes": 0,
+      "witness_same_offset": true,
+      "witness_source_tx_delta_ns": -28,
+      "witness_queue_delta_ns": 61241,
+      "witness_nonqueue_delta_ns": 0
+    },
+    {
+      "timer": "selective",
+      "stream": 9,
+      "category": "no_drop_off_failed_edge_same_paths",
+      "ack_delta_ns": 8601,
+      "accepted_delta_ns": 9584,
+      "extra_tx_payload_bytes": 0,
+      "witness_same_offset": true,
+      "witness_source_tx_delta_ns": -32,
+      "witness_queue_delta_ns": 9616,
+      "witness_nonqueue_delta_ns": 0
+    },
+    {
+      "timer": "selective",
+      "stream": 11,
+      "category": "no_drop_off_failed_edge_same_paths",
+      "ack_delta_ns": 64,
+      "accepted_delta_ns": 64,
+      "extra_tx_payload_bytes": 0,
+      "witness_same_offset": true,
+      "witness_source_tx_delta_ns": -24,
+      "witness_queue_delta_ns": 88,
+      "witness_nonqueue_delta_ns": 0
+    },
+    {
+      "timer": "selective",
+      "stream": 12,
+      "category": "direct_drop",
+      "ack_delta_ns": 25687,
+      "accepted_delta_ns": 25131,
+      "extra_tx_payload_bytes": 106712,
+      "witness_same_offset": false,
+      "witness_source_tx_delta_ns": 32036,
+      "witness_queue_delta_ns": -7679,
+      "witness_nonqueue_delta_ns": 774
+    },
+    {
+      "timer": "selective",
+      "stream": 13,
+      "category": "no_drop_off_failed_edge_same_paths",
+      "ack_delta_ns": 8491,
+      "accepted_delta_ns": 7896,
+      "extra_tx_payload_bytes": 0,
+      "witness_same_offset": true,
+      "witness_source_tx_delta_ns": -20,
+      "witness_queue_delta_ns": 7916,
+      "witness_nonqueue_delta_ns": 0
+    },
+    {
+      "timer": "selective",
+      "stream": 14,
+      "category": "no_drop_off_failed_edge_same_paths",
+      "ack_delta_ns": 4058,
+      "accepted_delta_ns": 4126,
+      "extra_tx_payload_bytes": 0,
+      "witness_same_offset": true,
+      "witness_source_tx_delta_ns": -20,
+      "witness_queue_delta_ns": 4146,
+      "witness_nonqueue_delta_ns": 0
+    }
+  ],
+  "preregistered_stream8": {
+    "healthy-gbn": {
+      "stream": 8,
+      "src": 4,
+      "dst": 0,
+      "work": 7,
+      "unique_bytes": 101248,
+      "tx_payload_bytes": 101248,
+      "source_packets": 105,
+      "repeated_payload_bytes": 0,
+      "dropped_by_protocol": {},
+      "direct_edge_seen": false,
+      "edges": {
+        "17": [
+          [
+            4,
+            12
+          ],
+          [
+            8,
+            0
+          ],
+          [
+            11,
+            8
+          ],
+          [
+            12,
+            15
+          ],
+          [
+            15,
+            17
+          ],
+          [
+            17,
+            11
+          ]
+        ],
+        "252": [
+          [
+            0,
+            8
+          ],
+          [
+            8,
+            11
+          ],
+          [
+            11,
+            17
+          ],
+          [
+            12,
+            4
+          ],
+          [
+            15,
+            12
+          ],
+          [
+            17,
+            15
+          ]
+        ],
+        "253": [],
+        "255": [
+          [
+            0,
+            8
+          ],
+          [
+            8,
+            11
+          ],
+          [
+            11,
+            17
+          ],
+          [
+            12,
+            4
+          ],
+          [
+            15,
+            12
+          ],
+          [
+            17,
+            15
+          ]
+        ]
+      },
+      "accepted_ns": 70958,
+      "acked_ns": 77026,
+      "last_source_tx_ns": 24304,
+      "first_cnp_ns": 26937,
+      "cnp_received": 2,
+      "witness": {
+        "sequence": 100784,
+        "payload_bytes": 464,
+        "packet_uid": 1367,
+        "source_tx_ns": 24304,
+        "destination_rx_ns": 70958,
+        "source_to_accept_ns": 46654,
+        "queue_wait_ns": 39934,
+        "nonqueue_transit_ns": 6720,
+        "queues": [
+          {
+            "stream": 8,
+            "packet_uid": 1367,
+            "sequence": 100784,
+            "ip_protocol": 17,
+            "node": 12,
+            "port": 4,
+            "peer": 15,
+            "enqueue_ns": 25344,
+            "dequeue_ns": 64732,
+            "wait_ns": 39388,
+            "model_bytes": 500,
+            "data_bytes_ahead_by_stream": {
+              "8": 67268,
+              "11": 52764
+            },
+            "repeated_model_bytes_ahead_by_stream": {},
+            "repeated_already_received_before_enqueue": {},
+            "repeated_already_acked_before_enqueue": {},
+            "stale_ahead_examples": []
+          },
+          {
+            "stream": 8,
+            "packet_uid": 1367,
+            "sequence": 100784,
+            "ip_protocol": 17,
+            "node": 15,
+            "port": 3,
+            "peer": 17,
+            "enqueue_ns": 65892,
+            "dequeue_ns": 66079,
+            "wait_ns": 187,
+            "model_bytes": 500,
+            "data_bytes_ahead_by_stream": {},
+            "repeated_model_bytes_ahead_by_stream": {},
+            "repeated_already_received_before_enqueue": {},
+            "repeated_already_acked_before_enqueue": {},
+            "stale_ahead_examples": []
+          },
+          {
+            "stream": 8,
+            "packet_uid": 1367,
+            "sequence": 100784,
+            "ip_protocol": 17,
+            "node": 17,
+            "port": 1,
+            "peer": 11,
+            "enqueue_ns": 67239,
+            "dequeue_ns": 67426,
+            "wait_ns": 187,
+            "model_bytes": 500,
+            "data_bytes_ahead_by_stream": {},
+            "repeated_model_bytes_ahead_by_stream": {},
+            "repeated_already_received_before_enqueue": {},
+            "repeated_already_acked_before_enqueue": {},
+            "stale_ahead_examples": []
+          },
+          {
+            "stream": 8,
+            "packet_uid": 1367,
+            "sequence": 100784,
+            "ip_protocol": 17,
+            "node": 11,
+            "port": 1,
+            "peer": 8,
+            "enqueue_ns": 68586,
+            "dequeue_ns": 68758,
+            "wait_ns": 172,
+            "model_bytes": 500,
+            "data_bytes_ahead_by_stream": {},
+            "repeated_model_bytes_ahead_by_stream": {},
+            "repeated_already_received_before_enqueue": {},
+            "repeated_already_acked_before_enqueue": {},
+            "stale_ahead_examples": []
+          },
+          {
+            "stream": 8,
+            "packet_uid": 1367,
+            "sequence": 100784,
+            "ip_protocol": 17,
+            "node": 8,
+            "port": 1,
+            "peer": 0,
+            "enqueue_ns": 69918,
+            "dequeue_ns": 69918,
+            "wait_ns": 0,
+            "model_bytes": 500,
+            "data_bytes_ahead_by_stream": {},
+            "repeated_model_bytes_ahead_by_stream": {},
+            "repeated_already_received_before_enqueue": {},
+            "repeated_already_acked_before_enqueue": {},
+            "stale_ahead_examples": []
+          }
+        ]
+      }
+    },
+    "failed-gbn": {
+      "stream": 8,
+      "src": 4,
+      "dst": 0,
+      "work": 7,
+      "unique_bytes": 101248,
+      "tx_payload_bytes": 101248,
+      "source_packets": 105,
+      "repeated_payload_bytes": 0,
+      "dropped_by_protocol": {},
+      "direct_edge_seen": false,
+      "edges": {
+        "17": [
+          [
+            4,
+            12
+          ],
+          [
+            8,
+            0
+          ],
+          [
+            11,
+            8
+          ],
+          [
+            12,
+            15
+          ],
+          [
+            15,
+            17
+          ],
+          [
+            17,
+            11
+          ]
+        ],
+        "252": [
+          [
+            0,
+            8
+          ],
+          [
+            8,
+            11
+          ],
+          [
+            11,
+            17
+          ],
+          [
+            12,
+            4
+          ],
+          [
+            15,
+            12
+          ],
+          [
+            17,
+            15
+          ]
+        ],
+        "253": [],
+        "255": [
+          [
+            0,
+            8
+          ],
+          [
+            8,
+            11
+          ],
+          [
+            11,
+            17
+          ],
+          [
+            12,
+            4
+          ],
+          [
+            15,
+            12
+          ],
+          [
+            17,
+            15
+          ]
+        ]
+      },
+      "accepted_ns": 138288,
+      "acked_ns": 145007,
+      "last_source_tx_ns": 24272,
+      "first_cnp_ns": 21206,
+      "cnp_received": 4,
+      "witness": {
+        "sequence": 100784,
+        "payload_bytes": 464,
+        "packet_uid": 1290,
+        "source_tx_ns": 24272,
+        "destination_rx_ns": 138288,
+        "source_to_accept_ns": 114016,
+        "queue_wait_ns": 107296,
+        "nonqueue_transit_ns": 6720,
+        "queues": [
+          {
+            "stream": 8,
+            "packet_uid": 1290,
+            "sequence": 100784,
+            "ip_protocol": 17,
+            "node": 12,
+            "port": 4,
+            "peer": 15,
+            "enqueue_ns": 25312,
+            "dequeue_ns": 64357,
+            "wait_ns": 39045,
+            "model_bytes": 500,
+            "data_bytes_ahead_by_stream": {
+              "11": 52764,
+              "8": 66232
+            },
+            "repeated_model_bytes_ahead_by_stream": {},
+            "repeated_already_received_before_enqueue": {},
+            "repeated_already_acked_before_enqueue": {},
+            "stale_ahead_examples": []
+          },
+          {
+            "stream": 8,
+            "packet_uid": 1290,
+            "sequence": 100784,
+            "ip_protocol": 17,
+            "node": 15,
+            "port": 3,
+            "peer": 17,
+            "enqueue_ns": 65517,
+            "dequeue_ns": 77712,
+            "wait_ns": 12195,
+            "model_bytes": 500,
+            "data_bytes_ahead_by_stream": {
+              "8": 22256,
+              "12": 13968
+            },
+            "repeated_model_bytes_ahead_by_stream": {
+              "12": 13968
+            },
+            "repeated_already_received_before_enqueue": {},
+            "repeated_already_acked_before_enqueue": {},
+            "stale_ahead_examples": []
+          },
+          {
+            "stream": 8,
+            "packet_uid": 1290,
+            "sequence": 100784,
+            "ip_protocol": 17,
+            "node": 17,
+            "port": 1,
+            "peer": 11,
+            "enqueue_ns": 78872,
+            "dequeue_ns": 79044,
+            "wait_ns": 172,
+            "model_bytes": 500,
+            "data_bytes_ahead_by_stream": {},
+            "repeated_model_bytes_ahead_by_stream": {},
+            "repeated_already_received_before_enqueue": {},
+            "repeated_already_acked_before_enqueue": {},
+            "stale_ahead_examples": []
+          },
+          {
+            "stream": 8,
+            "packet_uid": 1290,
+            "sequence": 100784,
+            "ip_protocol": 17,
+            "node": 11,
+            "port": 1,
+            "peer": 8,
+            "enqueue_ns": 80204,
+            "dequeue_ns": 136088,
+            "wait_ns": 55884,
+            "model_bytes": 500,
+            "data_bytes_ahead_by_stream": {
+              "8": 38296,
+              "12": 57408,
+              "4": 70876
+            },
+            "repeated_model_bytes_ahead_by_stream": {
+              "12": 46548,
+              "4": 56908
+            },
+            "repeated_already_received_before_enqueue": {
+              "4": 56908
+            },
+            "repeated_already_acked_before_enqueue": {
+              "4": 56908
+            },
+            "stale_ahead_examples": [
+              {
+                "stream": 4,
+                "packet_uid": 1713,
+                "sequence": 5000,
+                "payload_bytes": 1000,
+                "model_bytes": 1036,
+                "source_tx_ns": 39681,
+                "owner_enqueue_ns": 53274,
+                "source_ack_ns": 41082
+              },
+              {
+                "stream": 4,
+                "packet_uid": 1730,
+                "sequence": 6000,
+                "payload_bytes": 1000,
+                "model_bytes": 1036,
+                "source_tx_ns": 40418,
+                "owner_enqueue_ns": 53938,
+                "source_ack_ns": 41733
+              },
+              {
+                "stream": 4,
+                "packet_uid": 1738,
+                "sequence": 7000,
+                "payload_bytes": 1000,
+                "model_bytes": 1036,
+                "source_tx_ns": 40707,
+                "owner_enqueue_ns": 54270,
+                "source_ack_ns": 42042
+              },
+              {
+                "stream": 4,
+                "packet_uid": 1746,
+                "sequence": 8000,
+                "payload_bytes": 1000,
+                "model_bytes": 1036,
+                "source_tx_ns": 41082,
+                "owner_enqueue_ns": 54617,
+                "source_ack_ns": 42778
+              }
+            ]
+          },
+          {
+            "stream": 8,
+            "packet_uid": 1290,
+            "sequence": 100784,
+            "ip_protocol": 17,
+            "node": 8,
+            "port": 1,
+            "peer": 0,
+            "enqueue_ns": 137248,
+            "dequeue_ns": 137248,
+            "wait_ns": 0,
+            "model_bytes": 500,
+            "data_bytes_ahead_by_stream": {},
+            "repeated_model_bytes_ahead_by_stream": {},
+            "repeated_already_received_before_enqueue": {},
+            "repeated_already_acked_before_enqueue": {},
+            "stale_ahead_examples": []
+          }
+        ]
+      }
+    },
+    "healthy-selective": {
+      "stream": 8,
+      "src": 4,
+      "dst": 0,
+      "work": 7,
+      "unique_bytes": 101248,
+      "tx_payload_bytes": 101248,
+      "source_packets": 105,
+      "repeated_payload_bytes": 0,
+      "dropped_by_protocol": {},
+      "direct_edge_seen": false,
+      "edges": {
+        "17": [
+          [
+            4,
+            12
+          ],
+          [
+            8,
+            0
+          ],
+          [
+            11,
+            8
+          ],
+          [
+            12,
+            15
+          ],
+          [
+            15,
+            17
+          ],
+          [
+            17,
+            11
+          ]
+        ],
+        "252": [
+          [
+            0,
+            8
+          ],
+          [
+            8,
+            11
+          ],
+          [
+            11,
+            17
+          ],
+          [
+            12,
+            4
+          ],
+          [
+            15,
+            12
+          ],
+          [
+            17,
+            15
+          ]
+        ],
+        "253": [],
+        "255": [
+          [
+            0,
+            8
+          ],
+          [
+            8,
+            11
+          ],
+          [
+            11,
+            17
+          ],
+          [
+            12,
+            4
+          ],
+          [
+            15,
+            12
+          ],
+          [
+            17,
+            15
+          ]
+        ]
+      },
+      "accepted_ns": 71029,
+      "acked_ns": 77101,
+      "last_source_tx_ns": 24300,
+      "first_cnp_ns": 26983,
+      "cnp_received": 2,
+      "witness": {
+        "sequence": 100784,
+        "payload_bytes": 464,
+        "packet_uid": 1366,
+        "source_tx_ns": 24300,
+        "destination_rx_ns": 71029,
+        "source_to_accept_ns": 46729,
+        "queue_wait_ns": 40009,
+        "nonqueue_transit_ns": 6720,
+        "queues": [
+          {
+            "stream": 8,
+            "packet_uid": 1366,
+            "sequence": 100784,
+            "ip_protocol": 17,
+            "node": 12,
+            "port": 4,
+            "peer": 15,
+            "enqueue_ns": 25340,
+            "dequeue_ns": 64817,
+            "wait_ns": 39477,
+            "model_bytes": 500,
+            "data_bytes_ahead_by_stream": {
+              "8": 67268,
+              "11": 52764
+            },
+            "repeated_model_bytes_ahead_by_stream": {},
+            "repeated_already_received_before_enqueue": {},
+            "repeated_already_acked_before_enqueue": {},
+            "stale_ahead_examples": []
+          },
+          {
+            "stream": 8,
+            "packet_uid": 1366,
+            "sequence": 100784,
+            "ip_protocol": 17,
+            "node": 15,
+            "port": 3,
+            "peer": 17,
+            "enqueue_ns": 65977,
+            "dequeue_ns": 66165,
+            "wait_ns": 188,
+            "model_bytes": 500,
+            "data_bytes_ahead_by_stream": {},
+            "repeated_model_bytes_ahead_by_stream": {},
+            "repeated_already_received_before_enqueue": {},
+            "repeated_already_acked_before_enqueue": {},
+            "stale_ahead_examples": []
+          },
+          {
+            "stream": 8,
+            "packet_uid": 1366,
+            "sequence": 100784,
+            "ip_protocol": 17,
+            "node": 17,
+            "port": 1,
+            "peer": 11,
+            "enqueue_ns": 67325,
+            "dequeue_ns": 67497,
+            "wait_ns": 172,
+            "model_bytes": 500,
+            "data_bytes_ahead_by_stream": {},
+            "repeated_model_bytes_ahead_by_stream": {},
+            "repeated_already_received_before_enqueue": {},
+            "repeated_already_acked_before_enqueue": {},
+            "stale_ahead_examples": []
+          },
+          {
+            "stream": 8,
+            "packet_uid": 1366,
+            "sequence": 100784,
+            "ip_protocol": 17,
+            "node": 11,
+            "port": 1,
+            "peer": 8,
+            "enqueue_ns": 68657,
+            "dequeue_ns": 68829,
+            "wait_ns": 172,
+            "model_bytes": 500,
+            "data_bytes_ahead_by_stream": {},
+            "repeated_model_bytes_ahead_by_stream": {},
+            "repeated_already_received_before_enqueue": {},
+            "repeated_already_acked_before_enqueue": {},
+            "stale_ahead_examples": []
+          },
+          {
+            "stream": 8,
+            "packet_uid": 1366,
+            "sequence": 100784,
+            "ip_protocol": 17,
+            "node": 8,
+            "port": 1,
+            "peer": 0,
+            "enqueue_ns": 69989,
+            "dequeue_ns": 69989,
+            "wait_ns": 0,
+            "model_bytes": 500,
+            "data_bytes_ahead_by_stream": {},
+            "repeated_model_bytes_ahead_by_stream": {},
+            "repeated_already_received_before_enqueue": {},
+            "repeated_already_acked_before_enqueue": {},
+            "stale_ahead_examples": []
+          }
+        ]
+      }
+    },
+    "failed-selective": {
+      "stream": 8,
+      "src": 4,
+      "dst": 0,
+      "work": 7,
+      "unique_bytes": 101248,
+      "tx_payload_bytes": 101248,
+      "source_packets": 105,
+      "repeated_payload_bytes": 0,
+      "dropped_by_protocol": {},
+      "direct_edge_seen": false,
+      "edges": {
+        "17": [
+          [
+            4,
+            12
+          ],
+          [
+            8,
+            0
+          ],
+          [
+            11,
+            8
+          ],
+          [
+            12,
+            15
+          ],
+          [
+            15,
+            17
+          ],
+          [
+            17,
+            11
+          ]
+        ],
+        "252": [
+          [
+            0,
+            8
+          ],
+          [
+            8,
+            11
+          ],
+          [
+            11,
+            17
+          ],
+          [
+            12,
+            4
+          ],
+          [
+            15,
+            12
+          ],
+          [
+            17,
+            15
+          ]
+        ],
+        "253": [],
+        "255": [
+          [
+            0,
+            8
+          ],
+          [
+            8,
+            11
+          ],
+          [
+            11,
+            17
+          ],
+          [
+            12,
+            4
+          ],
+          [
+            15,
+            12
+          ],
+          [
+            17,
+            15
+          ]
+        ]
+      },
+      "accepted_ns": 132242,
+      "acked_ns": 138601,
+      "last_source_tx_ns": 24272,
+      "first_cnp_ns": 21235,
+      "cnp_received": 4,
+      "witness": {
+        "sequence": 100784,
+        "payload_bytes": 464,
+        "packet_uid": 1303,
+        "source_tx_ns": 24272,
+        "destination_rx_ns": 132242,
+        "source_to_accept_ns": 107970,
+        "queue_wait_ns": 101250,
+        "nonqueue_transit_ns": 6720,
+        "queues": [
+          {
+            "stream": 8,
+            "packet_uid": 1303,
+            "sequence": 100784,
+            "ip_protocol": 17,
+            "node": 12,
+            "port": 4,
+            "peer": 15,
+            "enqueue_ns": 25312,
+            "dequeue_ns": 64864,
+            "wait_ns": 39552,
+            "model_bytes": 500,
+            "data_bytes_ahead_by_stream": {
+              "11": 52764,
+              "8": 66232
+            },
+            "repeated_model_bytes_ahead_by_stream": {},
+            "repeated_already_received_before_enqueue": {},
+            "repeated_already_acked_before_enqueue": {},
+            "stale_ahead_examples": []
+          },
+          {
+            "stream": 8,
+            "packet_uid": 1303,
+            "sequence": 100784,
+            "ip_protocol": 17,
+            "node": 15,
+            "port": 3,
+            "peer": 17,
+            "enqueue_ns": 66024,
+            "dequeue_ns": 74679,
+            "wait_ns": 8655,
+            "model_bytes": 500,
+            "data_bytes_ahead_by_stream": {
+              "12": 3608,
+              "8": 22256
+            },
+            "repeated_model_bytes_ahead_by_stream": {
+              "12": 3608
+            },
+            "repeated_already_received_before_enqueue": {},
+            "repeated_already_acked_before_enqueue": {},
+            "stale_ahead_examples": []
+          },
+          {
+            "stream": 8,
+            "packet_uid": 1303,
+            "sequence": 100784,
+            "ip_protocol": 17,
+            "node": 17,
+            "port": 1,
+            "peer": 11,
+            "enqueue_ns": 75839,
+            "dequeue_ns": 76011,
+            "wait_ns": 172,
+            "model_bytes": 500,
+            "data_bytes_ahead_by_stream": {},
+            "repeated_model_bytes_ahead_by_stream": {},
+            "repeated_already_received_before_enqueue": {},
+            "repeated_already_acked_before_enqueue": {},
+            "stale_ahead_examples": []
+          },
+          {
+            "stream": 8,
+            "packet_uid": 1303,
+            "sequence": 100784,
+            "ip_protocol": 17,
+            "node": 11,
+            "port": 1,
+            "peer": 8,
+            "enqueue_ns": 77171,
+            "dequeue_ns": 130042,
+            "wait_ns": 52871,
+            "model_bytes": 500,
+            "data_bytes_ahead_by_stream": {
+              "4": 68304,
+              "8": 40368,
+              "12": 48084
+            },
+            "repeated_model_bytes_ahead_by_stream": {
+              "4": 54336,
+              "12": 38260
+            },
+            "repeated_already_received_before_enqueue": {
+              "4": 54336
+            },
+            "repeated_already_acked_before_enqueue": {
+              "4": 50192
+            },
+            "stale_ahead_examples": [
+              {
+                "stream": 4,
+                "packet_uid": 1757,
+                "sequence": 3000,
+                "payload_bytes": 1000,
+                "model_bytes": 1036,
+                "source_tx_ns": 38351,
+                "owner_enqueue_ns": 50995,
+                "source_ack_ns": 39082
+              },
+              {
+                "stream": 4,
+                "packet_uid": 1761,
+                "sequence": 4000,
+                "payload_bytes": 1000,
+                "model_bytes": 1036,
+                "source_tx_ns": 38545,
+                "owner_enqueue_ns": 51327,
+                "source_ack_ns": 40126
+              },
+              {
+                "stream": 4,
+                "packet_uid": 1765,
+                "sequence": 5000,
+                "payload_bytes": 1000,
+                "model_bytes": 1036,
+                "source_tx_ns": 38753,
+                "owner_enqueue_ns": 51991,
+                "source_ack_ns": 41208
+              },
+              {
+                "stream": 4,
+                "packet_uid": 1773,
+                "sequence": 6000,
+                "payload_bytes": 1000,
+                "model_bytes": 1036,
+                "source_tx_ns": 39082,
+                "owner_enqueue_ns": 52323,
+                "source_ack_ns": 42198
+              }
+            ]
+          },
+          {
+            "stream": 8,
+            "packet_uid": 1303,
+            "sequence": 100784,
+            "ip_protocol": 17,
+            "node": 8,
+            "port": 1,
+            "peer": 0,
+            "enqueue_ns": 131202,
+            "dequeue_ns": 131202,
+            "wait_ns": 0,
+            "model_bytes": 500,
+            "data_bytes_ahead_by_stream": {},
+            "repeated_model_bytes_ahead_by_stream": {},
+            "repeated_already_received_before_enqueue": {},
+            "repeated_already_acked_before_enqueue": {},
+            "stale_ahead_examples": []
+          }
+        ]
+      }
+    }
+  },
+  "mode_effect": {
+    "healthy": {
+      "ack_delta_ns": 109,
+      "accepted_delta_ns": 105,
+      "payload_delta_bytes": 0
+    },
+    "failed": {
+      "ack_delta_ns": -18404,
+      "accepted_delta_ns": -18406,
+      "payload_delta_bytes": -106248
+    }
+  },
+  "main_finding": "Classical selective repeat sharply reduces whole-window fault penalty while healthy-flow queue interference remains; not evidence of an application optimization contribution",
+  "complete_application_executed": false,
+  "hardware_calibrated": false,
+  "independent_heldout": false
+}

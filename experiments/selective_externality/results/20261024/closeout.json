@@ -1,0 +1,134 @@
+{
+  "passed": true,
+  "phase": "completed",
+  "overall_research_goal": "in_progress",
+  "platform_commit": "2dc9eb71a801eb88e8757bb33324e8b2729ab2d3",
+  "actual_network_executions": 4,
+  "network_limit": 4,
+  "no_network_retries": true,
+  "monitors": [
+    {
+      "path": "analyze-monitor/probe.json",
+      "wall_seconds": 2.1543271616101265,
+      "peak_rss_bytes": 102989824,
+      "status": "completed"
+    },
+    {
+      "path": "deps-monitor/probe.json",
+      "wall_seconds": 0.33087393641471863,
+      "peak_rss_bytes": 19095552,
+      "status": "completed"
+    },
+    {
+      "path": "network/failed-gbn/execution/probe.json",
+      "wall_seconds": 2.060785671696067,
+      "peak_rss_bytes": 416686080,
+      "status": "completed"
+    },
+    {
+      "path": "network/failed-selective/execution/probe.json",
+      "wall_seconds": 2.2566571347415447,
+      "peak_rss_bytes": 430456832,
+      "status": "completed"
+    },
+    {
+      "path": "network/healthy-gbn/execution/probe.json",
+      "wall_seconds": 1.6238153893500566,
+      "peak_rss_bytes": 409055232,
+      "status": "completed"
+    },
+    {
+      "path": "network/healthy-selective/execution/probe.json",
+      "wall_seconds": 1.8546215184032917,
+      "peak_rss_bytes": 417849344,
+      "status": "completed"
+    },
+    {
+      "path": "package-monitor/probe.json",
+      "wall_seconds": 0.7576503977179527,
+      "peak_rss_bytes": 24051712,
+      "status": "completed"
+    },
+    {
+      "path": "persist-monitor/probe.json",
+      "wall_seconds": 0.12171279266476631,
+      "peak_rss_bytes": 6422528,
+      "status": "completed"
+    },
+    {
+      "path": "prepare-monitor/probe.json",
+      "wall_seconds": 0.1225440762937069,
+      "peak_rss_bytes": 6402048,
+      "status": "completed"
+    },
+    {
+      "path": "restore-monitor/probe.json",
+      "wall_seconds": 11.289938036352396,
+      "peak_rss_bytes": 247222272,
+      "status": "completed"
+    },
+    {
+      "path": "run-monitor/probe.json",
+      "wall_seconds": 9.701504614204168,
+      "peak_rss_bytes": 517193728,
+      "status": "completed"
+    },
+    {
+      "path": "verify-monitor/probe.json",
+      "wall_seconds": 8.354926437139511,
+      "peak_rss_bytes": 223936512,
+      "status": "completed"
+    },
+    {
+      "path": "verify-strong-monitor/probe.json",
+      "wall_seconds": 8.956375155597925,
+      "peak_rss_bytes": 222990336,
+      "status": "completed"
+    }
+  ],
+  "original_monitor_count": 13,
+  "monitored_seconds_including_nested_conservatively": 49.58573232218623,
+  "final_file_management_reserve_seconds": 10,
+  "stage_wall_budget_seconds": 300,
+  "peak_sampled_rss_bytes": 517193728,
+  "disk_trees": {
+    "/dev/shm/moe-selective-externality-20261024": {
+      "apparent_bytes": 47171227,
+      "allocated_bytes": 47607808
+    },
+    "runs/selective_externality_checkpoint_20261024": {
+      "apparent_bytes": 2978442,
+      "allocated_bytes": 3014656
+    },
+    "experiments/selective_externality": {
+      "apparent_bytes": 99458,
+      "allocated_bytes": 126976
+    }
+  },
+  "charged_with_1MiB_receipt_reserve_bytes": 51798016,
+  "stage_disk_budget_bytes": 268435456,
+  "per_command_wall_seconds": 60,
+  "per_command_rss_bytes": 1073741824,
+  "per_process_address_bytes": 2147483648,
+  "per_command_artifact_bytes": 67108864,
+  "simulation_limit_ns": 5000000,
+  "result_json_limit_bytes": 16777216,
+  "archive": {
+    "sha256": "32588475d50c09520ecb9e7c456cc32b9db5830dab8a40cf02e769e0b3c8a6ee",
+    "bytes": 2901435,
+    "members": 92,
+    "uncompressed_file_bytes": 26109899,
+    "scope": "Original four network results and offline analysis replay. No portable binary, clean build or network replay."
+  },
+  "persistent_archive_sha256_equal": true,
+  "dependencies_checked": 13,
+  "binary_and_eight_libraries_hash_unchanged": true,
+  "all_monitors_terminal": true,
+  "preparation_or_checker_failures": [],
+  "checker_strengthened_offline_without_network_rerun": true,
+  "platform_or_dependency_modified": false,
+  "build_or_install_or_download": false,
+  "gpu_executed": false,
+  "pushed": false,
+  "scope": "Four finite source-backed Dispatch windows; classic baseline substantially weakens original whole-window candidate. Full modern application, hardware calibration, heldout and thousand-GPU evidence remain missing."
+}

@@ -1,0 +1,38 @@
+{
+  "passed": true,
+  "inputs": {
+    "gbn-work.json": {
+      "current_sha256": "a7546fa17ac31ddcf275f90e4c5f7a393aaa865d3b9667a01f44fa5ca6ebba78",
+      "historical_sha256": "a7546fa17ac31ddcf275f90e4c5f7a393aaa865d3b9667a01f44fa5ca6ebba78",
+      "loaded_json_equal": true
+    },
+    "healthy-protocol.json": {
+      "current_sha256": "3575d611e547dac1e0a0dc0cee04758ba5e191c20d84a6a5922be21c8bbf0806",
+      "historical_sha256": "3575d611e547dac1e0a0dc0cee04758ba5e191c20d84a6a5922be21c8bbf0806",
+      "loaded_json_equal": true
+    },
+    "failed-protocol.json": {
+      "current_sha256": "a84219c3d2dd5db0842b42f4d05bc03be2124d6e19eb9fc25352cb4bf3169188",
+      "historical_sha256": "a84219c3d2dd5db0842b42f4d05bc03be2124d6e19eb9fc25352cb4bf3169188",
+      "loaded_json_equal": true
+    },
+    "topology.json": {
+      "current_sha256": "1d92d5c3497fb42dcede3fabd7a49328973b3acc145944696c18d83f09a781ed",
+      "historical_sha256": "1d92d5c3497fb42dcede3fabd7a49328973b3acc145944696c18d83f09a781ed",
+      "loaded_json_equal": true
+    }
+  },
+  "results": {
+    "healthy": {
+      "current_sha256": "bedb49216a101e99381f4c8a3289977b4435059b92763a95d758b8054ccf60d6",
+      "historical_sha256": "ebb2b0baa15ab61b72dbef5c7d7d49e8eb871db205d389de78b8e4e8a32196a9",
+      "complete_equal_except_loaded_library_paths": true
+    },
+    "failed": {
+      "current_sha256": "a6eea953315db914d06ced62c5e9457a2b623b54f9b5f93157be9ddb2ba5a5a3",
+      "historical_sha256": "df1fa86767debb291d78fc218cad5165d7daa95de6bd50cffd06b887529939a3",
+      "complete_equal_except_loaded_library_paths": true
+    }
+  },
+  "scope": "Offline comparison against already completed historical files; no old driver imported or historical network rerun"
+}

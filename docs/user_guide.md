@@ -1,5 +1,7 @@
 # 用户指南
 
+可用`scaleout modern-deepep-native`让实际原生网络回调驱动现代功能图。两rank示例可运行；四rank原始路由尚受256次控制交互限制，未完成验收。输入、声明成本和限制见[现代功能接入](../examples/modern_deepep_native/README.md)。
+
 使用同一节点作为通信对端时，可在transactions/5显式声明功能self服务，并与真实远端通信共享内存和时钟。输入及公开probe/session命令见[混合服务示例](../examples/scaleout_self_peer/README.md)；context规划器仍拒绝self。
 
 验证通信域/context/peer到持久连接和物理NIC的对应，可用`scaleout rdma-context-plan`、现有`rdma-transaction-probe`及`rdma-context-check`。输入、完整捕获要求和两NIC例子见[上下文绑定](../examples/scaleout_context_transactions/README.md)；self-peer仍明确不支持。

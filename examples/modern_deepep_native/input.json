@@ -1,0 +1,129 @@
+{
+  "schema_version": "moe-modern-native-input/1",
+  "modern": {
+    "schema_version": "moe-modern-deepep-input/1",
+    "model": {
+      "experts": 4,
+      "top_k": 2,
+      "hidden_size": 256,
+      "precision": "bf16"
+    },
+    "execution": {
+      "ranks": 2,
+      "max_tokens_per_rank": 2,
+      "mode": "direct_rdma_only_fresh",
+      "stream": "compute_wait_no_deferred_epilogue",
+      "expanded_layout": true,
+      "allow_multiple_reduction": true,
+      "expert_alignment": 1,
+      "num_sms": 1,
+      "dispatch_warps": 1,
+      "combine_warps": 1,
+      "call_contexts": 3,
+      "requested_contexts": 3,
+      "connections": 2,
+      "local_devices": [
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ]
+      ]
+    },
+    "calls": [
+      {
+        "name": "first",
+        "tokens": [
+          [
+            [
+              0,
+              2
+            ],
+            [
+              1,
+              3
+            ]
+          ],
+          []
+        ]
+      },
+      {
+        "name": "second",
+        "tokens": [
+          [],
+          [
+            [
+              0,
+              2
+            ]
+          ]
+        ]
+      }
+    ],
+    "limits": {
+      "max_events": 8192,
+      "max_operations": 2048,
+      "max_input_bytes": 1048576,
+      "max_output_bytes": 4194304
+    }
+  },
+  "deployment": [
+    {
+      "rank": 0,
+      "node": 0,
+      "devices": [
+        {
+          "device": 0,
+          "nic": 1,
+          "plane": 0
+        },
+        {
+          "device": 1,
+          "nic": 2,
+          "plane": 1
+        }
+      ]
+    },
+    {
+      "rank": 1,
+      "node": 4,
+      "devices": [
+        {
+          "device": 0,
+          "nic": 1,
+          "plane": 0
+        },
+        {
+          "device": 1,
+          "nic": 2,
+          "plane": 1
+        }
+      ]
+    }
+  ],
+  "provider": {
+    "mode": "functional_mrt1/1",
+    "target_visibility": "native_apply_functional/1",
+    "queue_depth": 4,
+    "self_service": {
+      "apply_ns": 200,
+      "complete_ns": 500
+    },
+    "transport_recovery": {
+      "mode": "go_back_n/1",
+      "initial_rto_ns": 80000,
+      "max_rto_ns": 640000,
+      "max_retries": 3,
+      "max_events": 1000
+    }
+  },
+  "costs": {
+    "source_prepare_ns": 100,
+    "expert_ns": 1000,
+    "reduction_ns": 100,
+    "local_copy_ns": 100
+  }
+}

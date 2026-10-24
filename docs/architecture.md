@@ -1,5 +1,7 @@
 # 系统架构与执行过程
 
+`modern_native.py`新增功能接入：现代事件由同一次原生事务会话的实际回调推进，本地copy/计数清零/声明计算也在该时钟执行。必要self、动态slot和跨调用复用保留；accepted/visible采用显式native-apply功能假设。四rank原始路由仍触发控制交互上限，阶段尚未完成，见[公开范围](../examples/modern_deepep_native/README.md)。
+
 transactions/5的可选`declared_service_fifo/1`为每个self连接调度独立start/apply/complete事件。它沿用源保护和目标NIC权限，释放由实际complete回调触发；不占本地GPU计算槽，也不创建网络载体或ACK。见[混合服务](../examples/scaleout_self_peer/README.md)。
 
 `context_transactions.py`将显式communicator/source/context/peer身份编译成既有MRT1请求/响应载体，保留上下文隔离及声明的物理NIC；执行仍由同一个原生事务网络推进。核查入口对照实际包和连接生命周期，不新增provider。见[上下文绑定](../examples/scaleout_context_transactions/README.md)。
@@ -36,17 +38,17 @@ transactions/3在同一持久网络中串接“实际接收窗口→后续put”
 
 `RemoteTransactions`另支持提交GPU读取本地接收窗口的LE64条件等待与消费；值来自实际请求解码后的内存，全部条件满足才推进。它与远端应用记录使用同一网络时钟，但不提供GPU内存序或轮询成本；两轮例见[本地窗口等待](../examples/scaleout_rdma_transactions/README.md#根据实际收到的值推进下一轮)。
 
-独立`RemoteTransactions`在持久载体上增加MRT1实际负载编码、目标窗口解析、put/fetch-add、返回值流及按事务完成回收的工作额度。原子请求ACK不释放其队列槽，返回值实际到达后才能推进；应用完成后仍等反向确认和物理排空。`remote_memory.hh`不访问源工作表，`remote_transactions.cc`负责网络接入与本地应用事件；公开入口为`rdma-transaction-probe`。它不是RoCE/GIN时延模型，现代事件核心尚未接入，见[远端事务示例](../examples/scaleout_rdma_transactions/README.md)。
+独立`RemoteTransactions`在持久载体上增加MRT1实际负载编码、目标窗口解析、put/fetch-add、返回值流及按事务完成回收的工作额度。原子请求ACK不释放其队列槽，返回值实际到达后才能推进；应用完成后仍等反向确认和物理排空。`remote_memory.hh`不访问源工作表，`remote_transactions.cc`负责网络接入与本地应用事件；公开入口为`rdma-transaction-probe`。它不是RoCE/GIN时延模型，实际事件核心的功能接入见上方modern_native，原事务示例见[远端事务示例](../examples/scaleout_rdma_transactions/README.md)。
 
 独立网络增量`PersistentStreams`通过设备Receive/packet-generator回调使用同一原生Simulator，保留连接并按实际接收/ACK推进工作，公开入口为`rdma-stream-probe`。它已连接GinWorkQueue的单条工作资源状态，信用按完整ACK释放；现代Python事件核心尚未接到这里。原子事务、GPU可见与源buffer寿命待实现，不能作为现代DeepEP网络基线，见[持久字节传输](../examples/scaleout_rdma_streams/README.md)。
 
-`modern_deepep_plan.py`通过独立公开命令编译固定现代direct的无时间操作部分顺序，保留Dispatch原子slot和由其决定的Combine通道公式；数据、计数和屏障的必要依赖与在未来运行时才可解析的顺序分别保存。它尚未驱动队列核心或下面的在线服务，使用范围见[现代计划](../examples/modern_deepep_partial_order/README.md)。
+`modern_deepep_plan.py`通过独立公开命令编译固定现代direct的无时间操作部分顺序，保留Dispatch原子slot和由其决定的Combine通道公式；数据、计数和屏障的必要依赖与在未来运行时才可解析的顺序分别保存。离线plan本身不驱动队列；新增native接入的范围单独说明，离线使用见[现代计划](../examples/modern_deepep_partial_order/README.md)。
 
 现代plan/manifest现为`/2`，将显式本地旁路、GIN self-peer和跨rank GIN分开。屏障和专家计数块的self-peer操作保留provider资源与完成义务；不能按src==dst直接跳过。旧清单拒绝并要求从保存输入重新编译，依据见[自发GIN更正](../fixtures/modern_self_gin/README.md)。
 
-`modern_deepep_runtime.py`提供独立的`ModernDeepEPRuntime`事件核心与`modern-deepep-replay`。调用者逐项触发已满足依赖的事件，核心不自动完成操作；实际触发slot分配时才增加计数，取得同一owner的全部slot后建立Combine通道内顺序。它额外保留Dispatch同token全部目标slot原子分配后的warp同步。事件日志可以离线核验，但没有接入C++队列或网络回调，不能替代在线服务。
+`modern_deepep_runtime.py`提供独立的`ModernDeepEPRuntime`事件核心与`modern-deepep-replay`。调用者逐项触发已满足依赖的事件，核心不自动完成操作；实际触发slot分配时才增加计数，取得同一owner的全部slot后建立Combine通道内顺序。它额外保留Dispatch同token全部目标slot原子分配后的warp同步。事件日志可以离线核验，独立replay不接C++队列或网络；新增native入口单独提供有界的实际回调接入。
 
-`modern_deepep_windows.py`在事件核心外增加相对窗口解析、跨epoch源读保护、计数消费清零及滚动信号影子状态，公开入口为`modern-deepep-window-replay`。应用主窗口与provider索引信号分开，source local_complete与target visible分开；它不编码或接收真实负载，也未接入C++资源与网络时钟。功能范围及宿主结构体核查见[窗口验收](../fixtures/modern_windows/README.md)。
+`modern_deepep_windows.py`在事件核心外增加相对窗口解析、跨epoch源读保护、计数消费清零及滚动信号影子状态，公开入口为`modern-deepep-window-replay`。应用主窗口与provider索引信号分开，source local_complete与target visible分开；独立window-replay不编码或接收真实负载；新增native入口在外层接入实际负载/时钟，保留功能可见性限制。功能范围及宿主结构体核查见[窗口验收](../fixtures/modern_windows/README.md)。
 
 `backend/rdma/gin_work_queue.hh`是独立的无时间资源核心，验证持久工作队列的槽复用、提交前缀和累计完成；尚未接入下述在线网络或现代应用计划。它的完成输入必须由未来provider回调提供，不能用作包时延、远端可见或现代库性能证据，详见[后端接口](../backend/README.md#gin工作队列功能核心)。
 

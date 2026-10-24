@@ -1,0 +1,134 @@
+{
+  "passed": true,
+  "independent_tamper_rejects": [
+    "fake_visible_callback",
+    "missing_self",
+    "wrong_target_bytes",
+    "early_modern_complete",
+    "corrupt_source",
+    "wrong_atomic_return",
+    "wrong_MRT1_magic",
+    "wrong_destination_nic",
+    "missing_zero_count",
+    "wrong_allocated_slot",
+    "out_of_order_arrival_is_not_acceptance"
+  ],
+  "public_rejects_before_output_and_native": [
+    {
+      "label": "GPU_visibility",
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "modern-deepep-native",
+        "--topology",
+        "/dev/shm/moe-modern-native-20261024/topology",
+        "--protocol",
+        "/home/lry/moe-ub-cosim/examples/modern_deepep_native/rdma.json",
+        "--config",
+        "/dev/shm/moe-modern-native-20261024/public-reject/GPU_visibility.json",
+        "--backend",
+        "/dev/shm/moe-modern-native-20261024/runtime/run-transaction-session",
+        "--output",
+        "/dev/shm/moe-modern-native-20261024/public-reject/GPU_visibility-unexpected"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 1
+    },
+    {
+      "label": "self_timing",
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "modern-deepep-native",
+        "--topology",
+        "/dev/shm/moe-modern-native-20261024/topology",
+        "--protocol",
+        "/home/lry/moe-ub-cosim/examples/modern_deepep_native/rdma.json",
+        "--config",
+        "/dev/shm/moe-modern-native-20261024/public-reject/self_timing.json",
+        "--backend",
+        "/dev/shm/moe-modern-native-20261024/runtime/run-transaction-session",
+        "--output",
+        "/dev/shm/moe-modern-native-20261024/public-reject/self_timing-unexpected"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 1
+    },
+    {
+      "label": "missing_expert_cost",
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "modern-deepep-native",
+        "--topology",
+        "/dev/shm/moe-modern-native-20261024/topology",
+        "--protocol",
+        "/home/lry/moe-ub-cosim/examples/modern_deepep_native/rdma.json",
+        "--config",
+        "/dev/shm/moe-modern-native-20261024/public-reject/missing_expert_cost.json",
+        "--backend",
+        "/dev/shm/moe-modern-native-20261024/runtime/run-transaction-session",
+        "--output",
+        "/dev/shm/moe-modern-native-20261024/public-reject/missing_expert_cost-unexpected"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 1
+    },
+    {
+      "label": "wrong_nic",
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "modern-deepep-native",
+        "--topology",
+        "/dev/shm/moe-modern-native-20261024/topology",
+        "--protocol",
+        "/home/lry/moe-ub-cosim/examples/modern_deepep_native/rdma.json",
+        "--config",
+        "/dev/shm/moe-modern-native-20261024/public-reject/wrong_nic.json",
+        "--backend",
+        "/dev/shm/moe-modern-native-20261024/runtime/run-transaction-session",
+        "--output",
+        "/dev/shm/moe-modern-native-20261024/public-reject/wrong_nic-unexpected"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 1
+    },
+    {
+      "label": "repeated_rank",
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "modern-deepep-native",
+        "--topology",
+        "/dev/shm/moe-modern-native-20261024/topology",
+        "--protocol",
+        "/home/lry/moe-ub-cosim/examples/modern_deepep_native/rdma.json",
+        "--config",
+        "/dev/shm/moe-modern-native-20261024/public-reject/repeated_rank.json",
+        "--backend",
+        "/dev/shm/moe-modern-native-20261024/runtime/run-transaction-session",
+        "--output",
+        "/dev/shm/moe-modern-native-20261024/public-reject/repeated_rank-unexpected"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 1
+    }
+  ],
+  "additional_network_executions": 0
+}

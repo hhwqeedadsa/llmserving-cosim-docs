@@ -1,5 +1,7 @@
 # 观测记录与存储格式
 
+`modern-deepep-native`另存`modern-plan.json/modern-execution.json`和实际`control.jsonl/result.json`；现代事件以`native_operation/native_event/native_time_ns`指向实际回调，纯零时长控制步骤单独标记。失败保留部分执行，不把输出文件存在当完成证明；字段见[输出说明](../examples/modern_deepep_native/README.md#输出)。
+
 仅启用self服务时，`transactions.self_peer_model`记录功能模式和未校准边界；self连接增加`self_service`，self操作增加`delivery/self_started_ns/self_completed_ns`。`request_acked_ns/response_ns=-1`表示未发生网络确认/回复，不能当完成时间；`applied_ns/completed_ns`为共同原生时钟。见[字段说明](../examples/scaleout_self_peer/README.md)。
 
 `rdma-context-plan`保存便携输入、事务程序、`moe-rdma-context-map/1`绑定及各文件SHA-256；`rdma-context-check`输出逐binding的实际操作数、请求/响应载体、源包/目标RX数与payload字节。实际字节含重传，不等于应用有效字节或线速字节。plan没有执行，check不新增网络；字段和完整捕获要求见[上下文绑定](../examples/scaleout_context_transactions/README.md)。

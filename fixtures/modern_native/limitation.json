@@ -1,0 +1,122 @@
+{
+  "four_request_full_call_passed": false,
+  "actual_network_executed": true,
+  "failure": "native session hard-coded 256 decisions, not network deadlock",
+  "finish_ns": 36845,
+  "fired_modern_events": 437,
+  "total_modern_events": 566,
+  "maximum_decisions_unchanged": 256,
+  "enlarged_budgets": false,
+  "failed_network_reexecuted": false,
+  "transcript_analysis": {
+    "synthetic-healthy": {
+      "actual_decisions": 213,
+      "unused_only_decisions": [
+        14,
+        20,
+        60,
+        62,
+        79,
+        84,
+        90,
+        104,
+        121,
+        129,
+        140,
+        170,
+        181,
+        189,
+        196,
+        205,
+        210
+      ],
+      "transition_counts": {
+        "submitted": 50,
+        "prepared": 50,
+        "published": 50,
+        "applied": 50,
+        "completed": 97,
+        "local_admitted": 47,
+        "local_started": 47,
+        "request_acked": 30,
+        "response": 16
+      }
+    },
+    "synthetic-fault": {
+      "actual_decisions": 222,
+      "unused_only_decisions": [
+        13,
+        19,
+        39,
+        67,
+        77,
+        82,
+        91,
+        95,
+        113,
+        130,
+        138,
+        149,
+        179,
+        190,
+        198,
+        205,
+        214,
+        219
+      ],
+      "transition_counts": {
+        "submitted": 50,
+        "prepared": 50,
+        "published": 50,
+        "applied": 50,
+        "completed": 97,
+        "local_admitted": 47,
+        "local_started": 47,
+        "request_acked": 30,
+        "response": 16
+      }
+    },
+    "four-routes": {
+      "actual_decisions": 256,
+      "unused_only_decisions": [
+        6,
+        8,
+        73,
+        74,
+        76,
+        78,
+        79,
+        81,
+        155,
+        157,
+        159,
+        161,
+        203,
+        204,
+        207,
+        209,
+        210,
+        212,
+        215,
+        216,
+        219,
+        221,
+        240,
+        241,
+        243
+      ],
+      "transition_counts": {
+        "submitted": 89,
+        "prepared": 89,
+        "published": 89,
+        "applied": 83,
+        "completed": 117,
+        "request_acked": 60,
+        "response": 28,
+        "local_admitted": 45,
+        "local_started": 42
+      }
+    }
+  },
+  "next_requirement": "bounded dependency-driven callback wakeups with retained full history; do not silently raise this phase budget or delay independent application work"
+}

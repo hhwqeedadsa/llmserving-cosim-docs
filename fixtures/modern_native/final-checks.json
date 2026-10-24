@@ -1,0 +1,39 @@
+{
+  "passed": true,
+  "controller_unchanged_after_networks": true,
+  "layout_delta_only_serialization_admission_and_config_copy": true,
+  "all_four_initial_programs_and_plans_equal": true,
+  "new_declared_serialization_rejects": [
+    "max_input_bytes",
+    "max_output_bytes"
+  ],
+  "additional_network_executions": 0,
+  "final_layout_network_reexecuted": false,
+  "parsed_sources": [
+    "python/moe_ub_cosim/modern_native.py",
+    "python/moe_ub_cosim/modern_native_layout.py",
+    "python/moe_ub_cosim/cli.py",
+    "fixtures/modern_native/audit.py",
+    "fixtures/modern_native/checkpoint.py",
+    "fixtures/modern_native/checks.py",
+    "fixtures/modern_native/closeout.py",
+    "fixtures/modern_native/final_checks.py",
+    "fixtures/modern_native/prepare.py",
+    "fixtures/modern_native/recover.py",
+    "fixtures/modern_native/stage.py",
+    "fixtures/modern_native/verification.py",
+    "tests/unit/modern_native_test.py"
+  ],
+  "public_help_command": {
+    "command": [
+      "python3",
+      "-B",
+      "-m",
+      "moe_ub_cosim",
+      "scaleout",
+      "--help"
+    ],
+    "cwd": "/home/lry/moe-ub-cosim",
+    "exit_code": 0
+  }
+}

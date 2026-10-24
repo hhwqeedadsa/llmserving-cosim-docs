@@ -1,5 +1,7 @@
 # 模型依据与适用范围
 
+现代native入口已验证两rank两调用的实际网络与self/计数/屏障，但四原始请求的四rank调用在256次控制交互处失败；不能宣称完整代表性负载已验收。数据为完整布局长度的合成标记；本地串行声明成本、功能信号地址和native-apply可见性均非实测GPU/provider。见[验收状态](../fixtures/modern_native/README.md)。
+
 显式self服务用于保留必要的同节点计数/屏障操作，声明时长不等于provider测量。小例核查FIFO、真实原子旧值、源捕获和远端丢包后的恰好一次应用；物理loopback/NIC争用、GPU可见、现代完整映射仍缺。见[功能验收](../fixtures/self_peer_service/README.md)。
 
 context连接规划沿用[固定provider共享范围核查](reviews/现代连接共享范围与网络优化对象_20261024.md)中的显式connection/context/NIC规则；实际执行对象仍是MRT1。两NIC功能例验证身份复用与隔离、首包丢失恢复、目标字节和原子旧值，不证明GIN QP/报文等价、self-peer、GPU可见性或现代性能。见[验收范围](../fixtures/context_transactions/README.md)。

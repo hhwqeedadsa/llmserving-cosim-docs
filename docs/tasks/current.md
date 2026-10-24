@@ -13,7 +13,15 @@
 
 ## 当前范围和预算
 
-当前平台`in_progress`：[现代操作到同一原生网络的功能接入](modern_native_bridge_spec.md)，基线`b214516`。保留全部控制与数据操作，由实际native回调驱动现代事件/窗口；显式功能可见性及合成标记，不声称GIN/GPU等价。固定最多4次小网络；600受监控秒/384MiB、每命令60秒/1GiB/地址2GiB/阶段128MiB、网络1ms/result16MiB。只Python接入，不构建/下载/GPU/依赖修改或push。平台和后续研究分别验收。
+当前平台`in_progress`：[现代操作到同一原生网络的功能接入](modern_native_bridge_spec.md)，基线`b214516`，预登记`2415be2`。公开`modern-deepep-native`已由实际native回调驱动现代事件/窗口，保留self、rank/expert零计数、四屏障、动态slot/Combine及跨调用复用；数据为完整布局长度合成标记，功能native-apply可见性与本地串行声明成本不声称真实GIN/GPU。两rank两调用正常/真实丢包均完成322事件/60现代操作（20self/30跨节点/10本地），实际50事务/47本地节点；正常105,621ns、丢包123,921ns，源包100→103且2次乱序丢弃，目标各应用一次。独立MRT1/端点/ACK/源捕获/copy/完整内存和必要操作核验通过。
+
+**未满足的原定验收**：四份真实路由entry1/layer3、EP4/H7168/E256/Top8的一次完整调用（118操作/566事件）实际执行至36,845ns，在硬编码256次session交互处失败，只完成437事件/76事务/41本地节点，Combine均未完成。它是宿主控制接口限制，不是网络死锁或完整R1推理。没有提高256、删控制操作、扩预算或重跑失败网络。本阶段不能标completed，也不能把较小输入成功替代此要求。已只读核正常/故障/失败分别17/18/25次无新提交且仅含未使用回调的交互；仅去除它们不足以证明四rank可完成。
+
+9项不同新Python检查、51项相关回归、11类证据篡改/5类公开拒绝、序列化预算/重复回调负例、6类不安全归档和13依赖通过。检查器最初误把乱序包当缓存，已按Go-Back-N连续前缀修复，只重分析已有网络；首次单元physical schema遗漏、该checker失败、四rank真实失败及一次runner提前拒绝的依赖检查启动均保留。最后增加纯序列化准入和配置复制，controller不变，四个已运行输入的初始程序/计划逐项相同，无网络重跑。
+
+原定第4次为新Python根/空cwd/包内8库的独立一调用小例，已通过；两组离线verification逐字节一致，四个完整原始路由JSON/hash在包内再次核对。最终418成员/65,771,779B包压缩11,650,805B保存到`runs/modern_native_checkpoint_20261024/`。26原始终态监控含嵌套保守106.60秒、峰值约565.03MiB，原件/恢复/两包/持久/源码及2MiB预留约143.44MiB；保持600秒/384MiB、每命令60秒/1GiB/地址2GiB/阶段128MiB、4次1ms/result16MiB。3次网络成功、1次失败，全部进程终止，最终管理收据另存运行目录。同主机ABI-bound迁移，不是从零构建；原生HEAD`68a07f7`、程序/8库/后端源码未改，没有构建/安装下载/GPU/依赖修改或push。见[验收](../../fixtures/modern_native/README.md)、[核验](../../fixtures/modern_native/verification.json)、[限制](../../fixtures/modern_native/limitation.json)、[恢复](../../fixtures/modern_native/recovery.json)、[收尾](../../fixtures/modern_native/closeout.json)及[中文报告](../reviews/现代完整操作与真实网络回调接入_20261024.md)。
+
+本轮运行预算已收尾，不追加第五次网络；本平台原目标及整体论文目标均仍`in_progress`。下一步须独立登记有界依赖驱动回调唤醒的系统前置能力，保留完整历史、真实就绪时刻和并发关系，在既有限额下证明减少控制交互，不通过推迟独立工作或静默扩大计数绕过失败。之后仍须回到四请求完整验收，再研究恢复竞争是否进入健康应用关键路径及同资源强基线；现代provider成本/可见性、匹配硬件校准、独立留出、千卡与论文主创新仍缺。
 
 当前平台`completed`：[显式self-peer服务与共享目标内存](self_peer_service_spec.md)，基线`7549219`。transactions/5显式self FIFO与实际远端MRT1共享同一时钟、内存和NIC授权；保留源保护/实际原子旧值/后继读取，self不生成ACK或网络载体、不占本地GPU计算槽。4次固定网络全部完成：默认完整result除同hash库路径外相同，混合正常/真实丢包在线保持目标各应用一次；新Python根/空cwd/包内8库独立执行零时长、前缀发布及self源读取，原两组离线verification逐字节一致。
 

@@ -1,0 +1,109 @@
+{
+  "platform_commit": "fdb77c2",
+  "inputs": {
+    "initial.json": {
+      "source": "/dev/shm/moe-native-wakeup-20261024/four-routes/initial.json",
+      "sha256": "46899eea1488fe9fe6993f187851b7d56848fe0f8ba2b7e770696cb2a5a4bd4d"
+    },
+    "topology.json": {
+      "source": "/dev/shm/moe-native-wakeup-20261024/four-routes/topology.json",
+      "sha256": "7084c1a8d0d3e9cd271fb4d835ff9c8e58430b01258d9399a1d5e21044b2e642"
+    },
+    "protocol.json": {
+      "source": "/dev/shm/moe-native-wakeup-20261024/four-routes/protocol.json",
+      "sha256": "8a2ec1514e01dbf1367942a6050977599cfd97ce35cce0790f05fc49b242510d"
+    },
+    "control.jsonl": {
+      "source": "/dev/shm/moe-native-wakeup-20261024/four-routes/control.jsonl",
+      "sha256": "11b29f42ae86c8a928327f9ad858972edb2125b3c7eaecd72eb39c0bb236baef"
+    }
+  },
+  "fixed_link_inputs": {
+    "/dev/shm/moe-self-peer-service-20261024/objects/remote_transactions.o": "3cfbd590e3e882797b417dba54b495af82bdf390260ec87736296fde2652c9f6",
+    "/dev/shm/moe-nack-grace-20261024/objects/persistent_streams.o": "a4de8d39dce635de6b29abcee065814b2367397420aa2901e8b04dcb03089aa7",
+    "/dev/shm/moe-live-ecmp-20261024/objects/liblive-fabric.a": "b321ee31f2c03cc342adc545cb1c817cb15c7bdff4ef2e9df290d5c896b793cb",
+    "/dev/shm/moe-native-wakeup-20261024/runtime/lib/libns3.42-applications.so": "08b8382fcb6c7469dd0542229883eca67357bb28feb9edff3fbae07d7817b4ec",
+    "/dev/shm/moe-native-wakeup-20261024/runtime/lib/libns3.42-bridge.so": "62ef37cf30cfd6bb9178e7624ee9e8f86d1433ff4706c6f2c954f1993bfd0e0c",
+    "/dev/shm/moe-native-wakeup-20261024/runtime/lib/libns3.42-core.so": "9975681ae1df71e900cbdd6b6379f0605524cd399b632ea7c5a5fb4bdc5dccaa",
+    "/dev/shm/moe-native-wakeup-20261024/runtime/lib/libns3.42-internet.so": "28376cb47a4d969a53cf19dbe64bfbc3b6375e936144d2355d8157daede20c98",
+    "/dev/shm/moe-native-wakeup-20261024/runtime/lib/libns3.42-network.so": "631755f823937a40d2a851c0c3aded254efc1cd956f50b19bb0f471da8c27fc9",
+    "/dev/shm/moe-native-wakeup-20261024/runtime/lib/libns3.42-point-to-point.so": "6e524c32e26d6819466d2094125ec23466ca6ccb83ed45e1c503abd7051fdb0f",
+    "/dev/shm/moe-native-wakeup-20261024/runtime/lib/libns3.42-stats.so": "0d216548195c7324dbf850040050396aa79e359c848e5bdd898ed9635435b1ef",
+    "/dev/shm/moe-native-wakeup-20261024/runtime/lib/libns3.42-traffic-control.so": "2ebf9e8bd0ff4c0c970f076f2bfe3ef5da54c240a2f2c02a4a4ce786459c2557"
+  },
+  "native_headers": {
+    "backend/rdma/fabric.hh": "c24a1ccdb1fae6af1d0a3e7dedbc63c73e1cc9a86e7aad2838c0ea0bacda0739",
+    "backend/rdma/astra_adapter.hh": "29c09c9d808c7e19bbdca5647d55f4bb161046c878595662faf8819bbc86feb2",
+    "backend/rdma/recovery.hh": "51f15d2c463b729c357ec1845770e110194da9908372cbf567b4961549fd90f4",
+    "backend/rdma/recovery_records.hh": "864c8e7977876bf0759eef849124983f8b61fe84d7cbc8b2ebda9c3ad2cf392c",
+    "backend/rdma/gin_work_queue.hh": "2616252a1620bee3ebb89c603914d7476d904b9a9b9ec2a68e67fcc4f04c3b22",
+    "backend/rdma/persistent_streams.hh": "e16b6822e226c2cd4469c744f6efd2fdaff73e7a242406d415af3227150796d1",
+    "backend/rdma/remote_memory.hh": "2bfe997bf9151ef1aee7d7c45c6b79e8d3465f3d6dca6c7ec4b73436028dda33",
+    "backend/rdma/remote_transactions.hh": "47a0d465d28091ba2c5ed51f44cd83cd27ef8bebc1d313b1152cbdcf9686d6e3",
+    "backend/rdma/host_timing.hh": "7114fcab1d671d7961a4fdfc33e3e19a1cedc5de3ca907e49097573a68ff7d8c",
+    "backend/rdma/dcqcn_reference.hh": "b80eac69407c3d1fd670bb2c5da9a27a04b67faa6a83b322f61673b84bbfc60c",
+    "backend/rdma/cnp_switch.hh": "3f1166d5487c6c43b075ede4b4af96e0d30a3e93c43527e83ea61fbee63fefb5",
+    "backend/rdma/transaction_session_validation.hh": "fa06cb79cc6a67fd9387ad4e2fbfde400c0648e4578ea820c7d9a55065f36fde",
+    "backend/rdma/transaction_effect_order.hh": "c78a8c2b3d3a905caae1853dc2b971c0ba63576ac63df93e454a13e88ede9b43",
+    "backend/rdma/bounded_buffers.hh": "ff3bf7ed0014288db60862583259e01da3959afc5984087a61987826e25a950a",
+    "backend/rdma/memory_registrations.hh": "a02799fac561d8ed368576dfd75994c50659d4b3803fcbe332353c4f010ba738",
+    "backend/rdma/application_windows.hh": "02ca231ac69c903904dcc760b304890eef0961a047b70ca31367651d65d311e5",
+    "backend/rdma/application_window_validation.hh": "13733c0de33d5e4b877b945d8c4d9f86b764fb1a1d001702abe83ab62fb1d0f7",
+    "backend/rdma/link_failure_validation.hh": "ba2e668987426e596011822b2a0f724bdfc3eced0a53cba0a73f702dea30d1c5",
+    "backend/rdma/selective_repeat.hh": "b1fd43f06631511e45f8711886b9594edb957fa5c06158844c356999d72dbe21",
+    "backend/rdma/transaction_limits.hh": "dfe0b38787283ff50bce0a0f3bdd8d355bfdac5fa9b7f4ddb29de6b0517280a5",
+    "backend/rdma/transaction_transport.hh": "3ddad982f95e9f76f8ef46a51b9bd1ef1c90bc85685b1c08951af2fea33df901",
+    "backend/rdma/nack_grace.hh": "07b0dd90eeafebe3f7c84bb997736bfab5be8ac483d36e5f38fb54a8ca6c8ddc",
+    "backend/rdma/self_peer_service.hh": "2f7583dd7880935778bb239ed55ff93de50dc6794d224f90b5bf792aa5605b85",
+    "backend/rdma/session_wakeups.hh": "6d82788464ba829a1a634235c870b476a8766c3983b8088c914f74af07817f92"
+  },
+  "driver_sha256": "56646f973c1860bbb5dac45775cd8f207a87e774695bbb2d7069f361b453649c",
+  "compile_command": [
+    "/usr/bin/c++",
+    "-DNS3_BUILD_PROFILE_RELEASE",
+    "-DPROJECT_SOURCE_PATH=\"/home/lry/moe-ub-cosim/third_party/LLMServingSim/astra-sim/extern/network_backend/ns-3\"",
+    "-D__LINUX__",
+    "-I/dev/shm/moe-fault-20261021/native/output/include",
+    "-I/home/lry/moe-ub-cosim/backend/rdma",
+    "-I/home/lry/moe-ub-cosim/third_party/LLMServingSim/astra-sim/extern/helper",
+    "-O3",
+    "-DNDEBUG",
+    "-std=c++20",
+    "-fPIE",
+    "-fno-semantic-interposition",
+    "-Wall",
+    "-O0",
+    "-Wpedantic",
+    "/home/lry/moe-ub-cosim/fixtures/native_admission_cost/measure.cc",
+    "/dev/shm/moe-self-peer-service-20261024/objects/remote_transactions.o",
+    "/dev/shm/moe-nack-grace-20261024/objects/persistent_streams.o",
+    "/dev/shm/moe-live-ecmp-20261024/objects/liblive-fabric.a",
+    "-Wl,--no-as-needed",
+    "/dev/shm/moe-native-wakeup-20261024/runtime/lib/libns3.42-applications.so",
+    "/dev/shm/moe-native-wakeup-20261024/runtime/lib/libns3.42-bridge.so",
+    "/dev/shm/moe-native-wakeup-20261024/runtime/lib/libns3.42-core.so",
+    "/dev/shm/moe-native-wakeup-20261024/runtime/lib/libns3.42-internet.so",
+    "/dev/shm/moe-native-wakeup-20261024/runtime/lib/libns3.42-network.so",
+    "/dev/shm/moe-native-wakeup-20261024/runtime/lib/libns3.42-point-to-point.so",
+    "/dev/shm/moe-native-wakeup-20261024/runtime/lib/libns3.42-stats.so",
+    "/dev/shm/moe-native-wakeup-20261024/runtime/lib/libns3.42-traffic-control.so",
+    "-o",
+    "/dev/shm/moe-native-admission-cost-20261024/measure"
+  ],
+  "measurement_command": [
+    "env",
+    "LD_LIBRARY_PATH=/dev/shm/moe-native-wakeup-20261024/runtime/lib",
+    "/dev/shm/moe-native-admission-cost-20261024/measure",
+    "/dev/shm/moe-native-admission-cost-20261024/inputs/initial.json",
+    "/dev/shm/moe-native-admission-cost-20261024/inputs/topology.json",
+    "/dev/shm/moe-native-admission-cost-20261024/inputs/control.jsonl",
+    "1000000",
+    "/dev/shm/moe-native-admission-cost-20261024/timings.jsonl",
+    "/dev/shm/moe-native-admission-cost-20261024/final-program.json"
+  ],
+  "original_host_wall_seconds": 60.14821111783385,
+  "network_executed": false,
+  "dependencies_rebuilt": false,
+  "optimization": "same last -O0 as actual session",
+  "scope": "same-host native admission diagnostic; original host CPU division unknown"
+}

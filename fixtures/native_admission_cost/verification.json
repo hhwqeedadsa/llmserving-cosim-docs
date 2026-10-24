@@ -1,0 +1,36 @@
+{
+  "passed": true,
+  "candidates": 238,
+  "final_nodes": 145,
+  "network_executed": false,
+  "final_program_equals_all_actual_commits": true,
+  "eight_loaded_libraries_hash_checked": true,
+  "timing_unit": "nanoseconds",
+  "single_pass_totals": {
+    "copy_append": {
+      "wall_ns": 186935702,
+      "thread_cpu_ns": 180664121
+    },
+    "validate_program": {
+      "wall_ns": 2200715589,
+      "thread_cpu_ns": 2134743206
+    },
+    "validate_wakeups": {
+      "wall_ns": 76212385,
+      "thread_cpu_ns": 71990232
+    }
+  },
+  "measured_total_seconds": 2.463863676,
+  "measurement_monitor_seconds": 3.0710375532507896,
+  "original_host_limit_observation_seconds": 60.14821111783385,
+  "measured_total_divided_by_original_wall": 0.040963207886152216,
+  "per_candidate_wall_ns": {
+    "minimum": 2685467,
+    "median_low": 9190532,
+    "maximum": 31181568
+  },
+  "decision_limit_unchanged": 256,
+  "representative_four_rank_call_complete": false,
+  "historical_cpu_share_measured": false,
+  "scope": "one offline native admission pass; excludes session progress scans, frontend, I/O and packet events; ratio is not historical attribution"
+}

@@ -1,0 +1,657 @@
+{
+  "passed": true,
+  "primary_conditions": 15,
+  "edge_commands": 17,
+  "CLI_and_native_invalid_config_classes": 6,
+  "additional_unknown_native_stream_rejected": true,
+  "pure_cpp_invariants": 20,
+  "python_recovery_tests": 11,
+  "stream_input_tests": "completed",
+  "transaction_input_tests": "completed",
+  "regression_public_commands": {
+    "stream": 7,
+    "transactions": 8,
+    "online": 3
+  },
+  "fixed_dependencies_verified": 13,
+  "monitors": [
+    {
+      "path": "session-regression-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 10.223070273175836,
+      "peak_sampled_group_rss_bytes": 451780608
+    },
+    {
+      "path": "transaction-regression-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 4.729886407032609,
+      "peak_sampled_group_rss_bytes": 427786240
+    },
+    {
+      "path": "stream-regression-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 3.9338567312806845,
+      "peak_sampled_group_rss_bytes": 425410560
+    },
+    {
+      "path": "transaction-unit/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.23987728916108608,
+      "peak_sampled_group_rss_bytes": 20217856
+    },
+    {
+      "path": "stream-unit/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.13608785159885883,
+      "peak_sampled_group_rss_bytes": 7487488
+    },
+    {
+      "path": "unit/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.13651400804519653,
+      "peak_sampled_group_rss_bytes": 6393856
+    },
+    {
+      "path": "core-test/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.030755382031202316,
+      "peak_sampled_group_rss_bytes": 0
+    },
+    {
+      "path": "core-build/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.44490927644073963,
+      "peak_sampled_group_rss_bytes": 56967168
+    },
+    {
+      "path": "link-transaction-session/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.6822641789913177,
+      "peak_sampled_group_rss_bytes": 145137664
+    },
+    {
+      "path": "link-transaction-probe/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.5660722199827433,
+      "peak_sampled_group_rss_bytes": 141942784
+    },
+    {
+      "path": "link-stream-probe/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.5672132223844528,
+      "peak_sampled_group_rss_bytes": 113356800
+    },
+    {
+      "path": "archive/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.14181399531662464,
+      "peak_sampled_group_rss_bytes": 4284416
+    },
+    {
+      "path": "build-transaction_session/probe.json",
+      "status": "completed",
+      "wall_seconds": 7.354622608050704,
+      "peak_sampled_group_rss_bytes": 610193408
+    },
+    {
+      "path": "build-transaction_probe/probe.json",
+      "status": "completed",
+      "wall_seconds": 6.4343130476772785,
+      "peak_sampled_group_rss_bytes": 589266944
+    },
+    {
+      "path": "build-remote_transactions/probe.json",
+      "status": "completed",
+      "wall_seconds": 6.828427914530039,
+      "peak_sampled_group_rss_bytes": 590954496
+    },
+    {
+      "path": "build-stream_probe/probe.json",
+      "status": "completed",
+      "wall_seconds": 5.512407207861543,
+      "peak_sampled_group_rss_bytes": 529121280
+    },
+    {
+      "path": "build-persistent_streams/probe.json",
+      "status": "completed",
+      "wall_seconds": 7.882498238235712,
+      "peak_sampled_group_rss_bytes": 646639616
+    },
+    {
+      "path": "build-recovery/probe.json",
+      "status": "completed",
+      "wall_seconds": 5.461512358859181,
+      "peak_sampled_group_rss_bytes": 447209472
+    },
+    {
+      "path": "build-astra_adapter/probe.json",
+      "status": "completed",
+      "wall_seconds": 4.4558180291205645,
+      "peak_sampled_group_rss_bytes": 491180032
+    },
+    {
+      "path": "build-fabric/probe.json",
+      "status": "completed",
+      "wall_seconds": 9.8389199860394,
+      "peak_sampled_group_rss_bytes": 745803776
+    },
+    {
+      "path": "checkpoint-final/session-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.7627347111701965,
+      "peak_sampled_group_rss_bytes": 390193152
+    },
+    {
+      "path": "checkpoint-final/transaction-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.7547892965376377,
+      "peak_sampled_group_rss_bytes": 401997824
+    },
+    {
+      "path": "checkpoint-final/stream-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.8541763462126255,
+      "peak_sampled_group_rss_bytes": 407810048
+    },
+    {
+      "path": "checkpoint-final/topology-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.12264697067439556,
+      "peak_sampled_group_rss_bytes": 5349376
+    },
+    {
+      "path": "checkpoint-final/offline-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.12435349076986313,
+      "peak_sampled_group_rss_bytes": 5349376
+    },
+    {
+      "path": "checkpoint-final/transaction/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.5516745578497648,
+      "peak_sampled_group_rss_bytes": 371798016
+    },
+    {
+      "path": "checkpoint-final/stream/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.6427810974419117,
+      "peak_sampled_group_rss_bytes": 371126272
+    },
+    {
+      "path": "checkpoint/offline-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.12104809656739235,
+      "peak_sampled_group_rss_bytes": 5316608
+    },
+    {
+      "path": "fresh-user/unknown-monitor/probe.json",
+      "status": "child_failed",
+      "wall_seconds": 0.5482542123645544,
+      "peak_sampled_group_rss_bytes": 369680384
+    },
+    {
+      "path": "fresh-user/recovery-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.7597737070173025,
+      "peak_sampled_group_rss_bytes": 405065728
+    },
+    {
+      "path": "fresh-user/topology-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.12120869569480419,
+      "peak_sampled_group_rss_bytes": 5312512
+    },
+    {
+      "path": "fresh-user/recovery/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.5397126916795969,
+      "peak_sampled_group_rss_bytes": 371789824
+    },
+    {
+      "path": "session-regression/online/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.862453231588006,
+      "peak_sampled_group_rss_bytes": 395997184
+    },
+    {
+      "path": "session-regression/reference/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.6425540167838335,
+      "peak_sampled_group_rss_bytes": 370806784
+    },
+    {
+      "path": "transaction-regression/wrong-nic/execution/probe.json",
+      "status": "child_failed",
+      "wall_seconds": 0.5437054429203272,
+      "peak_sampled_group_rss_bytes": 370806784
+    },
+    {
+      "path": "transaction-regression/renamed/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.5539998020976782,
+      "peak_sampled_group_rss_bytes": 372875264
+    },
+    {
+      "path": "transaction-regression/repeat/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.5460415035486221,
+      "peak_sampled_group_rss_bytes": 372719616
+    },
+    {
+      "path": "transaction-regression/segmented/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.5436208583414555,
+      "peak_sampled_group_rss_bytes": 369684480
+    },
+    {
+      "path": "transaction-regression/deep/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.537404827773571,
+      "peak_sampled_group_rss_bytes": 371777536
+    },
+    {
+      "path": "transaction-regression/normal/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.5409580040723085,
+      "peak_sampled_group_rss_bytes": 370827264
+    },
+    {
+      "path": "stream-regression/wrong-nic/execution/probe.json",
+      "status": "child_failed",
+      "wall_seconds": 0.5363473165780306,
+      "peak_sampled_group_rss_bytes": 370724864
+    },
+    {
+      "path": "stream-regression/repeat/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.5375826712697744,
+      "peak_sampled_group_rss_bytes": 369684480
+    },
+    {
+      "path": "stream-regression/concurrent/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.6551180798560381,
+      "peak_sampled_group_rss_bytes": 369704960
+    },
+    {
+      "path": "stream-regression/deep/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.542468287050724,
+      "peak_sampled_group_rss_bytes": 371912704
+    },
+    {
+      "path": "stream-regression/normal/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.5431701447814703,
+      "peak_sampled_group_rss_bytes": 371900416
+    },
+    {
+      "path": "edges-congested/null-native-monitor/probe.json",
+      "status": "child_failed",
+      "wall_seconds": 0.1463366560637951,
+      "peak_sampled_group_rss_bytes": 14917632
+    },
+    {
+      "path": "edges-congested/null-cli-monitor/probe.json",
+      "status": "child_failed",
+      "wall_seconds": 0.14312884397804737,
+      "peak_sampled_group_rss_bytes": 7487488
+    },
+    {
+      "path": "edges-congested/bad-karn-native-monitor/probe.json",
+      "status": "child_failed",
+      "wall_seconds": 0.5597798805683851,
+      "peak_sampled_group_rss_bytes": 372850688
+    },
+    {
+      "path": "edges-congested/bad-karn-cli-monitor/probe.json",
+      "status": "child_failed",
+      "wall_seconds": 0.1392543464899063,
+      "peak_sampled_group_rss_bytes": 7499776
+    },
+    {
+      "path": "edges-congested/unknown-mode-native-monitor/probe.json",
+      "status": "child_failed",
+      "wall_seconds": 0.5742835327982903,
+      "peak_sampled_group_rss_bytes": 372760576
+    },
+    {
+      "path": "edges-congested/unknown-mode-cli-monitor/probe.json",
+      "status": "child_failed",
+      "wall_seconds": 0.1446093637496233,
+      "peak_sampled_group_rss_bytes": 6393856
+    },
+    {
+      "path": "edges-congested/unknown-field-native-monitor/probe.json",
+      "status": "child_failed",
+      "wall_seconds": 0.5723665673285723,
+      "peak_sampled_group_rss_bytes": 370798592
+    },
+    {
+      "path": "edges-congested/unknown-field-cli-monitor/probe.json",
+      "status": "child_failed",
+      "wall_seconds": 0.15236450359225273,
+      "peak_sampled_group_rss_bytes": 8523776
+    },
+    {
+      "path": "edges-congested/zero-rto-native-monitor/probe.json",
+      "status": "child_failed",
+      "wall_seconds": 0.5770142506808043,
+      "peak_sampled_group_rss_bytes": 371720192
+    },
+    {
+      "path": "edges-congested/zero-rto-cli-monitor/probe.json",
+      "status": "child_failed",
+      "wall_seconds": 0.1364731602370739,
+      "peak_sampled_group_rss_bytes": 7495680
+    },
+    {
+      "path": "edges-congested/bool-rto-native-monitor/probe.json",
+      "status": "child_failed",
+      "wall_seconds": 0.548855634406209,
+      "peak_sampled_group_rss_bytes": 372887552
+    },
+    {
+      "path": "edges-congested/bool-rto-cli-monitor/probe.json",
+      "status": "child_failed",
+      "wall_seconds": 0.15250025317072868,
+      "peak_sampled_group_rss_bytes": 7442432
+    },
+    {
+      "path": "edges-congested/cutoff-monitor/probe.json",
+      "status": "child_failed",
+      "wall_seconds": 0.581282489001751,
+      "peak_sampled_group_rss_bytes": 370798592
+    },
+    {
+      "path": "edges-congested/sparse-prefix-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.7932302076369524,
+      "peak_sampled_group_rss_bytes": 405413888
+    },
+    {
+      "path": "edges-congested/source-copy-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.7782226949930191,
+      "peak_sampled_group_rss_bytes": 404627456
+    },
+    {
+      "path": "edges-congested/online-loss-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.6852056365460157,
+      "peak_sampled_group_rss_bytes": 389033984
+    },
+    {
+      "path": "edges-congested/reference-loss-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.8799775671213865,
+      "peak_sampled_group_rss_bytes": 402927616
+    },
+    {
+      "path": "edges-congested/sparse-prefix/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.54663978330791,
+      "peak_sampled_group_rss_bytes": 371687424
+    },
+    {
+      "path": "edges-congested/source-copy/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.5439558271318674,
+      "peak_sampled_group_rss_bytes": 371843072
+    },
+    {
+      "path": "edges-congested/reference-loss/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.6568191982805729,
+      "peak_sampled_group_rss_bytes": 369704960
+    },
+    {
+      "path": "edges-valid/reference-loss-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.7546706702560186,
+      "peak_sampled_group_rss_bytes": 404131840
+    },
+    {
+      "path": "edges-valid/reference-loss/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.5446363892406225,
+      "peak_sampled_group_rss_bytes": 370839552
+    },
+    {
+      "path": "edges/reference-loss-monitor/probe.json",
+      "status": "child_failed",
+      "wall_seconds": 0.122927350923419,
+      "peak_sampled_group_rss_bytes": 5361664
+    },
+    {
+      "path": "updated-entries/link-transaction-session/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.5744823403656483,
+      "peak_sampled_group_rss_bytes": 145195008
+    },
+    {
+      "path": "updated-entries/link-transaction-probe/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.5670870412141085,
+      "peak_sampled_group_rss_bytes": 142237696
+    },
+    {
+      "path": "updated-entries/build-transaction_session/probe.json",
+      "status": "completed",
+      "wall_seconds": 7.258038602769375,
+      "peak_sampled_group_rss_bytes": 611020800
+    },
+    {
+      "path": "updated-entries/build-transaction_probe/probe.json",
+      "status": "completed",
+      "wall_seconds": 7.017553310841322,
+      "peak_sampled_group_rss_bytes": 583864320
+    },
+    {
+      "path": "accept/transaction-response-ack-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.7760665770620108,
+      "peak_sampled_group_rss_bytes": 405483520
+    },
+    {
+      "path": "accept/transaction-response-data-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.8811124693602324,
+      "peak_sampled_group_rss_bytes": 402432000
+    },
+    {
+      "path": "accept/transaction-request-ack-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.760721854865551,
+      "peak_sampled_group_rss_bytes": 402440192
+    },
+    {
+      "path": "accept/transaction-clean-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.7823956292122602,
+      "peak_sampled_group_rss_bytes": 405663744
+    },
+    {
+      "path": "accept/exhausted-monitor/probe.json",
+      "status": "child_failed",
+      "wall_seconds": 0.5669997520744801,
+      "peak_sampled_group_rss_bytes": 371892224
+    },
+    {
+      "path": "accept/idle-append-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.7553313784301281,
+      "peak_sampled_group_rss_bytes": 404160512
+    },
+    {
+      "path": "accept/adaptive-idle-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.7727385759353638,
+      "peak_sampled_group_rss_bytes": 405282816
+    },
+    {
+      "path": "accept/short-rto-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.7804926317185163,
+      "peak_sampled_group_rss_bytes": 405180416
+    },
+    {
+      "path": "accept/cross-work-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.7838500533252954,
+      "peak_sampled_group_rss_bytes": 404905984
+    },
+    {
+      "path": "accept/final-ack-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.7685042005032301,
+      "peak_sampled_group_rss_bytes": 404017152
+    },
+    {
+      "path": "accept/tail-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.7717984858900309,
+      "peak_sampled_group_rss_bytes": 402112512
+    },
+    {
+      "path": "accept/middle-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.7828160654753447,
+      "peak_sampled_group_rss_bytes": 405045248
+    },
+    {
+      "path": "accept/clean-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.7787809520959854,
+      "peak_sampled_group_rss_bytes": 404045824
+    },
+    {
+      "path": "accept/new-default-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.7819527331739664,
+      "peak_sampled_group_rss_bytes": 403152896
+    },
+    {
+      "path": "accept/old-default-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.7708569560199976,
+      "peak_sampled_group_rss_bytes": 402894848
+    },
+    {
+      "path": "accept/topology-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.12137090042233467,
+      "peak_sampled_group_rss_bytes": 5312512
+    },
+    {
+      "path": "accept/transaction-response-ack/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.545910032466054,
+      "peak_sampled_group_rss_bytes": 372752384
+    },
+    {
+      "path": "accept/transaction-response-data/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.6659825760871172,
+      "peak_sampled_group_rss_bytes": 369717248
+    },
+    {
+      "path": "accept/transaction-request-ack/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.540817204862833,
+      "peak_sampled_group_rss_bytes": 370782208
+    },
+    {
+      "path": "accept/transaction-clean/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.5527857039123774,
+      "peak_sampled_group_rss_bytes": 371892224
+    },
+    {
+      "path": "accept/idle-append/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.5466113574802876,
+      "peak_sampled_group_rss_bytes": 371712000
+    },
+    {
+      "path": "accept/adaptive-idle/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.5523192100226879,
+      "peak_sampled_group_rss_bytes": 371732480
+    },
+    {
+      "path": "accept/short-rto/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.5514256600290537,
+      "peak_sampled_group_rss_bytes": 371949568
+    },
+    {
+      "path": "accept/cross-work/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.5510040316730738,
+      "peak_sampled_group_rss_bytes": 370524160
+    },
+    {
+      "path": "accept/final-ack/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.5518536064773798,
+      "peak_sampled_group_rss_bytes": 370733056
+    },
+    {
+      "path": "accept/tail/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.5528868287801743,
+      "peak_sampled_group_rss_bytes": 369639424
+    },
+    {
+      "path": "accept/middle/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.5373294688761234,
+      "peak_sampled_group_rss_bytes": 371744768
+    },
+    {
+      "path": "accept/clean/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.5475116074085236,
+      "peak_sampled_group_rss_bytes": 370761728
+    },
+    {
+      "path": "accept/new-default/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.5462497677654028,
+      "peak_sampled_group_rss_bytes": 369692672
+    },
+    {
+      "path": "accept/old-default/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.5476505104452372,
+      "peak_sampled_group_rss_bytes": 370679808
+    },
+    {
+      "path": "lease-failure/monitor/probe.json",
+      "status": "child_failed",
+      "wall_seconds": 0.6487283539026976,
+      "peak_sampled_group_rss_bytes": 371683328
+    }
+  ],
+  "conservative_monitored_seconds_including_nested": 135.31596952490509,
+  "peak_sampled_group_rss_bytes": 745803776,
+  "total_tmpfs_and_persistent_archive_apparent_bytes": 233206597,
+  "budget_bytes": 268435456,
+  "tmpfs_free_bytes": 258587127808,
+  "archive_sha256": "b2275cc3acc4f7cf1fbebcbcf3426b8d4320cf06d10190a6ca6ca0700a367ae9",
+  "persistent_archive": "/home/lry/moe-ub-cosim/runs/persistent_recovery_checkpoint_20261024/checkpoint.tar.gz",
+  "independent_remote_backup": false,
+  "source_comparison": "sources.json",
+  "recovery": "recovery.json",
+  "full_research_goal_complete": false,
+  "failures_preserved": [
+    "checker transaction transport field access",
+    "pre-network invalid ECN zero",
+    "single stream no CNP control",
+    "offline JSON key order discrepancy"
+  ],
+  "scope": "functional persistent network recovery and effect safety; no hardware calibration, production security proof, throughput claim or new algorithm",
+  "registered_source_lease_failure_verified": true,
+  "supplemental_lease_failure_receipt": "lease-failure.json"
+}

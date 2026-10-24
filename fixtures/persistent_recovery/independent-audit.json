@@ -1,0 +1,119 @@
+{
+  "passed": true,
+  "cases": {
+    "adaptive-idle": {
+      "captured_source_tx_checked": 6,
+      "source_packets": 6,
+      "streams": 1,
+      "timer_events": 12,
+      "wire_payload_decoded": false
+    },
+    "clean": {
+      "captured_source_tx_checked": 6,
+      "source_packets": 6,
+      "streams": 1,
+      "timer_events": 12,
+      "wire_payload_decoded": false
+    },
+    "cross-work": {
+      "captured_source_tx_checked": 11,
+      "source_packets": 11,
+      "streams": 1,
+      "timer_events": 11,
+      "wire_payload_decoded": false
+    },
+    "final-ack": {
+      "captured_source_tx_checked": 7,
+      "source_packets": 7,
+      "streams": 1,
+      "timer_events": 13,
+      "wire_payload_decoded": false
+    },
+    "idle-append": {
+      "captured_source_tx_checked": 4,
+      "source_packets": 4,
+      "streams": 1,
+      "timer_events": 8,
+      "wire_payload_decoded": false
+    },
+    "middle": {
+      "captured_source_tx_checked": 8,
+      "source_packets": 8,
+      "streams": 1,
+      "timer_events": 13,
+      "wire_payload_decoded": false
+    },
+    "short-rto": {
+      "captured_source_tx_checked": 24,
+      "source_packets": 24,
+      "streams": 1,
+      "timer_events": 39,
+      "wire_payload_decoded": false
+    },
+    "tail": {
+      "captured_source_tx_checked": 7,
+      "source_packets": 7,
+      "streams": 1,
+      "timer_events": 13,
+      "wire_payload_decoded": false
+    },
+    "transaction-clean": {
+      "captured_source_tx_checked": 8,
+      "source_packets": 10,
+      "streams": 4,
+      "timer_events": 30,
+      "wire_payload_decoded": true
+    },
+    "transaction-request-ack": {
+      "captured_source_tx_checked": 9,
+      "source_packets": 11,
+      "streams": 4,
+      "timer_events": 31,
+      "wire_payload_decoded": true
+    },
+    "transaction-response-ack": {
+      "captured_source_tx_checked": 8,
+      "source_packets": 10,
+      "streams": 4,
+      "timer_events": 28,
+      "wire_payload_decoded": true
+    },
+    "transaction-response-data": {
+      "captured_source_tx_checked": 9,
+      "source_packets": 11,
+      "streams": 4,
+      "timer_events": 31,
+      "wire_payload_decoded": true
+    },
+    "reference-loss": {
+      "captured_source_tx_checked": 7,
+      "source_packets": 23,
+      "streams": 2,
+      "timer_events": 31,
+      "wire_payload_decoded": false
+    },
+    "source-copy": {
+      "captured_source_tx_checked": 7,
+      "source_packets": 8,
+      "streams": 6,
+      "timer_events": 24,
+      "wire_payload_decoded": true
+    },
+    "sparse-prefix": {
+      "captured_source_tx_checked": 3,
+      "source_packets": 3,
+      "streams": 4,
+      "timer_events": 8,
+      "wire_payload_decoded": true
+    }
+  },
+  "mutations_rejected": [
+    "premature-timeout",
+    "fabricated-ACK",
+    "changed-atomic-effect"
+  ],
+  "captured_source_tx_checked": 124,
+  "source_packets": 149,
+  "timer_events": 304,
+  "scope": "bounded endpoints/prefix timers/MRT1 effects; not hardware, production fault rates or new algorithm"
+}

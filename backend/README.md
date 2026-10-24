@@ -294,3 +294,5 @@ CANN/原生 `layer-fixture/3` 可附加 `endpoint_prepare`：`schema_version="mo
 transactions/5在两事务入口上支持RemoteMemory稀疏窗口：逻辑范围不因页未分配而缩小，zero-fill读取不分配，写入先检查所有新页额度再更改内容；原子拒绝不推进序号/响应缓存，本地copy拒绝保留未完成输出使用记录。v1—4仍为原稠密存储。细节见[窗口输入与输出](../examples/scaleout_rdma_transactions/README.md#使用大地址范围与稀疏初值)。
 
 事务v5可选显式前缀发布：`aggregate_requests=true`只准备，`false`发布同连接已准备前缀；真实prepared回调、源捕获和ACK/原子回复完成分别处理。默认模式不变，不自动补发布；它不是物理门铃或完整GIN/RoCE模型，见[输入与边界](../examples/scaleout_rdma_transactions/README.md#准备工作后统一发布)。
+
+持久字节与MRT1事务可选工作根`transport_recovery`，通过`PersistentStreams`在本次原生回调中组合`SourceRecovery`：发布只Extend合法前缀，PktSent记录真实TX高水位，ACK/NACK约束实际发出范围，超时仅回退游标。重复包补发真实累计ACK且不重复交付payload，drop钩子回收在途计数，逐work仍只释放一次。Fabric的`stream_packet_ids_`仅供包捕获和显式故障关联，分开于旧Flow映射，不驱动源端协议。旧回调默认不变；前缀确认不代表Close。配置、故障stream命名、状态输出和失败保存见[持久恢复](../examples/scaleout_rdma_streams/README.md#可选的持久连接丢包恢复)与[规范](../docs/tasks/persistent_recovery_spec.md)。这不是现代GIN/GPU可见性或硬件校准证据。

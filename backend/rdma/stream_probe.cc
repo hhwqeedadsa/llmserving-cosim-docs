@@ -39,7 +39,8 @@ int main(int argc,char** argv) {
     } else Require(!input.contains("limits"),"v1 stream work has fixed limits");
     ns3::RngSeedManager::SetSeed(config.at("seed"));
     const auto topology=ReadJson(argv[1]);
-    Fabric fabric(topology,config);PersistentStreams transport(fabric,limits);
+    Require(!input.contains("transport_recovery") || input.at("transport_recovery").is_object(),"transport_recovery must be an object");
+    Fabric fabric(topology,config);PersistentStreams transport(fabric,limits,input.value("transport_recovery",Json()));
     std::set<unsigned> gpu_ids;
     if(local_mode) {
       Keys(input.at("local_model"),{"mode","duration_source"});
@@ -51,6 +52,7 @@ int main(int argc,char** argv) {
     Require(input.at("streams").is_array() && !input.at("streams").empty() && input.at("streams").size()<=limits.streams,"stream count budget exceeded");
     for(const auto& s:input.at("streams"))transport.Open(s.at("id"),s.at("src"),s.at("dst"),s.at("plane"),
       s.at("wire_port"),s.at("source_nic"),s.at("destination_nic"),s.at("queue_depth"));
+    transport.ValidateFaultBindings();
     const auto& work=input.at("work");Require(work.is_array() && !work.empty() && work.size()<=limits.work,"work count budget exceeded");
     std::map<uint64_t,std::size_t> index;
     std::vector<std::array<std::vector<std::size_t>,3>> successors(work.size());

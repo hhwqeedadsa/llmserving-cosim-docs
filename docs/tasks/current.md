@@ -13,6 +13,12 @@
 
 ## 当前范围和预算
 
+当前平台阶段已验收（基线`256dfc2`）：显式持久stream/事务`transport_recovery`按已发布范围、真实TX高水位及累计ACK恢复，支持空闲追加、迟到ACK、完整重复包补ACK、物理drop排空与单次work回收；重复字节不重复执行put/fetch-add。15主条件、17边界命令、6类CLI/native拒绝及未知stream拒绝，20项纯源端不变量与输入单元通过；原stream/事务/在线回归7/8/3条公开命令及直接原生检查通过。旧默认结果逐字节相同。独立核对149源包、124捕获源TX、304恢复记录，实际MRT1解码/原子旧值/最终窗口及3类篡改拒绝通过。补充丢失源请求ACK：目标写入一次而ACK/完成保持-1，70μs耗尽后257B源租约仍保护。见[规范](persistent_recovery_spec.md)、[用户入口](../../examples/scaleout_rdma_streams/README.md#可选的持久连接丢包恢复)与[验收](../../fixtures/persistent_recovery/README.md)。
+
+640成员/59,647,125B检查点、压缩12,250,863B逐hash核验，新源码根/空cwd离线产物逐字节相同；4公开操作与3实际恢复网络除库路径外完整结果一致，8原生库从包内加载。原件`/dev/shm/moe-persistent-recovery-20261024/`，另存本地持久`runs/persistent_recovery_checkpoint_20261024/`，补充租约测试有单独输入/部分结果。首次字段检查器、ECN零输入、单流无CNP控制及离线JSON次序差异均保留；排序修复后才字节核对，未重复旧研究网络。每命令60秒/1GiB/地址2GiB/64MiB、仿真5ms/结果16MiB，累计受监控600秒/256MiB（含失败与归档恢复）及8GiB预留保持，详见[收尾](../../fixtures/persistent_recovery/closeout.json)。13固定依赖、旧runtime hash不变；无安装下载/GPU或旧Prefill/1024失败重跑。仅本地提交不push。
+
+论文整体目标仍in_progress。下一步研究优先判别“局部失败后保留其他专家已完成结果”是否在代表性MoE依赖和恢复安全约束下仍有收益；需把连接重建/跨代际写入、失败检测、重算及强重试基线纳入，不能把本轮经典重传功能当创新。现代事件接入、self路径、GPU可见性、硬件校准、代表性规模和超过强基线的主贡献仍缺。
+
 平台前缀发布已本地提交`aec2bb4`。本轮[反馈时延泛化](../../experiments/recovery_delay/protocol.md)已完成45个预登记条件及9个执行前另登记的Karn80强基线，共54次实际网络；没有重跑原条件。固定8GPU/两EP4/batch4/100G Clos/每源3消息8192B，改变每跳传播500/2000/4000ns、恢复策略和一次尾数据/ACK丢失。独立核对216图、1296个捕获源消息，源ACK计时/Karn/有限历史重放及3种篡改拒绝通过；捕获只覆盖GPU0/4。短超时在长反馈路径无故障也会重复发送；Karn80解决本轮健康冷启动误判，但真实丢失仍可能比固定强基线慢，不把经典参数改进当创新。见[报告](../reviews/ScaleOut恢复稳健性与清理交付_20261023.md)、[HTML](../review_artifacts/recovery_delay_20261023/report.html)、[收尾](../review_artifacts/recovery_delay_20261023/closeout.json)和[离线复现](../review_artifacts/recovery_delay_20261023/reproduction.json)。
 
 54份宿主监控完成，无遗留驱动/服务PID；监控合72.354秒，峰值采样RSS460,513,280B，驱动累计95.149秒（已包含主45条件）。研究树约155.4MB<256MiB；单命令60秒/1GiB/地址2GiB/64MiB、仿真5ms/结果16MiB和tmpfs8GiB预留保持。中间准备/分析时间未全部保存，不称完整阶段耗时实测。898成员/30,761,368B离线归档逐hash核对，新源码根/空cwd复算三份产物逐字节相同，无网络重跑；2,991,399B归档已另存本地持久目录`runs/recovery_delay_checkpoint_20261023/`，见[备份收据](../review_artifacts/recovery_delay_20261023/persistent_backup.json)。源码/实际服务/8原生库hash不变，无安装下载、GPU、依赖更改或旧Prefill/1024失败重跑。研究独立本地提交，不push。
@@ -25,7 +31,7 @@
 
 独立包/端口/序号核对312个捕获源消息、逐事件重放源ACK计时，目标进展对应真实反馈，三类篡改被拒绝；捕获仅GPU0/4。复用服务/9源码/8库身份不变。13宿主监控正常且无遗留子进程，驱动22.77秒、服务监控合17.74秒、峰值采样RSS460582912B。227成员/7058302B原文、压缩675854B检查点核hash，新源码根/空cwd离线复算三份产物逐字节一致，无网络重跑。原件`/dev/shm/moe-loss-recovery-cost-20261023/`约23.3MB，单命令60秒/RSS1GiB/地址2GiB/64MiB、仿真5ms/结果16MiB，全轮300秒/192MiB含归档及8GiB预留保持。无安装下载/构建/GPU/依赖更改或旧Prefill/1024失败重跑。见[研究报告](../reviews/丢包恢复机制_通信代价与优化空间_20261023.md)、[HTML](../review_artifacts/loss_recovery_cost_20261023/report.html)、[离线复现](../review_artifacts/loss_recovery_cost_20261023/reproduction.json)与[收尾](../review_artifacts/loss_recovery_cost_20261023/closeout.json)。原件易失无持久备份，研究单独本地提交、不push。
 
-完整目标仍in_progress：反馈时延泛化已完成，后续须检验并发及代表性负载，并为持久stream/事务明确丢包重放、完成信用与重复副作用。当前这些入口拒绝旧fault/recovery模式，不能直接开启或把参考模型冒充现代通信；20μs不改平台默认。前缀发布平台已独立收尾，后续研究不依赖tests/fixture。
+完整目标仍in_progress：反馈时延泛化已完成，后续须检验并发及代表性负载，持久stream/事务恢复现已通过独立平台验收；旧recovery配置仍拒绝，新增transport_recovery与stream命名faults须显式使用，不能把参考模型冒充现代通信；20μs不改平台默认。前缀发布平台已独立收尾，后续研究不依赖tests/fixture。
 
 第二阶段恢复保留筛选见[报告](../reviews/MoE在途恢复价值与状态存活判别_20261023.md)与[复现](../review_artifacts/recovery_value_20261023/reproduction.json)：约68%仅为全部健康结果完成时的条件任务数上界，实际收益下界0；原件`/dev/shm/moe-recovery-value-20261023/`。论文主贡献仍未成立，不能把该上界当作丢包时延收益。
 

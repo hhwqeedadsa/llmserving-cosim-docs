@@ -19,6 +19,12 @@ class RetransmissionTimer {
     high_=std::max(high_,end);
     if(deadline_<0 && high_>ack_)deadline_=now+rto_;
   }
+  // A persistent connection can publish another prefix after an idle ACKed
+  // prefix. Publication is not transmission and must not arm/postpone a timer.
+  void Extend(uint64_t bytes) {
+    if(failed_ || bytes<bytes_)throw std::logic_error("Invalid recovery prefix extension");
+    bytes_=bytes;
+  }
   bool Confirm(uint64_t ack,int64_t now,int64_t reset_rto=0) {
     Time(now);
     if(failed_ || ack>high_)throw std::logic_error("ACK exceeds actually transmitted source bytes");

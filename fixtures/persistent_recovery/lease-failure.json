@@ -1,0 +1,25 @@
+{
+  "passed": true,
+  "applied_ns": 6156,
+  "request_acked_ns": -1,
+  "completed_ns": -1,
+  "active_source_leases": [
+    {
+      "address": 4096,
+      "bytes": 257,
+      "key": 7,
+      "operation": 0,
+      "owner": 0
+    }
+  ],
+  "target_effect_count": 1,
+  "source_timeout_retransmissions": 2,
+  "failure": {
+    "reason": "retry_exhausted",
+    "stream": 0,
+    "time_ns": 70000
+  },
+  "actual_fault_drops": [
+    3
+  ]
+}

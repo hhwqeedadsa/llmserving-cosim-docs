@@ -16,9 +16,12 @@ class PersistentStreams {
   using Done = std::function<void()>;
   explicit PersistentStreams(Fabric& fabric);
   PersistentStreams(Fabric& fabric, Limits limits);
+  PersistentStreams(Fabric& fabric, Limits limits, const Json& recovery);
+  ~PersistentStreams();
   // Passive samples in existing callbacks; no timers or periodic polling.
   void ConfigureRateCapture(const Json& config);
   void ConfigureDcqcnReference(const Json& config);
+  void ValidateFaultBindings() const;
   void Open(uint64_t id, unsigned src, unsigned dst, unsigned plane, uint16_t wire_port,
             unsigned source_nic, unsigned destination_nic, unsigned depth);
   void Submit(uint64_t stream, uint64_t work, uint64_t bytes, Done accepted, Done acked);
@@ -56,6 +59,8 @@ class PersistentStreams {
     unsigned scheduler_insertions=0;
     std::function<void(Bytes)> receiver;
     std::unique_ptr<Reference> reference;
+    std::unique_ptr<moe_cosim::SourceRecovery> recovery;
+    ns3::EventId recovery_event;
     Stream(unsigned s,unsigned d,unsigned p,unsigned sn,unsigned dn,uint16_t w,unsigned depth,unsigned maximum)
       : src(s),dst(d),plane(p),source_nic(sn),destination_nic(dn),wire_port(w),queue(depth,maximum) {}
   };
@@ -93,8 +98,13 @@ class PersistentStreams {
   static RateState ReadRate(const Stream&);
   static Json RateValues(const RateState&);
   void SampleRate(const Stream&, unsigned event, ns3::Ptr<const ns3::Packet>, uint64_t sequence, unsigned bytes, unsigned cnp);
+  void ArmRecovery(Stream&);
+  void RecoveryTimeout(uint64_t stream);
+  void DuplicateAck(Stream&, ns3::CustomHeader&, ns3::Ptr<ns3::RdmaRxQueuePair>);
+  void RecoveryRecord(Stream&, unsigned code);
   static void Tx(PersistentStreams*,unsigned,unsigned,ns3::Ptr<const ns3::Packet>);
   static void Rx(PersistentStreams*,unsigned,unsigned,ns3::Ptr<const ns3::Packet>);
+  static void Drop(PersistentStreams*,unsigned,unsigned,ns3::Ptr<const ns3::Packet>);
   Fabric& fabric_;
   Limits limits_;
   std::map<uint64_t,Stream> streams_;
@@ -111,5 +121,9 @@ class PersistentStreams {
   std::vector<RateSample> rate_samples_;
   Json reference_config_,reference_events_=Json::array();
   uint64_t reference_limit_=0;
+  Json recovery_config_;
+  std::unique_ptr<RecoveryRecords> recovery_records_;
+  uint64_t duplicate_acks_=0, old_feedback_=0;
+  int64_t failed_stream_=-1, failure_ns_=-1;
 };
 }

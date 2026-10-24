@@ -12,6 +12,7 @@ def stream_limits(config):
     fields(config,'schema_version streams work'+(' limits' if not schema.endswith('/1') else '')
            +(' source_rate_capture' if 'source_rate_capture' in config else '')
            +(' dcqcn_reference' if 'dcqcn_reference' in config else '')
+           +(' transport_recovery' if 'transport_recovery' in config else '')
            +(' local_model' if schema.endswith('/3') else ''),'stream work root')
     if schema.endswith('/1'):
         return dict(max_streams=16,max_work=64)
@@ -25,6 +26,13 @@ def stream_limits(config):
 def validate(topology, protocol, config):
     counts=stream_limits(config)
     budget=limits(protocol)
+    recovery='transport_recovery' in config
+    if recovery:
+        c=config['transport_recovery']
+        require(isinstance(c,dict) and c.get('mode')=='go_back_n/1','invalid persistent recovery mode')
+        require('history' not in c,'persistent recovery retains per-connection evidence; history seeds unsupported')
+        from .scaleout_recovery_config import validate as validate_recovery
+        validate_recovery(dict(c,mode='go_back_n'),budget['max_sim_ns'])
     local_mode=config['schema_version'].endswith('/3')
     if local_mode:
         fields(config['local_model'],'mode duration_source','local model')
@@ -53,7 +61,8 @@ def validate(topology, protocol, config):
         integer(capture['end_ns'],'source rate end_ns',capture['start_ns']+1,budget['max_sim_ns'])
         integer(capture['max_events'],'source rate max_events',1,100000)
     max_gpus=min(32,budget['max_gpus']) if config['schema_version'].endswith('/1') else budget['max_gpus']
-    require(not any(k in protocol for k in ('admission','recovery','faults','drop_once','lifecycle_capture')),
+    require(not any(k in protocol for k in ('admission','recovery','drop_once','lifecycle_capture')) and
+            (recovery or 'faults' not in protocol),
             'stream probe excludes legacy admission/recovery/fault/lifecycle modes')
     require(not topology.get('intra_host',{}).get('enabled',False),'stream probe does not use intra-host bypass')
     require(isinstance(config['streams'],list) and 1<=len(config['streams'])<=counts['max_streams'],
@@ -69,7 +78,10 @@ def validate(topology, protocol, config):
         ids.add(s['id']);ports.add(s['wire_port'])
         # These descriptors validate topology only and are NEVER simulated.
         checks.append(dict(id=s['id'],src=s['src'],dst=s['dst'],plane=s['plane'],bytes=1,ready_ns=0))
-    validate_probe(topology,protocol,checks)
+    validate_probe(topology,protocol,checks,match_faults=False)
+    for rule in protocol.get('faults',[]):
+        require(rule['message_id'] in ids,'fault names an unopened persistent stream')
+        require(rule['sequence']<=64*2**20,'persistent fault sequence exceeds stream budget')
     require(isinstance(config['work'],list) and 1<=len(config['work'])<=counts['max_work'],
             'work count exceeds declared budget')
     seen,totals={}, {i:0 for i in ids}

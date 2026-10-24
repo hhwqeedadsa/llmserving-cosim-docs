@@ -16,6 +16,7 @@ inline void ValidateSessionProgram(const Json& input,const Json& topology,int64_
   const bool explicit_submission=input.contains("submission_model");
   auto root_keys=std::vector<std::string>{"schema_version","connections","windows","operations","local_model","source_model","local_memory_model"};
   if(explicit_submission)root_keys.push_back("submission_model");
+  if(input.contains("transport_recovery"))root_keys.push_back("transport_recovery");
   SessionKeys(input,root_keys);
   const bool sparse=input.at("schema_version")=="moe-rdma-transactions/5";
   if(explicit_submission)Require(sparse && input.at("submission_model")==Json{{"mode","explicit_prefix/1"}},"unsupported submission model");

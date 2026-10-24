@@ -281,7 +281,9 @@ int64_t Fabric::PacketFlow(Ptr<const Packet> p) const {
   const auto key=h.l3Prot==0x11?std::make_tuple(h.sip,h.dip,h.udp.sport):
       std::make_tuple(h.dip,h.sip,h.ack.dport);
   const auto it=port_to_flow_.find(key);
-  return it==port_to_flow_.end()?-1:static_cast<int64_t>(it->second);
+  if(it!=port_to_flow_.end())return static_cast<int64_t>(it->second);
+  const auto stream=stream_packet_ids_.find(key);
+  return stream==stream_packet_ids_.end()?-1:static_cast<int64_t>(stream->second);
 }
 void Fabric::PacketEvent(unsigned event,unsigned node,unsigned port,Ptr<const Packet> p) {
   if(!capture_limit_ || Now()<capture_start_ || Now()>=capture_end_ ||

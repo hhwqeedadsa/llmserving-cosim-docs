@@ -16,6 +16,7 @@ class SourceRecovery {
     timer_.Sent(end,now);
     if(rtt_)rtt_->Sent(start,end,now);
   }
+  void Extend(uint64_t bytes) {timer_.Extend(bytes);}
   bool Confirm(uint64_t ack,int64_t now,bool nack=false) {
     if(ack>timer_.High() || timer_.Failed())throw std::logic_error("Invalid source ACK for recovery");
     if(rtt_)rtt_->Confirm(ack,now,nack);

@@ -1,0 +1,21 @@
+{
+  "passed": true,
+  "archive_members": 640,
+  "uncompressed_bytes": 59647125,
+  "archive_bytes": 12250863,
+  "archive_sha256": "b2275cc3acc4f7cf1fbebcbcf3426b8d4320cf06d10190a6ca6ca0700a367ae9",
+  "offline_audit_byte_equal": true,
+  "restored_network_results_equal_except_library_paths": {
+    "stream": true,
+    "transaction": true,
+    "session": true
+  },
+  "public_commands": 4,
+  "actual_restored_networks": 3,
+  "all_eight_libraries_loaded_from_archive": true,
+  "new_source_root": "/dev/shm/moe-persistent-recovery-20261024/checkpoint-final/restored/source",
+  "cwd": "/dev/shm/moe-persistent-recovery-20261024/checkpoint-final/empty-cwd",
+  "task_tree_bytes": 220823404,
+  "monitor_wall_seconds": 2.6187008153647184,
+  "scope": "functional native replay; requires host Python/loader/system C++ libraries; not a complete offline dependency build"
+}

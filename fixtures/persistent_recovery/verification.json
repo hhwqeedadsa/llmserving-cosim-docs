@@ -1,0 +1,83 @@
+{
+  "passed": true,
+  "cases": {
+    "old-default": {
+      "path": "/dev/shm/moe-persistent-recovery-20261024/accept/old-default/result.json",
+      "sha256": "5cdf88bf9719ecb3d05f7a02a8fc04c5919208b22f210e5eeca5d832e7676ef8",
+      "passed": true
+    },
+    "new-default": {
+      "path": "/dev/shm/moe-persistent-recovery-20261024/accept/new-default/result.json",
+      "sha256": "5cdf88bf9719ecb3d05f7a02a8fc04c5919208b22f210e5eeca5d832e7676ef8",
+      "passed": true
+    },
+    "clean": {
+      "path": "/dev/shm/moe-persistent-recovery-20261024/accept/clean/result.json",
+      "sha256": "d87f7cacdb81d6356d420d7b632fe7cecbd8c4f7b4d9484245169d464c8afdc4",
+      "passed": true
+    },
+    "middle": {
+      "path": "/dev/shm/moe-persistent-recovery-20261024/accept/middle/result.json",
+      "sha256": "41981ef465c2659bdbbdf83af25245294a781d65f9065ff6ed75b8f08f90e355",
+      "passed": true
+    },
+    "tail": {
+      "path": "/dev/shm/moe-persistent-recovery-20261024/accept/tail/result.json",
+      "sha256": "4a037951cc7e6ff9aa11a08223e5fa02a274a3a67c2477571572862de5352eee",
+      "passed": true
+    },
+    "final-ack": {
+      "path": "/dev/shm/moe-persistent-recovery-20261024/accept/final-ack/result.json",
+      "sha256": "63d4789675c19fa947c39f9e14a1a8e158c73112f3957f16ff011aba53f8e5cd",
+      "passed": true
+    },
+    "cross-work": {
+      "path": "/dev/shm/moe-persistent-recovery-20261024/accept/cross-work/result.json",
+      "sha256": "86c27894d441eabc515957cf62c82af05645207f9c09cd57992f4eea5230a3a0",
+      "passed": true
+    },
+    "short-rto": {
+      "path": "/dev/shm/moe-persistent-recovery-20261024/accept/short-rto/result.json",
+      "sha256": "0be19dcd23b18faa839f27a80e2b4000bef48d5ece9e3c7ac412fdf9e4f2b0f1",
+      "passed": true
+    },
+    "adaptive-idle": {
+      "path": "/dev/shm/moe-persistent-recovery-20261024/accept/adaptive-idle/result.json",
+      "sha256": "4215f7d71ce391a22a5a2034cd9d004a280fe5ffdcf3a6688bfbb9dea7c70098",
+      "passed": true
+    },
+    "idle-append": {
+      "path": "/dev/shm/moe-persistent-recovery-20261024/accept/idle-append/result.json",
+      "sha256": "b994aa66ebc0356077f7626f14bded44814db0edcd03151addb74e2463371e2f",
+      "passed": true
+    },
+    "exhausted": {
+      "path": "/dev/shm/moe-persistent-recovery-20261024/accept/exhausted-result.json",
+      "sha256": "501cbcd2bc54b4684cbccd5fd687914ac77b545fae87e6a90c34b47bfed98c50",
+      "passed": false
+    },
+    "transaction-clean": {
+      "path": "/dev/shm/moe-persistent-recovery-20261024/accept/transaction-clean/result.json",
+      "sha256": "7d3933fb2e776d219da686f9eeaf246fa4e7bbd03a81225d41efb265d6787a95",
+      "passed": true
+    },
+    "transaction-request-ack": {
+      "path": "/dev/shm/moe-persistent-recovery-20261024/accept/transaction-request-ack/result.json",
+      "sha256": "77b84fefac67c079988f1d8f9d7437f2ee152adfab2242d0d7052112216e167e",
+      "passed": true
+    },
+    "transaction-response-data": {
+      "path": "/dev/shm/moe-persistent-recovery-20261024/accept/transaction-response-data/result.json",
+      "sha256": "dcce30cbcdcd2fb56bfb5b40c59bc1ebce3796044f768e9e217332980215c7f3",
+      "passed": true
+    },
+    "transaction-response-ack": {
+      "path": "/dev/shm/moe-persistent-recovery-20261024/accept/transaction-response-ack/result.json",
+      "sha256": "6c32726bd8309090864f8c8d44e280462efbefcf80d42be69c53cb22390787df",
+      "passed": true
+    }
+  },
+  "commands": 16,
+  "default_equal": true,
+  "wall_seconds": 2.4572051372379065
+}

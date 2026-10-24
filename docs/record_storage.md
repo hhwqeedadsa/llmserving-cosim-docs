@@ -426,3 +426,5 @@ A3 资源模板的原生 STORE 结果在 `transfers` 行内附加 `local_facts`�
 公开 `scaleout host-timing-check --run DIR --output NEW.json` 保存 `moe-host-phase-summary/1`，省略逐阶段明细但保留聚合、open_spans和快照。允许缺失一个记录器，写入 `missing_writers`；`passed=true` 表示已存在的记录前缀合法，只有两个记录器都有true footer时 `all_traces_complete=true`。两者都不证明网络或请求成功。输入和旧分析文件不会覆盖。
 
 native的 `message_resources` 在图激活后记录，`message_resources_final` 在Run正常返回后记录。`registered_messages` 是整个运行累计保留的逻辑消息数；`send_posts/recv_posts` 是应用提交数，`send_callbacks/recv_callbacks` 是已触发的完成回调数；`outstanding_*_callbacks` 为前两者之差。它们不是物理QP存活数、GPU可见状态或逐包计数，未来层RECV可能提前登记。超时只能使用最后一份已有快照，不能外推终止瞬间的计数。`ns3_events.processed_events` 使用锁定ns-3的 `Simulator::GetEventCount()`，也包含非包事件，不能当数据包数。
+
+持久恢复记录位于stream结果`persistent_transport.recovery`或事务结果`transactions.transport.recovery`。源端序号、字节、时间、重试与记录完整性规则见[持久恢复输出](../examples/scaleout_rdma_streams/README.md#可选的持久连接丢包恢复)；这些路径中的message_id解释为连接stream ID，complete事件表示当前已发布前缀ACK，并非连接关闭。

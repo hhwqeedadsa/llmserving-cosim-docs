@@ -100,6 +100,8 @@ class Fabric {
   std::vector<uint8_t> reachable_;
   std::unordered_map<uint64_t, Flow> flows_;
   std::unordered_map<std::tuple<uint32_t,uint32_t,uint16_t>, uint64_t,EndpointHash> port_to_flow_;
+  // Evaluation/fault association only. Persistent IDs are never legacy Flows.
+  std::unordered_map<std::tuple<uint32_t,uint32_t,uint16_t>, uint64_t,EndpointHash> stream_packet_ids_;
   std::map<std::pair<unsigned,bool>,int64_t> local_free_;
   std::map<std::pair<unsigned,bool>,Json> local_links_;
   uint64_t queue_observations_=0;

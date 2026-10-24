@@ -12,11 +12,33 @@ static CustomHeader StreamHeader(Ptr<const Packet> packet) {
   h.getInt=1;packet->PeekHeader(h);return h;
 }
 PersistentStreams::PersistentStreams(Fabric& fabric):PersistentStreams(fabric,Limits{}) {}
-PersistentStreams::PersistentStreams(Fabric& fabric,Limits limits):fabric_(fabric),limits_(limits) {
+PersistentStreams::PersistentStreams(Fabric& fabric,Limits limits):PersistentStreams(fabric,limits,Json()) {}
+PersistentStreams::PersistentStreams(Fabric& fabric,Limits limits,const Json& recovery):fabric_(fabric),limits_(limits) {
   Require(limits.streams>0 && limits.streams<=128 && limits.work>0 && limits.work<=8192,
           "persistent stream count limits out of supported range");
   Require(!fabric_.persistent_stream_mode_ && fabric_.flows_.empty() && !fabric_.resource_tracking_ && !fabric_.recovery_ &&
-          fabric_.fault_rules_.empty(),"stream probe excludes legacy sends/admission/recovery/fault injection");
+          !fabric_.config_.contains("drop_once") &&
+          (fabric_.fault_rules_.empty() || !recovery.is_null()),"stream faults require explicit persistent recovery; legacy sends/admission/recovery excluded");
+  if(!recovery.is_null()) {
+    const auto& c=recovery;
+    Require(c.is_object() && c.size()==(c.contains("rtt_estimator")?6u:5u) && c.at("mode")=="go_back_n/1",
+            "invalid persistent recovery mode/fields");
+    auto integer=[&](const char* key,int64_t low,int64_t high) {
+      const auto& v=c.at(key);Require(v.is_number_integer() && v>=low && v<=high,"invalid persistent recovery integer");
+      return v.get<int64_t>();
+    };
+    const auto initial=integer("initial_rto_ns",1,fabric_.MaxSimNs());
+    const auto maximum=integer("max_rto_ns",initial,1000000000);
+    integer("max_retries",1,16);integer("max_events",0,100000);
+    if(c.contains("rtt_estimator")) {
+      const auto& r=c.at("rtt_estimator");
+      Require(r.is_object() && r.size()==3 && r.at("kind")=="karn" &&
+        r.at("min_rto_ns").is_number_integer() && r.at("min_rto_ns")>=1 && r.at("min_rto_ns")<=initial &&
+        r.at("granularity_ns").is_number_integer() && r.at("granularity_ns")>=1 && r.at("granularity_ns")<=maximum,
+        "invalid persistent Karn estimator");
+    }
+    recovery_config_=c;recovery_records_=std::make_unique<RecoveryRecords>(c.at("max_events"),c.contains("rtt_estimator"));
+  }
   Require(!fabric_.topology_.contains("intra_host") || !fabric_.topology_.at("intra_host").at("enabled").get<bool>(),
           "stream probe requires physical RDMA paths; intra-host bypass unsupported");
   fabric_.persistent_stream_mode_=true;
@@ -26,6 +48,7 @@ PersistentStreams::PersistentStreams(Fabric& fabric,Limits limits):fabric_(fabri
     for(auto& nic:hw->m_nic) if(nic.dev) {
       nic.dev->m_rdmaReceiveCb=MakeCallback(&PersistentStreams::Receive,this,node);
       nic.dev->m_rdmaEQ->m_rdmaGetNxtPkt=MakeCallback(&PersistentStreams::Next,this,node);
+      if(recovery_records_)nic.dev->m_rdmaPktSent=MakeCallback(&PersistentStreams::PacketSent,this,node);
     }
   }
   for(unsigned node=0;node<fabric_.ports_.size();++node)
@@ -33,7 +56,16 @@ PersistentStreams::PersistentStreams(Fabric& fabric,Limits limits):fabric_(fabri
       auto device=fabric_.ports_[node][port].device;if(!device)continue;
       Require(device->TraceConnectWithoutContext("PhyTxBegin",MakeBoundCallback(&PersistentStreams::Tx,this,node,port)),"missing stream Tx hook");
       Require(device->TraceConnectWithoutContext("MacRx",MakeBoundCallback(&PersistentStreams::Rx,this,node,port)),"missing stream Rx hook");
+      if(recovery_records_)Require(device->TraceConnectWithoutContext("PhyRxDrop",MakeBoundCallback(&PersistentStreams::Drop,this,node,port)),"missing stream drop hook");
     }
+}
+PersistentStreams::~PersistentStreams() {
+  for(auto& item:streams_)Simulator::Cancel(item.second.recovery_event);
+}
+void PersistentStreams::ValidateFaultBindings() const {
+  for(const auto& r:fabric_.fault_rules_)
+    Require(streams_.count(r.at("message_id").get<uint64_t>()) && r.at("sequence")<=64*1024*1024,
+            "fault names an unopened persistent stream or exceeds sequence budget");
 }
 void PersistentStreams::ConfigureRateCapture(const Json& config) {
   Require(streams_.empty() && !rate_limit_ && config.is_object() && config.size()==3,
@@ -130,11 +162,54 @@ void PersistentStreams::ReferenceRecovery(uint64_t id) {
 }
 void PersistentStreams::PacketSent(unsigned node,Ptr<RdmaQueuePair> qp,Ptr<Packet> packet,Time gap) {
   fabric_.drivers_[node]->m_rdma->PktSent(qp,packet,gap);
-  auto& s=streams_.at(qp->GetTag());Require(s.src==node && s.qp==qp && bool(s.reference),"foreign reference TX");
-  const auto count=s.reference->rp.Sent(packet->GetSize());
-  if(count)ApplyReferenceRate(s);
-  ReferenceLog(s,"source_sent",packet);
-  if(count)ReferenceLog(s,"rp_bytes");
+  auto& s=streams_.at(qp->GetTag());Require(s.src==node && s.qp==qp,"foreign persistent TX");
+  if(s.reference) {
+    const auto count=s.reference->rp.Sent(packet->GetSize());
+    if(count)ApplyReferenceRate(s);
+    ReferenceLog(s,"source_sent",packet);
+    if(count)ReferenceLog(s,"rp_bytes");
+  }
+  if(s.recovery) {
+    const auto h=StreamHeader(packet);const auto end=h.udp.seq+packet->GetSize()-h.GetSerializedSize();
+    const auto previous=s.recovery->Timer().Deadline();
+    s.recovery->Sent(h.udp.seq,end,StreamNow());
+    recovery_records_->Rtt(StreamNow(),0,qp->GetTag(),h.udp.seq,end);
+    if(previous<0){RecoveryRecord(s,0);ArmRecovery(s);}
+  }
+}
+void PersistentStreams::RecoveryRecord(Stream& s,unsigned code) {
+  recovery_records_->Source(StreamNow(),code,s.src,s.qp->GetTag(),s.recovery->Timer());
+}
+void PersistentStreams::ArmRecovery(Stream& s) {
+  Simulator::Cancel(s.recovery_event);
+  const auto deadline=s.recovery->Timer().Deadline();
+  if(deadline>=0 && failed_stream_<0 && !closed_)
+    s.recovery_event=Simulator::Schedule(NanoSeconds(deadline-StreamNow()),&PersistentStreams::RecoveryTimeout,this,s.qp->GetTag());
+}
+void PersistentStreams::RecoveryTimeout(uint64_t id) {
+  auto& s=streams_.at(id);const auto expiry=s.recovery->Expire(StreamNow());
+  recovery_records_->Rtt(StreamNow(),3,id,0,0);
+  if(expiry==moe_cosim::RetransmissionTimer::Expiry::Exhausted) {
+    failed_stream_=id;failure_ns_=StreamNow();RecoveryRecord(s,4);
+    for(auto& item:streams_)Simulator::Cancel(item.second.recovery_event);
+    Simulator::Stop();return;
+  }
+  RecoveryRecord(s,2);
+  auto hw=fabric_.drivers_[s.src]->m_rdma;hw->RecoverQueue(s.qp);
+  ArmRecovery(s);Pump(s);Notify();
+}
+void PersistentStreams::DuplicateAck(Stream& s,CustomHeader& h,Ptr<RdmaRxQueuePair> rx) {
+  qbbHeader ack;ack.SetSeq(rx->ReceiverNextExpectedSeq);ack.SetPG(h.udp.pg);
+  ack.SetSport(h.udp.dport);ack.SetDport(h.udp.sport);ack.SetIntHeader(h.udp.ih);
+  if(!s.reference && h.GetIpv4EcnBits())ack.SetCnp();
+  auto packet=Create<Packet>(std::max(60-14-20-int(ack.GetSerializedSize()),0));packet->AddHeader(ack);
+  Ipv4Header ip;ip.SetDestination(Ipv4Address(h.sip));ip.SetSource(Ipv4Address(h.dip));ip.SetProtocol(0xfc);
+  ip.SetTtl(64);ip.SetPayloadSize(packet->GetSize());ip.SetIdentification(rx->m_ipid++);
+  packet->AddHeader(ip);fabric_.drivers_[s.dst]->m_rdma->AddHeader(packet,0x800);
+  ++duplicate_acks_;
+  recovery_records_->Receiver({StreamNow(),s.dst,h.sip,h.dip,h.udp.sport,h.udp.dport,rx->ReceiverNextExpectedSeq,h.udp.seq});
+  auto dev=fabric_.drivers_[s.dst]->m_rdma->m_nic[s.destination_nic].dev;
+  dev->RdmaEnqueueHighPrioQ(packet);dev->TriggerTransmit();
 }
 PersistentStreams::RateState PersistentStreams::ReadRate(const Stream& s) {
   const auto& q=*s.qp;
@@ -174,6 +249,7 @@ void PersistentStreams::Open(uint64_t id,unsigned src,unsigned dst,unsigned plan
                     MakeCallback(&Fabric::Noop),MakeCallback(&Fabric::Noop));
   it->second.qp=shw->GetQp(dip.Get(),wire_port,3);
   Require(bool(it->second.qp),"stream QP creation failed");
+  if(recovery_records_)fabric_.stream_packet_ids_.emplace(std::make_tuple(sip.Get(),dip.Get(),wire_port),id);
   if(reference_limit_) {
     const auto& c=reference_config_;
     DcqcnRpConfig rc{c.at("alpha_interval_ns"),c.at("recovery_interval_ns"),c.at("recovery_bytes"),
@@ -214,6 +290,16 @@ void PersistentStreams::Pump(Stream& s) {
     const auto consumed=s.queue.ConsumePublished();Require(consumed && consumed->work_id==w.id,"stream work consumption mismatch");
     w.begin=s.qp->m_size;w.end=w.begin+w.bytes;w.published=StreamNow();
     s.qp->m_size=w.end; // Only actually published work is offered to the NIC.
+    if(recovery_records_) {
+      if(s.recovery)s.recovery->Extend(w.end);
+      else {
+        const auto& c=recovery_config_;const bool adaptive=c.contains("rtt_estimator");
+        s.recovery=std::make_unique<moe_cosim::SourceRecovery>(w.end,c.at("initial_rto_ns"),c.at("max_rto_ns"),c.at("max_retries"),
+          adaptive?c.at("rtt_estimator").at("min_rto_ns").get<int64_t>():0,
+          adaptive?c.at("rtt_estimator").at("granularity_ns").get<int64_t>():0);
+      }
+      RecoveryRecord(s,5);
+    }
   }
   auto& nic=fabric_.drivers_[s.src]->m_rdma->m_nic[s.source_nic];
   if(s.qp->GetBytesLeft()) {
@@ -250,7 +336,14 @@ int PersistentStreams::Receive(unsigned node,Ptr<Packet> packet,CustomHeader& h)
   }
   if(h.l3Prot==0xFC || h.l3Prot==0xFD) {
     auto s=Match(node,h,true);Require(s,"unexpected ACK in exclusive stream execution");
-    Require(h.ack.seq<=s->qp->snd_nxt,"stream ACK covers unsent bytes");
+    if(s->recovery) {
+      const bool progress=s->recovery->Confirm(h.ack.seq,StreamNow(),h.l3Prot==0xfd);
+      recovery_records_->Rtt(StreamNow(),h.l3Prot==0xfd?2:1,s->qp->GetTag(),h.ack.seq,0);
+      if(progress)RecoveryRecord(*s,s->recovery->Timer().Complete()?3:1);
+      else {++old_feedback_;RecoveryRecord(*s,6);}
+      s->qp->snd_nxt=std::max(s->qp->snd_nxt,uint64_t(h.ack.seq));
+      ArmRecovery(*s);
+    } else Require(h.ack.seq<=s->qp->snd_nxt,"stream ACK covers unsent bytes");
     const auto cnp=(h.ack.flags>>qbbHeader::FLAG_CNP)&1;
     SampleRate(*s,1,packet,h.ack.seq,packet->GetSize(),cnp);
     s->qp->Acknowledge(h.ack.seq);
@@ -280,6 +373,8 @@ int PersistentStreams::Receive(unsigned node,Ptr<Packet> packet,CustomHeader& h)
   if(h.l3Prot==0x11) {
     auto& s=*data_stream;
     auto rx=hw->GetRxQp(h.dip,h.sip,h.udp.dport,h.udp.sport,3,false);
+    const auto size=packet->GetSize()-h.GetSerializedSize();
+    if(s.recovery && h.udp.seq<before && uint64_t(h.udp.seq)+size<=before)DuplicateAck(s,h,rx);
     if(s.receiver && rx->ReceiverNextExpectedSeq>before) {
       const auto size=packet->GetSize()-h.GetSerializedSize();
       Require(h.udp.seq==before && rx->ReceiverNextExpectedSeq==before+size,"unsupported overlapping payload acceptance");
@@ -358,12 +453,16 @@ void PersistentStreams::Rx(PersistentStreams* self,unsigned node,unsigned port,P
   auto h=StreamHeader(packet);
   if(h.l3Prot==0x11)if(auto s=self->Match(node,h,false))Require(port==s->destination_nic,"stream received on wrong bound NIC");
 }
+void PersistentStreams::Drop(PersistentStreams* self,unsigned,unsigned,Ptr<const Packet>) {
+  Require(self->inflight_>0,"stream drop without in-flight packet");--self->inflight_;self->Notify();
+}
 void PersistentStreams::Notify() {
   if(notification_pending_)return;
   notification_pending_=true;
   Simulator::ScheduleNow([this](){notification_pending_=false;if(changed)changed();});
 }
 bool PersistentStreams::Drained() const {
+  if(failed_stream_>=0)return false;
   if(inflight_)return false;
   for(const auto& item:streams_)if(!item.second.queue.Drained() || item.second.qp->snd_una!=item.second.qp->m_size ||
       (item.second.reference && item.second.reference->np.Pending()))return false;
@@ -376,6 +475,7 @@ void PersistentStreams::Close() {
   Require(!closed_ && Drained(),"stream close before physical drain or repeated close");
   for(auto& item:streams_) {
     auto& s=item.second;s.queue.Close();
+    Simulator::Cancel(s.recovery_event);
     if(s.reference) {
       Simulator::Cancel(s.reference->np_event);Simulator::Cancel(s.reference->alpha_event);Simulator::Cancel(s.reference->recovery_event);
       ReferenceLog(s,"qp_close");
@@ -392,6 +492,25 @@ Json PersistentStreams::Report() const {
     {"streams",Json::array()},{"work",Json::array()},{"inflight_packets",inflight_},{"physical_drained",Drained()},
     {"closed",closed_},{"atomic_operations_supported",false},{"gpu_visibility_modeled",false},{"hardware_calibrated",false}};
   result["source_packets"]=source_packets_;
+  if(recovery_records_) {
+    auto r=recovery_records_->Report();r["event_codes"]["prefix_published"]=5;
+    r["config"]=recovery_config_;r["failed"]=failed_stream_>=0;
+    r["duplicate_ack_responses"]=duplicate_acks_;r["old_feedback_packets"]=old_feedback_;
+    r["states"]=Json::array();
+    for(const auto& item:streams_)if(item.second.recovery) {
+      const auto& p=*item.second.recovery;const auto& t=p.Timer();
+      Json row={{"stream",item.first},{"published_bytes",item.second.qp->m_size},{"acknowledged_bytes",t.Ack()},
+        {"highest_sent_bytes",t.High()},{"deadline_ns",t.Deadline()},{"rto_ns",t.Rto()},{"timeout_retransmissions",t.TotalRetries()},
+        {"timeout_expiries",t.Expiries()},{"retries_since_progress",t.Retries()},{"prefix_complete",t.Complete()},{"failed",t.Failed()}};
+      if(p.Rtt())row["rtt"]={{"samples",p.Rtt()->Samples()},{"srtt_ns",p.Rtt()->Srtt()},
+        {"rttvar_ns",p.Rtt()->Variance()},{"base_rto_ns",p.Rtt()->BaseRto()},{"discarded_probes",p.Rtt()->DiscardedProbes()}};
+      r["states"].push_back(row);
+    }
+    r["identity_scope"]="message_id in records and fault rules means persistent stream ID; sequences cover the whole connection";
+    r["complete_scope"]="complete denotes ACKed published prefix; connection persists until explicit Close";
+    if(failed_stream_>=0)r["failure"]={{"reason","retry_exhausted"},{"stream",failed_stream_},{"time_ns",failure_ns_}};
+    result["recovery"]=r;
+  }
   if(reference_limit_) {
     result["dcqcn_reference"]={{"config",reference_config_},{"events",reference_events_},
       {"cnp_route","native ECMP over CNP IP source/destination and fid repeated as two 16-bit ports; local metadata projection only"},

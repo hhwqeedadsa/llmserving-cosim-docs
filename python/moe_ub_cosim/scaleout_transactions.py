@@ -59,7 +59,8 @@ def validate(topology, protocol, config, *, allow_no_remote=False):
     source_mode = memory_mode or (isinstance(config, dict) and config.get('schema_version') == 'moe-rdma-transactions/3')
     explicit = isinstance(config, dict) and 'submission_model' in config
     fields(config, 'schema_version connections windows operations'+(' local_model' if local_mode else '')+
-           (' source_model' if source_mode else '')+(' local_memory_model' if memory_mode else '')+(' submission_model' if explicit and sparse_mode else ''), 'transaction root')
+           (' source_model' if source_mode else '')+(' local_memory_model' if memory_mode else '')+(' submission_model' if explicit and sparse_mode else '')+
+           (' transport_recovery' if 'transport_recovery' in config else ''), 'transaction root')
     require(config['schema_version'] in ('moe-rdma-transactions/1', 'moe-rdma-transactions/2', 'moe-rdma-transactions/3', 'moe-rdma-transactions/4', 'moe-rdma-transactions/5'), 'unsupported transaction schema')
     if explicit:
         require(config['submission_model'] == dict(mode='explicit_prefix/1'), 'unsupported submission model')
@@ -89,8 +90,10 @@ def validate(topology, protocol, config, *, allow_no_remote=False):
                 destination_nic=c['source_nic'] if reverse else c['destination_nic'], queue_depth=c['queue_depth']))
     # Validate real physical reachability and native protocol using descriptors
     # only. These placeholder one-byte works are NEVER sent or saved as workload.
-    validate_streams(topology, protocol, dict(schema_version='moe-rdma-stream-work/1', streams=streams,
-        work=[dict(id=0, stream=streams[0]['id'], bytes=1, after=[])]))
+    descriptor=dict(schema_version='moe-rdma-stream-work/1', streams=streams,
+        work=[dict(id=0, stream=streams[0]['id'], bytes=1, after=[])])
+    if 'transport_recovery' in config:descriptor['transport_recovery']=config['transport_recovery']
+    validate_streams(topology, protocol, descriptor)
     windows = config['windows']
     require(isinstance(windows, list) and 1 <= len(windows) <= 16, 'require 1..16 remote windows')
     gpus = {n['id'] for n in topology['nodes'] if n['kind'] == 'gpu'}

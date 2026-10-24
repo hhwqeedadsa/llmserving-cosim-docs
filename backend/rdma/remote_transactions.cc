@@ -17,7 +17,9 @@ std::string MemoryHex(const std::vector<uint8_t>& bytes) {
   static const char digits[]="0123456789abcdef";std::string text;text.reserve(bytes.size()*2);
   for(auto byte:bytes){text+=digits[byte>>4];text+=digits[byte&15];}return text;
 }
-RemoteTransactions::RemoteTransactions(Fabric& fabric,const Json& input):transport_(fabric) {
+RemoteTransactions::RemoteTransactions(Fabric& fabric,const Json& input):
+    transport_(fabric,PersistentStreams::Limits{},input.value("transport_recovery",Json())) {
+  Require(!input.contains("transport_recovery") || input.at("transport_recovery").is_object(),"transport_recovery must be an object");
   Require(input.at("schema_version")=="moe-rdma-transactions/1" ||
           input.at("schema_version")=="moe-rdma-transactions/2" ||
           input.at("schema_version")=="moe-rdma-transactions/3" ||
@@ -56,6 +58,7 @@ RemoteTransactions::RemoteTransactions(Fabric& fabric,const Json& input):transpo
       connections_.at(id).responses.Feed(bytes,[this,id](const auto& frame){Response(id,frame);});
     });
   }
+  transport_.ValidateFaultBindings();
   Require(input.at("windows").is_array() && !input.at("windows").empty() && input.at("windows").size()<=16,
           "invalid remote windows");
   for(const auto& w:input.at("windows")) {

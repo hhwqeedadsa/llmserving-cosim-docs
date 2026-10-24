@@ -156,7 +156,7 @@ v4的transactions新增`local_memory_model/local_memory_events/active_local_memo
 
 MRT1帧用网络字节序编码，32B头依次是magic=0x4d525431、verb、连接内事务序号、远端地址、远端key及body长度；字段宽度为4/4/8/8/4/4B。put body为实际字节，fetch-add body为8B增量，reply body为8B旧值且地址/key为0。事务序号负责请求/响应匹配，**应用operation id不写入报文**，不改变NIC绑定、优先级或选路。
 
-接收端仅解析原生接收前缀新接受的包字节，允许帧跨包；它没有通过源端operation表推断写入内容。一个帧对应一次载体工作，包不跨工作边界；正常载体重复/乱序包不能推进接收前缀。独立内存核心另保留本连接生命周期内的完整请求与原子旧值，重复同一事务返回缓存结果、不再次加法；冲突重复和序号跳跃拒绝。此项已有核心检查，**没有实际网络丢包重试验收，也没有通用RTO或丢失原子响应后的恢复**。
+接收端仅解析原生接收前缀新接受的包字节，允许帧跨包；它没有通过源端operation表推断写入内容。一个帧对应一次载体工作，包不跨工作边界；正常载体重复/乱序包不能推进接收前缀。独立内存核心另保留本连接生命周期内的完整请求与原子旧值，重复同一事务返回缓存结果、不再次加法；冲突重复和序号跳跃拒绝。显式`transport_recovery`已支持实际丢包、重复数据ACK与原子响应恢复，独立核对实际字节和单次副作用，见下文“持久事务的丢包恢复”；默认未开启时仍没有通用超时重传。
 
 默认2次put、4次原子，共6操作；MRT1请求256B、回复160B，总416B有效载荷、10个实际源包，另有原生ACK和各层包头。这里的40B原子请求和40B返回不是RoCE线上字节数。真实原子扩展头、应答头、ACK及ICRC不能由这个数字推导；原子响应在本模型作为普通反向字节流参与调度，真实硬件可能不同。
 
@@ -251,4 +251,8 @@ v5结果窗口不含展开的`hex`，改为`bytes`、`initialization`、`residen
 
 启用模式的`transactions.operations`增加`prepared_ns`，未发生为−1；`transactions.submission`保存`mode`和`publications`，每次含`connection/operation/exclusive/time_ns`。exclusive是从0开始的队列ticket的排他上界，表示逻辑前缀，不是网络包数或物理MMIO门铃次数。同一纳秒的两次显式发布仍是两条记录。prepared、published、目标applied、request_acked、response和completed分别保留，均不能直接等同GPU可见。
 
-此模型依据固定provider源码中的跳过门铃语义，只验证显式发布边界；不模拟所有GIN flush、CPU代理或硬件信用优化。持久事务仍拒绝旧式fault/recovery配置。独立包核验、阻塞反例、在线回调、默认行为差分和恢复见[验收记录](../../fixtures/submission_prefix/README.md)。
+此模型依据固定provider源码中的跳过门铃语义，只验证显式发布边界；不模拟所有GIN flush、CPU代理或硬件信用优化。持久事务仍拒绝旧式recovery/drop_once配置；faults仅在显式transport_recovery时启用，见下节。独立包核验、阻塞反例、在线回调、默认行为差分和恢复见[验收记录](../../fixtures/submission_prefix/README.md)。
+
+### 持久事务的丢包恢复
+
+事务v1—v5及在线v4/v5初始配置可增加`transport_recovery`，字段、累计序号和失败处理见[持久恢复](../scaleout_rdma_streams/README.md#可选的持久连接丢包恢复)。同一连接的请求stream为`connection*2`、响应stream为`connection*2+1`；协议faults中的message_id指这个stream，不能填operation ID。真实重传的重复字节不重新进入事务解析器，原子响应也经真实重传到达源端。request_acked、applied、response和completed继续独立记录；源保护/事务信用仍由已有完成条件释放。恢复状态位于`transactions.transport.recovery`，不是顶层persistent_transport。没有加入该字段时默认保持。

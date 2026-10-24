@@ -43,7 +43,7 @@ PYTHONPATH=python python3 -m moe_ub_cosim scaleout rdma-stream-probe \
 
 默认6次传输共31,457B。work1等work0接收后就绪，深度1使其等ACK后才发布；后续工作检查空闲后追加。另一连接同时向相同目的GPU传输，共享同一网络状态与时钟。999/1001B等尺寸检查包边界；14,464/14,400B也只是操作数，不是一次现代MoE调用。拓扑的A100标签没有GPU测量含义。
 
-本模式独占Fabric传输入口，不能混用旧Send、软件准入、恢复/故障、lifecycle_capture或机内bypass。支持DCQCN、ACK间隔1及正常原生NACK处理；没有通用ACK超时重传。v1仍限制rank≤31；v2按协议的`max_gpus`及实际图检查端点，协议v1默认32GPU。协议v2虽支持更大的图，持久入口本次只验收8GPU上的24连接/192工作，不代表千卡已验证；固定交换机计数器的内存检查和宿主RSS上限仍生效。
+本模式独占Fabric传输入口，不能混用旧Send、软件准入、旧式recovery/drop_once、lifecycle_capture或机内bypass。支持DCQCN、ACK间隔1及正常原生NACK处理；显式持久恢复及故障配置见下节。v1仍限制rank≤31；v2按协议的`max_gpus`及实际图检查端点，协议v1默认32GPU。协议v2虽支持更大的图，持久入口本次只验收8GPU上的24连接/192工作，不代表千卡已验证；固定交换机计数器的内存检查和宿主RSS上限仍生效。
 
 内部按唯一线端端口查连接，以有序累计前缀处理发布、接收和ACK，实际发送序号通过二分查找工作边界（允许原生NACK回退）。依赖只在真实回调发生后释放，以输入顺序处理同时就绪的工作。它们减少宿主扫描，不修改包、QP信用、网络时间或路径规则；没有新增网络性能收益主张。
 
@@ -133,3 +133,31 @@ TX钩子发生在该包的`PktSent`更新之前：`next_avail_ns`仍是此前状
 人工独立核算、深度对照、并发根工作、重复和非法绑定的实际执行见[验收](../../fixtures/persistent_streams/README.md)。完成时间只描述此功能模型，不能将加深未校准队列后的变化写成优化收益。
 
 索引修改前后同输入结果、显式计数和多轮扩展检查见[扩展验收](../../fixtures/indexed_streams/README.md)。
+
+## 可选的持久连接丢包恢复
+
+把运行命令的`--config`换为[work-recovery.json](work-recovery.json)，`--protocol`换为[rdma-loss.json](rdma-loss.json)。完整示例有两个持久连接和六项写工作；它在真实接收端丢弃stream0对前999B的首次ACK，检查实际重传、接收端补ACK及后续累计序号。故障是否命中看`fault_injection.drop_counts`，示例应为`[1]`。已有二进制须包含本功能，否则重新使用公开`rdma-build`构建。
+
+工作根字段`transport_recovery`全部显式填写：
+
+```json
+"transport_recovery": {
+  "mode": "go_back_n/1",
+  "initial_rto_ns": 80000,
+  "max_rto_ns": 640000,
+  "max_retries": 3,
+  "max_events": 10000
+}
+```
+
+`initial_rto_ns`为首次等待确认的超时，范围1到`max_sim_ns`；`max_rto_ns`不小于初值且不超过1秒。`max_retries`为1—16次连续无进展重发，下一次到期记为耗尽；`max_events`为0—100000条被动恢复记录，设0仍执行协议但记录不完整。收到新的累计ACK才重置重试与定时；重复ACK不延期。指数退避保留原生pacing、队列、PFC和DCQCN。没有启用该字段时，默认行为保持。
+
+可选`rtt_estimator: {"kind":"karn","min_rto_ns":20000,"granularity_ns":1}`沿用源端保守采样。最小RTO不能超过初值，粒度不能超过最大RTO。每个连接的估计证据在空闲后保留；不提供跨连接history种子。数值是声明参数，不能直接当作生产推荐。
+
+协议中的`faults.message_id`在此模式指**stream ID**，`sequence`是整条连接累计字节偏移，跨工作边界不一定是MTU整数倍。它不是work ID；事务请求stream为`connection*2`，响应为`connection*2+1`。规则可匹配实际端点或交换机接收位置，未命中不会补造丢包。未开启持久恢复时继续拒绝faults；旧式recovery、drop_once不适用于此入口。
+
+发布新工作只扩大合法范围；首次实际TX才启动超时，源端实际已发高水位约束ACK，迟到累计ACK允许超过重传游标。已确认前缀可以空闲后追加，QP不会因前缀ACK而关闭。重复数据只在接收端补发真实累计ACK，不重复交付给上层。必须等全部工作、在途数据/反馈及队列排空才Close。耗尽或到仿真时限时命令失败并保存部分result，不自动扩大预算。
+
+输出`persistent_transport.recovery`包括各stream的已发布/实际已发/ACK前缀、截止时间、重试、可选RTT估计、重复ACK计数及失败原因。`events`沿用源端恢复列名，其中`message_id`同样表示stream；`prefix_published`是事件5，`complete`仅表示当前已发布前缀确认，不表示连接关闭。记录完整性由`complete/omitted_events`给出。`source_packets`统计全部实际重传，`inflight_packets/physical_drained/closed`区分排空与关闭。可与显式独立CNP参考模式组合。
+
+同一字段也支持事务v1—v5及v4/v5在线会话，真实字节重传不重复执行远端put/fetch-add。MRT1仍是功能编码，接收不等于GPU可见。能力与边界见[平台验收](../../fixtures/persistent_recovery/README.md)；这不是新拥塞控制或恢复算法的性能结论。

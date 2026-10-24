@@ -1,0 +1,35 @@
+{
+  "down_port_receive_drops": 1,
+  "explicit_release_restores_conservation": true,
+  "manually_seeded_state": true,
+  "native_take_down_leaves_mmu_occupancy": true,
+  "network_recovery_or_performance_proven": false,
+  "phy_rx_drops": 0,
+  "platform_link_failure_support_added": false,
+  "qbb_and_phy_drop_are_distinct": true,
+  "queue_drops": 15,
+  "retained_egress_bytes": 14000,
+  "retained_ingress_bytes": 14000,
+  "retained_shared_bytes": 5808,
+  "schema_version": "native-link-down-independent-audit/1",
+  "seeded_control_bytes": 96,
+  "seeded_data_bytes": 14000,
+  "source_transmissions": 0,
+  "tampering": [
+    {
+      "kind": "changed_occupancy",
+      "reason": "MMU occupancy evidence",
+      "rejected": true
+    },
+    {
+      "kind": "missing_drop",
+      "reason": "queue drops coverage",
+      "rejected": true
+    },
+    {
+      "kind": "forged_phy_drop",
+      "reason": "unexpected PhyRxDrop or TX",
+      "rejected": true
+    }
+  ]
+}

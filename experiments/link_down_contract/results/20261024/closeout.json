@@ -1,0 +1,83 @@
+{
+  "allocated_and_apparent_upper_sum_bytes": 2641920,
+  "artifact_usage": {
+    "/dev/shm/moe-link-down-contract-20261024": {
+      "allocated_bytes": 1294336,
+      "apparent_bytes": 1176842
+    },
+    "runs/link_down_contract_20261024": {
+      "allocated_bytes": 1347584,
+      "apparent_bytes": 1209831
+    }
+  },
+  "budget_artifact_bytes": 67108864,
+  "budget_seconds": 180,
+  "conservative_nested_monitor_seconds": 17.080359874293208,
+  "final_receipt_reserve_bytes": 65536,
+  "monitors": [
+    {
+      "path": "/dev/shm/moe-link-down-contract-20261024/audit-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 7442432,
+      "status": "completed",
+      "wall_seconds": 0.13039233721792698
+    },
+    {
+      "path": "/dev/shm/moe-link-down-contract-20261024/build-corrected-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 473923584,
+      "status": "completed",
+      "wall_seconds": 4.634560395032167
+    },
+    {
+      "path": "/dev/shm/moe-link-down-contract-20261024/build-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 404303872,
+      "status": "child_failed",
+      "wall_seconds": 3.1833621840924025
+    },
+    {
+      "path": "/dev/shm/moe-link-down-contract-20261024/offline-empty-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 7442432,
+      "status": "completed",
+      "wall_seconds": 0.1287543848156929
+    },
+    {
+      "path": "/dev/shm/moe-link-down-contract-20261024/offline-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 7442432,
+      "status": "completed",
+      "wall_seconds": 0.12972522154450417
+    },
+    {
+      "path": "/dev/shm/moe-link-down-contract-20261024/transition-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 12824576,
+      "status": "completed",
+      "wall_seconds": 0.1477128528058529
+    },
+    {
+      "path": "/dev/shm/moe-link-down-contract-20261024-corrected-driver-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 492859392,
+      "status": "completed",
+      "wall_seconds": 5.206415504217148
+    },
+    {
+      "path": "/dev/shm/moe-link-down-contract-20261024-driver-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 415031296,
+      "status": "child_failed",
+      "wall_seconds": 3.3715136367827654
+    },
+    {
+      "path": "/dev/shm/moe-link-down-contract-20261024-persistence-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 7442432,
+      "status": "completed",
+      "wall_seconds": 0.14792335778474808
+    }
+  ],
+  "native_libraries_bundled": false,
+  "native_state_transition_executions": 1,
+  "network_executions": 0,
+  "no_live_monitored_process_groups": true,
+  "not_total_wall_time": true,
+  "original_compile_failure_preserved": true,
+  "overall_paper_objective_complete": false,
+  "persistent_package": "/home/lry/moe-ub-cosim/runs/link_down_contract_20261024",
+  "platform_and_dependencies_modified": false,
+  "schema_version": "link-down-contract-closeout/1"
+}

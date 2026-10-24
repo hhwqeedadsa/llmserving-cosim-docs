@@ -1,0 +1,387 @@
+{
+  "after_down_receive": {
+    "egress": [
+      0,
+      0,
+      6000,
+      8000,
+      0,
+      0,
+      0,
+      0
+    ],
+    "headroom_used": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "ingress": [
+      0,
+      0,
+      6000,
+      8000,
+      0,
+      0,
+      0,
+      0
+    ],
+    "is_link_up": false,
+    "queued_bytes": 0,
+    "shared_used_bytes": 5808
+  },
+  "after_explicit_release": {
+    "egress": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "headroom_used": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "ingress": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "is_link_up": false,
+    "queued_bytes": 0,
+    "shared_used_bytes": 0
+  },
+  "after_take_down": {
+    "egress": [
+      0,
+      0,
+      6000,
+      8000,
+      0,
+      0,
+      0,
+      0
+    ],
+    "headroom_used": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "ingress": [
+      0,
+      0,
+      6000,
+      8000,
+      0,
+      0,
+      0,
+      0
+    ],
+    "is_link_up": false,
+    "queued_bytes": 0,
+    "shared_used_bytes": 5808
+  },
+  "all_qbb_drop_events": [
+    {
+      "bytes": 96,
+      "queue": 0,
+      "uid": 14
+    },
+    {
+      "bytes": 1000,
+      "queue": 2,
+      "uid": 8
+    },
+    {
+      "bytes": 1000,
+      "queue": 3,
+      "uid": 0
+    },
+    {
+      "bytes": 1000,
+      "queue": 2,
+      "uid": 9
+    },
+    {
+      "bytes": 1000,
+      "queue": 3,
+      "uid": 1
+    },
+    {
+      "bytes": 1000,
+      "queue": 2,
+      "uid": 10
+    },
+    {
+      "bytes": 1000,
+      "queue": 3,
+      "uid": 2
+    },
+    {
+      "bytes": 1000,
+      "queue": 2,
+      "uid": 11
+    },
+    {
+      "bytes": 1000,
+      "queue": 3,
+      "uid": 3
+    },
+    {
+      "bytes": 1000,
+      "queue": 2,
+      "uid": 12
+    },
+    {
+      "bytes": 1000,
+      "queue": 3,
+      "uid": 4
+    },
+    {
+      "bytes": 1000,
+      "queue": 2,
+      "uid": 13
+    },
+    {
+      "bytes": 1000,
+      "queue": 3,
+      "uid": 5
+    },
+    {
+      "bytes": 1000,
+      "queue": 3,
+      "uid": 6
+    },
+    {
+      "bytes": 1000,
+      "queue": 3,
+      "uid": 7
+    },
+    {
+      "bytes": 64,
+      "queue": 0,
+      "uid": 15
+    }
+  ],
+  "before": {
+    "egress": [
+      0,
+      0,
+      6000,
+      8000,
+      0,
+      0,
+      0,
+      0
+    ],
+    "headroom_used": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "ingress": [
+      0,
+      0,
+      6000,
+      8000,
+      0,
+      0,
+      0,
+      0
+    ],
+    "is_link_up": true,
+    "queued_bytes": 14096,
+    "shared_used_bytes": 5808
+  },
+  "late_receive_uid": 15,
+  "manually_seeded_state": true,
+  "network_flows_executed": 0,
+  "phy_rx_drop_events": [],
+  "phy_tx_events": [],
+  "queue_drop_events": [
+    {
+      "bytes": 96,
+      "queue": 0,
+      "uid": 14
+    },
+    {
+      "bytes": 1000,
+      "queue": 2,
+      "uid": 8
+    },
+    {
+      "bytes": 1000,
+      "queue": 3,
+      "uid": 0
+    },
+    {
+      "bytes": 1000,
+      "queue": 2,
+      "uid": 9
+    },
+    {
+      "bytes": 1000,
+      "queue": 3,
+      "uid": 1
+    },
+    {
+      "bytes": 1000,
+      "queue": 2,
+      "uid": 10
+    },
+    {
+      "bytes": 1000,
+      "queue": 3,
+      "uid": 2
+    },
+    {
+      "bytes": 1000,
+      "queue": 2,
+      "uid": 11
+    },
+    {
+      "bytes": 1000,
+      "queue": 3,
+      "uid": 3
+    },
+    {
+      "bytes": 1000,
+      "queue": 2,
+      "uid": 12
+    },
+    {
+      "bytes": 1000,
+      "queue": 3,
+      "uid": 4
+    },
+    {
+      "bytes": 1000,
+      "queue": 2,
+      "uid": 13
+    },
+    {
+      "bytes": 1000,
+      "queue": 3,
+      "uid": 5
+    },
+    {
+      "bytes": 1000,
+      "queue": 3,
+      "uid": 6
+    },
+    {
+      "bytes": 1000,
+      "queue": 3,
+      "uid": 7
+    }
+  ],
+  "reserve_bytes": 4096,
+  "schema_version": "native-link-down-contract/1",
+  "scope": "native manually seeded queue/MMU transition; no Simulator::Run, routed traffic, adapter fix or hardware claim",
+  "seeds": [
+    {
+      "bytes": 1000,
+      "queue": 3,
+      "uid": 0
+    },
+    {
+      "bytes": 1000,
+      "queue": 3,
+      "uid": 1
+    },
+    {
+      "bytes": 1000,
+      "queue": 3,
+      "uid": 2
+    },
+    {
+      "bytes": 1000,
+      "queue": 3,
+      "uid": 3
+    },
+    {
+      "bytes": 1000,
+      "queue": 3,
+      "uid": 4
+    },
+    {
+      "bytes": 1000,
+      "queue": 3,
+      "uid": 5
+    },
+    {
+      "bytes": 1000,
+      "queue": 3,
+      "uid": 6
+    },
+    {
+      "bytes": 1000,
+      "queue": 3,
+      "uid": 7
+    },
+    {
+      "bytes": 1000,
+      "queue": 2,
+      "uid": 8
+    },
+    {
+      "bytes": 1000,
+      "queue": 2,
+      "uid": 9
+    },
+    {
+      "bytes": 1000,
+      "queue": 2,
+      "uid": 10
+    },
+    {
+      "bytes": 1000,
+      "queue": 2,
+      "uid": 11
+    },
+    {
+      "bytes": 1000,
+      "queue": 2,
+      "uid": 12
+    },
+    {
+      "bytes": 1000,
+      "queue": 2,
+      "uid": 13
+    },
+    {
+      "bytes": 96,
+      "queue": 0,
+      "uid": 14
+    }
+  ],
+  "simulator_run_called": false
+}

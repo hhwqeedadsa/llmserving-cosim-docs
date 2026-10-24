@@ -1,0 +1,28 @@
+{
+  "cumulative_limit_bytes": 67108864,
+  "cumulative_limit_seconds": 180,
+  "cumulative_monitored_seconds": 2.536107663065195,
+  "evidence_stage": "/dev/shm/moe-recovery-lifetime-20261024",
+  "goal_status": "in_progress",
+  "measurement_scope": "code-derived content lengths, not runtime allocation/RSS/HBM measurement",
+  "monitor_count": 4,
+  "monitor_remaining_live_pids_all_empty": true,
+  "monitored_time_scope": "four stage commands, not full elapsed time",
+  "new_networks": 0,
+  "no_download_install_gpu_or_network_reruns": true,
+  "no_platform_or_dependency_changes": true,
+  "old_result_files": 16,
+  "passed": true,
+  "peak_sampled_group_rss_bytes": 47435776,
+  "persistent": "runs/recovery_lifetime_checkpoint_20261024",
+  "platform_commit": "726ab7d",
+  "prior_network_platform": "18025e3",
+  "python_syntax_files": 3,
+  "relevant_native_sources_identical": true,
+  "research_gate": "finite-buffer performance claims require explicit snapshot budgets and old-access exit guarantees",
+  "root_free_bytes": 100880384,
+  "stage_restored_archive_persistent_usage": {
+    "allocated_bytes": 29814784,
+    "apparent_bytes": 29661101
+  }
+}

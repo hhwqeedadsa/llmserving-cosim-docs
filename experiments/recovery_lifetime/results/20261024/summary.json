@@ -1,0 +1,320 @@
+{
+  "cases": [
+    {
+      "accounting_scope": "code-derived retained vector contents at report time; not capacity/RSS/HBM or network volume",
+      "captured_operations": 6,
+      "carrier_work_payload_content_bytes": 86208,
+      "case": "1472-data_tail-whole_token",
+      "failed_operation_applied_ns": -1,
+      "failed_operation_completed_ns": -1,
+      "fault": "data_tail",
+      "operation_body_content_bytes": 86016,
+      "repeated_packets_equal_original_payload": true,
+      "repeated_source_packet_offsets": 2,
+      "source_capture_times_ns": [
+        0,
+        100000
+      ],
+      "source_lease_bytes": 14336,
+      "strategy": "whole_token",
+      "target_saved_frame_content_bytes": 71840,
+      "three_container_content_bytes": 244064
+    },
+    {
+      "accounting_scope": "code-derived retained vector contents at report time; not capacity/RSS/HBM or network volume",
+      "captured_operations": 4,
+      "carrier_work_payload_content_bytes": 57472,
+      "case": "1472-data_tail-owner_retention",
+      "failed_operation_applied_ns": -1,
+      "failed_operation_completed_ns": -1,
+      "fault": "data_tail",
+      "operation_body_content_bytes": 57344,
+      "repeated_packets_equal_original_payload": true,
+      "repeated_source_packet_offsets": 2,
+      "source_capture_times_ns": [
+        0,
+        100000
+      ],
+      "source_lease_bytes": 14336,
+      "strategy": "owner_retention",
+      "target_saved_frame_content_bytes": 43104,
+      "three_container_content_bytes": 157920
+    },
+    {
+      "accounting_scope": "code-derived retained vector contents at report time; not capacity/RSS/HBM or network volume",
+      "captured_operations": 3,
+      "carrier_work_payload_content_bytes": 43104,
+      "case": "1472-ack_tail-whole_token",
+      "failed_operation_applied_ns": 9965,
+      "failed_operation_completed_ns": -1,
+      "fault": "ack_tail",
+      "operation_body_content_bytes": 43008,
+      "repeated_packets_equal_original_payload": true,
+      "repeated_source_packet_offsets": 2,
+      "source_capture_times_ns": [
+        0
+      ],
+      "source_lease_bytes": 14336,
+      "strategy": "whole_token",
+      "target_saved_frame_content_bytes": 43104,
+      "three_container_content_bytes": 129216
+    },
+    {
+      "accounting_scope": "code-derived retained vector contents at report time; not capacity/RSS/HBM or network volume",
+      "captured_operations": 3,
+      "carrier_work_payload_content_bytes": 43104,
+      "case": "1472-ack_tail-owner_retention",
+      "failed_operation_applied_ns": 9965,
+      "failed_operation_completed_ns": -1,
+      "fault": "ack_tail",
+      "operation_body_content_bytes": 43008,
+      "repeated_packets_equal_original_payload": true,
+      "repeated_source_packet_offsets": 2,
+      "source_capture_times_ns": [
+        0
+      ],
+      "source_lease_bytes": 14336,
+      "strategy": "owner_retention",
+      "target_saved_frame_content_bytes": 43104,
+      "three_container_content_bytes": 129216
+    },
+    {
+      "accounting_scope": "code-derived retained vector contents at report time; not capacity/RSS/HBM or network volume",
+      "captured_operations": 6,
+      "carrier_work_payload_content_bytes": 86208,
+      "case": "1808-data_tail-whole_token",
+      "failed_operation_applied_ns": -1,
+      "failed_operation_completed_ns": -1,
+      "fault": "data_tail",
+      "operation_body_content_bytes": 86016,
+      "repeated_packets_equal_original_payload": true,
+      "repeated_source_packet_offsets": 2,
+      "source_capture_times_ns": [
+        0,
+        100000
+      ],
+      "source_lease_bytes": 14336,
+      "strategy": "whole_token",
+      "target_saved_frame_content_bytes": 71840,
+      "three_container_content_bytes": 244064
+    },
+    {
+      "accounting_scope": "code-derived retained vector contents at report time; not capacity/RSS/HBM or network volume",
+      "captured_operations": 4,
+      "carrier_work_payload_content_bytes": 57472,
+      "case": "1808-data_tail-owner_retention",
+      "failed_operation_applied_ns": -1,
+      "failed_operation_completed_ns": -1,
+      "fault": "data_tail",
+      "operation_body_content_bytes": 57344,
+      "repeated_packets_equal_original_payload": true,
+      "repeated_source_packet_offsets": 2,
+      "source_capture_times_ns": [
+        0,
+        100000
+      ],
+      "source_lease_bytes": 14336,
+      "strategy": "owner_retention",
+      "target_saved_frame_content_bytes": 43104,
+      "three_container_content_bytes": 157920
+    },
+    {
+      "accounting_scope": "code-derived retained vector contents at report time; not capacity/RSS/HBM or network volume",
+      "captured_operations": 3,
+      "carrier_work_payload_content_bytes": 43104,
+      "case": "1808-ack_tail-whole_token",
+      "failed_operation_applied_ns": 9965,
+      "failed_operation_completed_ns": -1,
+      "fault": "ack_tail",
+      "operation_body_content_bytes": 43008,
+      "repeated_packets_equal_original_payload": true,
+      "repeated_source_packet_offsets": 2,
+      "source_capture_times_ns": [
+        0
+      ],
+      "source_lease_bytes": 14336,
+      "strategy": "whole_token",
+      "target_saved_frame_content_bytes": 43104,
+      "three_container_content_bytes": 129216
+    },
+    {
+      "accounting_scope": "code-derived retained vector contents at report time; not capacity/RSS/HBM or network volume",
+      "captured_operations": 3,
+      "carrier_work_payload_content_bytes": 43104,
+      "case": "1808-ack_tail-owner_retention",
+      "failed_operation_applied_ns": 9965,
+      "failed_operation_completed_ns": -1,
+      "fault": "ack_tail",
+      "operation_body_content_bytes": 43008,
+      "repeated_packets_equal_original_payload": true,
+      "repeated_source_packet_offsets": 2,
+      "source_capture_times_ns": [
+        0
+      ],
+      "source_lease_bytes": 14336,
+      "strategy": "owner_retention",
+      "target_saved_frame_content_bytes": 43104,
+      "three_container_content_bytes": 129216
+    },
+    {
+      "accounting_scope": "code-derived retained vector contents at report time; not capacity/RSS/HBM or network volume",
+      "captured_operations": 8,
+      "carrier_work_payload_content_bytes": 114944,
+      "case": "2675-data_tail-whole_token",
+      "failed_operation_applied_ns": -1,
+      "failed_operation_completed_ns": -1,
+      "fault": "data_tail",
+      "operation_body_content_bytes": 114688,
+      "repeated_packets_equal_original_payload": true,
+      "repeated_source_packet_offsets": 2,
+      "source_capture_times_ns": [
+        0,
+        100000
+      ],
+      "source_lease_bytes": 14336,
+      "strategy": "whole_token",
+      "target_saved_frame_content_bytes": 100576,
+      "three_container_content_bytes": 330208
+    },
+    {
+      "accounting_scope": "code-derived retained vector contents at report time; not capacity/RSS/HBM or network volume",
+      "captured_operations": 5,
+      "carrier_work_payload_content_bytes": 71840,
+      "case": "2675-data_tail-owner_retention",
+      "failed_operation_applied_ns": -1,
+      "failed_operation_completed_ns": -1,
+      "fault": "data_tail",
+      "operation_body_content_bytes": 71680,
+      "repeated_packets_equal_original_payload": true,
+      "repeated_source_packet_offsets": 2,
+      "source_capture_times_ns": [
+        0,
+        100000
+      ],
+      "source_lease_bytes": 14336,
+      "strategy": "owner_retention",
+      "target_saved_frame_content_bytes": 57472,
+      "three_container_content_bytes": 200992
+    },
+    {
+      "accounting_scope": "code-derived retained vector contents at report time; not capacity/RSS/HBM or network volume",
+      "captured_operations": 4,
+      "carrier_work_payload_content_bytes": 57472,
+      "case": "2675-ack_tail-whole_token",
+      "failed_operation_applied_ns": 11159,
+      "failed_operation_completed_ns": -1,
+      "fault": "ack_tail",
+      "operation_body_content_bytes": 57344,
+      "repeated_packets_equal_original_payload": true,
+      "repeated_source_packet_offsets": 2,
+      "source_capture_times_ns": [
+        0
+      ],
+      "source_lease_bytes": 14336,
+      "strategy": "whole_token",
+      "target_saved_frame_content_bytes": 57472,
+      "three_container_content_bytes": 172288
+    },
+    {
+      "accounting_scope": "code-derived retained vector contents at report time; not capacity/RSS/HBM or network volume",
+      "captured_operations": 4,
+      "carrier_work_payload_content_bytes": 57472,
+      "case": "2675-ack_tail-owner_retention",
+      "failed_operation_applied_ns": 11159,
+      "failed_operation_completed_ns": -1,
+      "fault": "ack_tail",
+      "operation_body_content_bytes": 57344,
+      "repeated_packets_equal_original_payload": true,
+      "repeated_source_packet_offsets": 2,
+      "source_capture_times_ns": [
+        0
+      ],
+      "source_lease_bytes": 14336,
+      "strategy": "owner_retention",
+      "target_saved_frame_content_bytes": 57472,
+      "three_container_content_bytes": 172288
+    },
+    {
+      "accounting_scope": "code-derived retained vector contents at report time; not capacity/RSS/HBM or network volume",
+      "captured_operations": 6,
+      "carrier_work_payload_content_bytes": 86208,
+      "case": "6447-data_tail-whole_token",
+      "failed_operation_applied_ns": -1,
+      "failed_operation_completed_ns": -1,
+      "fault": "data_tail",
+      "operation_body_content_bytes": 86016,
+      "repeated_packets_equal_original_payload": true,
+      "repeated_source_packet_offsets": 2,
+      "source_capture_times_ns": [
+        0,
+        100000
+      ],
+      "source_lease_bytes": 14336,
+      "strategy": "whole_token",
+      "target_saved_frame_content_bytes": 71840,
+      "three_container_content_bytes": 244064
+    },
+    {
+      "accounting_scope": "code-derived retained vector contents at report time; not capacity/RSS/HBM or network volume",
+      "captured_operations": 4,
+      "carrier_work_payload_content_bytes": 57472,
+      "case": "6447-data_tail-owner_retention",
+      "failed_operation_applied_ns": -1,
+      "failed_operation_completed_ns": -1,
+      "fault": "data_tail",
+      "operation_body_content_bytes": 57344,
+      "repeated_packets_equal_original_payload": true,
+      "repeated_source_packet_offsets": 2,
+      "source_capture_times_ns": [
+        0,
+        100000
+      ],
+      "source_lease_bytes": 14336,
+      "strategy": "owner_retention",
+      "target_saved_frame_content_bytes": 43104,
+      "three_container_content_bytes": 157920
+    },
+    {
+      "accounting_scope": "code-derived retained vector contents at report time; not capacity/RSS/HBM or network volume",
+      "captured_operations": 3,
+      "carrier_work_payload_content_bytes": 43104,
+      "case": "6447-ack_tail-whole_token",
+      "failed_operation_applied_ns": 9965,
+      "failed_operation_completed_ns": -1,
+      "fault": "ack_tail",
+      "operation_body_content_bytes": 43008,
+      "repeated_packets_equal_original_payload": true,
+      "repeated_source_packet_offsets": 2,
+      "source_capture_times_ns": [
+        0
+      ],
+      "source_lease_bytes": 14336,
+      "strategy": "whole_token",
+      "target_saved_frame_content_bytes": 43104,
+      "three_container_content_bytes": 129216
+    },
+    {
+      "accounting_scope": "code-derived retained vector contents at report time; not capacity/RSS/HBM or network volume",
+      "captured_operations": 3,
+      "carrier_work_payload_content_bytes": 43104,
+      "case": "6447-ack_tail-owner_retention",
+      "failed_operation_applied_ns": 9965,
+      "failed_operation_completed_ns": -1,
+      "fault": "ack_tail",
+      "operation_body_content_bytes": 43008,
+      "repeated_packets_equal_original_payload": true,
+      "repeated_source_packet_offsets": 2,
+      "source_capture_times_ns": [
+        0
+      ],
+      "source_lease_bytes": 14336,
+      "strategy": "owner_retention",
+      "target_saved_frame_content_bytes": 43104,
+      "three_container_content_bytes": 129216
+    }
+  ],
+  "finite_buffer_performance_gate": "not_ready_without_explicit_buffer_and_old_access_exit_model",
+  "hardware_memory_measured": false,
+  "new_network_executions": 0,
+  "source_lifetime_contract": "capture once at publication; lease release on transaction completion"
+}

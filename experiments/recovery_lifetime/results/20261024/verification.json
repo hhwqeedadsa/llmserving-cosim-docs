@@ -1,0 +1,16 @@
+{
+  "independent_raw_result_audit": true,
+  "passed": true,
+  "scope": "functional model and code-derived contents only",
+  "tamper_rejections": [
+    "source_lease_bytes",
+    "three_container_content_bytes"
+  ],
+  "totals": {
+    "cases": 16,
+    "failed_but_target_applied": 8,
+    "repeated_source_packet_offsets": 32,
+    "retained_source_lease_bytes": 229376,
+    "three_container_content_bytes": 2857024
+  }
+}

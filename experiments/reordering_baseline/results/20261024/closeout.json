@@ -1,0 +1,67 @@
+{
+  "schema_version": "reordering-baseline-closeout/1",
+  "platform_commit": "fa6f00173e6fbb320e83b368c85e9e835c8ba959",
+  "ended_utc": "2026-10-24T20:16:36.286217+00:00",
+  "research_stage_complete": true,
+  "overall_paper_goal_complete": false,
+  "new_actual_networks": 3,
+  "immutable_saved_baselines": 3,
+  "successful_network_reruns": 0,
+  "original_terminal_monitors": 23,
+  "conservative_cumulative_monitored_seconds_including_nested": 135.8405166324228,
+  "final_management_seconds_reserved": 10,
+  "peak_sampled_group_rss_bytes": 465285120,
+  "original_restored_archives_persistent_sources_apparent_bytes": 110743500,
+  "original_restored_archives_persistent_sources_allocated_bytes": 111587328,
+  "source_and_final_receipt_reserve_bytes": 2097152,
+  "total_charged_with_reserve_bytes": 113684480,
+  "limits": {
+    "cumulative_seconds": 600,
+    "cumulative_bytes": 402653184,
+    "per_command_seconds": 60,
+    "rss_bytes": 1073741824,
+    "address_bytes": 2147483648,
+    "artifact_bytes": 134217728,
+    "max_new_networks": 3,
+    "max_sim_ns": 5000000,
+    "result_json_bytes": 16777216
+  },
+  "remaining_monitored_live_pids": [],
+  "monitored_failures": [],
+  "unmonitored_diagnostic_read_error": {
+    "offline_exploratory_read_failure": "interactive read attempted absent top-level queue_metrics key; exit1 before inspecting second case; packet and per-port records then inspected directly",
+    "effect": "no input/result/platform changes or network reruns",
+    "monitor_scope": "registered executable research commands only; interactive source reads and file management are not total calendar time"
+  },
+  "archive": {
+    "sha256": "b4b1c78b8e2d65e5e6a88fd005f1d8ee7890703f8219ae7c26659756ae238d6d",
+    "members": 183,
+    "uncompressed_bytes": 46043790,
+    "compressed_bytes": 4786597,
+    "scope": "standalone research code and six saved conditions, three new networks; native runtime external"
+  },
+  "evidence": {
+    "final_archive_all_members_verified": true,
+    "final_archive_sources_equal_current": true,
+    "replay_executed_verified_v1": true,
+    "five_reports_byte_identical": true,
+    "final_analysis_sources_same_as_replayed": true,
+    "final_archive_network_reexecuted": false,
+    "runtime_identity": {
+      "passed": true,
+      "platform_commit": "fa6f00173e6fbb320e83b368c85e9e835c8ba959",
+      "backend_sha256": "bed31a8e1121a065fabbc9629b844eb4d9501dcc3f531212a41a496c346a2658",
+      "libraries": 8,
+      "compiled_sources": 33,
+      "preserved_build_inputs": 10,
+      "native_runtime_sources_and_platform_unchanged": true,
+      "network_executions": 0
+    },
+    "fixed_dependencies": "13 checkouts agree",
+    "graph_and_transport_tamper_classes": 7,
+    "source_train_tamper_classes": 3,
+    "unsafe_archive_classes": 8,
+    "platform_changes_builds_installs_downloads_gpu_push": false
+  },
+  "scope": "four fixed MMLU requests/two layers/two steps, legacy copy and declared compute; uncalibrated reference, no holdout or algorithm novelty"
+}

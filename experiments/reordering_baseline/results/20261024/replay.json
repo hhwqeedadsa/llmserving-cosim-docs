@@ -1,0 +1,100 @@
+{
+  "passed": true,
+  "archive_sha256": "a6d00adbfd805a36a90db98237f1a84b4ecc04cfccccdcce8c3aed0dd94406c5",
+  "members_verified": 173,
+  "new_source_root": true,
+  "empty_cwd": true,
+  "five_reports_byte_identical": true,
+  "network_executions": 0,
+  "pythonpath_scope": "restored research source only; no platform, fixtures, external runtime or old repository imports",
+  "commands": [
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "experiments.reordering_baseline.analyze",
+        "--observed",
+        "/dev/shm/moe-reordering-baseline-20261024/restored/evidence/inputs/observed",
+        "--planned",
+        "/dev/shm/moe-reordering-baseline-20261024/restored/evidence/planned",
+        "--network",
+        "/dev/shm/moe-reordering-baseline-20261024/restored/evidence/network",
+        "--baseline",
+        "/dev/shm/moe-reordering-baseline-20261024/restored/evidence/inputs/baseline",
+        "--output",
+        "/dev/shm/moe-reordering-baseline-20261024/restored/analysis.json"
+      ],
+      "cwd": "/dev/shm/moe-reordering-baseline-20261024/restored/empty-cwd",
+      "pythonpath": "/dev/shm/moe-reordering-baseline-20261024/restored/source",
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "experiments.reordering_baseline.verify",
+        "--stage",
+        "/dev/shm/moe-reordering-baseline-20261024/restored/evidence",
+        "--analysis",
+        "/dev/shm/moe-reordering-baseline-20261024/restored/analysis.json",
+        "--output",
+        "/dev/shm/moe-reordering-baseline-20261024/restored/verification-final.json"
+      ],
+      "cwd": "/dev/shm/moe-reordering-baseline-20261024/restored/empty-cwd",
+      "pythonpath": "/dev/shm/moe-reordering-baseline-20261024/restored/source",
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "experiments.reordering_baseline.train",
+        "--network",
+        "/dev/shm/moe-reordering-baseline-20261024/restored/evidence/network",
+        "--output",
+        "/dev/shm/moe-reordering-baseline-20261024/restored/source-train.json"
+      ],
+      "cwd": "/dev/shm/moe-reordering-baseline-20261024/restored/empty-cwd",
+      "pythonpath": "/dev/shm/moe-reordering-baseline-20261024/restored/source",
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "experiments.reordering_baseline.verify_train",
+        "--network",
+        "/dev/shm/moe-reordering-baseline-20261024/restored/evidence/network",
+        "--analysis",
+        "/dev/shm/moe-reordering-baseline-20261024/restored/source-train.json",
+        "--output",
+        "/dev/shm/moe-reordering-baseline-20261024/restored/source-train-verification.json"
+      ],
+      "cwd": "/dev/shm/moe-reordering-baseline-20261024/restored/empty-cwd",
+      "pythonpath": "/dev/shm/moe-reordering-baseline-20261024/restored/source",
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "experiments.reordering_baseline.summary",
+        "--analysis",
+        "/dev/shm/moe-reordering-baseline-20261024/restored/analysis.json",
+        "--train",
+        "/dev/shm/moe-reordering-baseline-20261024/restored/source-train.json",
+        "--output",
+        "/dev/shm/moe-reordering-baseline-20261024/restored/summary.json"
+      ],
+      "cwd": "/dev/shm/moe-reordering-baseline-20261024/restored/empty-cwd",
+      "pythonpath": "/dev/shm/moe-reordering-baseline-20261024/restored/source",
+      "exit_code": 0
+    }
+  ],
+  "native_runtime_bundled": false
+}

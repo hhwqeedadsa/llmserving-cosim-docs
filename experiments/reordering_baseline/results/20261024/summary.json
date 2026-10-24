@@ -1,0 +1,166 @@
+{
+  "schema_version": "reordering-baseline-summary/1",
+  "platform_commit": "fa6f00173e6fbb320e83b368c85e9e835c8ba959",
+  "new_networks": 3,
+  "immutable_saved_baselines": 3,
+  "cases": {
+    "immediate-healthy": {
+      "application_completion_ns": 397733,
+      "source_payload_bytes": 2609152,
+      "unique_payload_bytes": 2609152,
+      "repeated_payload_bytes": 0
+    },
+    "grace-healthy": {
+      "application_completion_ns": 397733,
+      "source_payload_bytes": 2609152,
+      "unique_payload_bytes": 2609152,
+      "repeated_payload_bytes": 0
+    },
+    "immediate-live-delayed": {
+      "application_completion_ns": 477134,
+      "source_payload_bytes": 2806528,
+      "unique_payload_bytes": 2609152,
+      "repeated_payload_bytes": 197376
+    },
+    "grace-live-delayed": {
+      "application_completion_ns": 446808,
+      "source_payload_bytes": 2726512,
+      "unique_payload_bytes": 2609152,
+      "repeated_payload_bytes": 117360
+    },
+    "immediate-live-instant": {
+      "application_completion_ns": 492791,
+      "source_payload_bytes": 2959200,
+      "unique_payload_bytes": 2609152,
+      "repeated_payload_bytes": 350048
+    },
+    "grace-live-instant": {
+      "application_completion_ns": 455794,
+      "source_payload_bytes": 2659168,
+      "unique_payload_bytes": 2609152,
+      "repeated_payload_bytes": 50016
+    }
+  },
+  "before_inversion_ns": 15657,
+  "after_inversion_ns": 8986,
+  "fault_increment_ns": {
+    "live-delayed": 49075,
+    "live-instant": 58061
+  },
+  "stream12_repeat_outcomes": {
+    "immediate-healthy": {},
+    "grace-healthy": {},
+    "immediate-live-delayed": {
+      "initial_copy_lost": 18000,
+      "initial_copy_received_before_retry": 14000,
+      "initial_copy_still_inflight_at_retry": 36688
+    },
+    "grace-live-delayed": {
+      "initial_copy_lost": 14000,
+      "initial_copy_received_before_retry": 22000,
+      "initial_copy_still_inflight_at_retry": 3344
+    },
+    "immediate-live-instant": {
+      "initial_copy_received_before_retry": 34000,
+      "initial_copy_still_inflight_at_retry": 184688
+    },
+    "grace-live-instant": {}
+  },
+  "grace": {
+    "grace-healthy": {
+      "events": 1364,
+      "arms": 0,
+      "progress_cancellations": 0,
+      "retries": 0,
+      "rtos": 0
+    },
+    "grace-live-delayed": {
+      "events": 1395,
+      "arms": 4,
+      "progress_cancellations": 0,
+      "retries": 4,
+      "rtos": 0
+    },
+    "grace-live-instant": {
+      "events": 1381,
+      "arms": 7,
+      "progress_cancellations": 4,
+      "retries": 3,
+      "rtos": 0
+    }
+  },
+  "selected_paired_write_accounting": {
+    "10": {
+      "work": 10,
+      "name": "L0.dispatch.2-0.send",
+      "ready_delta_ns": 0,
+      "receive_delta_ns": 16036,
+      "ack_delta_ns": 14596,
+      "witness_send_after_ready_delta_ns": 0,
+      "witness_queue_delta_ns": 16036,
+      "witness_transit_delta_ns": 0,
+      "final_declared_frontier_events": []
+    },
+    "24": {
+      "work": 24,
+      "name": "L0.combine.2-0.send",
+      "ready_delta_ns": -3792,
+      "receive_delta_ns": -9142,
+      "ack_delta_ns": -9291,
+      "witness_send_after_ready_delta_ns": -652,
+      "witness_queue_delta_ns": -4698,
+      "witness_transit_delta_ns": 0,
+      "final_declared_frontier_events": []
+    },
+    "99": {
+      "work": 99,
+      "name": "L1.dispatch.2-0.send",
+      "ready_delta_ns": 3819,
+      "receive_delta_ns": 12670,
+      "ack_delta_ns": 12395,
+      "witness_send_after_ready_delta_ns": 18106,
+      "witness_queue_delta_ns": -9255,
+      "witness_transit_delta_ns": 0,
+      "final_declared_frontier_events": [
+        "accepted"
+      ]
+    },
+    "123": {
+      "work": 123,
+      "name": "L1.combine.0-2.send",
+      "ready_delta_ns": 12670,
+      "receive_delta_ns": 8986,
+      "ack_delta_ns": 8986,
+      "witness_send_after_ready_delta_ns": -3684,
+      "witness_queue_delta_ns": 0,
+      "witness_transit_delta_ns": 0,
+      "final_declared_frontier_events": [
+        "acked"
+      ]
+    }
+  },
+  "selected_source_train": {
+    "live-delayed": {
+      "first_tx_ns": 319820,
+      "last_tx_ns": 342379,
+      "source_train_span_ns": 22559,
+      "adjusted_eligibility_intervals_ns": 14552,
+      "after_eligibility_ns": 8007,
+      "physical_service_after_eligibility_ns": 511,
+      "idle_after_eligibility_ns": 7496
+    },
+    "live-instant": {
+      "first_tx_ns": 323639,
+      "last_tx_ns": 364304,
+      "source_train_span_ns": 40665,
+      "adjusted_eligibility_intervals_ns": 28973,
+      "after_eligibility_ns": 11692,
+      "physical_service_after_eligibility_ns": 556,
+      "idle_after_eligibility_ns": 11136
+    }
+  },
+  "verdict": "classical grace removes old stream12 duplicate train, improves both fault cases, but does not eliminate timing inversion",
+  "research_implication": "reject attribution solely to stream12 repeats; validate source eligibility/wakeup fidelity before algorithm claims",
+  "scope": "four fixed MMLU requests, two layers/two steps legacy contribution-copy and declared compute; no modern calibration or holdout",
+  "warning": "posthoc delivery and exact queue service are evaluation facts; not source clairvoyance, unique causal components or production gain"
+}

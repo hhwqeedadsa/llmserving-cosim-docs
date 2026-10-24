@@ -1,0 +1,37 @@
+{
+  "verified": true,
+  "network_executed": false,
+  "same_ns_scheduler_order_verified": false,
+  "four_request_completion_proven": false,
+  "cases": {
+    "synthetic-healthy": {
+      "original_decisions": 213,
+      "event_wakeups": 165,
+      "native_operations": 97,
+      "callbacks_retained": 437,
+      "complete_original_record": true
+    },
+    "synthetic-fault": {
+      "original_decisions": 222,
+      "event_wakeups": 171,
+      "native_operations": 97,
+      "callbacks_retained": 437,
+      "complete_original_record": true
+    },
+    "four-routes": {
+      "original_decisions": 256,
+      "event_wakeups": 205,
+      "native_operations": 134,
+      "callbacks_retained": 642,
+      "complete_original_record": false
+    }
+  },
+  "tamper_rejections": [
+    "false_completion",
+    "changed_event_log",
+    "lost_callbacks",
+    "wrong_submission_time",
+    "unsubmitted_condition",
+    "batch_order"
+  ]
+}

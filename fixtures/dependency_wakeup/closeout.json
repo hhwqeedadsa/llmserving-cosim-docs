@@ -1,0 +1,39 @@
+{
+  "stage_complete": true,
+  "overall_goal_complete": false,
+  "network_executions": 0,
+  "previous_visible_turn": "no research progress: confirmed previously deleted legacy directories",
+  "this_goal_turn": "progress: implemented read-only runtime interface and verified candidate wakeup semantics",
+  "native_protocol_modified": false,
+  "decision_limit": 256,
+  "four_request_full_call_passed": false,
+  "commands_terminal": 13,
+  "monitors_completed": 13,
+  "monitored_wall_seconds": 7.517232010141015,
+  "final_management_reserved_seconds": 10,
+  "peak_group_rss_bytes": 46555136,
+  "allocated_bytes_before_receipts": 15282176,
+  "apparent_bytes_before_receipts": 14420184,
+  "final_receipt_reserve_bytes": 1048576,
+  "cumulative_budget_bytes": 100663296,
+  "cumulative_budget_seconds": 240,
+  "new_distinct_unit_tests": 8,
+  "affected_existing_tests": 25,
+  "unsafe_archive_types_rejected": 6,
+  "evidence_tamper_types_rejected": 6,
+  "dependency_checkouts": 13,
+  "final_source_matches_fresh_verified_python": true,
+  "provenance_before_local_commit": "d720fce60a374170d5ab915edca2e6e60781cf1d",
+  "persistent_archive": {
+    "sha256": "ae1f2c4f8bb8d47f226aaaded4c169bd1ce6179b35a8f638697ef02a4b45dcd3",
+    "members": 188,
+    "uncompressed_bytes": 5646203,
+    "compressed_bytes": 569254
+  },
+  "management_command": [
+    "python3",
+    "-B",
+    "/home/lry/moe-ub-cosim/runs/dependency_wakeup_checkpoint_20261024/management.py"
+  ],
+  "scope": "offline callback preservation and candidate proof only; no native execution or research performance claim"
+}

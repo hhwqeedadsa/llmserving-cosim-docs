@@ -170,6 +170,10 @@ class ModernDeepEPWindowRuntime:
     def ready(self):
         return self._runtime.ready()
 
+    def pending_dependencies(self):
+        """Read-only copy including dynamically added runtime ordering."""
+        return self._runtime.pending_dependencies()
+
     def operation(self, identity):
         result = self._runtime.operation(identity)
         result['memory'] = self._windows.resolve(result)

@@ -48,6 +48,8 @@ transactions/3在同一持久网络中串接“实际接收窗口→后续put”
 
 `modern_deepep_runtime.py`提供独立的`ModernDeepEPRuntime`事件核心与`modern-deepep-replay`。调用者逐项触发已满足依赖的事件，核心不自动完成操作；实际触发slot分配时才增加计数，取得同一owner的全部slot后建立Combine通道内顺序。它额外保留Dispatch同token全部目标slot原子分配后的warp同步。事件日志可以离线核验，独立replay不接C++队列或网络；新增native入口单独提供有界的实际回调接入。
 
+运行时及窗口包装器的 `pending_dependencies()` 返回未完成事件和其未完成直接前驱的副本，包含上述动态顺序；空前驱只表示依赖满足，不能制造完成。`modern_native_wakeups.py` 目前仅供离线检查回调唤醒条件，未接入原生协议，不能用它声称现代入口的交互上限已经解除。
+
 `modern_deepep_windows.py`在事件核心外增加相对窗口解析、跨epoch源读保护、计数消费清零及滚动信号影子状态，公开入口为`modern-deepep-window-replay`。应用主窗口与provider索引信号分开，source local_complete与target visible分开；独立window-replay不编码或接收真实负载；新增native入口在外层接入实际负载/时钟，保留功能可见性限制。功能范围及宿主结构体核查见[窗口验收](../fixtures/modern_windows/README.md)。
 
 `backend/rdma/gin_work_queue.hh`是独立的无时间资源核心，验证持久工作队列的槽复用、提交前缀和累计完成；尚未接入下述在线网络或现代应用计划。它的完成输入必须由未来provider回调提供，不能用作包时延、远端可见或现代库性能证据，详见[后端接口](../backend/README.md#gin工作队列功能核心)。

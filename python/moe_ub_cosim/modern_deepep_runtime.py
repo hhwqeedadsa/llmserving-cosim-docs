@@ -60,6 +60,16 @@ class ModernDeepEPRuntime:
         """Enabled event IDs, sorted for inspection, NOT a scheduling policy."""
         return sorted(self._ready)
 
+    def pending_dependencies(self):
+        """Copy unfinished events and their unfinished direct prerequisites.
+
+        Includes runtime-added slot/channel ordering. An empty list means an
+        event is enabled, never that its external operation has completed.
+        Taking or mutating this view cannot advance the runtime.
+        """
+        return {identity: sorted(self._deps[identity] - self._done)
+                for identity in sorted(self._events.keys() - self._done)}
+
     def _add_dependency(self, event, parent):
         require(event not in self._done, 'dynamic order cannot modify a past event')
         if parent not in self._deps[event]:

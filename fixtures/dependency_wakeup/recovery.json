@@ -1,0 +1,37 @@
+{
+  "passed": true,
+  "network_executed": false,
+  "fresh_source_root": true,
+  "empty_cwd": true,
+  "reports_byte_identical": {
+    "fresh-audit.json": "986f2e40ae93d384b53892ac4de6b5a569b316f3e22513fc835731e68440dce4",
+    "fresh-verification.json": "1b8ad1a3971365189eaeb41e053e582f4ac4ec83d46094c324ce193238426858"
+  },
+  "commands": [
+    [
+      "/usr/bin/python3",
+      "-P",
+      "-B",
+      "-m",
+      "fixtures.dependency_wakeup.audit",
+      "--source",
+      "/dev/shm/moe-dependency-wakeup-20261024/restored/original",
+      "--output",
+      "/dev/shm/moe-dependency-wakeup-20261024/restored/fresh-audit.json"
+    ],
+    [
+      "/usr/bin/python3",
+      "-P",
+      "-B",
+      "-m",
+      "fixtures.dependency_wakeup.verify",
+      "--source",
+      "/dev/shm/moe-dependency-wakeup-20261024/restored/original",
+      "--report",
+      "/dev/shm/moe-dependency-wakeup-20261024/restored/fresh-audit.json",
+      "--output",
+      "/dev/shm/moe-dependency-wakeup-20261024/restored/fresh-verification.json"
+    ]
+  ],
+  "scope": "offline callback replay only; no native network execution"
+}

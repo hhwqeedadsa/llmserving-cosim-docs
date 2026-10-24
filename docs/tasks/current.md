@@ -13,6 +13,8 @@
 
 ## 当前范围和预算
 
+当前研究`in_progress`：[现代provider连接共享范围](../../experiments/provider_binding/protocol.md)，平台`a81061a`。固定既有4调用/16路由选择，经一次公开plan/2生成和两个原函数的CPU记录执行，逐操作核context/peer身份、数据/控制及阶段/调用复用；核QoS初始化作用域。无新网络、参数扫描或平台/依赖改动，不从现代连接持久性推出网卡空闲规则。300受监控秒/128MiB，单命令60秒/1GiB/地址2GiB/64MiB，网络0，仅独立研究CPU编译、本地提交、不push。
+
 当前研究`completed`：[拥塞通知来源与应用阶段](../../experiments/feedback_ancestry/protocol.md)，固定平台`f325869`。只读三份已封存结果，逐一核对84个CNP、248个唯一CE包、438个通知物理发送跳及4,874条RP控制记录。80个通知到达时标记字节已ACK，31个对应work全部完成，14个QP已发布字节全部确认；健康条件16个立即通知全部满足“标记字节已ACK”，否定用此条件安全丢弃通知。work108/132分别继承work90/80所产生反馈后的限速；跨阶段状态不证明反馈错误，也不授权重置QP。228个标记点还有其他流排队，只证明同存，不是独立可消除损失。
 
 11类篡改拒绝、原论文式1—4有理数/整数状态核验及13依赖通过；新研究源码根/空cwd三份JSON逐字节一致，无新网络。131成员/19,298,998B证据包压缩3,496,077B，逐成员核验后保存`runs/feedback_ancestry_checkpoint_20261024/`。12份本阶段终态监控累计24.59秒、峰值127.58MiB，原件/恢复/归档/持久/源码加1MiB收据预留计55.45MiB，另预留10秒管理；保持300秒/192MiB与单命令60秒/1GiB/地址2GiB/96MiB、网络预算0，无遗留受监控PID。初版收尾误将3份复制的历史probe计入本阶段，原收据/归档保留，最终按注册命令排除并更正；分析/核验/摘要及实际复算源码未改，无网络重跑。capture未序列化CNP fid，关联依赖实际IP/UID及生成stream/fid；随机标记抽样未重建，不声称完整bit解码或硬件校准。见[入口](../../experiments/feedback_ancestry/README.md)、[核验](../../experiments/feedback_ancestry/results/20261024/verification.json)、[恢复](../../experiments/feedback_ancestry/results/20261024/replay.json)、[收尾](../../experiments/feedback_ancestry/results/20261024/closeout.json)及[中文报告](../reviews/拥塞反馈来源与跨阶段限速_20261024.md)。

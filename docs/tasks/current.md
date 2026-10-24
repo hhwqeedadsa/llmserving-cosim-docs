@@ -13,6 +13,12 @@
 
 ## 当前范围和预算
 
+本轮研究`completed`：[共享窗口注册扇出与部分失败](../../experiments/registration_fanout/README.md)，平台保持`a30296c`、父仓库基线`c4256a6`。3份固定缓存源码/3个精确原函数/7段原文核对，1,120个合成CPU条件由独立整数oracle逐条验证；420条件出现部分退出，80条件全部已创建MR退出但元数据报错，均非生产概率或真实DMA。确认同地址按backend/connection注册、注销遇错提前返回，同设备可以有多个注册渠道；不能用一个返回码或每NIC一个BOOL判断窗口复用。上层回滚/合法并发尚未核完，不声称库漏洞。
+
+55成员/164,367B包保存到`runs/registration_fanout_checkpoint_20261024/`，新源码根/空cwd重编译并复算，生成C++、1,120行调用记录、摘录/摘要/核验共5份逐字节一致，3类语义篡改拒绝、13固定依赖检查通过。全部监控正常完成，无新获取、GPU/provider/ns-3执行或平台/依赖变化；预算与hash见[收尾](../../experiments/registration_fanout/results/20261024/closeout.json)，结论见[中文报告](../reviews/共享窗口多连接撤销与部分失败_20261024.md)。180监控秒/32MiB、每命令60秒/1GiB/地址2GiB/16MiB及tmpfs8GiB/根盘64MiB预留保持；最终文件管理保守预留10秒/128KiB，仅本地提交不push。
+
+下一平台门槛：物理存储与注册权限分离，把现有连接的真实destination_nic带入权限查找，维护逐句柄退出/未知/元数据状态，再判定共享范围可复用。当前RemoteTransactions只保存src/dst、RemoteMemory按owner/key查找且拒绝重叠窗口，不表示已有真实多NIC权限语义。新接口须保留旧功能默认结果、明确失败与资源寿命并接实际传输事件，不增加未校准时延冒充provider性能；再以同资源强基线检验正常任务停顿和恢复价值，整体论文目标仍`in_progress`。
+
 本轮研究`completed`：[目标授权撤销与旧访问退出](../../experiments/target_retirement_contract/README.md)，平台保持`a30296c`。12份固定源码/12个精确原函数/16项主张核验通过；mlx5正常MR撤销明确提供DMA退出强保证，弱改key基线不成立。RXE快速MR失效、普通USER注销和异常超时必须分开；CPU替身分支不是合法应用并发、真实DMA或生产漏洞。现代共享主窗口没有免费按专家撤权依据，整MR退出须保留为强基线。
 
 112成员/279,601B包保存在`runs/target_retirement_checkpoint_20261024/`，新源码根/空cwd重新编译CPU替身并复算，5份产物逐字节一致；4类结论篡改和5类不安全归档均被拒绝，13固定依赖通过。初始raw获取60秒截止、单请求约16秒违反8秒目标，以及首分析误选前置声明均保留；更换同固定提交contents API取得8份文件，未原样重跑raw批次。定位修复不改已编译12函数字节，未删断言或扩限。预算/持久收据见[closeout](../../experiments/target_retirement_contract/results/20261024/closeout.json)、[budget](../../experiments/target_retirement_contract/results/20261024/budget.json)，详细结论见[中文报告](../reviews/目标内存撤销与恢复强基线_20261024.md)。本轮不改平台/依赖、无ns-3/GPU/驱动执行，整体论文目标仍`in_progress`。

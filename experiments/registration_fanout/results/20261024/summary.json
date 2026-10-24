@@ -1,0 +1,20 @@
+{
+  "actual_provider_executed": false,
+  "all_created_mrs_retired_but_error": 80,
+  "cases": 1120,
+  "cases_with_multiple_created_aliases_per_device": 718,
+  "new_ns3_networks": 0,
+  "paper_innovation_established": false,
+  "partial_retirement_errors": 420,
+  "records_sha256": "66c70008cb83f81166c03eafee9f0073cb7f346847e8e08a3357c21de3ca89b0",
+  "registration_error_with_successful_prefix": 360,
+  "schema_version": "registration-fanout-analysis/1",
+  "scope": "synthetic recording calls; no legal application concurrency, real MR retirement or failure rates measured",
+  "source_functions": 3,
+  "witness_rows": {
+    "all_retired_metadata_error": 5,
+    "partial_retirement": 19,
+    "register_prefix": 21,
+    "same_device_alias": 40
+  }
+}

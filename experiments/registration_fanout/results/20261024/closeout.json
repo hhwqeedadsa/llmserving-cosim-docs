@@ -1,0 +1,88 @@
+{
+  "actual_provider_executed": false,
+  "all_monitored_groups_exited": true,
+  "cpu_cases": 1120,
+  "final_receipts_reserved_bytes": 131072,
+  "finalization_seconds_reserved": 10,
+  "monitored_seconds": 2.978590529412031,
+  "new_downloads": 0,
+  "new_ns3_networks": 0,
+  "offline_byte_equal_files": 5,
+  "original_monitors": [
+    {
+      "name": "analyze-monitor",
+      "sampled_rss_bytes": 7479296,
+      "waited_rss_kib": 21716,
+      "wall_seconds": 0.1256531160324812
+    },
+    {
+      "name": "build-monitor",
+      "sampled_rss_bytes": 97103872,
+      "waited_rss_kib": 80248,
+      "wall_seconds": 0.656842902302742
+    },
+    {
+      "name": "deps-monitor",
+      "sampled_rss_bytes": 23351296,
+      "waited_rss_kib": 17620,
+      "wall_seconds": 0.45864579267799854
+    },
+    {
+      "name": "evidence-monitor",
+      "sampled_rss_bytes": 6393856,
+      "waited_rss_kib": 17636,
+      "wall_seconds": 0.1251797303557396
+    },
+    {
+      "name": "pack-monitor",
+      "sampled_rss_bytes": 6426624,
+      "waited_rss_kib": 19672,
+      "wall_seconds": 0.12711290456354618
+    },
+    {
+      "name": "prepare-monitor",
+      "sampled_rss_bytes": 6422528,
+      "waited_rss_kib": 17664,
+      "wall_seconds": 0.12276879139244556
+    },
+    {
+      "name": "replay-monitor",
+      "sampled_rss_bytes": 121344000,
+      "waited_rss_kib": 81164,
+      "wall_seconds": 0.9817992597818375
+    },
+    {
+      "name": "restore-monitor",
+      "sampled_rss_bytes": 6430720,
+      "waited_rss_kib": 19684,
+      "wall_seconds": 0.1292585674673319
+    },
+    {
+      "name": "source-run-monitor",
+      "sampled_rss_bytes": 3194880,
+      "waited_rss_kib": 9712,
+      "wall_seconds": 0.12458619847893715
+    },
+    {
+      "name": "verify-monitor",
+      "sampled_rss_bytes": 6393856,
+      "waited_rss_kib": 22708,
+      "wall_seconds": 0.1267432663589716
+    }
+  ],
+  "paper_innovation_established": false,
+  "parent_commit": "c4256a6",
+  "phase_disk_limit_bytes": 33554432,
+  "phase_seconds_limit": 180,
+  "platform_and_dependencies_unchanged": true,
+  "platform_commit": "a30296c",
+  "schema_version": "registration-fanout-closeout/1",
+  "source_functions": 3,
+  "syntax_checked": [
+    "audit.py",
+    "bundle.py",
+    "verify.py"
+  ],
+  "unique_allocated_bytes_before_receipts": 4042752,
+  "unique_apparent_bytes_before_receipts": 3641639
+}

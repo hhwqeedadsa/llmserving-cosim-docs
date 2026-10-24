@@ -1,0 +1,14 @@
+{
+  "actual_provider_executed": false,
+  "byte_equal": {
+    "build/selected.cc": "f20da1c0f6b0e28d29ecb173d8a06eb6f526c89bbf8b0c811d9ede5df3e7cc5c",
+    "evidence.json": "75fb3484d506d64c35234d962c9be19a93901cc7f24ee2d9c0326adb1368b0a9",
+    "records.stdout": "66c70008cb83f81166c03eafee9f0073cb7f346847e8e08a3357c21de3ca89b0",
+    "summary.json": "25f6c8cdf8304f05589916855dfaf70d5aec0b9779477607a97417c169f5dbaf",
+    "verification.json": "251ece252822b884a7e8a7c4fa6509b6a371c912bfb05c0a61077eb4274df2f7"
+  },
+  "commands": 5,
+  "new_ns3_networks": 0,
+  "requires": "host Python standard library, G++, libc",
+  "schema_version": "registration-fanout-replay/1"
+}

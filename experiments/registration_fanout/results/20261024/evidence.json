@@ -1,0 +1,76 @@
+[
+  {
+    "end_line": 228,
+    "line": 92,
+    "name": "ncclGinConnectOnce",
+    "required": [
+      "localGinDevs[commIdx % nLocalGinDevs]"
+    ],
+    "sha256": "99265f39df54ae2443e0048c9689f4cdefbbc8ab6e2ae8cacfbccb54d682abb3",
+    "source": "gin_host.cc"
+  },
+  {
+    "end_line": 533,
+    "line": 504,
+    "name": "ncclGinRegister",
+    "required": [
+      "backendIdx * NCCL_GIN_MAX_CONNECTIONS + commIdx",
+      "address, size, memType, mrFlags"
+    ],
+    "sha256": "e474863be5e1560dea60283a8e7689ff9e70bdc528b5f6f42a6201fb3d82cc5b",
+    "source": "gin_host.cc"
+  },
+  {
+    "end_line": 546,
+    "line": 535,
+    "name": "ncclGinDeregister",
+    "required": [
+      "deregMrSym(backend->ginComms[commIdx], ginHostWins[slot])"
+    ],
+    "sha256": "72b142c4e5c83a04b9b1ee25d9cc90e2293bbdf97e6ae2908b5442d4783a8fb3",
+    "source": "gin_host.cc"
+  },
+  {
+    "end_line": 1307,
+    "line": 1255,
+    "name": "ncclGinGdakiRegMrSym",
+    "required": [
+      "gdakiRegMr(&mr, cComm->ib.pd, data, size",
+      "allGather(cComm, &rkey"
+    ],
+    "sha256": "eb6bcb41474aa11602e43198b0f7eef03889143ef46fcba9a0705a3fd5473015",
+    "source": "gin_host_gdaki.cc"
+  },
+  {
+    "end_line": 1329,
+    "line": 1309,
+    "name": "ncclGinGdakiDeregMrSym",
+    "required": [
+      "NCCLCHECK(wrap_ibv_dereg_mr(mr))",
+      "rkeys_hd_mhandle->deallocate()"
+    ],
+    "sha256": "36fa2608d54bf4b7257b6f4ff8ff1a4ff3d936cd59b78ea17436558e0cafaca9",
+    "source": "gin_host_gdaki.cc"
+  },
+  {
+    "end_line": 204,
+    "line": 193,
+    "name": "metadata_deallocate",
+    "required": [
+      "NCCLCHECK(ncclCuMemFree"
+    ],
+    "sha256": "7f319b4f558ddb76b1ecc26dd00f01ffbcdc9d40c72071a5685c207fdb7c5f22",
+    "source": "gin_host_gdaki.cc"
+  },
+  {
+    "end_line": 199,
+    "line": 187,
+    "name": "main_shared_window",
+    "required": [
+      "num_workspace_bytes + num_gpu_buffer_bytes",
+      "ncclCommWindowRegister"
+    ],
+    "sha256": "6bec6ce528d9261db3c08b9d7935d2e81bcddb7c764a0f87a79d222a5940e1b8",
+    "source": "context.cpp"
+  }
+]

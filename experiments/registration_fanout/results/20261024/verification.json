@@ -1,0 +1,19 @@
+{
+  "actual_provider_executed": false,
+  "exact_functions": 3,
+  "independent_cases": 1120,
+  "independently_counted": {
+    "all_created_mrs_retired_but_error": 80,
+    "cases_with_multiple_created_aliases_per_device": 718,
+    "partial_retirement_errors": 420,
+    "registration_error_with_successful_prefix": 360
+  },
+  "schema_version": "registration-fanout-verification/1",
+  "semantic_tampering_rejected": [
+    "any_success_means_all_retired",
+    "all_errors_mean_none_retired",
+    "same_device_has_one_alias"
+  ],
+  "source_files": 3,
+  "static_excerpts": 7
+}

@@ -13,6 +13,8 @@
 
 ## 当前范围和预算
 
+当前平台`in_progress`：[现代操作到同一原生网络的功能接入](modern_native_bridge_spec.md)，基线`b214516`。保留全部控制与数据操作，由实际native回调驱动现代事件/窗口；显式功能可见性及合成标记，不声称GIN/GPU等价。固定最多4次小网络；600受监控秒/384MiB、每命令60秒/1GiB/地址2GiB/阶段128MiB、网络1ms/result16MiB。只Python接入，不构建/下载/GPU/依赖修改或push。平台和后续研究分别验收。
+
 当前平台`completed`：[显式self-peer服务与共享目标内存](self_peer_service_spec.md)，基线`7549219`。transactions/5显式self FIFO与实际远端MRT1共享同一时钟、内存和NIC授权；保留源保护/实际原子旧值/后继读取，self不生成ACK或网络载体、不占本地GPU计算槽。4次固定网络全部完成：默认完整result除同hash库路径外相同，混合正常/真实丢包在线保持目标各应用一次；新Python根/空cwd/包内8库独立执行零时长、前缀发布及self源读取，原两组离线verification逐字节一致。
 
 8项新单元与91项相关回归、12类初始native拒绝/8类篡改、6类不安全归档及13依赖检查通过。复核发现旧schema probe绕过v5 self准入的缺口，已补Fabric前纯校验并以v1—4有/无model共8种native拒绝验证；仅重编probe，核心/session/8库不变。最终probe未追加第五次网络，收尾精确核两版差异仅该纯准入分支，初始成功程序与最终包分别保留。两次构建准备与两次收尾checker失败原样保留，无网络失败、扩限或成功网络重跑。

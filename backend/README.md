@@ -36,7 +36,7 @@ transactions/3的put可从注册源窗口读取实际字节。`RemoteMemory`按o
 
 新增独立`PersistentStreams`与`moe-rdma-stream-probe`使用同一原生Fabric的设备回调，实现空闲可追加的持久字节连接、真实接收/ACK前缀和ACK释放的GinWorkQueue信用。连接显式绑定唯一源/反向NIC；实际收发决定后继就绪。它独占Fabric传输入口并拒绝旧Send混用，没有接入现代计划、原子事务或GPU可见性，不改变下面在线服务的语义。见[持久字节小例](../examples/scaleout_rdma_streams/README.md)。
 
-该独立字节入口可选`selective_repeat/1`；`rdma/selective_repeat.hh`提供有限范围状态，`PersistentStreams`保留实际乱序Packet并生成/解析实际MSR1反馈。源只使用到达的反馈，累计ACK才释放信用；固定窗口允许最多MTU−1字节越界，容量须覆盖它。配置、50B反馈帧及边界见[选择重传](../examples/scaleout_rdma_streams/README.md#可选的有界选择重传)。事务/在线入口不支持该模式，不改默认go-back-N路径。
+持久载体可选`selective_repeat/1`；`rdma/selective_repeat.hh`提供有限范围状态，`PersistentStreams`保留实际乱序Packet并生成/解析实际MSR1反馈。源只使用到达的反馈，累计ACK才释放信用；固定窗口允许最多MTU−1字节越界，容量须覆盖它。配置、50B反馈帧及边界见[选择重传](../examples/scaleout_rdma_streams/README.md#可选的有界选择重传)。v5事务和在线入口可显式配置相同独立DCQCN参考与选择模式；连续前缀从实际收到及缓存的Packet提取字节，在同一时钟按序交给MRT1解码器，选择确认不执行目标事务。详见[事务选择重传](../examples/scaleout_rdma_transactions/README.md#选择重传下执行实际事务)。载体层仍不执行原子操作；事务层解码后执行，不能解释为原生RoCE原子或GIN。默认go-back-N路径保持。
 
 Fabric在初始化时从实际`RdmaHw`对象读回拥塞/传输属性，统一导出`rdma_parameters`，不替换原生默认值。持久字节入口可选有界`source_rate_capture`，在已有源TX及ACK处理前后同步读状态，无额外仿真事件；不改变包或完成条件。详细单位、采样阶段和容量失败语义见[输出说明](../examples/scaleout_rdma_streams/README.md#可选的源端速率观测)。
 

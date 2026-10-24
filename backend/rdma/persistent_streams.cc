@@ -91,14 +91,13 @@ void PersistentStreams::ConfigureRateCapture(const Json& config) {
           "invalid source_rate_capture window or event budget");
   rate_start_=config.at("start_ns");rate_end_=config.at("end_ns");rate_limit_=config.at("max_events");
 }
-void PersistentStreams::ConfigureDcqcnReference(const Json& c) {
-  Require(streams_.empty() && !reference_limit_ && c.is_object() && c.size()==12 &&
-          c.at("mode")=="figure7_reference/1","invalid dcqcn_reference mode/fields or late configuration");
+void PersistentStreams::ValidateDcqcnReference(const Json& c,int64_t max_ns) {
+  Require(c.is_object() && c.size()==12 && c.at("mode")=="figure7_reference/1","invalid dcqcn_reference mode/fields");
   for(const auto* key:{"np_interval_ns","alpha_interval_ns","recovery_interval_ns","recovery_bytes",
       "min_rate_bps","additive_bps","hyper_bps","fast_recovery_rounds","cnp_model_bytes","max_events"})
     Require(c.at(key).is_number_integer() && c.at(key)>0,"dcqcn_reference fields must be positive integers");
   for(const auto* key:{"np_interval_ns","alpha_interval_ns","recovery_interval_ns"})
-    Require(c.at(key)<=fabric_.MaxSimNs(),"reference interval exceeds simulation horizon");
+    Require(c.at(key)<=max_ns,"reference interval exceeds simulation horizon");
   Require(c.at("alpha_interval_ns")>c.at("np_interval_ns") &&
           c.at("recovery_bytes")>=512 && c.at("recovery_bytes")<=1073741824 &&
           c.at("fast_recovery_rounds")<=100 && c.at("cnp_model_bytes")>=30 && c.at("cnp_model_bytes")<=512 &&
@@ -107,6 +106,10 @@ void PersistentStreams::ConfigureDcqcnReference(const Json& c) {
     Require(c.at(key)<=1000000000000000ull,"reference rate parameter exceeds supported range");
   const auto& gain=c.at("gain");
   Require(gain.is_number() && !gain.is_boolean() && gain>0 && gain<=1,"invalid reference gain");
+}
+void PersistentStreams::ConfigureDcqcnReference(const Json& c) {
+  Require(streams_.empty() && !reference_limit_,"late or duplicate dcqcn_reference configuration");
+  ValidateDcqcnReference(c,fabric_.MaxSimNs());
   reference_config_=c;reference_limit_=c.at("max_events");
   for(unsigned node=0;node<fabric_.drivers_.size();++node)
     for(auto& nic:fabric_.drivers_[node]->m_rdma->m_nic)if(nic.dev)
@@ -286,12 +289,35 @@ int PersistentStreams::SelectiveReceive(Stream& s,Ptr<Packet> packet,CustomHeade
           uint64_t(h.udp.seq)+size<=64*1024*1024,"invalid selective data range");
   const auto ack=s.selective_receiver->Receive(h.udp.seq,h.udp.seq+size);
   if(ack.received && s.selective_receiver->Held().count(h.udp.seq))s.reorder_packets.emplace(h.udp.seq,packet);
+  // Only the newly contiguous range is delivered. Read bytes from the actual
+  // accepted Packet(s), BEFORE removing ranges drained by SelectiveReceiver.
+  // Neither source Work payloads nor application metadata may supply RX bytes.
+  std::vector<std::pair<Ptr<Packet>,Bytes>> delivered;
+  if(s.receiver)for(uint64_t cursor=before;cursor<s.selective_receiver->Prefix();) {
+    auto held=cursor==h.udp.seq?packet:s.reorder_packets.at(cursor);
+    const auto header=StreamHeader(held);const auto length=held->GetSize()-header.GetSerializedSize();
+    Require(header.udp.seq==cursor && length>0 && cursor+length<=s.selective_receiver->Prefix(),
+            "selective payload prefix lacks an actual complete packet");
+    Bytes bytes(length);held->CreateFragment(header.GetSerializedSize(),length)->CopyData(bytes.data(),length);
+    delivered.emplace_back(held,std::move(bytes));cursor+=length;
+  }
   for(auto it=s.reorder_packets.begin();it!=s.reorder_packets.end();) {
     if(!s.selective_receiver->Held().count(it->first))it=s.reorder_packets.erase(it);else ++it;
   }
   Require(s.reorder_packets.size()==s.selective_receiver->Held().size(),"selective retained packet/range mismatch");
   rx->ReceiverNextExpectedSeq=s.selective_receiver->Prefix();
   SelectiveLog(s,"data_received",packet,ack);
+  if(!delivered.empty())Simulator::ScheduleNow([this,id=s.qp->GetTag(),delivered=std::move(delivered)]() mutable {
+    auto& stream=streams_.at(id);
+    for(auto& [actual,bytes]:delivered) {
+      const auto header=StreamHeader(actual);
+      SelectiveLog(stream,"payload_delivered",actual,{header.udp.seq,header.udp.seq+static_cast<uint32_t>(bytes.size()),true});
+      static const char digits[]="0123456789abcdef";std::string hex;hex.reserve(bytes.size()*2);
+      for(auto b:bytes){hex+=digits[b>>4];hex+=digits[b&15];}
+      selective_events_.back()["hex"]=hex;
+      stream.receiver(std::move(bytes));
+    }
+  });
   qbbHeader feedback;feedback.SetSeq(rx->ReceiverNextExpectedSeq);feedback.SetPG(h.udp.pg);
   feedback.SetSport(h.udp.dport);feedback.SetDport(h.udp.sport);feedback.SetIntHeader(h.udp.ih);
   const auto bytes=ack.Encode();auto response=Create<Packet>(bytes.data(),bytes.size());response->AddHeader(feedback);
@@ -361,7 +387,7 @@ void PersistentStreams::Submit(uint64_t stream,uint64_t work,uint64_t bytes,Done
   Enqueue(stream,work,bytes,{},std::move(accepted),std::move(acked));
 }
 void PersistentStreams::SetReceiver(uint64_t stream,std::function<void(Bytes)> receiver) {
-  Require(!selective_mode_ && !closed_ && streams_.count(stream) && streams_.at(stream).work.empty() &&
+  Require(!closed_ && streams_.count(stream) && streams_.at(stream).work.empty() &&
           !streams_.at(stream).receiver && bool(receiver),"invalid stream payload receiver");
   streams_.at(stream).receiver=std::move(receiver);
 }

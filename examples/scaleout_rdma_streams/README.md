@@ -72,7 +72,7 @@ v3保留v2的显式`limits`，增加必填`local_model`：
 ### 可选的独立拥塞反馈参考模式
 
 工作输入可增加`dcqcn_reference`；完整示例见[work-reference.json](work-reference.json)。运行时把上面命令的`--config`换成这个文件即可。
-省略该字段保留原有逐包ACK反馈模式。新模式只支持独立持久字节入口，尚未接入在线LLMServingSim服务、现代GIN或事务配置，不表示完成了生产RoCE仿真。
+省略该字段保留原有逐包ACK反馈模式。持久字节入口及v5事务/事务会话可显式配置该参考；事务配置见[事务指南](../scaleout_rdma_transactions/README.md#选择重传下执行实际事务)。尚未接入在线LLMServingSim服务或现代GIN，不表示完成了生产RoCE仿真。
 
 所有字段均须显式填写：
 
@@ -149,7 +149,7 @@ TX钩子发生在该包的`PktSent`更新之前：`next_avail_ns`仍是此前状
 
 接收端保留实际乱序包，仅在缺口填上后推进连续前缀。真实ACK/NACK携带16B大端`MSR1`扩展（magic、收到区间的begin/end、valid）；源端只依据已收到的反馈跳过已确认范围，每个累计缺口最多快速重传一次，其余等待实际确认或RTO。选择确认本身不释放工作信用，累计ACK才释放；反馈丢失仍可能造成重复发送。在途及交换机排队包不会被取消。
 
-扩展替换了原模型ACK的14B填充，故实际ACK/NACK模型帧为50B，较原48B增加2B；不能将16B扩展直接写成净增16B，也不能据此推算生产RoCE开销。这是独立字节入口的参考传输基线，不支持MRT1负载接收、在线服务或现代GIN，不是IRN复刻。
+扩展替换了原模型ACK的14B填充，故实际ACK/NACK模型帧为50B，较原48B增加2B；不能将16B扩展直接写成净增16B，也不能据此推算生产RoCE开销。该参考基线也可在v5事务及事务会话中有序交付实际MRT1负载，见[配置与范围](../scaleout_rdma_transactions/README.md#选择重传下执行实际事务)；它没有接入完整在线LLMServingSim或现代GIN，不是IRN复刻。
 
 启用后`persistent_transport.selective_repeat`包含容量、窗口、`states`和`events`。状态含连续接收前缀、缓冲当前/峰值字节、拒收数及源已确认区间；事件含真实数据到达、反馈生成/到达和快速重传，时间单位ns、区间为连接累计字节。`extension_hex`保存反馈的实际扩展字节。事件上限与恢复记录分别执行，超限明确失败。独立逐包、队列、完成回调检查与限制见[选择重传验收](../../fixtures/selective_repeat/README.md)。
 

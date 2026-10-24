@@ -23,6 +23,7 @@ int main(int argc,char** argv) {
     std::ifstream exists(argv[4]);Require(!exists.good(),"transaction output already exists");
     ns3::Time::SetResolution(ns3::Time::NS);
     const auto config=ReadJson(argv[2]),input=ReadJson(argv[3]);
+    ValidateTransactionTransport(input,config.contains("limits")?config.at("limits").at("max_sim_ns").get<int64_t>():5000000);
     const auto execution_limits=ReadTransactionLimits(input);
     const bool sparse_mode=input.at("schema_version")=="moe-rdma-transactions/5";
     const bool explicit_submission=input.contains("submission_model");
@@ -36,6 +37,7 @@ int main(int argc,char** argv) {
       if(local_memory_mode)keys.push_back("local_memory_model");
       if(explicit_submission)keys.push_back("submission_model");
       if(input.contains("execution_limits"))keys.push_back("execution_limits");
+      if(input.contains("dcqcn_reference"))keys.push_back("dcqcn_reference");
       if(input.contains("transport_recovery"))keys.push_back("transport_recovery");
       if(input.contains("buffer_model"))keys.push_back("buffer_model");
       for(const auto* name:{"registration_model","registrations","application_window_model","application_windows"})if(input.contains(name))keys.push_back(name);

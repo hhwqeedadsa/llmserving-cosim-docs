@@ -1,0 +1,97 @@
+{
+  "archive_safety_classes_rejected": 8,
+  "complete_pure_byte_selective_result_equal_except_verified_library_paths": true,
+  "eight_runtime_libraries_from_package": true,
+  "empty_cwd": true,
+  "first_offline_audit_filename_failure_preserved": true,
+  "five_transaction_audits_byte_equal": true,
+  "native_pre_fabric_rejections": 18,
+  "new_python_root": true,
+  "passed": true,
+  "public_commands": [
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "topology",
+        "--config",
+        "/dev/shm/moe-transaction-selective-20261024/restored/evidence/inputs/topology.json",
+        "--output",
+        "/dev/shm/moe-transaction-selective-20261024/fresh/topology"
+      ],
+      "cwd": "/dev/shm/moe-transaction-selective-20261024/fresh/cwd",
+      "exit_code": 0,
+      "label": "topology",
+      "pythonpath": "/dev/shm/moe-transaction-selective-20261024/restored/source/python"
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-preflight",
+        "--topology",
+        "/dev/shm/moe-transaction-selective-20261024/fresh/topology",
+        "--protocol",
+        "/dev/shm/moe-transaction-selective-20261024/restored/evidence/inputs/middle-protocol.json",
+        "--transactions",
+        "/dev/shm/moe-transaction-selective-20261024/restored/source/examples/scaleout_rdma_transactions/selective-chain.json",
+        "--output",
+        "/dev/shm/moe-transaction-selective-20261024/fresh/preflight.json"
+      ],
+      "cwd": "/dev/shm/moe-transaction-selective-20261024/fresh/cwd",
+      "exit_code": 0,
+      "label": "transaction-preflight",
+      "pythonpath": "/dev/shm/moe-transaction-selective-20261024/restored/source/python"
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-stream-probe",
+        "--topology",
+        "/dev/shm/moe-transaction-selective-20261024/fresh/topology",
+        "--protocol",
+        "/dev/shm/moe-transaction-selective-20261024/restored/evidence/reference/protocol.json",
+        "--config",
+        "/dev/shm/moe-transaction-selective-20261024/restored/evidence/reference/work.json",
+        "--backend",
+        "/dev/shm/moe-transaction-selective-20261024/restored/runtime/bin/stream-probe",
+        "--output",
+        "/dev/shm/moe-transaction-selective-20261024/fresh/byte-reference"
+      ],
+      "cwd": "/dev/shm/moe-transaction-selective-20261024/fresh/cwd",
+      "exit_code": 0,
+      "label": "pure-byte-reference",
+      "pythonpath": "/dev/shm/moe-transaction-selective-20261024/restored/source/python"
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "/dev/shm/moe-transaction-selective-20261024/restored/source/fixtures/transaction_selective_payload/audit.py",
+        "--stage",
+        "/dev/shm/moe-transaction-selective-20261024/restored/evidence",
+        "--output",
+        "/dev/shm/moe-transaction-selective-20261024/fresh/verification.json"
+      ],
+      "cwd": "/dev/shm/moe-transaction-selective-20261024/fresh/cwd",
+      "exit_code": 0,
+      "label": "transaction-offline",
+      "pythonpath": "/dev/shm/moe-transaction-selective-20261024/restored/source/python"
+    }
+  ],
+  "python_transaction_tests": 43,
+  "scope": "same Linux host incremental native runtime; byte-only reference plus new transaction preflight/offline replay; no clean build or full MoE",
+  "selective_transaction_preflight": true,
+  "strict_regression_only_native_library_path_normalization": true,
+  "total_stage_network_executions": 8
+}

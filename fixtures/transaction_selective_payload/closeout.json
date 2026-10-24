@@ -1,0 +1,56 @@
+{
+  "actual_network_executions": 8,
+  "archive": {
+    "archive_bytes": 12752349,
+    "members": 521,
+    "sha256": "c302221427a7bc783537f6e85c43c7e9aabd4baa4b9aac6117e36bde4afdbe1f",
+    "uncompressed_bytes": 62456970
+  },
+  "baseline": "aff6f9a85250d6c0031b099b43173903855f3812",
+  "budgets": {
+    "address_bytes": 2147483648,
+    "artifact_bytes": 67108864,
+    "cumulative_disk_bytes": 268435456,
+    "cumulative_seconds": 600,
+    "max_network_executions": 8,
+    "max_network_ns": 5000000,
+    "per_command_seconds": 60,
+    "result_bytes": 16777216,
+    "rss_bytes": 1073741824
+  },
+  "conservative_cumulative_monitored_seconds_including_nested": 84.08716834150255,
+  "ended_utc": "2026-10-24T16:53:45.096988+00:00",
+  "evidence": {
+    "all_archive_members_verified": true,
+    "dependency_check": "13 fixed dependencies clean",
+    "final_package_not_network_reexecuted": true,
+    "five_transaction_offline_summaries_byte_equal": true,
+    "fresh_source_root_and_empty_cwd_passed": true,
+    "installs_downloads_gpu_dependency_changes_push": false,
+    "other_system_library_paths_compared_exactly": true,
+    "pure_byte_and_default_complete_results_equal_except_verified_ns3_paths": true
+  },
+  "failed_monitor_receipts": [
+    {
+      "exit_code": 1,
+      "path": "audit-monitor/probe.json",
+      "status": "child_failed"
+    }
+  ],
+  "failure_explanation": "One offline checker used -protocol.json for an empty prefix. Fixed path selection, retained failure, reran offline only; no network/build failure.",
+  "final_management_seconds_reserved": 10,
+  "native_pre_fabric_rejections": 18,
+  "network_successes": 8,
+  "original_terminal_monitors": 36,
+  "overall_paper_goal_complete": false,
+  "peak_sampled_group_rss_bytes": 699908096,
+  "platform_functional_acceptance_complete": true,
+  "python_transaction_tests": 43,
+  "remaining_monitored_live_pids": [],
+  "schema_version": "transaction-selective-closeout/1",
+  "scope": "functional MRT1/MSR1 platform delivery; modern self-peer, GPU visibility, full MoE, hardware calibration and thousand-GPU validation remain incomplete",
+  "source_and_final_receipt_reserve_bytes": 1048576,
+  "stage_and_persistent_allocated_bytes": 182312960,
+  "stage_and_persistent_apparent_bytes": 180765671,
+  "total_charged_with_reserve_bytes": 183361536
+}

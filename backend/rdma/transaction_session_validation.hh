@@ -4,6 +4,7 @@
 #include "bounded_buffers.hh"
 #include "memory_registrations.hh"
 #include "application_window_validation.hh"
+#include "transaction_transport.hh"
 
 namespace moe_rdma {
 // Pure admission validation. Never inspect a live byte value/lease to validate
@@ -17,11 +18,13 @@ inline void SessionKeys(const Json& value,const std::vector<std::string>& keys) 
   for(const auto& key:keys)Require(value.contains(key),"missing session field");
 }
 inline void ValidateSessionProgram(const Json& input,const Json& topology,int64_t max_ns) {
+  ValidateTransactionTransport(input,max_ns);
   const auto execution_limits=ReadTransactionLimits(input);
   const bool explicit_submission=input.contains("submission_model");
   auto root_keys=std::vector<std::string>{"schema_version","connections","windows","operations","local_model","source_model","local_memory_model"};
   if(explicit_submission)root_keys.push_back("submission_model");
   if(input.contains("execution_limits"))root_keys.push_back("execution_limits");
+  if(input.contains("dcqcn_reference"))root_keys.push_back("dcqcn_reference");
   if(input.contains("transport_recovery"))root_keys.push_back("transport_recovery");
   if(input.contains("buffer_model"))root_keys.push_back("buffer_model");
   for(const auto* name:{"registration_model","registrations","application_window_model","application_windows"})if(input.contains(name))root_keys.push_back(name);

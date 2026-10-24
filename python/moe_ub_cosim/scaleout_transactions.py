@@ -75,13 +75,19 @@ def validate(topology, protocol, config, *, allow_no_remote=False):
     source_mode = memory_mode or (isinstance(config, dict) and config.get('schema_version') == 'moe-rdma-transactions/3')
     explicit = isinstance(config, dict) and 'submission_model' in config
     counts = execution_limits(config)
+    reference = 'dcqcn_reference' in config
+    selective = isinstance(config.get('transport_recovery'), dict) and config['transport_recovery'].get('mode') == 'selective_repeat/1'
+    if reference or selective:
+        require(sparse_mode and 'buffer_model' not in config, 'transaction reference/selective transport requires v5 without bounded copied payload pools')
+    require(not selective or reference, 'transaction selective transport requires dcqcn_reference')
     fields(config, 'schema_version connections windows operations'+(' local_model' if local_mode else '')+
            (' source_model' if source_mode else '')+(' local_memory_model' if memory_mode else '')+(' submission_model' if explicit and sparse_mode else '')+
            (' transport_recovery' if 'transport_recovery' in config else '')+
            (' application_window_model' if 'application_window_model' in config else '')+(' application_windows' if 'application_windows' in config else '')+
            (' registration_model' if 'registration_model' in config else '')+(' registrations' if 'registrations' in config else '')+
            (' buffer_model' if 'buffer_model' in config else '')+
-           (' execution_limits' if 'execution_limits' in config else ''), 'transaction root')
+           (' execution_limits' if 'execution_limits' in config else '')+
+           (' dcqcn_reference' if reference else ''), 'transaction root')
     require(config['schema_version'] in ('moe-rdma-transactions/1', 'moe-rdma-transactions/2', 'moe-rdma-transactions/3', 'moe-rdma-transactions/4', 'moe-rdma-transactions/5'), 'unsupported transaction schema')
     if explicit:
         require(config['submission_model'] == dict(mode='explicit_prefix/1'), 'unsupported submission model')
@@ -119,6 +125,7 @@ def validate(topology, protocol, config, *, allow_no_remote=False):
         descriptor.update(schema_version='moe-rdma-stream-work/2',
             limits=dict(max_streams=2*counts['max_connections'], max_work=2*counts['max_remote_operations']))
     if 'transport_recovery' in config:descriptor['transport_recovery']=config['transport_recovery']
+    if reference:descriptor['dcqcn_reference']=config['dcqcn_reference']
     validate_streams(topology, protocol, descriptor)
     windows = config['windows']
     require(isinstance(windows, list) and 1 <= len(windows) <= 16, 'require 1..16 remote windows')

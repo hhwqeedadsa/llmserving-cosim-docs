@@ -1,0 +1,115 @@
+{
+  "cases": {
+    "chain": {
+      "actual_received_bytes_drive_exactly_once_target": true,
+      "fast_retransmits": 1,
+      "last_memory_event_ns": 37872,
+      "local_copies": 3,
+      "memory_events": 25,
+      "passed": true,
+      "payload_deliveries": 11,
+      "peak_reorder_bytes": {
+        "0": 632
+      },
+      "physical": {
+        "drop": 1,
+        "rx": 137,
+        "tx": 138
+      },
+      "remote_operations": 5,
+      "source_packets": 12,
+      "source_payload_bytes": 6464,
+      "timeouts": 0
+    },
+    "explicit": {
+      "actual_received_bytes_drive_exactly_once_target": true,
+      "fast_retransmits": 0,
+      "last_memory_event_ns": 32120,
+      "local_copies": 0,
+      "memory_events": 5,
+      "passed": true,
+      "payload_deliveries": 3,
+      "peak_reorder_bytes": {},
+      "physical": {
+        "rx": 36,
+        "tx": 36
+      },
+      "remote_operations": 2,
+      "source_packets": 3,
+      "source_payload_bytes": 240,
+      "timeouts": 0
+    },
+    "online": {
+      "actual_received_bytes_drive_exactly_once_target": true,
+      "fast_retransmits": 1,
+      "last_memory_event_ns": 37872,
+      "local_copies": 3,
+      "memory_events": 25,
+      "passed": true,
+      "payload_deliveries": 11,
+      "peak_reorder_bytes": {
+        "0": 632
+      },
+      "physical": {
+        "drop": 1,
+        "rx": 137,
+        "tx": 138
+      },
+      "remote_operations": 5,
+      "source_packets": 12,
+      "source_payload_bytes": 6464,
+      "timeouts": 0
+    },
+    "reply-tail": {
+      "actual_received_bytes_drive_exactly_once_target": true,
+      "fast_retransmits": 0,
+      "last_memory_event_ns": 6078,
+      "local_copies": 0,
+      "memory_events": 8,
+      "passed": true,
+      "payload_deliveries": 16,
+      "peak_reorder_bytes": {},
+      "physical": {
+        "drop": 1,
+        "rx": 197,
+        "tx": 198
+      },
+      "remote_operations": 8,
+      "source_packets": 17,
+      "source_payload_bytes": 680,
+      "timeouts": 1
+    },
+    "request-gap": {
+      "actual_received_bytes_drive_exactly_once_target": true,
+      "fast_retransmits": 1,
+      "last_memory_event_ns": 18102,
+      "local_copies": 0,
+      "memory_events": 8,
+      "passed": true,
+      "payload_deliveries": 16,
+      "peak_reorder_bytes": {
+        "0": 280
+      },
+      "physical": {
+        "drop": 1,
+        "rx": 257,
+        "tx": 258
+      },
+      "remote_operations": 8,
+      "source_packets": 22,
+      "source_payload_bytes": 880,
+      "timeouts": 0
+    }
+  },
+  "passed": true,
+  "scope": "finite functional fixtures; independent actual packet, ordered bytes, MRT1 and memory replay; no application performance claim",
+  "tampering_rejected": [
+    "delivery_bytes",
+    "delivery_uid",
+    "target_value",
+    "final_page",
+    "ack_time",
+    "source_release",
+    "copy_snapshot"
+  ]
+}

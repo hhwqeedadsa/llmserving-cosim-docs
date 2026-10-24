@@ -3,6 +3,7 @@
 #include "bounded_buffers.hh"
 #include "memory_registrations.hh"
 #include "application_window_validation.hh"
+#include "transaction_transport.hh"
 
 namespace moe_rdma {
 static int64_t MemoryNow(){return ns3::Simulator::Now().GetNanoSeconds();}
@@ -24,6 +25,8 @@ std::string MemoryHex(const std::vector<uint8_t>& bytes) {
 RemoteTransactions::RemoteTransactions(Fabric& fabric,const Json& input):
     execution_limits_(ReadTransactionLimits(input)),explicit_limits_(input.contains("execution_limits")),
     transport_(fabric,{2*execution_limits_.connections,2*execution_limits_.remote},input.value("transport_recovery",Json())) {
+  ValidateTransactionTransport(input,fabric.MaxSimNs());
+  if(input.contains("dcqcn_reference"))transport_.ConfigureDcqcnReference(input.at("dcqcn_reference"));
   if(explicit_limits_)memory_.ConfigureRequestLimits(execution_limits_.connections,execution_limits_.remote,execution_limits_.Nodes());
   ValidateBoundedBuffers(input);
   bounded_buffers_=input.contains("buffer_model");

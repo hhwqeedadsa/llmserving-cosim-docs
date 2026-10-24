@@ -61,6 +61,18 @@ v5可选以下完整声明；省略时仍为8条连接、32个远端操作、16�
 
 这些事件用于功能驱动和离线核验：`applied`是目标内存模型已执行；`request_acked`是源收到请求字节的ACK；`completed`是应用队列可回收。目标事件可触发目标行为，不能把其全局记录当作现实源端已经知道的状态，也不能作为在线算法的额外观测。`applied`不代表GPU可见，`completed`不代表真实GIN flush或CQE格式。
 
+## 选择重传下执行实际事务
+
+v5可选`dcqcn_reference`，字段与[独立拥塞反馈参考](../scaleout_rdma_streams/README.md#可选的独立拥塞反馈参考模式)一致；它在创建连接前配置，也可与`go_back_n/1`配合，便于保持相同拥塞控制作恢复对照。选择`transport_recovery.mode="selective_repeat/1"`必须同时显式提供该参考。v1—v4拒绝新配置，`buffer_model`有界副本池与本组合不兼容；不能省略参考或悄悄退回另一种控制器。
+
+完整输入见[selective-chain.json](selective-chain.json)。沿用上文topology、protocol和执行命令，把`--config`换成此文件即可。它依次执行2600B写入、原子计数、本地等待/清零与复制，再通过第二条连接转发，源端等实际完成后另作复制；输入是人工功能链。在线会话接受相同静态字段，后续任务仍由实际回调追加。
+
+选择模式额外声明`receive_buffer_bytes`和`inflight_bytes`（均为MTU—2MiB），接收容量至少为窗口＋MTU−1；`max_events`必须为正数并覆盖所有选择记录。接收端保留真实乱序包，只有缺口补齐后的连续字节才按序交给事务解码器；重复包不重复交付。选择ACK不会执行写入或原子加法，也不释放源工作额度，源仍等累计ACK及原子实际回复，按连接顺序完成。
+
+选择记录保存在`transactions.transport.selective_repeat`，`payload_delivered`包含实际包UID、序号、字节hex和交付时刻；它和其他选择事件共用事件预算。目标操作仍以完整MRT1请求为单位执行，2600B写入跨包到齐前不应用。目标应用、请求ACK、原子响应和源完成分别记录，不能混为GPU可见或硬件CQ事件。
+
+[独立验收](../../fixtures/transaction_selective_payload/README.md)覆盖首请求丢失、末尾回复丢失、跨包写/复制/转发、显式发布和在线按返回值构造后续任务。它核对实际包、反馈、字节交付、内存及源保护；这是强恢复基线进入事务链的功能条件，不是新的恢复算法或性能收益证据。MRT1/MSR1仍为模拟格式，没有新增现代GIN、自发QP物理路径、GPU可见或硬件校准。
+
 ## 多NIC的权限共享同一份存储
 
 v4/v5可显式同时加入`registration_model={"mode":"nic_scoped_aliases/1"}`与`registrations`。此时`windows.key`是本地存储身份，远端操作的`key`是rkey（远端访问密钥），由目标owner、实际绑定的接收NIC及rkey共同查找；未命中直接拒绝。本地source、copy和local_wait仍使用存储key。省略两字段时保持原有行为。

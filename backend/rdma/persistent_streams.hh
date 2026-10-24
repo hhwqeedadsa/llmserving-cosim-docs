@@ -22,6 +22,7 @@ class PersistentStreams {
   // Passive samples in existing callbacks; no timers or periodic polling.
   void ConfigureRateCapture(const Json& config);
   void ConfigureDcqcnReference(const Json& config);
+  static void ValidateDcqcnReference(const Json& config,int64_t max_ns);
   void ValidateFaultBindings() const;
   void Open(uint64_t id, unsigned src, unsigned dst, unsigned plane, uint16_t wire_port,
             unsigned source_nic, unsigned destination_nic, unsigned depth);

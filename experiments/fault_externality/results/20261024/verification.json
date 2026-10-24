@@ -1,0 +1,40 @@
+{
+  "passed": true,
+  "independent_checks": {
+    "healthy-fixed": {
+      "source_packets": 1110,
+      "physical_tx": 12188,
+      "physical_rx": 12188,
+      "physical_drop": 0,
+      "work": 74
+    },
+    "healthy-karn": {
+      "source_packets": 1110,
+      "physical_tx": 12188,
+      "physical_rx": 12188,
+      "physical_drop": 0,
+      "work": 74
+    },
+    "failed-fixed": {
+      "source_packets": 1697,
+      "physical_tx": 15930,
+      "physical_rx": 15925,
+      "physical_drop": 5,
+      "work": 74
+    },
+    "failed-karn": {
+      "source_packets": 1808,
+      "physical_tx": 17170,
+      "physical_rx": 17165,
+      "physical_drop": 5,
+      "work": 74
+    }
+  },
+  "rejected_mutations": [
+    "ack_callback",
+    "physical_arrival",
+    "retransmission_queue_owner"
+  ],
+  "original_route_identity": "Preparation verifies original file SHA256; checker reconstructs the frozen selected routes.",
+  "scope": "physical packet timing, FIFO owner and prefix callback checks, not hardware calibration or innovation proof"
+}

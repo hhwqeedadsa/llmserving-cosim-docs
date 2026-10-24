@@ -1,0 +1,45 @@
+{
+  "passed": true,
+  "archive_sha256": "0f95b3bc1aea6d12d1950e5508c6cf3d1e5e2edc1f95096cc6bed5c374d77eeb",
+  "members": 101,
+  "byte_identical": {
+    "analysis": true,
+    "verification": true
+  },
+  "commands": [
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "/dev/shm/moe-fault-externality-20261024/restored-v2/source/analyze.py",
+        "--observed",
+        "/dev/shm/moe-fault-externality-20261024/restored-v2/inputs/observed",
+        "--runs",
+        "/dev/shm/moe-fault-externality-20261024/restored-v2/network",
+        "--output",
+        "/dev/shm/moe-fault-externality-20261024/restored-v2/replayed-analysis.json"
+      ],
+      "cwd": "/dev/shm/moe-fault-externality-20261024/restored-v2/empty-cwd",
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "/dev/shm/moe-fault-externality-20261024/restored-v2/source/verify.py",
+        "--inputs",
+        "/dev/shm/moe-fault-externality-20261024/restored-v2/inputs",
+        "--runs",
+        "/dev/shm/moe-fault-externality-20261024/restored-v2/network",
+        "--analysis",
+        "/dev/shm/moe-fault-externality-20261024/restored-v2/replayed-analysis.json",
+        "--output",
+        "/dev/shm/moe-fault-externality-20261024/restored-v2/replayed-verification.json"
+      ],
+      "cwd": "/dev/shm/moe-fault-externality-20261024/restored-v2/empty-cwd",
+      "exit_code": 0
+    }
+  ],
+  "network_executions": 0,
+  "scope": "Offline replay from a new source root and empty cwd on the same Linux host."
+}

@@ -1,0 +1,169 @@
+{
+  "schema_version": "moe-fault-externality-closeout/1",
+  "phase": "completed",
+  "overall_research_goal": "in_progress",
+  "platform_commit": "c8627e8",
+  "network_executions": 4,
+  "no_network_retries": true,
+  "monitors": [
+    {
+      "path": "analyze-monitor/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 1.753232054412365,
+      "peak_rss_bytes": 97890304
+    },
+    {
+      "path": "analyze-owner-monitor/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 2.386662807315588,
+      "peak_rss_bytes": 101421056
+    },
+    {
+      "path": "analyze-prefix-monitor/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 2.2258794512599707,
+      "peak_rss_bytes": 99467264
+    },
+    {
+      "path": "checkpoint-monitor/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.6553745102137327,
+      "peak_rss_bytes": 20279296
+    },
+    {
+      "path": "checkpoint-v2-monitor/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.6506158243864775,
+      "peak_rss_bytes": 22224896
+    },
+    {
+      "path": "deps-monitor/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.46724688820540905,
+      "peak_rss_bytes": 21225472
+    },
+    {
+      "path": "network/failed-fixed/execution/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 2.0555037315934896,
+      "peak_rss_bytes": 418226176
+    },
+    {
+      "path": "network/failed-karn/execution/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 2.1929398272186518,
+      "peak_rss_bytes": 423673856
+    },
+    {
+      "path": "network/healthy-fixed/execution/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 1.6230842974036932,
+      "peak_rss_bytes": 408887296
+    },
+    {
+      "path": "network/healthy-karn/execution/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 1.621556019410491,
+      "peak_rss_bytes": 409481216
+    },
+    {
+      "path": "prepare-monitor/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.23002131842076778,
+      "peak_rss_bytes": 28012544
+    },
+    {
+      "path": "replay-monitor/probe.json",
+      "status": "child_failed",
+      "child_exit_code": 1,
+      "wall_seconds": 0.23590966872870922,
+      "peak_rss_bytes": 19107840
+    },
+    {
+      "path": "replay-v2-monitor/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 7.205954385921359,
+      "peak_rss_bytes": 198766592
+    },
+    {
+      "path": "run-monitor/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 9.556869039312005,
+      "peak_rss_bytes": 514035712
+    },
+    {
+      "path": "verify-monitor/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 4.275916483253241,
+      "peak_rss_bytes": 177643520
+    },
+    {
+      "path": "verify-owner-monitor/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 4.436039546504617,
+      "peak_rss_bytes": 179331072
+    },
+    {
+      "path": "verify-prefix-monitor/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 4.682964647188783,
+      "peak_rss_bytes": 176488448
+    }
+  ],
+  "monitored_wall_seconds_sum_including_nested": 46.25577050074935,
+  "final_file_management_seconds_reserve": 10,
+  "peak_sampled_tree_rss_bytes": 514035712,
+  "allocated_bytes_stage_restore_persistent_results_before_receipt": 44339200,
+  "remaining_metadata_reserve_bytes": 1048576,
+  "budget": {
+    "monitored_seconds": 300,
+    "cumulative_disk_bytes": 268435456,
+    "per_command_seconds": 60,
+    "rss_bytes": 1073741824,
+    "address_bytes": 2147483648,
+    "artifact_bytes": 67108864,
+    "max_sim_ns": 5000000,
+    "result_json_bytes": 16777216
+  },
+  "library_identity_rechecked": true,
+  "original_native_library_files_reused_not_copied_into_stage": true,
+  "dependency_check": "13 fixed dependencies passed; read-only; no remote fetchability claim",
+  "known_failure": {
+    "initial_archive": "rejected-evidence.tar.gz",
+    "reason": "packaging the active checkpoint monitor samples caused a member hash mismatch",
+    "mismatched_member": "monitors/checkpoint-monitor/samples.jsonl",
+    "remedy": "only finished monitors plus an immutable read per file; repaired archive passed offline replay"
+  },
+  "replay": {
+    "source_root": "new restored directory",
+    "cwd": "empty directory",
+    "byte_identical": [
+      "analysis",
+      "verification"
+    ],
+    "network_executions": 0,
+    "portable_native_binary": false,
+    "clean_source_build": false,
+    "cross_machine_validation": false
+  },
+  "scope": "Four small real-route cold Dispatch conditions; no full inference, GPU, hardware calibration or thousand-GPU result.",
+  "installed_or_downloaded": false,
+  "platform_or_dependencies_changed": false,
+  "pushed": false
+}

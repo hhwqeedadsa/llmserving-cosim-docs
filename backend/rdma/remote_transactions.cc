@@ -1,4 +1,5 @@
 #include "remote_transactions.hh"
+#include "transaction_effect_order.hh"
 
 namespace moe_rdma {
 static int64_t MemoryNow(){return ns3::Simulator::Now().GetNanoSeconds();}
@@ -20,6 +21,7 @@ std::string MemoryHex(const std::vector<uint8_t>& bytes) {
 RemoteTransactions::RemoteTransactions(Fabric& fabric,const Json& input):
     transport_(fabric,PersistentStreams::Limits{},input.value("transport_recovery",Json())) {
   Require(!input.contains("transport_recovery") || input.at("transport_recovery").is_object(),"transport_recovery must be an object");
+  ValidateTransactionEffectOrder(input);
   Require(input.at("schema_version")=="moe-rdma-transactions/1" ||
           input.at("schema_version")=="moe-rdma-transactions/2" ||
           input.at("schema_version")=="moe-rdma-transactions/3" ||

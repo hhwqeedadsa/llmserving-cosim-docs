@@ -1,0 +1,392 @@
+{
+  "passed": true,
+  "platform_base": "9038e44",
+  "unit_tests": 25,
+  "native_rejection_schemas": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "public_transaction_regression_commands": 8,
+  "public_session_regression_commands": 3,
+  "prefix_workflow_commands_including_expected_rejections": 32,
+  "independent_primary_cases": 7,
+  "independent_source_packets": 38,
+  "independent_endpoint_tx_witnesses": 38,
+  "safe_before_after_full_results_byte_equal": [
+    "isolated",
+    "wait"
+  ],
+  "online_bad_batch_registration_ids": [
+    0
+  ],
+  "fixed_dependencies": 13,
+  "checker_initial_failure_preserved": true,
+  "network_rerun_to_fix_checker": false,
+  "monitor_count": 54,
+  "conservative_nested_monitor_seconds": 85.31868235953152,
+  "peak_sampled_rss_bytes": 627826688,
+  "task_storage": {
+    "apparent_bytes": 95938611,
+    "allocated_bytes": 98402304
+  },
+  "persistent_backup_storage": {
+    "apparent_bytes": 12788760,
+    "allocated_bytes": 12800000
+  },
+  "combined_budget_charge_bytes": 111202304,
+  "budget": {
+    "cumulative_seconds": 300,
+    "cumulative_bytes": 134217728,
+    "per_command_seconds": 60,
+    "per_command_rss_bytes": 1073741824
+  },
+  "archive": {
+    "members": 485,
+    "plain_bytes": 60787524,
+    "archive_bytes": 12778534,
+    "sha256": "83f2d73e7bec10357a74791cb823d9b29605f811d39adb8febb0d9cdbd4b51ea",
+    "baseline_python_validator": "9038e44; other Python modules unchanged by this fix"
+  },
+  "persistent_backup": "/home/lry/moe-ub-cosim/runs/transaction_effect_order_checkpoint_20261024/checkpoint.tar.gz",
+  "source_hashes": {
+    "backend/rdma/transaction_effect_order.hh": "91296673c1e49f33abc518552d47288b42d21269b2a84ec05c7aa211f558d7f7",
+    "backend/rdma/remote_transactions.cc": "8a2e3300a1bbe05f2d5633405e1011fa164426cd1bff75c6a47d86362e07d5a3",
+    "backend/rdma/transaction_session_validation.hh": "3375023c1a9782822d8e505cbd0d7c1f76d6015b40e0b68177ae80af28f1beb1",
+    "python/moe_ub_cosim/scaleout_transactions.py": "43b125f0002e3d5ff2b30d48624561670a2768fd256e7b62ace88237bcf310c1"
+  },
+  "archived_documentation_note": "user guide extended after packaging with a clarification that unposted aggregate work must first be published; platform code and replay helper sources unchanged",
+  "monitors": [
+    {
+      "path": "after/isolated/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.5508244391530752,
+      "rss": 370860032
+    },
+    {
+      "path": "after/wait/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.5353740304708481,
+      "rss": 370737152
+    },
+    {
+      "path": "after-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 1.7359481304883957,
+      "rss": 421326848
+    },
+    {
+      "path": "audit-final-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.1296480279415846,
+      "rss": 7467008
+    },
+    {
+      "path": "before/isolated/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.5439503788948059,
+      "rss": 370708480
+    },
+    {
+      "path": "before/unsafe/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.5501483324915171,
+      "rss": 370745344
+    },
+    {
+      "path": "before/wait/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.6507343240082264,
+      "rss": 374939648
+    },
+    {
+      "path": "before-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 2.505709558725357,
+      "rss": 422383616
+    },
+    {
+      "path": "build/build-remote_transactions/probe.json",
+      "status": "completed",
+      "wall_seconds": 6.896453404799104,
+      "rss": 596279296
+    },
+    {
+      "path": "build/build-transaction_session/probe.json",
+      "status": "completed",
+      "wall_seconds": 7.779919058084488,
+      "rss": 627826688
+    },
+    {
+      "path": "build/link-transaction-probe/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.5884445458650589,
+      "rss": 142999552
+    },
+    {
+      "path": "build/link-transaction-session/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.6887733358889818,
+      "rss": 146239488
+    },
+    {
+      "path": "checkpoint/restored/replayed-after/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.5539775155484676,
+      "rss": 371863552
+    },
+    {
+      "path": "checkpoint/restored/replayed-before/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.5461172796785831,
+      "rss": 370745344
+    },
+    {
+      "path": "checkpoint-pack-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 2.207090303301811,
+      "rss": 78872576
+    },
+    {
+      "path": "checkpoint-restore-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.9006946571171284,
+      "rss": 41799680
+    },
+    {
+      "path": "dependencies-final-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.44011958315968513,
+      "rss": 19099648
+    },
+    {
+      "path": "edges/indirect-completion/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.748628219589591,
+      "rss": 368648192
+    },
+    {
+      "path": "edges/indirect-completion-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.9740399830043316,
+      "rss": 401211392
+    },
+    {
+      "path": "edges/prepared-cross-monitor/probe.json",
+      "status": "child_failed",
+      "wall_seconds": 0.5407461635768414,
+      "rss": 368648192
+    },
+    {
+      "path": "edges/same-carrier/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.5396026521921158,
+      "rss": 371798016
+    },
+    {
+      "path": "edges/same-carrier-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.8285726327449083,
+      "rss": 404344832
+    },
+    {
+      "path": "edges/unordered-v1-monitor/probe.json",
+      "status": "child_failed",
+      "wall_seconds": 0.5559808723628521,
+      "rss": 371814400
+    },
+    {
+      "path": "edges/unordered-v2-monitor/probe.json",
+      "status": "child_failed",
+      "wall_seconds": 0.682025970891118,
+      "rss": 369680384
+    },
+    {
+      "path": "edges/unordered-v3-monitor/probe.json",
+      "status": "child_failed",
+      "wall_seconds": 0.5715777222067118,
+      "rss": 371904512
+    },
+    {
+      "path": "edges/unordered-v4-monitor/probe.json",
+      "status": "child_failed",
+      "wall_seconds": 0.5610847529023886,
+      "rss": 369729536
+    },
+    {
+      "path": "edges-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 5.418125411495566,
+      "rss": 425594880
+    },
+    {
+      "path": "prefix-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 16.41996701620519,
+      "rss": 455630848
+    },
+    {
+      "path": "regression-prefix/aggregate-tail-online/execution/probe.json",
+      "status": "child_failed",
+      "wall_seconds": 0.648835226893425,
+      "rss": 395894784
+    },
+    {
+      "path": "regression-prefix/all-false/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.8712337631732225,
+      "rss": 379154432
+    },
+    {
+      "path": "regression-prefix/changed-initial/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.5456159356981516,
+      "rss": 370675712
+    },
+    {
+      "path": "regression-prefix/credit-feedback/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.5541030913591385,
+      "rss": 369672192
+    },
+    {
+      "path": "regression-prefix/default/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.8721999507397413,
+      "rss": 374857728
+    },
+    {
+      "path": "regression-prefix/depth-one-online/execution/probe.json",
+      "status": "child_failed",
+      "wall_seconds": 0.6620763652026653,
+      "rss": 393826304
+    },
+    {
+      "path": "regression-prefix/fence-does-not-publish-online/execution/probe.json",
+      "status": "child_failed",
+      "wall_seconds": 0.6523446440696716,
+      "rss": 391798784
+    },
+    {
+      "path": "regression-prefix/online/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.6573294848203659,
+      "rss": 395890688
+    },
+    {
+      "path": "regression-prefix/other-connection/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.5539507810026407,
+      "rss": 372842496
+    },
+    {
+      "path": "regression-prefix/prefix/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.5443473011255264,
+      "rss": 370745344
+    },
+    {
+      "path": "regression-prefix/previous/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.8811133187264204,
+      "rss": 376025088
+    },
+    {
+      "path": "regression-prefix/two-publications/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.664456570520997,
+      "rss": 367595520
+    },
+    {
+      "path": "regression-session/online/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.8651153352111578,
+      "rss": 394997760
+    },
+    {
+      "path": "regression-session/reference/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.6581126358360052,
+      "rss": 374923264
+    },
+    {
+      "path": "regression-transactions/deep/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.5368176233023405,
+      "rss": 370778112
+    },
+    {
+      "path": "regression-transactions/normal/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.5437650047242641,
+      "rss": 370745344
+    },
+    {
+      "path": "regression-transactions/renamed/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.5385241657495499,
+      "rss": 370540544
+    },
+    {
+      "path": "regression-transactions/repeat/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.5517641231417656,
+      "rss": 371728384
+    },
+    {
+      "path": "regression-transactions/segmented/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.5411955770105124,
+      "rss": 370737152
+    },
+    {
+      "path": "regression-transactions/wrong-nic/execution/probe.json",
+      "status": "child_failed",
+      "wall_seconds": 0.5450657941401005,
+      "rss": 371765248
+    },
+    {
+      "path": "replay-after-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.7763071246445179,
+      "rss": 403836928
+    },
+    {
+      "path": "replay-audit-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.1214915718883276,
+      "rss": 5316608
+    },
+    {
+      "path": "replay-before-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.7748628724366426,
+      "rss": 403763200
+    },
+    {
+      "path": "session-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 10.19703066162765,
+      "rss": 450609152
+    },
+    {
+      "path": "transactions-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 4.686329532414675,
+      "rss": 427724800
+    },
+    {
+      "path": "units-final-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.23041560128331184,
+      "rss": 20226048
+    }
+  ],
+  "limitations": [
+    "functional MRT1 rather than RoCE/GIN/GPU visibility",
+    "no calibrated MoE recovery gain",
+    "same-volume local backup"
+  ]
+}

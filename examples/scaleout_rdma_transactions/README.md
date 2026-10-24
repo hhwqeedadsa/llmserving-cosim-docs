@@ -247,6 +247,8 @@ v5结果窗口不含展开的`hex`，改为`bytes`、`initialization`、`residen
 
 远端前驱可以使用`after: [{"operation": 0, "event": "prepared"}]`。该事件由实际队列额度可用并完成准备时产生，session也会把它反馈给前端；提交成功不代表已经准备。源窗口仍从提交开始保护，真正发布时才捕获字节，完成后释放。示例先准备put，再由prepared回调启动声明为20μs的本地工作，最后非聚合的原子请求发布两项工作；20μs前同连接没有数据包。这是人工功能程序，没有测量门铃或GPU成本。
 
+`prepared`不能证明旧写已到达目标。两条连接要重复写入同一地址范围，须通过`applied`、`request_acked`或`completed`建立远端副作用顺序；夹入一个本地等待节点也不能把准备事件变成完成证据。源端程序优先使用自身实际收到的ACK或完成，不能查询远端`applied`真值。若旧请求仍聚合而未发布，必须先安排显式发布；等待ACK不会自行发出请求。同一连接中，已准备前驱与其因果后继沿同一有序字节流执行；该后继的真实完成也覆盖这些前驱。独立输入数组位置不证明提交顺序。Python、原生事务及在线追加都会拒绝缺少上述顺序的重叠非原子写；不同地址范围与允许的原子并发继续适用。
+
 队列槽不足时，后续工作可能尚未准备；若前面的聚合工作一直没有发布，整个程序会在真实仿真截止时保留未完成状态。最后一项也设`true`不会自动补发布。`queue_fence`只等待调用时已预留的前缀，也不会替应用发布；使用时须显式安排一个可以获得槽的非聚合工作。不能通过自动加深队列或补完成掩盖阻塞。
 
 启用模式的`transactions.operations`增加`prepared_ns`，未发生为−1；`transactions.submission`保存`mode`和`publications`，每次含`connection/operation/exclusive/time_ns`。exclusive是从0开始的队列ticket的排他上界，表示逻辑前缀，不是网络包数或物理MMIO门铃次数。同一纳秒的两次显式发布仍是两条记录。prepared、published、目标applied、request_acked、response和completed分别保留，均不能直接等同GPU可见。

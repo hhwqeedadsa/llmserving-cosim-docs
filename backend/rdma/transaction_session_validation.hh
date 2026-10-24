@@ -1,5 +1,6 @@
 #pragma once
 #include "remote_transactions.hh"
+#include "transaction_effect_order.hh"
 
 namespace moe_rdma {
 // Pure admission validation. Never inspect a live byte value/lease to validate
@@ -140,5 +141,6 @@ inline void ValidateSessionProgram(const Json& input,const Json& topology,int64_
     }
     Require(local_count<=16 && remote_count<=32,"session kind count budget exceeded");local[id]=is_local;ancestors[id]=std::move(parents);
   }
+  ValidateTransactionEffectOrder(input);
 }
 }

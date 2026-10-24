@@ -13,6 +13,8 @@
 
 ## 当前范围和预算
 
+从 `9038e44` 完成准备事件/远端副作用顺序修复：真实单包丢失使旧写晚于新写到达，100μs复制确实读到旧内容；原输入错误接纳现由Python、原生事务v1—v5和在线批次共同拒绝。同连接合法次序保留，安全对照改前改后完整结果逐字节相同。25项相关单元及事务/在线/前缀回归通过，独立重放38源包；新目录/空cwd用包内8库重现改前反例和安全对照，持久检查点在 `runs/transaction_effect_order_checkpoint_20261024/`。见[报告](../reviews/网络丢包与跨连接旧写覆盖_20261024.md)、[验收](../../fixtures/transaction_effect_order/README.md)与[规范](transaction_effect_order_spec.md)。这项平台正确性进展不是新恢复算法或外部生产漏洞；整体目标仍in_progress，下一研究仍须局部失效继续执行、安全状态保留、强基线和代表性/校准证据。
+
 当前平台阶段已验收（基线`256dfc2`）：显式持久stream/事务`transport_recovery`按已发布范围、真实TX高水位及累计ACK恢复，支持空闲追加、迟到ACK、完整重复包补ACK、物理drop排空与单次work回收；重复字节不重复执行put/fetch-add。15主条件、17边界命令、6类CLI/native拒绝及未知stream拒绝，20项纯源端不变量与输入单元通过；原stream/事务/在线回归7/8/3条公开命令及直接原生检查通过。旧默认结果逐字节相同。独立核对149源包、124捕获源TX、304恢复记录，实际MRT1解码/原子旧值/最终窗口及3类篡改拒绝通过。补充丢失源请求ACK：目标写入一次而ACK/完成保持-1，70μs耗尽后257B源租约仍保护。见[规范](persistent_recovery_spec.md)、[用户入口](../../examples/scaleout_rdma_streams/README.md#可选的持久连接丢包恢复)与[验收](../../fixtures/persistent_recovery/README.md)。
 
 640成员/59,647,125B检查点、压缩12,250,863B逐hash核验，新源码根/空cwd离线产物逐字节相同；4公开操作与3实际恢复网络除库路径外完整结果一致，8原生库从包内加载。原件`/dev/shm/moe-persistent-recovery-20261024/`，另存本地持久`runs/persistent_recovery_checkpoint_20261024/`，补充租约测试有单独输入/部分结果。首次字段检查器、ECN零输入、单流无CNP控制及离线JSON次序差异均保留；排序修复后才字节核对，未重复旧研究网络。每命令60秒/1GiB/地址2GiB/64MiB、仿真5ms/结果16MiB，累计受监控600秒/256MiB（含失败与归档恢复）及8GiB预留保持，详见[收尾](../../fixtures/persistent_recovery/closeout.json)。13固定依赖、旧runtime hash不变；无安装下载/GPU或旧Prefill/1024失败重跑。仅本地提交不push。

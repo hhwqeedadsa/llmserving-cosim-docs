@@ -116,6 +116,7 @@ def validate(topology, protocol, config, *, allow_no_remote=False):
     require(isinstance(operations, list) and (0 if allow_no_remote else 1) <= len(operations) <= (48 if local_mode else 32), 'transaction node budget exceeded')
     kinds, ancestors, accesses = {}, {}, []
     remote_count = local_count = 0
+    before_effects, effects, remote_history = {}, {}, []
     for op in operations:
         require(isinstance(op, dict), 'transaction node must be an object')
         kind = op.get('kind') if local_mode else 'remote'
@@ -123,7 +124,7 @@ def validate(topology, protocol, config, *, allow_no_remote=False):
         integer(op.get('id'), 'operation id', 0, 65535)
         require(op['id'] not in kinds, 'repeated operation id')
         require(isinstance(op.get('after'), list) and len(op['after']) <= 32, 'invalid operation dependencies')
-        deps, parents = set(), set()
+        deps, parents, safe_parents = set(), set(), set()
         for d in op['after']:
             fields(d, 'operation event', 'transaction dependency')
             integer(d['operation'], 'dependency operation', 0, 65535)
@@ -133,6 +134,9 @@ def validate(topology, protocol, config, *, allow_no_remote=False):
             item = d['operation'], d['event']
             require(item not in deps, 'repeated dependency'); deps.add(item)
             parents.update(ancestors[d['operation']]); parents.add(d['operation'])
+            safe_parents.update(before_effects[d['operation']])
+            if kinds[d['operation']] == 'remote' and d['event'] != 'prepared':
+                safe_parents.update(effects[d['operation']])
         if kind == 'local':
             fields(op, 'id kind rank duration_ns after'+(' local_wait' if 'local_wait' in op else '')+
                    (' copy' if 'copy' in op and memory_mode else ''), 'local transaction node')
@@ -161,6 +165,7 @@ def validate(topology, protocol, config, *, allow_no_remote=False):
             local_count += 1
             require(local_count <= 16, 'local transaction node budget exceeded')
             kinds[op['id']] = kind; ancestors[op['id']] = parents
+            before_effects[op['id']] = safe_parents
             continue
         remote_count += 1
         require(remote_count <= 32, 'remote transaction budget exceeded')
@@ -215,8 +220,17 @@ def validate(topology, protocol, config, *, allow_no_remote=False):
                         'source overlaps own condition reset; use separate steps')
         for prior, prior_key, n in accesses:
             if key == prior_key and op['address'] < prior['address']+n and prior['address'] < op['address']+length:
-                require(op['verb'] == prior['verb'] == 'fetch_add' or prior['id'] in parents,
-                        'overlapping non-atomic memory writes require explicit causal order')
+                require(op['verb'] == prior['verb'] == 'fetch_add' or prior['id'] in safe_parents or
+                        (prior['connection'] == op['connection'] and prior['id'] in parents),
+                        'overlapping non-atomic memory writes require remote effect order; '
+                        'prepared does not order writes across connections')
+        completed_effects = safe_parents | {op['id']}
+        for prior in remote_history:
+            if prior['connection'] == op['connection'] and prior['id'] in parents:
+                completed_effects.update(effects[prior['id']])
+        before_effects[op['id']] = safe_parents
+        effects[op['id']] = completed_effects
+        remote_history.append(op)
         kinds[op['id']] = kind; ancestors[op['id']] = parents; accesses.append((op, key, length))
     require(allow_no_remote or remote_count > 0, 'transaction probe requires remote work')
 

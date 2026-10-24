@@ -1,0 +1,83 @@
+{
+  "passed": true,
+  "offline_audit_byte_equal": true,
+  "actual_restored_networks": 2,
+  "cases": {
+    "before": {
+      "public_cli": true,
+      "result_equal_except_library_paths": true,
+      "eight_native_libraries_from_archive": true
+    },
+    "after": {
+      "public_cli": true,
+      "result_equal_except_library_paths": true,
+      "eight_native_libraries_from_archive": true
+    }
+  },
+  "cwd": "/dev/shm/moe-effect-order-20261024/checkpoint/empty-cwd",
+  "monitors": [
+    {
+      "status": "completed",
+      "command": [
+        "python3",
+        "-B",
+        "/dev/shm/moe-effect-order-20261024/checkpoint/restored/source/fixtures/transaction_effect_order/audit.py",
+        "--runtime",
+        "/dev/shm/moe-effect-order-20261024/checkpoint/restored/run",
+        "--output",
+        "/dev/shm/moe-effect-order-20261024/checkpoint/replayed-audit.json"
+      ],
+      "wall_seconds": 0.1214915718883276
+    },
+    {
+      "status": "completed",
+      "command": [
+        "/usr/bin/env",
+        "PYTHONPATH=/dev/shm/moe-effect-order-20261024/checkpoint/restored/source-before/python",
+        "LD_LIBRARY_PATH=/dev/shm/moe-effect-order-20261024/checkpoint/restored/lib",
+        "python3",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-transaction-probe",
+        "--topology",
+        "/dev/shm/moe-effect-order-20261024/checkpoint/restored/run/before/topology",
+        "--protocol",
+        "/dev/shm/moe-effect-order-20261024/checkpoint/restored/run/before/protocol.json",
+        "--config",
+        "/dev/shm/moe-effect-order-20261024/checkpoint/restored/run/before/unsafe.json",
+        "--backend",
+        "/dev/shm/moe-effect-order-20261024/checkpoint/restored/runtimes/before/ns3.42-moe-rdma-transaction-probe",
+        "--output",
+        "/dev/shm/moe-effect-order-20261024/checkpoint/restored/replayed-before"
+      ],
+      "wall_seconds": 0.7748628724366426
+    },
+    {
+      "status": "completed",
+      "command": [
+        "/usr/bin/env",
+        "PYTHONPATH=/dev/shm/moe-effect-order-20261024/checkpoint/restored/source/python",
+        "LD_LIBRARY_PATH=/dev/shm/moe-effect-order-20261024/checkpoint/restored/lib",
+        "python3",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-transaction-probe",
+        "--topology",
+        "/dev/shm/moe-effect-order-20261024/checkpoint/restored/run/after/topology",
+        "--protocol",
+        "/dev/shm/moe-effect-order-20261024/checkpoint/restored/run/after/protocol.json",
+        "--config",
+        "/dev/shm/moe-effect-order-20261024/checkpoint/restored/run/after/isolated.json",
+        "--backend",
+        "/dev/shm/moe-effect-order-20261024/checkpoint/restored/run/build/bin/ns3.42-moe-rdma-transaction-probe",
+        "--output",
+        "/dev/shm/moe-effect-order-20261024/checkpoint/restored/replayed-after"
+      ],
+      "wall_seconds": 0.7763071246445179
+    }
+  ]
+}

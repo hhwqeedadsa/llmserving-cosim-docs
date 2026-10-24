@@ -1,0 +1,107 @@
+{
+  "byte_identical_safe_results": [
+    "isolated",
+    "wait"
+  ],
+  "cases": {
+    "after/isolated": {
+      "actual_drops": 1,
+      "actual_endpoint_tx_witnesses": 5,
+      "copy_hex": "2222222222222222",
+      "decoded_frames": 4,
+      "ignored_out_of_order": 0,
+      "source_packets": 5,
+      "target_times": [
+        26036,
+        38096,
+        86036
+      ]
+    },
+    "after/wait": {
+      "actual_drops": 1,
+      "actual_endpoint_tx_witnesses": 5,
+      "copy_hex": "2222222222222222",
+      "decoded_frames": 4,
+      "ignored_out_of_order": 0,
+      "source_packets": 5,
+      "target_times": [
+        86036,
+        118096,
+        130156
+      ]
+    },
+    "before/isolated": {
+      "actual_drops": 1,
+      "actual_endpoint_tx_witnesses": 5,
+      "copy_hex": "2222222222222222",
+      "decoded_frames": 4,
+      "ignored_out_of_order": 0,
+      "source_packets": 5,
+      "target_times": [
+        26036,
+        38096,
+        86036
+      ]
+    },
+    "before/unsafe": {
+      "actual_drops": 1,
+      "actual_endpoint_tx_witnesses": 5,
+      "copy_hex": "1111111111111111",
+      "decoded_frames": 4,
+      "ignored_out_of_order": 0,
+      "source_packets": 5,
+      "target_times": [
+        26036,
+        38096,
+        86036
+      ]
+    },
+    "before/wait": {
+      "actual_drops": 1,
+      "actual_endpoint_tx_witnesses": 5,
+      "copy_hex": "2222222222222222",
+      "decoded_frames": 4,
+      "ignored_out_of_order": 0,
+      "source_packets": 5,
+      "target_times": [
+        86036,
+        118096,
+        130156
+      ]
+    },
+    "edges/indirect-completion": {
+      "actual_drops": 1,
+      "actual_endpoint_tx_witnesses": 7,
+      "copy_hex": "2222222222222222",
+      "decoded_frames": 5,
+      "ignored_out_of_order": 1,
+      "source_packets": 7,
+      "target_times": [
+        18102,
+        18108,
+        50168,
+        62228
+      ]
+    },
+    "edges/same-carrier": {
+      "actual_drops": 1,
+      "actual_endpoint_tx_witnesses": 6,
+      "copy_hex": "2222222222222222",
+      "decoded_frames": 4,
+      "ignored_out_of_order": 1,
+      "source_packets": 6,
+      "target_times": [
+        38096,
+        38102,
+        50162
+      ]
+    }
+  },
+  "passed": true,
+  "scope": "functional model correctness; not a production vulnerability or MoE performance claim",
+  "tamper_rejected": [
+    "fake-fresh-copy",
+    "fabricated-application-time",
+    "false-notification"
+  ]
+}

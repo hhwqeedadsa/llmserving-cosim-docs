@@ -22,7 +22,9 @@ std::string MemoryHex(const std::vector<uint8_t>& bytes) {
   for(auto byte:bytes){text+=digits[byte>>4];text+=digits[byte&15];}return text;
 }
 RemoteTransactions::RemoteTransactions(Fabric& fabric,const Json& input):
-    transport_(fabric,PersistentStreams::Limits{},input.value("transport_recovery",Json())) {
+    execution_limits_(ReadTransactionLimits(input)),explicit_limits_(input.contains("execution_limits")),
+    transport_(fabric,{2*execution_limits_.connections,2*execution_limits_.remote},input.value("transport_recovery",Json())) {
+  if(explicit_limits_)memory_.ConfigureRequestLimits(execution_limits_.connections,execution_limits_.remote,execution_limits_.Nodes());
   ValidateBoundedBuffers(input);
   bounded_buffers_=input.contains("buffer_model");
   if(bounded_buffers_) {
@@ -55,13 +57,13 @@ RemoteTransactions::RemoteTransactions(Fabric& fabric,const Json& input):
     Require(source_model_==Json{{"capture","registered_window_at_publish/1"},{"release","transaction_completed/1"}},
             "unsupported transaction source model");
   }
-  Require(input.at("connections").is_array() && !input.at("connections").empty() && input.at("connections").size()<=8,
+  Require(input.at("connections").is_array() && !input.at("connections").empty() && input.at("connections").size()<=execution_limits_.connections,
           "transaction connection budget exceeded");
   for(const auto& c:input.at("connections")) {
     const auto id=c.at("id").get<uint64_t>();
     const auto src=c.at("src").get<unsigned>(),dst=c.at("dst").get<unsigned>();
-    Require(id<=7 && !connections_.count(id),"invalid transaction connection id");
-    connections_.try_emplace(id,src,dst,c.at("destination_nic"),c.at("queue_depth"));
+    Require(id<execution_limits_.connections && !connections_.count(id),"invalid transaction connection id");
+    connections_.try_emplace(id,src,dst,c.at("destination_nic"),c.at("queue_depth"),execution_limits_.remote);
     transport_.Open(id*2,src,dst,c.at("plane"),c.at("request_port"),c.at("source_nic"),c.at("destination_nic"),64);
     transport_.Open(id*2+1,dst,src,c.at("plane"),c.at("response_port"),c.at("destination_nic"),c.at("source_nic"),64);
     transport_.SetReceiver(id*2,[this,id](auto bytes){
@@ -168,7 +170,7 @@ void RemoteTransactions::AdmitLocal(const Json& input) {
   CheckApplicationUse(input);
   if(input.contains("copy")) {
     const auto id=input.at("id").get<uint64_t>();auto copy=Copy(input);
-    Require(!local_copies_.count(id) && local_copies_.size()<16,"invalid local copy identity/budget");
+    Require(!local_copies_.count(id) && local_copies_.size()<execution_limits_.local,"invalid local copy identity/budget");
     // All potential conflicts precede condition consumption and acquisition.
     memory_.CheckRead(copy.source);
     memory_.CheckWritable(copy.target.owner,copy.target.key,copy.target.address,copy.target.bytes);
@@ -274,7 +276,7 @@ bool RemoteTransactions::QueueFenceReady(const Json& input) {
   Require(!input.contains("local_wait"),"queue fence and local wait require separate application steps");
   if(!queue_fences_.contains(id)) {
     const auto& selected=input.at("queue_fence");
-    Require(selected.is_array() && !selected.empty() && selected.size()<=8,"invalid queue fence budget");
+    Require(selected.is_array() && !selected.empty() && selected.size()<=execution_limits_.connections,"invalid queue fence budget");
     Json targets=Json::array();std::set<uint64_t> seen;
     for(const auto& value:selected) {
       const auto connection=value.get<uint64_t>();
@@ -294,7 +296,7 @@ bool RemoteTransactions::QueueFenceReady(const Json& input) {
 }
 void RemoteTransactions::Submit(const Json& input) {
   const auto id=input.at("id").get<uint64_t>(),connection=input.at("connection").get<uint64_t>();
-  Require(operations_.size()<32 && !operations_.count(id) && connections_.count(connection),"invalid transaction work");
+  Require(operations_.size()<execution_limits_.remote && !operations_.count(id) && connections_.count(connection),"invalid transaction work");
   CheckApplicationUse(input);
   auto& c=connections_.at(connection);
   Operation op;
@@ -461,6 +463,8 @@ Json RemoteTransactions::Report() const {
     {"connections",Json::array()},{"duplicate_requests",duplicates_},{"gpu_visibility_modeled",false},
     {"hardware_calibrated",false},{"roce_wire_equivalent",false},
     {"scope","MRT1 functional addressed put/fetch-add with actual native byte request/response transport; not a GIN timing baseline"}};
+  if(explicit_limits_)out["execution_limits"]={{"max_connections",execution_limits_.connections},
+    {"max_remote_operations",execution_limits_.remote},{"max_local_operations",execution_limits_.local}};
   for(const auto& w:memory_.Windows()) {
     Json row={{"owner",w.owner},{"key",w.key},{"address",w.address},{"allow_atomic",w.atomic}};
     if(w.logical_bytes) {

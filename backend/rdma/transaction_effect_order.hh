@@ -13,7 +13,7 @@ inline void ValidateTransactionEffectOrder(const Json& input) {
   for(const auto& c:input.at("connections"))destinations.emplace(c.at("id"),c.at("dst"));
   std::vector<Access> writes;
   const auto& operations=input.at("operations");
-  Require(operations.is_array() && operations.size()<=48,"transaction order node budget exceeded");
+  Require(operations.is_array() && operations.size()<=ReadTransactionLimits(input).Nodes(),"transaction order node budget exceeded");
   for(const auto& op:operations) {
     const auto id=op.at("id").get<uint64_t>();
     Require(!nodes.count(id),"repeated transaction order id");

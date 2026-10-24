@@ -17,9 +17,11 @@ inline void SessionKeys(const Json& value,const std::vector<std::string>& keys) 
   for(const auto& key:keys)Require(value.contains(key),"missing session field");
 }
 inline void ValidateSessionProgram(const Json& input,const Json& topology,int64_t max_ns) {
+  const auto execution_limits=ReadTransactionLimits(input);
   const bool explicit_submission=input.contains("submission_model");
   auto root_keys=std::vector<std::string>{"schema_version","connections","windows","operations","local_model","source_model","local_memory_model"};
   if(explicit_submission)root_keys.push_back("submission_model");
+  if(input.contains("execution_limits"))root_keys.push_back("execution_limits");
   if(input.contains("transport_recovery"))root_keys.push_back("transport_recovery");
   if(input.contains("buffer_model"))root_keys.push_back("buffer_model");
   for(const auto* name:{"registration_model","registrations","application_window_model","application_windows"})if(input.contains(name))root_keys.push_back(name);
@@ -33,12 +35,12 @@ inline void ValidateSessionProgram(const Json& input,const Json& topology,int64_
   std::set<uint64_t> gpus,wire_ports;
   for(const auto& node:topology.at("nodes"))if(node.at("kind")=="gpu")gpus.insert(node.at("id").get<uint64_t>());
   const auto& connections=input.at("connections");
-  Require(connections.is_array() && !connections.empty() && connections.size()<=8,"session connection budget exceeded");
+  Require(connections.is_array() && !connections.empty() && connections.size()<=execution_limits.connections,"session connection budget exceeded");
   std::map<uint64_t,std::pair<uint64_t,uint64_t>> endpoints;
   std::map<uint64_t,unsigned> destination_nics;
   for(const auto& c:connections) {
     SessionKeys(c,{"id","src","dst","plane","request_port","response_port","source_nic","destination_nic","queue_depth"});
-    const auto id=SessionInteger(c.at("id"),7),src=SessionInteger(c.at("src"),31),dst=SessionInteger(c.at("dst"),31);
+    const auto id=SessionInteger(c.at("id"),execution_limits.connections-1),src=SessionInteger(c.at("src"),31),dst=SessionInteger(c.at("dst"),31);
     Require(src!=dst && gpus.count(src) && gpus.count(dst) && endpoints.emplace(id,std::pair{src,dst}).second,"invalid session endpoints/id");
     SessionInteger(c.at("plane"),31);SessionInteger(c.at("source_nic"),1024);SessionInteger(c.at("destination_nic"),1024);
     destination_nics.emplace(id,c.at("destination_nic"));
@@ -78,7 +80,7 @@ inline void ValidateSessionProgram(const Json& input,const Json& topology,int64_
     Require(address>=w.address && address-w.address<=w.bytes && bytes<=w.bytes-(address-w.address),"session memory range out of bounds");
   };
   const auto registrations=MemoryRegistrations(input);
-  const auto& ops=input.at("operations");Require(ops.is_array() && ops.size()<=48,"session node budget exceeded");
+  const auto& ops=input.at("operations");Require(ops.is_array() && ops.size()<=execution_limits.Nodes(),"session node budget exceeded");
   std::map<uint64_t,bool> local;
   std::map<uint64_t,std::set<uint64_t>> ancestors;
   struct Access {uint64_t id,owner,key,address,bytes;bool atomic;};std::vector<Access> writes;
@@ -109,7 +111,7 @@ inline void ValidateSessionProgram(const Json& input,const Json& topology,int64_
     }
     uint64_t owner;
     if(is_local) {owner=SessionInteger(op.at("rank"),31);Require(gpus.count(owner),"session local rank absent");SessionInteger(op.at("duration_ns"),max_ns);++local_count;}
-    else {const auto c=SessionInteger(op.at("connection"),7);Require(endpoints.count(c),"unknown session connection");owner=endpoints.at(c).first;++remote_count;}
+    else {const auto c=SessionInteger(op.at("connection"),execution_limits.connections-1);Require(endpoints.count(c),"unknown session connection");owner=endpoints.at(c).first;++remote_count;}
     std::vector<std::pair<uint64_t,uint64_t>> resets;
     if(op.contains("local_wait")) {
       const auto& waits=op.at("local_wait");Require(waits.is_array() && !waits.empty() && waits.size()<=8,"invalid session local waits");
@@ -152,11 +154,11 @@ inline void ValidateSessionProgram(const Json& input,const Json& topology,int64_
         Require((verb=="fetch_add" && w.atomic) || parents.count(w.id),"session overlapping remote writes lack causal order");
       writes.push_back({id,dst,key,address,bytes,verb=="fetch_add"});
       if(op.contains("queue_fence")) {
-        const auto& fs=op.at("queue_fence");Require(fs.is_array() && !fs.empty() && fs.size()<=8,"invalid session fence budget");std::set<uint64_t> seen;
-        for(const auto& item:fs) {const auto c=SessionInteger(item,7);Require(endpoints.count(c) && endpoints.at(c).first==owner && seen.insert(c).second,"invalid session fence connection");}
+        const auto& fs=op.at("queue_fence");Require(fs.is_array() && !fs.empty() && fs.size()<=execution_limits.connections,"invalid session fence budget");std::set<uint64_t> seen;
+        for(const auto& item:fs) {const auto c=SessionInteger(item,execution_limits.connections-1);Require(endpoints.count(c) && endpoints.at(c).first==owner && seen.insert(c).second,"invalid session fence connection");}
       }
     }
-    Require(local_count<=16 && remote_count<=32,"session kind count budget exceeded");local[id]=is_local;ancestors[id]=std::move(parents);
+    Require(local_count<=execution_limits.local && remote_count<=execution_limits.remote,"session kind count budget exceeded");local[id]=is_local;ancestors[id]=std::move(parents);
   }
   ValidateTransactionEffectOrder(input);
   ValidateBoundedBuffers(input);

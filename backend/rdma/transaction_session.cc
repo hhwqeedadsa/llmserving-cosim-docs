@@ -130,7 +130,7 @@ class TransactionSession {
     Require(command.at("type")=="COMMIT" && SessionInteger(command.at("decision_id"))==decision_ &&
       SessionInteger(command.at("now_ns"))==static_cast<uint64_t>(Now()) && command.at("finish").is_boolean(),"session command identity/time/type mismatch");
     const auto& submissions=command.at("submissions");
-    Require(submissions.is_array() && submissions.size()<=48,"invalid session submissions");
+    Require(submissions.is_array() && submissions.size()<=ReadTransactionLimits(input_).Nodes(),"invalid session submissions");
     // Pure validation of the entire candidate precedes registering/executing
     // any command member. Runtime lease/access failures are not rolled back.
     auto candidate=input_;

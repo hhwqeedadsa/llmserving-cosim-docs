@@ -1,0 +1,90 @@
+{
+  "passed": true,
+  "pre_replay_archive": "checkpoint.tar.gz",
+  "fresh_workflow": {
+    "passed": true,
+    "new_python_root": true,
+    "empty_cwd": true,
+    "public_commands": [
+      {
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "topology",
+          "--config",
+          "/dev/shm/moe-transaction-limits-20261024/restored/evidence/inputs/topology.json",
+          "--output",
+          "/dev/shm/moe-transaction-limits-20261024/fresh/topology"
+        ],
+        "cwd": "/dev/shm/moe-transaction-limits-20261024/fresh/cwd",
+        "pythonpath": "/dev/shm/moe-transaction-limits-20261024/restored/source/python",
+        "exit_code": 0
+      },
+      {
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-preflight",
+          "--topology",
+          "/dev/shm/moe-transaction-limits-20261024/fresh/topology",
+          "--protocol",
+          "/dev/shm/moe-transaction-limits-20261024/restored/evidence/inputs/protocol.json",
+          "--transactions",
+          "/dev/shm/moe-transaction-limits-20261024/restored/evidence/inputs/expanded.json",
+          "--output",
+          "/dev/shm/moe-transaction-limits-20261024/fresh/preflight.json"
+        ],
+        "cwd": "/dev/shm/moe-transaction-limits-20261024/fresh/cwd",
+        "pythonpath": "/dev/shm/moe-transaction-limits-20261024/restored/source/python",
+        "exit_code": 0
+      },
+      {
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-transaction-probe",
+          "--topology",
+          "/dev/shm/moe-transaction-limits-20261024/fresh/topology",
+          "--protocol",
+          "/dev/shm/moe-transaction-limits-20261024/restored/evidence/inputs/protocol.json",
+          "--config",
+          "/dev/shm/moe-transaction-limits-20261024/restored/source/examples/scaleout_rdma_transactions/sparse-windows.json",
+          "--backend",
+          "/dev/shm/moe-transaction-limits-20261024/restored/runtime/bin/reference-probe",
+          "--output",
+          "/dev/shm/moe-transaction-limits-20261024/fresh/reference"
+        ],
+        "cwd": "/dev/shm/moe-transaction-limits-20261024/fresh/cwd",
+        "pythonpath": "/dev/shm/moe-transaction-limits-20261024/restored/source/python",
+        "exit_code": 0
+      }
+    ],
+    "same_library_head_reference_default_full_result_equal": true,
+    "eight_runtime_libraries_from_package": true,
+    "offline_audits_byte_equal": 3,
+    "total_stage_network_executions": 8,
+    "scope": "same Linux host incremental binaries; expanded config preflight plus old/new default network comparison; no clean dependency build"
+  },
+  "archive_scope": "same-Linux-host incremental binaries; all expanded actual network cases audited offline, new-root default HEAD reference uses identical eight libraries",
+  "preserved_failures": [
+    "first actual expanded run: omitted derived source reader metadata cap, two source frames at 0ns and no complete transaction",
+    "fault CLI: missing explicit recovery before native launch",
+    "continuation assertion incorrectly assumed no synchronous TX at 0ns",
+    "audit v1 incorrectly assumed unscoped target report has destination_nic",
+    "audit v1 incorrectly used target address/key for reply header that defaults to zero",
+    "historical default comparator incorrectly assumed old libraries identical; strong replacement reference built and run within same eight-execution budget",
+    "fresh verifier omitted resolve() on bin/../lib; only checker rerun, no new network"
+  ],
+  "final_bundle_contains_corrected_fixture_helpers": true,
+  "actual_network_executions": 8,
+  "no_more_networks_in_this_stage": true
+}

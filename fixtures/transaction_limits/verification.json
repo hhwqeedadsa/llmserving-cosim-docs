@@ -1,0 +1,104 @@
+{
+  "schema_version": "transaction-limits-checks/1",
+  "conditions": {
+    "expanded-corrected": {
+      "passed": true,
+      "connections": 12,
+      "remote_operations": 96,
+      "local_copies": 20,
+      "source_packets": 96,
+      "unique_request_bytes": 6144,
+      "unique_reply_bytes": 0,
+      "physically_transmitted_payload_bytes": 6144,
+      "max_request_sequence": 7,
+      "actual_receive_ack_and_response_checked": true
+    },
+    "long-fault": {
+      "passed": true,
+      "connections": 1,
+      "remote_operations": 64,
+      "local_copies": 0,
+      "source_packets": 132,
+      "unique_request_bytes": 2560,
+      "unique_reply_bytes": 2560,
+      "physically_transmitted_payload_bytes": 5280,
+      "max_request_sequence": 63,
+      "actual_receive_ack_and_response_checked": true
+    },
+    "online": {
+      "passed": true,
+      "connections": 12,
+      "remote_operations": 96,
+      "local_copies": 20,
+      "source_packets": 96,
+      "unique_request_bytes": 6144,
+      "unique_reply_bytes": 0,
+      "physically_transmitted_payload_bytes": 6144,
+      "max_request_sequence": 7,
+      "actual_receive_ack_and_response_checked": true
+    }
+  },
+  "tamper_classes_rejected": [
+    "wire-byte",
+    "target-page",
+    "queue-release",
+    "effective-count",
+    "copy-byte",
+    "physical-ACK"
+  ],
+  "native_rejections": 23,
+  "online_candidate_atomicity": {
+    "api_rejections": [
+      "remote lifetime; live state and transcript unchanged",
+      "local lifetime after all completed; valid finish follows"
+    ],
+    "valid_continuation_completed": true,
+    "native_whole_candidate_rejected_before_mutation": true,
+    "native_expected_exit": 1
+  },
+  "commands": [
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/unit",
+        "-p",
+        "*transaction*test.py"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "/home/lry/moe-ub-cosim/fixtures/transaction_limits/reject.py",
+        "--topology",
+        "/dev/shm/moe-transaction-limits-20261024/topology",
+        "--protocol",
+        "/dev/shm/moe-transaction-limits-20261024/inputs/protocol.json",
+        "--work",
+        "/dev/shm/moe-transaction-limits-20261024/inputs/expanded.json",
+        "--backend",
+        "/dev/shm/moe-transaction-limits-20261024/bin/transaction-probe",
+        "--output",
+        "/dev/shm/moe-transaction-limits-20261024/native-rejections"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0
+    }
+  ],
+  "functional_only": true,
+  "modern_gin_implemented": false,
+  "hardware_calibrated": false,
+  "python_distinct_tests": 39,
+  "cpp_request_limit_assertions": 132066,
+  "cpp_existing_memory_assertions": 7085,
+  "same_library_HEAD_default_regression": true,
+  "actual_network_executions_including_failures_and_fresh": 8,
+  "overall_research_objective_complete": false
+}

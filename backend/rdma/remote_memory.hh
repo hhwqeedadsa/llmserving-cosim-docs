@@ -72,6 +72,12 @@ class RemoteMemory {
   };
   static constexpr uint64_t PageBytes=4096,MaxPages=256,MaxLogicalBytes=64*1024*1024;
   static uint64_t Size(const Window& w) {return w.logical_bytes?w.logical_bytes:w.bytes.size();}
+  void ConfigureRequestLimits(uint64_t contexts,uint64_t requests,uint64_t readers=48) {
+    MemoryCheck(contexts_.empty() && leases_.empty() && writers_.empty() &&
+                contexts>0 && contexts<=64 && requests>0 && requests<=1024 && readers>0 && readers<=1280,
+                "invalid/live remote request limits");
+    max_contexts_=contexts;max_requests_=requests;max_readers_=readers;
+  }
   void RegisterSparse(unsigned owner,uint32_t key,uint64_t address,bool atomic,uint64_t length,
                       const std::vector<std::pair<uint64_t,std::vector<uint8_t>>>& segments) {
     MemoryCheck(length>0 && length<=MaxLogicalBytes && address<=UINT64_MAX-length && segments.size()<=32,
@@ -169,7 +175,7 @@ class RemoteMemory {
     MemoryCheck(frame.verb==MemoryFrame::Put || frame.verb==MemoryFrame::FetchAdd,"target received non-request");
     MemoryCheck(!carrier_once_put_ || frame.verb==MemoryFrame::Put,"carrier-once target supports put only");
     const auto encoded=EncodeMemoryFrame(frame);
-    MemoryCheck(contexts_.count(context) || contexts_.size()<8,"remote memory context budget exceeded");
+    MemoryCheck(contexts_.count(context) || contexts_.size()<max_contexts_,"remote memory context budget exceeded");
     auto& state=contexts_[context];
     if(frame.sequence<state.next) {
       MemoryCheck(!carrier_once_put_,"application replay violates carrier-once put contract");
@@ -177,7 +183,7 @@ class RemoteMemory {
       MemoryCheck(saved.owner==owner && saved.bytes==encoded,"conflicting duplicate memory request");
       return {true,saved.result.atomic,saved.result.old_value};
     }
-    MemoryCheck(frame.sequence==state.next && state.next<32,"memory request sequence gap/budget exceeded");
+    MemoryCheck(frame.sequence==state.next && state.next<max_requests_,"memory request sequence gap/budget exceeded");
     const auto storage_key=registration?registration->window_key:frame.key;
     auto it=std::find_if(windows_.begin(),windows_.end(),[&](const Window& w){return w.owner==owner && w.key==storage_key;});
     MemoryCheck(it!=windows_.end(),"unknown remote memory key/owner");
@@ -210,7 +216,7 @@ class RemoteMemory {
     std::vector<uint8_t> out(bytes);for(uint64_t i=0;i<bytes;++i)out[i]=Byte(w,address-w.address+i);return out;
   }
   void AcquireRead(uint64_t identity,ReadLease lease) {
-    MemoryCheck(!leases_.count(identity) && leases_.size()<48,"invalid source read lease identity/budget");
+    MemoryCheck(!leases_.count(identity) && leases_.size()<max_readers_,"invalid source read lease identity/budget");
     CheckRead(lease);
     leases_.emplace(identity,lease);
   }
@@ -319,6 +325,7 @@ class RemoteMemory {
   std::map<uint64_t,ReadLease> leases_;
   std::map<uint64_t,ReadLease> writers_;
   std::map<uint64_t,Context> contexts_;
+  uint64_t max_contexts_=8,max_requests_=32,max_readers_=48;
   uint64_t cache_capacity_=0;
   bool carrier_once_put_=false;
   std::map<unsigned,uint64_t> cache_bytes_;

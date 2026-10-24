@@ -23,6 +23,7 @@ int main(int argc,char** argv) {
     std::ifstream exists(argv[4]);Require(!exists.good(),"transaction output already exists");
     ns3::Time::SetResolution(ns3::Time::NS);
     const auto config=ReadJson(argv[2]),input=ReadJson(argv[3]);
+    const auto execution_limits=ReadTransactionLimits(input);
     const bool sparse_mode=input.at("schema_version")=="moe-rdma-transactions/5";
     const bool explicit_submission=input.contains("submission_model");
     Require(!explicit_submission || sparse_mode,"submission model requires v5");
@@ -34,6 +35,7 @@ int main(int argc,char** argv) {
       if(source_mode)keys.push_back("source_model");
       if(local_memory_mode)keys.push_back("local_memory_model");
       if(explicit_submission)keys.push_back("submission_model");
+      if(input.contains("execution_limits"))keys.push_back("execution_limits");
       if(input.contains("transport_recovery"))keys.push_back("transport_recovery");
       if(input.contains("buffer_model"))keys.push_back("buffer_model");
       for(const auto* name:{"registration_model","registrations","application_window_model","application_windows"})if(input.contains(name))keys.push_back(name);
@@ -48,7 +50,7 @@ int main(int argc,char** argv) {
     std::set<unsigned> gpus;
     for(const auto& n:topology.at("nodes"))if(n.at("kind")=="gpu")gpus.insert(n.at("id").get<unsigned>());
     const auto& operations=input.at("operations");
-    Require(operations.is_array() && !operations.empty() && operations.size()<=(local_mode?48u:32u),"transaction count budget exceeded");
+    Require(operations.is_array() && !operations.empty() && operations.size()<=(local_mode?execution_limits.Nodes():32u),"transaction count budget exceeded");
     std::map<uint64_t,std::size_t> index;
     std::vector<bool> local(operations.size(),false);
     unsigned remote_count=0,local_count=0;
@@ -70,7 +72,7 @@ int main(int argc,char** argv) {
           Require(op.at("verb")=="put" || op.at("verb")=="fetch_add","unsupported transaction verb");
           Require(!op.contains("source") || (source_mode && op.at("verb")=="put" && !op.contains("hex")),"source requires v3 put without hex");
           keys.push_back(op.contains("source")?"source":op.at("verb")=="put"?"hex":"value");
-          Integer(op.at("connection"),7);Integer(op.at("key"),UINT32_MAX);Integer(op.at("address"),UINT64_MAX);
+          Integer(op.at("connection"),execution_limits.connections-1);Integer(op.at("key"),UINT32_MAX);Integer(op.at("address"),UINT64_MAX);
           if(op.at("verb")=="fetch_add")Integer(op.at("value"),UINT64_MAX);
           if(explicit_submission)keys.push_back("aggregate_requests");
           if(op.contains("queue_fence"))keys.push_back("queue_fence");
@@ -84,7 +86,7 @@ int main(int argc,char** argv) {
         transactions.ValidateLocalMemory(op);
       }
       if(local[i])++local_count;else ++remote_count;
-      Require(local_count<=16 && remote_count<=32,"transaction kind count budget exceeded");
+      Require(local_count<=execution_limits.local && remote_count<=execution_limits.remote,"transaction kind count budget exceeded");
       Require(index.emplace(operations[i].at("id"),i).second,"duplicate operation id");
       Require(operations[i].at("after").is_array() && operations[i].at("after").size()<=32,"invalid operation dependencies");
       std::set<std::pair<uint64_t,std::string>> dependencies;

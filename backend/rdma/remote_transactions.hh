@@ -2,6 +2,7 @@
 #include "persistent_streams.hh"
 #include "remote_memory.hh"
 #include "application_windows.hh"
+#include "transaction_limits.hh"
 
 namespace moe_rdma {
 // Functional addressed transactions over MRT1/native byte streams. Not a GIN
@@ -41,7 +42,7 @@ class RemoteTransactions {
     GinWorkQueue queue;
     MemoryFrameDecoder requests,responses;
     std::vector<uint64_t> operations;
-    Connection(unsigned s,unsigned d,unsigned nic,unsigned depth):src(s),dst(d),destination_nic(nic),queue(depth,32) {}
+    Connection(unsigned s,unsigned d,unsigned nic,unsigned depth,unsigned maximum):src(s),dst(d),destination_nic(nic),queue(depth,maximum) {}
   };
   void Pump(uint64_t connection);
   void PumpExplicit(uint64_t connection);
@@ -66,6 +67,8 @@ class RemoteTransactions {
   ApplicationWindows application_windows_;
   bool application_window_mode_=false;
   Json application_events_=Json::array();
+  TransactionLimits execution_limits_;
+  bool explicit_limits_=false;
   PersistentStreams transport_;
   RemoteMemory memory_;
   std::map<uint64_t,Connection> connections_;

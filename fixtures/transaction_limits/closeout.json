@@ -1,0 +1,76 @@
+{
+  "schema_version": "transaction-limits-closeout/1",
+  "ended_utc": "2026-10-24T16:23:42.697237+00:00",
+  "baseline": "fd3b714f140c871169aa288a543c7d2677dd80cf",
+  "platform_functional_acceptance_complete": true,
+  "overall_paper_goal_complete": false,
+  "actual_network_executions": 8,
+  "network_successes": 6,
+  "expected_native_candidate_failure": 1,
+  "preserved_original_capacity_failure": 1,
+  "original_terminal_monitors": 50,
+  "conservative_cumulative_monitored_seconds_including_nested": 119.242851074785,
+  "final_management_seconds_reserved": 10,
+  "peak_sampled_group_rss_bytes": 690274304,
+  "stage_and_persistent_apparent_bytes": 215124265,
+  "stage_and_persistent_allocated_bytes": 217083904,
+  "source_and_final_receipt_reserve_bytes": 1048576,
+  "total_charged_with_reserve_bytes": 218132480,
+  "archive": {
+    "archive_bytes": 13010602,
+    "members": 573,
+    "sha256": "7e20ee1b1ceb32aaeeeb2bf325f01ceceef3249ccf81bbf97e4d66ef6fc978bf",
+    "uncompressed_bytes": 65506651
+  },
+  "remaining_monitored_live_pids": [],
+  "failed_monitor_receipts": [
+    {
+      "path": "fresh-monitor/probe.json",
+      "status": "child_failed",
+      "child_exit_code": 1
+    },
+    {
+      "path": "audit-fault-monitor/probe.json",
+      "status": "child_failed",
+      "child_exit_code": 1
+    },
+    {
+      "path": "audit-expanded-monitor/probe.json",
+      "status": "child_failed",
+      "child_exit_code": 1
+    },
+    {
+      "path": "long-fault-monitor/probe.json",
+      "status": "child_failed",
+      "child_exit_code": 1
+    },
+    {
+      "path": "expanded-monitor/probe.json",
+      "status": "child_failed",
+      "child_exit_code": 1
+    },
+    {
+      "path": "network/expanded/execution/probe.json",
+      "status": "child_failed",
+      "child_exit_code": 1
+    }
+  ],
+  "budgets": {
+    "cumulative_seconds": 600,
+    "cumulative_disk_bytes": 268435456,
+    "command_seconds": 60,
+    "command_rss_bytes": 1073741824,
+    "command_address_bytes": 2147483648,
+    "command_artifact_bytes": 67108864,
+    "sim_ns": 5000000,
+    "result_bytes": 16777216
+  },
+  "bounds_notes": [
+    "Copied restore monitors excluded from cumulative time; nested original parent/child monitors conservatively summed.",
+    "Bootstrap archive was outside its probe artifact roots; its single monotonically growing output plus receipt totaled less than64MiB and is fully charged here. Final archive output root was explicitly monitored.",
+    "Initial archive and restored copy retained. Final archive all573 members checked without creating a second full restore.",
+    "Same host incremental binaries; no clean native build, GPU, installation, download, dependency change or push."
+  ],
+  "root_free_bytes": 78503768064,
+  "tmpfs_free_bytes": 256230756352
+}

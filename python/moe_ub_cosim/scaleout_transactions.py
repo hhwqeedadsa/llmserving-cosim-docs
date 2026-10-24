@@ -54,18 +54,34 @@ def _local_waits(waits, owner, registered):
         require(item not in locations, 'repeated local wait location'); locations.add(item)
 
 
+def execution_limits(config):
+    """Lifetime admission counts; independent of queue depth and byte budgets."""
+    require(isinstance(config, dict), 'transaction input must be an object')
+    defaults = dict(max_connections=8, max_remote_operations=32, max_local_operations=16)
+    if 'execution_limits' not in config:
+        return defaults
+    require(config.get('schema_version') == 'moe-rdma-transactions/5', 'execution limits require transactions/5')
+    value = config['execution_limits']
+    fields(value, 'max_connections max_remote_operations max_local_operations', 'execution limits')
+    for key, low, high in [('max_connections', 1, 64), ('max_remote_operations', 1, 1024), ('max_local_operations', 0, 256)]:
+        integer(value[key], key, low, high)
+    return dict(value)
+
+
 def validate(topology, protocol, config, *, allow_no_remote=False):
     local_mode = isinstance(config, dict) and config.get('schema_version') in ('moe-rdma-transactions/2', 'moe-rdma-transactions/3', 'moe-rdma-transactions/4', 'moe-rdma-transactions/5')
     sparse_mode = isinstance(config, dict) and config.get('schema_version') == 'moe-rdma-transactions/5'
     memory_mode = sparse_mode or (isinstance(config, dict) and config.get('schema_version') == 'moe-rdma-transactions/4')
     source_mode = memory_mode or (isinstance(config, dict) and config.get('schema_version') == 'moe-rdma-transactions/3')
     explicit = isinstance(config, dict) and 'submission_model' in config
+    counts = execution_limits(config)
     fields(config, 'schema_version connections windows operations'+(' local_model' if local_mode else '')+
            (' source_model' if source_mode else '')+(' local_memory_model' if memory_mode else '')+(' submission_model' if explicit and sparse_mode else '')+
            (' transport_recovery' if 'transport_recovery' in config else '')+
            (' application_window_model' if 'application_window_model' in config else '')+(' application_windows' if 'application_windows' in config else '')+
            (' registration_model' if 'registration_model' in config else '')+(' registrations' if 'registrations' in config else '')+
-           (' buffer_model' if 'buffer_model' in config else ''), 'transaction root')
+           (' buffer_model' if 'buffer_model' in config else '')+
+           (' execution_limits' if 'execution_limits' in config else ''), 'transaction root')
     require(config['schema_version'] in ('moe-rdma-transactions/1', 'moe-rdma-transactions/2', 'moe-rdma-transactions/3', 'moe-rdma-transactions/4', 'moe-rdma-transactions/5'), 'unsupported transaction schema')
     if explicit:
         require(config['submission_model'] == dict(mode='explicit_prefix/1'), 'unsupported submission model')
@@ -79,11 +95,13 @@ def validate(topology, protocol, config, *, allow_no_remote=False):
         require(config['local_memory_model'] == dict(mode='guarded_copy/1', acquire='admission/1', capture='start/1', commit='completion/1'),
                 'unsupported local memory model')
     connections = config['connections']
-    require(isinstance(connections, list) and 1 <= len(connections) <= 8, 'require 1..8 connections')
+    require(isinstance(connections, list) and 1 <= len(connections) <= counts['max_connections'], 'connection count budget exceeded')
     by_id, streams = {}, []
     for c in connections:
         fields(c, 'id src dst plane request_port response_port source_nic destination_nic queue_depth', 'connection')
-        integer(c['id'], 'connection id', 0, 7)
+        integer(c['id'], 'connection id', 0, counts['max_connections']-1)
+        integer(c['src'], 'transaction source rank', 0, 31)
+        integer(c['dst'], 'transaction destination rank', 0, 31)
         integer(c['queue_depth'], 'transaction depth', 1, 32)
         require(c['id'] not in by_id, 'repeated connection id')
         by_id[c['id']] = c
@@ -97,6 +115,9 @@ def validate(topology, protocol, config, *, allow_no_remote=False):
     # only. These placeholder one-byte works are NEVER sent or saved as workload.
     descriptor=dict(schema_version='moe-rdma-stream-work/1', streams=streams,
         work=[dict(id=0, stream=streams[0]['id'], bytes=1, after=[])])
+    if 'execution_limits' in config:
+        descriptor.update(schema_version='moe-rdma-stream-work/2',
+            limits=dict(max_streams=2*counts['max_connections'], max_work=2*counts['max_remote_operations']))
     if 'transport_recovery' in config:descriptor['transport_recovery']=config['transport_recovery']
     validate_streams(topology, protocol, descriptor)
     windows = config['windows']
@@ -119,7 +140,8 @@ def validate(topology, protocol, config, *, allow_no_remote=False):
         registered[key] = w, length
     registrations=validate_registrations(config,registered,by_id)
     operations = config['operations']
-    require(isinstance(operations, list) and (0 if allow_no_remote else 1) <= len(operations) <= (48 if local_mode else 32), 'transaction node budget exceeded')
+    require(isinstance(operations, list) and (0 if allow_no_remote else 1) <= len(operations) <=
+            (counts['max_remote_operations']+counts['max_local_operations'] if local_mode else 32), 'transaction node budget exceeded')
     kinds, ancestors, accesses = {}, {}, []
     remote_count = local_count = 0
     before_effects, effects, remote_history = {}, {}, []
@@ -170,12 +192,12 @@ def validate(topology, protocol, config, *, allow_no_remote=False):
                 require(source['address']+source['bytes'] <= target['address'] or
                         target['address']+source['bytes'] <= source['address'], 'local copy source/target overlap')
             local_count += 1
-            require(local_count <= 16, 'local transaction node budget exceeded')
+            require(local_count <= counts['max_local_operations'], 'local transaction node budget exceeded')
             kinds[op['id']] = kind; ancestors[op['id']] = parents
             before_effects[op['id']] = safe_parents
             continue
         remote_count += 1
-        require(remote_count <= 32, 'remote transaction budget exceeded')
+        require(remote_count <= counts['max_remote_operations'], 'remote transaction budget exceeded')
         require(isinstance(op, dict) and op.get('verb') in ('put', 'fetch_add'), 'unsupported transaction verb')
         from_source = 'source' in op
         require(not from_source or (source_mode and op['verb'] == 'put' and 'hex' not in op), 'source requires v3 put without hex')
@@ -184,7 +206,7 @@ def validate(topology, protocol, config, *, allow_no_remote=False):
                (' local_wait' if 'local_wait' in op else '')+(' queue_fence' if 'queue_fence' in op else '')+
                (' application_uses' if 'application_uses' in op else '')+(' release_window' if 'release_window' in op else ''), 'operation')
         if explicit: require(type(op['aggregate_requests']) is bool, 'aggregate_requests must be boolean')
-        integer(op['connection'], 'operation connection', 0, 7)
+        integer(op['connection'], 'operation connection', 0, counts['max_connections']-1)
         integer(op['key'], 'operation remote key', 1, 2**32-1)
         integer(op['address'], 'operation address', 0, 2**64-1)
         require(op['connection'] in by_id, 'unknown connection')
@@ -222,9 +244,9 @@ def validate(topology, protocol, config, *, allow_no_remote=False):
         if 'queue_fence' in op:
             selected = op['queue_fence']
             require('local_wait' not in op, 'queue fence and local wait require separate application steps')
-            require(isinstance(selected, list) and 1 <= len(selected) <= 8, 'require 1..8 queue fence connections')
+            require(isinstance(selected, list) and 1 <= len(selected) <= counts['max_connections'], 'queue fence count budget exceeded')
             for connection in selected:
-                integer(connection, 'queue fence connection', 0, 7)
+                integer(connection, 'queue fence connection', 0, counts['max_connections']-1)
                 require(connection in by_id and by_id[connection]['src'] == by_id[op['connection']]['src'],
                         'queue fence must select source-owned connections')
             require(len(set(selected)) == len(selected), 'repeated queue fence connection')

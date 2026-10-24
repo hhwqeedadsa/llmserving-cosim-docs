@@ -1,0 +1,2020 @@
+{
+  "schema_version": "moe-rdma-transactions/5",
+  "execution_limits": {
+    "max_connections": 12,
+    "max_remote_operations": 96,
+    "max_local_operations": 20
+  },
+  "local_model": {
+    "mode": "serial_per_gpu/1",
+    "duration_source": "declared_ns"
+  },
+  "source_model": {
+    "capture": "registered_window_at_publish/1",
+    "release": "transaction_completed/1"
+  },
+  "local_memory_model": {
+    "mode": "guarded_copy/1",
+    "acquire": "admission/1",
+    "capture": "start/1",
+    "commit": "completion/1"
+  },
+  "connections": [
+    {
+      "id": 0,
+      "src": 0,
+      "dst": 1,
+      "plane": 0,
+      "request_port": 24000,
+      "response_port": 24001,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4
+    },
+    {
+      "id": 1,
+      "src": 0,
+      "dst": 4,
+      "plane": 0,
+      "request_port": 24002,
+      "response_port": 24003,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4
+    },
+    {
+      "id": 2,
+      "src": 0,
+      "dst": 5,
+      "plane": 0,
+      "request_port": 24004,
+      "response_port": 24005,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4
+    },
+    {
+      "id": 3,
+      "src": 1,
+      "dst": 0,
+      "plane": 0,
+      "request_port": 24006,
+      "response_port": 24007,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4
+    },
+    {
+      "id": 4,
+      "src": 1,
+      "dst": 4,
+      "plane": 0,
+      "request_port": 24008,
+      "response_port": 24009,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4
+    },
+    {
+      "id": 5,
+      "src": 1,
+      "dst": 5,
+      "plane": 0,
+      "request_port": 24010,
+      "response_port": 24011,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4
+    },
+    {
+      "id": 6,
+      "src": 4,
+      "dst": 0,
+      "plane": 0,
+      "request_port": 24012,
+      "response_port": 24013,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4
+    },
+    {
+      "id": 7,
+      "src": 4,
+      "dst": 1,
+      "plane": 0,
+      "request_port": 24014,
+      "response_port": 24015,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4
+    },
+    {
+      "id": 8,
+      "src": 4,
+      "dst": 5,
+      "plane": 0,
+      "request_port": 24016,
+      "response_port": 24017,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4
+    },
+    {
+      "id": 9,
+      "src": 5,
+      "dst": 0,
+      "plane": 0,
+      "request_port": 24018,
+      "response_port": 24019,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4
+    },
+    {
+      "id": 10,
+      "src": 5,
+      "dst": 1,
+      "plane": 0,
+      "request_port": 24020,
+      "response_port": 24021,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4
+    },
+    {
+      "id": 11,
+      "src": 5,
+      "dst": 4,
+      "plane": 0,
+      "request_port": 24022,
+      "response_port": 24023,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4
+    }
+  ],
+  "windows": [
+    {
+      "owner": 0,
+      "key": 7,
+      "address": 4096,
+      "allow_atomic": true,
+      "bytes": 65536,
+      "initialization": "zero_fill/1",
+      "segments": [
+        {
+          "offset": 0,
+          "hex": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f"
+        }
+      ]
+    },
+    {
+      "owner": 1,
+      "key": 7,
+      "address": 4096,
+      "allow_atomic": true,
+      "bytes": 65536,
+      "initialization": "zero_fill/1",
+      "segments": [
+        {
+          "offset": 0,
+          "hex": "202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f"
+        }
+      ]
+    },
+    {
+      "owner": 4,
+      "key": 7,
+      "address": 4096,
+      "allow_atomic": true,
+      "bytes": 65536,
+      "initialization": "zero_fill/1",
+      "segments": [
+        {
+          "offset": 0,
+          "hex": "808182838485868788898a8b8c8d8e8f909192939495969798999a9b9c9d9e9f"
+        }
+      ]
+    },
+    {
+      "owner": 5,
+      "key": 7,
+      "address": 4096,
+      "allow_atomic": true,
+      "bytes": 65536,
+      "initialization": "zero_fill/1",
+      "segments": [
+        {
+          "offset": 0,
+          "hex": "a0a1a2a3a4a5a6a7a8a9aaabacadaeafb0b1b2b3b4b5b6b7b8b9babbbcbdbebf"
+        }
+      ]
+    }
+  ],
+  "operations": [
+    {
+      "id": 0,
+      "kind": "remote",
+      "connection": 0,
+      "verb": "put",
+      "key": 7,
+      "address": 8192,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 1,
+      "kind": "remote",
+      "connection": 0,
+      "verb": "put",
+      "key": 7,
+      "address": 8224,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 2,
+      "kind": "remote",
+      "connection": 0,
+      "verb": "put",
+      "key": 7,
+      "address": 8256,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 3,
+      "kind": "remote",
+      "connection": 0,
+      "verb": "put",
+      "key": 7,
+      "address": 8288,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 4,
+      "kind": "remote",
+      "connection": 0,
+      "verb": "put",
+      "key": 7,
+      "address": 8320,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 5,
+      "kind": "remote",
+      "connection": 0,
+      "verb": "put",
+      "key": 7,
+      "address": 8352,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 6,
+      "kind": "remote",
+      "connection": 0,
+      "verb": "put",
+      "key": 7,
+      "address": 8384,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 7,
+      "kind": "remote",
+      "connection": 0,
+      "verb": "put",
+      "key": 7,
+      "address": 8416,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 8,
+      "kind": "remote",
+      "connection": 1,
+      "verb": "put",
+      "key": 7,
+      "address": 8192,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 9,
+      "kind": "remote",
+      "connection": 1,
+      "verb": "put",
+      "key": 7,
+      "address": 8224,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 10,
+      "kind": "remote",
+      "connection": 1,
+      "verb": "put",
+      "key": 7,
+      "address": 8256,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 11,
+      "kind": "remote",
+      "connection": 1,
+      "verb": "put",
+      "key": 7,
+      "address": 8288,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 12,
+      "kind": "remote",
+      "connection": 1,
+      "verb": "put",
+      "key": 7,
+      "address": 8320,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 13,
+      "kind": "remote",
+      "connection": 1,
+      "verb": "put",
+      "key": 7,
+      "address": 8352,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 14,
+      "kind": "remote",
+      "connection": 1,
+      "verb": "put",
+      "key": 7,
+      "address": 8384,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 15,
+      "kind": "remote",
+      "connection": 1,
+      "verb": "put",
+      "key": 7,
+      "address": 8416,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 16,
+      "kind": "remote",
+      "connection": 2,
+      "verb": "put",
+      "key": 7,
+      "address": 8192,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 17,
+      "kind": "remote",
+      "connection": 2,
+      "verb": "put",
+      "key": 7,
+      "address": 8224,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 18,
+      "kind": "remote",
+      "connection": 2,
+      "verb": "put",
+      "key": 7,
+      "address": 8256,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 19,
+      "kind": "remote",
+      "connection": 2,
+      "verb": "put",
+      "key": 7,
+      "address": 8288,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 20,
+      "kind": "remote",
+      "connection": 2,
+      "verb": "put",
+      "key": 7,
+      "address": 8320,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 21,
+      "kind": "remote",
+      "connection": 2,
+      "verb": "put",
+      "key": 7,
+      "address": 8352,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 22,
+      "kind": "remote",
+      "connection": 2,
+      "verb": "put",
+      "key": 7,
+      "address": 8384,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 23,
+      "kind": "remote",
+      "connection": 2,
+      "verb": "put",
+      "key": 7,
+      "address": 8416,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 24,
+      "kind": "remote",
+      "connection": 3,
+      "verb": "put",
+      "key": 7,
+      "address": 9216,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 25,
+      "kind": "remote",
+      "connection": 3,
+      "verb": "put",
+      "key": 7,
+      "address": 9248,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 26,
+      "kind": "remote",
+      "connection": 3,
+      "verb": "put",
+      "key": 7,
+      "address": 9280,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 27,
+      "kind": "remote",
+      "connection": 3,
+      "verb": "put",
+      "key": 7,
+      "address": 9312,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 28,
+      "kind": "remote",
+      "connection": 3,
+      "verb": "put",
+      "key": 7,
+      "address": 9344,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 29,
+      "kind": "remote",
+      "connection": 3,
+      "verb": "put",
+      "key": 7,
+      "address": 9376,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 30,
+      "kind": "remote",
+      "connection": 3,
+      "verb": "put",
+      "key": 7,
+      "address": 9408,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 31,
+      "kind": "remote",
+      "connection": 3,
+      "verb": "put",
+      "key": 7,
+      "address": 9440,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 32,
+      "kind": "remote",
+      "connection": 4,
+      "verb": "put",
+      "key": 7,
+      "address": 9216,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 33,
+      "kind": "remote",
+      "connection": 4,
+      "verb": "put",
+      "key": 7,
+      "address": 9248,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 34,
+      "kind": "remote",
+      "connection": 4,
+      "verb": "put",
+      "key": 7,
+      "address": 9280,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 35,
+      "kind": "remote",
+      "connection": 4,
+      "verb": "put",
+      "key": 7,
+      "address": 9312,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 36,
+      "kind": "remote",
+      "connection": 4,
+      "verb": "put",
+      "key": 7,
+      "address": 9344,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 37,
+      "kind": "remote",
+      "connection": 4,
+      "verb": "put",
+      "key": 7,
+      "address": 9376,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 38,
+      "kind": "remote",
+      "connection": 4,
+      "verb": "put",
+      "key": 7,
+      "address": 9408,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 39,
+      "kind": "remote",
+      "connection": 4,
+      "verb": "put",
+      "key": 7,
+      "address": 9440,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 40,
+      "kind": "remote",
+      "connection": 5,
+      "verb": "put",
+      "key": 7,
+      "address": 9216,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 41,
+      "kind": "remote",
+      "connection": 5,
+      "verb": "put",
+      "key": 7,
+      "address": 9248,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 42,
+      "kind": "remote",
+      "connection": 5,
+      "verb": "put",
+      "key": 7,
+      "address": 9280,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 43,
+      "kind": "remote",
+      "connection": 5,
+      "verb": "put",
+      "key": 7,
+      "address": 9312,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 44,
+      "kind": "remote",
+      "connection": 5,
+      "verb": "put",
+      "key": 7,
+      "address": 9344,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 45,
+      "kind": "remote",
+      "connection": 5,
+      "verb": "put",
+      "key": 7,
+      "address": 9376,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 46,
+      "kind": "remote",
+      "connection": 5,
+      "verb": "put",
+      "key": 7,
+      "address": 9408,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 47,
+      "kind": "remote",
+      "connection": 5,
+      "verb": "put",
+      "key": 7,
+      "address": 9440,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 48,
+      "kind": "remote",
+      "connection": 6,
+      "verb": "put",
+      "key": 7,
+      "address": 12288,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 49,
+      "kind": "remote",
+      "connection": 6,
+      "verb": "put",
+      "key": 7,
+      "address": 12320,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 50,
+      "kind": "remote",
+      "connection": 6,
+      "verb": "put",
+      "key": 7,
+      "address": 12352,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 51,
+      "kind": "remote",
+      "connection": 6,
+      "verb": "put",
+      "key": 7,
+      "address": 12384,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 52,
+      "kind": "remote",
+      "connection": 6,
+      "verb": "put",
+      "key": 7,
+      "address": 12416,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 53,
+      "kind": "remote",
+      "connection": 6,
+      "verb": "put",
+      "key": 7,
+      "address": 12448,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 54,
+      "kind": "remote",
+      "connection": 6,
+      "verb": "put",
+      "key": 7,
+      "address": 12480,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 55,
+      "kind": "remote",
+      "connection": 6,
+      "verb": "put",
+      "key": 7,
+      "address": 12512,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 56,
+      "kind": "remote",
+      "connection": 7,
+      "verb": "put",
+      "key": 7,
+      "address": 12288,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 57,
+      "kind": "remote",
+      "connection": 7,
+      "verb": "put",
+      "key": 7,
+      "address": 12320,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 58,
+      "kind": "remote",
+      "connection": 7,
+      "verb": "put",
+      "key": 7,
+      "address": 12352,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 59,
+      "kind": "remote",
+      "connection": 7,
+      "verb": "put",
+      "key": 7,
+      "address": 12384,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 60,
+      "kind": "remote",
+      "connection": 7,
+      "verb": "put",
+      "key": 7,
+      "address": 12416,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 61,
+      "kind": "remote",
+      "connection": 7,
+      "verb": "put",
+      "key": 7,
+      "address": 12448,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 62,
+      "kind": "remote",
+      "connection": 7,
+      "verb": "put",
+      "key": 7,
+      "address": 12480,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 63,
+      "kind": "remote",
+      "connection": 7,
+      "verb": "put",
+      "key": 7,
+      "address": 12512,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 64,
+      "kind": "remote",
+      "connection": 8,
+      "verb": "put",
+      "key": 7,
+      "address": 12288,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 65,
+      "kind": "remote",
+      "connection": 8,
+      "verb": "put",
+      "key": 7,
+      "address": 12320,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 66,
+      "kind": "remote",
+      "connection": 8,
+      "verb": "put",
+      "key": 7,
+      "address": 12352,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 67,
+      "kind": "remote",
+      "connection": 8,
+      "verb": "put",
+      "key": 7,
+      "address": 12384,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 68,
+      "kind": "remote",
+      "connection": 8,
+      "verb": "put",
+      "key": 7,
+      "address": 12416,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 69,
+      "kind": "remote",
+      "connection": 8,
+      "verb": "put",
+      "key": 7,
+      "address": 12448,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 70,
+      "kind": "remote",
+      "connection": 8,
+      "verb": "put",
+      "key": 7,
+      "address": 12480,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 71,
+      "kind": "remote",
+      "connection": 8,
+      "verb": "put",
+      "key": 7,
+      "address": 12512,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 72,
+      "kind": "remote",
+      "connection": 9,
+      "verb": "put",
+      "key": 7,
+      "address": 13312,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 73,
+      "kind": "remote",
+      "connection": 9,
+      "verb": "put",
+      "key": 7,
+      "address": 13344,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 74,
+      "kind": "remote",
+      "connection": 9,
+      "verb": "put",
+      "key": 7,
+      "address": 13376,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 75,
+      "kind": "remote",
+      "connection": 9,
+      "verb": "put",
+      "key": 7,
+      "address": 13408,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 76,
+      "kind": "remote",
+      "connection": 9,
+      "verb": "put",
+      "key": 7,
+      "address": 13440,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 77,
+      "kind": "remote",
+      "connection": 9,
+      "verb": "put",
+      "key": 7,
+      "address": 13472,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 78,
+      "kind": "remote",
+      "connection": 9,
+      "verb": "put",
+      "key": 7,
+      "address": 13504,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 79,
+      "kind": "remote",
+      "connection": 9,
+      "verb": "put",
+      "key": 7,
+      "address": 13536,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 80,
+      "kind": "remote",
+      "connection": 10,
+      "verb": "put",
+      "key": 7,
+      "address": 13312,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 81,
+      "kind": "remote",
+      "connection": 10,
+      "verb": "put",
+      "key": 7,
+      "address": 13344,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 82,
+      "kind": "remote",
+      "connection": 10,
+      "verb": "put",
+      "key": 7,
+      "address": 13376,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 83,
+      "kind": "remote",
+      "connection": 10,
+      "verb": "put",
+      "key": 7,
+      "address": 13408,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 84,
+      "kind": "remote",
+      "connection": 10,
+      "verb": "put",
+      "key": 7,
+      "address": 13440,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 85,
+      "kind": "remote",
+      "connection": 10,
+      "verb": "put",
+      "key": 7,
+      "address": 13472,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 86,
+      "kind": "remote",
+      "connection": 10,
+      "verb": "put",
+      "key": 7,
+      "address": 13504,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 87,
+      "kind": "remote",
+      "connection": 10,
+      "verb": "put",
+      "key": 7,
+      "address": 13536,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 88,
+      "kind": "remote",
+      "connection": 11,
+      "verb": "put",
+      "key": 7,
+      "address": 13312,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 89,
+      "kind": "remote",
+      "connection": 11,
+      "verb": "put",
+      "key": 7,
+      "address": 13344,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 90,
+      "kind": "remote",
+      "connection": 11,
+      "verb": "put",
+      "key": 7,
+      "address": 13376,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 91,
+      "kind": "remote",
+      "connection": 11,
+      "verb": "put",
+      "key": 7,
+      "address": 13408,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 92,
+      "kind": "remote",
+      "connection": 11,
+      "verb": "put",
+      "key": 7,
+      "address": 13440,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 93,
+      "kind": "remote",
+      "connection": 11,
+      "verb": "put",
+      "key": 7,
+      "address": 13472,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 94,
+      "kind": "remote",
+      "connection": 11,
+      "verb": "put",
+      "key": 7,
+      "address": 13504,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 95,
+      "kind": "remote",
+      "connection": 11,
+      "verb": "put",
+      "key": 7,
+      "address": 13536,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 32
+      },
+      "after": []
+    },
+    {
+      "id": 96,
+      "kind": "local",
+      "rank": 0,
+      "duration_ns": 10,
+      "copy": {
+        "source": {
+          "key": 7,
+          "address": 9216,
+          "bytes": 32
+        },
+        "target": {
+          "key": 7,
+          "address": 40960
+        }
+      },
+      "after": [
+        {
+          "operation": 24,
+          "event": "completed"
+        }
+      ]
+    },
+    {
+      "id": 97,
+      "kind": "local",
+      "rank": 0,
+      "duration_ns": 10,
+      "copy": {
+        "source": {
+          "key": 7,
+          "address": 9248,
+          "bytes": 32
+        },
+        "target": {
+          "key": 7,
+          "address": 40992
+        }
+      },
+      "after": [
+        {
+          "operation": 25,
+          "event": "completed"
+        }
+      ]
+    },
+    {
+      "id": 98,
+      "kind": "local",
+      "rank": 0,
+      "duration_ns": 10,
+      "copy": {
+        "source": {
+          "key": 7,
+          "address": 9280,
+          "bytes": 32
+        },
+        "target": {
+          "key": 7,
+          "address": 41024
+        }
+      },
+      "after": [
+        {
+          "operation": 26,
+          "event": "completed"
+        }
+      ]
+    },
+    {
+      "id": 99,
+      "kind": "local",
+      "rank": 0,
+      "duration_ns": 10,
+      "copy": {
+        "source": {
+          "key": 7,
+          "address": 9312,
+          "bytes": 32
+        },
+        "target": {
+          "key": 7,
+          "address": 41056
+        }
+      },
+      "after": [
+        {
+          "operation": 27,
+          "event": "completed"
+        }
+      ]
+    },
+    {
+      "id": 100,
+      "kind": "local",
+      "rank": 0,
+      "duration_ns": 10,
+      "copy": {
+        "source": {
+          "key": 7,
+          "address": 9344,
+          "bytes": 32
+        },
+        "target": {
+          "key": 7,
+          "address": 41088
+        }
+      },
+      "after": [
+        {
+          "operation": 28,
+          "event": "completed"
+        }
+      ]
+    },
+    {
+      "id": 101,
+      "kind": "local",
+      "rank": 1,
+      "duration_ns": 10,
+      "copy": {
+        "source": {
+          "key": 7,
+          "address": 8192,
+          "bytes": 32
+        },
+        "target": {
+          "key": 7,
+          "address": 40960
+        }
+      },
+      "after": [
+        {
+          "operation": 0,
+          "event": "completed"
+        }
+      ]
+    },
+    {
+      "id": 102,
+      "kind": "local",
+      "rank": 1,
+      "duration_ns": 10,
+      "copy": {
+        "source": {
+          "key": 7,
+          "address": 8224,
+          "bytes": 32
+        },
+        "target": {
+          "key": 7,
+          "address": 40992
+        }
+      },
+      "after": [
+        {
+          "operation": 1,
+          "event": "completed"
+        }
+      ]
+    },
+    {
+      "id": 103,
+      "kind": "local",
+      "rank": 1,
+      "duration_ns": 10,
+      "copy": {
+        "source": {
+          "key": 7,
+          "address": 8256,
+          "bytes": 32
+        },
+        "target": {
+          "key": 7,
+          "address": 41024
+        }
+      },
+      "after": [
+        {
+          "operation": 2,
+          "event": "completed"
+        }
+      ]
+    },
+    {
+      "id": 104,
+      "kind": "local",
+      "rank": 1,
+      "duration_ns": 10,
+      "copy": {
+        "source": {
+          "key": 7,
+          "address": 8288,
+          "bytes": 32
+        },
+        "target": {
+          "key": 7,
+          "address": 41056
+        }
+      },
+      "after": [
+        {
+          "operation": 3,
+          "event": "completed"
+        }
+      ]
+    },
+    {
+      "id": 105,
+      "kind": "local",
+      "rank": 1,
+      "duration_ns": 10,
+      "copy": {
+        "source": {
+          "key": 7,
+          "address": 8320,
+          "bytes": 32
+        },
+        "target": {
+          "key": 7,
+          "address": 41088
+        }
+      },
+      "after": [
+        {
+          "operation": 4,
+          "event": "completed"
+        }
+      ]
+    },
+    {
+      "id": 106,
+      "kind": "local",
+      "rank": 4,
+      "duration_ns": 10,
+      "copy": {
+        "source": {
+          "key": 7,
+          "address": 8192,
+          "bytes": 32
+        },
+        "target": {
+          "key": 7,
+          "address": 40960
+        }
+      },
+      "after": [
+        {
+          "operation": 8,
+          "event": "completed"
+        }
+      ]
+    },
+    {
+      "id": 107,
+      "kind": "local",
+      "rank": 4,
+      "duration_ns": 10,
+      "copy": {
+        "source": {
+          "key": 7,
+          "address": 8224,
+          "bytes": 32
+        },
+        "target": {
+          "key": 7,
+          "address": 40992
+        }
+      },
+      "after": [
+        {
+          "operation": 9,
+          "event": "completed"
+        }
+      ]
+    },
+    {
+      "id": 108,
+      "kind": "local",
+      "rank": 4,
+      "duration_ns": 10,
+      "copy": {
+        "source": {
+          "key": 7,
+          "address": 8256,
+          "bytes": 32
+        },
+        "target": {
+          "key": 7,
+          "address": 41024
+        }
+      },
+      "after": [
+        {
+          "operation": 10,
+          "event": "completed"
+        }
+      ]
+    },
+    {
+      "id": 109,
+      "kind": "local",
+      "rank": 4,
+      "duration_ns": 10,
+      "copy": {
+        "source": {
+          "key": 7,
+          "address": 8288,
+          "bytes": 32
+        },
+        "target": {
+          "key": 7,
+          "address": 41056
+        }
+      },
+      "after": [
+        {
+          "operation": 11,
+          "event": "completed"
+        }
+      ]
+    },
+    {
+      "id": 110,
+      "kind": "local",
+      "rank": 4,
+      "duration_ns": 10,
+      "copy": {
+        "source": {
+          "key": 7,
+          "address": 8320,
+          "bytes": 32
+        },
+        "target": {
+          "key": 7,
+          "address": 41088
+        }
+      },
+      "after": [
+        {
+          "operation": 12,
+          "event": "completed"
+        }
+      ]
+    },
+    {
+      "id": 111,
+      "kind": "local",
+      "rank": 5,
+      "duration_ns": 10,
+      "copy": {
+        "source": {
+          "key": 7,
+          "address": 8192,
+          "bytes": 32
+        },
+        "target": {
+          "key": 7,
+          "address": 40960
+        }
+      },
+      "after": [
+        {
+          "operation": 16,
+          "event": "completed"
+        }
+      ]
+    },
+    {
+      "id": 112,
+      "kind": "local",
+      "rank": 5,
+      "duration_ns": 10,
+      "copy": {
+        "source": {
+          "key": 7,
+          "address": 8224,
+          "bytes": 32
+        },
+        "target": {
+          "key": 7,
+          "address": 40992
+        }
+      },
+      "after": [
+        {
+          "operation": 17,
+          "event": "completed"
+        }
+      ]
+    },
+    {
+      "id": 113,
+      "kind": "local",
+      "rank": 5,
+      "duration_ns": 10,
+      "copy": {
+        "source": {
+          "key": 7,
+          "address": 8256,
+          "bytes": 32
+        },
+        "target": {
+          "key": 7,
+          "address": 41024
+        }
+      },
+      "after": [
+        {
+          "operation": 18,
+          "event": "completed"
+        }
+      ]
+    },
+    {
+      "id": 114,
+      "kind": "local",
+      "rank": 5,
+      "duration_ns": 10,
+      "copy": {
+        "source": {
+          "key": 7,
+          "address": 8288,
+          "bytes": 32
+        },
+        "target": {
+          "key": 7,
+          "address": 41056
+        }
+      },
+      "after": [
+        {
+          "operation": 19,
+          "event": "completed"
+        }
+      ]
+    },
+    {
+      "id": 115,
+      "kind": "local",
+      "rank": 5,
+      "duration_ns": 10,
+      "copy": {
+        "source": {
+          "key": 7,
+          "address": 8320,
+          "bytes": 32
+        },
+        "target": {
+          "key": 7,
+          "address": 41088
+        }
+      },
+      "after": [
+        {
+          "operation": 20,
+          "event": "completed"
+        }
+      ]
+    }
+  ]
+}

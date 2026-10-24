@@ -1,0 +1,28 @@
+{
+  "cases": 432,
+  "counts": {
+    "public_error_after_all_mrs_retired": 36,
+    "public_success_all_retired_but_lower_error": 18,
+    "public_success_ignores_sync_error": 27,
+    "public_success_with_lower_error": 72,
+    "public_success_with_unretired_channels": 54,
+    "public_success_without_mr_calls": 18
+  },
+  "legal_failure_concurrency_proven": false,
+  "new_ns3_networks": 0,
+  "paper_innovation_established": false,
+  "performance_benefit_proven": false,
+  "production_vulnerability_proven": false,
+  "real_provider_executed": false,
+  "records_sha256": "f58e4e8568c3c46c9b7662f3065ede5c640b7af029171a235fe5fbdfebcf4cb3",
+  "schema_version": "window-lifecycle-analysis/1",
+  "source_functions": 4,
+  "witness_rows": {
+    "public_error_after_all_mrs_retired": 3,
+    "public_success_all_retired_but_lower_error": 9,
+    "public_success_ignores_sync_error": 7,
+    "public_success_with_lower_error": 8,
+    "public_success_with_unretired_channels": 8,
+    "public_success_without_mr_calls": 144
+  }
+}

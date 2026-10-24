@@ -1,0 +1,23 @@
+{
+  "independent_conditions": 432,
+  "independently_counted": {
+    "public_error_after_all_mrs_retired": 36,
+    "public_success_all_retired_but_lower_error": 18,
+    "public_success_ignores_sync_error": 27,
+    "public_success_with_lower_error": 72,
+    "public_success_with_unretired_channels": 54,
+    "public_success_without_mr_calls": 18
+  },
+  "production_vulnerability_proven": false,
+  "real_provider_executed": false,
+  "rejected_semantic_tampering": [
+    "success_means_all_retired",
+    "window_success_means_no_other_reference",
+    "error_means_no_mr_retired",
+    "provider_error_propagates_to_public"
+  ],
+  "schema_version": "window-lifecycle-verification/1",
+  "source_excerpts": 14,
+  "source_files": 12,
+  "source_functions": 4
+}

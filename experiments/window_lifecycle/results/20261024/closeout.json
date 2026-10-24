@@ -1,0 +1,113 @@
+{
+  "all_monitored_groups_exited": true,
+  "completed_cpu_source_run_repeated_to_fix_checks": 0,
+  "cpu_conditions": 432,
+  "final_receipts_reserved_bytes": 131072,
+  "finalization_seconds_reserved": 10,
+  "gpu_execution": false,
+  "independent_semantic_tampering_rejected": 4,
+  "initial_counts_label_and_twelve_excerpt_snapshot_preserved": true,
+  "monitored_seconds": 10.594317752867937,
+  "new_ns3_networks": 0,
+  "new_source_bytes": 191375,
+  "new_source_requests": 6,
+  "new_source_response_bytes": 265552,
+  "not_total_calendar_time": true,
+  "offline_byte_equal_files": 5,
+  "original_monitors": [
+    {
+      "name": "analyze-label-monitor",
+      "peak_sampled_group_rss_bytes": 6422528,
+      "seconds": 0.13310176320374012
+    },
+    {
+      "name": "analyze-monitor",
+      "peak_sampled_group_rss_bytes": 6443008,
+      "seconds": 0.1324508786201477
+    },
+    {
+      "name": "build-monitor",
+      "peak_sampled_group_rss_bytes": 111828992,
+      "seconds": 0.7758985348045826
+    },
+    {
+      "name": "collect-monitor",
+      "peak_sampled_group_rss_bytes": 32067584,
+      "seconds": 5.7298284731805325
+    },
+    {
+      "name": "deps-monitor",
+      "peak_sampled_group_rss_bytes": 20160512,
+      "seconds": 0.4754280745983124
+    },
+    {
+      "name": "evidence-backing-monitor",
+      "peak_sampled_group_rss_bytes": 14917632,
+      "seconds": 0.23707898892462254
+    },
+    {
+      "name": "evidence-monitor",
+      "peak_sampled_group_rss_bytes": 6447104,
+      "seconds": 0.13086497224867344
+    },
+    {
+      "name": "pack-monitor",
+      "peak_sampled_group_rss_bytes": 20209664,
+      "seconds": 0.24439235031604767
+    },
+    {
+      "name": "replay-monitor",
+      "peak_sampled_group_rss_bytes": 128909312,
+      "seconds": 1.1072832364588976
+    },
+    {
+      "name": "restore-monitor",
+      "peak_sampled_group_rss_bytes": 7503872,
+      "seconds": 0.13992678374052048
+    },
+    {
+      "name": "source-run-monitor",
+      "peak_sampled_group_rss_bytes": 0,
+      "seconds": 0.023243261501193047
+    },
+    {
+      "name": "supplement-monitor",
+      "peak_sampled_group_rss_bytes": 30892032,
+      "seconds": 1.2017680555582047
+    },
+    {
+      "name": "verify-backing-monitor",
+      "peak_sampled_group_rss_bytes": 6426624,
+      "seconds": 0.1313790176063776
+    },
+    {
+      "name": "verify-monitor",
+      "peak_sampled_group_rss_bytes": 6447104,
+      "seconds": 0.13167336210608482
+    }
+  ],
+  "package_bytes": 303615,
+  "package_members": 87,
+  "package_sha256": "edae28c12ba3dccf87c6af36a6c2742103226435aca276f6b9c1259419c8495d",
+  "paper_innovation_established": false,
+  "phase_disk_limit_bytes": 67108864,
+  "phase_seconds_limit": 300,
+  "platform_and_dependencies_unchanged": true,
+  "platform_baseline": "08bf585",
+  "post_package_documentation_clarification": [
+    {
+      "current_sha256": "7c7e7bf2fa69194d89af36fe2e8f971d57f2fd58ecf4737dd4e9f48ebc396b95",
+      "packaged_sha256": "8c952c1f047683b7c1ae6e75d74493a901312b341568c71a5c6cf8619b962348",
+      "path": "docs/reviews/\u7a97\u53e3\u6ce8\u9500\u5408\u6cd5\u8fb9\u754c\u4e0e\u5e95\u5c42\u6ce8\u518c\u590d\u7528_20261024.md",
+      "reason": "clarify CPU excerpt execution; no technical result changed"
+    }
+  ],
+  "real_provider_executed": false,
+  "request_retries": 0,
+  "schema_version": "window-lifecycle-closeout/1",
+  "source_files": 12,
+  "source_functions": 4,
+  "static_excerpts": 14,
+  "unique_allocated_bytes_before_final_receipts": 4837376,
+  "unique_apparent_bytes_before_final_receipts": 4309341
+}

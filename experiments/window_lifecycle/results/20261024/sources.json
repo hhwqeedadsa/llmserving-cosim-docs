@@ -1,0 +1,134 @@
+[
+  {
+    "bytes": 22975,
+    "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+    "git_blob_sha": "b4ec6c2a4056031f540edf2271acb5fc801fa6c6",
+    "method": "fixed-cache",
+    "path": "src/gin/gin_host.cc",
+    "project": "nccl",
+    "repository": "NVIDIA/nccl",
+    "sha256": "402adfd2097ca25a8abd4e0151511ad933cbcb9841f941230078827e89880d81",
+    "url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/src/gin/gin_host.cc"
+  },
+  {
+    "bytes": 60093,
+    "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+    "git_blob_sha": "976ab919d4ee438147f635d247721704bd511868",
+    "method": "fixed-cache",
+    "path": "src/transport/net_ib/gdaki/gin_host_gdaki.cc",
+    "project": "nccl",
+    "repository": "NVIDIA/nccl",
+    "sha256": "d554a0295c463782d60a36b746ed8e998c7e427493f00e6b6813f9d945fdd361",
+    "url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/src/transport/net_ib/gdaki/gin_host_gdaki.cc"
+  },
+  {
+    "bytes": 98689,
+    "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+    "git_blob_sha": "2bad06e7a130a65dc19562ee9fa994b26fe4e4c6",
+    "method": "fixed-git-blob-api",
+    "path": "src/dev_runtime.cc",
+    "project": "nccl",
+    "repository": "NVIDIA/nccl",
+    "sha256": "39acbe2dc80fe09cb05221335be2893a0c56b1b8dc2d616aee619ddf399db2dd",
+    "url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/src/dev_runtime.cc"
+  },
+  {
+    "bytes": 47276,
+    "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+    "git_blob_sha": "0b1ef92bbe1f33da1ae2c9f103eca2c040791f8d",
+    "method": "fixed-git-blob-api",
+    "path": "src/nccl.h.in",
+    "project": "nccl",
+    "repository": "NVIDIA/nccl",
+    "sha256": "4d844c73806b153deaab89fe8688b6c5f905cbe8fb076fbe5df3c337413a7211",
+    "url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/src/nccl.h.in"
+  },
+  {
+    "bytes": 18780,
+    "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+    "git_blob_sha": "3af874145649c143e39bcc0c20e5164b20de8189",
+    "method": "fixed-git-blob-api",
+    "path": "docs/userguide/source/api/device_setup.rst",
+    "project": "nccl",
+    "repository": "NVIDIA/nccl",
+    "sha256": "9501abe21fc585c4867dc9d124f2d6a8753ad0c732d48f12c3e298f4ab912d8c",
+    "url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/docs/userguide/source/api/device_setup.rst"
+  },
+  {
+    "bytes": 60540,
+    "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+    "git_blob_sha": "04f4dbfddeaf1cf8b0cf7006cc723e1323839210",
+    "method": "fixed-cache",
+    "path": "csrc/buffers/ep.hpp",
+    "project": "deepep",
+    "repository": "deepseek-ai/DeepEP",
+    "sha256": "e00e92a793b8e5a448db6f704ccd2c391ff9943cba30ec470c9d3945460c0193",
+    "url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/csrc/buffers/ep.hpp"
+  },
+  {
+    "bytes": 12061,
+    "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+    "git_blob_sha": "d26fdac9a7b280617653f1b6775587d056e85a28",
+    "method": "fixed-cache",
+    "path": "csrc/kernels/comm/context.cpp",
+    "project": "deepep",
+    "repository": "deepseek-ai/DeepEP",
+    "sha256": "c420b55314b9525dcb7e9f6c9d23a11cfe62a20268887493b76fc52881bb5e6a",
+    "url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/csrc/kernels/comm/context.cpp"
+  },
+  {
+    "bytes": 11335,
+    "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+    "git_blob_sha": "732c598ca1986636c300036533141ebeb49a320e",
+    "method": "fixed-cache",
+    "path": "deep_ep/include/deep_ep/comm/barrier.cuh",
+    "project": "deepep",
+    "repository": "deepseek-ai/DeepEP",
+    "sha256": "e4361353f31a2f3a36e019bb2ef013991017a205c16ab92f76f9da2a2652260f",
+    "url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/comm/barrier.cuh"
+  },
+  {
+    "bytes": 2093,
+    "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+    "git_blob_sha": "2c573f14b27ab0a88484073205e1b460bbb0d61a",
+    "method": "fixed-cache",
+    "path": "deep_ep/include/deep_ep/impls/comm/barrier.cuh",
+    "project": "deepep",
+    "repository": "deepseek-ai/DeepEP",
+    "sha256": "8ce31ac69b8a249d5bcc76f4c99ccedc6cf11eef51435b268914c8f6c8fd5188",
+    "url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/impls/comm/barrier.cuh"
+  },
+  {
+    "bytes": 1955,
+    "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+    "git_blob_sha": "68b2de3103fbe570f8c91cfe00ae8ded36a1fd38",
+    "method": "fixed-git-blob-api",
+    "path": "csrc/kernels/comm/barrier.hpp",
+    "project": "deepep",
+    "repository": "deepseek-ai/DeepEP",
+    "sha256": "440723a228f057026ea1257315c082631bbda0da9b6f4048ef1cf6be9abe01db",
+    "url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/csrc/kernels/comm/barrier.hpp"
+  },
+  {
+    "bytes": 1298,
+    "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+    "git_blob_sha": "ecd0da13e1a261e032b7bf27513030e293110af3",
+    "method": "fixed-git-blob-api",
+    "path": "csrc/comm/barrier.hpp",
+    "project": "deepep",
+    "repository": "deepseek-ai/DeepEP",
+    "sha256": "7ecba44fb172db9cd9a08b1e86fce7e9242006c74ed645f5ec2291ee53de9c5b",
+    "url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/csrc/comm/barrier.hpp"
+  },
+  {
+    "bytes": 23377,
+    "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+    "git_blob_sha": "089d8e53383b6d9791ed51dfa1d0ebd44daad326",
+    "method": "fixed-git-blob-api",
+    "path": "docs/userguide/source/usage/deviceapi.rst",
+    "project": "nccl",
+    "repository": "NVIDIA/nccl",
+    "sha256": "671a60ccb40cfba2f2207c901c8bc37c171da1da416144229da33e722835d163",
+    "url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/docs/userguide/source/usage/deviceapi.rst"
+  }
+]

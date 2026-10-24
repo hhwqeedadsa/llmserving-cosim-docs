@@ -1,0 +1,179 @@
+[
+  {
+    "end_line": 119,
+    "line": 102,
+    "name": "deepep_destroy_guard",
+    "required": [
+      "comm::barrier",
+      "true, true",
+      "context->finalize()"
+    ],
+    "sha256": "f66fa509f063a125ea940dc81ce30a3e5fc48c248b9b09ef00960e152f048d93",
+    "source": "deepep/csrc/buffers/ep.hpp"
+  },
+  {
+    "end_line": 43,
+    "line": 9,
+    "name": "host_barrier_syncs_before_and_after",
+    "required": [
+      "with_cpu_sync",
+      "cudaDeviceSynchronize()",
+      "launch_barrier"
+    ],
+    "sha256": "a4af40162b70c164ef99c630eb9f10c42d9f88ba79b36359a1e9c17cb049cf73",
+    "source": "deepep/csrc/comm/barrier.hpp"
+  },
+  {
+    "end_line": 170,
+    "line": 137,
+    "name": "all_context_flush_and_peer_wait",
+    "required": [
+      "nccl_dev_comm.ginContextCount",
+      ".flush(ncclCoopWarp())",
+      "barrier_gin.signal",
+      "barrier_gin.wait_signal"
+    ],
+    "sha256": "6b24280518a3c29231150600a7737d9f7498395d1f3a3cf6282e41eebcc46674",
+    "source": "deepep/deep_ep/include/deep_ep/comm/barrier.cuh"
+  },
+  {
+    "end_line": 42,
+    "line": 17,
+    "name": "sequential_scaleout_then_scaleup",
+    "required": [
+      "if constexpr (kSequential)",
+      "Scaleout barrier",
+      "Scaleup barrier",
+      "kFlushAllAllocatedQPs"
+    ],
+    "sha256": "2136fa6403141bb83fc1d38d80db3f4b349e709fdab9ef0d1008ed74ae0083c7",
+    "source": "deepep/deep_ep/include/deep_ep/impls/comm/barrier.cuh"
+  },
+  {
+    "end_line": 265,
+    "line": 244,
+    "name": "context_finalize_order",
+    "required": [
+      "storage_window",
+      "ncclCommWindowDeregister(comm, window)",
+      "ncclDevCommDestroy"
+    ],
+    "sha256": "2ceac8e3b486e7dafba2ffbe7335ec9581b296dc78594a73a402e5d1cffe4edd",
+    "source": "deepep/csrc/kernels/comm/context.cpp"
+  },
+  {
+    "end_line": 787,
+    "line": 729,
+    "name": "backing_reuse_global_agreement",
+    "required": [
+      "m->primaryAddr != memAddr",
+      "m->size != size",
+      "m->winFlags != winFlags",
+      "candidateRegistryId",
+      "bootstrapAllGather",
+      "goto exit;"
+    ],
+    "sha256": "d462a96996b53ef31e76ff9989ab02f8b14afda88acb0268743a7b294638ef0c",
+    "source": "nccl/src/dev_runtime.cc"
+  },
+  {
+    "end_line": 1242,
+    "line": 1149,
+    "name": "window_registration_backing_and_barrier",
+    "required": [
+      "ncclCuMemGetAddressRange",
+      "memOffset",
+      "symMemoryObtain",
+      "symWindowCreate",
+      "bootstrapBarrier"
+    ],
+    "sha256": "5e46e4cf824cd6e8e4d77082b57b0e13cfa216125012e73f8baebe0387d0ba3f",
+    "source": "nccl/src/dev_runtime.cc"
+  },
+  {
+    "end_line": 973,
+    "line": 932,
+    "name": "last_reference_and_ignored_lower_results",
+    "required": [
+      "0 == --mem->refCount",
+      "ncclGinDeregister(",
+      "free(mem)"
+    ],
+    "sha256": "ecbb17965cfb8a0c0055e03a1fca03e77d33c43ef5534c89ac53dda44b1712cb",
+    "source": "nccl/src/dev_runtime.cc"
+  },
+  {
+    "end_line": 1148,
+    "line": 1078,
+    "name": "window_destroy_drops_backing_first",
+    "required": [
+      "symMemoryDropRef",
+      "ncclShadowPoolFree",
+      "ncclCommDeregister",
+      "free(winHost)"
+    ],
+    "sha256": "49c8fbbf7a6215d42cca9285b84fa4f8c252eff5e4717c3b9d7623b0b09dc8df",
+    "source": "nccl/src/dev_runtime.cc"
+  },
+  {
+    "end_line": 1897,
+    "line": 1873,
+    "name": "public_deregister_local_stream_only",
+    "required": [
+      "cudaStreamNonBlocking",
+      "symWindowDestroy",
+      "cudaStreamSynchronize(stream)",
+      "return ret;"
+    ],
+    "sha256": "c470e3b34d3a39e4e2f16ffd93d9ffac8531eae2ef3fcf4bada163dcd2d48157",
+    "source": "nccl/src/dev_runtime.cc"
+  },
+  {
+    "end_line": 680,
+    "line": 639,
+    "name": "registration_partial_segment_cleanup",
+    "required": [
+      "numSegmentsRegistered++",
+      "i < numSegmentsRegistered",
+      "ncclGinDeregister",
+      "mem->ginSegmentInfos = nullptr"
+    ],
+    "sha256": "71bb506e4f8b9b067e3db21c96b1c6cd7652a4c4c27c431459d8b72dcaad69ac",
+    "source": "nccl/src/dev_runtime.cc"
+  },
+  {
+    "end_line": 272,
+    "line": 221,
+    "name": "finalize_remaining_window_cleanup",
+    "required": [
+      "During abort",
+      "while (devr->winSortedCount > 0)",
+      "NCCLCHECKIGNORE(symWindowDestroy"
+    ],
+    "sha256": "ea825ec97a3a52e3e047f27cde243bceae63c5f80b49c2f5bcd8b9ad745d2314",
+    "source": "nccl/src/dev_runtime.cc"
+  },
+  {
+    "end_line": 998,
+    "line": 985,
+    "name": "windows_copy_shared_backing_gin_handles",
+    "required": [
+      "winDevHost->ginWinsDefaultBackend[i] = mem->ginDevWins[i]",
+      "mem->numGinSegments"
+    ],
+    "sha256": "6841a7dbe36c6aee2e8a696a36a6c5be6c24be4042124551d242f5708fb91999",
+    "source": "nccl/src/dev_runtime.cc"
+  },
+  {
+    "end_line": 1077,
+    "line": 1000,
+    "name": "window_subrange_is_offset_into_backing",
+    "required": [
+      "win->memory = mem",
+      "win->size = userSize",
+      "winDevHost->ginOffset4K = memOffset >> 12"
+    ],
+    "sha256": "64df9a1115ab0582af236613ec0d12651a24c4dd5055e4a2f65398e2f3a1ef8c",
+    "source": "nccl/src/dev_runtime.cc"
+  }
+]

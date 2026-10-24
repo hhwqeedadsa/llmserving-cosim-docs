@@ -44,6 +44,18 @@ python -m moe_ub_cosim scaleout rdma-check --run /path/to/service-result
 
 ## 修改哪些参数
 
+修改拓扑带宽或传播延迟后，可先运行不需要后端程序的检查：
+
+```bash
+python -m moe_ub_cosim scaleout rdma-preflight \
+  --topology /path/to/topology --protocol examples/scaleout_rdma/rdma.json \
+  --output /path/to/new-preflight.json
+```
+
+它按固定原生PFC模型计算每台交换机各端口的headroom（暂停反馈到达前的缓冲预留）和每端口4096B保留量，要求合计严格小于配置缓冲。报告列出端口贡献和剩余共享容量；容量不满足时仍保存报告并返回退出码1。各Python运行入口也会在启动后端前执行此检查；不会自动增加缓冲或改延迟。该规则对应当前模型，不能当作实际硬件缓冲设计或无损保证。
+
+对事务小例可加`--transactions examples/scaleout_rdma_transactions/bounded-buffers.json`检查整份计划的窗口、地址和依赖。跨连接同址写仍需显式声明旧写`applied`/ACK/完成等有效顺序；控制器已经收到回调也不能代替计划里的依赖。在线追加的未来操作须在提交时继续检查。预检不运行网络，不预测时延或保证任务完成。
+
 | 文件 | 参数与作用 |
 |---|---|
 | `service.json` 的 model | hidden/FFN 维度、专家数、Top-K、激活字节及连续层数；GPU 类型为描述标签 |

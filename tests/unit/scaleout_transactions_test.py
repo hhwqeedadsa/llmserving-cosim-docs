@@ -13,7 +13,7 @@ class TransactionInputTests(unittest.TestCase):
         self.protocol = json.loads((ROOT/'examples/scaleout_rdma/rdma.json').read_text())
         self.topology = dict(schema_version='moe-scaleout-physical-topology/1',
             nodes=[dict(id=i, kind='gpu') for i in range(8)]+[dict(id=8, kind='tor', plane=0)],
-            links=[dict(src=i, dst=8, src_port=1, dst_port=i+1, rate_bps=100000000000) for i in range(8)])
+            links=[dict(src=i, dst=8, src_port=1, dst_port=i+1, rate_bps=100000000000,delay_ns=1000) for i in range(8)])
 
     def test_legal_and_non_power_two_depth(self):
         validate(self.topology, self.protocol, self.config)

@@ -200,6 +200,8 @@ def validate_probe(t, c, batch, *, match_faults=True):
     require((len(nodes)-len(gpus))*1025*1025*8*4 + 268435456 < budget['rss_bytes'],
             'fixed switch counters alone exceed declared RSS budget')
     require(all(str(l['rate_bps']) in c['ecn_by_rate'] for l in t['links']), 'missing ECN threshold for link rate')
+    from .scaleout_fabric_buffers import require_buffers
+    require_buffers(t,c)
     require(isinstance(batch, list) and 0 < len(batch) <= 128, 'probe message budget exceeded')
     adjacency = {n['id']: [] for n in nodes}
     by_id = {n['id']: n for n in nodes}

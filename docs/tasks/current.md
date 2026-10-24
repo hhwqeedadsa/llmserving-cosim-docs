@@ -1,6 +1,6 @@
 # 当前任务与交接
 
-状态：`in_progress`。当前首先在保留原有条件下，研究丢包恢复机制、通信效率损失、可执行优化与提升空间；继续按A类网络、系统或仿真论文标准核查机制与创新，不保证获奖。上一阶段的平台可交付结论不能作为完整目标完成证据，仅本地提交，不push。
+状态：`in_progress`。当前围绕网络恢复安全、有限资源连续服务及有实质价值的优化，按A类网络、系统或仿真论文标准核查机制与创新，不保证获奖。上一阶段的平台可交付结论不能作为完整目标完成证据，仅本地提交，不push。
 
 ## 目标与验收
 
@@ -12,6 +12,8 @@
 - 本轮评估与筛选是目标的一部分；论文主贡献未成立时保持研究目标进行中，不以一份评估报告替代整个目标。
 
 ## 当前范围和预算
+
+从`658d7c8`完成[交换机缓冲启动前检查](fabric_buffer_preflight_spec.md)：公开`scaleout rdma-preflight`及共用Python入口逐端口核对PFC headroom/保留量，报告节点/字节/主要端口，可选完整事务输入检查。126项不同单元（含7项新增）、13固定依赖、10条公开工作流命令通过；32个已保存原生端口的headroom和初始阈值全部相同，5种运行入口在启动backend/创建运行目录前拒绝9,503,884B>8,388,608B反例。有效配置、C++与依赖不改，绕过Python的原生保护仍保留。6份监控正常、无遗留PID，保守累计2.81秒/峰值55.09MiB，原件/持久副本分配块499,712B+64KiB收据预留<32MiB；180秒、每命令60秒/1GiB/2GiB/16MiB与磁盘预留保持。无构建/新网络/旧失败重跑、下载/GPU或依赖变化；见[验收](../../fixtures/fabric_buffer_preflight/README.md)、[收尾](../../fixtures/fabric_buffer_preflight/closeout.json)与[综合说明](../reviews/恢复边界实验与网络配置预检_20261024.md)，完整持久记录`runs/fabric_preflight_20261024/`。输入修复不是论文主贡献；下一步须先明确合法的排队/故障输入、远端旧访问退出与有限窗口复用，再按等资源/同信息比较强基线。
 
 [失败后晚到写入研究已负面收尾](../../experiments/late_write_isolation/README.md)，平台固定`2cfbaf8`且27份平台源码/程序/8库身份保持。首个fast-shared漏写既存副作用依赖，100us新写被Python拒绝，原生记录控制器EOF；旧写正常6036ns应用/12060ns完成。原矩阵停止、4条件未执行。[修订](../../experiments/late_write_isolation/amendment.md)首个独立槽条件又在建网时因PFC headroom拒绝：交换机8需9,503,884B>8,388,608B，无回调/数据包/result，另一修订条件未执行。两次失败不能支持覆盖、源耗尽或安全策略收益；没有放宽保护、扩容或重跑。独立实包/回调/内存核验及3类篡改拒绝完成；51,606B离线包在`runs/late_write_isolation_checkpoint_20261024/`，新源码根/空cwd复算逐字节一致。11份监控（4个child_failed含两层嵌套）保守累计3.99秒、峰值396.94MiB，原件/恢复/持久包分配块860,160B+64KiB收据预留；300秒/64MiB、每命令60秒/1GiB/2GiB/16MiB及磁盘预留保持，无遗留PID。见[核验](../../experiments/late_write_isolation/results/20261024/stop-review.json)及[收尾](../../experiments/late_write_isolation/results/20261024/closeout.json)。下一项独立平台改进为启动前联合检查拓扑延迟/带宽/交换机容量，不把输入错误当研究发现或论文贡献。
 

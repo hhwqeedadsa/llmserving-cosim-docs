@@ -1,0 +1,30 @@
+{
+  "all_monitor_statuses": "completed",
+  "allocated_bytes_before_receipts": 499712,
+  "apparent_bytes_before_receipts": 316662,
+  "code_hashes": {
+    "fixtures/fabric_buffer_preflight/native-reference.json": "34ef5284fe5b6a791c7bc71f0c35dee22a913c2b40ebc7019c3e2e875c65fdac",
+    "fixtures/fabric_buffer_preflight/verify.py": "1e5cce43d28173961c8088cccaa8f68e8a3b443badb9d4df50292ee04be06e74",
+    "python/moe_ub_cosim/cli.py": "6b5041898d63886a5ce0d4aa581c47079c12adc3136e659f70aa61a06642b874",
+    "python/moe_ub_cosim/scaleout_fabric_buffers.py": "524f4218eda5f823d21208a02e084f215f33427f3e833463d25c7c1eb91852b8",
+    "python/moe_ub_cosim/scaleout_rdma.py": "182d37c58c9c73223ca0c3a85847343cdd38b667ae808d2279eee345740a5d78",
+    "tests/unit/scaleout_fabric_buffers_test.py": "df036e6309767cba6f74fc2fd937da11403dd60fdebd3c768ad1839e6cb25465"
+  },
+  "conservative_monitored_seconds": 2.8053727578371763,
+  "distinct_related_tests_including_new": 126,
+  "fixed_dependencies_checked": 13,
+  "monitors": 6,
+  "native_networks_executed": 0,
+  "native_or_dependencies_changed": false,
+  "native_reference_ports": 32,
+  "old_networks_rerun": 0,
+  "peak_sampled_rss_bytes": 57765888,
+  "persistent_files_hash_verified": true,
+  "public_workflow_commands": 10,
+  "receipt_allowance_bytes": 65536,
+  "remaining_live_pids": [],
+  "schema_version": "fabric-buffer-preflight-closeout/1",
+  "stage_limit_bytes": 33554432,
+  "stage_limit_monitored_seconds": 180,
+  "unit_new_tests": 7
+}

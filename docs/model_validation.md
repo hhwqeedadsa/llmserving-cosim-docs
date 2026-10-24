@@ -66,6 +66,8 @@ stream-work/3的本地阶段使用输入显式声明的ns耗时，每GPU单个�
 
 ### 可选原生 RDMA 恢复扩展的依据
 
+交换机缓冲预检只复刻固定模型的初始分配：每物理端口headroom为`((rate_bps // 1000000) * delay_ns // 8000) * 3`，每端口reserve4096B，合计严格小于交换机缓冲。依据为`Fabric::Fabric`和固定ns-3的`SwitchMmu`，不是硬件测量。Python入口提前拒绝不满足条件及算术溢出的输入；通过不保证动态无损、实际PFC传播成本或恢复性能。与既有实际原生端口的核对见[预检验收](../fixtures/fabric_buffer_preflight/README.md)。
+
 [恢复示例](../examples/scaleout_rdma_recovery/README.md)明确声明字节序号 Go-Back-N 行为：实际发送后计时，源端只使用实际累计 ACK；新进展重置超时，旧反馈不延期，超时倍增并限制重试。接收端只根据自己的连续接收序号识别完整重复包，按原生 ACK 包格式重新确认。源端不读取接收端或交换机真值。实际发送仍由锁定原生 NIC 的仲裁、速率和 PFC 决定。
 
 计时原则参考 [RFC 6298 第5节](https://www.rfc-editor.org/rfc/rfc6298#section-5)，它是 TCP 文献，仅用于说明 ACK 进展和退避原则；固定模式不估计RTT；新增可选估计采用相同平滑原则，但采样、舍入和超时下限另有明确声明，不实现TCP拥塞控制。[Linux v6.12 RXE 接收器 duplicate_request](https://github.com/torvalds/linux/blob/v6.12/drivers/infiniband/sw/rxe/rxe_resp.c#L1275)在重复 SEND/WRITE 时重新发送 ACK，[RXE 完成器](https://github.com/torvalds/linux/blob/v6.12/drivers/infiniband/sw/rxe/rxe_comp.c#L771)对未确认请求有限重试并在耗尽时报告错误。这些源码支持重试/重复确认的设计动机，不表示本实现复刻了 RXE 的 PSN、重试状态机或生产网卡。

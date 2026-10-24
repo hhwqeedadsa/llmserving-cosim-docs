@@ -387,6 +387,8 @@ A3 资源模板的原生 STORE 结果在 `transfers` 行内附加 `local_facts`�
 
 ## 非 UB Scale-Out 恢复记录
 
+`scaleout rdma-preflight`独立报告使用`moe-rdma-fabric-buffers/1`，不是`result.json`。`switches`按节点列出逐端口`rate_bps`、`delay_ns`、`headroom_bytes`及汇总`reserve_bytes`、`required_bytes`、`buffer_bytes`；容量需满足严格小于。通过时`shared_capacity_bytes`和`initial_pfc_threshold_bytes`给出当前模型的初始剩余量/阈值，否则为null。`arithmetic_valid`核对原生整数存储范围；`network_executed`固定false，`input_hashes`记录被检查文件。可选`transaction_check`报告整份事务配置的静态校验；没有提供事务文件时`transactions_checked=false`，不能据此推断操作安全。非法类型/结构可能在报告生成前退出；容量不满足会保存报告并exit1。
+
 显式 `recovery.mode=go_back_n` 时，`result.json.recovery` 保存配置、逐消息源端状态、超时/重复确认计数及有界事件。默认原生模式不增加此字段。`highest_sent_bytes` 是实际发送最高字节，`acknowledged_bytes` 只来自真实累计 ACK；`timeout_retransmissions` 为超时重传决策数，不含原生 NACK 重传，不等于包数。`retries_since_progress` 为上次 ACK 进展后的次数；`deadline_ns=-1` 表示未计时，可能是当前已发字节都已确认、正常完成或重试耗尽，须结合状态判断。
 
 源事件列为 `[time_ns,event,source,message_id,acknowledged_bytes,highest_sent_bytes,retries_since_progress,rto_ns,deadline_ns]`，事件码随 `event_codes` 导出。`receiver_events` 保存接收端本地的重复包偏移和重新确认序号，具体列随输出提供。两类事件共享 `max_events`；累计观察数与遗漏数独立保存。完整日志才重放计时、退避、确认和终态；截断时 `rdma-diagnose.recovery.reconstructed=false`，仍检查计数与原生终态，不补造缺失事件。

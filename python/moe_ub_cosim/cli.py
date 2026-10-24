@@ -30,6 +30,11 @@ def parser():
     topology = sc.add_parser('topology', help='Generate flexible Clos/Agg/multi-rail/plane fabrics and native RDMA topology files')
     topology.add_argument('--config', type=Path, required=True, help='Topology JSON; counts, NIC rail map, layer rates and port limits')
     topology.add_argument('--output', type=Path, required=True, help='New directory for physical graph, NIC map, audit and ASTRA/SimAI text inputs')
+    pf = sc.add_parser('rdma-preflight', help='Check physical per-switch headroom/reserve and optional transaction input; no network execution or backend required')
+    pf.add_argument('--topology',type=Path,required=True,help='Generated physical topology directory')
+    pf.add_argument('--protocol',type=Path,required=True,help='Explicit native RDMA protocol JSON')
+    pf.add_argument('--transactions',type=Path,help='Optional full prospective or empty initial transaction config; existing dependency/address checks')
+    pf.add_argument('--output',type=Path,required=True,help='New JSON report; capacity failure is saved and exits 1')
     dp = sc.add_parser('deepep-plan', help='Compile an offline pinned DeepEP low-latency application partial order; no network/GPU execution')
     dp.add_argument('--config', type=Path, required=True, help='Explicit choices, default compute-stream-wait/no-hook API and logical single-NIC RDMA-only mode')
     dp.add_argument('--output', type=Path, required=True, help='New directory for input, operation/event plan and hash manifest')
@@ -160,7 +165,10 @@ def main(argv=None):
             value = dict(passed=True, output=str(args.output.resolve()), state=manifest['state'],
                          scenario_id=manifest['scenario_id'])
         elif args.command == 'scaleout':
-            if args.scaleout_command == 'host-timing-check':
+            if args.scaleout_command == 'rdma-preflight':
+                from .scaleout_fabric_buffers import preflight
+                value=preflight(args.topology,args.protocol,args.output,args.transactions)
+            elif args.scaleout_command == 'host-timing-check':
                 from .host_timing import check
                 value = check(args.run,args.output)
             elif args.scaleout_command == 'rdma-transaction-probe':

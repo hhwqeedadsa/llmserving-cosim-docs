@@ -1,0 +1,761 @@
+{
+  "execution_inputs": {
+    "command": [
+      "/dev/shm/moe-bounded-buffers-20261024/build/bin/ns3.42-moe-rdma-transaction-probe",
+      "/dev/shm/moe-bounded-buffers-20261024/public-topology/topology.json",
+      "/home/lry/moe-ub-cosim/examples/scaleout_rdma/rdma.json",
+      "/home/lry/moe-ub-cosim/examples/scaleout_rdma_transactions/bounded-buffers.json",
+      "/dev/shm/moe-bounded-buffers-20261024/public-example/result.json"
+    ],
+    "hashes": {
+      "/dev/shm/moe-bounded-buffers-20261024/build/bin/ns3.42-moe-rdma-transaction-probe": "948348d3cd19f5a95a9e7bf457f3aea8a5871edbe1fb2dcb49005f0a0c86c8c1",
+      "/dev/shm/moe-bounded-buffers-20261024/public-topology/topology.json": "2d87c0be3ee8e59ab0e5254396722f95cd1984369746ff6a0c88b5a4326ebde2",
+      "/home/lry/moe-ub-cosim/examples/scaleout_rdma/rdma.json": "050577ca50ed39778b5fab71b521a847cceb2f57c7cf63299e84f369f21ef24f",
+      "/home/lry/moe-ub-cosim/examples/scaleout_rdma_transactions/bounded-buffers.json": "53eae0b9810e58e3fc0579153ad9daea4ca0b8cd3680f7c7c413b084a5f3fb6d"
+    },
+    "native_commit": "3964b1d41cb5f7b51004c316b0eae1a3713c2498",
+    "scope": "MRT1 functional transactions; not RoCE wire-equivalent, GIN or GPU visibility"
+  },
+  "native_ports": [
+    {
+      "delay_ns": 1000,
+      "headroom_bytes": 37500,
+      "initial_pfc_threshold_bytes": 1027778,
+      "node": 8,
+      "port": 1,
+      "rate_bps": 100000000000
+    },
+    {
+      "delay_ns": 1000,
+      "headroom_bytes": 37500,
+      "initial_pfc_threshold_bytes": 1027778,
+      "node": 8,
+      "port": 2,
+      "rate_bps": 100000000000
+    },
+    {
+      "delay_ns": 1000,
+      "headroom_bytes": 37500,
+      "initial_pfc_threshold_bytes": 1027778,
+      "node": 8,
+      "port": 3,
+      "rate_bps": 100000000000
+    },
+    {
+      "delay_ns": 1000,
+      "headroom_bytes": 37500,
+      "initial_pfc_threshold_bytes": 1027778,
+      "node": 8,
+      "port": 4,
+      "rate_bps": 100000000000
+    },
+    {
+      "delay_ns": 1000,
+      "headroom_bytes": 37500,
+      "initial_pfc_threshold_bytes": 1027778,
+      "node": 9,
+      "port": 1,
+      "rate_bps": 100000000000
+    },
+    {
+      "delay_ns": 1000,
+      "headroom_bytes": 37500,
+      "initial_pfc_threshold_bytes": 1027778,
+      "node": 9,
+      "port": 2,
+      "rate_bps": 100000000000
+    },
+    {
+      "delay_ns": 1000,
+      "headroom_bytes": 37500,
+      "initial_pfc_threshold_bytes": 1027778,
+      "node": 9,
+      "port": 3,
+      "rate_bps": 100000000000
+    },
+    {
+      "delay_ns": 1000,
+      "headroom_bytes": 37500,
+      "initial_pfc_threshold_bytes": 1027778,
+      "node": 9,
+      "port": 4,
+      "rate_bps": 100000000000
+    },
+    {
+      "delay_ns": 1000,
+      "headroom_bytes": 37500,
+      "initial_pfc_threshold_bytes": 1032977,
+      "node": 10,
+      "port": 1,
+      "rate_bps": 100000000000
+    },
+    {
+      "delay_ns": 1000,
+      "headroom_bytes": 37500,
+      "initial_pfc_threshold_bytes": 1032977,
+      "node": 10,
+      "port": 2,
+      "rate_bps": 100000000000
+    },
+    {
+      "delay_ns": 1000,
+      "headroom_bytes": 37500,
+      "initial_pfc_threshold_bytes": 1032977,
+      "node": 10,
+      "port": 3,
+      "rate_bps": 100000000000
+    },
+    {
+      "delay_ns": 1000,
+      "headroom_bytes": 37500,
+      "initial_pfc_threshold_bytes": 1032977,
+      "node": 11,
+      "port": 1,
+      "rate_bps": 100000000000
+    },
+    {
+      "delay_ns": 1000,
+      "headroom_bytes": 37500,
+      "initial_pfc_threshold_bytes": 1032977,
+      "node": 11,
+      "port": 2,
+      "rate_bps": 100000000000
+    },
+    {
+      "delay_ns": 1000,
+      "headroom_bytes": 37500,
+      "initial_pfc_threshold_bytes": 1032977,
+      "node": 11,
+      "port": 3,
+      "rate_bps": 100000000000
+    },
+    {
+      "delay_ns": 1000,
+      "headroom_bytes": 37500,
+      "initial_pfc_threshold_bytes": 1027778,
+      "node": 12,
+      "port": 1,
+      "rate_bps": 100000000000
+    },
+    {
+      "delay_ns": 1000,
+      "headroom_bytes": 37500,
+      "initial_pfc_threshold_bytes": 1027778,
+      "node": 12,
+      "port": 2,
+      "rate_bps": 100000000000
+    },
+    {
+      "delay_ns": 1000,
+      "headroom_bytes": 37500,
+      "initial_pfc_threshold_bytes": 1027778,
+      "node": 12,
+      "port": 3,
+      "rate_bps": 100000000000
+    },
+    {
+      "delay_ns": 1000,
+      "headroom_bytes": 37500,
+      "initial_pfc_threshold_bytes": 1027778,
+      "node": 12,
+      "port": 4,
+      "rate_bps": 100000000000
+    },
+    {
+      "delay_ns": 1000,
+      "headroom_bytes": 37500,
+      "initial_pfc_threshold_bytes": 1027778,
+      "node": 13,
+      "port": 1,
+      "rate_bps": 100000000000
+    },
+    {
+      "delay_ns": 1000,
+      "headroom_bytes": 37500,
+      "initial_pfc_threshold_bytes": 1027778,
+      "node": 13,
+      "port": 2,
+      "rate_bps": 100000000000
+    },
+    {
+      "delay_ns": 1000,
+      "headroom_bytes": 37500,
+      "initial_pfc_threshold_bytes": 1027778,
+      "node": 13,
+      "port": 3,
+      "rate_bps": 100000000000
+    },
+    {
+      "delay_ns": 1000,
+      "headroom_bytes": 37500,
+      "initial_pfc_threshold_bytes": 1027778,
+      "node": 13,
+      "port": 4,
+      "rate_bps": 100000000000
+    },
+    {
+      "delay_ns": 1000,
+      "headroom_bytes": 37500,
+      "initial_pfc_threshold_bytes": 1032977,
+      "node": 14,
+      "port": 1,
+      "rate_bps": 100000000000
+    },
+    {
+      "delay_ns": 1000,
+      "headroom_bytes": 37500,
+      "initial_pfc_threshold_bytes": 1032977,
+      "node": 14,
+      "port": 2,
+      "rate_bps": 100000000000
+    },
+    {
+      "delay_ns": 1000,
+      "headroom_bytes": 37500,
+      "initial_pfc_threshold_bytes": 1032977,
+      "node": 14,
+      "port": 3,
+      "rate_bps": 100000000000
+    },
+    {
+      "delay_ns": 1000,
+      "headroom_bytes": 37500,
+      "initial_pfc_threshold_bytes": 1032977,
+      "node": 15,
+      "port": 1,
+      "rate_bps": 100000000000
+    },
+    {
+      "delay_ns": 1000,
+      "headroom_bytes": 37500,
+      "initial_pfc_threshold_bytes": 1032977,
+      "node": 15,
+      "port": 2,
+      "rate_bps": 100000000000
+    },
+    {
+      "delay_ns": 1000,
+      "headroom_bytes": 37500,
+      "initial_pfc_threshold_bytes": 1032977,
+      "node": 15,
+      "port": 3,
+      "rate_bps": 100000000000
+    },
+    {
+      "delay_ns": 1000,
+      "headroom_bytes": 37500,
+      "initial_pfc_threshold_bytes": 1038177,
+      "node": 16,
+      "port": 1,
+      "rate_bps": 100000000000
+    },
+    {
+      "delay_ns": 1000,
+      "headroom_bytes": 37500,
+      "initial_pfc_threshold_bytes": 1038177,
+      "node": 16,
+      "port": 2,
+      "rate_bps": 100000000000
+    },
+    {
+      "delay_ns": 1000,
+      "headroom_bytes": 37500,
+      "initial_pfc_threshold_bytes": 1038177,
+      "node": 17,
+      "port": 1,
+      "rate_bps": 100000000000
+    },
+    {
+      "delay_ns": 1000,
+      "headroom_bytes": 37500,
+      "initial_pfc_threshold_bytes": 1038177,
+      "node": 17,
+      "port": 2,
+      "rate_bps": 100000000000
+    }
+  ],
+  "original_result": "/dev/shm/moe-bounded-buffers-20261024/public-example/result.json",
+  "platform_commit": "2cfbaf83870ef9319832f9965d3aae1b5218fe12",
+  "protocol": {
+    "ack_interval_bytes": 1,
+    "base_rtt_ns": 14000,
+    "cc_mode": 1,
+    "chunk_bytes": 4000,
+    "ecn_by_rate": {
+      "100000000000": {
+        "kmax_bytes": 131072,
+        "kmin_bytes": 32768,
+        "pmax": 1.0
+      }
+    },
+    "payload_bytes": 1000,
+    "schema_version": "moe-scaleout-rdma/1",
+    "seed": 11,
+    "switch_buffer_bytes": 8388608
+  },
+  "result_sha256": "bbeaa9c8cc2f8517fc47a83a5c4d476b57755bde274ea860c53763f3323e7852",
+  "schema_version": "fabric-buffer-native-reference/1",
+  "source_hashes": {
+    "backend/rdma/fabric.cc": "83a592afa804a11cb2113c1deb7cc2b29e766394e1e115d5a7b77c522111e989",
+    "third_party/LLMServingSim/astra-sim/extern/network_backend/ns-3/src/point-to-point/model/switch-mmu.cc": "95243e0f3f2d15e0ea87990e01731fad92984e8ec9a6bb00872ee6bf50070a25"
+  },
+  "topology": {
+    "links": [
+      {
+        "delay_ns": 1000,
+        "dst": 8,
+        "dst_port": 1,
+        "id": 0,
+        "rate_bps": 100000000000,
+        "src": 0,
+        "src_port": 1,
+        "tier": "access"
+      },
+      {
+        "delay_ns": 1000,
+        "dst": 8,
+        "dst_port": 2,
+        "id": 1,
+        "rate_bps": 100000000000,
+        "src": 1,
+        "src_port": 1,
+        "tier": "access"
+      },
+      {
+        "delay_ns": 1000,
+        "dst": 9,
+        "dst_port": 1,
+        "id": 2,
+        "rate_bps": 100000000000,
+        "src": 2,
+        "src_port": 1,
+        "tier": "access"
+      },
+      {
+        "delay_ns": 1000,
+        "dst": 9,
+        "dst_port": 2,
+        "id": 3,
+        "rate_bps": 100000000000,
+        "src": 3,
+        "src_port": 1,
+        "tier": "access"
+      },
+      {
+        "delay_ns": 1000,
+        "dst": 12,
+        "dst_port": 1,
+        "id": 4,
+        "rate_bps": 100000000000,
+        "src": 4,
+        "src_port": 1,
+        "tier": "access"
+      },
+      {
+        "delay_ns": 1000,
+        "dst": 12,
+        "dst_port": 2,
+        "id": 5,
+        "rate_bps": 100000000000,
+        "src": 5,
+        "src_port": 1,
+        "tier": "access"
+      },
+      {
+        "delay_ns": 1000,
+        "dst": 13,
+        "dst_port": 1,
+        "id": 6,
+        "rate_bps": 100000000000,
+        "src": 6,
+        "src_port": 1,
+        "tier": "access"
+      },
+      {
+        "delay_ns": 1000,
+        "dst": 13,
+        "dst_port": 2,
+        "id": 7,
+        "rate_bps": 100000000000,
+        "src": 7,
+        "src_port": 1,
+        "tier": "access"
+      },
+      {
+        "delay_ns": 1000,
+        "dst": 10,
+        "dst_port": 1,
+        "id": 8,
+        "rate_bps": 100000000000,
+        "src": 8,
+        "src_port": 3,
+        "tier": "tor_agg"
+      },
+      {
+        "delay_ns": 1000,
+        "dst": 11,
+        "dst_port": 1,
+        "id": 9,
+        "rate_bps": 100000000000,
+        "src": 8,
+        "src_port": 4,
+        "tier": "tor_agg"
+      },
+      {
+        "delay_ns": 1000,
+        "dst": 10,
+        "dst_port": 2,
+        "id": 10,
+        "rate_bps": 100000000000,
+        "src": 9,
+        "src_port": 3,
+        "tier": "tor_agg"
+      },
+      {
+        "delay_ns": 1000,
+        "dst": 11,
+        "dst_port": 2,
+        "id": 11,
+        "rate_bps": 100000000000,
+        "src": 9,
+        "src_port": 4,
+        "tier": "tor_agg"
+      },
+      {
+        "delay_ns": 1000,
+        "dst": 16,
+        "dst_port": 1,
+        "id": 12,
+        "rate_bps": 100000000000,
+        "src": 10,
+        "src_port": 3,
+        "tier": "agg_core"
+      },
+      {
+        "delay_ns": 1000,
+        "dst": 17,
+        "dst_port": 1,
+        "id": 13,
+        "rate_bps": 100000000000,
+        "src": 11,
+        "src_port": 3,
+        "tier": "agg_core"
+      },
+      {
+        "delay_ns": 1000,
+        "dst": 14,
+        "dst_port": 1,
+        "id": 14,
+        "rate_bps": 100000000000,
+        "src": 12,
+        "src_port": 3,
+        "tier": "tor_agg"
+      },
+      {
+        "delay_ns": 1000,
+        "dst": 15,
+        "dst_port": 1,
+        "id": 15,
+        "rate_bps": 100000000000,
+        "src": 12,
+        "src_port": 4,
+        "tier": "tor_agg"
+      },
+      {
+        "delay_ns": 1000,
+        "dst": 14,
+        "dst_port": 2,
+        "id": 16,
+        "rate_bps": 100000000000,
+        "src": 13,
+        "src_port": 3,
+        "tier": "tor_agg"
+      },
+      {
+        "delay_ns": 1000,
+        "dst": 15,
+        "dst_port": 2,
+        "id": 17,
+        "rate_bps": 100000000000,
+        "src": 13,
+        "src_port": 4,
+        "tier": "tor_agg"
+      },
+      {
+        "delay_ns": 1000,
+        "dst": 16,
+        "dst_port": 2,
+        "id": 18,
+        "rate_bps": 100000000000,
+        "src": 14,
+        "src_port": 3,
+        "tier": "agg_core"
+      },
+      {
+        "delay_ns": 1000,
+        "dst": 17,
+        "dst_port": 2,
+        "id": 19,
+        "rate_bps": 100000000000,
+        "src": 15,
+        "src_port": 3,
+        "tier": "agg_core"
+      }
+    ],
+    "nic_ports": [
+      {
+        "gpu": 0,
+        "gpu_port": 1,
+        "gpu_slot": 0,
+        "nic": 0,
+        "plane": 0,
+        "rail": 0,
+        "rate_bps": 100000000000,
+        "server": 0,
+        "tor": 8,
+        "tor_port": 1
+      },
+      {
+        "gpu": 1,
+        "gpu_port": 1,
+        "gpu_slot": 1,
+        "nic": 0,
+        "plane": 0,
+        "rail": 0,
+        "rate_bps": 100000000000,
+        "server": 0,
+        "tor": 8,
+        "tor_port": 2
+      },
+      {
+        "gpu": 2,
+        "gpu_port": 1,
+        "gpu_slot": 0,
+        "nic": 0,
+        "plane": 0,
+        "rail": 0,
+        "rate_bps": 100000000000,
+        "server": 1,
+        "tor": 9,
+        "tor_port": 1
+      },
+      {
+        "gpu": 3,
+        "gpu_port": 1,
+        "gpu_slot": 1,
+        "nic": 0,
+        "plane": 0,
+        "rail": 0,
+        "rate_bps": 100000000000,
+        "server": 1,
+        "tor": 9,
+        "tor_port": 2
+      },
+      {
+        "gpu": 4,
+        "gpu_port": 1,
+        "gpu_slot": 0,
+        "nic": 0,
+        "plane": 0,
+        "rail": 0,
+        "rate_bps": 100000000000,
+        "server": 2,
+        "tor": 12,
+        "tor_port": 1
+      },
+      {
+        "gpu": 5,
+        "gpu_port": 1,
+        "gpu_slot": 1,
+        "nic": 0,
+        "plane": 0,
+        "rail": 0,
+        "rate_bps": 100000000000,
+        "server": 2,
+        "tor": 12,
+        "tor_port": 2
+      },
+      {
+        "gpu": 6,
+        "gpu_port": 1,
+        "gpu_slot": 0,
+        "nic": 0,
+        "plane": 0,
+        "rail": 0,
+        "rate_bps": 100000000000,
+        "server": 3,
+        "tor": 13,
+        "tor_port": 1
+      },
+      {
+        "gpu": 7,
+        "gpu_port": 1,
+        "gpu_slot": 1,
+        "nic": 0,
+        "plane": 0,
+        "rail": 0,
+        "rate_bps": 100000000000,
+        "server": 3,
+        "tor": 13,
+        "tor_port": 2
+      }
+    ],
+    "nodes": [
+      {
+        "gpu_slot": 0,
+        "id": 0,
+        "kind": "gpu",
+        "pod": 0,
+        "segment": 0,
+        "server": 0,
+        "server_in_segment": 0
+      },
+      {
+        "gpu_slot": 1,
+        "id": 1,
+        "kind": "gpu",
+        "pod": 0,
+        "segment": 0,
+        "server": 0,
+        "server_in_segment": 0
+      },
+      {
+        "gpu_slot": 0,
+        "id": 2,
+        "kind": "gpu",
+        "pod": 0,
+        "segment": 0,
+        "server": 1,
+        "server_in_segment": 1
+      },
+      {
+        "gpu_slot": 1,
+        "id": 3,
+        "kind": "gpu",
+        "pod": 0,
+        "segment": 0,
+        "server": 1,
+        "server_in_segment": 1
+      },
+      {
+        "gpu_slot": 0,
+        "id": 4,
+        "kind": "gpu",
+        "pod": 1,
+        "segment": 0,
+        "server": 2,
+        "server_in_segment": 0
+      },
+      {
+        "gpu_slot": 1,
+        "id": 5,
+        "kind": "gpu",
+        "pod": 1,
+        "segment": 0,
+        "server": 2,
+        "server_in_segment": 0
+      },
+      {
+        "gpu_slot": 0,
+        "id": 6,
+        "kind": "gpu",
+        "pod": 1,
+        "segment": 0,
+        "server": 3,
+        "server_in_segment": 1
+      },
+      {
+        "gpu_slot": 1,
+        "id": 7,
+        "kind": "gpu",
+        "pod": 1,
+        "segment": 0,
+        "server": 3,
+        "server_in_segment": 1
+      },
+      {
+        "id": 8,
+        "index": 0,
+        "kind": "tor",
+        "plane": 0,
+        "pod": 0,
+        "rail": 0,
+        "segment": 0
+      },
+      {
+        "id": 9,
+        "index": 1,
+        "kind": "tor",
+        "plane": 0,
+        "pod": 0,
+        "rail": 0,
+        "segment": 0
+      },
+      {
+        "id": 10,
+        "index": 0,
+        "kind": "agg",
+        "plane": 0,
+        "pod": 0,
+        "rail": -1
+      },
+      {
+        "id": 11,
+        "index": 1,
+        "kind": "agg",
+        "plane": 0,
+        "pod": 0,
+        "rail": -1
+      },
+      {
+        "id": 12,
+        "index": 0,
+        "kind": "tor",
+        "plane": 0,
+        "pod": 1,
+        "rail": 0,
+        "segment": 0
+      },
+      {
+        "id": 13,
+        "index": 1,
+        "kind": "tor",
+        "plane": 0,
+        "pod": 1,
+        "rail": 0,
+        "segment": 0
+      },
+      {
+        "id": 14,
+        "index": 0,
+        "kind": "agg",
+        "plane": 0,
+        "pod": 1,
+        "rail": -1
+      },
+      {
+        "id": 15,
+        "index": 1,
+        "kind": "agg",
+        "plane": 0,
+        "pod": 1,
+        "rail": -1
+      },
+      {
+        "id": 16,
+        "index": 0,
+        "kind": "core",
+        "plane": 0,
+        "rail": -1
+      },
+      {
+        "id": 17,
+        "index": 1,
+        "kind": "core",
+        "plane": 0,
+        "rail": -1
+      }
+    ],
+    "schema_version": "moe-scaleout-physical-topology/1"
+  }
+}

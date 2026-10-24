@@ -1,0 +1,16 @@
+{
+  "capacity_bytes": 8388608,
+  "explicit_order_accepted": true,
+  "native_networks_executed": 0,
+  "native_ports_matched": 32,
+  "native_reference_sha256": "34ef5284fe5b6a791c7bc71f0c35dee22a913c2b40ebc7019c3e2e875c65fdac",
+  "passed": true,
+  "public_commands": 10,
+  "required_bad_bytes": 9503884,
+  "runtime_entries_rejected_before_backend": 5,
+  "source_hashes": {
+    "backend/rdma/fabric.cc": "83a592afa804a11cb2113c1deb7cc2b29e766394e1e115d5a7b77c522111e989",
+    "third_party/LLMServingSim/astra-sim/extern/network_backend/ns-3/src/point-to-point/model/switch-mmu.cc": "95243e0f3f2d15e0ea87990e01731fad92984e8ec9a6bb00872ee6bf50070a25"
+  },
+  "transaction_order_rejected": true
+}

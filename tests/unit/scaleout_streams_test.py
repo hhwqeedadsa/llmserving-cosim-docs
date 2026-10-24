@@ -44,7 +44,7 @@ class StreamInputTests(unittest.TestCase):
         # execution evidence. Public workflow creates its own actual topology.
         self.topology=dict(schema_version='moe-scaleout-physical-topology/1',
             nodes=[dict(id=i,kind='gpu') for i in range(8)]+[dict(id=8,kind='tor',plane=0)],
-            links=[dict(src=i,dst=8,src_port=1,dst_port=i+1,rate_bps=100000000000) for i in range(8)])
+            links=[dict(src=i,dst=8,src_port=1,dst_port=i+1,rate_bps=100000000000,delay_ns=1000) for i in range(8)])
 
     def test_legal_causal_input(self):
         validate(self.topology,self.protocol,self.config)
@@ -132,7 +132,7 @@ class StreamInputTests(unittest.TestCase):
         protocol['limits']=dict(DEFAULTS,max_gpus=40)
         topology=dict(schema_version='moe-scaleout-physical-topology/1',
             nodes=[dict(id=i,kind='gpu') for i in range(40)]+[dict(id=40,kind='tor',plane=0)],
-            links=[dict(src=i,dst=40,src_port=1,dst_port=i+1,rate_bps=100000000000) for i in range(40)])
+            links=[dict(src=i,dst=40,src_port=1,dst_port=i+1,rate_bps=100000000000,delay_ns=1000) for i in range(40)])
         config=deepcopy(self.config);config['streams'][0]['src']=32
         with self.assertRaises(ValueError):validate(topology,protocol,config)
         config['schema_version']='moe-rdma-stream-work/2';config['limits']=dict(max_streams=2,max_work=6)

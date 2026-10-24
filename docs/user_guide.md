@@ -45,6 +45,8 @@ moe-ub build --build-dir build/default --jobs 2
 
 ## 运行小例
 
+修改非UB拓扑的带宽或延迟后，先用`scaleout rdma-preflight --topology <拓扑目录> --protocol <协议JSON> --output <新报告JSON>`检查每台交换机的缓冲保留量；不需要backend。可选`--transactions <事务JSON>`检查计划中的地址与依赖。容量失败会保存逐端口原因并返回退出码1，各Python运行入口也会提前拒绝；通过不代表网络执行或性能验证。说明见[RDMA小例](../examples/scaleout_rdma/README.md#修改哪些参数)。
+
 检查同一原生连接在多次传输和空闲后是否保留序号，可用`scaleout rdma-stream-probe --topology ... --protocol ... --config ... --backend ... --output ...`。后续工作按真实接收/ACK回调就绪；它是独立字节传输检查，不执行现代MoE或GPU可见性。构建输出的`stream_probe`路径、输入和上限见[持久传输小例](../examples/scaleout_rdma_streams/README.md)。
 
 该字节入口支持在工作输入中增加`source_rate_capture`，按已有包与ACK回调记录源端速率；所有原生入口另记录实际生效的`rdma_parameters`。配置、单位与采样边界见[源端速率观测](../examples/scaleout_rdma_streams/README.md#可选的源端速率观测)。

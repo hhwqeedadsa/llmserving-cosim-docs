@@ -16,6 +16,12 @@ class TransactionSession {
     Json r={{"decisions",decision_},{"finished",finished_},{"registrations",registrations_},{"events",history_},
       {"scope","interactive MRT1 functional transactions on one native clock; frontend host wait is not simulated time"},
       {"modern_deepep_connected",false},{"hardware_calibrated",false},{"gpu_visibility_modeled",false}};
+    if(!alarms_.empty()) {
+      r["control_alarms"]=Json::array();
+      for(const auto& [id,a]:alarms_)r["control_alarms"].push_back({{"id",id},{"armed_ns",a.armed},
+        {"deadline_ns",a.deadline},{"fired_ns",a.fired},{"cancelled_ns",a.cancelled}});
+      r["control_alarm_scope"]="frontend control wakeups on native ns-3 clock; no GPU slot, network packet or calibrated detection cost";
+    }
     return r;
   }
   Json Transactions() const {return transactions_.Report();}
@@ -48,6 +54,16 @@ class TransactionSession {
     return result;
   }
  private:
+  struct Alarm {
+    Alarm(int64_t start,int64_t end):armed(start),deadline(end) {}
+    int64_t armed,deadline,fired=-1,cancelled=-1;
+    bool delivered=false;
+    ns3::EventId event;
+    bool Pending() const {return fired<0 && cancelled<0;}
+  };
+  std::size_t PendingAlarms() const {
+    std::size_t count=0;for(const auto& [id,a]:alarms_)count+=a.Pending();return count;
+  }
   static int64_t Now(){return ns3::Simulator::Now().GetNanoSeconds();}
   const Json& Node(uint64_t id) const {return input_.at("operations").at(index_.at(id));}
   void Notify() {
@@ -92,6 +108,9 @@ class TransactionSession {
       for(unsigned k=0;k<3;++k)if(t[k]>=0 && delivered_.emplace(id,names[k]).second)
         events.push_back({{"operation",id},{"event",names[k]},{"time_ns",t[k]}});
     }
+    for(auto& [id,a]:alarms_)if(a.fired>=0 && !a.delivered) {
+      events.push_back({{"alarm",id},{"event","fired"},{"time_ns",a.fired}});a.delivered=true;
+    }
     // Timestamp order is descriptive; ties retain actual collection order and
     // are not a claim that independent same-ns device callbacks are ordered.
     std::stable_sort(events.begin(),events.end(),[](const Json& a,const Json& b){return a.at("time_ns")<b.at("time_ns");});
@@ -104,27 +123,66 @@ class TransactionSession {
       {"events",events},{"drained",drained}}.dump()<<std::endl;
     std::vector<char> buffer(1048577);
     Require(bool(std::cin.getline(buffer.data(),buffer.size())),"frontend EOF or oversized session command");
-    const auto command=Json::parse(buffer.data());SessionKeys(command,{"type","decision_id","now_ns","submissions","finish"});
+    const auto command=Json::parse(buffer.data());
+    std::vector<std::string> keys={"type","decision_id","now_ns","submissions","finish"};
+    for(const auto* name:{"alarms","cancel_alarms"})if(command.contains(name))keys.push_back(name);
+    SessionKeys(command,keys);
     Require(command.at("type")=="COMMIT" && SessionInteger(command.at("decision_id"))==decision_ &&
       SessionInteger(command.at("now_ns"))==static_cast<uint64_t>(Now()) && command.at("finish").is_boolean(),"session command identity/time/type mismatch");
     const auto& submissions=command.at("submissions");
     Require(submissions.is_array() && submissions.size()<=48,"invalid session submissions");
-    Require(!command.at("finish").get<bool>() || (submissions.empty() && !input_.at("operations").empty() && drained),"premature session finish");
     // Pure validation of the entire candidate precedes registering/executing
     // any command member. Runtime lease/access failures are not rolled back.
     auto candidate=input_;
     for(const auto& op:submissions)candidate["operations"].push_back(op);
     ValidateSessionProgram(candidate,topology_,fabric_.MaxSimNs());
+    std::vector<std::pair<uint64_t,int64_t>> arm;
+    std::vector<uint64_t> cancel;
+    std::set<uint64_t> new_ids,cancel_ids;
+    if(command.contains("alarms")) {
+      const auto& list=command.at("alarms");
+      Require(list.is_array() && alarms_.size()+list.size()<=32,"control alarm lifetime budget exceeded");
+      for(const auto& item:list) {
+        SessionKeys(item,{"id","delay_ns"});const auto id=SessionInteger(item.at("id"),65535);
+        const auto delay=SessionInteger(item.at("delay_ns"),fabric_.MaxSimNs());
+        Require(!alarms_.count(id) && new_ids.insert(id).second,"reused control alarm id");
+        Require(delay<static_cast<uint64_t>(fabric_.MaxSimNs()-Now()),"control alarm deadline reaches simulation cutoff");
+        arm.emplace_back(id,delay);
+      }
+    }
+    if(command.contains("cancel_alarms")) {
+      const auto& list=command.at("cancel_alarms");Require(list.is_array() && list.size()<=32,"invalid control alarm cancellations");
+      for(const auto& item:list) {
+        const auto id=SessionInteger(item,65535);
+        Require(alarms_.count(id) && alarms_.at(id).Pending() && cancel_ids.insert(id).second,"control alarm cancellation requires unique pending id");
+        cancel.push_back(id);
+      }
+    }
+    const auto pending=PendingAlarms()-cancel.size()+arm.size();
+    const bool finish=command.at("finish").get<bool>();
+    Require(!finish || (submissions.empty() && (!input_.at("operations").empty() || !alarms_.empty()) &&
+      drained && pending==0 && arm.empty()),"premature session finish or pending control alarm");
+    Require(finish || !submissions.empty() || !drained || pending>0,"empty idle session command cannot advance execution");
+    // Nothing above mutates the live network, operation table or alarm state.
     ++decision_;
-    if(command.at("finish").get<bool>()) {transactions_.Close();Require(fabric_.Drained(),"session resources remain after close");finished_=true;ns3::Simulator::Stop();return;}
+    for(const auto id:cancel) {
+      auto& a=alarms_.at(id);ns3::Simulator::Cancel(a.event);a.cancelled=Now();
+    }
+    for(const auto& [id,delay]:arm) {
+      auto [it,added]=alarms_.emplace(id,Alarm{Now(),Now()+delay});
+      Require(added,"duplicate control alarm registration");
+      it->second.event=ns3::Simulator::Schedule(ns3::NanoSeconds(delay),[this,id](){
+        auto& a=alarms_.at(id);Require(a.Pending(),"nonpending control alarm fired");a.fired=Now();Notify();
+      });
+    }
+    if(finish) {transactions_.Close();Require(fabric_.Drained(),"session resources remain after close");finished_=true;ns3::Simulator::Stop();return;}
     for(const auto& op:submissions) {
       const auto id=op.at("id").get<uint64_t>();
       index_[id]=input_.at("operations").size();input_["operations"].push_back(op);
       registrations_.push_back({{"operation",id},{"time_ns",Now()},{"decision_id",decision_-1}});
       if(op.at("kind")=="local")local_times_[id]={-1,-1,-1};
     }
-    if(!submissions.empty())Notify();
-    else Require(!drained,"empty idle session command cannot advance execution");
+    if(!submissions.empty() || !arm.empty() || !cancel.empty())Notify();
   }
   void Progress() {
     for(const auto& op:input_.at("operations")) {
@@ -140,13 +198,14 @@ class TransactionSession {
     auto events=Events();const bool drained=Drained();
     if(decision_==0 || !events.empty() || (drained && !last_drained_))Exchange(events,drained);
     last_drained_=drained;
-    if(!finished_ && !notify_pending_ && !AllDone() && transactions_.Drained() && local_busy_.empty())
+    if(!finished_ && !notify_pending_ && !AllDone() && transactions_.Drained() && local_busy_.empty() && PendingAlarms()==0)
       throw std::invalid_argument("session pending work has no event able to satisfy its conditions");
   }
   Fabric& fabric_;Json topology_,input_;RemoteTransactions transactions_;
   uint64_t decision_=0;bool notify_pending_=false,finished_=false,last_drained_=false;
   std::map<uint64_t,std::size_t> index_;std::set<uint64_t> submitted_;
   std::map<uint64_t,std::array<int64_t,3>> local_times_;
+  std::map<uint64_t,Alarm> alarms_;
   std::map<unsigned,std::deque<uint64_t>> local_queues_;std::set<unsigned> local_busy_;
   std::set<std::pair<uint64_t,std::string>> delivered_;
   Json registrations_=Json::array(),history_=Json::array();

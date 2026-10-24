@@ -19,6 +19,35 @@ from .scaleout_topology import fields, require
 from .scaleout_transactions import validate
 
 
+def _control_plan(current, alarms, cancel_alarms, now_ns, max_ns):
+    """Pure whole-command validation; no native events or GPU queue mutation."""
+    candidate, message = deepcopy(current), {}
+    if alarms is not None:
+        require(isinstance(alarms, list) and len(current)+len(alarms) <= 32,
+                'control alarm lifetime budget exceeded')
+        for alarm in alarms:
+            fields(alarm, 'id delay_ns', 'control alarm')
+            identity, delay = alarm['id'], alarm['delay_ns']
+            require(type(identity) is int and 0 <= identity <= 65535 and identity not in candidate,
+                    'invalid or reused control alarm id')
+            require(type(delay) is int and 0 <= delay < max_ns-now_ns,
+                    'control alarm deadline reaches simulation cutoff')
+            candidate[identity] = dict(armed_ns=now_ns, deadline_ns=now_ns+delay, status='pending')
+        message['alarms'] = deepcopy(alarms)
+    if cancel_alarms is not None:
+        require(isinstance(cancel_alarms, list) and len(cancel_alarms) <= 32,
+                'invalid control alarm cancellations')
+        seen = set()
+        for identity in cancel_alarms:
+            require(type(identity) is int and identity in current and
+                    current[identity]['status'] == 'pending' and identity not in seen,
+                    'control alarm cancellation requires unique pending id')
+            seen.add(identity)
+            candidate[identity]['status'] = 'cancelled'
+        message['cancel_alarms'] = deepcopy(cancel_alarms)
+    return candidate, message
+
+
 class NativeTransactionSession:
     """Receive actual transitions, then commit newly constructed v4/v5 nodes.
 
@@ -43,6 +72,7 @@ class NativeTransactionSession:
         self.sequence = 0
         self.last_ns = 0
         self._delivered = set()
+        self._alarms = {}
         self.child = None
         self._buffer = b''
         self.selector = selectors.DefaultSelector()
@@ -124,7 +154,20 @@ class NativeTransactionSession:
                     type(event['drained']) is bool and isinstance(event['events'], list), 'invalid native session decision')
             known = {op['id']: op for op in self.config['operations']}
             incoming = set()
+            fired_alarms = []
             for row in event['events']:
+                if isinstance(row, dict) and 'alarm' in row:
+                    fields(row, 'alarm event time_ns', 'session control alarm transition')
+                    identity = row['alarm']
+                    require(type(identity) is int and identity in self._alarms and
+                            self._alarms[identity]['status'] == 'pending' and row['event'] == 'fired' and
+                            type(row['time_ns']) is int and row['time_ns'] == self._alarms[identity]['deadline_ns'] and
+                            row['time_ns'] <= event['now_ns'], 'unknown or invalid control alarm transition')
+                    key = ('alarm', identity, 'fired')
+                    require(key not in self._delivered and key not in incoming, 'duplicate control alarm callback')
+                    incoming.add(key)
+                    fired_alarms.append(identity)
+                    continue
                 fields(row, 'operation event time_ns'+(' returned_value' if 'returned_value' in row else ''), 'session transition')
                 require(type(row['operation']) is int and row['operation'] in known and type(row['time_ns']) is int and
                         0 <= row['time_ns'] <= event['now_ns'], 'unknown or future session transition')
@@ -139,19 +182,33 @@ class NativeTransactionSession:
                     require(row['event'] in ('response', 'completed') and type(row['returned_value']) is int and
                             0 <= row['returned_value'] < 2**64, 'invalid session return value')
             self._delivered.update(incoming)
+            for identity in fired_alarms:
+                self._alarms[identity]['status'] = 'fired'
             self.pending = event
             self.last_ns = event['now_ns']
             self.transcript.write(json.dumps(dict(direction='native', message=event))+'\n')
             return deepcopy(event)
 
-    def commit(self, submissions, *, finish=False):
-        """Validate the whole new batch before sending it; never send completion."""
+    def commit(self, submissions, *, finish=False, alarms=None, cancel_alarms=None):
+        """Submit work or native-clock control wakeups, never device completion.
+
+        Alarms do not consume a GPU slot. IDs are lifetime-unique in a separate
+        namespace; finish needs explicit cancellation of any pending wakeups.
+        """
         require(self.pending is not None and type(finish) is bool and isinstance(submissions, list), 'invalid session commit')
-        require(not finish or (self.pending['drained'] and not submissions and self.config['operations']), 'premature session finish')
         candidate = deepcopy(self.config)
         candidate['operations'].extend(deepcopy(submissions))
         validate(self.t, self.p, candidate, allow_no_remote=True)
+        control, extra = _control_plan(self._alarms, alarms, cancel_alarms,
+                                      self.pending['now_ns'], limits(self.p)['max_sim_ns'])
+        pending_alarms = any(a['status'] == 'pending' for a in control.values())
+        require(not finish or (self.pending['drained'] and not submissions and
+                (self.config['operations'] or self._alarms) and not pending_alarms and not alarms),
+                'premature session finish or pending control alarm')
+        require(finish or submissions or not self.pending['drained'] or pending_alarms,
+                'empty idle session command cannot advance execution')
         message = dict(type='COMMIT', decision_id=self.sequence, now_ns=self.pending['now_ns'], submissions=submissions, finish=finish)
+        message.update(extra)
         raw = (json.dumps(message, separators=(',', ':'))+'\n').encode()
         require(len(raw) <= 1048576, 'session command exceeds 1MiB; split the batch')
         view = memoryview(raw)
@@ -162,6 +219,7 @@ class NativeTransactionSession:
         self.child.stdin.flush()
         self.transcript.write(json.dumps(dict(direction='frontend', message=message))+'\n')
         self.config = candidate
+        self._alarms = control
         self.pending = None
         self.sequence += 1
 

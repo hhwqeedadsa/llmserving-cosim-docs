@@ -1,0 +1,202 @@
+{
+  "cases": [
+    {
+      "alarm_callbacks": 1,
+      "all_port_model_bytes": 744,
+      "case": "busy_gpu",
+      "control_alarms": 1,
+      "finish_ns": 100000,
+      "local_completion_ns": {
+        "1": 100000,
+        "50": 100000
+      },
+      "passed": true,
+      "retained_source_leases": [],
+      "source_packets": 1,
+      "target_effects": 1
+    },
+    {
+      "alarm_callbacks": 1,
+      "all_port_model_bytes": 0,
+      "case": "cancel_and_finish",
+      "control_alarms": 2,
+      "finish_ns": 20000,
+      "local_completion_ns": {},
+      "passed": true,
+      "retained_source_leases": [],
+      "source_packets": 0,
+      "target_effects": 0
+    },
+    {
+      "alarm_callbacks": 0,
+      "all_port_model_bytes": 744,
+      "case": "control_cancel",
+      "control_alarms": 1,
+      "finish_ns": 12060,
+      "local_completion_ns": {
+        "1": 6036
+      },
+      "passed": true,
+      "retained_source_leases": [],
+      "source_packets": 1,
+      "target_effects": 1
+    },
+    {
+      "alarm_callbacks": 1,
+      "all_port_model_bytes": 744,
+      "case": "control_held",
+      "control_alarms": 1,
+      "finish_ns": 100000,
+      "local_completion_ns": {
+        "1": 6036
+      },
+      "passed": true,
+      "retained_source_leases": [],
+      "source_packets": 1,
+      "target_effects": 1
+    },
+    {
+      "alarm_callbacks": 0,
+      "all_port_model_bytes": 744,
+      "case": "default",
+      "control_alarms": 0,
+      "finish_ns": 12060,
+      "local_completion_ns": {
+        "1": 6036
+      },
+      "passed": true,
+      "retained_source_leases": [],
+      "source_packets": 1,
+      "target_effects": 1
+    },
+    {
+      "alarm_callbacks": 1,
+      "all_port_model_bytes": 744,
+      "case": "idle_alarm",
+      "control_alarms": 1,
+      "finish_ns": 32060,
+      "local_completion_ns": {
+        "1": 26036
+      },
+      "passed": true,
+      "retained_source_leases": [],
+      "source_packets": 1,
+      "target_effects": 1
+    },
+    {
+      "alarm_callbacks": 0,
+      "all_port_model_bytes": 744,
+      "case": "legacy_gpu",
+      "control_alarms": 0,
+      "finish_ns": 100000,
+      "local_completion_ns": {
+        "1": 100000,
+        "50": 100000
+      },
+      "passed": true,
+      "retained_source_leases": [],
+      "source_packets": 1,
+      "target_effects": 1
+    },
+    {
+      "alarm_callbacks": 0,
+      "all_port_model_bytes": 744,
+      "case": "old-default",
+      "control_alarms": 0,
+      "finish_ns": 12060,
+      "local_completion_ns": {
+        "1": 6036
+      },
+      "passed": true,
+      "retained_source_leases": [],
+      "source_packets": 1,
+      "target_effects": 1
+    },
+    {
+      "alarm_callbacks": 1,
+      "all_port_model_bytes": 744,
+      "case": "pending_wait",
+      "control_alarms": 1,
+      "finish_ns": 32060,
+      "local_completion_ns": {
+        "1": 26036,
+        "50": 26036
+      },
+      "passed": true,
+      "retained_source_leases": [],
+      "source_packets": 1,
+      "target_effects": 1
+    },
+    {
+      "alarm_callbacks": 1,
+      "all_port_model_bytes": 3720,
+      "case": "source_failed",
+      "control_alarms": 1,
+      "finish_ns": 5000000,
+      "local_completion_ns": {
+        "1": 6036,
+        "3": 106036
+      },
+      "passed": false,
+      "retained_source_leases": [
+        {
+          "address": 4096,
+          "bytes": 8,
+          "key": 7,
+          "operation": 0,
+          "owner": 0
+        }
+      ],
+      "source_packets": 5,
+      "target_effects": 2
+    },
+    {
+      "alarm_callbacks": 1,
+      "all_port_model_bytes": 0,
+      "case": "timer_only",
+      "control_alarms": 1,
+      "finish_ns": 20000,
+      "local_completion_ns": {},
+      "passed": true,
+      "retained_source_leases": [],
+      "source_packets": 0,
+      "target_effects": 0
+    },
+    {
+      "alarm_callbacks": 2,
+      "all_port_model_bytes": 744,
+      "case": "zero_alarm",
+      "control_alarms": 2,
+      "finish_ns": 12060,
+      "local_completion_ns": {
+        "1": 6036
+      },
+      "passed": true,
+      "retained_source_leases": [],
+      "source_packets": 1,
+      "target_effects": 1
+    }
+  ],
+  "independent_stdlib": true,
+  "native_invalid_no_work_or_packets": 22,
+  "source_packet_transmissions": 14,
+  "tamper_rejections": [
+    {
+      "kind": "alarm_time",
+      "reason": "alarm report differs from actual callbacks/cancellations",
+      "rejected": true
+    },
+    {
+      "kind": "output",
+      "reason": "final memory differs from real write/copy replay",
+      "rejected": true
+    },
+    {
+      "kind": "duplicate_callback",
+      "reason": "false or duplicate alarm trigger",
+      "rejected": true
+    }
+  ],
+  "target_effects": 11,
+  "unchanged_port_service_in_control_comparisons": true
+}

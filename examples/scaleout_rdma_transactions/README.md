@@ -187,7 +187,7 @@ PYTHONPATH=python python3 -m moe_ub_cosim scaleout rdma-transaction-session \
 
 后端由`rdma-build`的`transaction_session`字段返回，使用方式与已有probe相同。所有产物目录必须新建，tmpfs预留8GiB；公开命令限制60秒、RSS1GiB/地址2GiB、64MiB产物，仿真默认5ms、结果16MiB，不自动扩限。
 
-需要根据真实返回值构造后继时，使用`moe_ub_cosim.transaction_session.NativeTransactionSession`。`receive()`返回当前DECIDE（或成功结束时的None），`commit(nodes, finish=False)`只能回应这一决策。初始化传v4对象且operations为空；每次提交保留历史ID及依赖，累积32远端/16本地、8连接/16窗口，不能复用ID。调用者不得发送完成通知或未来就绪时刻。自定义驱动必须整体放在公开`host_probe`下；客户端另有60秒宿主截止，异常关闭仅回收其自己启动的子进程。
+需要根据真实返回值构造后继时，使用`moe_ub_cosim.transaction_session.NativeTransactionSession`。`receive()`返回当前DECIDE（或成功结束时的None），`commit(nodes, finish=False)`只能回应这一决策。初始化传v4/v5对象且operations为空；每次提交保留历史ID及依赖，累积32远端/16本地、8连接/16窗口，不能复用ID。调用者不得发送完成通知或未来就绪时刻。自定义驱动必须整体放在公开`host_probe`下；客户端另有60秒宿主截止，异常关闭仅回收其自己启动的子进程。
 
 可复制的[驱动示例](session_driver.py)读取[两节点程序](session-program.json)，先发原子加3，取得实际旧值后再生成“旧值+100”的小端写数据。把窗口初值从7改成19，第二次实际写入会从107变成119，无需修改后端或预先填结果：
 
@@ -214,6 +214,38 @@ PYTHONPATH=python python3 -m moe_ub_cosim.host_probe \
 | local_admitted / local_started | 本地条件消费并入队 / 占用该GPU的声明处理槽 |
 
 会话的`drained=true`表示当前已注册工作、本地槽与物理传输均空闲，QP仍保留；前端可以继续提交下一轮。只有显式`finish=true`才关闭持久连接，此后最终Fabric的`drained`还验证QP资源已清空。EOF、错误决策或实际截止不是成功；运行期错误保留partial result，宿主强制终止可能只留下已刷出的前缀和监控记录。self-peer仍拒绝，不能补成零成本或虚构外部路径。现代事件核心尚未接入，验收边界见[在线会话验收](../../fixtures/transaction_session/README.md)。
+
+## 不占用GPU队列的控制定时器
+
+业务重试期限或控制器定时检查应使用在线API的`alarms`，不要表示成占用`serial_per_gpu/1`槽的本地计算。它仍由同一个原生ns-3时钟推进，只唤醒前端，不触发网络完成、GPU完成或远端通知：
+
+```python
+session.commit(nodes, alarms=[{"id": 7, "delay_ns": 100000}])
+# 原生时间真正到达截止后，receive()的events中出现：
+# {"alarm": 7, "event": "fired", "time_ns": 实际截止时刻}
+# 条件提前满足时，可以显式取消仍pending的timer：
+session.commit([], cancel_alarms=[7])
+```
+
+`delay_ns`相对当前DECIDE的`now_ns`，可为0，但截止必须严格早于本次`max_sim_ns`。ID为0—65535，整个会话累计最多32个，已触发/取消的ID不能复用；alarm ID与operation ID分开。不能把alarm ID放入操作的`after`依赖：前端收到真实fired回调后，再递交需要的工作。同纳秒允许多个回调，只依赖其事件集合与时刻，不依赖独立事件的排列顺序。
+
+`DECIDE.drained=true`只表明当前工作和物理网络空闲，可能仍有控制timer。只剩timer时可`commit([])`等待；`finish=True`要求控制timer也已触发或被本批显式取消，不会自动取消。若取消最后timer且没有其他可推进工作，应在同批明确`finish=True`，或者提交新工作/timer，不能无限空等。未知、重复、已触发或已取消ID的取消请求会失败；同批新建再取消同一ID也拒绝。操作与timer整批校验通过前，不执行有效前部。
+
+[可复制驱动](control_alarm_driver.py)使用[小型输入](control-alarm.json)：先发送8B，按实际接收复制，再取消原定100μs控制期限。原输入中的本地copy仍遵守GPU FIFO；控制timer不占这个槽。运行整个驱动：
+
+```bash
+PYTHONPATH=python PYTHONDONTWRITEBYTECODE=1 python3 -B -m moe_ub_cosim.host_probe \
+  --output-dir /dev/shm/NEW_ALARM_MONITOR \
+  --rss-bytes 1073741824 --address-bytes 2147483648 \
+  --artifact-bytes 67108864 --wall-seconds 60 \
+  --artifact-root /dev/shm/NEW_ALARM_SESSION --min-free-bytes 8589934592 \
+  -- python3 -B examples/scaleout_rdma_transactions/control_alarm_driver.py \
+  --topology /dev/shm/SMALL_TOPO --protocol examples/scaleout_rdma/rdma.json \
+  --config examples/scaleout_rdma_transactions/control-alarm.json \
+  --backend /ABS/ns3.42-moe-rdma-transaction-session --output /dev/shm/NEW_ALARM_SESSION
+```
+
+timer不产生控制报文，没有声明CPU处理成本，也不模拟真实故障检测器；需要跨端通知时仍须显式建模通信。本例的更早复制是输入语义修正，不能当恢复算法加速。故障源仍可能未确认、持有源缓冲，不能因为控制期限结束或结果已收到而释放。完整范围见[平台验收](../../fixtures/session_control_alarms/README.md)。
 
 ## 使用大地址范围与稀疏初值
 

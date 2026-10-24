@@ -1,0 +1,22 @@
+{
+  "schema_version": "moe-rdma-transactions/4",
+  "local_model": {"mode": "serial_per_gpu/1", "duration_source": "declared_ns"},
+  "source_model": {"capture": "registered_window_at_publish/1", "release": "transaction_completed/1"},
+  "local_memory_model": {"mode": "guarded_copy/1", "acquire": "admission/1", "capture": "start/1", "commit": "completion/1"},
+  "connections": [
+    {"id": 0, "src": 0, "dst": 4, "plane": 0, "request_port": 24000, "response_port": 24001,
+     "source_nic": 1, "destination_nic": 1, "queue_depth": 1}
+  ],
+  "windows": [
+    {"owner": 0, "key": 7, "address": 4096, "allow_atomic": false, "hex": "0102030405060708"},
+    {"owner": 4, "key": 9, "address": 8192, "allow_atomic": false,
+     "hex": "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"}
+  ],
+  "operations": [
+    {"id": 0, "kind": "remote", "connection": 0, "verb": "put", "key": 9, "address": 8192,
+     "source": {"key": 7, "address": 4096, "bytes": 8}, "after": []},
+    {"id": 1, "kind": "local", "rank": 4, "duration_ns": 0,
+     "copy": {"source": {"key": 9, "address": 8192, "bytes": 8}, "target": {"key": 9, "address": 8224}},
+     "after": [{"operation": 0, "event": "applied"}]}
+  ]
+}

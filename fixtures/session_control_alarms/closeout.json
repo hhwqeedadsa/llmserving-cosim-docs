@@ -1,0 +1,48 @@
+{
+  "conservative_sum_monitored_seconds": 69.0063472930342,
+  "evidence_stage": "/dev/shm/moe-control-alarms-20261024",
+  "failure_monitors": [
+    {
+      "exit_code": 1,
+      "path": "audit-monitor/probe.json",
+      "status": "child_failed"
+    },
+    {
+      "exit_code": 1,
+      "path": "prefix-regression/aggregate-tail-online/execution/probe.json",
+      "status": "child_failed"
+    },
+    {
+      "exit_code": 1,
+      "path": "prefix-regression/depth-one-online/execution/probe.json",
+      "status": "child_failed"
+    },
+    {
+      "exit_code": 1,
+      "path": "prefix-regression/fence-does-not-publish-online/execution/probe.json",
+      "status": "child_failed"
+    }
+  ],
+  "goal_status": "in_progress",
+  "live_owned_group_pids": [],
+  "monitor_records": 30,
+  "monitored_time_scope": "includes nested originals; restored evidence copies excluded; not total elapsed stage time",
+  "no_dependency_changes": true,
+  "no_download_install_gpu_or_research_reruns": true,
+  "passed": true,
+  "peak_sampled_group_rss_bytes": 632807424,
+  "persistent_checkpoint": "runs/session_control_alarms_checkpoint_20261024",
+  "platform_stage_complete": true,
+  "raw_records_scope": "functional native invalid inputs keep final invalid command and native logs; initial valid setup commands not a complete raw transcript",
+  "recorded_remaining_live_pids_all_empty": true,
+  "root_free_bytes": 109002752,
+  "root_persistence_reserve_bytes": 67108864,
+  "stage_artifact_bytes_limit": 201326592,
+  "stage_cumulative_seconds_limit": 450,
+  "stage_plus_restored_archive_and_persistent_copy": {
+    "allocated_bytes": 93478912,
+    "apparent_bytes": 89620700
+  },
+  "tmpfs_free_bytes": 257576886272,
+  "tmpfs_reserve_bytes": 8589934592
+}

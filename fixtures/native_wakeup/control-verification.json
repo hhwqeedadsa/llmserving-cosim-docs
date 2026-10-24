@@ -1,0 +1,20 @@
+{
+  "passed": true,
+  "delivery": {
+    "decisions": 3,
+    "callbacks": 11,
+    "native_submissions": 2,
+    "suppressed_event_batches": 5
+  },
+  "actual_source_packets": 2,
+  "retransmitted_source_packets": 0,
+  "decoded_frames": 2,
+  "observed_out_of_order_data_packets": 0,
+  "physical_capture_events": 88,
+  "first_alarm_ns": 250,
+  "second_alarm_cancelled_ns": 250,
+  "invalid_compound_command_sent": false,
+  "remote_target_applications": 1,
+  "zero_duration_local_completed": true,
+  "scope": "actual functional remote memory and native control wakeups, not calibrated GPU timing"
+}

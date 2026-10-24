@@ -192,7 +192,7 @@ class ModernNativeController:
             scope='native callback-driven modern functional graph and synthetic full-size operands; not GIN/GPU timing')
 
 
-def worker(topology,protocol,config,backend,output):
+def worker(topology,protocol,config,backend,output,*,callback_wakeups=False):
     t,p,c=(checked_json(Path(path),maximum) for path,maximum in ((topology,8*2**20),(protocol,65536),(config,4*2**20)))
     output=Path(output);controller=ModernNativeController(t,p,c)
     save(output/'modern-plan.json',controller.layout.plan);save(output/'functional-windows.json',controller.layout.description)
@@ -202,12 +202,19 @@ def worker(topology,protocol,config,backend,output):
                 nodes=controller.advance(event)
                 finished=not nodes and event['drained'] and controller.runtime.snapshot()['all_events_fired']
                 require(nodes or finished or not event['drained'],'modern graph blocked while native network idle; preserve partial state')
-                session.commit(nodes,finish=finished)
+                extra={}
+                if callback_wakeups:
+                    from .modern_native_wakeups import conditions
+                    groups=conditions(controller,goal='events')
+                    require(all(len(group)==1 for group in groups),'event wakeup must reference one actual callback')
+                    extra['wake_on']=[group[0] for group in groups]
+                session.commit(nodes,finish=finished,**extra)
     finally:
         save(output/'modern-execution.json',controller.snapshot())
 
 
-def run(topology,protocol,config,backend,output):
+def run(topology,protocol,config,backend,output,*,callback_wakeups=False):
+    require(type(callback_wakeups) is bool,'callback_wakeups must be boolean')
     topology,protocol,config,backend,output=(Path(p).resolve() for p in (topology,protocol,config,backend,output))
     t,p,c=(checked_json(path,maximum) for path,maximum in ((topology/'topology.json',8*2**20),(protocol,65536),(config,4*2**20)))
     ModernNativeLayout(t,p,c)  # Pure admission before creating output or native network.
@@ -218,6 +225,10 @@ def run(topology,protocol,config,backend,output):
         hashes={str(path):digest(path) for path in (topology/'topology.json',protocol,config,backend,Path(__file__))}))
     command=[sys.executable,'-P','-B','-m','moe_ub_cosim.modern_native','--worker',output/'topology.json',
         output/'protocol.json',output/'input.json',backend,output]
+    if callback_wakeups:
+        command.append('--callback-wakeups')
+        save(output/'callback-delivery.json',dict(mode='next_event/1',bookkeeping_deferred=False,
+             decision_limit=256,source_sha256=digest(Path(__file__).with_name('modern_native_wakeups.py'))))
     budget=limits(p);budget.update(wall_seconds=min(60,budget['wall_seconds']),rss_bytes=min(2**30,budget['rss_bytes']),
         address_bytes=min(2**31,budget['address_bytes']),artifact_bytes=min(64*2**20,budget['artifact_bytes']))
     monitored(command,output/'execution',[output],runtime=budget)
@@ -229,5 +240,6 @@ def run(topology,protocol,config,backend,output):
 
 
 if __name__=='__main__':
-    require(sys.argv[1:2]==['--worker'] and len(sys.argv)==7,'internal modern worker requires five paths')
-    worker(*sys.argv[2:])
+    require(sys.argv[1:2]==['--worker'] and (len(sys.argv)==7 or
+        (len(sys.argv)==8 and sys.argv[7]=='--callback-wakeups')),'internal modern worker requires five paths and optional callback flag')
+    worker(*sys.argv[2:7],callback_wakeups=len(sys.argv)==8)

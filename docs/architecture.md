@@ -1,6 +1,6 @@
 # 系统架构与执行过程
 
-`modern_native.py`新增功能接入：现代事件由同一次原生事务会话的实际回调推进，本地copy/计数清零/声明计算也在该时钟执行。必要self、动态slot和跨调用复用保留；accepted/visible采用显式native-apply功能假设。四rank原始路由仍触发控制交互上限，阶段尚未完成，见[公开范围](../examples/modern_deepep_native/README.md)。
+`modern_native.py`提供功能接入：现代事件由同一次原生事务会话的实际回调推进，本地copy/计数清零/声明计算也在该时钟执行。必要self、动态slot和跨调用复用保留；accepted/visible采用显式native-apply功能假设。四rank原始路由仍未完成验收，已遇到控制交互和宿主限时两种限制，见[公开范围](../examples/modern_deepep_native/README.md)。
 
 transactions/5的可选`declared_service_fifo/1`为每个self连接调度独立start/apply/complete事件。它沿用源保护和目标NIC权限，释放由实际complete回调触发；不占本地GPU计算槽，也不创建网络载体或ACK。见[混合服务](../examples/scaleout_self_peer/README.md)。
 
@@ -48,7 +48,7 @@ transactions/3在同一持久网络中串接“实际接收窗口→后续put”
 
 `modern_deepep_runtime.py`提供独立的`ModernDeepEPRuntime`事件核心与`modern-deepep-replay`。调用者逐项触发已满足依赖的事件，核心不自动完成操作；实际触发slot分配时才增加计数，取得同一owner的全部slot后建立Combine通道内顺序。它额外保留Dispatch同token全部目标slot原子分配后的warp同步。事件日志可以离线核验，独立replay不接C++队列或网络；新增native入口单独提供有界的实际回调接入。
 
-运行时及窗口包装器的 `pending_dependencies()` 返回未完成事件和其未完成直接前驱的副本，包含上述动态顺序；空前驱只表示依赖满足，不能制造完成。`modern_native_wakeups.py` 目前仅供离线检查回调唤醒条件，未接入原生协议，不能用它声称现代入口的交互上限已经解除。
+运行时及窗口包装器的 `pending_dependencies()` 返回未完成事件和其未完成直接前驱的副本，包含上述动态顺序；空前驱只表示依赖满足，不能制造完成。`modern_native_wakeups.py` 的及时事件条件通过可选 `--callback-wakeups` 接入实际会话，256 次上限保持。原生端积累全部回调，订阅事件、闹钟或新排空才唤醒；该判别不新增仿真事件，缺省仍逐批交互。
 
 `modern_deepep_windows.py`在事件核心外增加相对窗口解析、跨epoch源读保护、计数消费清零及滚动信号影子状态，公开入口为`modern-deepep-window-replay`。应用主窗口与provider索引信号分开，source local_complete与target visible分开；独立window-replay不编码或接收真实负载；新增native入口在外层接入实际负载/时钟，保留功能可见性限制。功能范围及宿主结构体核查见[窗口验收](../fixtures/modern_windows/README.md)。
 

@@ -60,6 +60,7 @@ def parser():
     mn = sc.add_parser('modern-deepep-native', help='Drive the complete modern functional graph with actual native transaction callbacks and synthetic operands; no GPU/GIN timing claim')
     for name in ('topology','protocol','config','backend','output'):
         mn.add_argument('--'+name,type=Path,required=True)
+    mn.add_argument('--callback-wakeups',action='store_true',help='Subscribe to actual callbacks needed by the next modern event; requires a session backend supporting wake_on')
     rb = sc.add_parser('rdma-build', help='Build independent locked ASTRA RDMA probes and online service targets; no UB')
     rb.add_argument('--output', type=Path, required=True, help='New isolated build directory on a volume with at least 8GiB free')
     rb.add_argument('--cmake', default='cmake')
@@ -179,7 +180,7 @@ def main(argv=None):
         elif args.command == 'scaleout':
             if args.scaleout_command == 'modern-deepep-native':
                 from .modern_native import run
-                value=run(args.topology,args.protocol,args.config,args.backend,args.output)
+                value=run(args.topology,args.protocol,args.config,args.backend,args.output,callback_wakeups=args.callback_wakeups)
             elif args.scaleout_command == 'rdma-preflight':
                 from .scaleout_fabric_buffers import preflight
                 value=preflight(args.topology,args.protocol,args.output,args.transactions)

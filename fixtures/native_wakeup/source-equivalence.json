@@ -1,0 +1,16 @@
+{
+  "passed": true,
+  "docstring_only_changes": {
+    "modern_native_wakeups.py": {
+      "before_sha256": "afc02515c3b67212f43c190a15766003f97d9a42bae4d46a59c1ebb41d260c89",
+      "final_sha256": "408ca42eedd2112f1896a0ef8ef3aba0ba5d0da455524bc38e039d91be93d914",
+      "executable_ast_equal": true
+    },
+    "transaction_session.py": {
+      "before_sha256": "b66c7f283ac1633ee4ab5f269fe9ac34d6dc26eb21e8adce525eb5abb5f5d652",
+      "final_sha256": "cfcd42bd7b29f00868eb22fc216fda67e75a838a450f7a62d9b689948e7d3c76",
+      "executable_ast_equal": true
+    }
+  },
+  "native_sources_and_runtime_unchanged": true
+}

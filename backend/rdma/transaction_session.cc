@@ -1,4 +1,5 @@
 #include "transaction_session_validation.hh"
+#include "session_wakeups.hh"
 #include <deque>
 #include <fstream>
 #include <iostream>
@@ -16,6 +17,8 @@ class TransactionSession {
     Json r={{"decisions",decision_},{"finished",finished_},{"registrations",registrations_},{"events",history_},
       {"scope","interactive MRT1 functional transactions on one native clock; frontend host wait is not simulated time"},
       {"modern_deepep_connected",false},{"hardware_calibrated",false},{"gpu_visibility_modeled",false}};
+    if(filtered_commands_)r["callback_wakeups"]={{"mode","next_event/1"},{"filtered_commands",filtered_commands_},
+      {"suppressed_event_batches",suppressed_},{"retained_callbacks",history_.size()},{"pending_callbacks",pending_events_.size()}};
     if(!alarms_.empty()) {
       r["control_alarms"]=Json::array();
       for(const auto& [id,a]:alarms_)r["control_alarms"].push_back({{"id",id},{"armed_ns",a.armed},
@@ -125,7 +128,7 @@ class TransactionSession {
     Require(bool(std::cin.getline(buffer.data(),buffer.size())),"frontend EOF or oversized session command");
     const auto command=Json::parse(buffer.data());
     std::vector<std::string> keys={"type","decision_id","now_ns","submissions","finish"};
-    for(const auto* name:{"alarms","cancel_alarms"})if(command.contains(name))keys.push_back(name);
+    for(const auto* name:{"alarms","cancel_alarms","wake_on"})if(command.contains(name))keys.push_back(name);
     SessionKeys(command,keys);
     Require(command.at("type")=="COMMIT" && SessionInteger(command.at("decision_id"))==decision_ &&
       SessionInteger(command.at("now_ns"))==static_cast<uint64_t>(Now()) && command.at("finish").is_boolean(),"session command identity/time/type mismatch");
@@ -136,6 +139,7 @@ class TransactionSession {
     auto candidate=input_;
     for(const auto& op:submissions)candidate["operations"].push_back(op);
     ValidateSessionProgram(candidate,topology_,fabric_.MaxSimNs());
+    const auto next_filter=SessionWakeups::Parse(command,candidate,delivered_,ReadTransactionLimits(candidate).Nodes());
     std::vector<std::pair<uint64_t,int64_t>> arm;
     std::vector<uint64_t> cancel;
     std::set<uint64_t> new_ids,cancel_ids;
@@ -165,6 +169,7 @@ class TransactionSession {
     Require(finish || !submissions.empty() || !drained || pending>0,"empty idle session command cannot advance execution");
     // Nothing above mutates the live network, operation table or alarm state.
     ++decision_;
+    wake_filter_=next_filter;if(command.contains("wake_on"))++filtered_commands_;
     for(const auto id:cancel) {
       auto& a=alarms_.at(id);ns3::Simulator::Cancel(a.event);a.cancelled=Now();
     }
@@ -196,7 +201,10 @@ class TransactionSession {
       } else {transactions_.Submit(op);submitted_.insert(id);}
     }
     auto events=Events();const bool drained=Drained();
-    if(decision_==0 || !events.empty() || (drained && !last_drained_))Exchange(events,drained);
+    for(const auto& event:events)pending_events_.push_back(event);
+    if(decision_==0 || SessionWakeups::Triggered(wake_filter_,events) || (drained && !last_drained_)) {
+      Exchange(pending_events_,drained);pending_events_.clear();
+    } else if(!events.empty())++suppressed_;
     last_drained_=drained;
     if(!finished_ && !notify_pending_ && !AllDone() && transactions_.Drained() && local_busy_.empty() && PendingAlarms()==0)
       throw std::invalid_argument("session pending work has no event able to satisfy its conditions");
@@ -208,6 +216,9 @@ class TransactionSession {
   std::map<uint64_t,Alarm> alarms_;
   std::map<unsigned,std::deque<uint64_t>> local_queues_;std::set<unsigned> local_busy_;
   std::set<std::pair<uint64_t,std::string>> delivered_;
+  SessionWakeups::Filter wake_filter_;
+  uint64_t filtered_commands_=0,suppressed_=0;
+  Json pending_events_=Json::array();
   Json registrations_=Json::array(),history_=Json::array();
 };
 static int Libraries(dl_phdr_info* info,std::size_t,void* data) {

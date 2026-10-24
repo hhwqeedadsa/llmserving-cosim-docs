@@ -1,0 +1,776 @@
+{
+  "verified": true,
+  "acceptance_complete": false,
+  "complete_cases": {
+    "default-equivalence": {
+      "passed": true,
+      "case": "default-healthy",
+      "comparison": "whole native result and modern snapshot equal within explicitly declared control/library fields",
+      "delivery": {
+        "decisions": 213,
+        "callbacks": 437,
+        "native_submissions": 97,
+        "suppressed_event_batches": 0
+      },
+      "modern_acceptance": {
+        "passed": true,
+        "modern_operations": 60,
+        "modern_events": 322,
+        "native_remote_operations": 50,
+        "native_local_operations": 47,
+        "paths": {
+          "gin_self": 20,
+          "rdma": 30,
+          "local": 10
+        },
+        "calls": 2,
+        "ranks": 2,
+        "decisions": 213,
+        "finish_ns": 105621,
+        "actual_target_applications": 50,
+        "actual_source_packets": 100,
+        "retransmitted_source_packets": 0,
+        "decoded_frames": 46,
+        "observed_out_of_order_data_packets": 0,
+        "physical_capture_events": 4400,
+        "scope": "functional byte/event acceptance, not numerical model or calibrated GPU/provider performance"
+      },
+      "decision_limit": 256,
+      "gpu_visibility_modeled": false,
+      "hardware_calibrated": false
+    },
+    "healthy-equivalence": {
+      "passed": true,
+      "case": "wake-healthy",
+      "comparison": "whole native result and modern snapshot equal within explicitly declared control/library fields",
+      "delivery": {
+        "decisions": 165,
+        "callbacks": 437,
+        "native_submissions": 97,
+        "suppressed_event_batches": 48
+      },
+      "modern_acceptance": {
+        "passed": true,
+        "modern_operations": 60,
+        "modern_events": 322,
+        "native_remote_operations": 50,
+        "native_local_operations": 47,
+        "paths": {
+          "gin_self": 20,
+          "rdma": 30,
+          "local": 10
+        },
+        "calls": 2,
+        "ranks": 2,
+        "decisions": 165,
+        "finish_ns": 105621,
+        "actual_target_applications": 50,
+        "actual_source_packets": 100,
+        "retransmitted_source_packets": 0,
+        "decoded_frames": 46,
+        "observed_out_of_order_data_packets": 0,
+        "physical_capture_events": 4400,
+        "scope": "functional byte/event acceptance, not numerical model or calibrated GPU/provider performance"
+      },
+      "decision_limit": 256,
+      "gpu_visibility_modeled": false,
+      "hardware_calibrated": false
+    },
+    "fault-equivalence": {
+      "passed": true,
+      "case": "wake-fault",
+      "comparison": "whole native result and modern snapshot equal within explicitly declared control/library fields",
+      "delivery": {
+        "decisions": 171,
+        "callbacks": 437,
+        "native_submissions": 97,
+        "suppressed_event_batches": 51
+      },
+      "modern_acceptance": {
+        "passed": true,
+        "modern_operations": 60,
+        "modern_events": 322,
+        "native_remote_operations": 50,
+        "native_local_operations": 47,
+        "paths": {
+          "gin_self": 20,
+          "rdma": 30,
+          "local": 10
+        },
+        "calls": 2,
+        "ranks": 2,
+        "decisions": 171,
+        "finish_ns": 123921,
+        "actual_target_applications": 50,
+        "actual_source_packets": 103,
+        "retransmitted_source_packets": 3,
+        "decoded_frames": 46,
+        "observed_out_of_order_data_packets": 2,
+        "physical_capture_events": 4488,
+        "scope": "functional byte/event acceptance, not numerical model or calibrated GPU/provider performance"
+      },
+      "decision_limit": 256,
+      "gpu_visibility_modeled": false,
+      "hardware_calibrated": false
+    },
+    "control-verification": {
+      "passed": true,
+      "delivery": {
+        "decisions": 3,
+        "callbacks": 11,
+        "native_submissions": 2,
+        "suppressed_event_batches": 5
+      },
+      "actual_source_packets": 2,
+      "retransmitted_source_packets": 0,
+      "decoded_frames": 2,
+      "observed_out_of_order_data_packets": 0,
+      "physical_capture_events": 88,
+      "first_alarm_ns": 250,
+      "second_alarm_cancelled_ns": 250,
+      "invalid_compound_command_sent": false,
+      "remote_target_applications": 1,
+      "zero_duration_local_completed": true,
+      "scope": "actual functional remote memory and native control wakeups, not calibrated GPU timing"
+    }
+  },
+  "four_request_failure": {
+    "failed": true,
+    "reason": "60-second host wall limit; native did not write a terminal result",
+    "last_recorded_decision": 237,
+    "actual_control_exchanges": 238,
+    "last_reported_ns": 44904,
+    "native_clock_at_termination_known": false,
+    "network_deadlock_proven": false,
+    "four_request_full_call_passed": false,
+    "decision_limit": 256,
+    "limits_raised": false,
+    "network_reexecuted": false,
+    "fired_modern_events": 489,
+    "total_modern_events": 566,
+    "remaining_event_kinds": {
+      "local_complete": 20,
+      "accepted": 17,
+      "visible": 17,
+      "flush_all_contexts": 3,
+      "issued": 12,
+      "barrier_ready": 4,
+      "application_stage_complete": 4
+    },
+    "pending_application_completions": [
+      "m0.combine.r0.complete",
+      "m0.combine.r1.complete",
+      "m0.combine.r2.complete",
+      "m0.combine.r3.complete"
+    ],
+    "preserved_original_failure_prefix": true,
+    "last_control_file_write_seconds_after_start": 58.949466705322266,
+    "pending_actual_callback_subscriptions": [
+      {
+        "reference": {
+          "operation": 125,
+          "event": "completed"
+        },
+        "node": {
+          "kind": "remote",
+          "connection": 5,
+          "key": 1,
+          "address": 16781312,
+          "aggregate_requests": false,
+          "verb": "put",
+          "source": {
+            "key": 1,
+            "address": 16867712,
+            "bytes": 14400
+          },
+          "id": 125,
+          "after": [
+            {
+              "operation": 117,
+              "event": "completed"
+            }
+          ]
+        },
+        "task": {
+          "role": "operation",
+          "modern_operation": "m0.combine.data.s0.d2.t0",
+          "path": "rdma",
+          "event": "m0.combine.data.s0.d2.t0.issued"
+        },
+        "received_callbacks": {
+          "submitted": 35760,
+          "prepared": 35760,
+          "published": 35760,
+          "applied": 44205
+        }
+      },
+      {
+        "reference": {
+          "operation": 127,
+          "event": "applied"
+        },
+        "node": {
+          "kind": "remote",
+          "connection": 6,
+          "key": 1,
+          "address": 16781312,
+          "aggregate_requests": false,
+          "verb": "put",
+          "source": {
+            "key": 1,
+            "address": 16882112,
+            "bytes": 14400
+          },
+          "id": 127,
+          "after": [
+            {
+              "operation": 118,
+              "event": "completed"
+            }
+          ]
+        },
+        "task": {
+          "role": "operation",
+          "modern_operation": "m0.combine.data.s0.d3.t0",
+          "path": "rdma",
+          "event": "m0.combine.data.s0.d3.t0.issued"
+        },
+        "received_callbacks": {
+          "submitted": 35860,
+          "prepared": 35860,
+          "published": 35860
+        }
+      },
+      {
+        "reference": {
+          "operation": 128,
+          "event": "applied"
+        },
+        "node": {
+          "kind": "remote",
+          "connection": 13,
+          "key": 1,
+          "address": 16795712,
+          "aggregate_requests": false,
+          "verb": "put",
+          "source": {
+            "key": 1,
+            "address": 16867712,
+            "bytes": 14400
+          },
+          "id": 128,
+          "after": [
+            {
+              "operation": 122,
+              "event": "completed"
+            }
+          ]
+        },
+        "task": {
+          "role": "operation",
+          "modern_operation": "m0.combine.data.s1.d2.t0",
+          "path": "rdma",
+          "event": "m0.combine.data.s1.d2.t0.issued"
+        },
+        "received_callbacks": {
+          "submitted": 35866,
+          "prepared": 35866,
+          "published": 35866
+        }
+      },
+      {
+        "reference": {
+          "operation": 136,
+          "event": "completed"
+        },
+        "node": {
+          "kind": "remote",
+          "connection": 14,
+          "key": 1,
+          "address": 16810112,
+          "aggregate_requests": false,
+          "verb": "put",
+          "source": {
+            "key": 1,
+            "address": 16838912,
+            "bytes": 14400
+          },
+          "id": 136,
+          "after": [
+            {
+              "operation": 130,
+              "event": "completed"
+            }
+          ]
+        },
+        "task": {
+          "role": "operation",
+          "modern_operation": "m0.combine.data.s2.d0.t0",
+          "path": "rdma",
+          "event": "m0.combine.data.s2.d0.t0.issued"
+        },
+        "received_callbacks": {
+          "submitted": 36939,
+          "prepared": 36939,
+          "published": 36939,
+          "applied": 44904
+        }
+      },
+      {
+        "reference": {
+          "operation": 138,
+          "event": "applied"
+        },
+        "node": {
+          "kind": "remote",
+          "connection": 19,
+          "key": 1,
+          "address": 16810112,
+          "aggregate_requests": false,
+          "verb": "put",
+          "source": {
+            "key": 1,
+            "address": 16853312,
+            "bytes": 14400
+          },
+          "id": 138,
+          "after": [
+            {
+              "operation": 131,
+              "event": "completed"
+            }
+          ]
+        },
+        "task": {
+          "role": "operation",
+          "modern_operation": "m0.combine.data.s2.d1.t0",
+          "path": "rdma",
+          "event": "m0.combine.data.s2.d1.t0.issued"
+        },
+        "received_callbacks": {
+          "submitted": 37039,
+          "prepared": 37039,
+          "published": 37039
+        }
+      },
+      {
+        "reference": {
+          "operation": 141,
+          "event": "applied"
+        },
+        "node": {
+          "kind": "remote",
+          "connection": 21,
+          "key": 2,
+          "address": 33554456,
+          "aggregate_requests": false,
+          "verb": "fetch_add",
+          "value": 1,
+          "id": 141,
+          "after": [
+            {
+              "operation": 83,
+              "event": "completed"
+            },
+            {
+              "operation": 84,
+              "event": "completed"
+            },
+            {
+              "operation": 85,
+              "event": "completed"
+            },
+            {
+              "operation": 86,
+              "event": "completed"
+            },
+            {
+              "operation": 99,
+              "event": "completed"
+            },
+            {
+              "operation": 100,
+              "event": "completed"
+            },
+            {
+              "operation": 101,
+              "event": "completed"
+            },
+            {
+              "operation": 102,
+              "event": "completed"
+            },
+            {
+              "operation": 137,
+              "event": "completed"
+            }
+          ]
+        },
+        "task": {
+          "role": "operation",
+          "modern_operation": "m0.combine.exit.s3.d0",
+          "path": "rdma",
+          "event": "m0.combine.exit.s3.d0.issued"
+        },
+        "received_callbacks": {
+          "submitted": 41618,
+          "prepared": 41618,
+          "published": 41618
+        }
+      },
+      {
+        "reference": {
+          "operation": 142,
+          "event": "applied"
+        },
+        "node": {
+          "kind": "remote",
+          "connection": 22,
+          "key": 2,
+          "address": 33554456,
+          "aggregate_requests": false,
+          "verb": "fetch_add",
+          "value": 1,
+          "id": 142,
+          "after": [
+            {
+              "operation": 83,
+              "event": "completed"
+            },
+            {
+              "operation": 84,
+              "event": "completed"
+            },
+            {
+              "operation": 85,
+              "event": "completed"
+            },
+            {
+              "operation": 86,
+              "event": "completed"
+            },
+            {
+              "operation": 99,
+              "event": "completed"
+            },
+            {
+              "operation": 100,
+              "event": "completed"
+            },
+            {
+              "operation": 101,
+              "event": "completed"
+            },
+            {
+              "operation": 102,
+              "event": "completed"
+            },
+            {
+              "operation": 137,
+              "event": "completed"
+            }
+          ]
+        },
+        "task": {
+          "role": "operation",
+          "modern_operation": "m0.combine.exit.s3.d1",
+          "path": "rdma",
+          "event": "m0.combine.exit.s3.d1.issued"
+        },
+        "received_callbacks": {
+          "submitted": 41618,
+          "prepared": 41618,
+          "published": 41618
+        }
+      },
+      {
+        "reference": {
+          "operation": 143,
+          "event": "completed"
+        },
+        "node": {
+          "kind": "remote",
+          "connection": 23,
+          "key": 2,
+          "address": 33554456,
+          "aggregate_requests": false,
+          "verb": "fetch_add",
+          "value": 1,
+          "id": 143,
+          "after": [
+            {
+              "operation": 83,
+              "event": "completed"
+            },
+            {
+              "operation": 84,
+              "event": "completed"
+            },
+            {
+              "operation": 85,
+              "event": "completed"
+            },
+            {
+              "operation": 86,
+              "event": "completed"
+            },
+            {
+              "operation": 99,
+              "event": "completed"
+            },
+            {
+              "operation": 100,
+              "event": "completed"
+            },
+            {
+              "operation": 101,
+              "event": "completed"
+            },
+            {
+              "operation": 102,
+              "event": "completed"
+            },
+            {
+              "operation": 137,
+              "event": "completed"
+            }
+          ]
+        },
+        "task": {
+          "role": "operation",
+          "modern_operation": "m0.combine.exit.s3.d2",
+          "path": "rdma",
+          "event": "m0.combine.exit.s3.d2.issued"
+        },
+        "received_callbacks": {
+          "submitted": 41618,
+          "prepared": 41618,
+          "published": 41618,
+          "applied": 43642
+        }
+      }
+    ],
+    "missing_native_evidence": [
+      "final simulator clock",
+      "packet and queue state after last DECIDE",
+      "executing native event or stack",
+      "terminal memory/lease state"
+    ],
+    "next_requirement": "bounded native progress diagnostics before another full-call execution; do not extend wall budget",
+    "scope": "actual recorded frontend prefix only; not native packet replay, network deadlock diagnosis or completed inference"
+  },
+  "source_changes": {
+    "modern_native_wakeups.py": {
+      "before_sha256": "afc02515c3b67212f43c190a15766003f97d9a42bae4d46a59c1ebb41d260c89",
+      "final_sha256": "408ca42eedd2112f1896a0ef8ef3aba0ba5d0da455524bc38e039d91be93d914",
+      "executable_ast_equal": true
+    },
+    "transaction_session.py": {
+      "before_sha256": "b66c7f283ac1633ee4ab5f269fe9ac34d6dc26eb21e8adce525eb5abb5f5d652",
+      "final_sha256": "cfcd42bd7b29f00868eb22fc216fda67e75a838a450f7a62d9b689948e7d3c76",
+      "executable_ast_equal": true
+    }
+  },
+  "cplusplus_checks": 44,
+  "native_admission_rejections": 20,
+  "new_python_tests": 5,
+  "affected_existing_python_tests": 26,
+  "tamper_rejections": [
+    "wrong_finish_time",
+    "lost_native_callback",
+    "wrong_registration_decision",
+    "changed_physical_packet",
+    "changed_modern_time",
+    "changed_native_submission"
+  ],
+  "networks_so_far": 6,
+  "maximum_networks": 6,
+  "actual_successful_networks": 5,
+  "actual_failed_networks": 1,
+  "declared_network_attempts": 7,
+  "prelaunch_admission_rejections": 1,
+  "remaining_network": null,
+  "recovery": {
+    "passed": true,
+    "fresh_python_root": "/dev/shm/moe-native-wakeup-20261024/restored/source/python",
+    "empty_cwd": "/dev/shm/moe-native-wakeup-20261024/restored/empty-cwd",
+    "commands": [
+      {
+        "label": "fresh-modern-corrected",
+        "command": [
+          "/usr/bin/python3",
+          "-P",
+          "-B",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "modern-deepep-native",
+          "--topology",
+          "/dev/shm/moe-native-wakeup-20261024/restored/fresh-topology",
+          "--protocol",
+          "/dev/shm/moe-native-wakeup-20261024/restored/evidence/inputs/synthetic-healthy-protocol.json",
+          "--config",
+          "/dev/shm/moe-native-wakeup-20261024/fresh-input-corrected.json",
+          "--backend",
+          "/dev/shm/moe-native-wakeup-20261024/restored/evidence/runtime/run-transaction-session",
+          "--output",
+          "/dev/shm/moe-native-wakeup-20261024/fresh-smoke",
+          "--callback-wakeups"
+        ],
+        "cwd": "/dev/shm/moe-native-wakeup-20261024/restored/empty-cwd"
+      }
+    ],
+    "original_three_verifications_byte_identical": {
+      "default-healthy": "0cd7879b2a522df04fd262e9bb91a358f12a2ee0c6189d0442f390a2074392af",
+      "wake-healthy": "2657a6ff1ed454b2e25da0e358f5957a8cf92f0a322583c692402a0bf7fb2ebb",
+      "wake-fault": "4232739953607fc67b7b248ceb03d31dfaf72ebeb0bb7b95273b181d2338cb4f"
+    },
+    "fresh_modern_acceptance": {
+      "passed": true,
+      "modern_operations": 28,
+      "modern_events": 152,
+      "native_remote_operations": 26,
+      "native_local_operations": 20,
+      "paths": {
+        "gin_self": 10,
+        "rdma": 16,
+        "local": 2
+      },
+      "calls": 1,
+      "ranks": 2,
+      "decisions": 45,
+      "finish_ns": 61918,
+      "actual_target_applications": 26,
+      "actual_source_packets": 92,
+      "retransmitted_source_packets": 0,
+      "decoded_frames": 24,
+      "observed_out_of_order_data_packets": 0,
+      "physical_capture_events": 4048,
+      "scope": "functional byte/event acceptance, not numerical model or calibrated GPU/provider performance"
+    },
+    "fresh_delivery": {
+      "decisions": 45,
+      "callbacks": 214,
+      "native_submissions": 46,
+      "suppressed_event_batches": 12
+    },
+    "network_executions": 1,
+    "fixed_runtime_and_eight_library_hashes_checked": true,
+    "four_request_full_call_passed": false,
+    "prior_admission_rejection_preserved": true,
+    "scope": "same-host ABI-bound runtime and copied Python source; no clean build or calibrated full inference"
+  },
+  "fresh_source_hashes": {
+    "moe_ub_cosim/__init__.py": "1d6a880a0e1e7cef41a78db6a7eed7546746ed6e3d4db097c859e635a231801e",
+    "moe_ub_cosim/__main__.py": "935a1c1166b0c1ea35a82256345000bf2c73ded718d77773bc27a71ecce28f7d",
+    "moe_ub_cosim/a3.py": "b0de8991ae7482a9885d72be3f3450e11ec73fb5578b543722485461eeb8cf33",
+    "moe_ub_cosim/aggregate_export.py": "e9a7ccb83d3102f018d1ca2fa029309c8d0bc088160ff04d8098a3cd754daf97",
+    "moe_ub_cosim/application_windows.py": "9b08423046a1a52f2e64b9d73e0c8cf4d0ffe8b00d90587bdc1171ae540be75e",
+    "moe_ub_cosim/bounded_export.py": "dc8f76b5ed7e7ac73f5417e227b719086a24a668a760899fcee25b9e08bda3b8",
+    "moe_ub_cosim/bounded_metadata.py": "3b3fa00f96fef819e91ce13443ef8db96064bbe796e27b0de98a50c2f8035f2a",
+    "moe_ub_cosim/cann.py": "8be71397cd806e409d8feb35b5667e72bbac854ad66aab13bbe3c5c1a8f94de6",
+    "moe_ub_cosim/capacity_audit.py": "a390d249c19d369f16c4132577e38570e6dafb35fd872f42838766553aa0df2e",
+    "moe_ub_cosim/cli.py": "5e6df47209123a0c0730a8b6df37452a50c2a7fc0a66e4abe9ccb1c11ab103c4",
+    "moe_ub_cosim/composed_service.py": "05f561756f2f649ee1227920dbd6ddef6c55f60fdfcc634b3fa2e15d961c3120",
+    "moe_ub_cosim/configured_scheduler.py": "d8bf6ae1f47c33e267ce1b58642f605a9c7f3fa942e1404dd4e72f46318ce048",
+    "moe_ub_cosim/configured_service.py": "cab6130125110c53ae69cc1194a86f443cb5671b64f414ddb68cc27e608caa67",
+    "moe_ub_cosim/context_transactions.py": "3c45ae8854b2c037f2b1cc8b9772ce84dd67fb222d2c93719723f6d56bbf6a42",
+    "moe_ub_cosim/data_inputs.py": "2bf3a2c4a7f260bb656cd94a2d811265d82f3142ba926b8338db79d379669d5b",
+    "moe_ub_cosim/data_service.py": "a7f4620d5793070141e36208bfffcfee41fc7606714526a8984e4a4c916fbce6",
+    "moe_ub_cosim/deepep_plan.py": "acf45ca9b56fe967ebacace5121cf6a11f6f1274cb8b812891202678cec2dbdc",
+    "moe_ub_cosim/diagnostic_storage.py": "2e523cf5b29f97ef2ae95752f25ea1bf070b6a9eea3b5e7f85eef39af6974b6f",
+    "moe_ub_cosim/evidence_service.py": "b93c3382219ff9c22446510a230da458f0b0bbef42adc3da97917119c2a047d0",
+    "moe_ub_cosim/fabric.py": "909020095fe4f42601fc0ac1fec7931c89cf96ffccee28750958e6feee445062",
+    "moe_ub_cosim/frozen_replay.py": "0d83a160692b0523014a06144ead9c280c75f6d19a78cb03fccc24f5b391e845",
+    "moe_ub_cosim/full_model.py": "e35fd5728a45dec9af46d1a24005d0871c849a20bad51921a7c9f97d57d32f9b",
+    "moe_ub_cosim/full_model_recipe.py": "d4a3cdba5635111a54da56ee7b432fb6db9c61b08b02e9e63c23da9135518ff8",
+    "moe_ub_cosim/full_model_service.py": "f56fa1af7f2aa7c9cd5f124119744d8776816c7b700e3a382bd2e010b804fc9a",
+    "moe_ub_cosim/full_round_probe.py": "f9cb5dd8dcc8455b5478f96998d0ce9d6de7a8879c368e05b4740a485a4f7270",
+    "moe_ub_cosim/generate.py": "493db00d06b6051e11aeafca75bf04b071327bda4dd77ba1de5f5df2c9fe7d44",
+    "moe_ub_cosim/graph_storage.py": "1836ec4827f9b48f013ac5c105a77007324e3dbb012efe1846b8caa770396503",
+    "moe_ub_cosim/host_preflight.py": "19689f155c9afc6dc2c786640a66945c45e65e918b607470f5074d924681d6e5",
+    "moe_ub_cosim/host_probe.py": "86f99677a46f7ec40dfd4be234e0ef0e1ce9e1ac945ecd62d10475c8fb9cedd6",
+    "moe_ub_cosim/host_processes.py": "8867273cd3ffce8639e2fa4ccb06f997d6ad253af3a7bf927a56278af0725459",
+    "moe_ub_cosim/host_timing.py": "8021a61dcc5468e842513cdf101a9001103cf326e854454719d31316dcdba7f9",
+    "moe_ub_cosim/kv_plan.py": "a95432c537ea8cbc0e485615789c80cfb96f55f07597ea92de72c4a35bd178ec",
+    "moe_ub_cosim/lazy_uncached_pool.py": "fa2afa04cf35566720ced69e6b669ca237ad03077214ba734e91f5045e555b2e",
+    "moe_ub_cosim/local_facts.py": "b74fee4299064e3cb93dbd1ddd3a30464fb7ba6d617d22c44f22479404850614",
+    "moe_ub_cosim/locality.py": "280e2aeeef4a6ed9f7b39243b8def9bef5617e0a955ce9624000bc4025bc8ac1",
+    "moe_ub_cosim/memory_registrations.py": "78caec1d7c0eabdae5d3f59a4d49be1915346e363e36dbaf21b8ef882e11241c",
+    "moe_ub_cosim/mla_capacity.py": "d602b1035a255a59a2050338112e31ecca699e04f8c28d7fcff6e3f2ec57f479",
+    "moe_ub_cosim/model_capacity.py": "27d9e5502245e0b65f4417cabc27065d9185fe81630e366a8858c647dc813d9e",
+    "moe_ub_cosim/modern_deepep_plan.py": "b4035bc7e537940d0160162604a82acc770b34c66ae9f5e8a1272db647a6ed1e",
+    "moe_ub_cosim/modern_deepep_runtime.py": "39341345fa7f0969854159e2c418e89f86219d029d784c7ede0e5dcc6b8b79a9",
+    "moe_ub_cosim/modern_deepep_windows.py": "9b2e640535aea1c36085266b83230692ab01b856a80d0e17f33bb81044cfca9c",
+    "moe_ub_cosim/modern_native.py": "606b81e528043aafb2b42e280e803177d3aa2471e9a1958484542207fccfd5f2",
+    "moe_ub_cosim/modern_native_layout.py": "028210dabe814e46f69ce01d204b77c1494b320425a6a83b366b47aa41e9b973",
+    "moe_ub_cosim/modern_native_wakeups.py": "408ca42eedd2112f1896a0ef8ef3aba0ba5d0da455524bc38e039d91be93d914",
+    "moe_ub_cosim/multilayer.py": "fcb8df79368270e98cd4a44e0e02a5b03d1f95f9dead357a573b21b67f78f40b",
+    "moe_ub_cosim/native.py": "d8d5263ade28e1675ccb340c6429eb6cc1c6fabc4b2862a6b14830648f84a865",
+    "moe_ub_cosim/native_queue.py": "92dce80200e75a3119bf6fbd8c427095c6e32a9723ff2af8015cc15cb1d02fb7",
+    "moe_ub_cosim/network_facts.py": "dfa5c4c1c933167b46a8e529707ff70b769a13714f7fe1385894ea87487aa6d1",
+    "moe_ub_cosim/observation.py": "c0778d1cf2fb675d964822c2a88706fec5c893907144b93d735821bbc47c3d70",
+    "moe_ub_cosim/observation_recording.py": "87a8d4b3e6ad6a758a14e0b6ec62af7a87f3c26315945c38f6f654a7d3154657",
+    "moe_ub_cosim/operation_stages.py": "10202403e7ac3c632bca054299e200a049b91b46134b56a35b3fad616faa0368",
+    "moe_ub_cosim/operator_profile.py": "db58675f6873e402b2b79a3a2f3bc99d6f3add6f1b8840042fd4f3fab7b3a946",
+    "moe_ub_cosim/pd_queue_service.py": "4fd83875bf204c18ac0107c50b9ece6d9d30f1b16bf31df407674f557bba3eb8",
+    "moe_ub_cosim/pd_service.py": "2d12111f670aa0f035bc415f558e821d2c1008e37ffb52731e26536a7bddcbd7",
+    "moe_ub_cosim/plan.py": "9e54401309d887a3fd993e468cd482937364b52cbb887feca81af61ab9e4512d",
+    "moe_ub_cosim/plan_io.py": "0518c118b14403eb39898f86cd7ce2c33c9e3ede479dbe1cb089697331170964",
+    "moe_ub_cosim/port_service.py": "4ca56dc2931a199c5a99352cc733f696853ae638218499e75055dc654d9027be",
+    "moe_ub_cosim/protocol_io.py": "5242a94366e574152bf58184d3167cea6b015f126b68d0635d52841f431eced5",
+    "moe_ub_cosim/queue_statistics.py": "6f4104811f831cb5724e6a501ae3c486f12a4792e9862366e2fcba2d19e9501f",
+    "moe_ub_cosim/record_storage.py": "ee0b7cee5ae45e375c5aae62f72ed5366cbafdca78d196b7153cc6ab1c972fa6",
+    "moe_ub_cosim/replay_catalog.py": "ebcccfc9a4ab4e9cf8c916f9a0fe245444ecbb0690856825a6afbedba17de567",
+    "moe_ub_cosim/research.py": "132702e52fa2d52ee26e12daf5ea6634671513db5fc8f3549383c10740224a95",
+    "moe_ub_cosim/research_export.py": "fcabb49593ba11945aa6d770f1ef05ce8227a0b37b61b029d278d7fcbf41fe94",
+    "moe_ub_cosim/research_slice.py": "f1b5f7960187822a331a8ce850f9946cd027c69f9d88be2ce63a79cd888e0467",
+    "moe_ub_cosim/research_storage.py": "ad0eb3b987c4a8b1634bcba0e699d2005bb021b004e4d39cedac736d03230121",
+    "moe_ub_cosim/resources.py": "e4a79dbab1ba77b2d861ea7af39d4cadadb4ab2a53b1f0ab146e364b3f2371d8",
+    "moe_ub_cosim/route_admission.py": "051ace1eb4dc98005eb4ef597794038b852d7b379d20d530ddc8c93584091316",
+    "moe_ub_cosim/route_evidence.py": "925b634afd1f364afec8c10a0b29762727e0181bc6060e473ecab8aa45f65f0d",
+    "moe_ub_cosim/route_records.py": "1721bd69b91585b4665019b62866cf82179fdd107d5357ef70b59ada95da9cd3",
+    "moe_ub_cosim/route_selection.py": "2ca4feb7e3b53eaef34ecd85ee152903eaa26971f03fb300a40be2207bbd0213",
+    "moe_ub_cosim/scaleout.py": "45790992cd77b17d5728454b5938daa4b01fe391630a6fcffc0329f213f89c93",
+    "moe_ub_cosim/scaleout_admission.py": "8ed097b5a7a88af72e7c3decbf0bff5bf9e5ed57f5d45aa39c5220ab145e217b",
+    "moe_ub_cosim/scaleout_capacity.py": "408179558c50ae7dc01556d23954686ebdc2ab220db764fba15843fff7835a64",
+    "moe_ub_cosim/scaleout_causal_waves.py": "10984052234b2e288c0bd9d3efd47a2e306e157211760eb1c1749a75590dd5da",
+    "moe_ub_cosim/scaleout_diagnostics.py": "d216b252878f54ed32cdc956e74a42bc4793beb804f6471af545566246af9485",
+    "moe_ub_cosim/scaleout_fabric_buffers.py": "524f4218eda5f823d21208a02e084f215f33427f3e833463d25c7c1eb91852b8",
+    "moe_ub_cosim/scaleout_history_audit.py": "9a2aa08743f8d39d38f5b771b9f7cb508e6f5be21623f85d0abadee5221f917b",
+    "moe_ub_cosim/scaleout_limits.py": "517242826deb80100451d1cf25b4d5a257f19f6d8e5574709ec4c6a54838bdbd",
+    "moe_ub_cosim/scaleout_link_failures.py": "802a3c6bcbe6ea16bf39893858334b01b90237423d97f50f0df91f9c83a70e82",
+    "moe_ub_cosim/scaleout_llm.py": "35c934cfcd704993d75c6a9200ba97fa2314e8a4baf802a27a7ce5456e8f5029",
+    "moe_ub_cosim/scaleout_metrics.py": "289d7587a10c301665432b9624b1516a7bd85ef379e10ea21fecf94d68a81a1e",
+    "moe_ub_cosim/scaleout_mmu.py": "dff10d0191f7303ae2e6b63b9c3416b1e800e9521cdece8bd7994c8273faed07",
+    "moe_ub_cosim/scaleout_rdma.py": "4639a7a5fcbbb596c542bcccf6be7e9c829b855fd009abc70996816fb496e026",
+    "moe_ub_cosim/scaleout_recovery.py": "8395de1b6a807a34bbd964e1c2b3c25f8d57284184e08bd39539af0fee32b194",
+    "moe_ub_cosim/scaleout_recovery_config.py": "090f30510281e9d35cd02e762d07b2cf0a968a09e6949688154ae51a1ae7061e",
+    "moe_ub_cosim/scaleout_reliability.py": "8ae37571ed878b9332f209596970bcf12cf1674a4f9db7b31da9fedd4ad4de84",
+    "moe_ub_cosim/scaleout_replay.py": "2bc34449ecfc05ef2a79a4622112487bc6de84567ba10377044c97e79c9f71e3",
+    "moe_ub_cosim/scaleout_rtt_audit.py": "350e1ea33ac603725e1ce75d2636f1e1fe0060e3111c4bc14e7a4a7e28af63a5",
+    "moe_ub_cosim/scaleout_service.py": "dae93b1e371cea3750fa58113ef93eaf4af4502557338e2fe53ba4fa2edae13a",
+    "moe_ub_cosim/scaleout_streams.py": "1430865643058b9cac0874d9115d0c2a750ac89014b5ad8af6e8d0d0da95e46b",
+    "moe_ub_cosim/scaleout_sweep.py": "824a526fe28305648e202f1a2fafe97128364e26fa63fb4312b994e0146a008f",
+    "moe_ub_cosim/scaleout_topology.py": "b4f13925edd14d07f50d2e94eade7ddccf188cfe4e07d7657b53129996df094f",
+    "moe_ub_cosim/scaleout_transactions.py": "e65e2d76ff647598ef5604a2c8d59f2956480154c6a5681805d42a9d2b6be9be",
+    "moe_ub_cosim/scaleout_verify.py": "cbed453f69853cbc92c2ee43dbf9382db46c454ba42f9529eaaf2481bb17d46e",
+    "moe_ub_cosim/scenario.py": "17ef16650116948af8870f3b49f8d53f8ce1dc97fc0caed3592d577c827392d2",
+    "moe_ub_cosim/segment.py": "00c0ffe48aee6ca001bcf30c8a6269490d1bac9cb4c21d0a1a8d2bed45adbc4d",
+    "moe_ub_cosim/self_peer_service.py": "a9726167bd686452e3c1581a83b268139ddd0d945aa39a658621c9cb49cab93d",
+    "moe_ub_cosim/send_state.py": "e1dfc8d8c1a54493e61143ce50b00650b48b778f77978b6ac2fbc9ca40512440",
+    "moe_ub_cosim/sequence.py": "57552043f605b60a4820a2c5c826fb4ab9c73b0823db55ca326a3b3e8e369d6a",
+    "moe_ub_cosim/service.py": "0f3482f307948781f09dd774385bbef9bcc10dcffb763ae9fc4d59ef8a2a1a25",
+    "moe_ub_cosim/streaming_export.py": "e895c3b7b74c8b5488b403e2ef44a68e7ddae43d2cb0025587bded98b98d2ff5",
+    "moe_ub_cosim/transaction_session.py": "cfcd42bd7b29f00868eb22fc216fda67e75a838a450f7a62d9b689948e7d3c76",
+    "moe_ub_cosim/transfer_index.py": "bede47f49e03ea01ec9e67e6c226b91f91784d5be63e70b66457f0bbf1e55863",
+    "moe_ub_cosim/user_build.py": "33a0c0c73f2721099ab1d78ee362f7243239510ec3b490dbaef267c54e0e9de4",
+    "moe_ub_cosim/user_io.py": "829a15c1946bf708f70b15a776f301b0e10625341cfaba62b32f0484e8a03edd",
+    "moe_ub_cosim/user_workflow.py": "0b661e65db7aa0259d86488f1395dde1eea615b2e60ef99c7bddefaab18b48a4"
+  },
+  "dependency_checkouts_verified": 13,
+  "stage_execution_budget_closed": true,
+  "decision_limit": 256,
+  "hardware_calibrated": false,
+  "overall_goal_complete": false
+}

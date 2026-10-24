@@ -2,7 +2,7 @@
 
 这个入口把现代direct分支的Dispatch—专家—Combine控制图接到同一次原生ns-3事务会话。跨节点操作实际发包；发给自己的屏障和专家计数使用显式self服务；本地旁路、源准备及计数清零使用实际内存copy。全部必要操作保留，不能用离线事件完成代替网络回调。
 
-当前功能范围有一个已知限制：原生会话最多256次控制交互。两rank两调用的示例正常和丢包均通过；四份原始路由的一次四rank调用在256次交互处失败，Combine未完成。输入检查允许2—4 rank，但不保证满足这个运行上限；失败结果和部分事件仍保存。不要调高限额或删除控制操作来绕过它，见[验收与限制](../../fixtures/modern_native/README.md)。
+原生会话仍最多256次控制交互。两rank两调用的示例正常和丢包均通过；可选的回调订阅减少无关交互。四份原始路由的一次四rank调用仍未验收通过：缺省模式曾触及256次交互；订阅模式最新执行触及60秒宿主时间上限，没有原生最终结果。输入检查允许2—4 rank，不保证在执行预算内完成。已记录的回调和命令保留；强制终止时不能保证生成最终内存、包记录或现代快照。见[当前实际验收](../../fixtures/native_wakeup/README.md)及[初始失败记录](../../fixtures/modern_native/README.md)。
 
 ## 运行
 
@@ -22,6 +22,8 @@ python3 -B -m moe_ub_cosim scaleout modern-deepep-native \
 
 使用`drop-first-rdma.json`及新输出目录可测试本示例第一个远端signal请求包丢失。该协议的`message_id=2`对应本示例的请求载体，不适用于任意修改后的连接集合；错误标识应明确拒绝，不能假定丢包已发生。
 
+在以上现代入口命令后增加 `--callback-wakeups`，使用支持 `wake_on` 的新 session 后端，即可订阅下一现代事件需要的实际回调。所有回调仍按原顺序和时刻保留，首次、排空和控制闹钟强制唤醒；默认继续逐批交付。不启用推迟纯前端记账的策略。旧后端不支持此字段时会明确失败，不会静默降级。这个选项减少宿主交互，不代表网络时延下降。
+
 ## 怎样修改
 
 输入格式`moe-modern-native-input/1`。`modern`沿用[现代计划](../modern_deepep_partial_order/README.md)的完整配置与专家选择。可改模型形状、token数量/专家选择、调用次数及context，但仍受原计划和事务的有界容量约束，不等于完整模型部署或服务请求调度。
@@ -39,5 +41,7 @@ python3 -B -m moe_ub_cosim scaleout modern-deepep-native \
 `modern-plan.json`保存现代操作图，`initial.json`保存原生初始窗口/连接，`control.jsonl`记录实际DECIDE/COMMIT，`result.json`保存包、字节及目标应用。失败后仍保留这些已取得的文件。
 
 `modern-execution.json`保存逐现代事件的`time_ns/origin`；实际回调事件另有`native_operation/native_event/native_time_ns`，并保存实际增量事务及绑定。顶层scope说明本功能接入；内部`runtime`仍是窗口影子核查器，不能把其`simulated_packets=false`误读为整个外部运行未发包，也不能把外部网络执行误称为GPU校准。
+
+显式启用订阅时另存 `callback-delivery.json`，记录策略和生成器哈希；原生 `session.callback_wakeups` 记录过滤命令数、略去的无关交互批数及积累回调数。正常结束须无待交付回调；超时、缺少 `result.json` 或部分日志不能作为成功证据。
 
 本入口是功能接入，不是可用于发表性能排名的现代provider模型。四rank控制交互限制、真实provider成本、匹配校准、独立工作负载和完整千卡仍未解决。

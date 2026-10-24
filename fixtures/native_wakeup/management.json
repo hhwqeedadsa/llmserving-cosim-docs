@@ -1,0 +1,109 @@
+{
+  "passed": true,
+  "management_seconds": 0.7944635227322578,
+  "management_reserved_seconds": 10,
+  "reports": {
+    "final-management": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "fixtures.native_wakeup.closeout",
+        "--repository",
+        "/home/lry/moe-ub-cosim",
+        "--stage",
+        "/dev/shm/moe-native-wakeup-20261024",
+        "--archive",
+        "/home/lry/moe-ub-cosim/runs/native_wakeup_checkpoint_20261024/portable-final.tar.gz"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-24T23:38:27.361700+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 134217728,
+        "wall_seconds": 10.0
+      },
+      "peak_sampled_group_rss_bytes": 7487488,
+      "peak_sampled_processes": 1,
+      "status": "child_failed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/dev/shm/moe-native-wakeup-20261024",
+        "/home/lry/moe-ub-cosim/runs/native_wakeup_checkpoint_20261024"
+      ],
+      "peak_sampled_artifact_bytes": 103469056,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 102194189,
+      "peak_sampled_artifact_allocated_bytes": 103469056,
+      "process_group": 2215561,
+      "child_exit_code": 1,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-24T23:38:27.540824+00:00",
+      "wall_seconds": 0.1791241653263569,
+      "max_waited_child_rss_kib": 18756,
+      "artifact_bytes_before_report": 980,
+      "aggregate_artifact_bytes_before_report": 103469056,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 102194189,
+        "allocated_bytes": 103469056
+      }
+    },
+    "final-management-corrected": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "fixtures.native_wakeup.closeout",
+        "--repository",
+        "/home/lry/moe-ub-cosim",
+        "--stage",
+        "/dev/shm/moe-native-wakeup-20261024",
+        "--archive",
+        "/home/lry/moe-ub-cosim/runs/native_wakeup_checkpoint_20261024/portable-final.tar.gz"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-24T23:39:20.437952+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 134217728,
+        "wall_seconds": 9.8
+      },
+      "peak_sampled_group_rss_bytes": 95870976,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/dev/shm/moe-native-wakeup-20261024",
+        "/home/lry/moe-ub-cosim/runs/native_wakeup_checkpoint_20261024"
+      ],
+      "peak_sampled_artifact_bytes": 103501824,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 102212020,
+      "peak_sampled_artifact_allocated_bytes": 103501824,
+      "process_group": 2215673,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-24T23:39:21.053289+00:00",
+      "wall_seconds": 0.615339357405901,
+      "max_waited_child_rss_kib": 110008,
+      "artifact_bytes_before_report": 1545,
+      "aggregate_artifact_bytes_before_report": 103501824,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 102212020,
+        "allocated_bytes": 103501824
+      }
+    }
+  },
+  "network_executed": false,
+  "scope": "terminal bookkeeping receipts supplement immutable final archive; failed inode accounting check retained"
+}

@@ -1,0 +1,425 @@
+{
+  "failed": true,
+  "reason": "60-second host wall limit; native did not write a terminal result",
+  "last_recorded_decision": 237,
+  "actual_control_exchanges": 238,
+  "last_reported_ns": 44904,
+  "native_clock_at_termination_known": false,
+  "network_deadlock_proven": false,
+  "four_request_full_call_passed": false,
+  "decision_limit": 256,
+  "limits_raised": false,
+  "network_reexecuted": false,
+  "fired_modern_events": 489,
+  "total_modern_events": 566,
+  "remaining_event_kinds": {
+    "local_complete": 20,
+    "accepted": 17,
+    "visible": 17,
+    "flush_all_contexts": 3,
+    "issued": 12,
+    "barrier_ready": 4,
+    "application_stage_complete": 4
+  },
+  "pending_application_completions": [
+    "m0.combine.r0.complete",
+    "m0.combine.r1.complete",
+    "m0.combine.r2.complete",
+    "m0.combine.r3.complete"
+  ],
+  "preserved_original_failure_prefix": true,
+  "last_control_file_write_seconds_after_start": 58.949466705322266,
+  "pending_actual_callback_subscriptions": [
+    {
+      "reference": {
+        "operation": 125,
+        "event": "completed"
+      },
+      "node": {
+        "kind": "remote",
+        "connection": 5,
+        "key": 1,
+        "address": 16781312,
+        "aggregate_requests": false,
+        "verb": "put",
+        "source": {
+          "key": 1,
+          "address": 16867712,
+          "bytes": 14400
+        },
+        "id": 125,
+        "after": [
+          {
+            "operation": 117,
+            "event": "completed"
+          }
+        ]
+      },
+      "task": {
+        "role": "operation",
+        "modern_operation": "m0.combine.data.s0.d2.t0",
+        "path": "rdma",
+        "event": "m0.combine.data.s0.d2.t0.issued"
+      },
+      "received_callbacks": {
+        "submitted": 35760,
+        "prepared": 35760,
+        "published": 35760,
+        "applied": 44205
+      }
+    },
+    {
+      "reference": {
+        "operation": 127,
+        "event": "applied"
+      },
+      "node": {
+        "kind": "remote",
+        "connection": 6,
+        "key": 1,
+        "address": 16781312,
+        "aggregate_requests": false,
+        "verb": "put",
+        "source": {
+          "key": 1,
+          "address": 16882112,
+          "bytes": 14400
+        },
+        "id": 127,
+        "after": [
+          {
+            "operation": 118,
+            "event": "completed"
+          }
+        ]
+      },
+      "task": {
+        "role": "operation",
+        "modern_operation": "m0.combine.data.s0.d3.t0",
+        "path": "rdma",
+        "event": "m0.combine.data.s0.d3.t0.issued"
+      },
+      "received_callbacks": {
+        "submitted": 35860,
+        "prepared": 35860,
+        "published": 35860
+      }
+    },
+    {
+      "reference": {
+        "operation": 128,
+        "event": "applied"
+      },
+      "node": {
+        "kind": "remote",
+        "connection": 13,
+        "key": 1,
+        "address": 16795712,
+        "aggregate_requests": false,
+        "verb": "put",
+        "source": {
+          "key": 1,
+          "address": 16867712,
+          "bytes": 14400
+        },
+        "id": 128,
+        "after": [
+          {
+            "operation": 122,
+            "event": "completed"
+          }
+        ]
+      },
+      "task": {
+        "role": "operation",
+        "modern_operation": "m0.combine.data.s1.d2.t0",
+        "path": "rdma",
+        "event": "m0.combine.data.s1.d2.t0.issued"
+      },
+      "received_callbacks": {
+        "submitted": 35866,
+        "prepared": 35866,
+        "published": 35866
+      }
+    },
+    {
+      "reference": {
+        "operation": 136,
+        "event": "completed"
+      },
+      "node": {
+        "kind": "remote",
+        "connection": 14,
+        "key": 1,
+        "address": 16810112,
+        "aggregate_requests": false,
+        "verb": "put",
+        "source": {
+          "key": 1,
+          "address": 16838912,
+          "bytes": 14400
+        },
+        "id": 136,
+        "after": [
+          {
+            "operation": 130,
+            "event": "completed"
+          }
+        ]
+      },
+      "task": {
+        "role": "operation",
+        "modern_operation": "m0.combine.data.s2.d0.t0",
+        "path": "rdma",
+        "event": "m0.combine.data.s2.d0.t0.issued"
+      },
+      "received_callbacks": {
+        "submitted": 36939,
+        "prepared": 36939,
+        "published": 36939,
+        "applied": 44904
+      }
+    },
+    {
+      "reference": {
+        "operation": 138,
+        "event": "applied"
+      },
+      "node": {
+        "kind": "remote",
+        "connection": 19,
+        "key": 1,
+        "address": 16810112,
+        "aggregate_requests": false,
+        "verb": "put",
+        "source": {
+          "key": 1,
+          "address": 16853312,
+          "bytes": 14400
+        },
+        "id": 138,
+        "after": [
+          {
+            "operation": 131,
+            "event": "completed"
+          }
+        ]
+      },
+      "task": {
+        "role": "operation",
+        "modern_operation": "m0.combine.data.s2.d1.t0",
+        "path": "rdma",
+        "event": "m0.combine.data.s2.d1.t0.issued"
+      },
+      "received_callbacks": {
+        "submitted": 37039,
+        "prepared": 37039,
+        "published": 37039
+      }
+    },
+    {
+      "reference": {
+        "operation": 141,
+        "event": "applied"
+      },
+      "node": {
+        "kind": "remote",
+        "connection": 21,
+        "key": 2,
+        "address": 33554456,
+        "aggregate_requests": false,
+        "verb": "fetch_add",
+        "value": 1,
+        "id": 141,
+        "after": [
+          {
+            "operation": 83,
+            "event": "completed"
+          },
+          {
+            "operation": 84,
+            "event": "completed"
+          },
+          {
+            "operation": 85,
+            "event": "completed"
+          },
+          {
+            "operation": 86,
+            "event": "completed"
+          },
+          {
+            "operation": 99,
+            "event": "completed"
+          },
+          {
+            "operation": 100,
+            "event": "completed"
+          },
+          {
+            "operation": 101,
+            "event": "completed"
+          },
+          {
+            "operation": 102,
+            "event": "completed"
+          },
+          {
+            "operation": 137,
+            "event": "completed"
+          }
+        ]
+      },
+      "task": {
+        "role": "operation",
+        "modern_operation": "m0.combine.exit.s3.d0",
+        "path": "rdma",
+        "event": "m0.combine.exit.s3.d0.issued"
+      },
+      "received_callbacks": {
+        "submitted": 41618,
+        "prepared": 41618,
+        "published": 41618
+      }
+    },
+    {
+      "reference": {
+        "operation": 142,
+        "event": "applied"
+      },
+      "node": {
+        "kind": "remote",
+        "connection": 22,
+        "key": 2,
+        "address": 33554456,
+        "aggregate_requests": false,
+        "verb": "fetch_add",
+        "value": 1,
+        "id": 142,
+        "after": [
+          {
+            "operation": 83,
+            "event": "completed"
+          },
+          {
+            "operation": 84,
+            "event": "completed"
+          },
+          {
+            "operation": 85,
+            "event": "completed"
+          },
+          {
+            "operation": 86,
+            "event": "completed"
+          },
+          {
+            "operation": 99,
+            "event": "completed"
+          },
+          {
+            "operation": 100,
+            "event": "completed"
+          },
+          {
+            "operation": 101,
+            "event": "completed"
+          },
+          {
+            "operation": 102,
+            "event": "completed"
+          },
+          {
+            "operation": 137,
+            "event": "completed"
+          }
+        ]
+      },
+      "task": {
+        "role": "operation",
+        "modern_operation": "m0.combine.exit.s3.d1",
+        "path": "rdma",
+        "event": "m0.combine.exit.s3.d1.issued"
+      },
+      "received_callbacks": {
+        "submitted": 41618,
+        "prepared": 41618,
+        "published": 41618
+      }
+    },
+    {
+      "reference": {
+        "operation": 143,
+        "event": "completed"
+      },
+      "node": {
+        "kind": "remote",
+        "connection": 23,
+        "key": 2,
+        "address": 33554456,
+        "aggregate_requests": false,
+        "verb": "fetch_add",
+        "value": 1,
+        "id": 143,
+        "after": [
+          {
+            "operation": 83,
+            "event": "completed"
+          },
+          {
+            "operation": 84,
+            "event": "completed"
+          },
+          {
+            "operation": 85,
+            "event": "completed"
+          },
+          {
+            "operation": 86,
+            "event": "completed"
+          },
+          {
+            "operation": 99,
+            "event": "completed"
+          },
+          {
+            "operation": 100,
+            "event": "completed"
+          },
+          {
+            "operation": 101,
+            "event": "completed"
+          },
+          {
+            "operation": 102,
+            "event": "completed"
+          },
+          {
+            "operation": 137,
+            "event": "completed"
+          }
+        ]
+      },
+      "task": {
+        "role": "operation",
+        "modern_operation": "m0.combine.exit.s3.d2",
+        "path": "rdma",
+        "event": "m0.combine.exit.s3.d2.issued"
+      },
+      "received_callbacks": {
+        "submitted": 41618,
+        "prepared": 41618,
+        "published": 41618,
+        "applied": 43642
+      }
+    }
+  ],
+  "missing_native_evidence": [
+    "final simulator clock",
+    "packet and queue state after last DECIDE",
+    "executing native event or stack",
+    "terminal memory/lease state"
+  ],
+  "next_requirement": "bounded native progress diagnostics before another full-call execution; do not extend wall budget",
+  "scope": "actual recorded frontend prefix only; not native packet replay, network deadlock diagnosis or completed inference"
+}

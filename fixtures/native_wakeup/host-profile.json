@@ -1,0 +1,146 @@
+{
+  "network_executed": false,
+  "candidate_nodes": 145,
+  "python_validation_seconds_including_profile": 0.029307758435606956,
+  "top_functions": [
+    {
+      "file": "/home/lry/moe-ub-cosim/python/moe_ub_cosim/scaleout_transactions.py",
+      "function": "validate",
+      "line": 71,
+      "primitive_calls": 1,
+      "total_calls": 1,
+      "own_seconds": 0.0035818330000000004,
+      "cumulative_seconds": 0.016542328000000002
+    },
+    {
+      "file": "/usr/lib/python3.12/copy.py",
+      "function": "deepcopy",
+      "line": 118,
+      "primitive_calls": 1,
+      "total_calls": 6849,
+      "own_seconds": 0.006100773,
+      "cumulative_seconds": 0.012579919
+    },
+    {
+      "file": "/usr/lib/python3.12/copy.py",
+      "function": "_deepcopy_dict",
+      "line": 217,
+      "primitive_calls": 1,
+      "total_calls": 847,
+      "own_seconds": 0.002049144,
+      "cumulative_seconds": 0.012570788000000001
+    },
+    {
+      "file": "/usr/lib/python3.12/copy.py",
+      "function": "_deepcopy_list",
+      "line": 191,
+      "primitive_calls": 4,
+      "total_calls": 173,
+      "own_seconds": 0.000332587,
+      "cumulative_seconds": 0.012446419
+    },
+    {
+      "file": "/home/lry/moe-ub-cosim/python/moe_ub_cosim/scaleout_streams.py",
+      "function": "validate",
+      "line": 28,
+      "primitive_calls": 1,
+      "total_calls": 1,
+      "own_seconds": 0.00035487100000000004,
+      "cumulative_seconds": 0.006728358
+    },
+    {
+      "file": "/home/lry/moe-ub-cosim/python/moe_ub_cosim/scaleout_rdma.py",
+      "function": "validate_probe",
+      "line": 197,
+      "primitive_calls": 1,
+      "total_calls": 1,
+      "own_seconds": 0.000632277,
+      "cumulative_seconds": 0.005633457000000001
+    },
+    {
+      "file": "<frozen importlib._bootstrap>",
+      "function": "_find_and_load",
+      "line": 1349,
+      "primitive_calls": 6,
+      "total_calls": 6,
+      "own_seconds": 4.4696e-05,
+      "cumulative_seconds": 0.004957472
+    },
+    {
+      "file": "<frozen importlib._bootstrap>",
+      "function": "_find_and_load_unlocked",
+      "line": 1304,
+      "primitive_calls": 6,
+      "total_calls": 6,
+      "own_seconds": 3.6693e-05,
+      "cumulative_seconds": 0.004712624
+    },
+    {
+      "file": "<frozen importlib._bootstrap>",
+      "function": "_load_unlocked",
+      "line": 911,
+      "primitive_calls": 6,
+      "total_calls": 6,
+      "own_seconds": 2.1313e-05,
+      "cumulative_seconds": 0.004314215000000001
+    },
+    {
+      "file": "<frozen importlib._bootstrap_external>",
+      "function": "exec_module",
+      "line": 989,
+      "primitive_calls": 6,
+      "total_calls": 6,
+      "own_seconds": 1.6182000000000002e-05,
+      "cumulative_seconds": 0.0041358670000000005
+    },
+    {
+      "file": "<frozen importlib._bootstrap_external>",
+      "function": "get_code",
+      "line": 1062,
+      "primitive_calls": 6,
+      "total_calls": 6,
+      "own_seconds": 5.0148e-05,
+      "cumulative_seconds": 0.004065267
+    },
+    {
+      "file": "<frozen importlib._bootstrap>",
+      "function": "_call_with_frames_removed",
+      "line": 480,
+      "primitive_calls": 16,
+      "total_calls": 16,
+      "own_seconds": 1.5096e-05,
+      "cumulative_seconds": 0.0036320470000000002
+    },
+    {
+      "file": "<frozen importlib._bootstrap_external>",
+      "function": "source_to_code",
+      "line": 1054,
+      "primitive_calls": 4,
+      "total_calls": 4,
+      "own_seconds": 6.24e-06,
+      "cumulative_seconds": 0.0035748430000000003
+    },
+    {
+      "file": "~",
+      "function": "<built-in method builtins.compile>",
+      "line": 0,
+      "primitive_calls": 4,
+      "total_calls": 4,
+      "own_seconds": 0.0035624610000000003,
+      "cumulative_seconds": 0.0035624610000000003
+    },
+    {
+      "file": "~",
+      "function": "<method 'get' of 'dict' objects>",
+      "line": 0,
+      "primitive_calls": 17376,
+      "total_calls": 17376,
+      "own_seconds": 0.002553089,
+      "cumulative_seconds": 0.002553089
+    }
+  ],
+  "last_control_file_write_seconds_after_start": 58.949466705322266,
+  "native_cpu_profile_available": false,
+  "network_deadlock_proven": false,
+  "scope": "single offline Python validation; cannot attribute native runtime or whole-run timeout"
+}

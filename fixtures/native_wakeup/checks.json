@@ -1,0 +1,147 @@
+{
+  "passed": true,
+  "network_executed": false,
+  "strengthened_registration_check": true,
+  "rechecked_cases": {
+    "default-healthy": {
+      "passed": true,
+      "case": "default-healthy",
+      "comparison": "whole native result and modern snapshot equal within explicitly declared control/library fields",
+      "delivery": {
+        "decisions": 213,
+        "callbacks": 437,
+        "native_submissions": 97,
+        "suppressed_event_batches": 0
+      },
+      "modern_acceptance": {
+        "passed": true,
+        "modern_operations": 60,
+        "modern_events": 322,
+        "native_remote_operations": 50,
+        "native_local_operations": 47,
+        "paths": {
+          "gin_self": 20,
+          "rdma": 30,
+          "local": 10
+        },
+        "calls": 2,
+        "ranks": 2,
+        "decisions": 213,
+        "finish_ns": 105621,
+        "actual_target_applications": 50,
+        "actual_source_packets": 100,
+        "retransmitted_source_packets": 0,
+        "decoded_frames": 46,
+        "observed_out_of_order_data_packets": 0,
+        "physical_capture_events": 4400,
+        "scope": "functional byte/event acceptance, not numerical model or calibrated GPU/provider performance"
+      },
+      "decision_limit": 256,
+      "gpu_visibility_modeled": false,
+      "hardware_calibrated": false
+    },
+    "wake-healthy": {
+      "passed": true,
+      "case": "wake-healthy",
+      "comparison": "whole native result and modern snapshot equal within explicitly declared control/library fields",
+      "delivery": {
+        "decisions": 165,
+        "callbacks": 437,
+        "native_submissions": 97,
+        "suppressed_event_batches": 48
+      },
+      "modern_acceptance": {
+        "passed": true,
+        "modern_operations": 60,
+        "modern_events": 322,
+        "native_remote_operations": 50,
+        "native_local_operations": 47,
+        "paths": {
+          "gin_self": 20,
+          "rdma": 30,
+          "local": 10
+        },
+        "calls": 2,
+        "ranks": 2,
+        "decisions": 165,
+        "finish_ns": 105621,
+        "actual_target_applications": 50,
+        "actual_source_packets": 100,
+        "retransmitted_source_packets": 0,
+        "decoded_frames": 46,
+        "observed_out_of_order_data_packets": 0,
+        "physical_capture_events": 4400,
+        "scope": "functional byte/event acceptance, not numerical model or calibrated GPU/provider performance"
+      },
+      "decision_limit": 256,
+      "gpu_visibility_modeled": false,
+      "hardware_calibrated": false
+    },
+    "wake-fault": {
+      "passed": true,
+      "case": "wake-fault",
+      "comparison": "whole native result and modern snapshot equal within explicitly declared control/library fields",
+      "delivery": {
+        "decisions": 171,
+        "callbacks": 437,
+        "native_submissions": 97,
+        "suppressed_event_batches": 51
+      },
+      "modern_acceptance": {
+        "passed": true,
+        "modern_operations": 60,
+        "modern_events": 322,
+        "native_remote_operations": 50,
+        "native_local_operations": 47,
+        "paths": {
+          "gin_self": 20,
+          "rdma": 30,
+          "local": 10
+        },
+        "calls": 2,
+        "ranks": 2,
+        "decisions": 171,
+        "finish_ns": 123921,
+        "actual_target_applications": 50,
+        "actual_source_packets": 103,
+        "retransmitted_source_packets": 3,
+        "decoded_frames": 46,
+        "observed_out_of_order_data_packets": 2,
+        "physical_capture_events": 4488,
+        "scope": "functional byte/event acceptance, not numerical model or calibrated GPU/provider performance"
+      },
+      "decision_limit": 256,
+      "gpu_visibility_modeled": false,
+      "hardware_calibrated": false
+    }
+  },
+  "rejected_evidence_tampering": [
+    "wrong_finish_time",
+    "lost_native_callback",
+    "wrong_registration_decision",
+    "changed_physical_packet",
+    "changed_modern_time",
+    "changed_native_submission"
+  ],
+  "control": {
+    "passed": true,
+    "delivery": {
+      "decisions": 3,
+      "callbacks": 11,
+      "native_submissions": 2,
+      "suppressed_event_batches": 5
+    },
+    "actual_source_packets": 2,
+    "retransmitted_source_packets": 0,
+    "decoded_frames": 2,
+    "observed_out_of_order_data_packets": 0,
+    "physical_capture_events": 88,
+    "first_alarm_ns": 250,
+    "second_alarm_cancelled_ns": 250,
+    "invalid_compound_command_sent": false,
+    "remote_target_applications": 1,
+    "zero_duration_local_completed": true,
+    "scope": "actual functional remote memory and native control wakeups, not calibrated GPU timing"
+  },
+  "four_request_acceptance_complete": false
+}

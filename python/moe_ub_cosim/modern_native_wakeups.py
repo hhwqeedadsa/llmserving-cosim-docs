@@ -1,9 +1,10 @@
-"""Offline candidate callback frontiers; not enabled in the native protocol.
+"""Callback frontiers for optional modern native next-event wakeups.
 
 A frontier is an OR of conjunctions of actual transitions of already submitted
 nodes. It predicts no time or future callback. Drain and control alarms remain
 unconditional wakeups. Submission frontiers can defer frontend bookkeeping;
-offline submission equivalence is not ns-3 same-timestamp order equivalence.
+The native adapter uses singleton event frontiers only. Submission frontiers
+remain offline candidates; submission equivalence is not ns-3 order equivalence.
 """
 from .deepep_plan import require
 

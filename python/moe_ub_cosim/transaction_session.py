@@ -48,6 +48,37 @@ def _control_plan(current, alarms, cancel_alarms, now_ns, max_ns):
     return candidate, message
 
 
+def _wake_plan(program, wake_on, delivered):
+    """Pure validation of next-interaction subscriptions, including new work."""
+    if wake_on is None:
+        return {}
+    from .scaleout_transactions import execution_limits
+    counts = execution_limits(program)
+    require(isinstance(wake_on, list) and len(wake_on) <= 7*(counts['max_remote_operations']+counts['max_local_operations']),
+            'invalid session wakeup reference count')
+    known = {node['id']: node for node in program['operations']}
+    seen = set()
+    for row in wake_on:
+        fields(row, 'operation event', 'session wakeup')
+        identity, event = row['operation'], row['event']
+        require(type(identity) is int and 0 <= identity <= 65535 and identity in known and type(event) is str,
+                'session wakeup references unsubmitted work or invalid type')
+        allowed = ('local_admitted', 'local_started', 'completed') if known[identity]['kind'] == 'local' else (
+            'submitted', 'published', 'applied', 'request_acked', 'response', 'completed')
+        if 'submission_model' in program and known[identity]['kind'] == 'remote':
+            allowed += ('prepared',)
+        require(event in allowed, 'invalid session wakeup transition kind')
+        if known[identity]['kind'] == 'remote' and event in ('request_acked', 'response'):
+            connections = {connection['id']: connection for connection in program['connections']}
+            require('self_service' not in connections[known[identity]['connection']],
+                    'self service has no wire ACK or response callback')
+            require(event != 'response' or known[identity]['verb'] == 'fetch_add', 'put has no response callback')
+        key = identity, event
+        require(key not in delivered and key not in seen, 'duplicate or already delivered session wakeup')
+        seen.add(key)
+    return dict(wake_on=deepcopy(wake_on))
+
+
 class NativeTransactionSession:
     """Receive actual transitions, then commit newly constructed v4/v5 nodes.
 
@@ -189,11 +220,15 @@ class NativeTransactionSession:
             self.transcript.write(json.dumps(dict(direction='native', message=event))+'\n')
             return deepcopy(event)
 
-    def commit(self, submissions, *, finish=False, alarms=None, cancel_alarms=None):
+    def commit(self, submissions, *, finish=False, alarms=None, cancel_alarms=None, wake_on=None):
         """Submit work or native-clock control wakeups, never device completion.
 
         Alarms do not consume a GPU slot. IDs are lifetime-unique in a separate
         namespace; finish needs explicit cancellation of any pending wakeups.
+        wake_on lists actual transitions of existing or newly submitted work.
+        Omission delivers every callback batch; [] waits for drain or alarms.
+        Every commit replaces the policy. All callbacks retain their original
+        order and timestamps and are delivered together at the next wakeup.
         """
         require(self.pending is not None and type(finish) is bool and isinstance(submissions, list), 'invalid session commit')
         candidate = deepcopy(self.config)
@@ -201,6 +236,8 @@ class NativeTransactionSession:
         validate(self.t, self.p, candidate, allow_no_remote=True)
         control, extra = _control_plan(self._alarms, alarms, cancel_alarms,
                                       self.pending['now_ns'], limits(self.p)['max_sim_ns'])
+        if wake_on is not None:
+            extra.update(_wake_plan(candidate, wake_on, self._delivered))
         pending_alarms = any(a['status'] == 'pending' for a in control.values())
         require(not finish or (self.pending['drained'] and not submissions and
                 (self.config['operations'] or self._alarms) and not pending_alarms and not alarms),

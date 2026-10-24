@@ -1,0 +1,70 @@
+{
+  "passed": true,
+  "fresh_python_root": "/dev/shm/moe-native-wakeup-20261024/restored/source/python",
+  "empty_cwd": "/dev/shm/moe-native-wakeup-20261024/restored/empty-cwd",
+  "commands": [
+    {
+      "label": "fresh-modern-corrected",
+      "command": [
+        "/usr/bin/python3",
+        "-P",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "modern-deepep-native",
+        "--topology",
+        "/dev/shm/moe-native-wakeup-20261024/restored/fresh-topology",
+        "--protocol",
+        "/dev/shm/moe-native-wakeup-20261024/restored/evidence/inputs/synthetic-healthy-protocol.json",
+        "--config",
+        "/dev/shm/moe-native-wakeup-20261024/fresh-input-corrected.json",
+        "--backend",
+        "/dev/shm/moe-native-wakeup-20261024/restored/evidence/runtime/run-transaction-session",
+        "--output",
+        "/dev/shm/moe-native-wakeup-20261024/fresh-smoke",
+        "--callback-wakeups"
+      ],
+      "cwd": "/dev/shm/moe-native-wakeup-20261024/restored/empty-cwd"
+    }
+  ],
+  "original_three_verifications_byte_identical": {
+    "default-healthy": "0cd7879b2a522df04fd262e9bb91a358f12a2ee0c6189d0442f390a2074392af",
+    "wake-healthy": "2657a6ff1ed454b2e25da0e358f5957a8cf92f0a322583c692402a0bf7fb2ebb",
+    "wake-fault": "4232739953607fc67b7b248ceb03d31dfaf72ebeb0bb7b95273b181d2338cb4f"
+  },
+  "fresh_modern_acceptance": {
+    "passed": true,
+    "modern_operations": 28,
+    "modern_events": 152,
+    "native_remote_operations": 26,
+    "native_local_operations": 20,
+    "paths": {
+      "gin_self": 10,
+      "rdma": 16,
+      "local": 2
+    },
+    "calls": 1,
+    "ranks": 2,
+    "decisions": 45,
+    "finish_ns": 61918,
+    "actual_target_applications": 26,
+    "actual_source_packets": 92,
+    "retransmitted_source_packets": 0,
+    "decoded_frames": 24,
+    "observed_out_of_order_data_packets": 0,
+    "physical_capture_events": 4048,
+    "scope": "functional byte/event acceptance, not numerical model or calibrated GPU/provider performance"
+  },
+  "fresh_delivery": {
+    "decisions": 45,
+    "callbacks": 214,
+    "native_submissions": 46,
+    "suppressed_event_batches": 12
+  },
+  "network_executions": 1,
+  "fixed_runtime_and_eight_library_hashes_checked": true,
+  "four_request_full_call_passed": false,
+  "prior_admission_rejection_preserved": true,
+  "scope": "same-host ABI-bound runtime and copied Python source; no clean build or calibrated full inference"
+}

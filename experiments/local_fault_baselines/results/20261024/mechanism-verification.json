@@ -1,0 +1,55 @@
+{
+  "passed": true,
+  "cases": {
+    "healthy": {
+      "passed": true,
+      "writes": 76,
+      "hops": 328,
+      "repeated_payload_bytes": 0,
+      "nonservice_wait_ns": 0
+    },
+    "live-delayed": {
+      "passed": true,
+      "writes": 76,
+      "hops": 330,
+      "repeated_payload_bytes": 197376,
+      "nonservice_wait_ns": 0
+    },
+    "live-instant": {
+      "passed": true,
+      "writes": 76,
+      "hops": 328,
+      "repeated_payload_bytes": 350048,
+      "nonservice_wait_ns": 0
+    },
+    "static-degraded": {
+      "passed": true,
+      "writes": 76,
+      "hops": 328,
+      "repeated_payload_bytes": 0,
+      "nonservice_wait_ns": 0
+    },
+    "saved-healthy": {
+      "passed": true,
+      "writes": 76,
+      "hops": 328,
+      "repeated_payload_bytes": 0,
+      "nonservice_wait_ns": 0
+    },
+    "saved-fault": {
+      "passed": true,
+      "writes": 76,
+      "hops": 330,
+      "repeated_payload_bytes": 286720,
+      "nonservice_wait_ns": 0
+    }
+  },
+  "rejected_tamper_classes": [
+    "service_owner",
+    "queue_occupancy",
+    "retry_outcome",
+    "source_rate"
+  ],
+  "network_executions": 0,
+  "scope": "physical queue-service and posthoc delivery outcome facts, no source clairvoyance or counterfactual savings"
+}

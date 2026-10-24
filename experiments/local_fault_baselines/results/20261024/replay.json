@@ -1,0 +1,87 @@
+{
+  "passed": true,
+  "archive_sha256": "ca7964d6d1fcb7656eac1d237697ca57013c78bd4c733ba1054f2978b748d0f5",
+  "members_verified": 165,
+  "new_source_root": true,
+  "empty_cwd": true,
+  "pythonpath_scope": "new research source only, no platform/fixtures/old repository imports",
+  "all_four_reports_byte_identical": true,
+  "network_executions": 0,
+  "commands": [
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "experiments.local_fault_baselines.analyze",
+        "--observed",
+        "/dev/shm/moe-local-fault-baselines-20261024/restored/evidence/inputs/observed",
+        "--planned",
+        "/dev/shm/moe-local-fault-baselines-20261024/restored/evidence/planned",
+        "--network",
+        "/dev/shm/moe-local-fault-baselines-20261024/restored/evidence/network",
+        "--baseline",
+        "/dev/shm/moe-local-fault-baselines-20261024/restored/evidence/inputs/baseline",
+        "--output",
+        "/dev/shm/moe-local-fault-baselines-20261024/restored/analysis.json"
+      ],
+      "cwd": "/dev/shm/moe-local-fault-baselines-20261024/restored/empty-cwd",
+      "pythonpath": "/dev/shm/moe-local-fault-baselines-20261024/restored/source",
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "experiments.local_fault_baselines.verify",
+        "--stage",
+        "/dev/shm/moe-local-fault-baselines-20261024/restored/evidence",
+        "--analysis",
+        "/dev/shm/moe-local-fault-baselines-20261024/restored/analysis.json",
+        "--output",
+        "/dev/shm/moe-local-fault-baselines-20261024/restored/verification.json"
+      ],
+      "cwd": "/dev/shm/moe-local-fault-baselines-20261024/restored/empty-cwd",
+      "pythonpath": "/dev/shm/moe-local-fault-baselines-20261024/restored/source",
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "experiments.local_fault_baselines.mechanism",
+        "--stage",
+        "/dev/shm/moe-local-fault-baselines-20261024/restored/evidence",
+        "--analysis",
+        "/dev/shm/moe-local-fault-baselines-20261024/restored/analysis.json",
+        "--output",
+        "/dev/shm/moe-local-fault-baselines-20261024/restored/mechanism-expanded.json"
+      ],
+      "cwd": "/dev/shm/moe-local-fault-baselines-20261024/restored/empty-cwd",
+      "pythonpath": "/dev/shm/moe-local-fault-baselines-20261024/restored/source",
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "experiments.local_fault_baselines.verify_mechanism",
+        "--stage",
+        "/dev/shm/moe-local-fault-baselines-20261024/restored/evidence",
+        "--analysis",
+        "/dev/shm/moe-local-fault-baselines-20261024/restored/analysis.json",
+        "--mechanism",
+        "/dev/shm/moe-local-fault-baselines-20261024/restored/mechanism-expanded.json",
+        "--output",
+        "/dev/shm/moe-local-fault-baselines-20261024/restored/mechanism-verification.json"
+      ],
+      "cwd": "/dev/shm/moe-local-fault-baselines-20261024/restored/empty-cwd",
+      "pythonpath": "/dev/shm/moe-local-fault-baselines-20261024/restored/source",
+      "exit_code": 0
+    }
+  ],
+  "native_runtime_bundled": false
+}

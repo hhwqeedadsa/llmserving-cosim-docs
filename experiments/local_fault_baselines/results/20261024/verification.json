@@ -1,0 +1,195 @@
+{
+  "passed": true,
+  "cases": {
+    "healthy": {
+      "graph_transport": {
+        "messages": 76,
+        "original_nodes": 216,
+        "local_work": 70,
+        "group_completion_ns": 397733,
+        "source_packets": 1352,
+        "physical_transmissions": 14466,
+        "physical_drops": 0,
+        "packet_events": 52404,
+        "window_never_binding": true,
+        "actual_callbacks": true,
+        "all_original_dependencies": true
+      },
+      "routes": {
+        "passed": true,
+        "enqueues_verified_by_protocol": {
+          "17": 5812,
+          "252": 5812,
+          "255": 112
+        },
+        "local_drop_causes": {},
+        "no_postfailure_tx_on_failed_ports": true,
+        "no_enqueue_timestamp_tie": true,
+        "cnp_identity_scope": "actual IP/UID plus generated stream/fid projection; packet capture does not serialize fid"
+      }
+    },
+    "live-delayed": {
+      "graph_transport": {
+        "messages": 76,
+        "original_nodes": 216,
+        "local_work": 70,
+        "group_completion_ns": 477134,
+        "source_packets": 1453,
+        "physical_transmissions": 15424,
+        "physical_drops": 3,
+        "packet_events": 55934,
+        "window_never_binding": true,
+        "actual_callbacks": true,
+        "all_original_dependencies": true
+      },
+      "routes": {
+        "passed": true,
+        "enqueues_verified_by_protocol": {
+          "17": 6258,
+          "252": 5842,
+          "253": 311,
+          "255": 117
+        },
+        "local_drop_causes": {
+          "queue_close": 9,
+          "no_live_old_candidate": 21
+        },
+        "no_postfailure_tx_on_failed_ports": true,
+        "no_enqueue_timestamp_tie": true,
+        "cnp_identity_scope": "actual IP/UID plus generated stream/fid projection; packet capture does not serialize fid"
+      }
+    },
+    "live-instant": {
+      "graph_transport": {
+        "messages": 76,
+        "original_nodes": 216,
+        "local_work": 70,
+        "group_completion_ns": 492791,
+        "source_packets": 1530,
+        "physical_transmissions": 16398,
+        "physical_drops": 3,
+        "packet_events": 59479,
+        "window_never_binding": true,
+        "actual_callbacks": true,
+        "all_original_dependencies": true
+      },
+      "routes": {
+        "passed": true,
+        "enqueues_verified_by_protocol": {
+          "17": 6639,
+          "252": 6305,
+          "253": 299,
+          "255": 94
+        },
+        "local_drop_causes": {
+          "queue_close": 9
+        },
+        "no_postfailure_tx_on_failed_ports": true,
+        "no_enqueue_timestamp_tie": true,
+        "cnp_identity_scope": "actual IP/UID plus generated stream/fid projection; packet capture does not serialize fid"
+      }
+    },
+    "static-degraded": {
+      "graph_transport": {
+        "messages": 76,
+        "original_nodes": 216,
+        "local_work": 70,
+        "group_completion_ns": 509002,
+        "source_packets": 1352,
+        "physical_transmissions": 14458,
+        "physical_drops": 0,
+        "packet_events": 52374,
+        "window_never_binding": true,
+        "actual_callbacks": true,
+        "all_original_dependencies": true
+      },
+      "routes": {
+        "passed": true,
+        "enqueues_verified_by_protocol": {
+          "17": 5812,
+          "252": 5812,
+          "255": 105
+        },
+        "local_drop_causes": {},
+        "no_postfailure_tx_on_failed_ports": true,
+        "no_enqueue_timestamp_tie": true,
+        "cnp_identity_scope": "actual IP/UID plus generated stream/fid projection; packet capture does not serialize fid"
+      }
+    },
+    "saved-healthy": {
+      "graph_transport": {
+        "messages": 76,
+        "original_nodes": 216,
+        "local_work": 70,
+        "group_completion_ns": 397733,
+        "source_packets": 1352,
+        "physical_transmissions": 14466,
+        "physical_drops": 0,
+        "packet_events": 52404,
+        "window_never_binding": true,
+        "actual_callbacks": true,
+        "all_original_dependencies": true
+      },
+      "routes": {
+        "passed": true,
+        "enqueues_verified_by_protocol": {
+          "17": 5812,
+          "252": 5812,
+          "255": 112
+        },
+        "local_drop_causes": {},
+        "no_postfailure_tx_on_failed_ports": true,
+        "no_enqueue_timestamp_tie": true,
+        "cnp_identity_scope": "actual IP/UID plus generated stream/fid projection; packet capture does not serialize fid"
+      }
+    },
+    "saved-fault": {
+      "graph_transport": {
+        "messages": 76,
+        "original_nodes": 216,
+        "local_work": 70,
+        "group_completion_ns": 576245,
+        "source_packets": 1499,
+        "physical_transmissions": 15449,
+        "physical_drops": 3,
+        "packet_events": 55979,
+        "window_never_binding": true,
+        "actual_callbacks": true,
+        "all_original_dependencies": true
+      },
+      "routes": {
+        "passed": true,
+        "enqueues_verified_by_protocol": {
+          "17": 6237,
+          "252": 5863,
+          "253": 275,
+          "255": 129
+        },
+        "local_drop_causes": {
+          "queue_close": 9,
+          "stale_forwarding": 64
+        },
+        "no_postfailure_tx_on_failed_ports": true,
+        "no_enqueue_timestamp_tie": true,
+        "cnp_identity_scope": "actual IP/UID plus generated stream/fid projection; packet capture does not serialize fid"
+      }
+    }
+  },
+  "raw_route_projection_verified": true,
+  "all_original_dependencies_verified": true,
+  "all_work_byte_identical": true,
+  "all_first_dispatch_loss_feedback_verified": true,
+  "all_contrasts_verified": true,
+  "evidence_tamper_classes_rejected": [
+    "actual_ACK",
+    "declared_dependency",
+    "actual_packet_arrival",
+    "actual_feedback_bytes",
+    "local_candidate_count",
+    "declared_route_update",
+    "initial_lost_bytes"
+  ],
+  "new_actual_networks": 4,
+  "saved_baseline_inputs": 2,
+  "scope": "reference-network mechanisms only; no complete modern inference/calibration/novelty claim"
+}

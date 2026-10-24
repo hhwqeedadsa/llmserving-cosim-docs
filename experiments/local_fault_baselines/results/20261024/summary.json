@@ -1,0 +1,781 @@
+{
+  "schema_version": "local-fault-baselines-summary/1",
+  "cases": {
+    "healthy": {
+      "group_completion_ns": 397733,
+      "physical_finish_ns": 401871,
+      "tx_payload_bytes": 2609152,
+      "unique_payload_bytes": 2609152,
+      "timeouts": 0,
+      "local_drop_events": 0,
+      "packet_events": 52404
+    },
+    "live-delayed": {
+      "group_completion_ns": 477134,
+      "physical_finish_ns": 477134,
+      "tx_payload_bytes": 2806528,
+      "unique_payload_bytes": 2609152,
+      "timeouts": 0,
+      "local_drop_events": 30,
+      "packet_events": 55934
+    },
+    "live-instant": {
+      "group_completion_ns": 492791,
+      "physical_finish_ns": 492791,
+      "tx_payload_bytes": 2959200,
+      "unique_payload_bytes": 2609152,
+      "timeouts": 0,
+      "local_drop_events": 9,
+      "packet_events": 59479
+    },
+    "static-degraded": {
+      "group_completion_ns": 509002,
+      "physical_finish_ns": 509002,
+      "tx_payload_bytes": 2609152,
+      "unique_payload_bytes": 2609152,
+      "timeouts": 0,
+      "local_drop_events": 0,
+      "packet_events": 52374
+    },
+    "saved-healthy": {
+      "group_completion_ns": 397733,
+      "physical_finish_ns": 401871,
+      "tx_payload_bytes": 2609152,
+      "unique_payload_bytes": 2609152,
+      "timeouts": 0,
+      "local_drop_events": 0,
+      "packet_events": 52404
+    },
+    "saved-fault": {
+      "group_completion_ns": 576245,
+      "physical_finish_ns": 576245,
+      "tx_payload_bytes": 2895872,
+      "unique_payload_bytes": 2609152,
+      "timeouts": 1,
+      "local_drop_events": 73,
+      "packet_events": 55979
+    }
+  },
+  "contrasts": [
+    {
+      "before": "healthy",
+      "after": "live-delayed",
+      "group_delta_ns": 79401,
+      "extra_source_payload_bytes": 197376,
+      "step_delta_ns": [
+        27861,
+        79401
+      ]
+    },
+    {
+      "before": "healthy",
+      "after": "live-instant",
+      "group_delta_ns": 95058,
+      "extra_source_payload_bytes": 350048,
+      "step_delta_ns": [
+        77895,
+        95058
+      ]
+    },
+    {
+      "before": "healthy",
+      "after": "static-degraded",
+      "group_delta_ns": 111269,
+      "extra_source_payload_bytes": 0,
+      "step_delta_ns": [
+        44824,
+        111269
+      ]
+    },
+    {
+      "before": "saved-fault",
+      "after": "live-delayed",
+      "group_delta_ns": -99111,
+      "extra_source_payload_bytes": -89344,
+      "step_delta_ns": [
+        -113284,
+        -99111
+      ]
+    },
+    {
+      "before": "live-delayed",
+      "after": "live-instant",
+      "group_delta_ns": 15657,
+      "extra_source_payload_bytes": 152672,
+      "step_delta_ns": [
+        50034,
+        15657
+      ]
+    },
+    {
+      "before": "static-degraded",
+      "after": "live-instant",
+      "group_delta_ns": -16211,
+      "extra_source_payload_bytes": 350048,
+      "step_delta_ns": [
+        33071,
+        -16211
+      ]
+    }
+  ],
+  "all_first_dispatch": {
+    "healthy": [
+      {
+        "work": 2,
+        "stream": 1,
+        "bytes": 28672,
+        "initial_packets": 15,
+        "initial_packets_lost": 0,
+        "initial_payload_lost": 0,
+        "first_source_tx_ns": 1030,
+        "first_feedback_rx_ns": 11272,
+        "first_timeout_ns": null,
+        "timeout_precedes_any_feedback": false
+      },
+      {
+        "work": 3,
+        "stream": 2,
+        "bytes": 86016,
+        "initial_packets": 44,
+        "initial_packets_lost": 0,
+        "initial_payload_lost": 0,
+        "first_source_tx_ns": 1193,
+        "first_feedback_rx_ns": 19096,
+        "first_timeout_ns": null,
+        "timeout_precedes_any_feedback": false
+      },
+      {
+        "work": 6,
+        "stream": 4,
+        "bytes": 28672,
+        "initial_packets": 15,
+        "initial_packets_lost": 0,
+        "initial_payload_lost": 0,
+        "first_source_tx_ns": 1030,
+        "first_feedback_rx_ns": 10832,
+        "first_timeout_ns": null,
+        "timeout_precedes_any_feedback": false
+      },
+      {
+        "work": 7,
+        "stream": 6,
+        "bytes": 43008,
+        "initial_packets": 22,
+        "initial_packets_lost": 0,
+        "initial_payload_lost": 0,
+        "first_source_tx_ns": 1193,
+        "first_feedback_rx_ns": 19052,
+        "first_timeout_ns": null,
+        "timeout_precedes_any_feedback": false
+      },
+      {
+        "work": 10,
+        "stream": 8,
+        "bytes": 71680,
+        "initial_packets": 36,
+        "initial_packets_lost": 0,
+        "initial_payload_lost": 0,
+        "first_source_tx_ns": 1030,
+        "first_feedback_rx_ns": 16136,
+        "first_timeout_ns": null,
+        "timeout_precedes_any_feedback": false
+      },
+      {
+        "work": 11,
+        "stream": 9,
+        "bytes": 14336,
+        "initial_packets": 8,
+        "initial_packets_lost": 0,
+        "initial_payload_lost": 0,
+        "first_source_tx_ns": 1193,
+        "first_feedback_rx_ns": 19748,
+        "first_timeout_ns": null,
+        "timeout_precedes_any_feedback": false
+      },
+      {
+        "work": 17,
+        "stream": 12,
+        "bytes": 57344,
+        "initial_packets": 29,
+        "initial_packets_lost": 0,
+        "initial_payload_lost": 0,
+        "first_source_tx_ns": 1030,
+        "first_feedback_rx_ns": 16303,
+        "first_timeout_ns": null,
+        "timeout_precedes_any_feedback": false
+      },
+      {
+        "work": 22,
+        "stream": 14,
+        "bytes": 28672,
+        "initial_packets": 15,
+        "initial_packets_lost": 0,
+        "initial_payload_lost": 0,
+        "first_source_tx_ns": 1193,
+        "first_feedback_rx_ns": 10968,
+        "first_timeout_ns": null,
+        "timeout_precedes_any_feedback": false
+      }
+    ],
+    "live-delayed": [
+      {
+        "work": 2,
+        "stream": 1,
+        "bytes": 28672,
+        "initial_packets": 15,
+        "initial_packets_lost": 5,
+        "initial_payload_lost": 10000,
+        "first_source_tx_ns": 1030,
+        "first_feedback_rx_ns": 19764,
+        "first_timeout_ns": null,
+        "timeout_precedes_any_feedback": false
+      },
+      {
+        "work": 3,
+        "stream": 2,
+        "bytes": 86016,
+        "initial_packets": 44,
+        "initial_packets_lost": 6,
+        "initial_payload_lost": 12000,
+        "first_source_tx_ns": 1193,
+        "first_feedback_rx_ns": 21099,
+        "first_timeout_ns": null,
+        "timeout_precedes_any_feedback": false
+      },
+      {
+        "work": 6,
+        "stream": 4,
+        "bytes": 28672,
+        "initial_packets": 15,
+        "initial_packets_lost": 10,
+        "initial_payload_lost": 20000,
+        "first_source_tx_ns": 1030,
+        "first_feedback_rx_ns": 28643,
+        "first_timeout_ns": null,
+        "timeout_precedes_any_feedback": false
+      },
+      {
+        "work": 7,
+        "stream": 6,
+        "bytes": 43008,
+        "initial_packets": 22,
+        "initial_packets_lost": 0,
+        "initial_payload_lost": 0,
+        "first_source_tx_ns": 1193,
+        "first_feedback_rx_ns": 18444,
+        "first_timeout_ns": null,
+        "timeout_precedes_any_feedback": false
+      },
+      {
+        "work": 10,
+        "stream": 8,
+        "bytes": 71680,
+        "initial_packets": 36,
+        "initial_packets_lost": 0,
+        "initial_payload_lost": 0,
+        "first_source_tx_ns": 1030,
+        "first_feedback_rx_ns": 17156,
+        "first_timeout_ns": null,
+        "timeout_precedes_any_feedback": false
+      },
+      {
+        "work": 11,
+        "stream": 9,
+        "bytes": 14336,
+        "initial_packets": 8,
+        "initial_packets_lost": 0,
+        "initial_payload_lost": 0,
+        "first_source_tx_ns": 1193,
+        "first_feedback_rx_ns": 18476,
+        "first_timeout_ns": null,
+        "timeout_precedes_any_feedback": false
+      },
+      {
+        "work": 17,
+        "stream": 12,
+        "bytes": 57344,
+        "initial_packets": 29,
+        "initial_packets_lost": 7,
+        "initial_payload_lost": 14000,
+        "first_source_tx_ns": 1030,
+        "first_feedback_rx_ns": 30611,
+        "first_timeout_ns": null,
+        "timeout_precedes_any_feedback": false
+      },
+      {
+        "work": 22,
+        "stream": 14,
+        "bytes": 28672,
+        "initial_packets": 15,
+        "initial_packets_lost": 0,
+        "initial_payload_lost": 0,
+        "first_source_tx_ns": 1193,
+        "first_feedback_rx_ns": 10968,
+        "first_timeout_ns": null,
+        "timeout_precedes_any_feedback": false
+      }
+    ],
+    "live-instant": [
+      {
+        "work": 2,
+        "stream": 1,
+        "bytes": 28672,
+        "initial_packets": 15,
+        "initial_packets_lost": 5,
+        "initial_payload_lost": 10000,
+        "first_source_tx_ns": 1030,
+        "first_feedback_rx_ns": 11880,
+        "first_timeout_ns": null,
+        "timeout_precedes_any_feedback": false
+      },
+      {
+        "work": 3,
+        "stream": 2,
+        "bytes": 86016,
+        "initial_packets": 44,
+        "initial_packets_lost": 6,
+        "initial_payload_lost": 12000,
+        "first_source_tx_ns": 1193,
+        "first_feedback_rx_ns": 20687,
+        "first_timeout_ns": null,
+        "timeout_precedes_any_feedback": false
+      },
+      {
+        "work": 6,
+        "stream": 4,
+        "bytes": 28672,
+        "initial_packets": 15,
+        "initial_packets_lost": 1,
+        "initial_payload_lost": 2000,
+        "first_source_tx_ns": 1030,
+        "first_feedback_rx_ns": 13836,
+        "first_timeout_ns": null,
+        "timeout_precedes_any_feedback": false
+      },
+      {
+        "work": 7,
+        "stream": 6,
+        "bytes": 43008,
+        "initial_packets": 22,
+        "initial_packets_lost": 0,
+        "initial_payload_lost": 0,
+        "first_source_tx_ns": 1193,
+        "first_feedback_rx_ns": 18313,
+        "first_timeout_ns": null,
+        "timeout_precedes_any_feedback": false
+      },
+      {
+        "work": 10,
+        "stream": 8,
+        "bytes": 71680,
+        "initial_packets": 36,
+        "initial_packets_lost": 0,
+        "initial_payload_lost": 0,
+        "first_source_tx_ns": 1030,
+        "first_feedback_rx_ns": 19096,
+        "first_timeout_ns": null,
+        "timeout_precedes_any_feedback": false
+      },
+      {
+        "work": 11,
+        "stream": 9,
+        "bytes": 14336,
+        "initial_packets": 8,
+        "initial_packets_lost": 0,
+        "initial_payload_lost": 0,
+        "first_source_tx_ns": 1193,
+        "first_feedback_rx_ns": 19748,
+        "first_timeout_ns": null,
+        "timeout_precedes_any_feedback": false
+      },
+      {
+        "work": 17,
+        "stream": 12,
+        "bytes": 57344,
+        "initial_packets": 29,
+        "initial_packets_lost": 0,
+        "initial_payload_lost": 0,
+        "first_source_tx_ns": 1030,
+        "first_feedback_rx_ns": 27288,
+        "first_timeout_ns": null,
+        "timeout_precedes_any_feedback": false
+      },
+      {
+        "work": 22,
+        "stream": 14,
+        "bytes": 28672,
+        "initial_packets": 15,
+        "initial_packets_lost": 0,
+        "initial_payload_lost": 0,
+        "first_source_tx_ns": 1193,
+        "first_feedback_rx_ns": 10968,
+        "first_timeout_ns": null,
+        "timeout_precedes_any_feedback": false
+      }
+    ],
+    "static-degraded": [
+      {
+        "work": 2,
+        "stream": 1,
+        "bytes": 28672,
+        "initial_packets": 15,
+        "initial_packets_lost": 0,
+        "initial_payload_lost": 0,
+        "first_source_tx_ns": 1030,
+        "first_feedback_rx_ns": 11880,
+        "first_timeout_ns": null,
+        "timeout_precedes_any_feedback": false
+      },
+      {
+        "work": 3,
+        "stream": 2,
+        "bytes": 86016,
+        "initial_packets": 44,
+        "initial_packets_lost": 0,
+        "initial_payload_lost": 0,
+        "first_source_tx_ns": 1193,
+        "first_feedback_rx_ns": 18511,
+        "first_timeout_ns": null,
+        "timeout_precedes_any_feedback": false
+      },
+      {
+        "work": 6,
+        "stream": 4,
+        "bytes": 28672,
+        "initial_packets": 15,
+        "initial_packets_lost": 0,
+        "initial_payload_lost": 0,
+        "first_source_tx_ns": 1030,
+        "first_feedback_rx_ns": 11880,
+        "first_timeout_ns": null,
+        "timeout_precedes_any_feedback": false
+      },
+      {
+        "work": 7,
+        "stream": 6,
+        "bytes": 43008,
+        "initial_packets": 22,
+        "initial_packets_lost": 0,
+        "initial_payload_lost": 0,
+        "first_source_tx_ns": 1193,
+        "first_feedback_rx_ns": 17661,
+        "first_timeout_ns": null,
+        "timeout_precedes_any_feedback": false
+      },
+      {
+        "work": 10,
+        "stream": 8,
+        "bytes": 71680,
+        "initial_packets": 36,
+        "initial_packets_lost": 0,
+        "initial_payload_lost": 0,
+        "first_source_tx_ns": 1030,
+        "first_feedback_rx_ns": 18524,
+        "first_timeout_ns": null,
+        "timeout_precedes_any_feedback": false
+      },
+      {
+        "work": 11,
+        "stream": 9,
+        "bytes": 14336,
+        "initial_packets": 8,
+        "initial_packets_lost": 0,
+        "initial_payload_lost": 0,
+        "first_source_tx_ns": 1193,
+        "first_feedback_rx_ns": 18528,
+        "first_timeout_ns": null,
+        "timeout_precedes_any_feedback": false
+      },
+      {
+        "work": 17,
+        "stream": 12,
+        "bytes": 57344,
+        "initial_packets": 29,
+        "initial_packets_lost": 0,
+        "initial_payload_lost": 0,
+        "first_source_tx_ns": 1030,
+        "first_feedback_rx_ns": 19077,
+        "first_timeout_ns": null,
+        "timeout_precedes_any_feedback": false
+      },
+      {
+        "work": 22,
+        "stream": 14,
+        "bytes": 28672,
+        "initial_packets": 15,
+        "initial_packets_lost": 0,
+        "initial_payload_lost": 0,
+        "first_source_tx_ns": 1193,
+        "first_feedback_rx_ns": 11457,
+        "first_timeout_ns": null,
+        "timeout_precedes_any_feedback": false
+      }
+    ],
+    "saved-healthy": [
+      {
+        "work": 2,
+        "stream": 1,
+        "bytes": 28672,
+        "initial_packets": 15,
+        "initial_packets_lost": 0,
+        "initial_payload_lost": 0,
+        "first_source_tx_ns": 1030,
+        "first_feedback_rx_ns": 11272,
+        "first_timeout_ns": null,
+        "timeout_precedes_any_feedback": false
+      },
+      {
+        "work": 3,
+        "stream": 2,
+        "bytes": 86016,
+        "initial_packets": 44,
+        "initial_packets_lost": 0,
+        "initial_payload_lost": 0,
+        "first_source_tx_ns": 1193,
+        "first_feedback_rx_ns": 19096,
+        "first_timeout_ns": null,
+        "timeout_precedes_any_feedback": false
+      },
+      {
+        "work": 6,
+        "stream": 4,
+        "bytes": 28672,
+        "initial_packets": 15,
+        "initial_packets_lost": 0,
+        "initial_payload_lost": 0,
+        "first_source_tx_ns": 1030,
+        "first_feedback_rx_ns": 10832,
+        "first_timeout_ns": null,
+        "timeout_precedes_any_feedback": false
+      },
+      {
+        "work": 7,
+        "stream": 6,
+        "bytes": 43008,
+        "initial_packets": 22,
+        "initial_packets_lost": 0,
+        "initial_payload_lost": 0,
+        "first_source_tx_ns": 1193,
+        "first_feedback_rx_ns": 19052,
+        "first_timeout_ns": null,
+        "timeout_precedes_any_feedback": false
+      },
+      {
+        "work": 10,
+        "stream": 8,
+        "bytes": 71680,
+        "initial_packets": 36,
+        "initial_packets_lost": 0,
+        "initial_payload_lost": 0,
+        "first_source_tx_ns": 1030,
+        "first_feedback_rx_ns": 16136,
+        "first_timeout_ns": null,
+        "timeout_precedes_any_feedback": false
+      },
+      {
+        "work": 11,
+        "stream": 9,
+        "bytes": 14336,
+        "initial_packets": 8,
+        "initial_packets_lost": 0,
+        "initial_payload_lost": 0,
+        "first_source_tx_ns": 1193,
+        "first_feedback_rx_ns": 19748,
+        "first_timeout_ns": null,
+        "timeout_precedes_any_feedback": false
+      },
+      {
+        "work": 17,
+        "stream": 12,
+        "bytes": 57344,
+        "initial_packets": 29,
+        "initial_packets_lost": 0,
+        "initial_payload_lost": 0,
+        "first_source_tx_ns": 1030,
+        "first_feedback_rx_ns": 16303,
+        "first_timeout_ns": null,
+        "timeout_precedes_any_feedback": false
+      },
+      {
+        "work": 22,
+        "stream": 14,
+        "bytes": 28672,
+        "initial_packets": 15,
+        "initial_packets_lost": 0,
+        "initial_payload_lost": 0,
+        "first_source_tx_ns": 1193,
+        "first_feedback_rx_ns": 10968,
+        "first_timeout_ns": null,
+        "timeout_precedes_any_feedback": false
+      }
+    ],
+    "saved-fault": [
+      {
+        "work": 2,
+        "stream": 1,
+        "bytes": 28672,
+        "initial_packets": 15,
+        "initial_packets_lost": 14,
+        "initial_payload_lost": 26672,
+        "first_source_tx_ns": 1030,
+        "first_feedback_rx_ns": 79059,
+        "first_timeout_ns": null,
+        "timeout_precedes_any_feedback": false
+      },
+      {
+        "work": 3,
+        "stream": 2,
+        "bytes": 86016,
+        "initial_packets": 44,
+        "initial_packets_lost": 44,
+        "initial_payload_lost": 86016,
+        "first_source_tx_ns": 1193,
+        "first_feedback_rx_ns": 84902,
+        "first_timeout_ns": 81193,
+        "timeout_precedes_any_feedback": true
+      },
+      {
+        "work": 6,
+        "stream": 4,
+        "bytes": 28672,
+        "initial_packets": 15,
+        "initial_packets_lost": 10,
+        "initial_payload_lost": 20000,
+        "first_source_tx_ns": 1030,
+        "first_feedback_rx_ns": 28396,
+        "first_timeout_ns": null,
+        "timeout_precedes_any_feedback": false
+      },
+      {
+        "work": 7,
+        "stream": 6,
+        "bytes": 43008,
+        "initial_packets": 22,
+        "initial_packets_lost": 0,
+        "initial_payload_lost": 0,
+        "first_source_tx_ns": 1193,
+        "first_feedback_rx_ns": 18444,
+        "first_timeout_ns": null,
+        "timeout_precedes_any_feedback": false
+      },
+      {
+        "work": 10,
+        "stream": 8,
+        "bytes": 71680,
+        "initial_packets": 36,
+        "initial_packets_lost": 0,
+        "initial_payload_lost": 0,
+        "first_source_tx_ns": 1030,
+        "first_feedback_rx_ns": 16124,
+        "first_timeout_ns": null,
+        "timeout_precedes_any_feedback": false
+      },
+      {
+        "work": 11,
+        "stream": 9,
+        "bytes": 14336,
+        "initial_packets": 8,
+        "initial_packets_lost": 0,
+        "initial_payload_lost": 0,
+        "first_source_tx_ns": 1193,
+        "first_feedback_rx_ns": 18460,
+        "first_timeout_ns": null,
+        "timeout_precedes_any_feedback": false
+      },
+      {
+        "work": 17,
+        "stream": 12,
+        "bytes": 57344,
+        "initial_packets": 29,
+        "initial_packets_lost": 7,
+        "initial_payload_lost": 14000,
+        "first_source_tx_ns": 1030,
+        "first_feedback_rx_ns": 29124,
+        "first_timeout_ns": null,
+        "timeout_precedes_any_feedback": false
+      },
+      {
+        "work": 22,
+        "stream": 14,
+        "bytes": 28672,
+        "initial_packets": 15,
+        "initial_packets_lost": 0,
+        "initial_payload_lost": 0,
+        "first_source_tx_ns": 1193,
+        "first_feedback_rx_ns": 10968,
+        "first_timeout_ns": null,
+        "timeout_precedes_any_feedback": false
+      }
+    ]
+  },
+  "retry_payload_by_initial_copy_outcome": {
+    "healthy": {},
+    "live-delayed": {
+      "1": {
+        "initial_copy_lost": 10000,
+        "initial_copy_received_before_retry": 8000
+      },
+      "2": {
+        "initial_copy_lost": 12000,
+        "initial_copy_received_before_retry": 22000,
+        "initial_copy_still_inflight_at_retry": 50016
+      },
+      "4": {
+        "initial_copy_lost": 20000,
+        "initial_copy_received_before_retry": 2000,
+        "initial_copy_still_inflight_at_retry": 4672
+      },
+      "12": {
+        "initial_copy_lost": 18000,
+        "initial_copy_received_before_retry": 14000,
+        "initial_copy_still_inflight_at_retry": 36688
+      }
+    },
+    "live-instant": {
+      "4": {
+        "initial_copy_lost": 2000,
+        "initial_copy_still_inflight_at_retry": 12672,
+        "initial_copy_received_before_retry": 10000
+      },
+      "1": {
+        "initial_copy_lost": 10000,
+        "initial_copy_received_before_retry": 6000,
+        "initial_copy_still_inflight_at_retry": 6672
+      },
+      "2": {
+        "initial_copy_lost": 12000,
+        "initial_copy_received_before_retry": 16000,
+        "initial_copy_still_inflight_at_retry": 56016
+      },
+      "12": {
+        "initial_copy_received_before_retry": 34000,
+        "initial_copy_still_inflight_at_retry": 184688
+      }
+    },
+    "static-degraded": {},
+    "saved-healthy": {},
+    "saved-fault": {
+      "4": {
+        "initial_copy_lost": 20000,
+        "initial_copy_received_before_retry": 2000,
+        "initial_copy_still_inflight_at_retry": 4672
+      },
+      "12": {
+        "initial_copy_lost": 22000,
+        "initial_copy_received_before_retry": 8000,
+        "initial_copy_still_inflight_at_retry": 44688
+      },
+      "1": {
+        "initial_copy_lost": 26672,
+        "initial_copy_received_before_retry": 6000,
+        "initial_copy_still_inflight_at_retry": 16672
+      },
+      "2": {
+        "initial_copy_lost": 108016,
+        "initial_copy_received_before_retry": 16000,
+        "initial_copy_still_inflight_at_retry": 12000
+      }
+    }
+  },
+  "scope": "four fixed MMLU requests, two layers/two steps legacy contribution-copy and declared compute; not modern inference/calibration/holdout"
+}

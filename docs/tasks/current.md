@@ -13,6 +13,8 @@
 
 ## 当前范围和预算
 
+当前平台`in_progress`：[Context身份到实际事务连接](context_transaction_binding_spec.md)，基线`32f508d`。新增公开规划/核查入口，将communicator/context/peer映射到明确物理NIC和既有MRT1持久连接；验证相同身份复用、不同身份隔离及实际包/返回。self-peer与完整现代provider仍不支持，不删必要操作冒充现代基线。固定健康/单包丢失/新根小例共3次网络；450受监控秒/256MiB、单命令60秒/1GiB/地址2GiB/96MiB，网络1ms/结果16MiB。只改Python/CLI及说明，无构建下载/GPU/依赖变化或push。
+
 当前研究`completed`：[现代provider连接共享范围](../../experiments/provider_binding/protocol.md)，平台`a81061a`。固定既有4调用/16路由选择与显式SM2/5个context/2条连接，经一次公开plan/2及两个原函数的CPU替身执行核486行；444个provider操作、42个本地旁路，37个活跃主QP含33个远端/4个self，分配对象120（含24个self responder），不等于流或包数。12个旧方向都合并了多个现代context；4条QP实际同时承载Combine数据与计数/屏障。全部数字以四调用复用同一Context为前提，不是默认配置、真实部署或现代性能。
 
 独立重建全部76个旧SEND与同一原始路由的对应：事前固定work90→108在本声明下仍同context1；work80→132分别context1/0，不能将旧同QP反馈继承解释直接搬到现代对象。未将旧CNP/速率/时延赋给新操作。9份固定源码核Git树/blob，QoS只证初始化的Context→GIN config→AH作用域，不将其等同网络PG或证明网卡空闲规则。9类篡改拒绝、13依赖、新研究源码根/空cwd三份JSON逐字节一致；补核默认counter及全76映射只读既有产物，初版核验保留，无plan/CPU驱动重跑。

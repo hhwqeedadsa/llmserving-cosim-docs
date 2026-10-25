@@ -1,0 +1,56 @@
+{
+  "passed": true,
+  "actual_networks": 3,
+  "cases": [
+    {
+      "name": "uniform-healthy",
+      "executed": true,
+      "passed": true,
+      "dependencies": 90,
+      "write_byte_coverage": true,
+      "complete_source_records": true,
+      "capture_complete": true,
+      "packet_records_omitted": 0,
+      "whole_physical_packet_path_audit": false
+    },
+    {
+      "name": "hotspot-healthy",
+      "executed": true,
+      "passed": true,
+      "dependencies": 90,
+      "write_byte_coverage": true,
+      "complete_source_records": true,
+      "capture_complete": true,
+      "packet_records_omitted": 0,
+      "whole_physical_packet_path_audit": false
+    },
+    {
+      "name": "hotspot-uplink",
+      "executed": true,
+      "passed": true,
+      "dependencies": 90,
+      "write_byte_coverage": true,
+      "complete_source_records": true,
+      "capture_complete": false,
+      "packet_records_omitted": 12070,
+      "whole_physical_packet_path_audit": false
+    },
+    {
+      "name": "hotspot-core",
+      "executed": false
+    },
+    {
+      "name": "hotspot-static-core",
+      "executed": false
+    },
+    {
+      "name": "hotspot-partition",
+      "executed": false
+    }
+  ],
+  "network_phase_closed": true,
+  "candidate_optimization_gain_measured": false,
+  "all_dependency_and_source_byte_checks": true,
+  "full_fault_packet_capture": false,
+  "full_physical_path_or_ack_reconstruction": false
+}

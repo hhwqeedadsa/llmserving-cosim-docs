@@ -1,0 +1,112 @@
+{
+  "schema": "moe-extreme-fault-results/1",
+  "synthetic_stress": true,
+  "cases": [
+    {
+      "name": "uniform-healthy",
+      "status": "complete",
+      "application_completion_ns": 2566232,
+      "physical_finish_ns": 2566232,
+      "completed_work": 90,
+      "expected_work": 90,
+      "unique_payload_bytes": 4194304,
+      "source_payload_bytes": 4194304,
+      "repeated_payload_bytes": 0,
+      "timeout_expiries": 0,
+      "capture_complete": true,
+      "capture_saved": 99286,
+      "capture_observations": 99286,
+      "capture_omitted": 0,
+      "recovery_records_complete": true,
+      "source_log_matches_stream_totals": true,
+      "application_checked_separately": true,
+      "full_packet_path_audited": false
+    },
+    {
+      "name": "hotspot-healthy",
+      "status": "complete",
+      "application_completion_ns": 4223689,
+      "physical_finish_ns": 4223689,
+      "completed_work": 90,
+      "expected_work": 90,
+      "unique_payload_bytes": 4194304,
+      "source_payload_bytes": 4194304,
+      "repeated_payload_bytes": 0,
+      "timeout_expiries": 0,
+      "capture_complete": true,
+      "capture_saved": 95898,
+      "capture_observations": 95898,
+      "capture_omitted": 0,
+      "recovery_records_complete": true,
+      "source_log_matches_stream_totals": true,
+      "application_checked_separately": true,
+      "full_packet_path_audited": false
+    },
+    {
+      "name": "hotspot-uplink",
+      "status": "complete",
+      "application_completion_ns": 4883365,
+      "physical_finish_ns": 4883365,
+      "completed_work": 90,
+      "expected_work": 90,
+      "unique_payload_bytes": 4194304,
+      "source_payload_bytes": 4844112,
+      "repeated_payload_bytes": 649808,
+      "timeout_expiries": 7,
+      "capture_complete": false,
+      "capture_saved": 100000,
+      "capture_observations": 112070,
+      "capture_omitted": 12070,
+      "recovery_records_complete": true,
+      "source_log_matches_stream_totals": true,
+      "application_checked_separately": true,
+      "full_packet_path_audited": false
+    },
+    {
+      "name": "hotspot-core",
+      "status": "not_run",
+      "expected_complete": true
+    },
+    {
+      "name": "hotspot-static-core",
+      "status": "not_run",
+      "expected_complete": true
+    },
+    {
+      "name": "hotspot-partition",
+      "status": "not_run",
+      "expected_complete": false
+    }
+  ],
+  "effects": {
+    "hotspot_effect": {
+      "before": "uniform-healthy",
+      "after": "hotspot-healthy",
+      "delta_ns": 1657457,
+      "slowdown_percent": 64.5871846349044,
+      "fraction_of_after_percent": 39.241928087034815
+    },
+    "fault_effect": {
+      "before": "hotspot-healthy",
+      "after": "hotspot-uplink",
+      "delta_ns": 659676,
+      "slowdown_percent": 15.618479485587123,
+      "fraction_of_after_percent": 13.508635950824893
+    },
+    "combined_effect": {
+      "before": "uniform-healthy",
+      "after": "hotspot-uplink",
+      "delta_ns": 2317133,
+      "slowdown_percent": 90.29320030301236,
+      "fraction_of_after_percent": 47.44951483249768
+    }
+  },
+  "actual_networks": 3,
+  "planned_networks": 6,
+  "phase_closed": true,
+  "stop_reason": "packet_capture_limit_at_hotspot_uplink",
+  "successful_network_reruns": 0,
+  "scope": "synthetic Top1 role-separated dispatch/expert-stage/combine, declared compute; not modern EP implementation, real routing distribution, GPU or calibrated inference",
+  "candidate_optimization_gain_measured": false,
+  "remaining_fault_gap_is_optimization_bound": false
+}

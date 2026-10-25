@@ -1,0 +1,55 @@
+{
+  "phase_closed": true,
+  "ended_utc": "2026-10-25T08:57:24.490247+00:00",
+  "planned_networks": 6,
+  "actual_networks": 3,
+  "successful_network_reruns": 0,
+  "networks_completed": 3,
+  "conditions_constructed": 6,
+  "conditions_public_input_validated": 6,
+  "unexecuted": [
+    "hotspot-core",
+    "hotspot-static-core",
+    "hotspot-partition"
+  ],
+  "stop_reason": "hotspot-uplink capture omitted 12070 of 112070 observations; do not enlarge or rerun",
+  "failed_preparations": [
+    "unsupported synthetic GPU export label",
+    "healthy local_failover without link schedule",
+    "driver refused existing empty network directory"
+  ],
+  "failed_diagnostic": "read-only diagnostic treated integer queue_observations as iterable",
+  "conservative_monitored_seconds_including_nested": 47.85485666617751,
+  "peak_sampled_group_rss_bytes": 627347456,
+  "aggregate_source_stage_restored_persistent_bytes": 66904064,
+  "source_and_final_receipt_reserve_bytes": 2097152,
+  "limits": {
+    "cumulative_seconds": 600,
+    "cumulative_bytes": 402653184,
+    "per_command_seconds": 60,
+    "rss_bytes": 1073741824,
+    "address_bytes": 2147483648,
+    "network_ns": 5000000,
+    "result_bytes": 33554432,
+    "packet_capture": 100000
+  },
+  "archive": {
+    "sha256": "b313a6f838aac427b7a43aa1f01a81294d8701925fe7f341dcb5d8261354fd1b",
+    "members": 167,
+    "uncompressed_bytes": 30616990,
+    "compressed_bytes": 2773305,
+    "native_runtime_bundled": false
+  },
+  "offline_replay_byte_identical": {
+    "summary.json": true,
+    "verification.json": true
+  },
+  "runtime_identity_unchanged": true,
+  "full_fault_packet_capture": false,
+  "full_physical_path_or_ack_reconstruction": false,
+  "new_algorithm_benefit_measured": false,
+  "platform_dependencies_changed": false,
+  "build_install_download_gpu_push": false,
+  "remaining_live_monitored_pids": [],
+  "overall_paper_goal_complete": false
+}

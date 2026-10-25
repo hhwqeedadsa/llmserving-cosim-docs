@@ -1,0 +1,25 @@
+{
+  "schema": "moe-extreme-fault-stress/1",
+  "sources": [0, 1, 2, 3],
+  "owners": [4, 5, 6, 7],
+  "experts_per_owner": 8,
+  "top_k": 1,
+  "tokens_per_source_per_step": 256,
+  "hidden_dim": 512,
+  "activation_bytes_per_element": 2,
+  "steps": 2,
+  "uniform_owner_tokens": [64, 64, 64, 64],
+  "hotspot_owner_tokens": [224, 11, 11, 10],
+  "expert_stage_ns": 2000,
+  "merge_ns": 1000,
+  "upper_rate_bps": 10000000000,
+  "seed": 11,
+  "cases": [
+    {"name": "uniform-healthy", "load": "uniform", "failures": [], "expected_complete": true},
+    {"name": "hotspot-healthy", "load": "hotspot", "failures": [], "expected_complete": true},
+    {"name": "hotspot-uplink", "load": "hotspot", "failures": [[12, 14, 4000]], "expected_complete": true},
+    {"name": "hotspot-core", "load": "hotspot", "failures": [[10, 16, 4000], [14, 16, 4000]], "expected_complete": true},
+    {"name": "hotspot-static-core", "load": "hotspot", "failures": [[10, 16, 0], [14, 16, 0]], "expected_complete": true},
+    {"name": "hotspot-partition", "load": "hotspot", "failures": [[12, 14, 4000], [12, 15, 4000]], "expected_complete": false}
+  ]
+}

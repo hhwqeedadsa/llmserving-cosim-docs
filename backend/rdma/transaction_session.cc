@@ -1,5 +1,6 @@
 #include "transaction_session_validation.hh"
 #include "session_wakeups.hh"
+#include "session_callback_batches.hh"
 #include "host_timing.hh"
 #include <deque>
 #include <fstream>
@@ -9,7 +10,7 @@
 using namespace moe_rdma;
 class TransactionSession {
  public:
-  TransactionSession(Fabric& fabric,const Json& topology,const Json& input,HostTiming& timing):fabric_(fabric),topology_(topology),input_(input),transactions_(fabric,input),timing_(timing) {
+  TransactionSession(Fabric& fabric,const Json& topology,const Json& input,HostTiming& timing,bool batches=false):fabric_(fabric),topology_(topology),input_(input),transactions_(fabric,input),batch_mode_(batches),timing_(timing) {
     Require(input.at("operations").empty(),"session initial operations must be empty");
     transactions_.changed=[this](){Notify();};Notify();
   }
@@ -20,6 +21,7 @@ class TransactionSession {
       {"modern_deepep_connected",false},{"hardware_calibrated",false},{"gpu_visibility_modeled",false}};
     if(filtered_commands_)r["callback_wakeups"]={{"mode","next_event/1"},{"filtered_commands",filtered_commands_},
       {"suppressed_event_batches",suppressed_},{"retained_callbacks",history_.size()},{"pending_callbacks",pending_events_.size()}};
+    if(batch_mode_)r["callback_batches"]=batches_.Report();
     if(!alarms_.empty()) {
       r["control_alarms"]=Json::array();
       for(const auto& [id,a]:alarms_)r["control_alarms"].push_back({{"id",id},{"armed_ns",a.armed},
@@ -128,8 +130,11 @@ class TransactionSession {
     Require(decision_<256,"session decision budget exceeded");
     {
     auto phase=timing_.Span("session_decide_write");
-    std::cout<<"MOE_TX_EVENT "<<Json{{"type","DECIDE"},{"decision_id",decision_},{"now_ns",Now()},
-      {"events",events},{"drained",drained}}.dump()<<std::endl;
+    Json message={{"type","DECIDE"},{"decision_id",decision_},{"now_ns",Now()},
+      {"events",events},{"drained",drained}};
+    if(batch_mode_)message["batches"]=batches_.Rows();
+    const auto line=message.dump();Require(line.size()+14<=1048576,"session callback line budget exceeded");
+    std::cout<<"MOE_TX_EVENT "<<line<<std::endl;
     }
     std::vector<char> buffer(1048577);
     {
@@ -138,7 +143,7 @@ class TransactionSession {
     }
     const auto command=Json::parse(buffer.data());
     std::vector<std::string> keys={"type","decision_id","now_ns","submissions","finish"};
-    for(const auto* name:{"alarms","cancel_alarms","wake_on"})if(command.contains(name))keys.push_back(name);
+    for(const auto* name:{"alarms","cancel_alarms","wake_on","wake_groups"})if(command.contains(name))keys.push_back(name);
     SessionKeys(command,keys);
     Require(command.at("type")=="COMMIT" && SessionInteger(command.at("decision_id"))==decision_ &&
       SessionInteger(command.at("now_ns"))==static_cast<uint64_t>(Now()) && command.at("finish").is_boolean(),"session command identity/time/type mismatch");
@@ -152,6 +157,9 @@ class TransactionSession {
     {auto phase=timing_.Span("session_candidate_validate");ValidateSessionProgram(candidate,topology_,fabric_.MaxSimNs());}
     const auto next_filter=[&](){auto phase=timing_.Span("session_wakeup_validate");
       return SessionWakeups::Parse(command,candidate,delivered_,ReadTransactionLimits(candidate).Nodes());}();
+    Require(!command.contains("wake_groups") || batch_mode_,"wake_groups requires callback batch mode");
+    Require(!batch_mode_ || !command.contains("wake_on"),"wake_on incompatible with callback batch mode");
+    const auto next_groups=SessionWakeups::ParseGroups(command,candidate,delivered_,ReadTransactionLimits(candidate).Nodes());
     std::vector<std::pair<uint64_t,int64_t>> arm;
     std::vector<uint64_t> cancel;
     std::set<uint64_t> new_ids,cancel_ids;
@@ -183,6 +191,7 @@ class TransactionSession {
     auto apply=timing_.Span("session_apply_commit");
     ++decision_;
     wake_filter_=next_filter;if(command.contains("wake_on"))++filtered_commands_;
+    wake_groups_=next_groups;
     for(const auto id:cancel) {
       auto& a=alarms_.at(id);ns3::Simulator::Cancel(a.event);a.cancelled=Now();
     }
@@ -221,8 +230,12 @@ class TransactionSession {
     {auto phase=timing_.Span("session_events");events=Events();}
     const bool drained=[&](){auto phase=timing_.Span("session_drained");return Drained();}();
     for(const auto& event:events)pending_events_.push_back(event);
-    if(decision_==0 || SessionWakeups::Triggered(wake_filter_,events) || (drained && !last_drained_)) {
+    const bool boundary=decision_==0 || !events.empty() || (drained && !last_drained_);
+    const bool capacity=batch_mode_ && boundary && batches_.Add(Now(),events,drained);
+    const bool trigger=batch_mode_?SessionWakeups::TriggeredGroups(wake_groups_,delivered_,events):SessionWakeups::Triggered(wake_filter_,events);
+    if(decision_==0 || trigger || (drained && !last_drained_) || capacity) {
       Exchange(pending_events_,drained);pending_events_.clear();
+      if(batch_mode_)batches_.Clear();
     } else if(!events.empty())++suppressed_;
     last_drained_=drained;
     if(!finished_ && !notify_pending_ && !AllDone() && transactions_.Drained() && local_busy_.empty() && PendingAlarms()==0)
@@ -243,6 +256,8 @@ class TransactionSession {
   std::map<unsigned,std::deque<uint64_t>> local_queues_;std::set<unsigned> local_busy_;
   std::set<std::pair<uint64_t,std::string>> delivered_;
   SessionWakeups::Filter wake_filter_;
+  SessionWakeups::Groups wake_groups_;
+  bool batch_mode_;SessionCallbackBatches batches_;
   uint64_t filtered_commands_=0,suppressed_=0;
   Json pending_events_=Json::array();
   Json registrations_=Json::array(),history_=Json::array();
@@ -252,7 +267,7 @@ static int Libraries(dl_phdr_info* info,std::size_t,void* data) {
   if(info->dlpi_name && info->dlpi_name[0])static_cast<Json*>(data)->push_back(info->dlpi_name);
   return 0;
 }
-static void Execute(char** argv,HostTiming& timing) {
+static void Execute(char** argv,HostTiming& timing,bool batches) {
     auto total=timing.Span("native_total");
     std::ifstream prior(argv[4]);Require(!prior.good(),"session result already exists");
     ns3::Time::SetResolution(ns3::Time::NS);
@@ -262,7 +277,7 @@ static void Execute(char** argv,HostTiming& timing) {
     Require(initial.at("operations").empty(),"session initial operations must be empty");
     ns3::RngSeedManager::SetSeed(protocol.at("seed"));
     PersistentStreams::ValidateReordering(initial.value("transport_recovery",Json()),protocol.contains("limits")?protocol.at("limits").at("max_sim_ns").get<int64_t>():5000000);
-    Fabric fabric(topology,protocol);TransactionSession session(fabric,topology,initial,timing);
+    Fabric fabric(topology,protocol);TransactionSession session(fabric,topology,initial,timing,batches);
     ns3::Simulator::Stop(ns3::NanoSeconds(fabric.MaxSimNs()));std::string error;
     try {auto phase=timing.Span("simulator_run");ns3::Simulator::Run();}catch(const std::exception& e){error=e.what();}
     Json result;
@@ -282,7 +297,12 @@ static void Execute(char** argv,HostTiming& timing) {
 }
 int main(int argc,char** argv) {
   try {
-    Require(argc==5 || argc==6,"usage: moe-rdma-transaction-session TOPOLOGY RDMA INITIAL_V4 NEW_RESULT [NEW_HOST_TIMING.jsonl]");
-    HostTiming timing(argc==6?argv[5]:"");Execute(argv,timing);timing.Complete();return 0;
+    Require(argc>=5 && argc<=7,"usage: moe-rdma-transaction-session TOPOLOGY RDMA INITIAL_V4 NEW_RESULT [NEW_HOST_TIMING.jsonl] [--callback-batches]");
+    bool batches=false;std::string timing_path;
+    for(int i=5;i<argc;++i) {
+      if(std::string(argv[i])=="--callback-batches") {Require(!batches,"duplicate callback batch flag");batches=true;}
+      else {Require(timing_path.empty(),"multiple host timing paths");timing_path=argv[i];}
+    }
+    HostTiming timing(timing_path);Execute(argv,timing,batches);timing.Complete();return 0;
   }catch(const std::exception& e){std::cerr<<e.what()<<'\n';ns3::Simulator::Destroy();return 1;}
 }

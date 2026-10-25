@@ -6,6 +6,8 @@
 
 原生 session 的 `COMMIT` 可选 `wake_on`，格式为 `[{"operation": 0, "event": "completed"}]`，任一实际引用发生就唤醒。引用必须属于已注册或同命令新增的工作，不能重复、已交付或指定不可能的阶段（如 put 回复或 self 的线上 ACK）。省略恢复逐批交付，空列表只等待首次、新排空或实际控制闹钟；每条命令重新声明。整批校验先于工作/闹钟注册，256 次交互上限保持。所有积累回调在下一次唤醒按原顺序和时刻交付，默认报告不增加字段，显式模式另存 `session.callback_wakeups`。现代公开入口见[使用说明](../examples/modern_deepep_native/README.md)。
 
+session末尾可加 `--callback-batches`（与可选宿主计时路径可并用）。COMMIT使用 `wake_groups`，例如 `[[{"operation":0,"event":"applied"},{"operation":1,"event":"completed"}]]`，任一组全部被收集才触发；与 `wake_on` 互斥，组数≤工作额度、总引用≤其7倍。每组非空且唯一，引用沿用上述准入。DECIDE附 `batches` 原收集边界/时刻和外层flat events；首次/闹钟/新排空/缓存阈值无条件交付。详见[字段与硬界](../examples/modern_deepep_native/README.md)。默认无新字段，旧后端不自动回退。
+
 事务v5可选显式self服务：纯输入检查在Fabric分配及在线注册之前拒绝非法NIC/时长/ACK依赖；RemoteTransactions在同一Simulator上安排FIFO服务并用RemoteMemory::ApplyOnNic修改共享字节，不创建transport stream。普通远端路径保持。输入、功能时长与不支持项见[混合服务](../examples/scaleout_self_peer/README.md)。
 
 `ApplicationWindows`只管理本地应用视图及每操作活跃使用；共享底层域仍由物理owner/key标识。`ValidateApplicationWindows`在probe建网前、session整批准入前纯检查覆盖和completed依赖，运行时在准入/完成再次登记与释放。`RemoteMemory::ApplyOnNic`继续独立授权，视图关闭不改变MR状态或吞掉数据包。范围见[应用窗口](../examples/scaleout_rdma_transactions/README.md#应用窗口关闭与底层注册分开)。

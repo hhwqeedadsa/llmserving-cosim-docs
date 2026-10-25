@@ -19,7 +19,9 @@ from .host_timing import HostTiming
 
 
 class ModernNativeController:
-    def __init__(self,topology,protocol,config):
+    def __init__(self,topology,protocol,config,*,callback_batches=False):
+        require(type(callback_batches) is bool,'callback_batches must be boolean')
+        self.callback_batches=callback_batches;self.logical_steps=0
         self.layout=ModernNativeLayout(topology,protocol,config)
         self.runtime=ModernDeepEPWindowRuntime(config['modern'])
         self.events={e['id']:e for e in self.layout.plan['events']}
@@ -134,9 +136,31 @@ class ModernNativeController:
         self.log.append(row)
 
     def advance(self,decision):
+        require(not self.callback_batches,'batch controller requires explicit batch envelope')
         require(type(decision['now_ns']) is int and self.now<=decision['now_ns'],'nonmonotonic native decision')
-        self.now=decision['now_ns'];self.decisions+=1
+        self.decisions+=1
         require(self.decisions<=256,'native session decision limit reached')
+        return self._advance_step(decision)
+
+    def advance_batches(self,decision):
+        require(self.callback_batches,'callback batch mode not enabled')
+        from .transaction_session import _callback_batches
+        rows=_callback_batches(decision,self.now)
+        self.decisions+=1
+        require(self.decisions<=256,'native session decision limit reached')
+        nodes=[]
+        for index,row in enumerate(rows):
+            self.logical_steps+=1
+            require(self.logical_steps<=16384,'native logical step limit reached')
+            nodes=self._advance_step(row)
+            if index<len(rows)-1:
+                require(not nodes and not (row['drained'] and self.runtime.snapshot()['all_events_fired']),
+                        'suppressed batch required earlier native submission or finish; preserve counterexample')
+        return nodes
+
+    def _advance_step(self,decision):
+        require(type(decision['now_ns']) is int and self.now<=decision['now_ns'],'nonmonotonic native decision')
+        self.now=decision['now_ns']
         before=len(self.native_nodes)
         for row in decision['events']:
             identity=row.get('operation');event=row.get('event');key=identity,event
@@ -185,31 +209,36 @@ class ModernNativeController:
         return deepcopy(self.native_nodes[before:])
 
     def snapshot(self):
-        return dict(schema_version='moe-modern-native-execution/1',functional_provider='functional_mrt1/1',
+        result=dict(schema_version='moe-modern-native-execution/1',functional_provider='functional_mrt1/1',
             target_visibility='native_apply_functional/1',runtime=self.runtime.snapshot(),events=deepcopy(self.log),
             native_tasks={str(i):deepcopy(t) for i,t in self.tasks.items()},bindings=deepcopy(self.layout.bindings),
             native_operations=deepcopy(self.native_nodes),decisions=self.decisions,
             gpu_visibility_modeled=False,hardware_calibrated=False,numeric_expert_computation=False,
             scope='native callback-driven modern functional graph and synthetic full-size operands; not GIN/GPU timing')
+        if self.callback_batches:result['callback_batches']=dict(mode='callback_batches/1',logical_steps=self.logical_steps,
+            physical_decisions=self.decisions,physical_decision_limit=256,logical_step_limit=16384)
+        return result
 
 
-def worker(topology,protocol,config,backend,output,*,callback_wakeups=False,host_timing=False):
+def worker(topology,protocol,config,backend,output,*,callback_wakeups=False,host_timing=False,callback_batches=False):
+    require(not (callback_wakeups and callback_batches),'mutually exclusive callback modes')
     output=Path(output);timing=HostTiming(output/'worker_host.jsonl' if host_timing else None)
     complete=False
     try:
         with timing.span('modern_worker'):
             with timing.span('controller_init'):
                 t,p,c=(checked_json(Path(path),maximum) for path,maximum in ((topology,8*2**20),(protocol,65536),(config,4*2**20)))
-                controller=ModernNativeController(t,p,c)
+                controller=ModernNativeController(t,p,c,callback_batches=callback_batches)
                 save(output/'modern-plan.json',controller.layout.plan);save(output/'functional-windows.json',controller.layout.description)
             try:
                 with timing.span('session_init'):
-                    session=NativeTransactionSession(topology,protocol,controller.layout.initial,backend,output,timing=timing)
+                    session=NativeTransactionSession(topology,protocol,controller.layout.initial,backend,output,timing=timing,callback_batches=callback_batches)
                 with session:
                     while True:
                         with timing.span('native_receive'):event=session.receive()
                         if event is None:break
-                        with timing.span('controller_advance'):nodes=controller.advance(event)
+                        with timing.span('controller_advance'):
+                            nodes=controller.advance_batches(event) if callback_batches else controller.advance(event)
                         finished=not nodes and event['drained'] and controller.runtime.snapshot()['all_events_fired']
                         require(nodes or finished or not event['drained'],'modern graph blocked while native network idle; preserve partial state')
                         extra={}
@@ -218,6 +247,9 @@ def worker(topology,protocol,config,backend,output,*,callback_wakeups=False,host
                             with timing.span('wake_conditions'):groups=conditions(controller,goal='events')
                             require(all(len(group)==1 for group in groups),'event wakeup must reference one actual callback')
                             extra['wake_on']=[group[0] for group in groups]
+                        if callback_batches:
+                            from .modern_native_wakeups import conditions
+                            with timing.span('wake_conditions'):extra['wake_groups']=conditions(controller,goal='submissions')
                         timing.snapshot('modern_decision',dict(now_ns=controller.now,decisions=controller.decisions,
                             native_nodes=len(controller.native_nodes),fired_events=len(controller.log)))
                         with timing.span('native_commit'):session.commit(nodes,finish=finished,**extra)
@@ -228,8 +260,10 @@ def worker(topology,protocol,config,backend,output,*,callback_wakeups=False,host
         timing.close(complete)
 
 
-def run(topology,protocol,config,backend,output,*,callback_wakeups=False,host_timing=False):
+def run(topology,protocol,config,backend,output,*,callback_wakeups=False,host_timing=False,callback_batches=False):
     require(type(callback_wakeups) is bool,'callback_wakeups must be boolean')
+    require(type(callback_batches) is bool,'callback_batches must be boolean')
+    require(not (callback_wakeups and callback_batches),'mutually exclusive callback modes')
     require(type(host_timing) is bool,'host_timing must be boolean')
     topology,protocol,config,backend,output=(Path(p).resolve() for p in (topology,protocol,config,backend,output))
     t,p,c=(checked_json(path,maximum) for path,maximum in ((topology/'topology.json',8*2**20),(protocol,65536),(config,4*2**20)))
@@ -245,6 +279,12 @@ def run(topology,protocol,config,backend,output,*,callback_wakeups=False,host_ti
         command.append('--callback-wakeups')
         save(output/'callback-delivery.json',dict(mode='next_event/1',bookkeeping_deferred=False,
              decision_limit=256,source_sha256=digest(Path(__file__).with_name('modern_native_wakeups.py'))))
+    if callback_batches:
+        command.append('--callback-batches')
+        save(output/'callback-delivery.json',dict(mode='callback_batches/1',historical_batch_times_preserved=True,
+            physical_decision_limit=256,logical_step_limit=16384,max_buffer_batches=64,
+            max_buffer_compact_bytes=131072,max_buffer_callbacks=1024,
+            source_sha256=digest(Path(__file__).with_name('modern_native_wakeups.py'))))
     if host_timing:
         command.append('--host-timing')
         save(output/'host-timing.json',dict(schema_version='moe-host-phase-trace/1',host_observation_only=True,
@@ -263,5 +303,6 @@ def run(topology,protocol,config,backend,output,*,callback_wakeups=False,host_ti
 if __name__=='__main__':
     flags=sys.argv[7:]
     require(sys.argv[1:2]==['--worker'] and len(sys.argv)>=7 and len(set(flags))==len(flags) and
-        set(flags)<={'--callback-wakeups','--host-timing'},'internal modern worker requires five paths and supported unique flags')
-    worker(*sys.argv[2:7],callback_wakeups='--callback-wakeups' in flags,host_timing='--host-timing' in flags)
+        set(flags)<={'--callback-wakeups','--host-timing','--callback-batches'},'internal modern worker requires five paths and supported unique flags')
+    worker(*sys.argv[2:7],callback_wakeups='--callback-wakeups' in flags,host_timing='--host-timing' in flags,
+           callback_batches='--callback-batches' in flags)

@@ -2,6 +2,8 @@
 
 `modern-deepep-native`另存`modern-plan.json/modern-execution.json`和实际`control.jsonl/result.json`；现代事件以`native_operation/native_event/native_time_ns`指向实际回调，纯零时长控制步骤单独标记。失败保留部分执行，不把输出文件存在当完成证明；字段见[输出说明](../examples/modern_deepep_native/README.md#输出)。
 
+显式 `--callback-batches` 的DECIDE增加 `batches`：各项 `now_ns/events/drained` 按原生收集边界保存，顺序展开与外层 `events` 相同，最后时刻等于外层同步时刻。COMMIT的 `wake_groups` 引用已提交且未交付的回调，以任一组全部满足唤醒；空组列表只等强制边界。`session.callback_batches`含 `logical_steps/pending_batches/peak_batches/peak_compact_batch_bytes/peak_callbacks/physical_decision_limit/logical_step_limit`；现代快照同名对象含前端 `logical_steps/physical_decisions` 及两上限。`decisions`仍指同步次数，逻辑处理步数单独解释；compact字节不等于宿主RSS。默认格式不变，硬界及错误见[批次使用说明](../examples/modern_deepep_native/README.md#可选的有界批次交付)。
+
 仅启用self服务时，`transactions.self_peer_model`记录功能模式和未校准边界；self连接增加`self_service`，self操作增加`delivery/self_started_ns/self_completed_ns`。`request_acked_ns/response_ns=-1`表示未发生网络确认/回复，不能当完成时间；`applied_ns/completed_ns`为共同原生时钟。见[字段说明](../examples/scaleout_self_peer/README.md)。
 
 `rdma-context-plan`保存便携输入、事务程序、`moe-rdma-context-map/1`绑定及各文件SHA-256；`rdma-context-check`输出逐binding的实际操作数、请求/响应载体、源包/目标RX数与payload字节。实际字节含重传，不等于应用有效字节或线速字节。plan没有执行，check不新增网络；字段和完整捕获要求见[上下文绑定](../examples/scaleout_context_transactions/README.md)。

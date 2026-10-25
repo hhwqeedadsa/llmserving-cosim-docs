@@ -12,7 +12,8 @@ from moe_ub_cosim.scaleout_rdma import save
 
 
 class FakeController:
-    def __init__(self,*_):
+    def __init__(self,*_,callback_batches=False):
+        assert not callback_batches
         self.layout=SimpleNamespace(plan={},description={},initial={})
         self.runtime=SimpleNamespace(snapshot=lambda:dict(all_events_fired=True))
         self.now=0;self.decisions=0;self.native_nodes=[];self.log=[]
@@ -23,7 +24,8 @@ class FakeController:
 
 
 class FakeSession:
-    def __init__(self,*_,timing):
+    def __init__(self,*_,timing,callback_batches=False):
+        assert not callback_batches
         self.timing=timing;self.received=False;self.commands=[]
     def __enter__(self):return self
     def __exit__(self,*_):pass

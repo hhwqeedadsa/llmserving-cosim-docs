@@ -3,8 +3,10 @@
 A frontier is an OR of conjunctions of actual transitions of already submitted
 nodes. It predicts no time or future callback. Drain and control alarms remain
 unconditional wakeups. Submission frontiers can defer frontend bookkeeping;
-The native adapter uses singleton event frontiers only. Submission frontiers
-remain offline candidates; submission equivalence is not ns-3 order equivalence.
+The singleton adapter uses event frontiers. The explicit callback-batches
+adapter uses submission frontiers but processes original collection boundaries
+at their original times, rejecting intermediate productive steps. Offline
+submission equivalence alone is not ns-3 order equivalence.
 """
 from .deepep_plan import require
 

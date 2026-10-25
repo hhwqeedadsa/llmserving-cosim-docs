@@ -5,6 +5,7 @@
 #include <set>
 #include <stdexcept>
 #include <string>
+#include <vector>
 
 namespace moe_rdma {
 // Pure command admission and predicate. No simulator event, packet or clock.
@@ -12,6 +13,7 @@ struct SessionWakeups {
   using Key=std::pair<uint64_t,std::string>;
   using Filter=std::optional<std::set<Key>>;
   using Value=nlohmann::json;
+  using Groups=std::optional<std::vector<std::set<Key>>>;
   static void Check(bool ok,const char* reason) {
     if(!ok)throw std::invalid_argument(reason);
   }
@@ -51,6 +53,30 @@ struct SessionWakeups {
     for(const auto& row:events) {
       if(row.contains("alarm"))return true;
       if(filter->count({row.at("operation").get<uint64_t>(),row.at("event").get<std::string>()}))return true;
+    }
+    return false;
+  }
+  static Groups ParseGroups(const Value& command,const Value& candidate,
+                            const std::set<Key>& delivered,unsigned maximum_nodes) {
+    Check(!(command.contains("wake_on") && command.contains("wake_groups")),"mutually exclusive session wakeup modes");
+    if(!command.contains("wake_groups"))return std::nullopt;
+    const auto& groups=command.at("wake_groups");
+    Check(groups.is_array() && groups.size()<=maximum_nodes,"invalid session wakeup group count");
+    std::vector<std::set<Key>> result;std::set<std::set<Key>> unique;std::size_t references=0;
+    for(const auto& group:groups) {
+      Check(group.is_array() && !group.empty(),"empty session wakeup conjunction");
+      references+=group.size();Check(references<=7u*maximum_nodes,"invalid session wakeup total reference count");
+      const auto parsed=Parse(Value{{"wake_on",group}},candidate,delivered,maximum_nodes);
+      Check(unique.insert(*parsed).second,"duplicate session wakeup group");result.push_back(*parsed);
+    }
+    return result;
+  }
+  static bool TriggeredGroups(const Groups& groups,const std::set<Key>& collected,const Value& events) {
+    if(!groups)return !events.empty();
+    for(const auto& e:events)if(e.contains("alarm"))return true;
+    for(const auto& group:*groups) {
+      bool all=true;for(const auto& key:group)all=all && collected.count(key);
+      if(all)return true;
     }
     return false;
   }

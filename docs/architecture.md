@@ -54,6 +54,8 @@ transactions/3在同一持久网络中串接“实际接收窗口→后续put”
 
 运行时及窗口包装器的 `pending_dependencies()` 返回未完成事件和其未完成直接前驱的副本，包含上述动态顺序；空前驱只表示依赖满足，不能制造完成。`modern_native_wakeups.py` 的及时事件条件通过可选 `--callback-wakeups` 接入实际会话，256 次上限保持。原生端积累全部回调，订阅事件、闹钟或新排空才唤醒；该判别不新增仿真事件，缺省仍逐批交互。
 
+互斥的 `--callback-batches` 使用提交条件的OR-of-AND（任一组全部回调发生）唤醒。原生仍执行全部Progress，保存实际非空收集批次及首批/新排空边界；容量阈值也强制交付，不插入新ns3事件。前端按原批次的推进时刻处理，中间批若需提交工作立即拒绝。256次上限明确计同步，另限16384逻辑批次；缓存硬界和记录见[使用说明](../examples/modern_deepep_native/README.md)。这种适配不改变网络恢复算法，也不提供真实GPU可见性。
+
 `modern_deepep_windows.py`在事件核心外增加相对窗口解析、跨epoch源读保护、计数消费清零及滚动信号影子状态，公开入口为`modern-deepep-window-replay`。应用主窗口与provider索引信号分开，source local_complete与target visible分开；独立window-replay不编码或接收真实负载；新增native入口在外层接入实际负载/时钟，保留功能可见性限制。功能范围及宿主结构体核查见[窗口验收](../fixtures/modern_windows/README.md)。
 
 `backend/rdma/gin_work_queue.hh`是独立的无时间资源核心，验证持久工作队列的槽复用、提交前缀和累计完成；尚未接入下述在线网络或现代应用计划。它的完成输入必须由未来provider回调提供，不能用作包时延、远端可见或现代库性能证据，详见[后端接口](../backend/README.md#gin工作队列功能核心)。

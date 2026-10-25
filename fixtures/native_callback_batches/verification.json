@@ -1,0 +1,206 @@
+{
+  "verified": true,
+  "cases": {
+    "default-healthy": {
+      "verified": true,
+      "case": "default-healthy",
+      "whole_result_equal": true,
+      "network_and_application_equal": false,
+      "original_four_rank_prefix_preserved": false,
+      "delivery": {
+        "physical_decisions": 213,
+        "logical_steps": 213,
+        "callbacks": 437,
+        "native_nodes": 97,
+        "peak_batches": 0,
+        "peak_compact_bytes": 0
+      },
+      "application": {
+        "passed": true,
+        "modern_operations": 60,
+        "modern_events": 322,
+        "native_remote_operations": 50,
+        "native_local_operations": 47,
+        "paths": {
+          "gin_self": 20,
+          "rdma": 30,
+          "local": 10
+        },
+        "calls": 2,
+        "ranks": 2,
+        "decisions": 213,
+        "finish_ns": 105621,
+        "actual_target_applications": 50,
+        "actual_source_packets": 100,
+        "retransmitted_source_packets": 0,
+        "decoded_frames": 46,
+        "observed_out_of_order_data_packets": 0,
+        "physical_capture_events": 4400,
+        "scope": "functional byte/event acceptance, not numerical model or calibrated GPU/provider performance"
+      },
+      "capture_complete": true,
+      "omitted_capture_events": 0,
+      "original_decisions": 213,
+      "finish_ns": 105621,
+      "normalization": "explicit delivery metadata/counts/physical registration decision ids; verified eight library paths only"
+    },
+    "batch-healthy": {
+      "verified": true,
+      "case": "batch-healthy",
+      "whole_result_equal": false,
+      "network_and_application_equal": true,
+      "original_four_rank_prefix_preserved": false,
+      "delivery": {
+        "physical_decisions": 63,
+        "logical_steps": 213,
+        "callbacks": 437,
+        "native_nodes": 97,
+        "peak_batches": 10,
+        "peak_compact_bytes": 1442
+      },
+      "application": {
+        "passed": true,
+        "modern_operations": 60,
+        "modern_events": 322,
+        "native_remote_operations": 50,
+        "native_local_operations": 47,
+        "paths": {
+          "gin_self": 20,
+          "rdma": 30,
+          "local": 10
+        },
+        "calls": 2,
+        "ranks": 2,
+        "decisions": 63,
+        "finish_ns": 105621,
+        "actual_target_applications": 50,
+        "actual_source_packets": 100,
+        "retransmitted_source_packets": 0,
+        "decoded_frames": 46,
+        "observed_out_of_order_data_packets": 0,
+        "physical_capture_events": 4400,
+        "scope": "functional byte/event acceptance, not numerical model or calibrated GPU/provider performance"
+      },
+      "capture_complete": true,
+      "omitted_capture_events": 0,
+      "original_decisions": 213,
+      "finish_ns": 105621,
+      "normalization": "explicit delivery metadata/counts/physical registration decision ids; verified eight library paths only"
+    },
+    "batch-fault": {
+      "verified": true,
+      "case": "batch-fault",
+      "whole_result_equal": false,
+      "network_and_application_equal": true,
+      "original_four_rank_prefix_preserved": false,
+      "delivery": {
+        "physical_decisions": 66,
+        "logical_steps": 222,
+        "callbacks": 437,
+        "native_nodes": 97,
+        "peak_batches": 10,
+        "peak_compact_bytes": 1367
+      },
+      "application": {
+        "passed": true,
+        "modern_operations": 60,
+        "modern_events": 322,
+        "native_remote_operations": 50,
+        "native_local_operations": 47,
+        "paths": {
+          "gin_self": 20,
+          "rdma": 30,
+          "local": 10
+        },
+        "calls": 2,
+        "ranks": 2,
+        "decisions": 66,
+        "finish_ns": 123921,
+        "actual_target_applications": 50,
+        "actual_source_packets": 103,
+        "retransmitted_source_packets": 3,
+        "decoded_frames": 46,
+        "observed_out_of_order_data_packets": 2,
+        "physical_capture_events": 4488,
+        "scope": "functional byte/event acceptance, not numerical model or calibrated GPU/provider performance"
+      },
+      "capture_complete": true,
+      "omitted_capture_events": 0,
+      "original_decisions": 171,
+      "finish_ns": 123921,
+      "normalization": "explicit delivery metadata/counts/physical registration decision ids; verified eight library paths only"
+    },
+    "four-routes": {
+      "verified": true,
+      "case": "four-routes",
+      "whole_result_equal": false,
+      "network_and_application_equal": false,
+      "original_four_rank_prefix_preserved": true,
+      "delivery": {
+        "physical_decisions": 65,
+        "logical_steps": 360,
+        "callbacks": 835,
+        "native_nodes": 161,
+        "peak_batches": 58,
+        "peak_compact_bytes": 8234
+      },
+      "application": {
+        "passed": true,
+        "modern_operations": 118,
+        "modern_events": 566,
+        "native_remote_operations": 108,
+        "native_local_operations": 53,
+        "paths": {
+          "gin_self": 20,
+          "rdma": 88,
+          "local": 10
+        },
+        "calls": 1,
+        "ranks": 4,
+        "decisions": 65,
+        "finish_ns": 70610,
+        "actual_target_applications": 108,
+        "actual_source_packets": 3840,
+        "retransmitted_source_packets": 0,
+        "decoded_frames": 136,
+        "complete_work_records": 136,
+        "physical_capture_events": 20000,
+        "checked_captured_endpoint_data_records": 2557,
+        "observed_endpoint_ack_records": 841,
+        "full_physical_path_or_ack_audit_complete": false,
+        "omitted_physical_records": 103168,
+        "transport_scope": "complete source bytes/frames/work/transaction memory; physical data and ACK validation restricted to capture prefix",
+        "scope": "functional byte/event acceptance, not numerical model or calibrated GPU/provider performance"
+      },
+      "capture_complete": false,
+      "omitted_capture_events": 103168,
+      "original_decisions": 256,
+      "finish_ns": 70610,
+      "normalization": "explicit delivery metadata/counts/physical registration decision ids; verified eight library paths only"
+    }
+  },
+  "tamper": {
+    "verified": true,
+    "rejected": [
+      "historical-advancement-time",
+      "flat-callback-order",
+      "batch-boundary-order",
+      "suppressed-drain",
+      "batch-budget",
+      "physical-counter",
+      "logical-counter",
+      "registration-time",
+      "submitted-content",
+      "future-condition",
+      "target-memory-bytes"
+    ],
+    "network_executions": 0
+  },
+  "original_four_rank_call_complete": true,
+  "complete_four_rank_physical_capture": false,
+  "fixed_native_commit": "68a07f7d5e53bbe97d275af41d4964ad01b864f3",
+  "fixed_streams_fabric_eight_libraries": true,
+  "platform_sources_verified": true,
+  "original_inputs_and_failure_preserved": true,
+  "overall_goal_status": "in_progress"
+}

@@ -2,7 +2,7 @@
 
 这个入口把现代direct分支的Dispatch—专家—Combine控制图接到同一次原生ns-3事务会话。跨节点操作实际发包；发给自己的屏障和专家计数使用显式self服务；本地旁路、源准备及计数清零使用实际内存copy。全部必要操作保留，不能用离线事件完成代替网络回调。
 
-原生会话仍最多256次控制交互。两rank两调用的示例正常和丢包均通过；可选的回调订阅减少无关交互。四份原始路由的一次四rank调用仍未验收通过：缺省模式曾触及256次交互；订阅模式最新执行触及60秒宿主时间上限，没有原生最终结果。输入检查允许2—4 rank，不保证在执行预算内完成。已记录的回调和命令保留；强制终止时不能保证生成最终内存、包记录或现代快照。见[当前实际验收](../../fixtures/native_wakeup/README.md)及[初始失败记录](../../fixtures/modern_native/README.md)。
+原生会话仍最多256次同步控制交互。两rank两调用的示例正常和丢包均通过；原四份路由的一次四rank调用在显式批次模式下也已完成全部566事件。输入检查允许2—4 rank，不保证任意配置在执行预算内完成；这不是完整模型或千卡应用。强制终止时不能保证生成最终内存、包记录或现代快照。见[批次模式验收](../../fixtures/native_callback_batches/README.md)及[初始失败记录](../../fixtures/modern_native/README.md)。
 
 ## 运行
 
@@ -23,6 +23,12 @@ python3 -B -m moe_ub_cosim scaleout modern-deepep-native \
 使用`drop-first-rdma.json`及新输出目录可测试本示例第一个远端signal请求包丢失。该协议的`message_id=2`对应本示例的请求载体，不适用于任意修改后的连接集合；错误标识应明确拒绝，不能假定丢包已发生。
 
 在以上现代入口命令后增加 `--callback-wakeups`，使用支持 `wake_on` 的新 session 后端，即可订阅下一现代事件需要的实际回调。所有回调仍按原顺序和时刻保留，首次、排空和控制闹钟强制唤醒；默认继续逐批交付。不启用推迟纯前端记账的策略。旧后端不支持此字段时会明确失败，不会静默降级。这个选项减少宿主交互，不代表网络时延下降。
+
+### 可选的有界批次交付
+
+增加 `--callback-batches`，使用支持同名原生参数的后端，按下一次工作提交需要的回调组合减少同步。它与 `--callback-wakeups` 互斥。原生保存实际收集批次及各自 `now_ns`，前端按原时刻逐批处理；不把过去回调改成当前时刻。若中间批次本应提交工作，明确拒绝并保存反例，不补交历史工作。旧后端不支持时明确失败。
+
+每批最多512回调/64KiB紧凑JSON；缓存达到64批、512回调或64KiB任一阈值就强制交付，追加后的硬界为64批/1024回调/128KiB。首次、新排空和闹钟也强制交付。单批超大则失败，不扩内存。仍最多256次同步交互；逐批处理另限16384步。有限批次缓存不改变仿真时间，也不是网络性能优化或硬件校准。
 
 ### 可选的宿主开销观测
 
@@ -63,4 +69,6 @@ Python阶段区分 `controller_advance/wake_conditions/python_candidate_copy/pyt
 
 启用宿主观测时另存 `host-timing.json`，记录格式与worker/session/记录器源码hash；实际原生命令包含计时路径。原生程序及输入hash仍保存在 `native-command.json`。这些文件独立于 `result.json`，不改变网络结果字段。
 
-本入口是功能接入，不是可用于发表性能排名的现代provider模型。四rank控制交互限制、真实provider成本、匹配校准、独立工作负载和完整千卡仍未解决。
+批次模式保存的 `callback-delivery.json` 使用 `mode=callback_batches/1`；`control.jsonl`的DECIDE多出 `batches`，每项含 `now_ns/events/drained`，按序展开必须等于外层 `events`，最后时刻等于同步时刻。COMMIT的 `wake_groups` 是若干非空回调引用组，任一组全部发生即可唤醒，仅可引用已提交且尚未交付的工作。`session.callback_batches`记录原生收集步数及缓存峰值；`modern-execution.json.callback_batches`记录前端处理步数。两者的 `decisions` 均是实际同步数；不要与旧模式的逐批交互数混用。紧凑JSON字节峰值不是进程实际内存峰值。
+
+本入口是功能接入，不是可用于发表性能排名的现代provider模型。四rank已验证条件可在原同步上限内完成；真实provider成本、匹配校准、独立工作负载和完整千卡仍未解决。逐包证据还取决于捕获是否完整，不能用应用完成代替全路径验证。

@@ -1,0 +1,48 @@
+{
+  "verified": true,
+  "case": "four-routes",
+  "whole_result_equal": false,
+  "network_and_application_equal": false,
+  "original_four_rank_prefix_preserved": true,
+  "delivery": {
+    "physical_decisions": 65,
+    "logical_steps": 360,
+    "callbacks": 835,
+    "native_nodes": 161,
+    "peak_batches": 58,
+    "peak_compact_bytes": 8234
+  },
+  "application": {
+    "passed": true,
+    "modern_operations": 118,
+    "modern_events": 566,
+    "native_remote_operations": 108,
+    "native_local_operations": 53,
+    "paths": {
+      "gin_self": 20,
+      "rdma": 88,
+      "local": 10
+    },
+    "calls": 1,
+    "ranks": 4,
+    "decisions": 65,
+    "finish_ns": 70610,
+    "actual_target_applications": 108,
+    "actual_source_packets": 3840,
+    "retransmitted_source_packets": 0,
+    "decoded_frames": 136,
+    "complete_work_records": 136,
+    "physical_capture_events": 20000,
+    "checked_captured_endpoint_data_records": 2557,
+    "observed_endpoint_ack_records": 841,
+    "full_physical_path_or_ack_audit_complete": false,
+    "omitted_physical_records": 103168,
+    "transport_scope": "complete source bytes/frames/work/transaction memory; physical data and ACK validation restricted to capture prefix",
+    "scope": "functional byte/event acceptance, not numerical model or calibrated GPU/provider performance"
+  },
+  "capture_complete": false,
+  "omitted_capture_events": 103168,
+  "original_decisions": 256,
+  "finish_ns": 70610,
+  "normalization": "explicit delivery metadata/counts/physical registration decision ids; verified eight library paths only"
+}

@@ -1,0 +1,90 @@
+{
+  "passed": true,
+  "commands": [
+    {
+      "label": "fresh-topology",
+      "command": [
+        "/usr/bin/python3",
+        "-P",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "topology",
+        "--config",
+        "/dev/shm/moe-native-callback-batches-20261025/restored/source/examples/modern_deepep_native/topology.json",
+        "--output",
+        "/dev/shm/moe-native-callback-batches-20261025/restored/fresh-topology"
+      ],
+      "cwd": "/dev/shm/moe-native-callback-batches-20261025/restored/empty-cwd"
+    },
+    {
+      "label": "fresh-modern",
+      "command": [
+        "/usr/bin/python3",
+        "-P",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "modern-deepep-native",
+        "--topology",
+        "/dev/shm/moe-native-callback-batches-20261025/restored/fresh-topology",
+        "--protocol",
+        "/dev/shm/moe-native-callback-batches-20261025/restored/evidence/inputs/synthetic-healthy-protocol.json",
+        "--config",
+        "/dev/shm/moe-native-callback-batches-20261025/fresh-input.json",
+        "--backend",
+        "/dev/shm/moe-native-callback-batches-20261025/restored/evidence/runtime/run-transaction-session",
+        "--output",
+        "/dev/shm/moe-native-callback-batches-20261025/fresh-smoke",
+        "--callback-batches"
+      ],
+      "cwd": "/dev/shm/moe-native-callback-batches-20261025/restored/empty-cwd"
+    }
+  ],
+  "fresh_modern_acceptance": {
+    "passed": true,
+    "modern_operations": 28,
+    "modern_events": 152,
+    "native_remote_operations": 26,
+    "native_local_operations": 20,
+    "paths": {
+      "gin_self": 10,
+      "rdma": 16,
+      "local": 2
+    },
+    "calls": 1,
+    "ranks": 2,
+    "decisions": 16,
+    "finish_ns": 61918,
+    "actual_target_applications": 26,
+    "actual_source_packets": 92,
+    "retransmitted_source_packets": 0,
+    "decoded_frames": 24,
+    "observed_out_of_order_data_packets": 0,
+    "physical_capture_events": 4048,
+    "scope": "functional byte/event acceptance, not numerical model or calibrated GPU/provider performance"
+  },
+  "fresh_delivery": {
+    "physical_decisions": 16,
+    "logical_steps": 57,
+    "callbacks": 214,
+    "native_nodes": 46,
+    "peak_batches": 8,
+    "peak_compact_bytes": 2280
+  },
+  "independent_actual_network_executions": 1,
+  "four_complete_comparisons_byte_identical": {
+    "default-healthy": "ca7e1cfde0868f8ce560451550b925d9e7a4ce9d8f793bfd4119353bf1b732a6",
+    "batch-healthy": "b1601791e488168870155a6138c33825fe58d4a0e8b818742dc5a9aec4f37d97",
+    "batch-fault": "36e1586817775292a15e16107433ed3fddb9c51f6346920784980656ed8f2dee",
+    "four-routes": "ba8099aa829fbedc86e3109de31b43880a66e9474a18c370550f83caa8d22674"
+  },
+  "source_root": "/dev/shm/moe-native-callback-batches-20261025/restored/source",
+  "empty_cwd": "/dev/shm/moe-native-callback-batches-20261025/restored/empty-cwd",
+  "fixed_runtime_and_eight_library_hashes_checked": true,
+  "representative_four_rank_call_complete": true,
+  "full_four_rank_physical_capture_complete": false,
+  "scope": "same-host ABI-bound runtime/eight libraries and copied Python; no clean native build, GPU timing or thousand-GPU application"
+}

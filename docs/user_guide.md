@@ -1,6 +1,6 @@
 # 用户指南
 
-可用`scaleout modern-deepep-native`让实际原生网络回调驱动现代功能图。两rank示例可运行；四rank原始路由尚受256次控制交互限制，未完成验收。输入、声明成本和限制见[现代功能接入](../examples/modern_deepep_native/README.md)。
+可用`scaleout modern-deepep-native`让实际原生网络回调驱动现代功能图。两rank示例可运行；原四rank路由的一次调用通过显式 `--callback-batches` 在256次同步上限内完成。输入、声明成本和限制见[现代功能接入](../examples/modern_deepep_native/README.md)，不等于完整模型或千卡应用。
 
 使用同一节点作为通信对端时，可在transactions/5显式声明功能self服务，并与真实远端通信共享内存和时钟。输入及公开probe/session命令见[混合服务示例](../examples/scaleout_self_peer/README.md)；context规划器仍拒绝self。
 

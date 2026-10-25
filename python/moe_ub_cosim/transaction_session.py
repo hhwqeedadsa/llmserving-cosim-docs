@@ -81,6 +81,51 @@ def _wake_plan(program, wake_on, delivered):
     return dict(wake_on=deepcopy(wake_on))
 
 
+def _group_plan(program, groups, delivered):
+    from .scaleout_transactions import execution_limits
+    counts = execution_limits(program)
+    maximum = counts['max_remote_operations']+counts['max_local_operations']
+    require(isinstance(groups, list) and len(groups) <= maximum, 'invalid session wakeup group count')
+    require(all(isinstance(group, list) and group for group in groups), 'empty session wakeup conjunction')
+    require(sum(map(len, groups)) <= 7*maximum, 'invalid session wakeup total reference count')
+    unique = set()
+    for group in groups:
+        _wake_plan(program, group, delivered)
+        key = frozenset((row['operation'], row['event']) for row in group)
+        require(key not in unique, 'duplicate session wakeup group')
+        unique.add(key)
+    return dict(wake_groups=deepcopy(groups))
+
+
+def _callback_batches(event, last_ns):
+    """Validate the complete envelope before committing any receive state."""
+    rows = event['batches']
+    require(isinstance(rows, list) and 1 <= len(rows) <= 64, 'invalid callback batch count')
+    flat, size, now, callbacks = [], 0, last_ns, 0
+    for index, row in enumerate(rows):
+        fields(row, 'now_ns events drained', 'session callback batch')
+        require(type(row['now_ns']) is int and now <= row['now_ns'] <= event['now_ns'] and
+                type(row['drained']) is bool and isinstance(row['events'], list), 'invalid callback batch time/type')
+        encoded = len(json.dumps(row, separators=(',', ':'), ensure_ascii=False).encode())
+        require(encoded <= 65536 and len(row['events']) <= 512, 'session callback single batch budget exceeded')
+        require(index < 64 and size < 65536 and callbacks < 512, 'callback buffer was not flushed at high water')
+        size += encoded
+        callbacks += len(row['events'])
+        require(size <= 131072 and callbacks <= 1024, 'session callback buffer budget exceeded')
+        require(index == len(rows)-1 or not row['drained'], 'suppressed native drain boundary')
+        previous = -1
+        for transition in row['events']:
+            require(isinstance(transition, dict) and type(transition.get('time_ns')) is int and
+                    previous <= transition['time_ns'] <= row['now_ns'], 'invalid callback batch event order/time')
+            require('alarm' not in transition or index == len(rows)-1, 'suppressed control alarm boundary')
+            previous = transition['time_ns']
+        flat.extend(row['events'])
+        now = row['now_ns']
+    require(flat == event['events'] and now == event['now_ns'] and rows[-1]['drained'] == event['drained'],
+            'callback batch flattening or final boundary mismatch')
+    return rows
+
+
 class NativeTransactionSession:
     """Receive actual transitions, then commit newly constructed v4/v5 nodes.
 
@@ -89,8 +134,10 @@ class NativeTransactionSession:
     visibility. Cumulative work/connection budgets retain the v4 bounds.
     """
 
-    def __init__(self, topology, protocol, initial, backend, output, *, timing=None):
+    def __init__(self, topology, protocol, initial, backend, output, *, timing=None, callback_batches=False):
         require(timing is None or isinstance(timing,HostTiming), 'invalid host timing observer')
+        require(type(callback_batches) is bool, 'callback_batches must be boolean')
+        self.callback_batches = callback_batches
         self.timing=timing if timing is not None else HostTiming()
         self.topology, self.protocol = Path(topology).resolve(), Path(protocol).resolve()
         self.backend, self.output = Path(backend).resolve(), Path(output).resolve()
@@ -119,6 +166,7 @@ class NativeTransactionSession:
         self.transcript = (self.output/'control.jsonl').open('w', buffering=1)
         argv = [str(self.backend), str(self.topology), str(self.protocol), str(self.output/'initial.json'), str(self.output/'result.json')]
         if self.timing.file is not None:argv.append(str(self.output/'native_host.jsonl'))
+        if callback_batches:argv.append('--callback-batches')
         save(self.output/'native-command.json', dict(command=argv, cwd=str(self.output), native_commit=NATIVE_COMMIT,
              input_hashes={str(p): digest(p) for p in (self.topology, self.protocol, self.backend, self.output/'initial.json')}))
         try:
@@ -188,11 +236,12 @@ class NativeTransactionSession:
             if not line.startswith('MOE_TX_EVENT '):
                 continue
             event = json.loads(line[len('MOE_TX_EVENT '):])
-            fields(event, 'type decision_id now_ns events drained', 'transaction session decision')
+            fields(event, 'type decision_id now_ns events drained'+(' batches' if getattr(self,'callback_batches',False) else ''), 'transaction session decision')
             require(event['type'] == 'DECIDE' and type(event['decision_id']) is int and
                     event['decision_id'] == self.sequence and type(event['now_ns']) is int and
                     self.last_ns <= event['now_ns'] <= limits(self.p)['max_sim_ns'] and
                     type(event['drained']) is bool and isinstance(event['events'], list), 'invalid native session decision')
+            if getattr(self,'callback_batches',False):_callback_batches(event,self.last_ns)
             known = {op['id']: op for op in self.config['operations']}
             incoming = set()
             fired_alarms = []
@@ -230,7 +279,7 @@ class NativeTransactionSession:
             self.transcript.write(json.dumps(dict(direction='native', message=event))+'\n')
             return deepcopy(event)
 
-    def commit(self, submissions, *, finish=False, alarms=None, cancel_alarms=None, wake_on=None):
+    def commit(self, submissions, *, finish=False, alarms=None, cancel_alarms=None, wake_on=None, wake_groups=None):
         """Submit work or native-clock control wakeups, never device completion.
 
         Alarms do not consume a GPU slot. IDs are lifetime-unique in a separate
@@ -241,6 +290,8 @@ class NativeTransactionSession:
         order and timestamps and are delivered together at the next wakeup.
         """
         require(self.pending is not None and type(finish) is bool and isinstance(submissions, list), 'invalid session commit')
+        require(wake_groups is None or getattr(self,'callback_batches',False), 'wake_groups requires callback batch mode')
+        require(wake_on is None or not getattr(self,'callback_batches',False), 'wake_on incompatible with callback batch mode')
         with self._phase('python_candidate_copy'):
             candidate = deepcopy(self.config)
             candidate['operations'].extend(deepcopy(submissions))
@@ -250,6 +301,8 @@ class NativeTransactionSession:
                                           self.pending['now_ns'], limits(self.p)['max_sim_ns'])
             if wake_on is not None:
                 extra.update(_wake_plan(candidate, wake_on, self._delivered))
+            if wake_groups is not None:
+                extra.update(_group_plan(candidate, wake_groups, self._delivered))
         pending_alarms = any(a['status'] == 'pending' for a in control.values())
         require(not finish or (self.pending['drained'] and not submissions and
                 (self.config['operations'] or self._alarms) and not pending_alarms and not alarms),

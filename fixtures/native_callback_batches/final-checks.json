@@ -1,0 +1,21 @@
+{
+  "verified": true,
+  "python_distinct_tests": 56,
+  "python_initial_test_invocations": 27,
+  "affected_test_invocations": 34,
+  "native_pure_checks": 84,
+  "native_pure_rejections": 11,
+  "evidence_tamper_types": 11,
+  "dependency_checkouts": 13,
+  "ast_sources": 116,
+  "copied_python_sources_current": 106,
+  "cli_help_and_mutual_exclusion": true,
+  "retained_preparation_checker_or_test_double_failures": [
+    "prepare",
+    "four-verification",
+    "affected-regressions"
+  ],
+  "actual_network_executions": 5,
+  "representative_four_rank_call_complete": true,
+  "overall_goal_status": "in_progress"
+}

@@ -15,6 +15,7 @@ from .modern_deepep_windows import ModernDeepEPWindowRuntime
 from .modern_native_layout import ModernNativeLayout, MAIN_BASE, SIGNAL_BASE
 from .scaleout_rdma import checked_json, digest, limits, monitored, save
 from .transaction_session import NativeTransactionSession
+from .host_timing import HostTiming
 
 
 class ModernNativeController:
@@ -192,29 +193,44 @@ class ModernNativeController:
             scope='native callback-driven modern functional graph and synthetic full-size operands; not GIN/GPU timing')
 
 
-def worker(topology,protocol,config,backend,output,*,callback_wakeups=False):
-    t,p,c=(checked_json(Path(path),maximum) for path,maximum in ((topology,8*2**20),(protocol,65536),(config,4*2**20)))
-    output=Path(output);controller=ModernNativeController(t,p,c)
-    save(output/'modern-plan.json',controller.layout.plan);save(output/'functional-windows.json',controller.layout.description)
+def worker(topology,protocol,config,backend,output,*,callback_wakeups=False,host_timing=False):
+    output=Path(output);timing=HostTiming(output/'worker_host.jsonl' if host_timing else None)
+    complete=False
     try:
-        with NativeTransactionSession(topology,protocol,controller.layout.initial,backend,output) as session:
-            while (event:=session.receive()) is not None:
-                nodes=controller.advance(event)
-                finished=not nodes and event['drained'] and controller.runtime.snapshot()['all_events_fired']
-                require(nodes or finished or not event['drained'],'modern graph blocked while native network idle; preserve partial state')
-                extra={}
-                if callback_wakeups:
-                    from .modern_native_wakeups import conditions
-                    groups=conditions(controller,goal='events')
-                    require(all(len(group)==1 for group in groups),'event wakeup must reference one actual callback')
-                    extra['wake_on']=[group[0] for group in groups]
-                session.commit(nodes,finish=finished,**extra)
+        with timing.span('modern_worker'):
+            with timing.span('controller_init'):
+                t,p,c=(checked_json(Path(path),maximum) for path,maximum in ((topology,8*2**20),(protocol,65536),(config,4*2**20)))
+                controller=ModernNativeController(t,p,c)
+                save(output/'modern-plan.json',controller.layout.plan);save(output/'functional-windows.json',controller.layout.description)
+            try:
+                with timing.span('session_init'):
+                    session=NativeTransactionSession(topology,protocol,controller.layout.initial,backend,output,timing=timing)
+                with session:
+                    while True:
+                        with timing.span('native_receive'):event=session.receive()
+                        if event is None:break
+                        with timing.span('controller_advance'):nodes=controller.advance(event)
+                        finished=not nodes and event['drained'] and controller.runtime.snapshot()['all_events_fired']
+                        require(nodes or finished or not event['drained'],'modern graph blocked while native network idle; preserve partial state')
+                        extra={}
+                        if callback_wakeups:
+                            from .modern_native_wakeups import conditions
+                            with timing.span('wake_conditions'):groups=conditions(controller,goal='events')
+                            require(all(len(group)==1 for group in groups),'event wakeup must reference one actual callback')
+                            extra['wake_on']=[group[0] for group in groups]
+                        timing.snapshot('modern_decision',dict(now_ns=controller.now,decisions=controller.decisions,
+                            native_nodes=len(controller.native_nodes),fired_events=len(controller.log)))
+                        with timing.span('native_commit'):session.commit(nodes,finish=finished,**extra)
+            finally:
+                with timing.span('modern_report_write'):save(output/'modern-execution.json',controller.snapshot())
+        complete=True
     finally:
-        save(output/'modern-execution.json',controller.snapshot())
+        timing.close(complete)
 
 
-def run(topology,protocol,config,backend,output,*,callback_wakeups=False):
+def run(topology,protocol,config,backend,output,*,callback_wakeups=False,host_timing=False):
     require(type(callback_wakeups) is bool,'callback_wakeups must be boolean')
+    require(type(host_timing) is bool,'host_timing must be boolean')
     topology,protocol,config,backend,output=(Path(p).resolve() for p in (topology,protocol,config,backend,output))
     t,p,c=(checked_json(path,maximum) for path,maximum in ((topology/'topology.json',8*2**20),(protocol,65536),(config,4*2**20)))
     ModernNativeLayout(t,p,c)  # Pure admission before creating output or native network.
@@ -229,6 +245,11 @@ def run(topology,protocol,config,backend,output,*,callback_wakeups=False):
         command.append('--callback-wakeups')
         save(output/'callback-delivery.json',dict(mode='next_event/1',bookkeeping_deferred=False,
              decision_limit=256,source_sha256=digest(Path(__file__).with_name('modern_native_wakeups.py'))))
+    if host_timing:
+        command.append('--host-timing')
+        save(output/'host-timing.json',dict(schema_version='moe-host-phase-trace/1',host_observation_only=True,
+            source_hashes={path.name:digest(path) for path in (Path(__file__),Path(__file__).with_name('host_timing.py'),
+                Path(__file__).with_name('transaction_session.py'))}))
     budget=limits(p);budget.update(wall_seconds=min(60,budget['wall_seconds']),rss_bytes=min(2**30,budget['rss_bytes']),
         address_bytes=min(2**31,budget['address_bytes']),artifact_bytes=min(64*2**20,budget['artifact_bytes']))
     monitored(command,output/'execution',[output],runtime=budget)
@@ -240,6 +261,7 @@ def run(topology,protocol,config,backend,output,*,callback_wakeups=False):
 
 
 if __name__=='__main__':
-    require(sys.argv[1:2]==['--worker'] and (len(sys.argv)==7 or
-        (len(sys.argv)==8 and sys.argv[7]=='--callback-wakeups')),'internal modern worker requires five paths and optional callback flag')
-    worker(*sys.argv[2:7],callback_wakeups=len(sys.argv)==8)
+    flags=sys.argv[7:]
+    require(sys.argv[1:2]==['--worker'] and len(sys.argv)>=7 and len(set(flags))==len(flags) and
+        set(flags)<={'--callback-wakeups','--host-timing'},'internal modern worker requires five paths and supported unique flags')
+    worker(*sys.argv[2:7],callback_wakeups='--callback-wakeups' in flags,host_timing='--host-timing' in flags)

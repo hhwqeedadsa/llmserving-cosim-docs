@@ -2,7 +2,7 @@
 
 平台增量，基线 `dbb53cb`。上轮已保存原生回调唤醒并完成238条失败前缀的纯C++准入测量，属于进展；完整四rank调用及整体论文目标尚未完成。本轮不重开此前关闭的预算。
 
-复用已有 `moe-host-phase-trace/1`、Python/C++ `HostTiming` 和公开 `host-timing-check`，为 `modern-deepep-native` 增加可选 `--host-timing`，原生session可接可选第六个参数 NEW_HOST_TIMING.jsonl。缺省不生成计时文件，网络结果和控制行为保持；不开启时不读宿主计时钟。记录仅供诊断，前端不读取原生计时或快照作决定，不改变包、NS3事件、优先级、回调收集顺序、动态slot、计算成本或256次交互上限。
+复用已有 `moe-host-phase-trace/1`、Python/C++ `HostTiming` 和公开 `host-timing-check`，为 `modern-deepep-native` 增加可选 `--host-timing`，原生session可接末尾可选计时路径参数 NEW_HOST_TIMING.jsonl。缺省不生成计时文件，网络结果和控制行为保持；不开启时不读宿主计时钟。记录仅供诊断，前端不读取原生计时或快照作决定，不改变包、NS3事件、优先级、回调收集顺序、动态slot、计算成本或256次交互上限。
 
 两进程分别记录嵌套的单调宿主时间/本进程CPU时间。Python覆盖初始化、等待原生消息、现代事件推进、订阅条件、候选复制/校验和命令发送；原生覆盖Simulator::Run、session推进/准入扫描、OperationProgress JSON、回调收集、排空检查、控制输出/等待与完整命令校验。每次有界推进保存当前ns3时刻、已处理事件数、决策数、登记数、已提交数和回调计数；它们不代表终止瞬间、包数、最终内存或应用完成。Simulator::Run的exclusive部分包含未细分的传输、内存、设备/事件处理，不能全部归为包处理。记录上限继续65,536条/读取16MiB，不静默截断或自动扩大。
 

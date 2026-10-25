@@ -41,6 +41,11 @@ class HostTiming:
         self.write(dict(type='footer',complete=bool(complete and not self.stack),spans=self.count))
         self.file.close();self.file=None
 
+    def snapshot(self,name,values):
+        if self.file is None:return
+        self.write(dict(type='snapshot',name=name,wall_ns=time.monotonic_ns(),
+            cpu_ns=time.process_time_ns(),values=values))
+
 
 def read_trace(path):
     """Read a bounded trace or flushed prefix. Never manufacture an open span's end.
@@ -130,7 +135,7 @@ def check(run,output):
         path=Path(run)/f'{name}_host.jsonl'
         if not path.exists():missing.append(name);continue
         trace=read_trace(path);trace.pop('completed_spans');traces[name]=trace
-    if not traces:raise ValueError('no host traces; run rdma-run with --host-timing')
+    if not traces:raise ValueError('no host traces; run rdma-run or modern-deepep-native with --host-timing')
     report=dict(schema_version='moe-host-phase-summary/1',passed=True,traces=traces,missing_writers=missing,
         all_traces_complete=not missing and all(t['trace_complete'] for t in traces.values()),
         scope='host observation only; no service success assertion; nested/process wall times must not be added')

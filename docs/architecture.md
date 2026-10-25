@@ -1,5 +1,7 @@
 # 系统架构与执行过程
 
+现代事务入口可选复用HostTiming，分别记录Python控制推进和原生session/Simulator宿主阶段。观测不参与就绪、时钟或选路；同进程嵌套和跨进程等待不能相加，失败只解释已闭合阶段与最近快照。见[现代入口](../examples/modern_deepep_native/README.md#可选的宿主开销观测)。
+
 `modern_native.py`提供功能接入：现代事件由同一次原生事务会话的实际回调推进，本地copy/计数清零/声明计算也在该时钟执行。必要self、动态slot和跨调用复用保留；accepted/visible采用显式native-apply功能假设。四rank原始路由仍未完成验收，已遇到控制交互和宿主限时两种限制，见[公开范围](../examples/modern_deepep_native/README.md)。
 
 transactions/5的可选`declared_service_fifo/1`为每个self连接调度独立start/apply/complete事件。它沿用源保护和目标NIC权限，释放由实际complete回调触发；不占本地GPU计算槽，也不创建网络载体或ACK。见[混合服务](../examples/scaleout_self_peer/README.md)。

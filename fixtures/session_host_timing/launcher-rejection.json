@@ -1,0 +1,11 @@
+{
+  "observed_exit_code": 1,
+  "network_started": false,
+  "child_command_started": false,
+  "origin": "parent exec tool return",
+  "reason": "all registered commands must be terminal; tamper-check handle still running",
+  "rejected_label": "public-help",
+  "guard_source_sha256": "ccdd1cd445728e406569c537401a14d7270f03ce1200e78f44d4a5ecee4150c6",
+  "original_error": "AssertionError at stage.py run: all(row[status]==terminal for row in records)",
+  "later_public_help_registered_once": true
+}

@@ -437,7 +437,7 @@ A3 资源模板的原生 STORE 结果在 `transfers` 行内附加 `local_facts`�
 
 ## 原生RDMA宿主阶段记录
 
-`scaleout rdma-run --host-timing` 的两份 JSONL 使用 `moe-host-phase-trace/1`。它们不属于网络 `result.json`，不参与计算或网络调度。实际用法与计时边界见[RDMA示例](../examples/scaleout_rdma/README.md#可选宿主阶段计时)。开启时 `provenance.json` 记录选项、格式版本和 Python 记录模块 hash；原生可执行文件 hash 仍按原方式保存。
+`scaleout rdma-run --host-timing`及`modern-deepep-native --host-timing`的两份 JSONL 使用 `moe-host-phase-trace/1`。它们不属于网络 `result.json`，不参与计算或网络调度。实际用法与计时边界见[RDMA示例](../examples/scaleout_rdma/README.md#可选宿主阶段计时)和[现代事务示例](../examples/modern_deepep_native/README.md#可选的宿主开销观测)。RDMA入口在 `provenance.json` 记录选项、格式版本和 Python 记录模块 hash；现代入口另存`host-timing.json`记录源码身份，原生可执行文件 hash 仍按原方式保存。
 
 | 记录 | 字段与含义 |
 |---|---|
@@ -448,6 +448,8 @@ A3 资源模板的原生 STORE 结果在 `transfers` 行内附加 `local_facts`�
 | footer | complete、spans；native正常返回才写true，Python失败时可写false |
 
 两个进程的墙钟使用同一台 Linux 的单调时钟起点，可检查交互区间包含关系。CPU起点各自独立，不能比较绝对值。计时覆盖记录器内部的阶段范围，不能代表完整CLI启动/退出；操作系统调度和记录I/O也有开销。原始记录保持嵌套，不从跨进程等待推断网络仿真时间。
+
+现代session另存`session_progress_enter/exit`快照：`now_ns/processed_events/decisions/registered_nodes/submitted_nodes/local_busy_ranks/collected_callbacks/pending_callbacks/finished`均为当时事实。`registered_nodes`是已接受的本地/远端节点数，`submitted_nodes`是已通过实际依赖和本地条件的节点数，后者不代表完成；`collected_callbacks`含尚未唤醒交付的回调。控制器不读取该快照。`session_frontend_wait`与Python的推进/校验/发送有重叠；Simulator::Run exclusive包含尚未细分的设备、传输、内存与事件分派，不能等同实际包CPU时间。未闭合父阶段的exclusive不计算。
 
 稳定读取接口 `moe_ub_cosim.host_timing.read_trace(path)` 每文件最多16MiB、65,536条，校验格式、ID、嵌套、单调时钟和footer。返回 `completed_spans`、`open_spans`、按阶段聚合的 `phases` 和 `snapshots`。完整阶段的 inclusive 是 end−begin，exclusive 扣除同进程直接子阶段。未闭合阶段不提供耗时；最后未带换行的一条记录视为未完成写入，标记 `trailing_partial_record=true`；完整但错误的JSON、交叉结束或重复ID仍报错。正常footer之后出现任何记录也报错。
 

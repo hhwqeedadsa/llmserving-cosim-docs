@@ -24,6 +24,21 @@ python3 -B -m moe_ub_cosim scaleout modern-deepep-native \
 
 在以上现代入口命令后增加 `--callback-wakeups`，使用支持 `wake_on` 的新 session 后端，即可订阅下一现代事件需要的实际回调。所有回调仍按原顺序和时刻保留，首次、排空和控制闹钟强制唤醒；默认继续逐批交付。不启用推迟纯前端记账的策略。旧后端不支持此字段时会明确失败，不会静默降级。这个选项减少宿主交互，不代表网络时延下降。
 
+### 可选的宿主开销观测
+
+增加 `--host-timing` 并使用支持可选计时路径参数的session后端，保存 `worker_host.jsonl/native_host.jsonl`。这两份日志使用已有 `moe-host-phase-trace/1`；每条记录及时写出，超时后仍可检查合法前缀。缺省不生成日志，不读取观测用宿主时钟。旧后端收到额外参数会明确失败，不静默降级。
+
+```bash
+python3 -B -m moe_ub_cosim scaleout host-timing-check \
+  --run runs/modern-native --output runs/modern-host-summary.json
+```
+
+Python阶段区分 `controller_advance/wake_conditions/python_candidate_copy/python_candidate_validate/python_command_write/python_wait_line`；原生阶段区分 `session_pump/operation_progress_snapshot/session_events/session_candidate_validate/session_frontend_wait`。同进程父阶段包含子阶段，跨进程等待重叠，不能直接相加。`simulator_run`的exclusive时间包含未细分的传输、内存与事件处理，不能全称为包处理。
+
+原生 `session_progress_enter/exit` 快照记录当时的ns3时刻、处理事件数、决策/任务/回调数；不是终止瞬间或最终内存，也不是包计数。日志只供离线诊断，控制器不读取它决定工作。超时阶段没有结束记录时，分析器保留open_spans，不虚构耗时；`all_traces_complete`与网络成功分开。具体字段及计数限制见[宿主记录](../../docs/record_storage.md#原生rdma宿主阶段记录)。
+
+记录器每进程最多65,536条；达到上限时明确失败，保留合法前缀，不静默截断或自动扩大额度。高频通知的大场景可能先耗尽观测额度；这类失败与网络失败、宿主限时分开解释。
+
 ## 怎样修改
 
 输入格式`moe-modern-native-input/1`。`modern`沿用[现代计划](../modern_deepep_partial_order/README.md)的完整配置与专家选择。可改模型形状、token数量/专家选择、调用次数及context，但仍受原计划和事务的有界容量约束，不等于完整模型部署或服务请求调度。
@@ -43,5 +58,7 @@ python3 -B -m moe_ub_cosim scaleout modern-deepep-native \
 `modern-execution.json`保存逐现代事件的`time_ns/origin`；实际回调事件另有`native_operation/native_event/native_time_ns`，并保存实际增量事务及绑定。顶层scope说明本功能接入；内部`runtime`仍是窗口影子核查器，不能把其`simulated_packets=false`误读为整个外部运行未发包，也不能把外部网络执行误称为GPU校准。
 
 显式启用订阅时另存 `callback-delivery.json`，记录策略和生成器哈希；原生 `session.callback_wakeups` 记录过滤命令数、略去的无关交互批数及积累回调数。正常结束须无待交付回调；超时、缺少 `result.json` 或部分日志不能作为成功证据。
+
+启用宿主观测时另存 `host-timing.json`，记录格式与worker/session/记录器源码hash；实际原生命令包含计时路径。原生程序及输入hash仍保存在 `native-command.json`。这些文件独立于 `result.json`，不改变网络结果字段。
 
 本入口是功能接入，不是可用于发表性能排名的现代provider模型。四rank控制交互限制、真实provider成本、匹配校准、独立工作负载和完整千卡仍未解决。

@@ -5,6 +5,7 @@ Use the bounded CLI for the dependency frontend, or run a custom Python driver
 under the public host_probe with the same declared group/artifact limits.
 """
 from copy import deepcopy
+from contextlib import nullcontext
 import json
 import os
 from pathlib import Path
@@ -17,6 +18,7 @@ import time
 from .scaleout_rdma import checked_json, digest, limits, monitored, save, NATIVE_COMMIT
 from .scaleout_topology import fields, require
 from .scaleout_transactions import validate
+from .host_timing import HostTiming
 
 
 def _control_plan(current, alarms, cancel_alarms, now_ns, max_ns):
@@ -87,7 +89,9 @@ class NativeTransactionSession:
     visibility. Cumulative work/connection budgets retain the v4 bounds.
     """
 
-    def __init__(self, topology, protocol, initial, backend, output):
+    def __init__(self, topology, protocol, initial, backend, output, *, timing=None):
+        require(timing is None or isinstance(timing,HostTiming), 'invalid host timing observer')
+        self.timing=timing if timing is not None else HostTiming()
         self.topology, self.protocol = Path(topology).resolve(), Path(protocol).resolve()
         self.backend, self.output = Path(backend).resolve(), Path(output).resolve()
         self.config = deepcopy(initial)
@@ -114,6 +118,7 @@ class NativeTransactionSession:
         self.logs = (self.output/'native.stdout.log').open('w', buffering=1)
         self.transcript = (self.output/'control.jsonl').open('w', buffering=1)
         argv = [str(self.backend), str(self.topology), str(self.protocol), str(self.output/'initial.json'), str(self.output/'result.json')]
+        if self.timing.file is not None:argv.append(str(self.output/'native_host.jsonl'))
         save(self.output/'native-command.json', dict(command=argv, cwd=str(self.output), native_commit=NATIVE_COMMIT,
              input_hashes={str(p): digest(p) for p in (self.topology, self.protocol, self.backend, self.output/'initial.json')}))
         try:
@@ -129,6 +134,10 @@ class NativeTransactionSession:
 
     def __exit__(self, *_):
         self.close()
+
+    def _phase(self,name):
+        timing=getattr(self,'timing',None)
+        return timing.span(name) if timing is not None else nullcontext()
 
     def close(self):
         try:
@@ -171,7 +180,8 @@ class NativeTransactionSession:
         """One DECIDE or terminal None. The pending DECIDE needs one commit."""
         require(self.pending is None, 'commit the pending decision before receiving again')
         while True:
-            line = self._line()
+            with self._phase('python_wait_line'):
+                line = self._line()
             if line is None:
                 return None
             self.logs.write(line+'\n')
@@ -231,13 +241,15 @@ class NativeTransactionSession:
         order and timestamps and are delivered together at the next wakeup.
         """
         require(self.pending is not None and type(finish) is bool and isinstance(submissions, list), 'invalid session commit')
-        candidate = deepcopy(self.config)
-        candidate['operations'].extend(deepcopy(submissions))
-        validate(self.t, self.p, candidate, allow_no_remote=True)
-        control, extra = _control_plan(self._alarms, alarms, cancel_alarms,
-                                      self.pending['now_ns'], limits(self.p)['max_sim_ns'])
-        if wake_on is not None:
-            extra.update(_wake_plan(candidate, wake_on, self._delivered))
+        with self._phase('python_candidate_copy'):
+            candidate = deepcopy(self.config)
+            candidate['operations'].extend(deepcopy(submissions))
+        with self._phase('python_candidate_validate'):
+            validate(self.t, self.p, candidate, allow_no_remote=True)
+            control, extra = _control_plan(self._alarms, alarms, cancel_alarms,
+                                          self.pending['now_ns'], limits(self.p)['max_sim_ns'])
+            if wake_on is not None:
+                extra.update(_wake_plan(candidate, wake_on, self._delivered))
         pending_alarms = any(a['status'] == 'pending' for a in control.values())
         require(not finish or (self.pending['drained'] and not submissions and
                 (self.config['operations'] or self._alarms) and not pending_alarms and not alarms),
@@ -246,15 +258,16 @@ class NativeTransactionSession:
                 'empty idle session command cannot advance execution')
         message = dict(type='COMMIT', decision_id=self.sequence, now_ns=self.pending['now_ns'], submissions=submissions, finish=finish)
         message.update(extra)
-        raw = (json.dumps(message, separators=(',', ':'))+'\n').encode()
-        require(len(raw) <= 1048576, 'session command exceeds 1MiB; split the batch')
-        view = memoryview(raw)
-        while view:
-            written = self.child.stdin.write(view)
-            require(written and written > 0, 'native session command pipe closed')
-            view = view[written:]
-        self.child.stdin.flush()
-        self.transcript.write(json.dumps(dict(direction='frontend', message=message))+'\n')
+        with self._phase('python_command_write'):
+            raw = (json.dumps(message, separators=(',', ':'))+'\n').encode()
+            require(len(raw) <= 1048576, 'session command exceeds 1MiB; split the batch')
+            view = memoryview(raw)
+            while view:
+                written = self.child.stdin.write(view)
+                require(written and written > 0, 'native session command pipe closed')
+                view = view[written:]
+            self.child.stdin.flush()
+            self.transcript.write(json.dumps(dict(direction='frontend', message=message))+'\n')
         self.config = candidate
         self._alarms = control
         self.pending = None

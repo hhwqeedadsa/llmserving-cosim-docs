@@ -1,0 +1,51 @@
+{
+  "preserved_failure": true,
+  "reason": "native observation record budget exhausted",
+  "host_limit_exhausted": false,
+  "actual_monitor_seconds": 20.537068653851748,
+  "observation_record_limit": 65536,
+  "native_trace_complete": false,
+  "service_complete": false,
+  "network_deadlock_proven": false,
+  "original_control_prefix_byte_identical": true,
+  "control_prefix_sha256": "9bbac6484bfdfc421dfe8a8b29f6f2f2dbe4947bb8da47cd2be1b39d3acb7e10",
+  "decisions": 98,
+  "modern_events": 246,
+  "modern_total_events": 566,
+  "native_registered_nodes": 75,
+  "last_native_snapshot": {
+    "collected_callbacks": 341,
+    "decisions": 98,
+    "finished": false,
+    "local_busy_ranks": 0,
+    "now_ns": 17546,
+    "pending_callbacks": 0,
+    "processed_events": 40931,
+    "registered_nodes": 75,
+    "submitted_nodes": 75
+  },
+  "last_native_snapshot_is_terminal_state": false,
+  "closed_operation_progress_snapshots": 5347,
+  "completed_progress_scans": 5346,
+  "scans_without_new_operation_callbacks": 5229,
+  "scans_without_changes_to_recorded_work_counters": 5228,
+  "closed_json_progress_wall_ns": 9226702868,
+  "closed_event_collection_exclusive_wall_ns": 4700114541,
+  "closed_json_progress_cpu_ns": 8974006619,
+  "closed_event_collection_exclusive_cpu_ns": 4546030678,
+  "open_spans": [
+    "native_total",
+    "simulator_run",
+    "session_progress",
+    "session_drained"
+  ],
+  "original_packetization": {
+    "payload_bytes": 64,
+    "chunk_bytes": 256,
+    "ack_interval_bytes": 1
+  },
+  "packetization_hardware_calibrated": false,
+  "model_or_protocol_changed": false,
+  "scope": "actual recorded prefix; observer exhaustion is a new failure, not the previous 60-second host timeout",
+  "next_requirement": "incremental operation-transition collection plus bounded aggregate observation; preserve exact callback ordering and original four-rank workload"
+}

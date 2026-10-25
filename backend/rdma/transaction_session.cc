@@ -1,5 +1,6 @@
 #include "transaction_session_validation.hh"
 #include "session_wakeups.hh"
+#include "host_timing.hh"
 #include <deque>
 #include <fstream>
 #include <iostream>
@@ -8,7 +9,7 @@
 using namespace moe_rdma;
 class TransactionSession {
  public:
-  TransactionSession(Fabric& fabric,const Json& topology,const Json& input):fabric_(fabric),topology_(topology),input_(input),transactions_(fabric,input) {
+  TransactionSession(Fabric& fabric,const Json& topology,const Json& input,HostTiming& timing):fabric_(fabric),topology_(topology),input_(input),transactions_(fabric,input),timing_(timing) {
     Require(input.at("operations").empty(),"session initial operations must be empty");
     transactions_.changed=[this](){Notify();};Notify();
   }
@@ -93,7 +94,9 @@ class TransactionSession {
   }
   Json Events() {
     Json events=Json::array();
-    for(const auto& op:transactions_.OperationProgress()) {
+    Json progress;
+    {auto phase=timing_.Span("operation_progress_snapshot");progress=transactions_.OperationProgress();}
+    for(const auto& op:progress) {
       const auto id=op.at("id").get<uint64_t>();
       for(const auto& pair:std::vector<std::pair<std::string,std::string>>{{"submitted","ready_ns"},{"prepared","prepared_ns"},{"published","published_ns"},{"applied","applied_ns"},
           {"request_acked","request_acked_ns"},{"response","response_ns"},{"completed","completed_ns"}}) {
@@ -121,11 +124,18 @@ class TransactionSession {
     return events;
   }
   void Exchange(Json events,bool drained) {
+    auto exchange=timing_.Span("session_exchange");
     Require(decision_<256,"session decision budget exceeded");
+    {
+    auto phase=timing_.Span("session_decide_write");
     std::cout<<"MOE_TX_EVENT "<<Json{{"type","DECIDE"},{"decision_id",decision_},{"now_ns",Now()},
       {"events",events},{"drained",drained}}.dump()<<std::endl;
+    }
     std::vector<char> buffer(1048577);
+    {
+    auto phase=timing_.Span("session_frontend_wait");
     Require(bool(std::cin.getline(buffer.data(),buffer.size())),"frontend EOF or oversized session command");
+    }
     const auto command=Json::parse(buffer.data());
     std::vector<std::string> keys={"type","decision_id","now_ns","submissions","finish"};
     for(const auto* name:{"alarms","cancel_alarms","wake_on"})if(command.contains(name))keys.push_back(name);
@@ -136,10 +146,12 @@ class TransactionSession {
     Require(submissions.is_array() && submissions.size()<=ReadTransactionLimits(input_).Nodes(),"invalid session submissions");
     // Pure validation of the entire candidate precedes registering/executing
     // any command member. Runtime lease/access failures are not rolled back.
-    auto candidate=input_;
-    for(const auto& op:submissions)candidate["operations"].push_back(op);
-    ValidateSessionProgram(candidate,topology_,fabric_.MaxSimNs());
-    const auto next_filter=SessionWakeups::Parse(command,candidate,delivered_,ReadTransactionLimits(candidate).Nodes());
+    Json candidate;
+    {auto phase=timing_.Span("session_candidate_copy");candidate=input_;
+      for(const auto& op:submissions)candidate["operations"].push_back(op);}
+    {auto phase=timing_.Span("session_candidate_validate");ValidateSessionProgram(candidate,topology_,fabric_.MaxSimNs());}
+    const auto next_filter=[&](){auto phase=timing_.Span("session_wakeup_validate");
+      return SessionWakeups::Parse(command,candidate,delivered_,ReadTransactionLimits(candidate).Nodes());}();
     std::vector<std::pair<uint64_t,int64_t>> arm;
     std::vector<uint64_t> cancel;
     std::set<uint64_t> new_ids,cancel_ids;
@@ -168,6 +180,7 @@ class TransactionSession {
       drained && pending==0 && arm.empty()),"premature session finish or pending control alarm");
     Require(finish || !submissions.empty() || !drained || pending>0,"empty idle session command cannot advance execution");
     // Nothing above mutates the live network, operation table or alarm state.
+    auto apply=timing_.Span("session_apply_commit");
     ++decision_;
     wake_filter_=next_filter;if(command.contains("wake_on"))++filtered_commands_;
     for(const auto id:cancel) {
@@ -190,6 +203,9 @@ class TransactionSession {
     if(!submissions.empty() || !arm.empty() || !cancel.empty())Notify();
   }
   void Progress() {
+    auto progress=timing_.Span("session_progress");Snapshot("session_progress_enter");
+    {
+    auto phase=timing_.Span("session_pump");
     for(const auto& op:input_.at("operations")) {
       const auto id=op.at("id").get<uint64_t>();if(submitted_.count(id))continue;
       bool ready=true;
@@ -200,7 +216,10 @@ class TransactionSession {
         const auto rank=op.at("rank").get<unsigned>();local_queues_[rank].push_back(id);PumpLocal(rank);
       } else {transactions_.Submit(op);submitted_.insert(id);}
     }
-    auto events=Events();const bool drained=Drained();
+    }
+    Json events;
+    {auto phase=timing_.Span("session_events");events=Events();}
+    const bool drained=[&](){auto phase=timing_.Span("session_drained");return Drained();}();
     for(const auto& event:events)pending_events_.push_back(event);
     if(decision_==0 || SessionWakeups::Triggered(wake_filter_,events) || (drained && !last_drained_)) {
       Exchange(pending_events_,drained);pending_events_.clear();
@@ -208,6 +227,13 @@ class TransactionSession {
     last_drained_=drained;
     if(!finished_ && !notify_pending_ && !AllDone() && transactions_.Drained() && local_busy_.empty() && PendingAlarms()==0)
       throw std::invalid_argument("session pending work has no event able to satisfy its conditions");
+    Snapshot("session_progress_exit");
+  }
+  void Snapshot(const char* name) {
+    if(timing_.Enabled())timing_.Snapshot(name,{{"now_ns",Now()},{"processed_events",ns3::Simulator::GetEventCount()},
+      {"decisions",decision_},{"registered_nodes",input_.at("operations").size()},{"submitted_nodes",submitted_.size()},
+      {"local_busy_ranks",local_busy_.size()},{"collected_callbacks",history_.size()},
+      {"pending_callbacks",pending_events_.size()},{"finished",finished_}});
   }
   Fabric& fabric_;Json topology_,input_;RemoteTransactions transactions_;
   uint64_t decision_=0;bool notify_pending_=false,finished_=false,last_drained_=false;
@@ -220,14 +246,14 @@ class TransactionSession {
   uint64_t filtered_commands_=0,suppressed_=0;
   Json pending_events_=Json::array();
   Json registrations_=Json::array(),history_=Json::array();
+  HostTiming& timing_;
 };
 static int Libraries(dl_phdr_info* info,std::size_t,void* data) {
   if(info->dlpi_name && info->dlpi_name[0])static_cast<Json*>(data)->push_back(info->dlpi_name);
   return 0;
 }
-int main(int argc,char** argv) {
-  try {
-    Require(argc==5,"usage: moe-rdma-transaction-session TOPOLOGY RDMA INITIAL_V4 NEW_RESULT");
+static void Execute(char** argv,HostTiming& timing) {
+    auto total=timing.Span("native_total");
     std::ifstream prior(argv[4]);Require(!prior.good(),"session result already exists");
     ns3::Time::SetResolution(ns3::Time::NS);
     const auto topology=ReadJson(argv[1]),protocol=ReadJson(argv[2]),initial=ReadJson(argv[3]);
@@ -236,17 +262,27 @@ int main(int argc,char** argv) {
     Require(initial.at("operations").empty(),"session initial operations must be empty");
     ns3::RngSeedManager::SetSeed(protocol.at("seed"));
     PersistentStreams::ValidateReordering(initial.value("transport_recovery",Json()),protocol.contains("limits")?protocol.at("limits").at("max_sim_ns").get<int64_t>():5000000);
-    Fabric fabric(topology,protocol);TransactionSession session(fabric,topology,initial);
+    Fabric fabric(topology,protocol);TransactionSession session(fabric,topology,initial,timing);
     ns3::Simulator::Stop(ns3::NanoSeconds(fabric.MaxSimNs()));std::string error;
-    try {ns3::Simulator::Run();}catch(const std::exception& e){error=e.what();}
-    auto result=fabric.Report();result["transactions"]=session.Transactions();result["session"]=session.Report();
+    try {auto phase=timing.Span("simulator_run");ns3::Simulator::Run();}catch(const std::exception& e){error=e.what();}
+    Json result;
+    {
+    auto phase=timing.Span("report_build");
+    result=fabric.Report();result["transactions"]=session.Transactions();result["session"]=session.Report();
     result["completed_operations"]=session.CompletedRemote();result["completed_local_work"]=session.CompletedLocal();
     result["local_model"]=initial.at("local_model");result["local_work"]=session.LocalWork();
     result["pending_operations"]=session.Pending(false);result["pending_local_work"]=session.Pending(true);
     result["loaded_libraries"]=Json::array();dl_iterate_phdr(Libraries,&result["loaded_libraries"]);
+    }
     const bool passed=error.empty() && session.Finished() && fabric.Drained();result["passed"]=passed;
     if(!error.empty())result["execution_error"]=error;
-    std::ofstream out(argv[4]);out<<result.dump()<<'\n';out.close();Require(bool(out),"cannot write session result");
-    ns3::Simulator::Destroy();Require(passed,"incomplete transaction session; inspect report");return 0;
+    {auto phase=timing.Span("report_write");std::ofstream out(argv[4]);out<<result.dump()<<'\n';out.close();Require(bool(out),"cannot write session result");}
+    {auto phase=timing.Span("simulator_cleanup");ns3::Simulator::Destroy();}
+    Require(passed,"incomplete transaction session; inspect report");
+}
+int main(int argc,char** argv) {
+  try {
+    Require(argc==5 || argc==6,"usage: moe-rdma-transaction-session TOPOLOGY RDMA INITIAL_V4 NEW_RESULT [NEW_HOST_TIMING.jsonl]");
+    HostTiming timing(argc==6?argv[5]:"");Execute(argv,timing);timing.Complete();return 0;
   }catch(const std::exception& e){std::cerr<<e.what()<<'\n';ns3::Simulator::Destroy();return 1;}
 }

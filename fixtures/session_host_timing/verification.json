@@ -1,0 +1,244 @@
+{
+  "verified": true,
+  "platform_observation_acceptance_complete": true,
+  "representative_four_rank_call_complete": false,
+  "overall_goal_complete": false,
+  "actual_network_executions": 4,
+  "maximum_network_executions": 4,
+  "default_full_equivalence": {
+    "passed": true,
+    "case": "default-healthy",
+    "whole_native_and_modern_result_equal": true,
+    "normalization": "only paths of hash-checked fixed eight libraries",
+    "actual_delivery": {
+      "decisions": 213,
+      "callbacks": 437,
+      "native_submissions": 97,
+      "suppressed_event_batches": 0
+    },
+    "modern_acceptance": {
+      "passed": true,
+      "modern_operations": 60,
+      "modern_events": 322,
+      "native_remote_operations": 50,
+      "native_local_operations": 47,
+      "paths": {
+        "gin_self": 20,
+        "rdma": 30,
+        "local": 10
+      },
+      "calls": 2,
+      "ranks": 2,
+      "decisions": 213,
+      "finish_ns": 105621,
+      "actual_target_applications": 50,
+      "actual_source_packets": 100,
+      "retransmitted_source_packets": 0,
+      "decoded_frames": 46,
+      "observed_out_of_order_data_packets": 0,
+      "physical_capture_events": 4400,
+      "scope": "functional byte/event acceptance, not numerical model or calibrated GPU/provider performance"
+    },
+    "no_optional_trace_artifacts": true
+  },
+  "timed_full_equivalence": {
+    "passed": true,
+    "case": "timed-healthy",
+    "whole_native_and_modern_result_equal": true,
+    "normalization": "only paths of hash-checked fixed eight libraries",
+    "actual_delivery": {
+      "decisions": 165,
+      "callbacks": 437,
+      "native_submissions": 97,
+      "suppressed_event_batches": 48
+    },
+    "modern_acceptance": {
+      "passed": true,
+      "modern_operations": 60,
+      "modern_events": 322,
+      "native_remote_operations": 50,
+      "native_local_operations": 47,
+      "paths": {
+        "gin_self": 20,
+        "rdma": 30,
+        "local": 10
+      },
+      "calls": 2,
+      "ranks": 2,
+      "decisions": 165,
+      "finish_ns": 105621,
+      "actual_target_applications": 50,
+      "actual_source_packets": 100,
+      "retransmitted_source_packets": 0,
+      "decoded_frames": 46,
+      "observed_out_of_order_data_packets": 0,
+      "physical_capture_events": 4400,
+      "scope": "functional byte/event acceptance, not numerical model or calibrated GPU/provider performance"
+    },
+    "host_traces_complete": true
+  },
+  "four_request_failure": {
+    "preserved_failure": true,
+    "reason": "native observation record budget exhausted",
+    "host_limit_exhausted": false,
+    "actual_monitor_seconds": 20.537068653851748,
+    "observation_record_limit": 65536,
+    "native_trace_complete": false,
+    "service_complete": false,
+    "network_deadlock_proven": false,
+    "original_control_prefix_byte_identical": true,
+    "control_prefix_sha256": "9bbac6484bfdfc421dfe8a8b29f6f2f2dbe4947bb8da47cd2be1b39d3acb7e10",
+    "decisions": 98,
+    "modern_events": 246,
+    "modern_total_events": 566,
+    "native_registered_nodes": 75,
+    "last_native_snapshot": {
+      "collected_callbacks": 341,
+      "decisions": 98,
+      "finished": false,
+      "local_busy_ranks": 0,
+      "now_ns": 17546,
+      "pending_callbacks": 0,
+      "processed_events": 40931,
+      "registered_nodes": 75,
+      "submitted_nodes": 75
+    },
+    "last_native_snapshot_is_terminal_state": false,
+    "closed_operation_progress_snapshots": 5347,
+    "completed_progress_scans": 5346,
+    "scans_without_new_operation_callbacks": 5229,
+    "scans_without_changes_to_recorded_work_counters": 5228,
+    "closed_json_progress_wall_ns": 9226702868,
+    "closed_event_collection_exclusive_wall_ns": 4700114541,
+    "closed_json_progress_cpu_ns": 8974006619,
+    "closed_event_collection_exclusive_cpu_ns": 4546030678,
+    "open_spans": [
+      "native_total",
+      "simulator_run",
+      "session_progress",
+      "session_drained"
+    ],
+    "original_packetization": {
+      "payload_bytes": 64,
+      "chunk_bytes": 256,
+      "ack_interval_bytes": 1
+    },
+    "packetization_hardware_calibrated": false,
+    "model_or_protocol_changed": false,
+    "scope": "actual recorded prefix; observer exhaustion is a new failure, not the previous 60-second host timeout",
+    "next_requirement": "incremental operation-transition collection plus bounded aggregate observation; preserve exact callback ordering and original four-rank workload"
+  },
+  "distinct_python_tests": 43,
+  "new_python_tests": 6,
+  "disabled_cpp_observer_clock_reads": 0,
+  "rejected_evidence_tampering": [
+    "finish",
+    "physical_packet",
+    "callback_loss",
+    "registration_decision",
+    "modern_time",
+    "native_operation"
+  ],
+  "decision_limit_unchanged": 256,
+  "source_and_runtime_identity_checked": true,
+  "recovery": {
+    "passed": true,
+    "commands": [
+      {
+        "label": "fresh-topology",
+        "command": [
+          "/usr/bin/python3",
+          "-P",
+          "-B",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "topology",
+          "--config",
+          "/dev/shm/moe-session-host-timing-20261024/restored/source/examples/modern_deepep_native/topology.json",
+          "--output",
+          "/dev/shm/moe-session-host-timing-20261024/restored/fresh-topology"
+        ],
+        "cwd": "/dev/shm/moe-session-host-timing-20261024/restored/empty-cwd"
+      },
+      {
+        "label": "fresh-modern",
+        "command": [
+          "/usr/bin/python3",
+          "-P",
+          "-B",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "modern-deepep-native",
+          "--topology",
+          "/dev/shm/moe-session-host-timing-20261024/restored/fresh-topology",
+          "--protocol",
+          "/dev/shm/moe-session-host-timing-20261024/restored/evidence/inputs/synthetic-healthy-protocol.json",
+          "--config",
+          "/dev/shm/moe-session-host-timing-20261024/fresh-input.json",
+          "--backend",
+          "/dev/shm/moe-session-host-timing-20261024/restored/evidence/runtime/run-transaction-session",
+          "--output",
+          "/dev/shm/moe-session-host-timing-20261024/fresh-smoke",
+          "--callback-wakeups",
+          "--host-timing"
+        ],
+        "cwd": "/dev/shm/moe-session-host-timing-20261024/restored/empty-cwd"
+      },
+      {
+        "label": "fresh-public-summary",
+        "command": [
+          "/usr/bin/python3",
+          "-P",
+          "-B",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "host-timing-check",
+          "--run",
+          "/dev/shm/moe-session-host-timing-20261024/fresh-smoke",
+          "--output",
+          "/dev/shm/moe-session-host-timing-20261024/fresh-public-summary.json"
+        ],
+        "cwd": "/dev/shm/moe-session-host-timing-20261024/restored/empty-cwd"
+      }
+    ],
+    "fresh_source_root": "/dev/shm/moe-session-host-timing-20261024/restored/source",
+    "empty_cwd": "/dev/shm/moe-session-host-timing-20261024/restored/empty-cwd",
+    "independent_actual_network_executions": 1,
+    "fresh_modern_acceptance": {
+      "passed": true,
+      "modern_operations": 28,
+      "modern_events": 152,
+      "native_remote_operations": 26,
+      "native_local_operations": 20,
+      "paths": {
+        "gin_self": 10,
+        "rdma": 16,
+        "local": 2
+      },
+      "calls": 1,
+      "ranks": 2,
+      "decisions": 45,
+      "finish_ns": 61918,
+      "actual_target_applications": 26,
+      "actual_source_packets": 92,
+      "retransmitted_source_packets": 0,
+      "decoded_frames": 24,
+      "observed_out_of_order_data_packets": 0,
+      "physical_capture_events": 4048,
+      "scope": "functional byte/event acceptance, not numerical model or calibrated GPU/provider performance"
+    },
+    "complete_comparisons_byte_identical": {
+      "default-healthy": "5ce93869f3394f16de89ded78d989f81f13bc3503b5705af01d9225022f9a05d",
+      "timed-healthy": "96db49efc01933b26198a4e363ccf99292bb2c85de6ddd1fb4f0d6cd56b18829"
+    },
+    "failure_summary_byte_identical": true,
+    "fixed_runtime_and_eight_library_hashes_checked": true,
+    "representative_four_rank_call_complete": false,
+    "scope": "same-host ABI-bound runtime and copied Python source; fresh small call does not replace original four-rank acceptance"
+  },
+  "dependency_checkouts_verified": 13,
+  "scope": "optional bounded host observation; no protocol/model optimization, full inference or paper novelty claim"
+}

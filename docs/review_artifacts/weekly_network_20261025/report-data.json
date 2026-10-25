@@ -1,0 +1,321 @@
+{
+  "schema": "moe-weekly-network-report/1",
+  "as_of": "2026-10-25",
+  "window": {
+    "platform_commit": "2dc9eb71a801eb88e8757bb33324e8b2729ab2d3",
+    "cases": {
+      "healthy-gbn": {
+        "all_work_accepted_ns": 138887,
+        "all_work_ack_ns": 144955,
+        "tx_payload_bytes": 1070336
+      },
+      "failed-gbn": {
+        "all_work_accepted_ns": 159945,
+        "all_work_ack_ns": 163983,
+        "tx_payload_bytes": 1636432
+      },
+      "healthy-selective": {
+        "all_work_accepted_ns": 138992,
+        "all_work_ack_ns": 145064,
+        "tx_payload_bytes": 1070336
+      },
+      "failed-selective": {
+        "all_work_accepted_ns": 141539,
+        "all_work_ack_ns": 145579,
+        "tx_payload_bytes": 1530184
+      }
+    },
+    "fault_effect": {
+      "gbn": {
+        "accepted_delta_ns": 21058,
+        "acked_delta_ns": 19028,
+        "extra_payload_bytes": 566096
+      },
+      "selective": {
+        "accepted_delta_ns": 2547,
+        "acked_delta_ns": 515,
+        "extra_payload_bytes": 459848
+      }
+    }
+  },
+  "graph": {
+    "cases": {
+      "healthy-gbn": {
+        "group_completion_ns": 397833,
+        "tx_payload_bytes": 2609152
+      },
+      "failed-gbn": {
+        "group_completion_ns": 586258,
+        "tx_payload_bytes": 3055872
+      },
+      "healthy-selective": {
+        "group_completion_ns": 397733,
+        "tx_payload_bytes": 2609152
+      },
+      "failed-selective": {
+        "group_completion_ns": 576245,
+        "tx_payload_bytes": 2895872
+      }
+    },
+    "contrasts": [
+      {
+        "mode": "gbn",
+        "group_delta_ns": 188425,
+        "step_delta_ns": [
+          164260,
+          188425
+        ],
+        "extra_payload_bytes": 446720
+      },
+      {
+        "mode": "selective",
+        "group_delta_ns": 178512,
+        "step_delta_ns": [
+          141145,
+          178512
+        ],
+        "extra_payload_bytes": 286720
+      }
+    ],
+    "scope": "saved legacy contribution-copy reference, declared compute, no ASTRA replay/modern GIN/calibration/holdout"
+  },
+  "four_rank": {
+    "application": {
+      "passed": true,
+      "modern_operations": 118,
+      "modern_events": 566,
+      "native_remote_operations": 108,
+      "native_local_operations": 53,
+      "paths": {
+        "gin_self": 20,
+        "rdma": 88,
+        "local": 10
+      },
+      "calls": 1,
+      "ranks": 4,
+      "decisions": 65,
+      "finish_ns": 70610,
+      "actual_target_applications": 108,
+      "actual_source_packets": 3840,
+      "retransmitted_source_packets": 0,
+      "decoded_frames": 136,
+      "complete_work_records": 136,
+      "physical_capture_events": 20000,
+      "checked_captured_endpoint_data_records": 2557,
+      "observed_endpoint_ack_records": 841,
+      "full_physical_path_or_ack_audit_complete": false,
+      "omitted_physical_records": 103168,
+      "transport_scope": "complete source bytes/frames/work/transaction memory; physical data and ACK validation restricted to capture prefix",
+      "scope": "functional byte/event acceptance, not numerical model or calibrated GPU/provider performance"
+    },
+    "delivery": {
+      "physical_decisions": 65,
+      "logical_steps": 360,
+      "callbacks": 835,
+      "native_nodes": 161,
+      "peak_batches": 58,
+      "peak_compact_bytes": 8234
+    },
+    "original_decisions": 256,
+    "capture_complete": false,
+    "omitted_capture_events": 103168
+  },
+  "interference": {
+    "timer": "selective",
+    "stream": 8,
+    "category": "no_drop_off_failed_edge_same_paths",
+    "ack_delta_ns": 61500,
+    "accepted_delta_ns": 61213,
+    "extra_tx_payload_bytes": 0,
+    "witness_same_offset": true,
+    "witness_source_tx_delta_ns": -28,
+    "witness_queue_delta_ns": 61241,
+    "witness_nonqueue_delta_ns": 0
+  },
+  "stream8": {
+    "healthy-gbn": {
+      "accepted_ns": 70958,
+      "acked_ns": 77026,
+      "tx_payload_bytes": 101248,
+      "witness": {
+        "source_tx_ns": 24304,
+        "destination_rx_ns": 70958,
+        "queue_wait_ns": 39934,
+        "nonqueue_transit_ns": 6720
+      },
+      "queues": [
+        {
+          "node": 12,
+          "peer": 15,
+          "wait_ns": 39388
+        },
+        {
+          "node": 15,
+          "peer": 17,
+          "wait_ns": 187
+        },
+        {
+          "node": 17,
+          "peer": 11,
+          "wait_ns": 187
+        },
+        {
+          "node": 11,
+          "peer": 8,
+          "wait_ns": 172
+        },
+        {
+          "node": 8,
+          "peer": 0,
+          "wait_ns": 0
+        }
+      ]
+    },
+    "failed-gbn": {
+      "accepted_ns": 138288,
+      "acked_ns": 145007,
+      "tx_payload_bytes": 101248,
+      "witness": {
+        "source_tx_ns": 24272,
+        "destination_rx_ns": 138288,
+        "queue_wait_ns": 107296,
+        "nonqueue_transit_ns": 6720
+      },
+      "queues": [
+        {
+          "node": 12,
+          "peer": 15,
+          "wait_ns": 39045
+        },
+        {
+          "node": 15,
+          "peer": 17,
+          "wait_ns": 12195
+        },
+        {
+          "node": 17,
+          "peer": 11,
+          "wait_ns": 172
+        },
+        {
+          "node": 11,
+          "peer": 8,
+          "wait_ns": 55884
+        },
+        {
+          "node": 8,
+          "peer": 0,
+          "wait_ns": 0
+        }
+      ]
+    },
+    "healthy-selective": {
+      "accepted_ns": 71029,
+      "acked_ns": 77101,
+      "tx_payload_bytes": 101248,
+      "witness": {
+        "source_tx_ns": 24300,
+        "destination_rx_ns": 71029,
+        "queue_wait_ns": 40009,
+        "nonqueue_transit_ns": 6720
+      },
+      "queues": [
+        {
+          "node": 12,
+          "peer": 15,
+          "wait_ns": 39477
+        },
+        {
+          "node": 15,
+          "peer": 17,
+          "wait_ns": 188
+        },
+        {
+          "node": 17,
+          "peer": 11,
+          "wait_ns": 172
+        },
+        {
+          "node": 11,
+          "peer": 8,
+          "wait_ns": 172
+        },
+        {
+          "node": 8,
+          "peer": 0,
+          "wait_ns": 0
+        }
+      ]
+    },
+    "failed-selective": {
+      "accepted_ns": 132242,
+      "acked_ns": 138601,
+      "tx_payload_bytes": 101248,
+      "witness": {
+        "source_tx_ns": 24272,
+        "destination_rx_ns": 132242,
+        "queue_wait_ns": 101250,
+        "nonqueue_transit_ns": 6720
+      },
+      "queues": [
+        {
+          "node": 12,
+          "peer": 15,
+          "wait_ns": 39552
+        },
+        {
+          "node": 15,
+          "peer": 17,
+          "wait_ns": 8655
+        },
+        {
+          "node": 17,
+          "peer": 11,
+          "wait_ns": 172
+        },
+        {
+          "node": 11,
+          "peer": 8,
+          "wait_ns": 52871
+        },
+        {
+          "node": 8,
+          "peer": 0,
+          "wait_ns": 0
+        }
+      ]
+    }
+  },
+  "sources": [
+    {
+      "path": "experiments/selective_externality/results/20261024/summary.json",
+      "label": "通信窗口：四条件结果与逐流分析",
+      "sha256": "abb01e0e859e40307ef1b2f27b8601aab484770e458bad7ab4abe6083fa8fed5"
+    },
+    {
+      "path": "experiments/causal_fault/results/20261024/summary.json",
+      "label": "保留任务依赖：四条件参考结果",
+      "sha256": "1e664b1150f9b88e0b92a3be04606c7f66aa1c6362588e3182d61b440ec9d59e"
+    },
+    {
+      "path": "fixtures/native_callback_batches/verification.json",
+      "label": "四卡完整功能调用：独立核验",
+      "sha256": "b84f847b51c8da85ba61becc3d646a5782203b1344790a3bf5f7562aa915022a"
+    },
+    {
+      "path": "experiments/selective_externality/protocol.md",
+      "label": "通信窗口：参数与执行前设计",
+      "sha256": "101b3cd57b0621fc2307fcf02357847edbd8a0b780c83523fb44050f9ed7698e"
+    },
+    {
+      "path": "experiments/causal_fault/README.md",
+      "label": "旧式任务图的适用范围",
+      "sha256": "622468dcdbd636931eb5fd4a0c2250de20574a95a6b96c488a14aa40cba43c97"
+    },
+    {
+      "path": "docs/reviews/原生批次交付与四卡完整调用_20261025.md",
+      "label": "四卡完整调用的结果与捕获边界",
+      "sha256": "5b5a368f636a75478c70023cf69a269d3490b3c13360d65c21a4e1f6b4ee0207"
+    }
+  ]
+}

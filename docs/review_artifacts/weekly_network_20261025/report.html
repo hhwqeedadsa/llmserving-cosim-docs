@@ -1,0 +1,474 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="description" content="MoE跨服务器网络研究周报：四卡完整功能调用、成熟恢复机制的对照结果、未丢包通信的排队分析与收益验证计划。">
+<title>MoE 跨机网络 · 本周工作与收益验证</title>
+<style>
+:root{--bg:#f4f5f1;--paper:#fff;--ink:#172e38;--muted:#536871;--line:#dce4df;--teal:#087568;--soft:#e7f2ed;--orange:#ae4e20;--warm:#fff2e8;--blue:#315d9a;--night:#163c3b}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:90px}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.75 system-ui,-apple-system,"Segoe UI","Noto Sans CJK SC","Microsoft YaHei",sans-serif}a{color:var(--teal);text-underline-offset:4px}button,select{font:inherit}button{cursor:pointer}button:focus-visible,a:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid var(--blue);outline-offset:4px}h1,h2,h3,p{margin:0}h1{font-size:clamp(29px,4.2vw,51px);line-height:1.28;letter-spacing:-1px}h2{font-size:clamp(23px,3vw,30px);line-height:1.4}h3{font-size:18px;line-height:1.5}.wrap{max-width:1150px;margin:auto;padding:0 32px}.topbar{position:sticky;top:0;z-index:10;background:rgba(244,245,241,.96);border-bottom:1px solid var(--line)}.topbar .wrap{display:flex;align-items:center;justify-content:space-between;min-height:68px;gap:20px}.brand{font-size:14px;letter-spacing:1px;font-weight:700;color:var(--night);text-decoration:none;white-space:nowrap}.brand span{display:inline-block;width:9px;height:9px;background:var(--teal);border-radius:50%;margin-right:9px}nav{display:flex;gap:22px;font-size:14px}nav a{color:var(--muted);text-decoration:none}nav a:hover{color:var(--teal)}.hero{padding:66px 0 38px;display:grid;grid-template-columns:1.5fr 1fr;gap:55px;align-items:start}.eyebrow{font-size:12px;letter-spacing:2px;font-weight:700;color:var(--teal);text-transform:uppercase;margin-bottom:17px}.lead{margin-top:20px;color:var(--muted);max-width:650px;font-size:17px}.hero-note{background:var(--night);color:#eef8f4;padding:28px;border-radius:15px}.hero-note p{font-size:15px;color:#d1e3dd;margin-top:14px}.hero-note strong{font-weight:600}.hero-note .line{margin-top:22px;padding-top:16px;border-top:1px solid #3e605a;font-size:13px}.status{display:inline-flex;align-items:center;gap:7px;border-radius:4px;padding:2px 8px;background:var(--soft);color:#075d51;font-size:12px;font-weight:600}.status.pending{background:var(--warm);color:#944011}.status.neutral{background:#eef0f4;color:#425467}.section{padding:35px 0;border-top:1px solid var(--line)}.section-head{display:flex;align-items:flex-start;justify-content:space-between;gap:24px;margin-bottom:24px}.section-num{font-size:12px;letter-spacing:2px;color:var(--teal);margin-bottom:8px}.sub{color:var(--muted);margin-top:9px;max-width:820px}.work-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.work-card{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:23px}.work-card .order{font-size:13px;color:var(--teal);font-weight:700;margin-bottom:15px}.work-card h3{margin:13px 0}.work-card p{color:var(--muted);font-size:14px}.work-card .result{margin:17px 0 12px;padding-top:13px;border-top:1px solid var(--line);color:var(--ink);font-size:15px}.num{font-variant-numeric:tabular-nums}.result b{font-size:23px;font-weight:650}.caption{font-size:13px;color:var(--muted)}.flow{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:13px;margin:28px 0 18px}.flow-step{position:relative;background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:17px 13px;min-height:115px}.flow-step:not(:last-child):after{content:'→';position:absolute;right:-15px;top:41px;color:var(--muted);z-index:1}.flow-step b{font-size:14px;display:block}.flow-step span{font-size:12px;color:var(--muted);display:block;margin-top:7px}.flow-step.network{background:var(--soft);border-color:#a8cec1}.small-note{padding:14px 17px;border-left:3px solid var(--teal);background:#eaf0eb;font-size:14px;margin:18px 0}.small-note.warm{background:var(--warm);border-color:var(--orange)}.two-col{display:grid;grid-template-columns:1.2fr 1fr;gap:20px;align-items:start}.panel{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:25px}.panel-head{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:18px}.panel h3{font-size:17px}.controls{display:flex;flex-wrap:wrap;gap:12px 18px;align-items:center;margin:18px 0 24px}.control{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--muted)}select{background:var(--paper);color:var(--ink);border:1px solid #bfcfc8;border-radius:6px;padding:6px 9px;font-size:13px;max-width:100%}.chart-scale{font-size:12px;color:var(--muted);margin-bottom:12px}.chart-row{display:grid;grid-template-columns:112px minmax(0,1fr) 78px;gap:10px;align-items:center;margin-bottom:16px;font-size:13px}.track{height:22px;background:#f0f3f0;border-radius:3px;overflow:hidden}.bar{height:100%;background:var(--teal);min-width:1px;transition:width .2s}.bar.fault{background:var(--orange)}.chart-value{text-align:right;font-variant-numeric:tabular-nums}.legend{display:flex;gap:18px;font-size:12px;color:var(--muted);margin:12px 0 18px}.legend span:before{content:'';display:inline-block;width:9px;height:9px;border-radius:2px;background:var(--teal);margin-right:6px}.legend .fault:before{background:var(--orange)}.chart-meaning{font-size:14px;color:var(--muted);margin-top:22px;min-height:54px}.gain{margin-top:18px;padding:17px 0;border-top:1px solid var(--line);display:flex;gap:14px;align-items:center}.gain strong{font-size:29px;line-height:1.2;font-variant-numeric:tabular-nums;white-space:nowrap}.gain span{font-size:13px;color:var(--muted)}.facts{display:grid;grid-template-columns:1fr 1fr;gap:0 20px;margin:18px 0}.facts div{padding:11px 0;border-bottom:1px solid var(--line);font-size:13px}.facts dt{color:var(--muted)}.facts dd{margin:3px 0 0;font-weight:600}.context-box{font-size:14px;color:var(--muted);margin-top:20px}.context-box strong{color:var(--ink)}details{margin-top:17px}summary{cursor:pointer;font-size:14px;color:var(--teal);padding:6px 0}.table-scroll{overflow-x:auto;margin-top:12px}table{border-collapse:collapse;width:100%;font-size:13px;text-align:left}th,td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}thead th{background:#f0f4f0;font-weight:600}tbody th{font-weight:500}td small{display:block;font-size:11px;color:var(--muted);overflow-wrap:anywhere;margin-top:5px}.mono,code{font-family:ui-monospace,"SFMono-Regular",Consolas,monospace;font-size:12px;overflow-wrap:anywhere}.queue-head{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:20px}.switch{display:inline-flex;background:#eaf0eb;border-radius:7px;padding:4px;gap:3px}.switch button{border:0;background:transparent;border-radius:5px;padding:5px 12px;font-size:13px;color:var(--muted)}.switch button[aria-pressed=true]{background:var(--night);color:#fff}.equation{display:grid;grid-template-columns:repeat(3,1fr);margin:20px 0 14px;gap:10px}.equation div{padding:14px;background:#f2f5f1;border-radius:7px;font-size:12px;color:var(--muted)}.equation strong{display:block;font-size:23px;color:var(--ink);font-variant-numeric:tabular-nums}.queue-chart .chart-row{grid-template-columns:110px minmax(0,1fr) 76px}.comparison{display:grid;grid-template-columns:1fr 1fr;gap:18px}.comparison .item{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:23px}.comparison .item h3{margin:14px 0 10px}.comparison p{font-size:14px;color:var(--muted)}.comparison .big{font-size:32px;font-weight:650;line-height:1.4;margin:12px 0 5px;font-variant-numeric:tabular-nums}.gates{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:22px}.gate{padding:22px;border:1px solid var(--line);border-radius:10px;background:var(--paper)}.gate h3{margin:14px 0 10px}.gate p{font-size:14px;color:var(--muted)}.gate .deliver{color:var(--ink);border-top:1px solid var(--line);padding-top:12px;margin-top:15px}.questions{display:grid;grid-template-columns:1fr 1fr;gap:0 32px}.questions div{padding:20px 0;border-top:1px solid var(--line)}.questions h3{font-size:16px;margin-bottom:7px}.questions p{font-size:14px;color:var(--muted)}.foot{padding:30px 0 45px;color:var(--muted);font-size:12px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:20px}.action{border:1px solid #b5c8bf;background:var(--paper);color:var(--teal);border-radius:7px;font-size:13px;padding:7px 12px;text-decoration:none;white-space:nowrap}#data-status{font-size:13px;color:var(--muted);margin-left:9px}.hidden{display:none!important}.skip{position:absolute;left:12px;top:-100px;background:var(--paper);padding:12px;z-index:30}.skip:focus{top:10px}.view-only{font-size:12px;color:var(--muted);margin:10px 0}.weekly-copy{font-size:14px;line-height:1.9}.weekly-copy p{margin:10px 0}.weekly-copy ol{padding-left:23px}.weekly-copy li{padding-bottom:10px}.tagline{font-size:12px;color:var(--muted);margin-top:10px}.no-js{margin:20px 0;padding:15px;background:var(--warm)}
+@media(max-width:850px){.wrap{padding:0 22px}.hero{gap:25px;grid-template-columns:1fr 1fr}.work-grid,.gates{grid-template-columns:1fr}.work-card{padding:20px}.work-card .order{margin-bottom:8px}.two-col{grid-template-columns:1fr}.flow{gap:9px}.flow-step{padding:13px 9px}.topbar nav{gap:13px}.chart-row{grid-template-columns:112px minmax(0,1fr) 78px}.equation{gap:7px}.hero-note{padding:22px}}
+@media(max-width:600px){body{font-size:15px}.wrap{padding:0 17px}.topbar .wrap{min-height:60px;flex-wrap:wrap;gap:6px;padding-top:10px;padding-bottom:10px}.brand{font-size:12px}nav{width:100%;justify-content:space-between;font-size:12px}.hero{padding-top:35px;grid-template-columns:1fr;gap:22px}.lead{font-size:15px}.hero-note{padding:20px}.section{padding:27px 0}.section-head{display:block}.section-head .status{margin-top:12px}.flow{grid-template-columns:1fr}.flow-step{min-height:auto;padding:12px 15px}.flow-step:not(:last-child):after{content:'↓';right:15px;top:auto;bottom:-16px}.flow-step span{margin-top:3px}.panel{padding:18px 14px}.chart-row{grid-template-columns:95px minmax(0,1fr) 65px;gap:7px;font-size:12px}.queue-chart .chart-row{grid-template-columns:85px minmax(0,1fr) 66px}.comparison,.questions{grid-template-columns:1fr}.equation strong{font-size:19px}.queue-head{align-items:flex-start;flex-direction:column}.controls{gap:12px}.gain strong{font-size:26px}.foot{flex-direction:column}.facts{gap:0 12px}.section h2{font-size:23px}.chart-meaning{min-height:0}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.bar{transition:none}}
+@media print{body{background:#fff;font-size:11pt}.wrap{max-width:none;padding:0}.topbar,.controls,.switch,.action,.view-only{display:none}.hero{padding-top:0}.hero-note{background:#edf4f0!important;color:var(--ink)}.hero-note p{color:var(--ink)}.section,.work-card,.panel,.gate{break-inside:avoid}.work-grid,.gates{grid-template-columns:1fr}.two-col{grid-template-columns:1fr}.foot{padding-bottom:0}.bar{print-color-adjust:exact;-webkit-print-color-adjust:exact}a{color:inherit}details>div{display:block!important}summary{font-weight:600}.hidden{display:block!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">跳到正文</a>
+<header class="topbar"><div class="wrap"><a class="brand" href="#main"><span></span>MoE / SCALE-OUT NETWORK</a><nav aria-label="报告导航"><a href="#work">本周工作</a><a href="#results">实验收益</a><a href="#finding">问题定位</a><a href="#plan">下周计划</a><a href="#evidence">证据</a></nav></div></header>
+<main class="wrap" id="main">
+<section class="hero" aria-labelledby="title">
+ <div><div class="eyebrow">WEEKLY REVIEW / 截至 2026.10.25</div><h1 id="title">MoE 跨机网络<br>本周进展与收益验证</h1><p class="lead">把真实专家选择、网络里的包与排队，以及任务完成时间连起来。先测清还有多少等待可以减少，再判断新方法是否值得做。</p><p class="tagline">本页整理既有实验 · 本轮新增网络实验 0 次 · 可离线浏览</p></div>
+ <aside class="hero-note"><span class="status">当前研究目标</span><h3 style="margin-top:15px">相同网络资源下，<br>让 MoE 任务少等一会儿。</h3><p>关注专家热点、拥塞和故障恢复；最终评价整次任务完成时间，同时检查吞吐、公平性与恢复代价。</p><p class="line"><strong>已具备：</strong>包级分析与单层功能调用。<br><strong>待证明：</strong>强基线之外的任务收益与方法创新。</p></aside>
+</section>
+<section class="section" id="work" aria-labelledby="work-title">
+ <div class="section-head"><div><div class="section-num">01 / 本周完成</div><h2 id="work-title">三件事，分别解决三个问题</h2><p class="sub">让实验能完成、把比较基线做强、把等待的来源查清。</p></div><span class="status neutral">平台进展与研究结论分别说明</span></div>
+ <div class="work-grid">
+  <article class="work-card"><div class="order">工作 01 · 完整调用</div><span class="status">功能验收通过</span><h3>跑通四卡单层 MoE 通信流程</h3><p>使用四份真实路由中的四个选定行，保留分发、专家阶段、结果汇合所需的依赖与屏障，修复前后端交互次数上限造成的提前终止。</p><div class="result"><b class="num">566</b> 个现代操作事件完整完成</div><p>意义：现在可以在完整调用里追踪等待。这里的“专家阶段”是功能事件建模，没有执行真实 GPU 专家计算。</p></article>
+  <article class="work-card"><div class="order">工作 02 · 恢复对照</div><span class="status">四条件对照完成</span><h3>用成熟恢复机制检验优化空间</h3><p>在相同通信工作量和拓扑下，对比正常与故障、回退重传与选择性重传，保留反馈与接收缓存等成本。</p><div class="result"><b class="num">21.058 → 2.547</b> 微秒</div><p>这是通信窗口最后接收时刻的故障增量。选择性重传属于已有机制，这项改善不能算作我们的算法创新。</p></article>
+  <article class="work-card"><div class="order">工作 03 · 机制定位</div><span class="status">排队现象已核对</span><h3>找到未丢包通信的额外等待</h3><p>一条未直接丢包、未经过故障边的通信仍受到影响。沿实际数据包逐跳检查，将变化拆为发送、排队和非排队传输。</p><div class="result"><b class="num">61.213</b> 微秒额外接收等待</div><p>该流不是最后完成者。它提供了研究线索，还没有证明能让整次任务缩短这么多时间。</p></article>
+ </div>
+ <div class="flow" aria-label="单层功能调用的逻辑结构；此图不表示各阶段耗时">
+  <div class="flow-step"><b>真实专家选择</b><span>四份 MMLU 请求<br>选定 token / 层</span></div>
+  <div class="flow-step"><b>Dispatch · 分发</b><span>按专家部署生成通信<br>保留数据与控制依赖</span></div>
+  <div class="flow-step network"><b>共享网络执行</b><span>包、ACK、排队与恢复<br>实际完成事件推进任务</span></div>
+  <div class="flow-step"><b>专家阶段</b><span>功能依赖与本地操作<br>未执行 GPU 数值计算</span></div>
+  <div class="flow-step"><b>Combine · 汇合</b><span>同样经过网络<br>等待必要结果与屏障</span></div>
+ </div>
+ <p class="caption">逻辑结构示意，框宽不代表耗时。Scale-Out 使用独立的原生 RDMA ns-3 入口。此页四卡功能验收不是完整 DeepSeek-R1 推理或千卡应用验收。</p>
+ <details><summary>查看四卡功能验收的具体范围</summary><div class="table-scroll"><table><thead><tr><th>项目</th><th>已保存的结果</th><th>怎样理解</th></tr></thead><tbody>
+ <tr><th>输入配置</th><td>EP4 / H7168 / 256 专家 / Top8</td><td>四个专家并行 rank；每 token 选择 8 个专家。通信布局采用 BF16 假设；不等于数据集采集时的权重精度。</td></tr>
+ <tr><th>执行结果</th><td>118 操作 / 566 事件 / 161 原生节点</td><td>一次单层功能调用；仿真完成时刻 70.610 微秒，尚未硬件校准。</td></tr>
+ <tr><th>接口改进</th><td>原 256 次交互处失败 → 65 次同步完成</td><td>仍处理 360 个逻辑批次，保留原时刻与顺序。同步次数减少不能当作推理加速比。</td></tr>
+ <tr><th>包级覆盖</th><td>四卡捕获 20,000 条，遗漏 103,168 条</td><td>完整源字节、工作、依赖和内存核验通过；物理跳与 ACK 仅核捕获前缀。小型正常/故障用例具备完整捕获。</td></tr>
+ </tbody></table></div></details>
+</section>
+<section class="section" id="results" aria-labelledby="results-title">
+ <div class="section-head"><div><div class="section-num">02 / 收益有多少</div><h2 id="results-title">先说明分母，再谈改善比例</h2><p class="sub">下面是两项独立实验，输入、工作图、拆包及平台版本不同。只在各自实验内部比较，不能把它们连接成同一次推理的收益。</p></div></div>
+ <div class="two-col">
+  <article class="panel"><span class="status">实验 A · 通信窗口</span><h3 style="margin-top:14px">成熟恢复机制已经消除了大部分故障增量</h3>
+   <div class="controls"><label class="control" for="metric">完成定义<select id="metric"><option value="accepted">接收端全部接收</option><option value="acked">发送端全部确认（主指标）</option></select></label><label class="control" for="measure">显示方式<select id="measure"><option value="delta">故障额外等待</option><option value="absolute">四条件完成时刻</option></select></label></div>
+   <div class="chart-scale" id="window-scale"></div><div id="window-chart" role="img" aria-label="通信窗口四条件对比"></div><div class="legend" id="window-legend"><span>正常</span><span class="fault">故障</span></div>
+   <div class="gain" aria-live="polite"><strong id="window-gain">87.9%</strong><span id="window-gain-text">故障接收增量的下降比例<br>不是推理加速比例</span></div><p class="chart-meaning" id="window-meaning"></p>
+   <details><summary>查看原始四条件数据</summary><div class="table-scroll"><table><thead><tr><th>条件</th><th>接收时刻 / 微秒</th><th>确认时刻 / 微秒</th><th>源 payload / 字节，含重传</th></tr></thead><tbody><tr><th scope="row">正常 / 回退重传</th><td>138.887</td><td>144.955</td><td>1,070,336</td></tr>
+<tr><th scope="row">故障 / 回退重传</th><td>159.945</td><td>163.983</td><td>1,636,432</td></tr>
+<tr><th scope="row">正常 / 选择性重传</th><td>138.992</td><td>145.064</td><td>1,070,336</td></tr>
+<tr><th scope="row">故障 / 选择性重传</th><td>141.539</td><td>145.579</td><td>1,530,184</td></tr></tbody></table></div></details>
+  </article>
+  <aside class="panel"><span class="status neutral">实验 A 的限定条件</span><h3 style="margin-top:14px">它测的是通信，尚未连接完整调用</h3><dl class="facts"><div><dt>工作量</dt><dd>74 次写 / 1,070,336 字节</dd></div><div><dt>发布方式</dt><dd>全部在 0 纳秒就绪</dd></div><div><dt>参考网络</dt><dd>8 端点 / 10 交换机 / Clos</dd></div><div><dt>分层带宽</dt><dd>接入 100G / 上层 25G</dd></div><div><dt>故障设置</dt><dd>4 微秒断链 / 12 微秒后改路</dd></div><div><dt>控制与恢复</dt><dd>DCQCN 参考 / 两种重传</dd></div></dl><p class="context-box">源数据来自 <strong>DeepSeek-R1-AWQ 的公开推理专家选择</strong>，选取 entry0、layer4、每请求前 8 个 token，实际为 [8,8,8,6]。四份文件不是四卡真实硬件测量，也不代表训练热点。</p><p class="context-box">“正常”与“故障”分别运行，再计算增量。选择性重传保留了扩展反馈和乱序缓存成本，并非复刻某款商用网卡。</p></aside>
+ </div>
+ <article class="panel" style="margin-top:20px"><div class="panel-head"><div><span class="status neutral">实验 B · 旧式完整依赖参考图</span><h3 style="margin-top:12px">把依赖加回来，经典方法的改善就没有那么大</h3></div></div><div class="two-col"><div><div class="chart-scale" id="graph-scale"></div><div id="graph-chart" role="img" aria-label="保留任务依赖时的故障增量"></div><div class="gain"><strong id="graph-gain">5.3%</strong><span>故障任务完成增量的下降比例<br>仅限本组旧式参考图</span></div></div><div><p class="context-box" style="margin-top:0">保留两层、两步的原始依赖后，故障增量为 <strong>188.425 → 178.512 微秒</strong>，减少 9.913 微秒；故障下任务完成时刻为 586.258 → 576.245 微秒，约缩短 <strong id="graph-total-gain">1.71%</strong>。</p><div class="small-note warm">这些结果来自旧式“按专家贡献复制”的参考图和声明计算，不是本周新跑通的现代四卡调用。残余 178.512 微秒还包含故障、路径与反馈等影响，不能全部当作可优化空间。</div></div></div><details><summary>查看实验 B 的原始数据与范围</summary><div class="table-scroll"><table><thead><tr><th>条件</th><th>任务完成时刻 / 微秒</th><th>源 payload / 字节，含重传</th></tr></thead><tbody><tr><th scope="row">正常 / 回退重传</th><td>397.833</td><td>2,609,152</td></tr>
+<tr><th scope="row">故障 / 回退重传</th><td>586.258</td><td>3,055,872</td></tr>
+<tr><th scope="row">正常 / 选择性重传</th><td>397.733</td><td>2,609,152</td></tr>
+<tr><th scope="row">故障 / 选择性重传</th><td>576.245</td><td>2,895,872</td></tr></tbody></table></div><p class="caption" style="margin-top:12px">216 原节点 / 76 写 / 2,609,152 唯一字节；四个逻辑 rank 投影到 0、2、4、6 端点，使用 2000 字节拆包。实验 A 使用 1000 字节拆包和另一平台版本，不做跨实验单因素比较。</p></details></article>
+</section>
+<section class="section" id="finding" aria-labelledby="finding-title">
+ <div class="section-head"><div><div class="section-num">03 / 等待来自哪里</div><h2 id="finding-title">自己没丢包，也可能被共享队列拖慢</h2><p class="sub">实验 A 中预先选定的 stream8：未直接丢包、数据与反馈边集合不变。下面展示的是决定该流最后接收的见证数据包，其两条件路径相同。</p></div></div>
+ <div class="two-col"><article class="panel"><div class="queue-head"><h3>见证包逐跳排队等待</h3><div class="switch" role="group" aria-label="选择正常或故障的见证包"><button type="button" id="queue-healthy" aria-pressed="false">正常</button><button type="button" id="queue-failed" aria-pressed="true">故障</button></div></div><div class="chart-scale" id="queue-scale"></div><div id="queue-chart" class="queue-chart" role="img" aria-label="各跳的排队等待"></div><p class="caption" id="queue-detail" aria-live="polite"></p><div class="view-only">切换仅查看已保存结果，不会重新仿真；两种状态使用相同刻度。</div></article>
+ <aside class="panel"><span class="status">变化已分解</span><h3 style="margin-top:13px">额外等待主要发生在队列中</h3><div class="equation"><div>发送时刻变化<strong>−0.028</strong>微秒</div><div>逐跳排队变化<strong>+61.241</strong>微秒</div><div>非排队传输变化<strong>0.000</strong>微秒</div></div><p class="num" style="font-size:18px">合计：接收晚 61.213 微秒</p><p class="context-box">故障条件下，见证包在 11 → 8 这一跳等待 52.871 微秒。队列记录中存在其他流的重复数据，说明恢复流量竞争值得继续检查；还不能据此认定所有等待都可消除。</p><div class="small-note warm">该流不是全窗口最后完成者。减少它的等待，可能被其他通信的等待覆盖。不能直接写成“推理可加速 61 微秒”。</div></aside></div>
+ <div class="comparison" style="margin-top:20px"><div class="item"><span class="status">已经支持的判断</span><h3>恢复方式确实会改变共享网络的排队</h3><p>已有正常/故障对照，具备真实包、源反馈和逐跳队列记录，可以把某条流的接收变化解释清楚。这里“真实包”指仿真实际产生的包。</p></div><div class="item"><span class="status pending">尚需验证的判断</span><h3>这种排队是否值得提出一种新方法？</h3><p>要先证明它进入完整任务的关键路径，并且现有恢复限速、公平调度等方法仍有不足。多个独立请求共享网络的影响也尚未建立。</p></div></div>
+</section>
+<section class="section" id="plan" aria-labelledby="plan-title">
+ <div class="section-num">04 / 创新候选与下周计划</div><h2 id="plan-title">让恢复安排服务于任务完成</h2><p class="sub">候选方向：结合当前可观测的 MoE 阶段进度，安排恢复流与正常流的发送节奏。下面是计划，不是已实现的新算法，也未承诺性能数字。</p>
+ <div class="gates"><article class="gate"><span class="status pending">第一步 · 证明空间</span><h3>完整调用还被网络拖慢多少？</h3><p>将成熟恢复与拥塞控制接入现代完整调用；沿依赖检查故障前后完成时间，区分排队、源限速、等待反馈及计算假设。</p><p class="deliver">交付：整次调用的正常/故障对照，以及每类等待的依据。剩余影响很小，就结束这个候选。</p></article><article class="gate"><span class="status pending">第二步 · 比过已有方法</span><h3>阶段信息是否真的有帮助？</h3><p>比较默认恢复、固定恢复限速、普通公平调度和阶段感知调度。方法只能使用当时已知的信息，不能提前知道故障或未来关键路径。</p><p class="deliver">交付：相对强基线的完成时间、吞吐与恢复代价。通用方法已足够，就不包装新机制。</p></article><article class="gate"><span class="status pending">第三步 · 检验适用边界</span><h3>换热点、batch 和网络还有效吗？</h3><p>在能力和预算明确后比较不同请求规模、热点、分层带宽和故障位置，补独立负载；再逐步扩大规模，记录宿主开销。</p><p class="deliver">交付：在哪些条件下有效、何时无收益或变差。完整千卡应用与硬件校准仍需单独验证。</p></article></div>
+ <div class="small-note">预期收益的主指标：<strong>（基线任务完成时间 − 方法任务完成时间）÷ 基线任务完成时间</strong>。故障额外等待的减少比例另外报告。只减少某条流的等待或模拟器同步次数，不算同一种收益。</div>
+ <div class="questions"><div><h3>有意义吗？</h3><p>如果网络恢复确实卡住任务终点，减少等待有助于提升服务效率、降低同资源下的尾延迟；当前尚未证明生产收益或成本节省。</p></div><div><h3>能做出来吗？</h3><p>小规模功能调用与包级分析已经具备。接下来先完成强基线集成和最小调度对照；真实 GPU/RDMA 性能仍需要匹配环境校准。</p></div><div><h3>为什么由我们做？</h3><p>现有链路能同时看到专家选择、通信依赖、实际包和队列，具备验证跨层问题的条件。平台能力是研究基础，不自动构成论文创新。</p></div><div><h3>最终形成什么？</h3><p>先交付可复核的收益空间与机制解释；若新方法优于已有方法，再形成论文和可复用基准。研究候选不成立时保留负面结论。</p></div></div>
+ <details><summary>查看可直接用于周报的文字</summary><div class="weekly-copy"><p><strong>点评：</strong>关注研究收益和剩余优化空间，明确预期成果，回答“有没有意义、能不能做出来、为什么由我们来做”。</p><p><strong>点评落实：</strong>本项研究面向 MoE 推理中的跨机通信拥塞与故障恢复，目标是在相同网络资源下减少任务等待。本周已具备真实专家路由、包级网络和完整功能调用的分析能力，并发现恢复期间未丢包通信受到排队拖累的现象。下一步以成熟恢复与拥塞控制为基线，先测清整次任务的收益空间，再验证结合任务进度的调度方法，形成有明确适用边界的机制结论和实验基准。</p><p><strong>本周工作：</strong></p><ol><li>跑通基于真实专家选择的四卡单层 MoE 完整通信调用，保留阶段依赖与屏障，能够追踪任务等待。</li><li>完成正常与故障下的恢复机制对照，发现成熟选择性重传已显著减少通信窗口的故障增量，明确后续必须采用强基线。</li><li>定位未丢包通信受到共享队列拖累的现象，并复核数据与任务依赖，明确仍需验证其对整次任务的影响。</li></ol><p><strong>下周计划：</strong></p><ol><li>将成熟恢复机制接入完整调用，测清故障与排队造成的任务级等待及优化空间。</li><li>比较恢复限速、公平调度与结合任务进度的调度，评估完成时间、吞吐及恢复代价。</li><li>结合不同 batch、专家热点和网络带宽验证适用边界，条件具备后逐步扩大规模。</li></ol></div></details>
+</section>
+<section class="section" id="evidence" aria-labelledby="evidence-title"><div class="section-head"><div><div class="section-num">05 / 数据与证据</div><h2 id="evidence-title">每一个数字，都能回到保存的记录</h2><p class="sub">本页仅从版本化摘要提取既有结果；没有新增仿真、硬件测量或性能结论。下列链接在仓库中可用，单独复制网页后仍可查看内嵌数据及原始数值表。</p></div><button class="action" id="download-data" type="button">下载本页数据 JSON</button></div><p class="caption">来源文件 SHA256 用于核对本页使用的版本；不是硬件校准或原始包级证据的替代品。<span id="data-status" role="status"></span></p><div class="table-scroll"><table><thead><tr><th>来源</th><th>SHA256</th></tr></thead><tbody><tr><td><a href="../../../experiments/selective_externality/results/20261024/summary.json">通信窗口：四条件结果与逐流分析</a><small>experiments/selective_externality/results/20261024/summary.json</small></td><td><code>abb01e0e859e40307ef1b2f27b8601aab484770e458bad7ab4abe6083fa8fed5</code></td></tr>
+<tr><td><a href="../../../experiments/causal_fault/results/20261024/summary.json">保留任务依赖：四条件参考结果</a><small>experiments/causal_fault/results/20261024/summary.json</small></td><td><code>1e664b1150f9b88e0b92a3be04606c7f66aa1c6362588e3182d61b440ec9d59e</code></td></tr>
+<tr><td><a href="../../../fixtures/native_callback_batches/verification.json">四卡完整功能调用：独立核验</a><small>fixtures/native_callback_batches/verification.json</small></td><td><code>b84f847b51c8da85ba61becc3d646a5782203b1344790a3bf5f7562aa915022a</code></td></tr>
+<tr><td><a href="../../../experiments/selective_externality/protocol.md">通信窗口：参数与执行前设计</a><small>experiments/selective_externality/protocol.md</small></td><td><code>101b3cd57b0621fc2307fcf02357847edbd8a0b780c83523fb44050f9ed7698e</code></td></tr>
+<tr><td><a href="../../../experiments/causal_fault/README.md">旧式任务图的适用范围</a><small>experiments/causal_fault/README.md</small></td><td><code>622468dcdbd636931eb5fd4a0c2250de20574a95a6b96c488a14aa40cba43c97</code></td></tr>
+<tr><td><a href="../../../docs/reviews/原生批次交付与四卡完整调用_20261025.md">四卡完整调用的结果与捕获边界</a><small>docs/reviews/原生批次交付与四卡完整调用_20261025.md</small></td><td><code>5b5a368f636a75478c70023cf69a269d3490b3c13360d65c21a4e1f6b4ee0207</code></td></tr></tbody></table></div><div class="small-note warm">四份推理路由 ≠ 独立大样本；逻辑 GPU 端点 ≠ 实机 GPU；四卡功能调用 ≠ 完整 R1 推理；千端点合成网络 ≠ 完整千卡应用；已有机制的对照改善 ≠ 新算法贡献。</div><p class="caption">模型路由来源：<a href="https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/tree/27febb7b2d24169560a9f6f83d38eb53f94916cf">core12345/MoE_expert_selection_trace · 固定版本</a>，cognitivecomputations/DeepSeek-R1-AWQ / MMLU。四个文件编号：1472、1808、2675、6447。它们提供专家选择，不提供本页所需的匹配硬件时延校准。</p></section>
+<noscript><div class="no-js">浏览器未启用 JavaScript。正文、参数、来源及两组原始结果表仍可阅读；图表切换与数据下载需要 JavaScript。</div></noscript>
+<footer class="foot"><span>MoE Scale-Out · 本周工作可视化 · 2026-10-25</span><span>本地报告 / 不依赖外部脚本、字体或服务</span></footer>
+</main>
+<script id="report-data" type="application/json">{
+  "schema": "moe-weekly-network-report/1",
+  "as_of": "2026-10-25",
+  "window": {
+    "platform_commit": "2dc9eb71a801eb88e8757bb33324e8b2729ab2d3",
+    "cases": {
+      "healthy-gbn": {
+        "all_work_accepted_ns": 138887,
+        "all_work_ack_ns": 144955,
+        "tx_payload_bytes": 1070336
+      },
+      "failed-gbn": {
+        "all_work_accepted_ns": 159945,
+        "all_work_ack_ns": 163983,
+        "tx_payload_bytes": 1636432
+      },
+      "healthy-selective": {
+        "all_work_accepted_ns": 138992,
+        "all_work_ack_ns": 145064,
+        "tx_payload_bytes": 1070336
+      },
+      "failed-selective": {
+        "all_work_accepted_ns": 141539,
+        "all_work_ack_ns": 145579,
+        "tx_payload_bytes": 1530184
+      }
+    },
+    "fault_effect": {
+      "gbn": {
+        "accepted_delta_ns": 21058,
+        "acked_delta_ns": 19028,
+        "extra_payload_bytes": 566096
+      },
+      "selective": {
+        "accepted_delta_ns": 2547,
+        "acked_delta_ns": 515,
+        "extra_payload_bytes": 459848
+      }
+    }
+  },
+  "graph": {
+    "cases": {
+      "healthy-gbn": {
+        "group_completion_ns": 397833,
+        "tx_payload_bytes": 2609152
+      },
+      "failed-gbn": {
+        "group_completion_ns": 586258,
+        "tx_payload_bytes": 3055872
+      },
+      "healthy-selective": {
+        "group_completion_ns": 397733,
+        "tx_payload_bytes": 2609152
+      },
+      "failed-selective": {
+        "group_completion_ns": 576245,
+        "tx_payload_bytes": 2895872
+      }
+    },
+    "contrasts": [
+      {
+        "mode": "gbn",
+        "group_delta_ns": 188425,
+        "step_delta_ns": [
+          164260,
+          188425
+        ],
+        "extra_payload_bytes": 446720
+      },
+      {
+        "mode": "selective",
+        "group_delta_ns": 178512,
+        "step_delta_ns": [
+          141145,
+          178512
+        ],
+        "extra_payload_bytes": 286720
+      }
+    ],
+    "scope": "saved legacy contribution-copy reference, declared compute, no ASTRA replay/modern GIN/calibration/holdout"
+  },
+  "four_rank": {
+    "application": {
+      "passed": true,
+      "modern_operations": 118,
+      "modern_events": 566,
+      "native_remote_operations": 108,
+      "native_local_operations": 53,
+      "paths": {
+        "gin_self": 20,
+        "rdma": 88,
+        "local": 10
+      },
+      "calls": 1,
+      "ranks": 4,
+      "decisions": 65,
+      "finish_ns": 70610,
+      "actual_target_applications": 108,
+      "actual_source_packets": 3840,
+      "retransmitted_source_packets": 0,
+      "decoded_frames": 136,
+      "complete_work_records": 136,
+      "physical_capture_events": 20000,
+      "checked_captured_endpoint_data_records": 2557,
+      "observed_endpoint_ack_records": 841,
+      "full_physical_path_or_ack_audit_complete": false,
+      "omitted_physical_records": 103168,
+      "transport_scope": "complete source bytes/frames/work/transaction memory; physical data and ACK validation restricted to capture prefix",
+      "scope": "functional byte/event acceptance, not numerical model or calibrated GPU/provider performance"
+    },
+    "delivery": {
+      "physical_decisions": 65,
+      "logical_steps": 360,
+      "callbacks": 835,
+      "native_nodes": 161,
+      "peak_batches": 58,
+      "peak_compact_bytes": 8234
+    },
+    "original_decisions": 256,
+    "capture_complete": false,
+    "omitted_capture_events": 103168
+  },
+  "interference": {
+    "timer": "selective",
+    "stream": 8,
+    "category": "no_drop_off_failed_edge_same_paths",
+    "ack_delta_ns": 61500,
+    "accepted_delta_ns": 61213,
+    "extra_tx_payload_bytes": 0,
+    "witness_same_offset": true,
+    "witness_source_tx_delta_ns": -28,
+    "witness_queue_delta_ns": 61241,
+    "witness_nonqueue_delta_ns": 0
+  },
+  "stream8": {
+    "healthy-gbn": {
+      "accepted_ns": 70958,
+      "acked_ns": 77026,
+      "tx_payload_bytes": 101248,
+      "witness": {
+        "source_tx_ns": 24304,
+        "destination_rx_ns": 70958,
+        "queue_wait_ns": 39934,
+        "nonqueue_transit_ns": 6720
+      },
+      "queues": [
+        {
+          "node": 12,
+          "peer": 15,
+          "wait_ns": 39388
+        },
+        {
+          "node": 15,
+          "peer": 17,
+          "wait_ns": 187
+        },
+        {
+          "node": 17,
+          "peer": 11,
+          "wait_ns": 187
+        },
+        {
+          "node": 11,
+          "peer": 8,
+          "wait_ns": 172
+        },
+        {
+          "node": 8,
+          "peer": 0,
+          "wait_ns": 0
+        }
+      ]
+    },
+    "failed-gbn": {
+      "accepted_ns": 138288,
+      "acked_ns": 145007,
+      "tx_payload_bytes": 101248,
+      "witness": {
+        "source_tx_ns": 24272,
+        "destination_rx_ns": 138288,
+        "queue_wait_ns": 107296,
+        "nonqueue_transit_ns": 6720
+      },
+      "queues": [
+        {
+          "node": 12,
+          "peer": 15,
+          "wait_ns": 39045
+        },
+        {
+          "node": 15,
+          "peer": 17,
+          "wait_ns": 12195
+        },
+        {
+          "node": 17,
+          "peer": 11,
+          "wait_ns": 172
+        },
+        {
+          "node": 11,
+          "peer": 8,
+          "wait_ns": 55884
+        },
+        {
+          "node": 8,
+          "peer": 0,
+          "wait_ns": 0
+        }
+      ]
+    },
+    "healthy-selective": {
+      "accepted_ns": 71029,
+      "acked_ns": 77101,
+      "tx_payload_bytes": 101248,
+      "witness": {
+        "source_tx_ns": 24300,
+        "destination_rx_ns": 71029,
+        "queue_wait_ns": 40009,
+        "nonqueue_transit_ns": 6720
+      },
+      "queues": [
+        {
+          "node": 12,
+          "peer": 15,
+          "wait_ns": 39477
+        },
+        {
+          "node": 15,
+          "peer": 17,
+          "wait_ns": 188
+        },
+        {
+          "node": 17,
+          "peer": 11,
+          "wait_ns": 172
+        },
+        {
+          "node": 11,
+          "peer": 8,
+          "wait_ns": 172
+        },
+        {
+          "node": 8,
+          "peer": 0,
+          "wait_ns": 0
+        }
+      ]
+    },
+    "failed-selective": {
+      "accepted_ns": 132242,
+      "acked_ns": 138601,
+      "tx_payload_bytes": 101248,
+      "witness": {
+        "source_tx_ns": 24272,
+        "destination_rx_ns": 132242,
+        "queue_wait_ns": 101250,
+        "nonqueue_transit_ns": 6720
+      },
+      "queues": [
+        {
+          "node": 12,
+          "peer": 15,
+          "wait_ns": 39552
+        },
+        {
+          "node": 15,
+          "peer": 17,
+          "wait_ns": 8655
+        },
+        {
+          "node": 17,
+          "peer": 11,
+          "wait_ns": 172
+        },
+        {
+          "node": 11,
+          "peer": 8,
+          "wait_ns": 52871
+        },
+        {
+          "node": 8,
+          "peer": 0,
+          "wait_ns": 0
+        }
+      ]
+    }
+  },
+  "sources": [
+    {
+      "path": "experiments/selective_externality/results/20261024/summary.json",
+      "label": "通信窗口：四条件结果与逐流分析",
+      "sha256": "abb01e0e859e40307ef1b2f27b8601aab484770e458bad7ab4abe6083fa8fed5"
+    },
+    {
+      "path": "experiments/causal_fault/results/20261024/summary.json",
+      "label": "保留任务依赖：四条件参考结果",
+      "sha256": "1e664b1150f9b88e0b92a3be04606c7f66aa1c6362588e3182d61b440ec9d59e"
+    },
+    {
+      "path": "fixtures/native_callback_batches/verification.json",
+      "label": "四卡完整功能调用：独立核验",
+      "sha256": "b84f847b51c8da85ba61becc3d646a5782203b1344790a3bf5f7562aa915022a"
+    },
+    {
+      "path": "experiments/selective_externality/protocol.md",
+      "label": "通信窗口：参数与执行前设计",
+      "sha256": "101b3cd57b0621fc2307fcf02357847edbd8a0b780c83523fb44050f9ed7698e"
+    },
+    {
+      "path": "experiments/causal_fault/README.md",
+      "label": "旧式任务图的适用范围",
+      "sha256": "622468dcdbd636931eb5fd4a0c2250de20574a95a6b96c488a14aa40cba43c97"
+    },
+    {
+      "path": "docs/reviews/原生批次交付与四卡完整调用_20261025.md",
+      "label": "四卡完整调用的结果与捕获边界",
+      "sha256": "5b5a368f636a75478c70023cf69a269d3490b3c13360d65c21a4e1f6b4ee0207"
+    }
+  ]
+}</script>
+<script>
+'use strict';
+(() => {
+ const D=JSON.parse(document.getElementById('report-data').textContent);
+ const $=id=>document.getElementById(id);
+ const us=n=>(n/1000).toFixed(3);
+ function bars(id, rows, max, title){
+  const host=$(id); host.replaceChildren();
+  const ceiling=max*1.06;
+  rows.forEach(row=>{
+   const line=document.createElement('div'); line.className='chart-row';
+   const label=document.createElement('span'); label.textContent=row.label;
+   const track=document.createElement('div'); track.className='track';
+   const fill=document.createElement('div'); fill.className='bar'+(row.fault?' fault':'');
+   fill.style.width=(row.value/ceiling*100)+'%'; fill.setAttribute('aria-hidden','true');
+   track.append(fill);
+   const val=document.createElement('span'); val.className='chart-value'; val.textContent=us(row.value);
+   line.append(label,track,val); host.append(line);
+  });
+  host.setAttribute('aria-label', title+'；'+rows.map(x=>x.label+' '+us(x.value)+' 微秒').join('；'));
+  return us(ceiling);
+ }
+ function drawWindow(){
+  const metric=$('metric').value, delta=$('measure').value==='delta';
+  const key=metric==='accepted'?'all_work_accepted_ns':'all_work_ack_ns';
+  const deltaKey=metric==='accepted'?'accepted_delta_ns':'acked_delta_ns';
+  const effect=D.window.fault_effect;
+  let rows;
+  if(delta){rows=[{label:'回退重传',value:effect.gbn[deltaKey],fault:true},{label:'选择性重传',value:effect.selective[deltaKey],fault:true}];}
+  else{rows=['healthy-gbn','failed-gbn','healthy-selective','failed-selective'].map((name,i)=>({label:['回退 / 正常','回退 / 故障','选择 / 正常','选择 / 故障'][i],value:D.window.cases[name][key],fault:name.startsWith('failed')}));}
+  const bound=bars('window-chart',rows,Math.max(...rows.map(x=>x.value)),'实验A通信窗口');
+  $('window-scale').textContent='单位：微秒 · 横轴从 0 起，当前上限 '+bound;
+  $('window-legend').classList.toggle('hidden',delta);
+  const reduction=(1-effect.selective[deltaKey]/effect.gbn[deltaKey])*100;
+  $('window-gain').textContent=reduction.toFixed(1)+'%';
+  $('window-gain-text').textContent='故障'+(metric==='accepted'?'接收':'确认')+'增量的下降比例；不是推理加速比例';
+  $('window-meaning').textContent=(metric==='accepted'?'接收完成：所有写入都已被目标接收。':'确认完成（实验主指标）：所有写入都已被发送端确认。')+' 故障增量 = 同一重传模式下的故障时刻 − 正常时刻。';
+ }
+ function drawGraph(){
+  const rows=D.graph.contrasts.map(x=>({label:x.mode==='gbn'?'回退重传':'选择性重传',value:x.group_delta_ns,fault:true}));
+  const bound=bars('graph-chart',rows,Math.max(...rows.map(x=>x.value)),'实验B保留依赖参考图的故障增量');
+  $('graph-scale').textContent='故障额外任务等待 / 微秒 · 从 0 起，上限 '+bound;
+  $('graph-gain').textContent=((1-rows[1].value/rows[0].value)*100).toFixed(1)+'%';
+  $('graph-total-gain').textContent=((1-D.graph.cases['failed-selective'].group_completion_ns/D.graph.cases['failed-gbn'].group_completion_ns)*100).toFixed(2)+'%';
+ }
+ function drawQueues(failed){
+  const name=failed?'failed-selective':'healthy-selective', row=D.stream8[name];
+  const max=Math.max(...['healthy-selective','failed-selective'].flatMap(k=>D.stream8[k].queues.map(q=>q.wait_ns)));
+  const bound=bars('queue-chart',row.queues.map(q=>({label:q.node+' → '+q.peer,value:q.wait_ns,fault:failed})),max,'stream8见证包逐跳排队');
+  $('queue-scale').textContent='逐跳等待 / 微秒 · 从 0 起，固定上限 '+bound;
+  $('queue-healthy').setAttribute('aria-pressed',String(!failed)); $('queue-failed').setAttribute('aria-pressed',String(failed));
+  $('queue-detail').textContent=(failed?'故障':'正常')+'：见证包在 '+us(row.witness.source_tx_ns)+' 微秒上网、'+us(row.witness.destination_rx_ns)+' 微秒接收；逐跳排队合计 '+us(row.witness.queue_wait_ns)+' 微秒。';
+ }
+ $('metric').addEventListener('change',drawWindow); $('measure').addEventListener('change',drawWindow);
+ $('queue-healthy').addEventListener('click',()=>drawQueues(false)); $('queue-failed').addEventListener('click',()=>drawQueues(true));
+ $('download-data').addEventListener('click',()=>{
+  const blob=new Blob([JSON.stringify(D,null,2)+'\n'],{type:'application/json;charset=utf-8'});
+  const url=URL.createObjectURL(blob), a=document.createElement('a'); a.href=url; a.download='moe-weekly-network-20261025.json'; a.click();
+  setTimeout(()=>URL.revokeObjectURL(url),1000); $('data-status').textContent='已生成包含来源校验值的本页数据。';
+ });
+ drawWindow(); drawGraph(); drawQueues(true);
+})();
+</script>
+</body>
+</html>

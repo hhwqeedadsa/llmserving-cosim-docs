@@ -1,0 +1,43 @@
+{
+  "passed": true,
+  "case": "timed-healthy",
+  "whole_native_modern_control_equal": true,
+  "normalization": "only verified fixed eight library paths",
+  "delivery": {
+    "decisions": 165,
+    "callbacks": 437,
+    "native_submissions": 97,
+    "suppressed_event_batches": 48
+  },
+  "acceptance": {
+    "passed": true,
+    "modern_operations": 60,
+    "modern_events": 322,
+    "native_remote_operations": 50,
+    "native_local_operations": 47,
+    "paths": {
+      "gin_self": 20,
+      "rdma": 30,
+      "local": 10
+    },
+    "calls": 2,
+    "ranks": 2,
+    "decisions": 165,
+    "finish_ns": 105621,
+    "actual_target_applications": 50,
+    "actual_source_packets": 100,
+    "retransmitted_source_packets": 0,
+    "decoded_frames": 46,
+    "observed_out_of_order_data_packets": 0,
+    "physical_capture_events": 4400,
+    "scope": "functional byte/event acceptance, not numerical model or calibrated GPU/provider performance"
+  },
+  "native_full_snapshot_shadow_enabled": false,
+  "host_observation": {
+    "native_records": 18738,
+    "progress_calls": 1368,
+    "closed_progress_wall_ns": 35865854,
+    "closed_progress_cpu_ns": 35778125,
+    "scope": "includes observer overhead; no same-host wall-time acceleration claim"
+  }
+}

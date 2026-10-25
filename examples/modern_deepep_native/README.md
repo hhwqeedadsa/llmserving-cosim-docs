@@ -35,6 +35,8 @@ python3 -B -m moe_ub_cosim scaleout host-timing-check \
 
 Python阶段区分 `controller_advance/wake_conditions/python_candidate_copy/python_candidate_validate/python_command_write/python_wait_line`；原生阶段区分 `session_pump/operation_progress_snapshot/session_events/session_candidate_validate/session_frontend_wait`。同进程父阶段包含子阶段，跨进程等待重叠，不能直接相加。`simulator_run`的exclusive时间包含未细分的传输、内存与事件处理，不能全称为包处理。
 
+增量状态收集版本中，`operation_progress_snapshot`表示构造本次变化的操作行；旧版本在此构造全部操作行。阶段名保持，比较时必须核对源码版本，不能将调用次数理解为发生变化的操作数。高频逐扫描记录的上限仍在，不宜将开启该观测的大场景作为性能基准。
+
 原生 `session_progress_enter/exit` 快照记录当时的ns3时刻、处理事件数、决策/任务/回调数；不是终止瞬间或最终内存，也不是包计数。日志只供离线诊断，控制器不读取它决定工作。超时阶段没有结束记录时，分析器保留open_spans，不虚构耗时；`all_traces_complete`与网络成功分开。具体字段及计数限制见[宿主记录](../../docs/record_storage.md#原生rdma宿主阶段记录)。
 
 记录器每进程最多65,536条；达到上限时明确失败，保留合法前缀，不静默截断或自动扩大额度。高频通知的大场景可能先耗尽观测额度；这类失败与网络失败、宿主限时分开解释。

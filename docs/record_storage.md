@@ -437,6 +437,8 @@ A3 资源模板的原生 STORE 结果在 `transfers` 行内附加 `local_facts`�
 
 ## 原生RDMA宿主阶段记录
 
+增量操作收集版本的session保留`operation_progress_snapshot`阶段名，内部仅构造实际变化行；旧版本为全量行构造。调用次数仍是收集次数，不代表新回调数。最终事务结果和控制回调字段不变；是否使用增量实现须根据所保存的后端源码hash确定。
+
 `scaleout rdma-run --host-timing`及`modern-deepep-native --host-timing`的两份 JSONL 使用 `moe-host-phase-trace/1`。它们不属于网络 `result.json`，不参与计算或网络调度。实际用法与计时边界见[RDMA示例](../examples/scaleout_rdma/README.md#可选宿主阶段计时)和[现代事务示例](../examples/modern_deepep_native/README.md#可选的宿主开销观测)。RDMA入口在 `provenance.json` 记录选项、格式版本和 Python 记录模块 hash；现代入口另存`host-timing.json`记录源码身份，原生可执行文件 hash 仍按原方式保存。
 
 | 记录 | 字段与含义 |

@@ -27,6 +27,9 @@ class RemoteTransactions {
   Json Report() const;
   // Actual operation transitions only; no remote memory/payload truth.
   Json OperationProgress() const;
+  // Consume changed rows only, in the same id order as OperationProgress().
+  // Reporting a full snapshot never consumes this independent change set.
+  Json TakeOperationProgressUpdates();
   std::function<void()> changed;
  private:
   struct Operation {
@@ -47,6 +50,11 @@ class RemoteTransactions {
     int64_t self_apply=0,self_complete=0,self_available=0;
     Connection(unsigned s,unsigned d,unsigned nic,unsigned depth,unsigned maximum):src(s),dst(d),destination_nic(nic),queue(depth,maximum) {}
   };
+  Json ProgressRow(const Operation&) const;
+  std::set<uint64_t> dirty_progress_;
+#ifdef MOE_VERIFY_PROGRESS_UPDATES
+  Json progress_shadow_=Json::object();
+#endif
   void Pump(uint64_t connection);
   void PumpExplicit(uint64_t connection);
   void Send(Operation& op);

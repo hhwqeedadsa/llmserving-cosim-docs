@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "network_executed": false,
+  "rejected": [
+    "finish",
+    "physical_packet",
+    "callback_loss",
+    "registration_decision",
+    "modern_time",
+    "native_operation"
+  ]
+}

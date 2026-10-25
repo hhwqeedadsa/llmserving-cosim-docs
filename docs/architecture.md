@@ -1,5 +1,7 @@
 # 系统架构与执行过程
 
+原生事务会话每次网络通知仍正常推进依赖、本地条件和排空检查。操作状态收集通过`RemoteTransactions::TakeOperationProgressUpdates()`消费实际变化的id，按原id/阶段顺序交付回调，再与本地事件和控制闹钟稳定按时间排序；最终`Report/OperationProgress`仍读取全量状态。增量索引不是前端可见的调度信息，也不改变网络或GPU模型。
+
 现代事务入口可选复用HostTiming，分别记录Python控制推进和原生session/Simulator宿主阶段。观测不参与就绪、时钟或选路；同进程嵌套和跨进程等待不能相加，失败只解释已闭合阶段与最近快照。见[现代入口](../examples/modern_deepep_native/README.md#可选的宿主开销观测)。
 
 `modern_native.py`提供功能接入：现代事件由同一次原生事务会话的实际回调推进，本地copy/计数清零/声明计算也在该时钟执行。必要self、动态slot和跨调用复用保留；accepted/visible采用显式native-apply功能假设。四rank原始路由仍未完成验收，已遇到控制交互和宿主限时两种限制，见[公开范围](../examples/modern_deepep_native/README.md)。

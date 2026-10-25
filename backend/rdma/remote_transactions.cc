@@ -339,7 +339,7 @@ void RemoteTransactions::Submit(const Json& input) {
   ConsumeConditions(input,observations);
   if(op.has_source) {memory_.AcquireRead(id,op.source);SourceEvent(id,"acquired",op.source);}
   AcquireApplicationUse(input);
-  c.operations.push_back(id);operations_.emplace(id,std::move(op));Pump(connection);
+  c.operations.push_back(id);operations_.emplace(id,std::move(op));dirty_progress_.insert(id);Pump(connection);
 }
 void RemoteTransactions::Pump(uint64_t connection) {
   if(explicit_submission_) {PumpExplicit(connection);return;}
@@ -356,11 +356,11 @@ void RemoteTransactions::Pump(uint64_t connection) {
     }
     c.queue.Prepare(op.ticket);c.queue.PublishThrough(op.ticket+1);
     const auto work=c.queue.ConsumePublished();Require(work && work->work_id==id,"transaction queue consumption mismatch");
-    op.published=MemoryNow();
+    op.published=MemoryNow();dirty_progress_.insert(id);
     if(c.self) {EnqueueSelf(op);continue;}
     transport_.SubmitPayload(connection*2,transport_work_++,EncodeMemoryFrame(op.request),[this,id,connection](){
       auto& w=operations_.at(id);Require(w.request_ack<0,"duplicate request ACK callback");
-      w.request_ack=MemoryNow();Retire(connection);
+      w.request_ack=MemoryNow();dirty_progress_.insert(id);Retire(connection);
     });
     if(bounded_buffers_)std::vector<uint8_t>().swap(op.request.body);
   }
@@ -373,7 +373,7 @@ void RemoteTransactions::PumpExplicit(uint64_t connection) {
   for(const auto id:c.operations) {
     auto& op=operations_.at(id);
     if(op.prepared>=0 || !c.queue.CanPrepare(op.ticket))continue;
-    c.queue.Prepare(op.ticket);op.prepared=MemoryNow();prepared=true;
+    c.queue.Prepare(op.ticket);op.prepared=MemoryNow();dirty_progress_.insert(id);prepared=true;
     if(!op.aggregate) {
       c.queue.PublishThrough(op.ticket+1);
       publications_.push_back({{"connection",connection},{"exclusive",op.ticket+1},
@@ -390,11 +390,11 @@ void RemoteTransactions::Send(Operation& op) {
     op.request.body=memory_.ReadBytes(s.owner,s.key,s.address,s.bytes);
     SourceEvent(op.id,"captured",s,&op.request.body);
   }
-  op.published=MemoryNow();const auto id=op.id,connection=op.connection;
+  op.published=MemoryNow();dirty_progress_.insert(op.id);const auto id=op.id,connection=op.connection;
   if(connections_.at(connection).self) {EnqueueSelf(op);return;}
   transport_.SubmitPayload(connection*2,transport_work_++,EncodeMemoryFrame(op.request),[this,id,connection](){
     auto& w=operations_.at(id);Require(w.request_ack<0,"duplicate request ACK callback");
-    w.request_ack=MemoryNow();Retire(connection);
+    w.request_ack=MemoryNow();dirty_progress_.insert(id);Retire(connection);
   });
 }
 void RemoteTransactions::EnqueueSelf(Operation& op) {
@@ -403,7 +403,7 @@ void RemoteTransactions::EnqueueSelf(Operation& op) {
   c.self_available=begin+c.self_complete;
   ns3::Simulator::Schedule(ns3::NanoSeconds(begin-MemoryNow()),[this,id]() {
     auto& operation=operations_.at(id);Require(operation.self_started<0,"duplicate self service start");
-    operation.self_started=MemoryNow();
+    operation.self_started=MemoryNow();dirty_progress_.insert(id);
   });
   // The source bytes were captured at publication under their existing lease.
   // No physical packet, fake ACK or GIN wire frame is generated for self.
@@ -411,7 +411,7 @@ void RemoteTransactions::EnqueueSelf(Operation& op) {
   ns3::Simulator::Schedule(ns3::NanoSeconds(begin+c.self_apply-MemoryNow()),[this,connection,frame]() {Request(connection,frame);});
   ns3::Simulator::Schedule(ns3::NanoSeconds(begin+c.self_complete-MemoryNow()),[this,id,connection]() {
     auto& operation=operations_.at(id);Require(operation.applied>=0 && operation.self_finished<0,"invalid self service completion");
-    operation.self_finished=MemoryNow();Retire(connection);
+    operation.self_finished=MemoryNow();dirty_progress_.insert(id);Retire(connection);
   });
 }
 void RemoteTransactions::Request(uint64_t connection,const MemoryFrame& frame) {
@@ -428,7 +428,7 @@ void RemoteTransactions::Request(uint64_t connection,const MemoryFrame& frame) {
   Require(frame.sequence<c.operations.size(),"target request has no submitted application observer");
   auto& op=operations_.at(c.operations.at(frame.sequence));
   if(result.duplicate)++duplicates_;
-  else {Require(op.applied<0,"duplicate target application");op.applied=MemoryNow();}
+  else {Require(op.applied<0,"duplicate target application");op.applied=MemoryNow();dirty_progress_.insert(op.id);}
   if(c.self && result.atomic)op.returned_value=result.old_value;
   if(result.atomic && !c.self) {
     MemoryFrame reply;reply.verb=MemoryFrame::Reply;reply.sequence=frame.sequence;reply.body=MemoryInteger(result.old_value);
@@ -443,7 +443,7 @@ void RemoteTransactions::Response(uint64_t connection,const MemoryFrame& frame) 
   Require(op.request.verb==MemoryFrame::FetchAdd && op.published>=0,"response for non-atomic/unpublished work");
   const auto value=MemoryRead(frame.body.data(),8);
   if(op.response>=0) {Require(value==op.returned_value,"conflicting duplicate response");return;}
-  op.returned_value=value;op.response=MemoryNow();Retire(connection);
+  op.returned_value=value;op.response=MemoryNow();dirty_progress_.insert(op.id);Retire(connection);
 }
 void RemoteTransactions::Retire(uint64_t connection) {
   auto& c=connections_.at(connection);
@@ -451,7 +451,7 @@ void RemoteTransactions::Retire(uint64_t connection) {
     auto& op=operations_.at(id);
     if(op.completed>=0)continue;
     if(c.self?op.self_finished<0:(op.request_ack<0 || (op.request.verb==MemoryFrame::FetchAdd && op.response<0)))break;
-    op.completed=MemoryNow();c.queue.CompleteThrough(op.ticket+1);
+    op.completed=MemoryNow();dirty_progress_.insert(id);c.queue.CompleteThrough(op.ticket+1);
     if(op.has_source) {memory_.ReleaseRead(id);SourceEvent(id,"released",op.source);}
     ReleaseApplicationUse(id);
   }
@@ -474,10 +474,7 @@ void RemoteTransactions::Close() {
   for(auto& item:connections_)item.second.queue.Close();
   transport_.Close();
 }
-Json RemoteTransactions::OperationProgress() const {
-  Json rows=Json::array();
-  for(const auto& item:operations_) {
-    const auto& op=item.second;
+Json RemoteTransactions::ProgressRow(const Operation& op) const {
     Json value={{"id",op.id},{"connection",op.connection},{"sequence",op.request.sequence},{"ticket",op.ticket},
       {"verb",op.request.verb==MemoryFrame::Put?"put":"fetch_add"},{"ready_ns",op.ready},{"published_ns",op.published},
       {"applied_ns",op.applied},{"request_acked_ns",op.request_ack},{"response_ns",op.response},{"completed_ns",op.completed}};
@@ -486,8 +483,28 @@ Json RemoteTransactions::OperationProgress() const {
     }
     if(op.request.verb==MemoryFrame::FetchAdd && (op.response>=0 || op.self_finished>=0))value["returned_value"]=op.returned_value;
     if(explicit_submission_)value["prepared_ns"]=op.prepared;
-    rows.push_back(value);
+    return value;
+}
+Json RemoteTransactions::OperationProgress() const {
+  Json rows=Json::array();
+  for(const auto& [id,op]:operations_)rows.push_back(ProgressRow(op));
+  return rows;
+}
+Json RemoteTransactions::TakeOperationProgressUpdates() {
+  Json rows=Json::array();
+  for(const auto id:dirty_progress_)rows.push_back(ProgressRow(operations_.at(id)));
+#ifdef MOE_VERIFY_PROGRESS_UPDATES
+  // Small-case development oracle only: derive changes independently from
+  // all current row values, rather than trusting the dirty marks being tested.
+  Json expected=Json::array();
+  for(const auto& row:OperationProgress()) {
+    const auto id=std::to_string(row.at("id").get<uint64_t>());
+    if(!progress_shadow_.contains(id) || progress_shadow_.at(id)!=row)expected.push_back(row);
+    progress_shadow_[id]=row;
   }
+  Require(rows==expected,"incremental operation progress differs from full snapshot changes");
+#endif
+  dirty_progress_.clear();
   return rows;
 }
 Json RemoteTransactions::Report() const {

@@ -1,0 +1,99 @@
+{
+  "passed": true,
+  "commands": [
+    {
+      "label": "fresh-topology",
+      "command": [
+        "/usr/bin/python3",
+        "-P",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "topology",
+        "--config",
+        "/dev/shm/moe-incremental-progress-20261025/restored/source/examples/modern_deepep_native/topology.json",
+        "--output",
+        "/dev/shm/moe-incremental-progress-20261025/restored/fresh-topology"
+      ],
+      "cwd": "/dev/shm/moe-incremental-progress-20261025/restored/empty-cwd"
+    },
+    {
+      "label": "fresh-modern",
+      "command": [
+        "/usr/bin/python3",
+        "-P",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "modern-deepep-native",
+        "--topology",
+        "/dev/shm/moe-incremental-progress-20261025/restored/fresh-topology",
+        "--protocol",
+        "/dev/shm/moe-incremental-progress-20261025/restored/evidence/inputs/synthetic-healthy-protocol.json",
+        "--config",
+        "/dev/shm/moe-incremental-progress-20261025/fresh-input.json",
+        "--backend",
+        "/dev/shm/moe-incremental-progress-20261025/restored/evidence/runtime/run-transaction-session",
+        "--output",
+        "/dev/shm/moe-incremental-progress-20261025/fresh-smoke",
+        "--callback-wakeups",
+        "--host-timing"
+      ],
+      "cwd": "/dev/shm/moe-incremental-progress-20261025/restored/empty-cwd"
+    },
+    {
+      "label": "fresh-host-summary",
+      "command": [
+        "/usr/bin/python3",
+        "-P",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "host-timing-check",
+        "--run",
+        "/dev/shm/moe-incremental-progress-20261025/fresh-smoke",
+        "--output",
+        "/dev/shm/moe-incremental-progress-20261025/fresh-host-summary.json"
+      ],
+      "cwd": "/dev/shm/moe-incremental-progress-20261025/restored/empty-cwd"
+    }
+  ],
+  "fresh_modern_acceptance": {
+    "passed": true,
+    "modern_operations": 28,
+    "modern_events": 152,
+    "native_remote_operations": 26,
+    "native_local_operations": 20,
+    "paths": {
+      "gin_self": 10,
+      "rdma": 16,
+      "local": 2
+    },
+    "calls": 1,
+    "ranks": 2,
+    "decisions": 45,
+    "finish_ns": 61918,
+    "actual_target_applications": 26,
+    "actual_source_packets": 92,
+    "retransmitted_source_packets": 0,
+    "decoded_frames": 24,
+    "observed_out_of_order_data_packets": 0,
+    "physical_capture_events": 4048,
+    "scope": "functional byte/event acceptance, not numerical model or calibrated GPU/provider performance"
+  },
+  "independent_actual_network_executions": 1,
+  "complete_comparisons_byte_identical": {
+    "default-healthy": "5acb50f5d8246f9398324e7e9b4e03a6a128a782f6b0f3823b59348c6abe6e53",
+    "timed-healthy": "c291fdf4b22829c9bcf45e7a4d9c4a372881a50933db2198ebaa4dc43a94d451",
+    "wake-fault": "ec3f1904291a8fa2fa380266b6ce70a1d99bbcba08b42bf30d123506e1caa846"
+  },
+  "four_failure_summary_byte_identical": true,
+  "source_root": "/dev/shm/moe-incremental-progress-20261025/restored/source",
+  "empty_cwd": "/dev/shm/moe-incremental-progress-20261025/restored/empty-cwd",
+  "fixed_runtime_and_eight_library_hashes_checked": true,
+  "representative_four_rank_call_complete": false,
+  "scope": "same-host ABI-bound runtime/eight libraries and copied Python; no clean native build or full four-rank acceptance"
+}

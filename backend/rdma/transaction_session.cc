@@ -95,7 +95,7 @@ class TransactionSession {
   Json Events() {
     Json events=Json::array();
     Json progress;
-    {auto phase=timing_.Span("operation_progress_snapshot");progress=transactions_.OperationProgress();}
+    {auto phase=timing_.Span("operation_progress_snapshot");progress=transactions_.TakeOperationProgressUpdates();}
     for(const auto& op:progress) {
       const auto id=op.at("id").get<uint64_t>();
       for(const auto& pair:std::vector<std::pair<std::string,std::string>>{{"submitted","ready_ns"},{"prepared","prepared_ns"},{"published","published_ns"},{"applied","applied_ns"},

@@ -1,5 +1,7 @@
 # 联合后端接口与执行规则
 
+`RemoteTransactions`在提交、准备、发布、目标应用、请求ACK、回复、自服务起止和退休时标记状态变化。session使用消费式`TakeOperationProgressUpdates()`，仅构造变化行；全量`OperationProgress()`及最终报告不消费索引。回调阶段、同纳秒稳定顺序、网络通知和本地条件检查保持。开发宏`MOE_VERIFY_PROGRESS_UPDATES`独立比较每次消费结果与全量快照变化，须同时重编事务对象和消费者，不用于规模性能测量。
+
 `transaction-session`末尾可选计时路径参数`NEW_HOST_TIMING.jsonl`启用已有HostTiming记录器，公开现代入口为`--host-timing`。时钟只用于独立日志，默认关闭；不添加Simulator事件或改变DECIDE/COMMIT。阶段与失败前缀语义见[现代观测](../examples/modern_deepep_native/README.md#可选的宿主开销观测)，字段见[输出说明](../docs/record_storage.md#原生rdma宿主阶段记录)。
 
 原生 session 的 `COMMIT` 可选 `wake_on`，格式为 `[{"operation": 0, "event": "completed"}]`，任一实际引用发生就唤醒。引用必须属于已注册或同命令新增的工作，不能重复、已交付或指定不可能的阶段（如 put 回复或 self 的线上 ACK）。省略恢复逐批交付，空列表只等待首次、新排空或实际控制闹钟；每条命令重新声明。整批校验先于工作/闹钟注册，256 次交互上限保持。所有积累回调在下一次唤醒按原顺序和时刻交付，默认报告不增加字段，显式模式另存 `session.callback_wakeups`。现代公开入口见[使用说明](../examples/modern_deepep_native/README.md)。

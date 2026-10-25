@@ -1,0 +1,37 @@
+{
+  "passed": true,
+  "network_executed": false,
+  "copied_source_root": true,
+  "empty_cwd": true,
+  "commands": [
+    [
+      "/usr/bin/python3",
+      "-P",
+      "-B",
+      "-m",
+      "fixtures.batched_callback_replay.audit",
+      "--source",
+      "/dev/shm/moe-batched-callback-replay-20261025/restored/evidence/original",
+      "--output",
+      "/dev/shm/moe-batched-callback-replay-20261025/restored/fresh-audit.json"
+    ],
+    [
+      "/usr/bin/python3",
+      "-P",
+      "-B",
+      "-m",
+      "fixtures.batched_callback_replay.verify",
+      "--source",
+      "/dev/shm/moe-batched-callback-replay-20261025/restored/evidence/original",
+      "--report",
+      "/dev/shm/moe-batched-callback-replay-20261025/restored/fresh-audit.json",
+      "--output",
+      "/dev/shm/moe-batched-callback-replay-20261025/restored/fresh-verification.json"
+    ]
+  ],
+  "reports_byte_identical": {
+    "fresh-audit.json": "a3422ecd18bd652ca0ba0ac7fd1d337e5f750660737ff0423f2b2c52aa071303",
+    "fresh-verification.json": "9c65b83b42b2f8ab008cfdcf2b8e538d99751c134abde0ac023ca9fc4b8bcbab"
+  },
+  "scope": "offline replay of saved callbacks only; no native build, network or full four-rank completion"
+}

@@ -1,0 +1,70 @@
+{
+  "verified": true,
+  "network_executed": false,
+  "platform_modified": false,
+  "cases": {
+    "default-healthy": {
+      "original_logical_steps": 213,
+      "candidate_physical_flushes": 63,
+      "pending_tail_batches": 0,
+      "maximum_buffered_batches": 10,
+      "maximum_compact_batch_payload_bytes": 1453,
+      "native_operations": 97,
+      "modern_events_preserved": 322,
+      "full_reconstructed_snapshot_equal": true,
+      "actual_delivered_events": 322,
+      "source_record_complete": true
+    },
+    "timed-healthy": {
+      "original_logical_steps": 165,
+      "candidate_physical_flushes": 63,
+      "pending_tail_batches": 0,
+      "maximum_buffered_batches": 9,
+      "maximum_compact_batch_payload_bytes": 1409,
+      "native_operations": 97,
+      "modern_events_preserved": 322,
+      "full_reconstructed_snapshot_equal": true,
+      "actual_delivered_events": 322,
+      "source_record_complete": true
+    },
+    "wake-fault": {
+      "original_logical_steps": 171,
+      "candidate_physical_flushes": 66,
+      "pending_tail_batches": 0,
+      "maximum_buffered_batches": 9,
+      "maximum_compact_batch_payload_bytes": 1334,
+      "native_operations": 97,
+      "modern_events_preserved": 322,
+      "full_reconstructed_snapshot_equal": true,
+      "actual_delivered_events": 322,
+      "source_record_complete": true
+    },
+    "four-routes": {
+      "original_logical_steps": 256,
+      "candidate_physical_flushes": 60,
+      "pending_tail_batches": 3,
+      "maximum_buffered_batches": 52,
+      "maximum_compact_batch_payload_bytes": 8029,
+      "native_operations": 157,
+      "modern_events_preserved": 526,
+      "full_reconstructed_snapshot_equal": true,
+      "actual_delivered_events": 520,
+      "source_record_complete": false
+    }
+  },
+  "physical_interface_implemented": false,
+  "same_ns_native_scheduler_order_verified": false,
+  "representative_four_rank_call_complete": false,
+  "scope": "saved front-end boundaries only; native suppressed Progress boundaries are not reconstructed",
+  "tamper_rejections": [
+    "changed_batch_time",
+    "lost_callbacks",
+    "lost_boundary",
+    "changed_batch_order",
+    "false_intermediate_submission",
+    "future_condition",
+    "false_completion",
+    "false_tail_wakeup",
+    "changed_dynamic_state"
+  ]
+}

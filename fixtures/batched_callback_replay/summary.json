@@ -1,0 +1,114 @@
+{
+  "verified": true,
+  "offline_candidate_accepted_for_native_design": true,
+  "offline_recovery_complete": true,
+  "original_logical_decision_limit_unchanged": 256,
+  "platform_sources_and_native_runtime_unchanged": true,
+  "python_tests": 14,
+  "new_python_tests": 6,
+  "dependency_checkouts_verified": 13,
+  "tamper_rejections": [
+    "changed_batch_time",
+    "lost_callbacks",
+    "lost_boundary",
+    "changed_batch_order",
+    "false_intermediate_submission",
+    "future_condition",
+    "false_completion",
+    "false_tail_wakeup",
+    "changed_dynamic_state"
+  ],
+  "cases": {
+    "default-healthy": {
+      "original_logical_steps": 213,
+      "candidate_physical_flushes": 63,
+      "pending_tail_batches": 0,
+      "maximum_buffered_batches": 10,
+      "maximum_compact_batch_payload_bytes": 1453,
+      "native_operations": 97,
+      "modern_events_preserved": 322,
+      "full_reconstructed_snapshot_equal": true,
+      "actual_delivered_events": 322,
+      "source_record_complete": true
+    },
+    "timed-healthy": {
+      "original_logical_steps": 165,
+      "candidate_physical_flushes": 63,
+      "pending_tail_batches": 0,
+      "maximum_buffered_batches": 9,
+      "maximum_compact_batch_payload_bytes": 1409,
+      "native_operations": 97,
+      "modern_events_preserved": 322,
+      "full_reconstructed_snapshot_equal": true,
+      "actual_delivered_events": 322,
+      "source_record_complete": true
+    },
+    "wake-fault": {
+      "original_logical_steps": 171,
+      "candidate_physical_flushes": 66,
+      "pending_tail_batches": 0,
+      "maximum_buffered_batches": 9,
+      "maximum_compact_batch_payload_bytes": 1334,
+      "native_operations": 97,
+      "modern_events_preserved": 322,
+      "full_reconstructed_snapshot_equal": true,
+      "actual_delivered_events": 322,
+      "source_record_complete": true
+    },
+    "four-routes": {
+      "original_logical_steps": 256,
+      "candidate_physical_flushes": 60,
+      "pending_tail_batches": 3,
+      "maximum_buffered_batches": 52,
+      "maximum_compact_batch_payload_bytes": 8029,
+      "native_operations": 157,
+      "modern_events_preserved": 526,
+      "full_reconstructed_snapshot_equal": true,
+      "actual_delivered_events": 520,
+      "source_record_complete": false
+    }
+  },
+  "physical_interface_implemented": false,
+  "same_ns_native_scheduler_order_verified": false,
+  "representative_four_rank_call_complete": false,
+  "overall_goal_complete": false,
+  "network_executed": false,
+  "scope": "saved front-end boundaries only; native suppressed Progress boundaries are not reconstructed",
+  "recovery": {
+    "passed": true,
+    "network_executed": false,
+    "copied_source_root": true,
+    "empty_cwd": true,
+    "commands": [
+      [
+        "/usr/bin/python3",
+        "-P",
+        "-B",
+        "-m",
+        "fixtures.batched_callback_replay.audit",
+        "--source",
+        "/dev/shm/moe-batched-callback-replay-20261025/restored/evidence/original",
+        "--output",
+        "/dev/shm/moe-batched-callback-replay-20261025/restored/fresh-audit.json"
+      ],
+      [
+        "/usr/bin/python3",
+        "-P",
+        "-B",
+        "-m",
+        "fixtures.batched_callback_replay.verify",
+        "--source",
+        "/dev/shm/moe-batched-callback-replay-20261025/restored/evidence/original",
+        "--report",
+        "/dev/shm/moe-batched-callback-replay-20261025/restored/fresh-audit.json",
+        "--output",
+        "/dev/shm/moe-batched-callback-replay-20261025/restored/fresh-verification.json"
+      ]
+    ],
+    "reports_byte_identical": {
+      "fresh-audit.json": "a3422ecd18bd652ca0ba0ac7fd1d337e5f750660737ff0423f2b2c52aa071303",
+      "fresh-verification.json": "9c65b83b42b2f8ab008cfdcf2b8e538d99751c134abde0ac023ca9fc4b8bcbab"
+    },
+    "scope": "offline replay of saved callbacks only; no native build, network or full four-rank completion"
+  }
+}

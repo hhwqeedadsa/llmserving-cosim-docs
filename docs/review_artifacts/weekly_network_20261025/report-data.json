@@ -132,6 +132,58 @@
     "witness_queue_delta_ns": 61241,
     "witness_nonqueue_delta_ns": 0
   },
+  "room_analysis": {
+    "cases": [
+      {
+        "id": "window-ack",
+        "label": "通信窗口 · 确认（主指标）",
+        "healthy_ns": 145064,
+        "fault_ns": 145579,
+        "gap_ns": 515,
+        "reference_gap_percent": 0.3537598142589247,
+        "scope": "实验A；全部0ns发布；不是完整任务",
+        "is_strict_optimization_bound": false,
+        "new_method_gain_measured": false
+      },
+      {
+        "id": "window-receive",
+        "label": "通信窗口 · 接收",
+        "healthy_ns": 138992,
+        "fault_ns": 141539,
+        "gap_ns": 2547,
+        "reference_gap_percent": 1.799504023625997,
+        "scope": "实验A；全部0ns发布；不是完整任务",
+        "is_strict_optimization_bound": false,
+        "new_method_gain_measured": false
+      },
+      {
+        "id": "strong-delayed",
+        "label": "较强任务基线 · 延迟改路",
+        "healthy_ns": 401735,
+        "fault_ns": 452119,
+        "gap_ns": 50384,
+        "reference_gap_percent": 11.14396873389528,
+        "scope": "旧式两层两步参考；含已有恢复、端口过滤、16us乱序等待及源NIC修复；非现代完整推理",
+        "is_strict_optimization_bound": false,
+        "new_method_gain_measured": false
+      },
+      {
+        "id": "strong-instant",
+        "label": "较强任务基线 · 立即改路",
+        "healthy_ns": 401735,
+        "fault_ns": 463884,
+        "gap_ns": 62149,
+        "reference_gap_percent": 13.397530417087031,
+        "scope": "旧式两层两步参考；含已有恢复、端口过滤、16us乱序等待及源NIC修复；非现代完整推理",
+        "is_strict_optimization_bound": false,
+        "new_method_gain_measured": false
+      }
+    ],
+    "scenario_formula": "(affected_fraction * eliminated_fraction * gap_ns - overhead_ns_per_request) / (healthy_ns + affected_fraction * gap_ns) * 100",
+    "scenario_is_measurement": false,
+    "fault_rate_measured": false,
+    "new_method_gain_measured": false
+  },
   "stream8": {
     "healthy-gbn": {
       "accepted_ns": 70958,
@@ -303,6 +355,11 @@
       "sha256": "b84f847b51c8da85ba61becc3d646a5782203b1344790a3bf5f7562aa915022a"
     },
     {
+      "path": "experiments/nic_wakeup_effect/results/20261024/summary.json",
+      "label": "较强基线：修复源NIC后同版本正常/故障任务结果",
+      "sha256": "544212985923670c34b9e243833cc3dcb66ad5ba68f9f5ee556b39ba88ae35af"
+    },
+    {
       "path": "experiments/selective_externality/protocol.md",
       "label": "通信窗口：参数与执行前设计",
       "sha256": "101b3cd57b0621fc2307fcf02357847edbd8a0b780c83523fb44050f9ed7698e"
@@ -316,6 +373,11 @@
       "path": "docs/reviews/原生批次交付与四卡完整调用_20261025.md",
       "label": "四卡完整调用的结果与捕获边界",
       "sha256": "5b5a368f636a75478c70023cf69a269d3490b3c13360d65c21a4e1f6b4ee0207"
+    },
+    {
+      "path": "docs/reviews/源NIC修复后的完整应用与拥塞反馈_20261024.md",
+      "label": "较强基线的配置、负面结果与适用范围",
+      "sha256": "3a151be5052ceacd2555b074be7bb99be1a08290c6cbbe9d8cefe065e6005ec1"
     }
   ]
 }

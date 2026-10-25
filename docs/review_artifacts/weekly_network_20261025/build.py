@@ -24,9 +24,12 @@ def main():
                  "保留任务依赖：四条件参考结果")
     native = load("fixtures/native_callback_batches/verification.json",
                   "四卡完整功能调用：独立核验")
+    strong = load("experiments/nic_wakeup_effect/results/20261024/summary.json",
+                  "较强基线：修复源NIC后同版本正常/故障任务结果")
     load("experiments/selective_externality/protocol.md", "通信窗口：参数与执行前设计", "text")
     load("experiments/causal_fault/README.md", "旧式任务图的适用范围", "text")
     load("docs/reviews/原生批次交付与四卡完整调用_20261025.md", "四卡完整调用的结果与捕获边界", "text")
+    load("docs/reviews/源NIC修复后的完整应用与拥塞反馈_20261024.md", "较强基线的配置、负面结果与适用范围", "text")
     assert window["passed"] and native["verified"]
     assert native["original_four_rank_call_complete"]
     assert not window["complete_application_executed"]
@@ -37,6 +40,25 @@ def main():
     assert interference["witness_same_offset"]
     assert interference["accepted_delta_ns"] == sum(interference[k] for k in
         ("witness_source_tx_delta_ns", "witness_queue_delta_ns", "witness_nonqueue_delta_ns"))
+
+    def room(name, label, healthy, fault, scope):
+        assert fault >= healthy > 0
+        return {"id": name, "label": label, "healthy_ns": healthy, "fault_ns": fault,
+                "gap_ns": fault - healthy, "reference_gap_percent": (fault - healthy) / fault * 100,
+                "scope": scope, "is_strict_optimization_bound": False,
+                "new_method_gain_measured": False}
+
+    room_cases = [room("window-ack", "通信窗口 · 确认（主指标）",
+        window["cases"]["healthy-selective"]["all_work_ack_ns"],
+        window["cases"]["failed-selective"]["all_work_ack_ns"], "实验A；全部0ns发布；不是完整任务"),
+        room("window-receive", "通信窗口 · 接收",
+        window["cases"]["healthy-selective"]["all_work_accepted_ns"],
+        window["cases"]["failed-selective"]["all_work_accepted_ns"], "实验A；全部0ns发布；不是完整任务")]
+    for name, label in [("delayed", "较强任务基线 · 延迟改路"), ("instant", "较强任务基线 · 立即改路")]:
+        room_cases.append(room("strong-" + name, label,
+            strong["cases"]["fixed-healthy"]["application_completion_ns"],
+            strong["cases"]["fixed-live-" + name]["application_completion_ns"],
+            "旧式两层两步参考；含已有恢复、端口过滤、16us乱序等待及源NIC修复；非现代完整推理"))
 
     def cases(data, fields):
         return {name: {k: row[k] for k in fields} for name, row in data["cases"].items()}
@@ -53,6 +75,11 @@ def main():
                       "capture_complete": four["capture_complete"],
                       "omitted_capture_events": four["omitted_capture_events"]},
         "interference": interference,
+        "room_analysis": {"cases": room_cases,
+                          "scenario_formula": "(affected_fraction * eliminated_fraction * gap_ns - overhead_ns_per_request) / (healthy_ns + affected_fraction * gap_ns) * 100",
+                          "scenario_is_measurement": False,
+                          "fault_rate_measured": False,
+                          "new_method_gain_measured": False},
         "stream8": {case: {
             **{key: row[key] for key in ("accepted_ns", "acked_ns", "tx_payload_bytes")},
             "witness": {key: row["witness"][key] for key in
@@ -73,6 +100,11 @@ def main():
         "@@REPORT_DATA@@": json.dumps(data, ensure_ascii=False, indent=2).replace("<", "\\u003c"),
         "@@WINDOW_ROWS@@": raw_table(data["window"]["cases"], ["all_work_accepted_ns", "all_work_ack_ns", "tx_payload_bytes"]),
         "@@GRAPH_ROWS@@": raw_table(data["graph"]["cases"], ["group_completion_ns", "tx_payload_bytes"]),
+        "@@ROOM_ROWS@@": "\n".join(
+            f'<tr><th scope="row">{html.escape(r["label"])}</th>'
+            f'<td>{r["healthy_ns"] / 1000:.3f}</td><td>{r["fault_ns"] / 1000:.3f}</td>'
+            f'<td>{r["gap_ns"] / 1000:.3f}</td><td>{r["reference_gap_percent"]:.2f}%</td></tr>'
+            for r in room_cases),
         "@@SOURCE_ROWS@@": "\n".join(
             f'<tr><td><a href="../../../{html.escape(s["path"], quote=True)}">{html.escape(s["label"])}</a>'
             f'<small>{html.escape(s["path"])}</small></td><td><code>{s["sha256"]}</code></td></tr>' for s in sources),

@@ -4,18 +4,27 @@
   "html_tags_balanced": true,
   "local_links_valid": true,
   "embedded_data_equal": true,
-  "source_sha256_matches": 6,
+  "source_sha256_matches": 8,
   "javascript_syntax_valid": true,
   "offline_no_external_script": true,
   "deterministic_rebuild": true,
+  "room_reference_percentages": [
+    0.35,
+    1.8,
+    11.14,
+    13.4
+  ],
   "interaction_checks": {
     "passed": true,
     "completion_definitions": 2,
     "display_modes": 2,
     "queue_conditions": 2,
+    "room_reference_cases": 4,
+    "scenario_cases": 2,
+    "zero_gain_negative_gain_overhead_and_mixture_checked": true,
     "download_data_equal": true,
     "real_browser_layout_checked": false
   },
   "network_executions": 0,
-  "artifacts_bytes": 96200
+  "artifacts_bytes": 122928
 }

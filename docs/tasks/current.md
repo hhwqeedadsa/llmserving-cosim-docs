@@ -13,6 +13,8 @@
 
 ## 当前范围和预算
 
+当前研究 `in_progress`：[现代网络瓶颈三组判别](../../experiments/modern_network_levers/protocol.md)，固定平台 `710bafc`。从四份原始路由独立选择下标2/层3，采用显式2KB分包及完整现代调用，最多3次正常网络对照原网络/带宽翻倍/传播减半；不重跑已关闭功能阶段。450受监控秒/256MiB及单命令60秒/1GiB/2GiB/96MiB、网络1ms/result16MiB/capture20000。先判断小batch下主要杠杆，再筛选两个仿真创新候选；不将硬件资源升级或模型敏感性当新算法收益。
+
 当前平台 `completed`：[现代完整调用接入已有选择重传](modern_selective_bridge_spec.md)，起点 `aeaf4aa`。补齐可选 `provider.dcqcn_reference` 到既有v5事务层的透传，两个原始输入的缺省初始事务/计划/连接完整相同，C++和固定依赖未改。四次选择模式网络全部成功并关闭：公开双rank两调用正常/单包故障105,621/123,921ns；原四路由EP4/H7168/E256/Top8单调用70,610/77,160ns，均566事件完成。实际单包命中、MSR1反馈、源帧/字节、目标恰好一次、屏障/保护释放及回调批次独立通过；四卡捕获仍分别遗漏103,168/103,282条，不声称完整逐跳还原。
 
 62项不同Python检查、8类篡改拒绝和13固定依赖核对通过。新增离线checker误要求空响应方向具有定时器的失败保留，按源码修checker，没有重跑网络。四份验收在逐成员hash恢复后的新Python根/空cwd逐字节一致；程序/八库/原生源码身份核验。证据存 `runs/modern_selective_checkpoint_20261026/`，见[入口](../../fixtures/modern_selective/README.md)、[验收](../../fixtures/modern_selective/verification.json)、[恢复](../../fixtures/modern_selective/recovery.json)及[预算收尾](../../fixtures/modern_selective/closeout.json)。保持900秒/512MiB及全部单命令/仿真/捕获上限，无构建安装下载/GPU/push。该接入只补已有强基线，不是新算法；现代调用仍为声明成本与功能字节。下一研究分别衡量网络方案决策准确性和仿真宿主成本，不将接入、回调批处理或单场景可靠性当论文创新；整体目标 `in_progress`。

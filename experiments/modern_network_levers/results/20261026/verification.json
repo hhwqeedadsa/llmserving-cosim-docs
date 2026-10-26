@@ -1,0 +1,19 @@
+{
+  "passed": true,
+  "cases": 3,
+  "tamper_rejections": [
+    "wrong_network_rate",
+    "wrong_propagation",
+    "false_drain_time",
+    "truncated_source_payload",
+    "duplicate_target_effect",
+    "unacked_prefix",
+    "missing_modern_event"
+  ],
+  "closed_network_executions": 3,
+  "additional_network_executions": 0,
+  "capture_complete": true,
+  "full_physical_path_reconstruction_claimed": false,
+  "completion_definitions_checked": true,
+  "scope": "public-output integrity and declared model comparison; no independent hardware accuracy evidence"
+}

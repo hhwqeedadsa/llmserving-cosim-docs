@@ -1,0 +1,753 @@
+{
+  "passed": true,
+  "cases": {
+    "baseline": {
+      "passed": true,
+      "finish_ns": 69547,
+      "last_modern_event_ns": 63523,
+      "model_application_stage_complete_ns": 57479,
+      "full_modern_events_and_source_release_ns": 63523,
+      "network_drained_ns": 69547,
+      "modern_operations": 120,
+      "modern_events": 576,
+      "native_operations": 164,
+      "remote_token_data_operations": 18,
+      "remote_and_self_operation_groups": {
+        "control": 92,
+        "token_data": 18
+      },
+      "remote_frame_and_operand_bytes": {
+        "control_request_operand": 6624,
+        "control_request_frame": 8928,
+        "control_reply_frame": 1920,
+        "token_data_request_operand": 259776,
+        "token_data_request_frame": 260352
+      },
+      "source_payload_bytes": 271200,
+      "source_packets": 264,
+      "repeated_source_packets": 0,
+      "source_packet_groups": {
+        "control": 120,
+        "token_data": 144
+      },
+      "control_frame_byte_fraction": 0.04,
+      "control_source_packet_fraction": 0.45454545454545453,
+      "timeout_expiries": 0,
+      "reference_cnp_named_events": 0,
+      "reference_event_kinds": {
+        "source_sent": 264,
+        "qp_close": 50
+      },
+      "rates_bps": [
+        100000000000
+      ],
+      "link_delays_ns": [
+        1000
+      ],
+      "phase_marks": [
+        {
+          "event": "m0.dispatch.r0.begin",
+          "kind": "kernel_begin",
+          "time_ns": 0
+        },
+        {
+          "event": "m0.dispatch.r1.begin",
+          "kind": "kernel_begin",
+          "time_ns": 0
+        },
+        {
+          "event": "m0.dispatch.r2.begin",
+          "kind": "kernel_begin",
+          "time_ns": 0
+        },
+        {
+          "event": "m0.dispatch.r3.begin",
+          "kind": "kernel_begin",
+          "time_ns": 0
+        },
+        {
+          "event": "m0.dispatch.entry.r0.ready",
+          "kind": "barrier_ready",
+          "time_ns": 6046
+        },
+        {
+          "event": "m0.dispatch.entry.r2.ready",
+          "kind": "barrier_ready",
+          "time_ns": 6048
+        },
+        {
+          "event": "m0.dispatch.entry.r1.ready",
+          "kind": "barrier_ready",
+          "time_ns": 6054
+        },
+        {
+          "event": "m0.dispatch.entry.r3.ready",
+          "kind": "barrier_ready",
+          "time_ns": 6060
+        },
+        {
+          "event": "m0.dispatch.exit.r0.ready",
+          "kind": "barrier_ready",
+          "time_ns": 28589
+        },
+        {
+          "event": "m0.dispatch.r0.complete",
+          "kind": "application_stage_complete",
+          "time_ns": 28589
+        },
+        {
+          "event": "m0.dispatch.exit.r1.ready",
+          "kind": "barrier_ready",
+          "time_ns": 28595
+        },
+        {
+          "event": "m0.dispatch.r1.complete",
+          "kind": "application_stage_complete",
+          "time_ns": 28595
+        },
+        {
+          "event": "m0.dispatch.exit.r2.ready",
+          "kind": "barrier_ready",
+          "time_ns": 28799
+        },
+        {
+          "event": "m0.dispatch.r2.complete",
+          "kind": "application_stage_complete",
+          "time_ns": 28799
+        },
+        {
+          "event": "m0.dispatch.exit.r3.ready",
+          "kind": "barrier_ready",
+          "time_ns": 28805
+        },
+        {
+          "event": "m0.dispatch.r3.complete",
+          "kind": "application_stage_complete",
+          "time_ns": 28805
+        },
+        {
+          "event": "m0.r0.experts_done",
+          "kind": "expert_stage_done",
+          "time_ns": 29589
+        },
+        {
+          "event": "m0.combine.r0.begin",
+          "kind": "kernel_begin",
+          "time_ns": 29589
+        },
+        {
+          "event": "m0.r1.experts_done",
+          "kind": "expert_stage_done",
+          "time_ns": 29595
+        },
+        {
+          "event": "m0.combine.r1.begin",
+          "kind": "kernel_begin",
+          "time_ns": 29595
+        },
+        {
+          "event": "m0.r2.experts_done",
+          "kind": "expert_stage_done",
+          "time_ns": 29799
+        },
+        {
+          "event": "m0.combine.r2.begin",
+          "kind": "kernel_begin",
+          "time_ns": 29799
+        },
+        {
+          "event": "m0.r3.experts_done",
+          "kind": "expert_stage_done",
+          "time_ns": 29805
+        },
+        {
+          "event": "m0.combine.r3.begin",
+          "kind": "kernel_begin",
+          "time_ns": 29805
+        },
+        {
+          "event": "m0.combine.entry.r2.ready",
+          "kind": "barrier_ready",
+          "time_ns": 35643
+        },
+        {
+          "event": "m0.combine.entry.r3.ready",
+          "kind": "barrier_ready",
+          "time_ns": 35649
+        },
+        {
+          "event": "m0.combine.entry.r0.ready",
+          "kind": "barrier_ready",
+          "time_ns": 35847
+        },
+        {
+          "event": "m0.combine.entry.r1.ready",
+          "kind": "barrier_ready",
+          "time_ns": 35853
+        },
+        {
+          "event": "m0.combine.exit.r0.ready",
+          "kind": "barrier_ready",
+          "time_ns": 56974
+        },
+        {
+          "event": "m0.combine.r0.complete",
+          "kind": "application_stage_complete",
+          "time_ns": 56974
+        },
+        {
+          "event": "m0.combine.exit.r1.ready",
+          "kind": "barrier_ready",
+          "time_ns": 56980
+        },
+        {
+          "event": "m0.combine.r1.complete",
+          "kind": "application_stage_complete",
+          "time_ns": 56980
+        },
+        {
+          "event": "m0.combine.exit.r2.ready",
+          "kind": "barrier_ready",
+          "time_ns": 57473
+        },
+        {
+          "event": "m0.combine.r2.complete",
+          "kind": "application_stage_complete",
+          "time_ns": 57473
+        },
+        {
+          "event": "m0.combine.exit.r3.ready",
+          "kind": "barrier_ready",
+          "time_ns": 57479
+        },
+        {
+          "event": "m0.combine.r3.complete",
+          "kind": "application_stage_complete",
+          "time_ns": 57479
+        }
+      ],
+      "capture_complete": true,
+      "omitted_capture_events": 0,
+      "packet_path_reconstruction_claimed": false,
+      "operation_wait_scope": "descriptive per-operation ready-to-complete intervals; not additive application losses",
+      "max_operation_wait_ns": {
+        "control": 12494,
+        "token_data": 16511
+      },
+      "input_sha256": "5da569c18e4f566b159bbdfb27a571827dade90e8c0e83319624913bc9ae4bb7",
+      "plan_sha256": "ea3cd49d0e1124b65a7994527e710d188fb34800f047fed224fb8237cd36bcc6"
+    },
+    "bandwidth": {
+      "passed": true,
+      "finish_ns": 65480,
+      "last_modern_event_ns": 59468,
+      "model_application_stage_complete_ns": 53446,
+      "full_modern_events_and_source_release_ns": 59468,
+      "network_drained_ns": 65480,
+      "modern_operations": 120,
+      "modern_events": 576,
+      "native_operations": 164,
+      "remote_token_data_operations": 18,
+      "remote_and_self_operation_groups": {
+        "control": 92,
+        "token_data": 18
+      },
+      "remote_frame_and_operand_bytes": {
+        "control_request_operand": 6624,
+        "control_request_frame": 8928,
+        "control_reply_frame": 1920,
+        "token_data_request_operand": 259776,
+        "token_data_request_frame": 260352
+      },
+      "source_payload_bytes": 271200,
+      "source_packets": 264,
+      "repeated_source_packets": 0,
+      "source_packet_groups": {
+        "control": 120,
+        "token_data": 144
+      },
+      "control_frame_byte_fraction": 0.04,
+      "control_source_packet_fraction": 0.45454545454545453,
+      "timeout_expiries": 0,
+      "reference_cnp_named_events": 0,
+      "reference_event_kinds": {
+        "source_sent": 264,
+        "qp_close": 50
+      },
+      "rates_bps": [
+        200000000000
+      ],
+      "link_delays_ns": [
+        1000
+      ],
+      "phase_marks": [
+        {
+          "event": "m0.dispatch.r0.begin",
+          "kind": "kernel_begin",
+          "time_ns": 0
+        },
+        {
+          "event": "m0.dispatch.r1.begin",
+          "kind": "kernel_begin",
+          "time_ns": 0
+        },
+        {
+          "event": "m0.dispatch.r2.begin",
+          "kind": "kernel_begin",
+          "time_ns": 0
+        },
+        {
+          "event": "m0.dispatch.r3.begin",
+          "kind": "kernel_begin",
+          "time_ns": 0
+        },
+        {
+          "event": "m0.dispatch.entry.r0.ready",
+          "kind": "barrier_ready",
+          "time_ns": 6023
+        },
+        {
+          "event": "m0.dispatch.entry.r2.ready",
+          "kind": "barrier_ready",
+          "time_ns": 6024
+        },
+        {
+          "event": "m0.dispatch.entry.r1.ready",
+          "kind": "barrier_ready",
+          "time_ns": 6027
+        },
+        {
+          "event": "m0.dispatch.entry.r3.ready",
+          "kind": "barrier_ready",
+          "time_ns": 6030
+        },
+        {
+          "event": "m0.dispatch.exit.r0.ready",
+          "kind": "barrier_ready",
+          "time_ns": 26381
+        },
+        {
+          "event": "m0.dispatch.r0.complete",
+          "kind": "application_stage_complete",
+          "time_ns": 26381
+        },
+        {
+          "event": "m0.dispatch.exit.r1.ready",
+          "kind": "barrier_ready",
+          "time_ns": 26384
+        },
+        {
+          "event": "m0.dispatch.r1.complete",
+          "kind": "application_stage_complete",
+          "time_ns": 26384
+        },
+        {
+          "event": "m0.dispatch.exit.r2.ready",
+          "kind": "barrier_ready",
+          "time_ns": 26485
+        },
+        {
+          "event": "m0.dispatch.r2.complete",
+          "kind": "application_stage_complete",
+          "time_ns": 26485
+        },
+        {
+          "event": "m0.dispatch.exit.r3.ready",
+          "kind": "barrier_ready",
+          "time_ns": 26488
+        },
+        {
+          "event": "m0.dispatch.r3.complete",
+          "kind": "application_stage_complete",
+          "time_ns": 26488
+        },
+        {
+          "event": "m0.r0.experts_done",
+          "kind": "expert_stage_done",
+          "time_ns": 27381
+        },
+        {
+          "event": "m0.combine.r0.begin",
+          "kind": "kernel_begin",
+          "time_ns": 27381
+        },
+        {
+          "event": "m0.r1.experts_done",
+          "kind": "expert_stage_done",
+          "time_ns": 27384
+        },
+        {
+          "event": "m0.combine.r1.begin",
+          "kind": "kernel_begin",
+          "time_ns": 27384
+        },
+        {
+          "event": "m0.r2.experts_done",
+          "kind": "expert_stage_done",
+          "time_ns": 27485
+        },
+        {
+          "event": "m0.combine.r2.begin",
+          "kind": "kernel_begin",
+          "time_ns": 27485
+        },
+        {
+          "event": "m0.r3.experts_done",
+          "kind": "expert_stage_done",
+          "time_ns": 27488
+        },
+        {
+          "event": "m0.combine.r3.begin",
+          "kind": "kernel_begin",
+          "time_ns": 27488
+        },
+        {
+          "event": "m0.combine.entry.r2.ready",
+          "kind": "barrier_ready",
+          "time_ns": 33408
+        },
+        {
+          "event": "m0.combine.entry.r3.ready",
+          "kind": "barrier_ready",
+          "time_ns": 33411
+        },
+        {
+          "event": "m0.combine.entry.r0.ready",
+          "kind": "barrier_ready",
+          "time_ns": 33509
+        },
+        {
+          "event": "m0.combine.entry.r1.ready",
+          "kind": "barrier_ready",
+          "time_ns": 33512
+        },
+        {
+          "event": "m0.combine.exit.r0.ready",
+          "kind": "barrier_ready",
+          "time_ns": 53115
+        },
+        {
+          "event": "m0.combine.r0.complete",
+          "kind": "application_stage_complete",
+          "time_ns": 53115
+        },
+        {
+          "event": "m0.combine.exit.r1.ready",
+          "kind": "barrier_ready",
+          "time_ns": 53118
+        },
+        {
+          "event": "m0.combine.r1.complete",
+          "kind": "application_stage_complete",
+          "time_ns": 53118
+        },
+        {
+          "event": "m0.combine.exit.r2.ready",
+          "kind": "barrier_ready",
+          "time_ns": 53443
+        },
+        {
+          "event": "m0.combine.r2.complete",
+          "kind": "application_stage_complete",
+          "time_ns": 53443
+        },
+        {
+          "event": "m0.combine.exit.r3.ready",
+          "kind": "barrier_ready",
+          "time_ns": 53446
+        },
+        {
+          "event": "m0.combine.r3.complete",
+          "kind": "application_stage_complete",
+          "time_ns": 53446
+        }
+      ],
+      "capture_complete": true,
+      "omitted_capture_events": 0,
+      "packet_path_reconstruction_claimed": false,
+      "operation_wait_scope": "descriptive per-operation ready-to-complete intervals; not additive application losses",
+      "max_operation_wait_ns": {
+        "control": 12247,
+        "token_data": 14241
+      },
+      "input_sha256": "5da569c18e4f566b159bbdfb27a571827dade90e8c0e83319624913bc9ae4bb7",
+      "plan_sha256": "ea3cd49d0e1124b65a7994527e710d188fb34800f047fed224fb8237cd36bcc6"
+    },
+    "propagation": {
+      "passed": true,
+      "finish_ns": 39571,
+      "last_modern_event_ns": 36547,
+      "model_application_stage_complete_ns": 33503,
+      "full_modern_events_and_source_release_ns": 36547,
+      "network_drained_ns": 39571,
+      "modern_operations": 120,
+      "modern_events": 576,
+      "native_operations": 164,
+      "remote_token_data_operations": 18,
+      "remote_and_self_operation_groups": {
+        "control": 92,
+        "token_data": 18
+      },
+      "remote_frame_and_operand_bytes": {
+        "control_request_operand": 6624,
+        "control_request_frame": 8928,
+        "control_reply_frame": 1920,
+        "token_data_request_operand": 259776,
+        "token_data_request_frame": 260352
+      },
+      "source_payload_bytes": 271200,
+      "source_packets": 264,
+      "repeated_source_packets": 0,
+      "source_packet_groups": {
+        "control": 120,
+        "token_data": 144
+      },
+      "control_frame_byte_fraction": 0.04,
+      "control_source_packet_fraction": 0.45454545454545453,
+      "timeout_expiries": 0,
+      "reference_cnp_named_events": 0,
+      "reference_event_kinds": {
+        "source_sent": 264,
+        "qp_close": 50
+      },
+      "rates_bps": [
+        100000000000
+      ],
+      "link_delays_ns": [
+        500
+      ],
+      "phase_marks": [
+        {
+          "event": "m0.dispatch.r0.begin",
+          "kind": "kernel_begin",
+          "time_ns": 0
+        },
+        {
+          "event": "m0.dispatch.r1.begin",
+          "kind": "kernel_begin",
+          "time_ns": 0
+        },
+        {
+          "event": "m0.dispatch.r2.begin",
+          "kind": "kernel_begin",
+          "time_ns": 0
+        },
+        {
+          "event": "m0.dispatch.r3.begin",
+          "kind": "kernel_begin",
+          "time_ns": 0
+        },
+        {
+          "event": "m0.dispatch.entry.r0.ready",
+          "kind": "barrier_ready",
+          "time_ns": 3046
+        },
+        {
+          "event": "m0.dispatch.entry.r2.ready",
+          "kind": "barrier_ready",
+          "time_ns": 3048
+        },
+        {
+          "event": "m0.dispatch.entry.r1.ready",
+          "kind": "barrier_ready",
+          "time_ns": 3054
+        },
+        {
+          "event": "m0.dispatch.entry.r3.ready",
+          "kind": "barrier_ready",
+          "time_ns": 3060
+        },
+        {
+          "event": "m0.dispatch.exit.r0.ready",
+          "kind": "barrier_ready",
+          "time_ns": 16589
+        },
+        {
+          "event": "m0.dispatch.r0.complete",
+          "kind": "application_stage_complete",
+          "time_ns": 16589
+        },
+        {
+          "event": "m0.dispatch.exit.r1.ready",
+          "kind": "barrier_ready",
+          "time_ns": 16595
+        },
+        {
+          "event": "m0.dispatch.r1.complete",
+          "kind": "application_stage_complete",
+          "time_ns": 16595
+        },
+        {
+          "event": "m0.dispatch.exit.r2.ready",
+          "kind": "barrier_ready",
+          "time_ns": 16803
+        },
+        {
+          "event": "m0.dispatch.r2.complete",
+          "kind": "application_stage_complete",
+          "time_ns": 16803
+        },
+        {
+          "event": "m0.dispatch.exit.r3.ready",
+          "kind": "barrier_ready",
+          "time_ns": 16809
+        },
+        {
+          "event": "m0.dispatch.r3.complete",
+          "kind": "application_stage_complete",
+          "time_ns": 16809
+        },
+        {
+          "event": "m0.r0.experts_done",
+          "kind": "expert_stage_done",
+          "time_ns": 17589
+        },
+        {
+          "event": "m0.combine.r0.begin",
+          "kind": "kernel_begin",
+          "time_ns": 17589
+        },
+        {
+          "event": "m0.r1.experts_done",
+          "kind": "expert_stage_done",
+          "time_ns": 17595
+        },
+        {
+          "event": "m0.combine.r1.begin",
+          "kind": "kernel_begin",
+          "time_ns": 17595
+        },
+        {
+          "event": "m0.r2.experts_done",
+          "kind": "expert_stage_done",
+          "time_ns": 17803
+        },
+        {
+          "event": "m0.combine.r2.begin",
+          "kind": "kernel_begin",
+          "time_ns": 17803
+        },
+        {
+          "event": "m0.r3.experts_done",
+          "kind": "expert_stage_done",
+          "time_ns": 17809
+        },
+        {
+          "event": "m0.combine.r3.begin",
+          "kind": "kernel_begin",
+          "time_ns": 17809
+        },
+        {
+          "event": "m0.combine.entry.r2.ready",
+          "kind": "barrier_ready",
+          "time_ns": 20643
+        },
+        {
+          "event": "m0.combine.entry.r3.ready",
+          "kind": "barrier_ready",
+          "time_ns": 20649
+        },
+        {
+          "event": "m0.combine.entry.r0.ready",
+          "kind": "barrier_ready",
+          "time_ns": 20851
+        },
+        {
+          "event": "m0.combine.entry.r1.ready",
+          "kind": "barrier_ready",
+          "time_ns": 20857
+        },
+        {
+          "event": "m0.combine.exit.r0.ready",
+          "kind": "barrier_ready",
+          "time_ns": 32986
+        },
+        {
+          "event": "m0.combine.r0.complete",
+          "kind": "application_stage_complete",
+          "time_ns": 32986
+        },
+        {
+          "event": "m0.combine.exit.r1.ready",
+          "kind": "barrier_ready",
+          "time_ns": 32992
+        },
+        {
+          "event": "m0.combine.r1.complete",
+          "kind": "application_stage_complete",
+          "time_ns": 32992
+        },
+        {
+          "event": "m0.combine.exit.r2.ready",
+          "kind": "barrier_ready",
+          "time_ns": 33497
+        },
+        {
+          "event": "m0.combine.r2.complete",
+          "kind": "application_stage_complete",
+          "time_ns": 33497
+        },
+        {
+          "event": "m0.combine.exit.r3.ready",
+          "kind": "barrier_ready",
+          "time_ns": 33503
+        },
+        {
+          "event": "m0.combine.r3.complete",
+          "kind": "application_stage_complete",
+          "time_ns": 33503
+        }
+      ],
+      "capture_complete": true,
+      "omitted_capture_events": 0,
+      "packet_path_reconstruction_claimed": false,
+      "operation_wait_scope": "descriptive per-operation ready-to-complete intervals; not additive application losses",
+      "max_operation_wait_ns": {
+        "control": 6494,
+        "token_data": 10515
+      },
+      "input_sha256": "5da569c18e4f566b159bbdfb27a571827dade90e8c0e83319624913bc9ae4bb7",
+      "plan_sha256": "ea3cd49d0e1124b65a7994527e710d188fb34800f047fed224fb8237cd36bcc6"
+    }
+  },
+  "effects": {
+    "model_application_stage_complete_ns": {
+      "bandwidth": {
+        "saved_ns": 4033,
+        "relative_reduction": 0.07016475582386611
+      },
+      "propagation": {
+        "saved_ns": 23976,
+        "relative_reduction": 0.4171262548061031
+      }
+    },
+    "full_modern_events_and_source_release_ns": {
+      "bandwidth": {
+        "saved_ns": 4055,
+        "relative_reduction": 0.06383514632495317
+      },
+      "propagation": {
+        "saved_ns": 26976,
+        "relative_reduction": 0.4246650819388253
+      }
+    },
+    "network_drained_ns": {
+      "bandwidth": {
+        "saved_ns": 4067,
+        "relative_reduction": 0.05847843904122392
+      },
+      "propagation": {
+        "saved_ns": 29976,
+        "relative_reduction": 0.4310178728054409
+      }
+    }
+  },
+  "both_levers_improve": true,
+  "larger_observed_lever": {
+    "model_application_stage_complete_ns": "propagation",
+    "full_modern_events_and_source_release_ns": "propagation",
+    "network_drained_ns": "propagation"
+  },
+  "completion_scope": "model application stage, all modern callbacks/source release, and physical drain are distinct; none is measured end-user latency",
+  "scope": "one held-out routing step, four ranks, one layer, declared compute/provider costs; sensitivity, not calibrated speedup or production generalization"
+}

@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "archive_sha256": "00a98a5739d7af0520978d0759ce0e58f5241ca3717871c32c928d3f152e5497",
+  "members_hash_verified_before_writes": true,
+  "copied_research_source_root": true,
+  "empty_cwd": true,
+  "byte_identical": {
+    "summary.json": true,
+    "verification.json": true
+  },
+  "additional_network_executions": 0,
+  "native_runtime_required": false,
+  "scope": "offline analysis reproduction; runtime/source identities retained, no native rebuild or hardware accuracy claim"
+}

@@ -1,0 +1,266 @@
+{
+  "passed": true,
+  "cached_primary_documents": [
+    {
+      "id": "analytical_overlap",
+      "url": "https://arxiv.org/html/2609.07536",
+      "public_url": "https://arxiv.org/html/2609.07536v1",
+      "local_snapshot": "data/research/system_innovation_20261021/analytical_overlap.html",
+      "sha256": "375c8d09d3abaad6c56627d66c9a0060b9244e2fad5a5358b3c2432ea09fae40",
+      "text_snapshot": "data/research/system_innovation_20261021/analytical_overlap.txt",
+      "text_sha256": "863549817a6c3dfb7b30f696d13b4b601bf131a9067fa6e31030853d9aaecaf5"
+    },
+    {
+      "id": "patterns",
+      "url": "https://arxiv.org/html/2510.05497v5",
+      "public_url": "https://arxiv.org/html/2510.05497v5",
+      "local_snapshot": "data/research/system_innovation_20261021/patterns.html",
+      "sha256": "ea29c8cc1a0c1e8cfa815af439bf8440f73d989e07e7685899712afbc54a5387",
+      "text_snapshot": "data/research/system_innovation_20261021/patterns.txt",
+      "text_sha256": "1b356cd1b4725c540110ef745e9f2702cfb8ca716131d29f4276f877da912168"
+    },
+    {
+      "id": "llmservingsim2",
+      "url": "https://arxiv.org/html/2602.23036",
+      "public_url": "https://arxiv.org/html/2602.23036v2",
+      "local_snapshot": "data/research/system_innovation_20261021/llmservingsim2.html",
+      "sha256": "d77c1caf6bcc43ef63b229bcc1a4907c9223e283a4e9da41dfddf845409992fa",
+      "text_snapshot": "data/research/system_innovation_20261021/llmservingsim2.txt",
+      "text_sha256": "509007c1d49de92f5bcca7067d159c12c0c681e932ddc720735862bb0ca464ef"
+    },
+    {
+      "id": "simai",
+      "url": "https://api.github.com/repos/aliyun/SimAI/contents/README.md",
+      "public_url": "https://github.com/aliyun/SimAI/blob/master/README.md",
+      "local_snapshot": "data/research/system_innovation_20261021/simai.md",
+      "sha256": "c9dae7ba10cf20fad4c6b43583188ebbda9d7e6de63656faccf2041a3d71375b",
+      "text_snapshot": "data/research/system_innovation_20261021/simai.txt",
+      "text_sha256": "c9dae7ba10cf20fad4c6b43583188ebbda9d7e6de63656faccf2041a3d71375b",
+      "git_blob_sha": "553af97e39a40bb20546b05d27b9c3347be5db28"
+    },
+    {
+      "id": "clem",
+      "url": "https://api.github.com/repos/aliyun/SimAI-CLEM/contents/README.md",
+      "public_url": "https://github.com/aliyun/SimAI-CLEM/blob/master/README.md",
+      "local_snapshot": "data/research/system_innovation_20261021/clem.md",
+      "sha256": "b285917e8af5703f22b146d5337468068da8e2ce61e711aff925907062fa42f8",
+      "text_snapshot": "data/research/system_innovation_20261021/clem.txt",
+      "text_sha256": "b285917e8af5703f22b146d5337468068da8e2ce61e711aff925907062fa42f8",
+      "git_blob_sha": "33b9fb962463789a9f483e93ccfba8576eaa3e44"
+    },
+    {
+      "id": "vidur",
+      "url": "https://api.github.com/repos/microsoft/vidur/contents/README.md",
+      "public_url": "https://github.com/microsoft/vidur/blob/main/README.md",
+      "local_snapshot": "data/research/system_innovation_20261021/vidur.md",
+      "sha256": "e5ad589f16aeb588676b77c11be918addc976111bbb7944112922fca647ac51c",
+      "text_snapshot": "data/research/system_innovation_20261021/vidur.txt",
+      "text_sha256": "e5ad589f16aeb588676b77c11be918addc976111bbb7944112922fca647ac51c",
+      "git_blob_sha": "d0def19e71c008ffaed04114d1434882df61211e"
+    },
+    {
+      "id": "simbricks_readme",
+      "url": "https://api.github.com/repos/simbricks/simbricks/contents/README.md?ref=main",
+      "accessed_utc": "2026-10-20T07:45:11.566467+00:00",
+      "status": 200,
+      "first_attempt": {
+        "url": "https://raw.githubusercontent.com/simbricks/simbricks/main/README.md",
+        "status": "failed",
+        "error": "The read operation timed out"
+      },
+      "public_url": "https://github.com/simbricks/simbricks/blob/main/README.md",
+      "git_blob_sha": "7dd7e1a18d600969727f1349bca54f007b411fdb",
+      "bytes": 1783,
+      "sha256": "2dedc88a554d05f2ca1528a92bec86dae31d32812a494b51088ebfab9c730832",
+      "local_snapshot": "data/research/hardware_systems_20261020/simbricks_readme.txt",
+      "retrieval": "GitHub contents API; base64 decoded",
+      "immutable_blob_api": "https://api.github.com/repos/simbricks/simbricks/git/blobs/7dd7e1a18d600969727f1349bca54f007b411fdb"
+    },
+    {
+      "id": "simbricks_arch",
+      "url": "https://docs.simbricks.io/learn/simulator-integration/",
+      "accessed_utc": "2026-10-20T07:48:26.742906+00:00",
+      "status": 200,
+      "bytes": 23531,
+      "sha256": "c504f6008ba3af5a4e89b5904bd0858f7c92cde253be9dda9cd1fdcd2e04dd30",
+      "local_snapshot": "data/research/hardware_systems_20261020/simbricks_arch.html"
+    }
+  ],
+  "astra_readme": {
+    "path": "third_party/LLMServingSim/astra-sim/README.md",
+    "sha256": "a5b9c0a72c86f5307cbe3169acfe9d9dfcc978ba1dc2dc54b2af84fc33ee1903",
+    "locked_commit": "8ecf388a667de9d45866da1ee9829938d6218686",
+    "url": "https://github.com/astra-sim/astra-sim"
+  },
+  "routing": {
+    "platform_commit": "710bafc",
+    "repository_head": "6cbcba268050dc134a41da0e0cf36537ab841296",
+    "route_manifest_sha256": "caf6870f867e3307c52873a4fa1491c9225ff77f9735742b8a74313f80717a16",
+    "dataset_source": {
+      "kind": "published_model_trace",
+      "dataset_id": "core12345/MoE_expert_selection_trace",
+      "dataset_revision": "27febb7b2d24169560a9f6f83d38eb53f94916cf",
+      "collector_model_id": "cognitivecomputations/DeepSeek-R1-AWQ",
+      "collector_model_revision": null,
+      "runtime_revision": null,
+      "precision": "awq_4bit",
+      "usage_terms": "Files downloaded by the user from the published dataset and supplied locally for analysis. No access terms accepted or credentials used by the agent; original dataset citation/access conditions apply; license not independently verified.",
+      "source_url": "https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/tree/27febb7b2d24169560a9f6f83d38eb53f94916cf",
+      "unknown_fields": [
+        "collector_model_revision",
+        "runtime_revision",
+        "license",
+        "collector_hardware",
+        "activation_dtype",
+        "request_eos_reason"
+      ]
+    },
+    "selected_rows": [
+      {
+        "file": {
+          "path": "data/moe-trace-small/1472.json",
+          "sha256": "3085c39e9b9950a7e68f30eed8517eaecbfe3d0ad75d813925ff788a1c164255"
+        },
+        "entry_index": 2,
+        "layer": 3,
+        "choices": [
+          [
+            123,
+            146,
+            150,
+            160,
+            175,
+            189,
+            197,
+            126
+          ]
+        ]
+      },
+      {
+        "file": {
+          "path": "data/moe-trace-small/1808.json",
+          "sha256": "c8c9cf4917498a2195960dbd9c65e9efe027af6606db098d40b0db8f7c266092"
+        },
+        "entry_index": 2,
+        "layer": 3,
+        "choices": [
+          [
+            10,
+            14,
+            21,
+            47,
+            120,
+            125,
+            249,
+            31
+          ]
+        ]
+      },
+      {
+        "file": {
+          "path": "data/moe-trace-small/2675.json",
+          "sha256": "848633cf8afa1c9247d9cdaf5968bb09a5f2e2d409387f4a333ce7a6e35390cd"
+        },
+        "entry_index": 2,
+        "layer": 3,
+        "choices": [
+          [
+            1,
+            9,
+            42,
+            54,
+            92,
+            133,
+            151,
+            25
+          ]
+        ]
+      },
+      {
+        "file": {
+          "path": "data/moe-trace-small/6447.json",
+          "sha256": "265c8e66cfb49da12be0d8037cd7a8be6997f4207bcb0a48ca3c616bbe253b96"
+        },
+        "entry_index": 2,
+        "layer": 3,
+        "choices": [
+          [
+            0,
+            134,
+            196,
+            227,
+            236,
+            250,
+            252,
+            223
+          ]
+        ]
+      }
+    ],
+    "runtime": "/dev/shm/moe-native-callback-batches-20261025/runtime",
+    "input_sha256": "5da569c18e4f566b159bbdfb27a571827dade90e8c0e83319624913bc9ae4bb7",
+    "protocol_sha256": "4ace3134f53fa8f80affd826fc59ed7b3e0a4dcb112e7d74a8562d7324aebf81"
+  },
+  "runtime_and_native_source_identity": {
+    "files": {
+      "transaction-session": "b4b22b2aefa54402b29797ab8a00501b88a62a40d8e347a5be8cb2ca6dc398bc",
+      "run-transaction-session": "781430b38cb1b369418b6b5321c56fc96ef122eff9f9b32306e578a73257b389",
+      "lib/libns3.42-traffic-control.so": "2ebf9e8bd0ff4c0c970f076f2bfe3ef5da54c240a2f2c02a4a4ce786459c2557",
+      "lib/libns3.42-stats.so": "0d216548195c7324dbf850040050396aa79e359c848e5bdd898ed9635435b1ef",
+      "lib/libns3.42-point-to-point.so": "6e524c32e26d6819466d2094125ec23466ca6ccb83ed45e1c503abd7051fdb0f",
+      "lib/libns3.42-network.so": "631755f823937a40d2a851c0c3aded254efc1cd956f50b19bb0f471da8c27fc9",
+      "lib/libns3.42-internet.so": "28376cb47a4d969a53cf19dbe64bfbc3b6375e936144d2355d8157daede20c98",
+      "lib/libns3.42-core.so": "9975681ae1df71e900cbdd6b6379f0605524cd399b632ea7c5a5fb4bdc5dccaa",
+      "lib/libns3.42-bridge.so": "62ef37cf30cfd6bb9178e7624ee9e8f86d1433ff4706c6f2c954f1993bfd0e0c",
+      "lib/libns3.42-applications.so": "08b8382fcb6c7469dd0542229883eca67357bb28feb9edff3fbae07d7817b4ec"
+    },
+    "sources": {
+      "backend/rdma/application_window_validation.hh": "13733c0de33d5e4b877b945d8c4d9f86b764fb1a1d001702abe83ab62fb1d0f7",
+      "backend/rdma/application_windows.hh": "02ca231ac69c903904dcc760b304890eef0961a047b70ca31367651d65d311e5",
+      "backend/rdma/astra_adapter.hh": "29c09c9d808c7e19bbdca5647d55f4bb161046c878595662faf8819bbc86feb2",
+      "backend/rdma/bounded_buffers.hh": "ff3bf7ed0014288db60862583259e01da3959afc5984087a61987826e25a950a",
+      "backend/rdma/cnp_switch.hh": "3f1166d5487c6c43b075ede4b4af96e0d30a3e93c43527e83ea61fbee63fefb5",
+      "backend/rdma/dcqcn_reference.hh": "b80eac69407c3d1fd670bb2c5da9a27a04b67faa6a83b322f61673b84bbfc60c",
+      "backend/rdma/fabric.hh": "c24a1ccdb1fae6af1d0a3e7dedbc63c73e1cc9a86e7aad2838c0ea0bacda0739",
+      "backend/rdma/gin_work_queue.hh": "2616252a1620bee3ebb89c603914d7476d904b9a9b9ec2a68e67fcc4f04c3b22",
+      "backend/rdma/host_timing.hh": "7114fcab1d671d7961a4fdfc33e3e19a1cedc5de3ca907e49097573a68ff7d8c",
+      "backend/rdma/link_failure_validation.hh": "ba2e668987426e596011822b2a0f724bdfc3eced0a53cba0a73f702dea30d1c5",
+      "backend/rdma/memory_registrations.hh": "a02799fac561d8ed368576dfd75994c50659d4b3803fcbe332353c4f010ba738",
+      "backend/rdma/nack_grace.hh": "07b0dd90eeafebe3f7c84bb997736bfab5be8ac483d36e5f38fb54a8ca6c8ddc",
+      "backend/rdma/persistent_streams.hh": "e16b6822e226c2cd4469c744f6efd2fdaff73e7a242406d415af3227150796d1",
+      "backend/rdma/recovery.hh": "51f15d2c463b729c357ec1845770e110194da9908372cbf567b4961549fd90f4",
+      "backend/rdma/recovery_records.hh": "864c8e7977876bf0759eef849124983f8b61fe84d7cbc8b2ebda9c3ad2cf392c",
+      "backend/rdma/remote_memory.hh": "2bfe997bf9151ef1aee7d7c45c6b79e8d3465f3d6dca6c7ec4b73436028dda33",
+      "backend/rdma/remote_transactions.hh": "93b56d21f302aefce718e059af5b6e846e0ff926e690ea52d0c240e438af6b39",
+      "backend/rdma/selective_repeat.hh": "b1fd43f06631511e45f8711886b9594edb957fa5c06158844c356999d72dbe21",
+      "backend/rdma/self_peer_service.hh": "2f7583dd7880935778bb239ed55ff93de50dc6794d224f90b5bf792aa5605b85",
+      "backend/rdma/session_callback_batches.hh": "dd911806b5025342d056c12e2af68023718df6bce1ddc5364e828b19a516d529",
+      "backend/rdma/session_wakeups.hh": "9a336df80f9b122bc018a8ec7f37c2f0c2a9390d7f1d3989806b356e47bd9a12",
+      "backend/rdma/transaction_effect_order.hh": "c78a8c2b3d3a905caae1853dc2b971c0ba63576ac63df93e454a13e88ede9b43",
+      "backend/rdma/transaction_limits.hh": "dfe0b38787283ff50bce0a0f3bdd8d355bfdac5fa9b7f4ddb29de6b0517280a5",
+      "backend/rdma/transaction_session_validation.hh": "fa06cb79cc6a67fd9387ad4e2fbfde400c0648e4578ea820c7d9a55065f36fde",
+      "backend/rdma/transaction_transport.hh": "3ddad982f95e9f76f8ef46a51b9bd1ef1c90bc85685b1c08951af2fea33df901",
+      "backend/rdma/remote_transactions.cc": "7c0cac5482ca56bd779dfcf1fff4a5c2bd33bf234317576409d709e3ac7fdde6",
+      "backend/rdma/transaction_session.cc": "87c5b498d8bbb6610bf767717f3082793b09e93d2c8821a8470c92218b4f774b"
+    },
+    "unchanged_objects": {
+      "/dev/shm/moe-nack-grace-20261024/objects/persistent_streams.o": "a4de8d39dce635de6b29abcee065814b2367397420aa2901e8b04dcb03089aa7",
+      "/dev/shm/moe-live-ecmp-20261024/objects/liblive-fabric.a": "b321ee31f2c03cc342adc545cb1c817cb15c7bdff4ef2e9df290d5c896b793cb"
+    },
+    "libraries": {
+      "/dev/shm/moe-incremental-progress-20261025/runtime/lib/libns3.42-applications.so": "08b8382fcb6c7469dd0542229883eca67357bb28feb9edff3fbae07d7817b4ec",
+      "/dev/shm/moe-incremental-progress-20261025/runtime/lib/libns3.42-bridge.so": "62ef37cf30cfd6bb9178e7624ee9e8f86d1433ff4706c6f2c954f1993bfd0e0c",
+      "/dev/shm/moe-incremental-progress-20261025/runtime/lib/libns3.42-core.so": "9975681ae1df71e900cbdd6b6379f0605524cd399b632ea7c5a5fb4bdc5dccaa",
+      "/dev/shm/moe-incremental-progress-20261025/runtime/lib/libns3.42-internet.so": "28376cb47a4d969a53cf19dbe64bfbc3b6375e936144d2355d8157daede20c98",
+      "/dev/shm/moe-incremental-progress-20261025/runtime/lib/libns3.42-network.so": "631755f823937a40d2a851c0c3aded254efc1cd956f50b19bb0f471da8c27fc9",
+      "/dev/shm/moe-incremental-progress-20261025/runtime/lib/libns3.42-point-to-point.so": "6e524c32e26d6819466d2094125ec23466ca6ccb83ed45e1c503abd7051fdb0f",
+      "/dev/shm/moe-incremental-progress-20261025/runtime/lib/libns3.42-stats.so": "0d216548195c7324dbf850040050396aa79e359c848e5bdd898ed9635435b1ef",
+      "/dev/shm/moe-incremental-progress-20261025/runtime/lib/libns3.42-traffic-control.so": "2ebf9e8bd0ff4c0c970f076f2bfe3ef5da54c240a2f2c02a4a4ce786459c2557"
+    },
+    "actual_native_commit": "68a07f7d5e53bbe97d275af41d4964ad01b864f3",
+    "clean_build": false,
+    "optimization": "O0 unchanged",
+    "prior_runtime_sha256": "8f909e9a8f305e8ff36d72d9496e324ebf64e2b5c2ce587e75bf2b4d630e6cff"
+  },
+  "scope": "cached originals rehashed; source-derived comparison only, no competitor performance execution or claim of complete literature search"
+}

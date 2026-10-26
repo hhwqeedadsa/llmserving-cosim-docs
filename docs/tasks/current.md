@@ -13,6 +13,8 @@
 
 ## 当前范围和预算
 
+当前平台 `in_progress`：[现代完整调用接入已有选择重传](modern_selective_bridge_spec.md)，起点 `aeaf4aa`。已确认持久字节和v5事务支持选择模式，现代适配层却未透传必需的 `dcqcn_reference`；本轮补可选字段并保持缺省初始事务、操作依赖及原生程序不变。独立登记最多4次选择模式网络（公开小例与原四路由完整调用各健康/首请求丢包），不复用已关闭阶段预算。900受监控秒/512MiB、单命令60秒/1GiB RSS/2GiB地址及原1ms/捕获20000上限保持；失败保留不自动增限。研究任务继续比较平台和筛选两个最有价值的仿真候选，尚未证明新方法收益或千卡能力。
+
 当前研究 `completed`：[极端故障压力测试](../../experiments/extreme_fault_stress/README.md)，见[网页](../../experiments/extreme_fault_stress/results/20261025/report.html)。已构造并公开验证6条件；实际执行3次，固定Top1/4源4owner/两步4MiB、87.5%人工热点、100G接入/10G上层，DCQCN/选择重传/乱序等待保持，故障保留本地过滤。均匀健康/热点健康/热点单上联故障完成2.566232/4.223689/4.883365ms；故障相对同热点增加659.676us/15.62%，热点加故障相对均匀总增90.29%不能全归故障，也不是新方法收益。三条件全部90工作/64写/完整源字节和依赖通过；故障7次超时，源额外649,808B。第三次实际网络完成但捕获112,070条中遗漏12,070，按事前规则关闭，不扩100000上限、不重跑或追加剩余核心/静态核心/分区；不宣称全物理跳/ACK还原。
 
 准备阶段两项配置格式拒绝、空目录存在的驱动错误及一次只读诊断错误保留，均未导致成功网络重复。三类篡改拒绝，13固定依赖和程序/八库身份通过；167成员/30,616,990B证据包压缩2,773,305B，SHA256 `b313a6f838aac427b7a43aa1f01a81294d8701925fe7f341dcb5d8261354fd1b`存于`runs/extreme_fault_stress_checkpoint_20261025/`。逐hash恢复后，新研究源码根/空cwd离线摘要与核验逐字节一致，不需要native运行时、不执行网络；不声称从零构建/硬件校准。含嵌套保守47.855监控秒、峰值598.29MiB；阶段/恢复/持久/研究源码含2MiB预留计63.81MiB，保持600秒/384MiB、单命令60秒/1GiB/2GiB和全部限额。原件`/dev/shm/moe-extreme-fault-stress-20261025/`，见[摘要](../../experiments/extreme_fault_stress/results/20261025/summary.json)、[核验](../../experiments/extreme_fault_stress/results/20261025/verification.json)、[恢复](../../experiments/extreme_fault_stress/results/20261025/replay.json)及[收尾](../../experiments/extreme_fault_stress/results/20261025/closeout.json)。无平台/依赖修改、构建安装下载/GPU/push。本轮交付结束，整体论文创新、真实负载泛化和硬件价值仍未成立，不自动启动第二阶段以扩大压力结果。

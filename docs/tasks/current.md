@@ -13,6 +13,10 @@
 
 ## 当前范围和预算
 
+
+当前研究 `in_progress`：[真实路由覆盖盘点与有界扩充](../../experiments/route_coverage/protocol.md)，起点`01a4d68`。按用户新增要求，先盘点四份原件全部层/步，再准备64个不同请求、四类来源的固定版本清单，检查公开获取能力；历史1024请求清单不能替代当前可读原件。不执行网络仿真，不改变平台/依赖或原生规模限制，不push。新阶段600秒/512MiB，原始下载≤64份/128MiB，目录≤8请求/8MiB，单请求12秒，失败不重试、不接纳新条款；详细边界见协议。
+
+
 当前研究 `completed`：[现代网络瓶颈三组判别](../../experiments/modern_network_levers/README.md)，固定平台 `710bafc`。四份原始路由独立选择下标2/层3、四活动rank、显式2KB分包及完整现代调用，三次正常网络成功并关闭。原网络/带宽翻倍/传播减半的模型应用阶段为57.479/53.446/33.503us；全部现代事件及源保护释放63.523/59.468/36.547us，网络排空69.547/65.480/39.571us，明确三种完成定义。应用阶段改善7.02%/41.71%，只是声明成本、小batch的参数敏感性，不是同成本软件收益、优化上界或生产预测。
 
 三条件同输入/现代计划、120操作/576事件、271,200B源MRT1帧、264源包，控制请求/原子回复占帧字节4%而源数据包45.45%；不能改称全网线上字节或将传播收益全归控制。捕获无遗漏但本轮未声称完整物理路径重建；无重复源包、恢复超时或CNP命名事件，不能推广为故障拥塞结果。7类篡改拒绝、8份缓存一手来源hash及13固定依赖通过；逐成员hash恢复后的新研究根/空cwd复算两JSON逐字节相同，无新增网络。证据与持久包在 `runs/modern_network_levers_checkpoint_20261026/`，见[摘要](../../experiments/modern_network_levers/results/20261026/summary.json)、[核验](../../experiments/modern_network_levers/results/20261026/verification.json)、[收尾](../../experiments/modern_network_levers/results/20261026/closeout.json)、[网页](../../experiments/modern_network_levers/results/20261026/report.html)和[中文报告](../reviews/联合仿真的两个创新候选与网络收益判别_20261026.md)。保持450秒/256MiB及全部单命令/仿真上限，无失败网络、成功网络重跑、平台/依赖修改、构建安装下载/GPU/push。

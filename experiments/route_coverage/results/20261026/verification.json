@@ -1,0 +1,18 @@
+{
+  "independent_raw_counts": true,
+  "independent_histograms": true,
+  "independent_traffic_waves": 51968,
+  "deterministic_reanalysis": true,
+  "passed": true,
+  "synthetic_checks": [
+    "unequal_lengths_report_unused_tails",
+    "Duplicate contents",
+    "SHA256",
+    "file_budget",
+    "plan_order_independent",
+    "unknown_identity_not_data_ready",
+    "request_level_split"
+  ],
+  "network_simulations": 0,
+  "new_route_files": 0
+}

@@ -1,0 +1,19 @@
+{
+  "state": "delivered_with_expansion_unavailable",
+  "new_raw_files": 0,
+  "network_simulations": 0,
+  "http_requests": 5,
+  "http_retries": 0,
+  "completed_monitored_commands": 3,
+  "monitored_seconds_before_finalizer": 50.062468599528074,
+  "finalizer_reserved_seconds": 60,
+  "maximum_stage_seconds": 600,
+  "bytes_before_closeout": 450317,
+  "reserved_receipt_bytes": 2097152,
+  "maximum_stage_bytes": 536870912,
+  "preserved_setup_failure": "catalog.stderr.log: /usr/bin/time absent; no HTTP executed by that command",
+  "access_state": "connection_error_not_confirmed_http_authorization_failure",
+  "platform_modified": false,
+  "dependencies_modified": false,
+  "pushed": false
+}

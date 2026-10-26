@@ -1,0 +1,595 @@
+{
+  "schema_version": "moe-route-expansion-plan/1",
+  "dataset_id": "core12345/MoE_expert_selection_trace",
+  "revision": "27febb7b2d24169560a9f6f83d38eb53f94916cf",
+  "collector_model": "cognitivecomputations/DeepSeek-R1-AWQ",
+  "seed": 20261026,
+  "algorithm": "sha256_seed_newline_path_v1_per_group",
+  "requested_files": 64,
+  "data_ready": false,
+  "files": [
+    {
+      "path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/computer_security/1525.json",
+      "size": null,
+      "git_blob_id": null,
+      "group": "mmlu/computer_security",
+      "group_order": 0,
+      "split": "development",
+      "url": "https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/resolve/27febb7b2d24169560a9f6f83d38eb53f94916cf/cognitivecomputations/DeepSeek-R1-AWQ/mmlu/computer_security/1525.json"
+    },
+    {
+      "path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/computer_security/1570.json",
+      "size": null,
+      "git_blob_id": null,
+      "group": "mmlu/computer_security",
+      "group_order": 1,
+      "split": "development",
+      "url": "https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/resolve/27febb7b2d24169560a9f6f83d38eb53f94916cf/cognitivecomputations/DeepSeek-R1-AWQ/mmlu/computer_security/1570.json"
+    },
+    {
+      "path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/computer_security/1492.json",
+      "size": null,
+      "git_blob_id": null,
+      "group": "mmlu/computer_security",
+      "group_order": 2,
+      "split": "development",
+      "url": "https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/resolve/27febb7b2d24169560a9f6f83d38eb53f94916cf/cognitivecomputations/DeepSeek-R1-AWQ/mmlu/computer_security/1492.json"
+    },
+    {
+      "path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/computer_security/1475.json",
+      "size": null,
+      "git_blob_id": null,
+      "group": "mmlu/computer_security",
+      "group_order": 3,
+      "split": "development",
+      "url": "https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/resolve/27febb7b2d24169560a9f6f83d38eb53f94916cf/cognitivecomputations/DeepSeek-R1-AWQ/mmlu/computer_security/1475.json"
+    },
+    {
+      "path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/computer_security/1533.json",
+      "size": null,
+      "git_blob_id": null,
+      "group": "mmlu/computer_security",
+      "group_order": 4,
+      "split": "development",
+      "url": "https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/resolve/27febb7b2d24169560a9f6f83d38eb53f94916cf/cognitivecomputations/DeepSeek-R1-AWQ/mmlu/computer_security/1533.json"
+    },
+    {
+      "path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/computer_security/1509.json",
+      "size": null,
+      "git_blob_id": null,
+      "group": "mmlu/computer_security",
+      "group_order": 5,
+      "split": "development",
+      "url": "https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/resolve/27febb7b2d24169560a9f6f83d38eb53f94916cf/cognitivecomputations/DeepSeek-R1-AWQ/mmlu/computer_security/1509.json"
+    },
+    {
+      "path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/computer_security/1508.json",
+      "size": null,
+      "git_blob_id": null,
+      "group": "mmlu/computer_security",
+      "group_order": 6,
+      "split": "development",
+      "url": "https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/resolve/27febb7b2d24169560a9f6f83d38eb53f94916cf/cognitivecomputations/DeepSeek-R1-AWQ/mmlu/computer_security/1508.json"
+    },
+    {
+      "path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/computer_security/1552.json",
+      "size": null,
+      "git_blob_id": null,
+      "group": "mmlu/computer_security",
+      "group_order": 7,
+      "split": "development",
+      "url": "https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/resolve/27febb7b2d24169560a9f6f83d38eb53f94916cf/cognitivecomputations/DeepSeek-R1-AWQ/mmlu/computer_security/1552.json"
+    },
+    {
+      "path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/computer_security/1498.json",
+      "size": null,
+      "git_blob_id": null,
+      "group": "mmlu/computer_security",
+      "group_order": 8,
+      "split": "holdout_candidate",
+      "url": "https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/resolve/27febb7b2d24169560a9f6f83d38eb53f94916cf/cognitivecomputations/DeepSeek-R1-AWQ/mmlu/computer_security/1498.json"
+    },
+    {
+      "path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/computer_security/1546.json",
+      "size": null,
+      "git_blob_id": null,
+      "group": "mmlu/computer_security",
+      "group_order": 9,
+      "split": "holdout_candidate",
+      "url": "https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/resolve/27febb7b2d24169560a9f6f83d38eb53f94916cf/cognitivecomputations/DeepSeek-R1-AWQ/mmlu/computer_security/1546.json"
+    },
+    {
+      "path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/computer_security/1507.json",
+      "size": null,
+      "git_blob_id": null,
+      "group": "mmlu/computer_security",
+      "group_order": 10,
+      "split": "holdout_candidate",
+      "url": "https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/resolve/27febb7b2d24169560a9f6f83d38eb53f94916cf/cognitivecomputations/DeepSeek-R1-AWQ/mmlu/computer_security/1507.json"
+    },
+    {
+      "path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/computer_security/1474.json",
+      "size": null,
+      "git_blob_id": null,
+      "group": "mmlu/computer_security",
+      "group_order": 11,
+      "split": "holdout_candidate",
+      "url": "https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/resolve/27febb7b2d24169560a9f6f83d38eb53f94916cf/cognitivecomputations/DeepSeek-R1-AWQ/mmlu/computer_security/1474.json"
+    },
+    {
+      "path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/computer_security/1555.json",
+      "size": null,
+      "git_blob_id": null,
+      "group": "mmlu/computer_security",
+      "group_order": 12,
+      "split": "holdout_candidate",
+      "url": "https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/resolve/27febb7b2d24169560a9f6f83d38eb53f94916cf/cognitivecomputations/DeepSeek-R1-AWQ/mmlu/computer_security/1555.json"
+    },
+    {
+      "path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/computer_security/1553.json",
+      "size": null,
+      "git_blob_id": null,
+      "group": "mmlu/computer_security",
+      "group_order": 13,
+      "split": "holdout_candidate",
+      "url": "https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/resolve/27febb7b2d24169560a9f6f83d38eb53f94916cf/cognitivecomputations/DeepSeek-R1-AWQ/mmlu/computer_security/1553.json"
+    },
+    {
+      "path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/computer_security/1568.json",
+      "size": null,
+      "git_blob_id": null,
+      "group": "mmlu/computer_security",
+      "group_order": 14,
+      "split": "holdout_candidate",
+      "url": "https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/resolve/27febb7b2d24169560a9f6f83d38eb53f94916cf/cognitivecomputations/DeepSeek-R1-AWQ/mmlu/computer_security/1568.json"
+    },
+    {
+      "path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/computer_security/1490.json",
+      "size": null,
+      "git_blob_id": null,
+      "group": "mmlu/computer_security",
+      "group_order": 15,
+      "split": "holdout_candidate",
+      "url": "https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/resolve/27febb7b2d24169560a9f6f83d38eb53f94916cf/cognitivecomputations/DeepSeek-R1-AWQ/mmlu/computer_security/1490.json"
+    },
+    {
+      "path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/econometrics/1879.json",
+      "size": null,
+      "git_blob_id": null,
+      "group": "mmlu/econometrics",
+      "group_order": 0,
+      "split": "development",
+      "url": "https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/resolve/27febb7b2d24169560a9f6f83d38eb53f94916cf/cognitivecomputations/DeepSeek-R1-AWQ/mmlu/econometrics/1879.json"
+    },
+    {
+      "path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/econometrics/1823.json",
+      "size": null,
+      "git_blob_id": null,
+      "group": "mmlu/econometrics",
+      "group_order": 1,
+      "split": "development",
+      "url": "https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/resolve/27febb7b2d24169560a9f6f83d38eb53f94916cf/cognitivecomputations/DeepSeek-R1-AWQ/mmlu/econometrics/1823.json"
+    },
+    {
+      "path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/econometrics/1856.json",
+      "size": null,
+      "git_blob_id": null,
+      "group": "mmlu/econometrics",
+      "group_order": 2,
+      "split": "development",
+      "url": "https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/resolve/27febb7b2d24169560a9f6f83d38eb53f94916cf/cognitivecomputations/DeepSeek-R1-AWQ/mmlu/econometrics/1856.json"
+    },
+    {
+      "path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/econometrics/1829.json",
+      "size": null,
+      "git_blob_id": null,
+      "group": "mmlu/econometrics",
+      "group_order": 3,
+      "split": "development",
+      "url": "https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/resolve/27febb7b2d24169560a9f6f83d38eb53f94916cf/cognitivecomputations/DeepSeek-R1-AWQ/mmlu/econometrics/1829.json"
+    },
+    {
+      "path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/econometrics/1825.json",
+      "size": null,
+      "git_blob_id": null,
+      "group": "mmlu/econometrics",
+      "group_order": 4,
+      "split": "development",
+      "url": "https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/resolve/27febb7b2d24169560a9f6f83d38eb53f94916cf/cognitivecomputations/DeepSeek-R1-AWQ/mmlu/econometrics/1825.json"
+    },
+    {
+      "path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/econometrics/1907.json",
+      "size": null,
+      "git_blob_id": null,
+      "group": "mmlu/econometrics",
+      "group_order": 5,
+      "split": "development",
+      "url": "https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/resolve/27febb7b2d24169560a9f6f83d38eb53f94916cf/cognitivecomputations/DeepSeek-R1-AWQ/mmlu/econometrics/1907.json"
+    },
+    {
+      "path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/econometrics/1898.json",
+      "size": null,
+      "git_blob_id": null,
+      "group": "mmlu/econometrics",
+      "group_order": 6,
+      "split": "development",
+      "url": "https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/resolve/27febb7b2d24169560a9f6f83d38eb53f94916cf/cognitivecomputations/DeepSeek-R1-AWQ/mmlu/econometrics/1898.json"
+    },
+    {
+      "path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/econometrics/1814.json",
+      "size": null,
+      "git_blob_id": null,
+      "group": "mmlu/econometrics",
+      "group_order": 7,
+      "split": "development",
+      "url": "https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/resolve/27febb7b2d24169560a9f6f83d38eb53f94916cf/cognitivecomputations/DeepSeek-R1-AWQ/mmlu/econometrics/1814.json"
+    },
+    {
+      "path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/econometrics/1904.json",
+      "size": null,
+      "git_blob_id": null,
+      "group": "mmlu/econometrics",
+      "group_order": 8,
+      "split": "holdout_candidate",
+      "url": "https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/resolve/27febb7b2d24169560a9f6f83d38eb53f94916cf/cognitivecomputations/DeepSeek-R1-AWQ/mmlu/econometrics/1904.json"
+    },
+    {
+      "path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/econometrics/1847.json",
+      "size": null,
+      "git_blob_id": null,
+      "group": "mmlu/econometrics",
+      "group_order": 9,
+      "split": "holdout_candidate",
+      "url": "https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/resolve/27febb7b2d24169560a9f6f83d38eb53f94916cf/cognitivecomputations/DeepSeek-R1-AWQ/mmlu/econometrics/1847.json"
+    },
+    {
+      "path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/econometrics/1816.json",
+      "size": null,
+      "git_blob_id": null,
+      "group": "mmlu/econometrics",
+      "group_order": 10,
+      "split": "holdout_candidate",
+      "url": "https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/resolve/27febb7b2d24169560a9f6f83d38eb53f94916cf/cognitivecomputations/DeepSeek-R1-AWQ/mmlu/econometrics/1816.json"
+    },
+    {
+      "path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/econometrics/1905.json",
+      "size": null,
+      "git_blob_id": null,
+      "group": "mmlu/econometrics",
+      "group_order": 11,
+      "split": "holdout_candidate",
+      "url": "https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/resolve/27febb7b2d24169560a9f6f83d38eb53f94916cf/cognitivecomputations/DeepSeek-R1-AWQ/mmlu/econometrics/1905.json"
+    },
+    {
+      "path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/econometrics/1908.json",
+      "size": null,
+      "git_blob_id": null,
+      "group": "mmlu/econometrics",
+      "group_order": 12,
+      "split": "holdout_candidate",
+      "url": "https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/resolve/27febb7b2d24169560a9f6f83d38eb53f94916cf/cognitivecomputations/DeepSeek-R1-AWQ/mmlu/econometrics/1908.json"
+    },
+    {
+      "path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/econometrics/1843.json",
+      "size": null,
+      "git_blob_id": null,
+      "group": "mmlu/econometrics",
+      "group_order": 13,
+      "split": "holdout_candidate",
+      "url": "https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/resolve/27febb7b2d24169560a9f6f83d38eb53f94916cf/cognitivecomputations/DeepSeek-R1-AWQ/mmlu/econometrics/1843.json"
+    },
+    {
+      "path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/econometrics/1894.json",
+      "size": null,
+      "git_blob_id": null,
+      "group": "mmlu/econometrics",
+      "group_order": 14,
+      "split": "holdout_candidate",
+      "url": "https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/resolve/27febb7b2d24169560a9f6f83d38eb53f94916cf/cognitivecomputations/DeepSeek-R1-AWQ/mmlu/econometrics/1894.json"
+    },
+    {
+      "path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/econometrics/1886.json",
+      "size": null,
+      "git_blob_id": null,
+      "group": "mmlu/econometrics",
+      "group_order": 15,
+      "split": "holdout_candidate",
+      "url": "https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/resolve/27febb7b2d24169560a9f6f83d38eb53f94916cf/cognitivecomputations/DeepSeek-R1-AWQ/mmlu/econometrics/1886.json"
+    },
+    {
+      "path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu_ZH_CN/international_law/6499.json",
+      "size": null,
+      "git_blob_id": null,
+      "group": "mmlu_ZH_CN/international_law",
+      "group_order": 0,
+      "split": "development",
+      "url": "https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/resolve/27febb7b2d24169560a9f6f83d38eb53f94916cf/cognitivecomputations/DeepSeek-R1-AWQ/mmlu_ZH_CN/international_law/6499.json"
+    },
+    {
+      "path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu_ZH_CN/international_law/6500.json",
+      "size": null,
+      "git_blob_id": null,
+      "group": "mmlu_ZH_CN/international_law",
+      "group_order": 1,
+      "split": "development",
+      "url": "https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/resolve/27febb7b2d24169560a9f6f83d38eb53f94916cf/cognitivecomputations/DeepSeek-R1-AWQ/mmlu_ZH_CN/international_law/6500.json"
+    },
+    {
+      "path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu_ZH_CN/international_law/6459.json",
+      "size": null,
+      "git_blob_id": null,
+      "group": "mmlu_ZH_CN/international_law",
+      "group_order": 2,
+      "split": "development",
+      "url": "https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/resolve/27febb7b2d24169560a9f6f83d38eb53f94916cf/cognitivecomputations/DeepSeek-R1-AWQ/mmlu_ZH_CN/international_law/6459.json"
+    },
+    {
+      "path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu_ZH_CN/international_law/6481.json",
+      "size": null,
+      "git_blob_id": null,
+      "group": "mmlu_ZH_CN/international_law",
+      "group_order": 3,
+      "split": "development",
+      "url": "https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/resolve/27febb7b2d24169560a9f6f83d38eb53f94916cf/cognitivecomputations/DeepSeek-R1-AWQ/mmlu_ZH_CN/international_law/6481.json"
+    },
+    {
+      "path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu_ZH_CN/international_law/6561.json",
+      "size": null,
+      "git_blob_id": null,
+      "group": "mmlu_ZH_CN/international_law",
+      "group_order": 4,
+      "split": "development",
+      "url": "https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/resolve/27febb7b2d24169560a9f6f83d38eb53f94916cf/cognitivecomputations/DeepSeek-R1-AWQ/mmlu_ZH_CN/international_law/6561.json"
+    },
+    {
+      "path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu_ZH_CN/international_law/6447.json",
+      "size": null,
+      "git_blob_id": null,
+      "group": "mmlu_ZH_CN/international_law",
+      "group_order": 5,
+      "split": "development",
+      "url": "https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/resolve/27febb7b2d24169560a9f6f83d38eb53f94916cf/cognitivecomputations/DeepSeek-R1-AWQ/mmlu_ZH_CN/international_law/6447.json"
+    },
+    {
+      "path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu_ZH_CN/international_law/6521.json",
+      "size": null,
+      "git_blob_id": null,
+      "group": "mmlu_ZH_CN/international_law",
+      "group_order": 6,
+      "split": "development",
+      "url": "https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/resolve/27febb7b2d24169560a9f6f83d38eb53f94916cf/cognitivecomputations/DeepSeek-R1-AWQ/mmlu_ZH_CN/international_law/6521.json"
+    },
+    {
+      "path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu_ZH_CN/international_law/6453.json",
+      "size": null,
+      "git_blob_id": null,
+      "group": "mmlu_ZH_CN/international_law",
+      "group_order": 7,
+      "split": "development",
+      "url": "https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/resolve/27febb7b2d24169560a9f6f83d38eb53f94916cf/cognitivecomputations/DeepSeek-R1-AWQ/mmlu_ZH_CN/international_law/6453.json"
+    },
+    {
+      "path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu_ZH_CN/international_law/6451.json",
+      "size": null,
+      "git_blob_id": null,
+      "group": "mmlu_ZH_CN/international_law",
+      "group_order": 8,
+      "split": "holdout_candidate",
+      "url": "https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/resolve/27febb7b2d24169560a9f6f83d38eb53f94916cf/cognitivecomputations/DeepSeek-R1-AWQ/mmlu_ZH_CN/international_law/6451.json"
+    },
+    {
+      "path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu_ZH_CN/international_law/6474.json",
+      "size": null,
+      "git_blob_id": null,
+      "group": "mmlu_ZH_CN/international_law",
+      "group_order": 9,
+      "split": "holdout_candidate",
+      "url": "https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/resolve/27febb7b2d24169560a9f6f83d38eb53f94916cf/cognitivecomputations/DeepSeek-R1-AWQ/mmlu_ZH_CN/international_law/6474.json"
+    },
+    {
+      "path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu_ZH_CN/international_law/6497.json",
+      "size": null,
+      "git_blob_id": null,
+      "group": "mmlu_ZH_CN/international_law",
+      "group_order": 10,
+      "split": "holdout_candidate",
+      "url": "https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/resolve/27febb7b2d24169560a9f6f83d38eb53f94916cf/cognitivecomputations/DeepSeek-R1-AWQ/mmlu_ZH_CN/international_law/6497.json"
+    },
+    {
+      "path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu_ZH_CN/international_law/6463.json",
+      "size": null,
+      "git_blob_id": null,
+      "group": "mmlu_ZH_CN/international_law",
+      "group_order": 11,
+      "split": "holdout_candidate",
+      "url": "https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/resolve/27febb7b2d24169560a9f6f83d38eb53f94916cf/cognitivecomputations/DeepSeek-R1-AWQ/mmlu_ZH_CN/international_law/6463.json"
+    },
+    {
+      "path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu_ZH_CN/international_law/6511.json",
+      "size": null,
+      "git_blob_id": null,
+      "group": "mmlu_ZH_CN/international_law",
+      "group_order": 12,
+      "split": "holdout_candidate",
+      "url": "https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/resolve/27febb7b2d24169560a9f6f83d38eb53f94916cf/cognitivecomputations/DeepSeek-R1-AWQ/mmlu_ZH_CN/international_law/6511.json"
+    },
+    {
+      "path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu_ZH_CN/international_law/6559.json",
+      "size": null,
+      "git_blob_id": null,
+      "group": "mmlu_ZH_CN/international_law",
+      "group_order": 13,
+      "split": "holdout_candidate",
+      "url": "https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/resolve/27febb7b2d24169560a9f6f83d38eb53f94916cf/cognitivecomputations/DeepSeek-R1-AWQ/mmlu_ZH_CN/international_law/6559.json"
+    },
+    {
+      "path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu_ZH_CN/international_law/6537.json",
+      "size": null,
+      "git_blob_id": null,
+      "group": "mmlu_ZH_CN/international_law",
+      "group_order": 14,
+      "split": "holdout_candidate",
+      "url": "https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/resolve/27febb7b2d24169560a9f6f83d38eb53f94916cf/cognitivecomputations/DeepSeek-R1-AWQ/mmlu_ZH_CN/international_law/6537.json"
+    },
+    {
+      "path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu_ZH_CN/international_law/6465.json",
+      "size": null,
+      "git_blob_id": null,
+      "group": "mmlu_ZH_CN/international_law",
+      "group_order": 15,
+      "split": "holdout_candidate",
+      "url": "https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/resolve/27febb7b2d24169560a9f6f83d38eb53f94916cf/cognitivecomputations/DeepSeek-R1-AWQ/mmlu_ZH_CN/international_law/6465.json"
+    },
+    {
+      "path": "cognitivecomputations/DeepSeek-R1-AWQ/livecodebench/execution/105.json",
+      "size": null,
+      "git_blob_id": null,
+      "group": "livecodebench/execution",
+      "group_order": 0,
+      "split": "development",
+      "url": "https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/resolve/27febb7b2d24169560a9f6f83d38eb53f94916cf/cognitivecomputations/DeepSeek-R1-AWQ/livecodebench/execution/105.json"
+    },
+    {
+      "path": "cognitivecomputations/DeepSeek-R1-AWQ/livecodebench/execution/316.json",
+      "size": null,
+      "git_blob_id": null,
+      "group": "livecodebench/execution",
+      "group_order": 1,
+      "split": "development",
+      "url": "https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/resolve/27febb7b2d24169560a9f6f83d38eb53f94916cf/cognitivecomputations/DeepSeek-R1-AWQ/livecodebench/execution/316.json"
+    },
+    {
+      "path": "cognitivecomputations/DeepSeek-R1-AWQ/livecodebench/execution/442.json",
+      "size": null,
+      "git_blob_id": null,
+      "group": "livecodebench/execution",
+      "group_order": 2,
+      "split": "development",
+      "url": "https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/resolve/27febb7b2d24169560a9f6f83d38eb53f94916cf/cognitivecomputations/DeepSeek-R1-AWQ/livecodebench/execution/442.json"
+    },
+    {
+      "path": "cognitivecomputations/DeepSeek-R1-AWQ/livecodebench/execution/282.json",
+      "size": null,
+      "git_blob_id": null,
+      "group": "livecodebench/execution",
+      "group_order": 3,
+      "split": "development",
+      "url": "https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/resolve/27febb7b2d24169560a9f6f83d38eb53f94916cf/cognitivecomputations/DeepSeek-R1-AWQ/livecodebench/execution/282.json"
+    },
+    {
+      "path": "cognitivecomputations/DeepSeek-R1-AWQ/livecodebench/execution/415.json",
+      "size": null,
+      "git_blob_id": null,
+      "group": "livecodebench/execution",
+      "group_order": 4,
+      "split": "development",
+      "url": "https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/resolve/27febb7b2d24169560a9f6f83d38eb53f94916cf/cognitivecomputations/DeepSeek-R1-AWQ/livecodebench/execution/415.json"
+    },
+    {
+      "path": "cognitivecomputations/DeepSeek-R1-AWQ/livecodebench/execution/29.json",
+      "size": null,
+      "git_blob_id": null,
+      "group": "livecodebench/execution",
+      "group_order": 5,
+      "split": "development",
+      "url": "https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/resolve/27febb7b2d24169560a9f6f83d38eb53f94916cf/cognitivecomputations/DeepSeek-R1-AWQ/livecodebench/execution/29.json"
+    },
+    {
+      "path": "cognitivecomputations/DeepSeek-R1-AWQ/livecodebench/execution/294.json",
+      "size": null,
+      "git_blob_id": null,
+      "group": "livecodebench/execution",
+      "group_order": 6,
+      "split": "development",
+      "url": "https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/resolve/27febb7b2d24169560a9f6f83d38eb53f94916cf/cognitivecomputations/DeepSeek-R1-AWQ/livecodebench/execution/294.json"
+    },
+    {
+      "path": "cognitivecomputations/DeepSeek-R1-AWQ/livecodebench/execution/2.json",
+      "size": null,
+      "git_blob_id": null,
+      "group": "livecodebench/execution",
+      "group_order": 7,
+      "split": "development",
+      "url": "https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/resolve/27febb7b2d24169560a9f6f83d38eb53f94916cf/cognitivecomputations/DeepSeek-R1-AWQ/livecodebench/execution/2.json"
+    },
+    {
+      "path": "cognitivecomputations/DeepSeek-R1-AWQ/livecodebench/execution/443.json",
+      "size": null,
+      "git_blob_id": null,
+      "group": "livecodebench/execution",
+      "group_order": 8,
+      "split": "holdout_candidate",
+      "url": "https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/resolve/27febb7b2d24169560a9f6f83d38eb53f94916cf/cognitivecomputations/DeepSeek-R1-AWQ/livecodebench/execution/443.json"
+    },
+    {
+      "path": "cognitivecomputations/DeepSeek-R1-AWQ/livecodebench/execution/44.json",
+      "size": null,
+      "git_blob_id": null,
+      "group": "livecodebench/execution",
+      "group_order": 9,
+      "split": "holdout_candidate",
+      "url": "https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/resolve/27febb7b2d24169560a9f6f83d38eb53f94916cf/cognitivecomputations/DeepSeek-R1-AWQ/livecodebench/execution/44.json"
+    },
+    {
+      "path": "cognitivecomputations/DeepSeek-R1-AWQ/livecodebench/execution/347.json",
+      "size": null,
+      "git_blob_id": null,
+      "group": "livecodebench/execution",
+      "group_order": 10,
+      "split": "holdout_candidate",
+      "url": "https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/resolve/27febb7b2d24169560a9f6f83d38eb53f94916cf/cognitivecomputations/DeepSeek-R1-AWQ/livecodebench/execution/347.json"
+    },
+    {
+      "path": "cognitivecomputations/DeepSeek-R1-AWQ/livecodebench/execution/399.json",
+      "size": null,
+      "git_blob_id": null,
+      "group": "livecodebench/execution",
+      "group_order": 11,
+      "split": "holdout_candidate",
+      "url": "https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/resolve/27febb7b2d24169560a9f6f83d38eb53f94916cf/cognitivecomputations/DeepSeek-R1-AWQ/livecodebench/execution/399.json"
+    },
+    {
+      "path": "cognitivecomputations/DeepSeek-R1-AWQ/livecodebench/execution/268.json",
+      "size": null,
+      "git_blob_id": null,
+      "group": "livecodebench/execution",
+      "group_order": 12,
+      "split": "holdout_candidate",
+      "url": "https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/resolve/27febb7b2d24169560a9f6f83d38eb53f94916cf/cognitivecomputations/DeepSeek-R1-AWQ/livecodebench/execution/268.json"
+    },
+    {
+      "path": "cognitivecomputations/DeepSeek-R1-AWQ/livecodebench/execution/124.json",
+      "size": null,
+      "git_blob_id": null,
+      "group": "livecodebench/execution",
+      "group_order": 13,
+      "split": "holdout_candidate",
+      "url": "https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/resolve/27febb7b2d24169560a9f6f83d38eb53f94916cf/cognitivecomputations/DeepSeek-R1-AWQ/livecodebench/execution/124.json"
+    },
+    {
+      "path": "cognitivecomputations/DeepSeek-R1-AWQ/livecodebench/execution/38.json",
+      "size": null,
+      "git_blob_id": null,
+      "group": "livecodebench/execution",
+      "group_order": 14,
+      "split": "holdout_candidate",
+      "url": "https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/resolve/27febb7b2d24169560a9f6f83d38eb53f94916cf/cognitivecomputations/DeepSeek-R1-AWQ/livecodebench/execution/38.json"
+    },
+    {
+      "path": "cognitivecomputations/DeepSeek-R1-AWQ/livecodebench/execution/331.json",
+      "size": null,
+      "git_blob_id": null,
+      "group": "livecodebench/execution",
+      "group_order": 15,
+      "split": "holdout_candidate",
+      "url": "https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/resolve/27febb7b2d24169560a9f6f83d38eb53f94916cf/cognitivecomputations/DeepSeek-R1-AWQ/livecodebench/execution/331.json"
+    }
+  ],
+  "independent_capture_runs_verified": false,
+  "scope": "four_declared_subtrees_not_population_sample",
+  "max_download_bytes": 134217728,
+  "max_file_bytes": 8388608,
+  "all_catalogs_complete": false,
+  "estimated_selected_bytes": null,
+  "fits_download_byte_budget": null
+}

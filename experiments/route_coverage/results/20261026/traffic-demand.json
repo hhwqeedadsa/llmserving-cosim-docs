@@ -1,0 +1,175 @@
+{
+  "schema_version": "moe-route-traffic-demand/1",
+  "ranks": 4,
+  "expert_placement": "contiguous_equal_capacity_per_layer",
+  "source_assignment": "manifest_request_index_modulo_4",
+  "batch_definition": "distinct_requests_per_EP_group",
+  "source_count_changes_with_batch": true,
+  "activation_bytes": 2,
+  "activation_precision": "declared_BF16_not_collection_evidence",
+  "hidden_size": 7168,
+  "payload_unit": "one_hidden_vector_per_token_per_remote_destination_rank",
+  "excludes": [
+    "metadata",
+    "control",
+    "ACK_NACK_CNP",
+    "headers",
+    "combine",
+    "expert_compute",
+    "real_arrivals",
+    "queues",
+    "latency"
+  ],
+  "dataset_coverage_sha256": "caf6870f867e3307c52873a4fa1491c9225ff77f9735742b8a74313f80717a16",
+  "batches": [
+    {
+      "batch": 1,
+      "state": "offline_demand_only",
+      "groups": [
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "unused_request_indices": [],
+      "common_decode_steps_per_group": [
+        128,
+        128,
+        128,
+        128
+      ],
+      "application_waves": 29696,
+      "remote_vector_copies": {
+        "count": 29696,
+        "minimum": 1,
+        "median": 2,
+        "p95_nearest_rank": 3,
+        "maximum": 3
+      },
+      "dispatch_payload_bytes": {
+        "count": 29696,
+        "minimum": 14336,
+        "median": 28672,
+        "p95_nearest_rank": 43008,
+        "maximum": 43008
+      },
+      "positive_demand_destination_peak_to_mean": {
+        "count": 29696,
+        "minimum": 1.3333333333333333,
+        "median": 2.0,
+        "p95_nearest_rank": 2.0,
+        "maximum": 4.0
+      },
+      "unused_decode_tokens_due_to_common_prefix": 0
+    },
+    {
+      "batch": 2,
+      "state": "offline_demand_only",
+      "groups": [
+        [
+          0,
+          1
+        ],
+        [
+          2,
+          3
+        ]
+      ],
+      "unused_request_indices": [],
+      "common_decode_steps_per_group": [
+        128,
+        128
+      ],
+      "application_waves": 14848,
+      "remote_vector_copies": {
+        "count": 14848,
+        "minimum": 2,
+        "median": 5,
+        "p95_nearest_rank": 6,
+        "maximum": 6
+      },
+      "dispatch_payload_bytes": {
+        "count": 14848,
+        "minimum": 28672,
+        "median": 71680,
+        "p95_nearest_rank": 86016,
+        "maximum": 86016
+      },
+      "positive_demand_destination_peak_to_mean": {
+        "count": 14848,
+        "minimum": 1.0,
+        "median": 1.6,
+        "p95_nearest_rank": 2.0,
+        "maximum": 4.0
+      },
+      "unused_decode_tokens_due_to_common_prefix": 0
+    },
+    {
+      "batch": 4,
+      "state": "offline_demand_only",
+      "groups": [
+        [
+          0,
+          1,
+          2,
+          3
+        ]
+      ],
+      "unused_request_indices": [],
+      "common_decode_steps_per_group": [
+        128
+      ],
+      "application_waves": 7424,
+      "remote_vector_copies": {
+        "count": 7424,
+        "minimum": 5,
+        "median": 9,
+        "p95_nearest_rank": 11,
+        "maximum": 12
+      },
+      "dispatch_payload_bytes": {
+        "count": 7424,
+        "minimum": 71680,
+        "median": 129024,
+        "p95_nearest_rank": 157696,
+        "maximum": 172032
+      },
+      "positive_demand_destination_peak_to_mean": {
+        "count": 7424,
+        "minimum": 1.0,
+        "median": 1.3333333333333333,
+        "p95_nearest_rank": 1.5,
+        "maximum": 2.4
+      },
+      "unused_decode_tokens_due_to_common_prefix": 0
+    },
+    {
+      "batch": 8,
+      "state": "unavailable_distinct_requests",
+      "available_request_files": 4
+    },
+    {
+      "batch": 16,
+      "state": "unavailable_distinct_requests",
+      "available_request_files": 4
+    },
+    {
+      "batch": 32,
+      "state": "unavailable_distinct_requests",
+      "available_request_files": 4
+    },
+    {
+      "batch": 64,
+      "state": "unavailable_distinct_requests",
+      "available_request_files": 4
+    }
+  ]
+}

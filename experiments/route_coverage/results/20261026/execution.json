@@ -1,0 +1,107 @@
+{
+  "monitored_commands": [
+    {
+      "command": [
+        "python3",
+        "-B",
+        "experiments/route_coverage/analyze.py",
+        "--manifest",
+        "data/moe-trace-small/manifest.json",
+        "--output-dir",
+        "runs/route_coverage_20261026/analysis"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.5724996849894524,
+      "peak_sampled_group_rss_bytes": 29073408,
+      "remaining_live_group_pids": []
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "experiments/route_coverage/catalog.py",
+        "--output-dir",
+        "runs/route_coverage_20261026/catalog",
+        "--cached-api",
+        "runs/moe_trace_dataset_review_20261018/dataset-api.json",
+        "--existing-manifest",
+        "data/moe-trace-small/manifest.json",
+        "--probe-raw"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 48.490085216239095,
+      "peak_sampled_group_rss_bytes": 65470464,
+      "remaining_live_group_pids": []
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "experiments/route_coverage/check.py",
+        "--manifest",
+        "data/moe-trace-small/manifest.json",
+        "--analysis-dir",
+        "runs/route_coverage_20261026/analysis",
+        "--output",
+        "runs/route_coverage_20261026/verification.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.9998836982995272,
+      "peak_sampled_group_rss_bytes": 41852928,
+      "remaining_live_group_pids": []
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "experiments/route_coverage/finalize.py",
+        "--stage",
+        "runs/route_coverage_20261026",
+        "--manifest",
+        "data/moe-trace-small/manifest.json",
+        "--output-dir",
+        "experiments/route_coverage/results/20261026"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.14171250723302364,
+      "peak_sampled_group_rss_bytes": 7442432,
+      "remaining_live_group_pids": []
+    }
+  ],
+  "total_monitored_seconds": 50.2041811067611,
+  "network_simulations": 0,
+  "new_raw_files": 0,
+  "code_sha256": {
+    "experiments/route_coverage/catalog.py": "800bd0fa7c544f25e1077787d1f8344f89741e1cf2232bca97473a631c181f90",
+    "experiments/route_coverage/analyze.py": "9c0fa79f68a5c7b5d025a27b99ada7fbbc0a3e55dcbfaa90198a6922d91ddbd4",
+    "experiments/route_coverage/check.py": "1f7456bfdd7fa267eb20f1e43df4c047dd69fee8abe145cf9395dede6db1e52a",
+    "experiments/route_coverage/finalize.py": "d434b711f830b9685c27ce6c69f6182814e73bc9e8449ea54901894409441e87"
+  },
+  "output_sha256": {
+    "coverage.json": "205820665b5e0c2735ded018b4461816b34700e16b2b414e60c3e7ba77f45b3b",
+    "traffic-demand.json": "ecb75356a75963b55954a9bc0986a321205158b8f6466419ffbeb0c8d4728870",
+    "verification.json": "3c76b1a3f903daf29db942f5f2ff5d805fce3c635f591f78eb2c49abb0a324d3",
+    "access.json": "47cb5b5c4e22d5f5896ed0d52fcd2417e649fe3bd229d6c047884c22f06a4a44",
+    "download-urls.txt": "81cb245885eeb91500010589596465271ccdb420ed35c018a31399401cbef723",
+    "download-plan.json": "416dd82bf6af20a2b8ce487b60040e85aa69908940b0affb951cf7c86f8e5f84",
+    "sources.json": "711ac5c12a70216ed02aa9724056c791d4dbf3d4f0eb75ab7d4fcb26631692cd",
+    "report.md": "b77449df4f71c068461348cdf5d85f4b443f4351fac33c6c70f5b663c589274d",
+    "closeout.json": "e156714613631c45ac79783ad60cc78c73feec6ad01912c6616c5926c1e93ccf"
+  },
+  "checks": {
+    "fixed_dependencies": 13,
+    "python_syntax": true,
+    "local_links": true,
+    "unique_plan_paths": 64
+  },
+  "catalog_program_note": "After HTTP execution, added an offline fits_download_byte_budget flag and preservation of unadmitted responses. Rebuilt plan from saved directory status; no HTTP rerun.",
+  "setup_failure_log": "runs/route_coverage_20261026/catalog.stderr.log"
+}

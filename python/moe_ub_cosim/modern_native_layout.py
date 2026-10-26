@@ -27,7 +27,8 @@ class ModernNativeLayout:
         self.windows=ModernDeepEPWindows(self.modern);self.description=self.windows.describe()
         x=self.modern['execution'];self.ranks=x['ranks']
         require(2<=self.ranks<=4,'functional native bridge currently supports 2..4 ranks')
-        fields(config['provider'],'mode target_visibility queue_depth self_service transport_recovery','functional provider')
+        fields(config['provider'],'mode target_visibility queue_depth self_service transport_recovery'+
+               (' dcqcn_reference' if 'dcqcn_reference' in config['provider'] else ''),'functional provider')
         p=config['provider'];require(p['mode']=='functional_mrt1/1' and p['target_visibility']=='native_apply_functional/1',
             'explicit functional apply visibility model required; not GPU visibility')
         integer(p['queue_depth'],2,32,'provider queue depth')
@@ -117,6 +118,8 @@ class ModernNativeLayout:
             transport_recovery=deepcopy(p['transport_recovery']),
             registration_model=dict(mode='nic_scoped_aliases/1'),registrations=registrations,
             execution_limits=dict(max_connections=64,max_remote_operations=1024,max_local_operations=256))
+        if 'dcqcn_reference' in p:
+            self.initial['dcqcn_reference']=deepcopy(p['dcqcn_reference'])
         validate(topology,protocol,self.initial,allow_no_remote=True)
 
     def node(self,rank):return self.deployment[rank]['node']

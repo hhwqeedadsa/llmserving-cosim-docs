@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "byte_identical": {
+    "small-healthy": "02cc9119768f5d478038be6d16263814a33168f6cd20712f623e8a709fbef21b",
+    "small-fault": "cf03f13f24f899b8d0984c3b333791f1cd8d9280e1f2957f18295ad6d9887433",
+    "four-healthy": "7d609a0808020821120668dbf20dac568336b59e3d1d820b4bac32c260970db9",
+    "four-fault": "f6ad240551a4e73d5fa51cbc5b400f19f94e4c06db3764a4f4f9e1d0527a045a"
+  },
+  "all_runtime_and_native_source_hashes_verified": true,
+  "additional_network_executions": 0,
+  "scope": "restored Python and evidence, empty cwd; no clean native build or GPU calibration"
+}

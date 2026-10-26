@@ -103,6 +103,28 @@ class ModernNativeTests(unittest.TestCase):
         cfg=example();c=ModernNativeController(topology(),protocol(),cfg);cfg['costs']['expert_ns']=999999
         self.assertEqual(c.layout.config['costs']['expert_ns'],1000)
 
+    def test_selective_transport_admitted_without_changing_modern_work(self):
+        cfg=json.loads((ROOT/'examples/modern_deepep_native/input-selective.json').read_text())
+        layout=ModernNativeLayout(topology(),protocol(),cfg)
+        default=ModernNativeLayout(topology(),protocol(),example())
+        self.assertEqual(layout.plan,default.plan)
+        self.assertEqual(layout.connections,default.connections)
+        self.assertEqual(layout.initial['dcqcn_reference'],cfg['provider']['dcqcn_reference'])
+        self.assertEqual(layout.initial['transport_recovery'],cfg['provider']['transport_recovery'])
+        cfg['provider']['dcqcn_reference']['gain']=1
+        self.assertNotEqual(layout.initial['dcqcn_reference']['gain'],1)
+        self.assertNotIn('dcqcn_reference',default.initial)
+
+    def test_selective_requires_explicit_valid_controller_and_capacity(self):
+        original=json.loads((ROOT/'examples/modern_deepep_native/input-selective.json').read_text())
+        for change in (lambda c:c['provider'].pop('dcqcn_reference'),
+                       lambda c:c['provider']['dcqcn_reference'].update(gain=0),
+                       lambda c:c['provider']['transport_recovery'].update(receive_buffer_bytes=64),
+                       lambda c:c['provider'].update(unknown_controller=True)):
+            cfg=deepcopy(original);change(cfg)
+            with self.subTest(config=cfg['provider']),self.assertRaises(ValueError):
+                ModernNativeLayout(topology(),protocol(),cfg)
+
     def test_declared_serialization_budgets_are_admission_limits(self):
         for key in ('max_input_bytes','max_output_bytes'):
             cfg=example();cfg['modern']['limits'][key]=1

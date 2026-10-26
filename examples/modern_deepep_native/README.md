@@ -55,6 +55,8 @@ Python阶段区分 `controller_advance/wake_conditions/python_candidate_copy/pyt
 
 `provider.mode=functional_mrt1/1`及`target_visibility=native_apply_functional/1`必须显式填写。功能模型的accepted/visible来自目标实际applied，local_complete来自事务实际completed；前者不释放源保护。这个声明不证明真实GPU可见性、GIN CQ或RoCE报文等价。`self_service`给出开始后apply/complete的相对纳秒时长，`queue_depth`为2—32内2的幂；`transport_recovery`沿用现有明确的恢复输入。
 
+选择性重传使用同目录 `input-selective.json` 替换上面命令的 `--config`。该输入保留完整现代操作和成本，只显式配置已有 `selective_repeat/1` 及 `provider.dcqcn_reference`；后者直接传给v5事务层的既有Figure7参考控制器。接收缓冲、发送窗口和控制周期均为声明参数，没有自动硬件校准。配合 `drop-first-rdma.json` 可检验首远端signal请求丢失后的完整调用。缺少控制器或非法窗口明确拒绝，不静默回退到GBN。该接入是已有恢复机制的基线能力，不是新恢复算法。
+
 `costs`必须声明`source_prepare_ns/expert_ns/reduction_ns/local_copy_ns`。本地带成本工作沿现有每GPU串行lane；控制依赖和slot分配为零时长逻辑步骤。此入口没有模拟CUDA各SM并发；成本是使用者条件，GPU名称不能自动生成实测成本。
 
 数据内容为每call/源/token或Combine贡献生成的32B标记及显式零填充，保留现代布局的完整发送长度。主窗口跨phase/call实际复用；不可变输入、provider功能信号域与主窗口分开。这里不执行数值BF16专家、完整LLMServingSim服务调度或真实模型KV。

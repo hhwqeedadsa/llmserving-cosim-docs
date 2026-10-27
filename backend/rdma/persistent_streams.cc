@@ -13,7 +13,7 @@ static CustomHeader StreamHeader(Ptr<const Packet> packet) {
 }
 PersistentStreams::PersistentStreams(Fabric& fabric):PersistentStreams(fabric,Limits{}) {}
 PersistentStreams::PersistentStreams(Fabric& fabric,Limits limits):PersistentStreams(fabric,limits,Json()) {}
-PersistentStreams::PersistentStreams(Fabric& fabric,Limits limits,const Json& recovery):fabric_(fabric),limits_(limits) {
+PersistentStreams::PersistentStreams(Fabric& fabric,Limits limits,const Json& recovery,bool transaction_peer_copies):fabric_(fabric),limits_(limits) {
   Require(limits.streams>0 && limits.streams<=4096 && limits.work>0 && limits.work<=65536 &&
           limits.link_transmissions>0 && limits.link_transmissions<=2000000,
           "persistent stream count limits out of supported range");
@@ -57,7 +57,10 @@ PersistentStreams::PersistentStreams(Fabric& fabric,Limits limits,const Json& re
     }
     recovery_config_=c;recovery_records_=std::make_unique<RecoveryRecords>(c.at("max_events"),c.contains("rtt_estimator"));
   }
-  Require(!fabric_.topology_.contains("intra_host") || !fabric_.topology_.at("intra_host").at("enabled").get<bool>(),
+  if(transaction_peer_copies)Require(fabric_.topology_.at("schema_version")=="moe-scaleout-physical-topology/2" &&
+    fabric_.topology_.contains("intra_host") && fabric_.topology_.at("intra_host").at("enabled")==true &&
+    fabric_.topology_.at("intra_host").at("kind")=="nonblocking_chunked_crossbar","transaction peer mode requires enabled topology/2 crossbar");
+  Require(transaction_peer_copies || !fabric_.topology_.contains("intra_host") || !fabric_.topology_.at("intra_host").at("enabled").get<bool>(),
           "stream probe requires physical RDMA paths; intra-host bypass unsupported");
   fabric_.persistent_stream_mode_=true;
   fabric_.EnableNicBindings();

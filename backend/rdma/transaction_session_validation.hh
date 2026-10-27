@@ -29,6 +29,21 @@ inline void ValidateSessionProgram(const Json& input,const Json& topology,int64_
   if(input.contains("transport_recovery"))root_keys.push_back("transport_recovery");
   if(input.contains("buffer_model"))root_keys.push_back("buffer_model");
   if(input.contains("self_peer_model"))root_keys.push_back("self_peer_model");
+  const bool peer_copy=input.contains("peer_copy_model");
+  if(peer_copy) {
+    root_keys.push_back("peer_copy_model");
+    Require(input.at("schema_version")=="moe-rdma-transactions/5" &&
+      input.at("peer_copy_model")==Json{{"mode","topology_intra_host_crossbar/1"}} &&
+      topology.at("schema_version")=="moe-scaleout-physical-topology/2" &&
+      topology.contains("intra_host") && topology.at("intra_host").at("enabled")==true &&
+      topology.at("intra_host").at("kind")=="nonblocking_chunked_crossbar" &&
+      !input.contains("application_window_model") && !input.contains("buffer_model"),"unsupported peer copy model/topology/combination");
+    const auto& model=topology.at("intra_host");SessionKeys(model,{"kind","enabled","rate_bps","delay_ns","chunk_bytes"});
+    const auto rate=SessionInteger(model.at("rate_bps"),1000000000000000ull);
+    const auto chunk=SessionInteger(model.at("chunk_bytes"),1048576);
+    SessionInteger(model.at("delay_ns"),1000000);
+    Require(rate>0 && chunk>=64,"invalid peer crossbar rate/chunk");
+  }
   for(const auto* name:{"registration_model","registrations","application_window_model","application_windows"})if(input.contains(name))root_keys.push_back(name);
   SessionKeys(input,root_keys);
   const bool sparse=input.at("schema_version")=="moe-rdma-transactions/5";
@@ -136,10 +151,18 @@ inline void ValidateSessionProgram(const Json& input,const Json& topology,int64_
     };
     if(is_local && op.contains("copy")) {
       const auto& cp=op.at("copy");SessionKeys(cp,{"source","target"});const auto& s=cp.at("source");const auto& t=cp.at("target");
-      SessionKeys(s,{"key","address","bytes"});SessionKeys(t,{"key","address"});
+      SessionKeys(s,{"key","address","bytes"});
+      const bool peer=t.contains("owner");
+      SessionKeys(t,peer?std::vector<std::string>{"owner","key","address"}:std::vector<std::string>{"key","address"});
+      const auto target_owner=peer?SessionInteger(t.at("owner"),31):owner;
+      if(peer)Require(peer_copy && target_owner!=owner && gpus.count(target_owner) &&
+        topology.at("nodes").at(owner).at("server")==topology.at("nodes").at(target_owner).at("server") &&
+        op.at("duration_ns")==0,"peer copy must target a same-server peer with zero fixed duration");
       const auto bytes=SessionInteger(s.at("bytes"),32768),sa=SessionInteger(s.at("address")),ta=SessionInteger(t.at("address"));
-      for(const auto& part:{s,t}) {const auto key=SessionInteger(part.at("key"),UINT32_MAX),address=SessionInteger(part.at("address"));range(owner,key,address,bytes);separate_resets(key,address,bytes);}
-      Require(sa+bytes<=ta || ta+bytes<=sa,"session copy source/target overlap");
+      const auto sk=SessionInteger(s.at("key"),UINT32_MAX),tk=SessionInteger(t.at("key"),UINT32_MAX);
+      range(owner,sk,sa,bytes);range(target_owner,tk,ta,bytes);separate_resets(sk,sa,bytes);
+      if(target_owner==owner)separate_resets(tk,ta,bytes);
+      Require(target_owner!=owner || sa+bytes<=ta || ta+bytes<=sa,"session copy source/target overlap");
     }
     if(!is_local) {
       const auto dst=endpoints.at(op.at("connection")).second,key=SessionInteger(op.at("key"),UINT32_MAX),address=SessionInteger(op.at("address"));

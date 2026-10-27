@@ -18,7 +18,7 @@ class PersistentStreams {
   using Done = std::function<void()>;
   explicit PersistentStreams(Fabric& fabric);
   PersistentStreams(Fabric& fabric, Limits limits);
-  PersistentStreams(Fabric& fabric, Limits limits, const Json& recovery);
+  PersistentStreams(Fabric& fabric, Limits limits, const Json& recovery, bool transaction_peer_copies=false);
   ~PersistentStreams();
   // Passive samples in existing callbacks; no timers or periodic polling.
   void ConfigureRateCapture(const Json& config);

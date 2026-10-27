@@ -38,6 +38,8 @@ class TransactionSession {
       const auto& t=local_times_.at(id);
       rows.push_back({{"id",id},{"rank",op.at("rank")},{"duration_ns",op.at("duration_ns")},
         {"ready_ns",t[0]},{"start_ns",t[1]},{"completed_ns",t[2]}});
+      if(op.contains("copy") && op.at("copy").at("target").contains("owner"))
+        rows.back()["duration_source"]="topology_intra_host_crossbar/1";
     }
     return rows;
   }
@@ -88,9 +90,9 @@ class TransactionSession {
   void PumpLocal(unsigned rank) {
     auto& q=local_queues_[rank];if(local_busy_.count(rank) || q.empty())return;
     const auto id=q.front();q.pop_front();local_busy_.insert(rank);
-    local_times_.at(id)[1]=Now();transactions_.StartLocal(Node(id));
-    ns3::Simulator::Schedule(ns3::NanoSeconds(Node(id).at("duration_ns").get<int64_t>()),[this,rank,id](){
-      transactions_.CompleteLocal(Node(id));Require(local_busy_.erase(rank)==1,"duplicate session local completion");
+    local_times_.at(id)[1]=Now();
+    transactions_.ExecuteLocal(Node(id),[this,rank,id](){
+      Require(local_busy_.erase(rank)==1,"duplicate session local completion");
       local_times_.at(id)[2]=Now();PumpLocal(rank);Notify();
     });
   }

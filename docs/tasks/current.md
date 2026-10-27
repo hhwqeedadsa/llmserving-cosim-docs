@@ -13,7 +13,13 @@
 
 ## 当前范围和预算
 
-当前平台`in_progress`：[共享机内peer字节转发](peer_copy_spec.md)。起点`28637a0`；补上持久事务只有同GPU copy、不能正确承载Hybrid域内转发的缺口。沿用既有crossbar共享端口/同一ns-3时钟，以真实窗口字节和实际完成回调驱动；不以重建标记或机外RDMA替代。本轮一次全新O3构建、最多4次固定功能网络，独立2400秒/2GiB和各单项预算；不重开旧实验、升级依赖或push。前轮为progress；本增量仍不等同完整Hybrid或论文收益。
+当前平台`completed`：[共享机内peer字节转发](peer_copy_spec.md)、[用户小例](../../examples/scaleout_peer_copy/README.md)、[验收与网页](../../fixtures/peer_copy/README.md)。起点`28637a0`、规范`695f44e`。transactions/5显式peer模式接入已有共享crossbar，保留源lane、开始捕获实际字节、交付提交/释放保护；纯stream入口仍拒绝机内旁路，静态校验键区分混合权限。同一ns-3时钟和持续NIC完成实际远端接收→机内peer→后继远端发送，不生成peer RDMA包或假ACK。
+
+一次新公开O3构建通过（437编译单元，约405秒，峰值进程组RSS1,664,798,720B），48项单元、5个编译单元语法及13固定依赖检查通过。15条新cwd公开CLI含7类预期拒绝与4次固定网络全部通过；人工2服务器×4GPU主例3个peer共512B、2个远端源MRT1包共576B、20内存事件及24物理逐跳发送/接收独立核对。共享GPU2目的端口完成276/340ns、繁忙256ns/maxwait128ns；首远端在6496ns交付、下一peer在6836ns完成并发出后继数据，首发送ACK在12520ns，全网19016ns排空。仅属声明参数功能关系，不是MoE/GPU/生产时延。
+
+probe/session核心结果相同，迁移完整result仅允许逐hash对应八库路径/枚举差异；7类证据篡改拒绝。首次unit遇旧stream准入断言失败，原件/源码与说明保留，随后显式混合模式修复；未重跑失败网络。613成员/7,402,044B包逐成员hash恢复，复制源码/空cwd四份离线重算及HTML逐字节一致，零恢复网络或构建；SHA256 `135c052d6c0fc73ffcf9b3581df0bcfa5fddc21a712489f16264c3ba72a62e92`。原件`runs/peer_copy_20261027/`，资源与关闭见[收尾](../../fixtures/peer_copy/closeout.json)，保守含嵌套及恢复副本共1793.205受监控秒、约173.3MiB分配产物，另留2MiB/10秒管理额度，保持2400受监控秒/2GiB及各单项原上限。
+
+本平台阶段额度关闭，一次构建/四网络用尽；零安装下载、GPU执行、依赖修改或push，仅本地保存。不自动开始新功能或重开旧研究。整体仍为progress：此增量补分层通信所需机内交付，不等价完整Hybrid或新仿真贡献；后续须另行明确输入驱动Hybrid执行及其相对正确分层模型/完整DAG的决策或净成本优势，两项论文创新和总目标仍`in_progress`。
 
 当前平台`completed`：[分层逻辑输入与转发门槛规范](hybrid_logical_spec.md)、[用户小例](../../examples/hybrid_logical/README.md)、[验收和网页](../../fixtures/hybrid_logical/README.md)。起点`859f0ac`、规范`43f21ba`。两个公开命令从显式域/rail/专家选择生成逐token数据、域内GPU转发、三个Combine贡献分区、计数块及tail/finish；Dispatch回放保留选中来源等待、缓存tail刷新和每批≤6，不解析最终GPU slot或执行Combine/完整Hybrid。8项新单元与8项direct回归通过；新cwd18条CLI含10类预期拒绝、另15条旧流程回归、13固定依赖和四源码tree/blob/SHA核对通过。完整检查最初多排空来源消费，原检查器/动作/失败monitor保留，只修检查脚本并继续未完成步骤，未改平台规则。
 

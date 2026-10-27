@@ -1,5 +1,8 @@
 # 联合后端接口与执行规则
 
+持久事务的 `ExecuteLocal` 统一普通固定耗时工作与可选机内 peer copy。后者仅允许 topology/2 显式同服务器 crossbar，零固定 duration，复用 `Fabric::SendLocal` 的端口和事件；实际完成后才写入目标/释放保护。`PersistentStreams` 仅在事务明确启用该模型时允许混合拓扑，所有持久字节仍绑定物理 NIC，不使用 legacy Send。见[机内转发小例](../examples/scaleout_peer_copy/README.md)。
+
+
 `RemoteTransactions`在提交、准备、发布、目标应用、请求ACK、回复、自服务起止和退休时标记状态变化。session使用消费式`TakeOperationProgressUpdates()`，仅构造变化行；全量`OperationProgress()`及最终报告不消费索引。回调阶段、同纳秒稳定顺序、网络通知和本地条件检查保持。开发宏`MOE_VERIFY_PROGRESS_UPDATES`独立比较每次消费结果与全量快照变化，须同时重编事务对象和消费者，不用于规模性能测量。
 
 `transaction-session`末尾可选计时路径参数`NEW_HOST_TIMING.jsonl`启用已有HostTiming记录器，公开现代入口为`--host-timing`。时钟只用于独立日志，默认关闭；不添加Simulator事件或改变DECIDE/COMMIT。阶段与失败前缀语义见[现代观测](../examples/modern_deepep_native/README.md#可选的宿主开销观测)，字段见[输出说明](../docs/record_storage.md#原生rdma宿主阶段记录)。

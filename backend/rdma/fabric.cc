@@ -490,6 +490,21 @@ void Fabric::LocalDropTrace(Fabric* f,unsigned node,unsigned port,Ptr<const Pack
   ++f->local_drops_;f->PacketEvent(5,node,port,p);f->CheckDrain();
 }
 
+bool Fabric::IntraHostPeer(uint32_t src,uint32_t dst) const {
+  return src<gpus_ && dst<gpus_ && src!=dst && topology_.contains("intra_host") &&
+    topology_.at("intra_host").at("enabled")==true &&
+    topology_.at("intra_host").at("kind")=="nonblocking_chunked_crossbar" &&
+    topology_.at("nodes").at(src).at("server")==topology_.at("nodes").at(dst).at("server");
+}
+void Fabric::SendPeerCopy(uint64_t id,uint32_t src,uint32_t dst,uint64_t bytes,Done delivered) {
+  Require(IntraHostPeer(src,dst) && bytes>0 && bytes<=32768,"peer copy requires enabled same-server crossbar");
+  Require(id<65536 && flows_.size()<MaxMessages(),"peer copy identity/count budget exceeded");
+  const uint64_t flow_id=2147483648ull+id; // Separate from all legacy wire IDs.
+  Require(!flows_.count(flow_id),"peer copy submitted twice");
+  Flow flow;flow.src=src;flow.dst=dst;flow.bytes=bytes;flow.plane=0;
+  flow.ready=Now();flow.done=std::move(delivered);
+  flows_.emplace(flow_id,std::move(flow));SendLocal(flow_id);
+}
 void Fabric::Send(uint64_t id, uint32_t src,uint32_t dst,uint64_t bytes,unsigned plane,Done done,Done received) {
   Require(!persistent_stream_mode_,"legacy byte messages cannot share a persistent-stream controller");
   Require(src<gpus_ && dst<gpus_ && src!=dst && bytes>0 && bytes<=64*1024*1024 && plane<planes_,"invalid message");

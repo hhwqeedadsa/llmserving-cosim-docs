@@ -44,10 +44,10 @@ class StaticStreamValidationCache:
         self._key = None
         self.calls = self.hits = self.validations = self.unkeyable = 0
 
-    def validate(self, topology, protocol, descriptor):
+    def validate(self, topology, protocol, descriptor, *, transaction_peer_copies=False):
         self.calls += 1
         try:
-            key = (_freeze(topology), _freeze(protocol), _freeze(descriptor))
+            key = (_freeze(topology), _freeze(protocol), _freeze(descriptor), _freeze(transaction_peer_copies))
         except (_Unkeyable, RecursionError):
             key = None
             self.unkeyable += 1
@@ -55,7 +55,7 @@ class StaticStreamValidationCache:
             self.hits += 1
             return
         self.validations += 1
-        scaleout_streams.validate(topology, protocol, descriptor)
+        scaleout_streams.validate(topology, protocol, descriptor, transaction_peer_copies=transaction_peer_copies)
         # Keep the previous successful key on failure or unsupported inputs.
         if key is not None:
             self._key = key

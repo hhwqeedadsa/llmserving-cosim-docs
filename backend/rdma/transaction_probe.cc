@@ -41,6 +41,7 @@ int main(int argc,char** argv) {
       if(input.contains("transport_recovery"))keys.push_back("transport_recovery");
       if(input.contains("buffer_model"))keys.push_back("buffer_model");
       if(input.contains("self_peer_model"))keys.push_back("self_peer_model");
+      if(input.contains("peer_copy_model"))keys.push_back("peer_copy_model");
       for(const auto* name:{"registration_model","registrations","application_window_model","application_windows"})if(input.contains(name))keys.push_back(name);
       Keys(input,keys);
       Require(input.at("local_model")==Json{{"mode","serial_per_gpu/1"},{"duration_source","declared_ns"}},"unsupported transaction local model");
@@ -121,9 +122,7 @@ int main(int argc,char** argv) {
       if(local_busy.count(rank) || queue.empty())return;
       const auto i=queue.front();queue.pop_front();local_busy.insert(rank);
       local_times[i][1]=ns3::Simulator::Now().GetNanoSeconds();
-      transactions.StartLocal(operations[i]);
-      ns3::Simulator::Schedule(ns3::NanoSeconds(operations[i].at("duration_ns").get<int64_t>()),[&,rank,i]() {
-        transactions.CompleteLocal(operations[i]);
+      transactions.ExecuteLocal(operations[i],[&,rank,i]() {
         Require(local_busy.erase(rank)==1 && local_times[i][2]<0,"duplicate transaction local completion");
         local_times[i][2]=ns3::Simulator::Now().GetNanoSeconds();++local_complete;
         // An older admitted node retains precedence over a newly unlocked node.
@@ -178,6 +177,8 @@ int main(int argc,char** argv) {
         result["local_work"].push_back(Json{{"id",operations[i].at("id")},{"rank",operations[i].at("rank")},
           {"duration_ns",operations[i].at("duration_ns")},{"ready_ns",local_times[i][0]},
           {"start_ns",local_times[i][1]},{"completed_ns",local_times[i][2]}});
+        if(operations[i].contains("copy") && operations[i].at("copy").at("target").contains("owner"))
+          result["local_work"].back()["duration_source"]="topology_intra_host_crossbar/1";
         if(local_times[i][2]<0) {
           auto row=pending(operations[i]);row["admitted"]=static_cast<bool>(submitted[i]);
           result["pending_local_work"].push_back(row);

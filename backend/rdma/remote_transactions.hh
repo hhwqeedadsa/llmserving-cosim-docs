@@ -19,6 +19,7 @@ class RemoteTransactions {
   void ValidateLocalMemory(const Json& operation) const;
   void StartLocal(const Json& operation);
   void CompleteLocal(const Json& operation);
+  void ExecuteLocal(const Json& operation, Fabric::Done completed);
   void ValidateSource(const Json& operation) const;
   bool QueueFenceReady(const Json& operation);
   bool Occurred(uint64_t operation,const std::string& event) const;
@@ -79,6 +80,7 @@ class RemoteTransactions {
   ApplicationWindows application_windows_;
   bool application_window_mode_=false;
   Json application_events_=Json::array();
+  Fabric& fabric_;
   TransactionLimits execution_limits_;
   bool explicit_limits_=false;
   PersistentStreams transport_;
@@ -93,6 +95,7 @@ class RemoteTransactions {
   bool source_mode_=false;
   Json source_model_,source_events_=Json::array();
   bool local_memory_mode_=false;
+  bool peer_copy_mode_=false;
   Json local_memory_model_,local_memory_events_=Json::array();
   std::map<uint64_t,LocalCopy> local_copies_;
   bool bounded_buffers_=false;

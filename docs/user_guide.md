@@ -1,5 +1,8 @@
 # 用户指南
 
+事务输入 transactions/5 可显式启用同服务器 GPU 之间的 peer copy。实际源窗口字节通过共享机内 crossbar，在交付回调时提交目标；与机外持久 RDMA 共用同一仿真时钟。配置、公开 probe/session 命令及边界见[机内转发小例](../examples/scaleout_peer_copy/README.md)。
+
+
 持久流、事务和现代功能入口可在同plane中绑定多张物理NIC，并让不同rail共用实际Agg/MMU。[共享rail示例](../examples/scaleout_multirail_native/README.md)提供可直接运行的配置和逐包输出说明；需使用按当前锁文件构建的原生后端，故障改路不会自动更换网卡。
 
 可用`scaleout modern-deepep-native`让实际原生网络回调驱动现代功能图。两rank示例可运行；原四rank路由的一次调用通过显式 `--callback-batches` 在256次同步上限内完成。输入、声明成本和限制见[现代功能接入](../examples/modern_deepep_native/README.md)，不等于完整模型或千卡应用。

@@ -78,6 +78,13 @@ def validate(topology, protocol, config, *, allow_no_remote=False, stream_cache=
     memory_mode = sparse_mode or (isinstance(config, dict) and config.get('schema_version') == 'moe-rdma-transactions/4')
     source_mode = memory_mode or (isinstance(config, dict) and config.get('schema_version') == 'moe-rdma-transactions/3')
     explicit = isinstance(config, dict) and 'submission_model' in config
+    peer_copy = isinstance(config, dict) and 'peer_copy_model' in config
+    if peer_copy:
+        require(sparse_mode and topology.get('schema_version') == 'moe-scaleout-physical-topology/2' and config['peer_copy_model'] == dict(mode='topology_intra_host_crossbar/1') and
+                topology.get('intra_host', {}).get('enabled') is True and
+                topology['intra_host'].get('kind') == 'nonblocking_chunked_crossbar' and
+                'application_window_model' not in config and 'buffer_model' not in config,
+                'peer copy requires v5 enabled topology crossbar without application views/bounded pool')
     counts = execution_limits(config)
     reference = 'dcqcn_reference' in config
     selective = isinstance(config.get('transport_recovery'), dict) and config['transport_recovery'].get('mode') == 'selective_repeat/1'
@@ -92,7 +99,8 @@ def validate(topology, protocol, config, *, allow_no_remote=False, stream_cache=
            (' buffer_model' if 'buffer_model' in config else '')+
            (' execution_limits' if 'execution_limits' in config else '')+
            (' dcqcn_reference' if reference else '')+
-           (' self_peer_model' if 'self_peer_model' in config else ''), 'transaction root')
+           (' self_peer_model' if 'self_peer_model' in config else '')+
+           (' peer_copy_model' if peer_copy else ''), 'transaction root')
     require(config['schema_version'] in ('moe-rdma-transactions/1', 'moe-rdma-transactions/2', 'moe-rdma-transactions/3', 'moe-rdma-transactions/4', 'moe-rdma-transactions/5'), 'unsupported transaction schema')
     if explicit:
         require(config['submission_model'] == dict(mode='explicit_prefix/1'), 'unsupported submission model')
@@ -137,9 +145,9 @@ def validate(topology, protocol, config, *, allow_no_remote=False, stream_cache=
     if 'transport_recovery' in config:descriptor['transport_recovery']=config['transport_recovery']
     if reference:descriptor['dcqcn_reference']=config['dcqcn_reference']
     if stream_cache is None:
-        validate_streams(topology, protocol, descriptor)
+        validate_streams(topology, protocol, descriptor, transaction_peer_copies=peer_copy)
     else:
-        stream_cache.validate(topology, protocol, descriptor)
+        stream_cache.validate(topology, protocol, descriptor, transaction_peer_copies=peer_copy)
     windows = config['windows']
     require(isinstance(windows, list) and 1 <= len(windows) <= 16, 'require 1..16 remote windows')
     gpus = {n['id'] for n in topology['nodes'] if n['kind'] == 'gpu'}
@@ -196,20 +204,29 @@ def validate(topology, protocol, config, *, allow_no_remote=False, stream_cache=
             if 'copy' in op:
                 copy = op['copy']; fields(copy, 'source target', 'local copy')
                 source, target = copy['source'], copy['target']
-                fields(source, 'key address bytes', 'local copy source'); fields(target, 'key address', 'local copy target')
+                is_peer = 'owner' in target
+                fields(source, 'key address bytes', 'local copy source')
+                fields(target, 'key address'+(' owner' if is_peer else ''), 'local copy target')
+                target_owner = target['owner'] if is_peer else op['rank']
+                if is_peer:
+                    integer(target_owner, 'peer copy target owner', 0, 31)
+                    nodes = {n['id']: n for n in topology['nodes']}
+                    require(peer_copy and target_owner in gpus and target_owner != op['rank'] and
+                            nodes[target_owner]['server'] == nodes[op['rank']]['server'] and op['duration_ns'] == 0,
+                            'peer copy requires same-server different GPU and zero fixed duration')
                 integer(source['bytes'], 'local copy bytes', 1, 32768)
-                for item in (source, target):
+                for item, owner in ((source, op['rank']), (target, target_owner)):
                     integer(item['key'], 'local copy key', 1, 2**32-1)
                     integer(item['address'], 'local copy address', 0, 2**64-1)
-                    key = op['rank'], item['key']
+                    key = owner, item['key']
                     require(key in registered, 'unknown local copy owner/key')
                     window, size = registered[key]
                     require(window['address'] <= item['address'] and item['address']+source['bytes'] <= window['address']+size,
                             'local copy range out of bounds')
-                    require(all('reset_to' not in w or w['address']+8 <= item['address'] or
+                    require(all(owner != op['rank'] or 'reset_to' not in w or w['address']+8 <= item['address'] or
                                 item['address']+source['bytes'] <= w['address'] for w in op.get('local_wait', [])),
                             'local copy overlaps own condition reset')
-                require(source['address']+source['bytes'] <= target['address'] or
+                require(target_owner != op['rank'] or source['address']+source['bytes'] <= target['address'] or
                         target['address']+source['bytes'] <= source['address'], 'local copy source/target overlap')
             local_count += 1
             require(local_count <= counts['max_local_operations'], 'local transaction node budget exceeded')
@@ -290,6 +307,9 @@ def validate(topology, protocol, config, *, allow_no_remote=False, stream_cache=
         effects[op['id']] = completed_effects
         remote_history.append(op)
         kinds[op['id']] = kind; ancestors[op['id']] = parents; accesses.append((op, key, length))
+    if peer_copy:
+        require(sum(op.get('kind') == 'local' and 'owner' in op.get('copy', {}).get('target', {})
+                    for op in operations) <= limits(protocol)['max_messages'], 'peer flow count exceeds protocol budget')
     from .self_peer_service import validate as validate_self
     validate_self(topology,protocol,config)
     validate_application_windows(config, registered, by_id)

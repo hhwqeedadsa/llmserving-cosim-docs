@@ -27,6 +27,10 @@ class Fabric {
   Fabric(const Json& topology, const Json& config);
   void Send(uint64_t id, uint32_t src, uint32_t dst, uint64_t bytes, unsigned plane, Done acked,
             Done received = {});
+  bool IntraHostPeer(uint32_t src, uint32_t dst) const;
+  // Raw local bytes only; shares SendLocal ports with legacy local traffic.
+  // No QP, MRT1 frame, physical packet or RDMA acknowledgement is created.
+  void SendPeerCopy(uint64_t id, uint32_t src, uint32_t dst, uint64_t bytes, Done delivered);
   bool Drained() const;
   void FinishWhenDrained(Done);
   Json Report();

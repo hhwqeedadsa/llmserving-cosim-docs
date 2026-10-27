@@ -1,5 +1,8 @@
 # 系统架构与执行过程
 
+显式 peer-copy 事务保留源 GPU 串行 lane，准入时保护源读/目标写，开始时捕获字节，经 `Fabric::SendPeerCopy` 复用 `SendLocal` 的分块机内端口。实际交付先提交窗口并释放保护，再发出 local 完成通知；网络接收可触发该转发，转发完成又可触发后续持久 RDMA。纯 stream 入口仍拒绝机内旁路，混合模式的远端事务始终走物理网络。详见[配置与范围](../examples/scaleout_peer_copy/README.md)。
+
+
 `hybrid_deepep_plan.py`提供独立分层逻辑表示：逐token按服务器域去重，入口绑定源卡同位置rail，域内再按GPU去重，并保留三个Combine贡献分支。`hybrid_deepep_progress.py`核验显式可见性动作与Dispatch转发器的轮询、缓存tail和每批最多6条；选中未就绪来源不能跳过。它不使用已有truth生成输入，也不生成时间或最终GPU slot，尚未连接provider/native执行。完整范围见[示例](../examples/hybrid_logical/README.md)，不改变下方direct执行路径。
 
 事务会话可选持有一份`StaticStreamValidationCache`，仅复用纯Python传输声明校验。不可变键覆盖完整拓扑、协议和派生streams，并区分内建JSON类型；不保留可变别名，不共享全局状态。完整动态候选与原生校验照常执行，缓存不参与网络控制。公开选项、计数和默认行为见[固定校验复用](../examples/modern_deepep_native/README.md#可选的固定校验复用)。

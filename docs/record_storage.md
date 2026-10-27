@@ -1,5 +1,8 @@
 # 观测记录与存储格式
 
+启用 `peer_copy_model` 时，peer local_work 的 `duration_ns=0`，`duration_source=topology_intra_host_crossbar/1`，实际耗时为 `completed_ns-start_ns`。`transactions.local_memory_events` 的 source/target 分别保留 owner；目标只在 committed 时改变。机内流以 `2147483648+local_node_id` 记录在 messages，`completion_kind=local_data_ready_no_RDMA_ACK`；兼容字段 ack_ns/ack_callbacks 表示本地数据就绪，不代表物理 ACK。`intra_host_links` 统计共享端口字节、繁忙和最大等待，peer 不计入 transport.source_packets。见[小例](../examples/scaleout_peer_copy/README.md)。
+
+
 分层逻辑入口输出`moe-hybrid-logical-plan/1`及`moe-hybrid-logical-manifest/1`，保存逐token数据、转发、Combine贡献分区、计数块、通道数据序列及tail/finish义务；hash和重新编译都参与回放准入。`moe-hybrid-progress-replay/1`保存调用者动作、每转发器缓存tail/finish、已消费数量及admissions顺序。`domain_channel_slot`仅是某源通道到目标域的有序位置；`gpu_slot/schedule`为空，不能用于反推真实slot/时间。`admission_complete`及`all_forwarder_admissions_complete`不是collective/网络完成；所有`scope`能力标记仍为false。字段、字节口径及遗漏协议见[分层逻辑示例](../examples/hybrid_logical/README.md)。
 
 两个会话入口显式开启`--reuse-static-validation`时，退出时另存`static-validation.json`，格式`moe-static-stream-validation/1`。`calls`为静态子检查请求数，`hits`为复用数，`validations`为实际原校验尝试数（包括失败），满足`calls=hits+validations`；`unkeyable`为不支持的类型或递归输入而回退的次数，`entries`仅为0或1。`host_only=true`，没有时长信息，不属于网络/算法观察输入。关闭时不生成；主result、控制消息和原生协议不添加缓存字段。用法见[会话复用说明](../examples/modern_deepep_native/README.md#可选的固定校验复用)。

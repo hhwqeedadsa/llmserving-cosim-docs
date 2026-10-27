@@ -1,0 +1,207 @@
+{
+  "schema_version": "moe-rdma-transactions/5",
+  "connections": [
+    {
+      "id": 0,
+      "src": 2,
+      "dst": 4,
+      "plane": 0,
+      "request_port": 24000,
+      "response_port": 24001,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4
+    },
+    {
+      "id": 1,
+      "src": 5,
+      "dst": 0,
+      "plane": 0,
+      "request_port": 24002,
+      "response_port": 24003,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4
+    }
+  ],
+  "windows": [
+    {
+      "owner": 0,
+      "key": 1,
+      "address": 4096,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "allow_atomic": false,
+      "segments": [
+        {
+          "offset": 0,
+          "hex": "3131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131"
+        }
+      ]
+    },
+    {
+      "owner": 1,
+      "key": 1,
+      "address": 4096,
+      "bytes": 128,
+      "initialization": "zero_fill/1",
+      "allow_atomic": false,
+      "segments": [
+        {
+          "offset": 0,
+          "hex": "6262626262626262626262626262626262626262626262626262626262626262626262626262626262626262626262626262626262626262626262626262626262626262626262626262626262626262626262626262626262626262626262626262626262626262626262626262626262626262626262626262626262626262"
+        }
+      ]
+    },
+    {
+      "owner": 2,
+      "key": 1,
+      "address": 4096,
+      "bytes": 256,
+      "initialization": "zero_fill/1",
+      "allow_atomic": false,
+      "segments": []
+    },
+    {
+      "owner": 4,
+      "key": 1,
+      "address": 4096,
+      "bytes": 256,
+      "initialization": "zero_fill/1",
+      "allow_atomic": false,
+      "segments": []
+    },
+    {
+      "owner": 5,
+      "key": 1,
+      "address": 4096,
+      "bytes": 256,
+      "initialization": "zero_fill/1",
+      "allow_atomic": false,
+      "segments": []
+    }
+  ],
+  "operations": [
+    {
+      "id": 0,
+      "kind": "local",
+      "rank": 0,
+      "duration_ns": 0,
+      "after": [],
+      "copy": {
+        "source": {
+          "key": 1,
+          "address": 4096,
+          "bytes": 128
+        },
+        "target": {
+          "owner": 2,
+          "key": 1,
+          "address": 4096
+        }
+      }
+    },
+    {
+      "id": 1,
+      "kind": "local",
+      "rank": 1,
+      "duration_ns": 0,
+      "after": [],
+      "copy": {
+        "source": {
+          "key": 1,
+          "address": 4096,
+          "bytes": 128
+        },
+        "target": {
+          "owner": 2,
+          "key": 1,
+          "address": 4224
+        }
+      }
+    },
+    {
+      "id": 2,
+      "kind": "remote",
+      "connection": 0,
+      "verb": "put",
+      "key": 1,
+      "address": 4096,
+      "source": {
+        "key": 1,
+        "address": 4096,
+        "bytes": 256
+      },
+      "after": [
+        {
+          "operation": 0,
+          "event": "completed"
+        },
+        {
+          "operation": 1,
+          "event": "completed"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "kind": "local",
+      "rank": 4,
+      "duration_ns": 0,
+      "after": [
+        {
+          "operation": 2,
+          "event": "applied"
+        }
+      ],
+      "copy": {
+        "source": {
+          "key": 1,
+          "address": 4096,
+          "bytes": 256
+        },
+        "target": {
+          "owner": 5,
+          "key": 1,
+          "address": 4096
+        }
+      }
+    },
+    {
+      "id": 4,
+      "kind": "remote",
+      "connection": 1,
+      "verb": "put",
+      "key": 1,
+      "address": 4352,
+      "source": {
+        "key": 1,
+        "address": 4096,
+        "bytes": 256
+      },
+      "after": [
+        {
+          "operation": 3,
+          "event": "completed"
+        }
+      ]
+    }
+  ],
+  "local_model": {
+    "mode": "serial_per_gpu/1",
+    "duration_source": "declared_ns"
+  },
+  "source_model": {
+    "capture": "registered_window_at_publish/1",
+    "release": "transaction_completed/1"
+  },
+  "local_memory_model": {
+    "mode": "guarded_copy/1",
+    "acquire": "admission/1",
+    "capture": "start/1",
+    "commit": "completion/1"
+  },
+  "peer_copy_model": {
+    "mode": "topology_intra_host_crossbar/1"
+  }
+}

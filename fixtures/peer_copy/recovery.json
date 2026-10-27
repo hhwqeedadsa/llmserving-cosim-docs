@@ -1,0 +1,108 @@
+{
+  "passed": true,
+  "archive_sha256": "135c052d6c0fc73ffcf9b3581df0bcfa5fddc21a712489f16264c3ba72a62e92",
+  "members_verified": 613,
+  "copied_source_and_new_cwd": true,
+  "runtime_files_verified": 12,
+  "four_offline_reports_equal": true,
+  "html_byte_identical": true,
+  "new_networks": 0,
+  "new_builds": 0,
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "fixtures.peer_copy.verify",
+        "--result",
+        "/home/lry/moe-ub-cosim/runs/peer_copy_20261027/recovered/run/peer/result.json",
+        "--config",
+        "/home/lry/moe-ub-cosim/runs/peer_copy_20261027/recovered/run/inputs/work.json",
+        "--topology",
+        "/home/lry/moe-ub-cosim/runs/peer_copy_20261027/recovered/run/topology/topology.json",
+        "--protocol",
+        "/home/lry/moe-ub-cosim/runs/peer_copy_20261027/recovered/run/inputs/rdma.json",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/peer_copy_20261027/recovered/peer-verification.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim/runs/peer_copy_20261027/recovered/empty-cwd",
+      "exit_code": 0
+    },
+    {
+      "argv": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "fixtures.peer_copy.verify",
+        "--result",
+        "/home/lry/moe-ub-cosim/runs/peer_copy_20261027/recovered/run/session/result.json",
+        "--config",
+        "/home/lry/moe-ub-cosim/runs/peer_copy_20261027/recovered/run/inputs/work.json",
+        "--topology",
+        "/home/lry/moe-ub-cosim/runs/peer_copy_20261027/recovered/run/topology/topology.json",
+        "--protocol",
+        "/home/lry/moe-ub-cosim/runs/peer_copy_20261027/recovered/run/inputs/rdma.json",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/peer_copy_20261027/recovered/session-verification.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim/runs/peer_copy_20261027/recovered/empty-cwd",
+      "exit_code": 0
+    },
+    {
+      "argv": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "fixtures.peer_copy.verify",
+        "--result",
+        "/home/lry/moe-ub-cosim/runs/peer_copy_20261027/recovered/run/without-peer/result.json",
+        "--config",
+        "/home/lry/moe-ub-cosim/runs/peer_copy_20261027/recovered/run/inputs/without-peer.json",
+        "--topology",
+        "/home/lry/moe-ub-cosim/runs/peer_copy_20261027/recovered/run/without-peer-topology/topology.json",
+        "--protocol",
+        "/home/lry/moe-ub-cosim/runs/peer_copy_20261027/recovered/run/inputs/rdma.json",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/peer_copy_20261027/recovered/without-peer-verification.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim/runs/peer_copy_20261027/recovered/empty-cwd",
+      "exit_code": 0
+    },
+    {
+      "argv": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "fixtures.peer_copy.verify",
+        "--result",
+        "/home/lry/moe-ub-cosim/runs/peer_copy_20261027/recovered/run/migrated/result.json",
+        "--config",
+        "/home/lry/moe-ub-cosim/runs/peer_copy_20261027/recovered/run/inputs/work.json",
+        "--topology",
+        "/home/lry/moe-ub-cosim/runs/peer_copy_20261027/recovered/run/topology/topology.json",
+        "--protocol",
+        "/home/lry/moe-ub-cosim/runs/peer_copy_20261027/recovered/run/inputs/rdma.json",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/peer_copy_20261027/recovered/migrated-verification.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim/runs/peer_copy_20261027/recovered/empty-cwd",
+      "exit_code": 0
+    },
+    {
+      "argv": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "fixtures.peer_copy.closeout",
+        "report",
+        "--stage",
+        "/home/lry/moe-ub-cosim/runs/peer_copy_20261027/recovered/run",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/peer_copy_20261027/recovered/report.html"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim/runs/peer_copy_20261027/recovered/empty-cwd",
+      "exit_code": 0
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>机内转发与跨机网络：功能验收</title><style>
+body{font:16px/1.7 system-ui,sans-serif;background:#f4f6fa;color:#1d2c42;margin:0}main{max-width:1050px;margin:auto;padding:36px 24px}
+h1{font-size:30px;line-height:1.3}h2{font-size:21px;margin-top:30px}.card{background:white;border:1px solid #dce3ed;border-radius:12px;padding:20px;margin:16px 0}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.stats strong{display:block;font-size:27px;color:#165c92}small{color:#52637a}
+table{border-collapse:collapse;width:100%;font-size:14px}td,th{padding:10px;text-align:left;border-bottom:1px solid #e1e7ef}td:last-child{min-width:180px}
+.track{height:16px;background:#edf1f7;display:flex}.track span{display:block;min-width:2px}.peer{background:#17876c}.wire{background:#3674c7}
+.boundary{border-left:4px solid #ae7615}code{background:#edf1f7;padding:2px 4px}a{color:#165c92}@media(max-width:700px){.stats{grid-template-columns:1fr}.scroll{overflow:auto}}</style>
+<main><small>2026-10-27 · 平台增量 · 人工功能例</small><h1>收到的跨机字节，可以继续走机内网络，再发回远端</h1>
+<p>本次补上持久事务缺少 GPU 间机内转发的实现。机内和机外共用一个 ns-3 时钟，目标只在实际交付时写入，后续任务由完成通知推进。</p>
+<div class="stats"><div class="card"><strong>4 / 4</strong>预定功能网络通过</div><div class="card"><strong>512 B</strong>机内实际转发字节</div><div class="card"><strong>2 个 / 576 B</strong>远端源数据包 / MRT1载体</div></div>
+<div class="card"><h2>传递链路</h2><p>服务器 A：GPU0、GPU1 → GPU2 → 跨机网络 → 服务器 B：GPU4 → GPU5 → 跨机网络 → GPU0。</p>
+<p>GPU0/1 各提供128B不同字节，GPU2 合成256B发送。GPU4收到后把同一组字节交给GPU5，GPU5再从窗口读出并回传。后续阶段没有重新生成标记。</p></div>
+<div class="card scroll"><h2>实际数据就绪时刻（ns）</h2><table><thead><tr><th>工作</th><th>开始</th><th>交付</th><th>同一时间轴</th></tr></thead><tbody><tr><td>0：GPU0 → GPU2（机内）</td><td>0</td><td>276</td><td><div class="track"><span class="peer" style="margin-left:0.00000%;width:1.45141%"></span></div></td></tr><tr><td>1：GPU1 → GPU2（机内）</td><td>0</td><td>340</td><td><div class="track"><span class="peer" style="margin-left:0.00000%;width:1.78797%"></span></div></td></tr><tr><td>2：GPU2 → GPU4（跨机数据交付）</td><td>340</td><td>6,496</td><td><div class="track"><span class="wire" style="margin-left:1.78797%;width:32.37274%"></span></div></td></tr><tr><td>3：GPU4 → GPU5（机内）</td><td>6,496</td><td>6,836</td><td><div class="track"><span class="peer" style="margin-left:34.16071%;width:1.78797%"></span></div></td></tr><tr><td>4：GPU5 → GPU0（跨机数据交付）</td><td>6,836</td><td>12,992</td><td><div class="track"><span class="wire" style="margin-left:35.94867%;width:32.37274%"></span></div></td></tr></tbody></table>
+<p>首条跨机写入在6,496ns交付，发送方在12,520ns才收到完整ACK；机内转发与后续发送已在6,836ns开始推进。不能把数据交付、发送完成或各段耗时简单相加。</p>
+<p>最终网络排空：19,016ns。绿色为机内转发，蓝色为跨机数据交付；表中没有把等待ACK画成数据传输。</p></div>
+<div class="card"><h2>验证了什么</h2><ul><li>GPU2目的端口共享：两条128B转发分别在276/340ns完成，端口繁忙256ns、最大等待128ns。</li>
+<li>独立重放20项内存事件，核对源保护、开始时捕获、完成时提交和最终字节。</li><li>逐项核对实际物理发送/接收、路径两端口、序列及ACK，共24次逐跳发送；机内转发不增加物理RDMA包。</li>
+<li>直接执行与依赖前端的核心结果相同；迁移后的完整结果只允许已核实的运行库路径和枚举顺序差异。</li>
+<li>7类非法输入在创建输出和启动后端前拒绝；7类证据篡改被独立核验器拒绝。</li></ul><a href="verification.json">查看机器可读核验结果</a></div>
+<div class="card boundary"><h2>这一步能支持什么研究</h2><p>可以继续接入“跨机先送到某张GPU、再在机内转发”的分层通信依赖，避免把域内转发误算成机外RDMA。它补的是模型正确性，尚未建立新的仿真创新或性能收益。</p>
+<p>本例为2台服务器×4张逻辑GPU，机内8Gbps、每跳10ns、64B分块，机外100Gbps、每跳1µs。GPU类型为NONE，属于声明参数；不是GPU执行、NVLink/TMA/GIN/RoCE成本校准、真实MoE调用或千卡实验。</p>
+<p>新增路由数据的来源已确认为DeepSeek-R1-AWQ/MMLU；本次人工功能例没有使用这些文件。完整Hybrid的slot、屏障、计数、Combine执行及强基线收益验证仍待完成。</p></div></main></html>

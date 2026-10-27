@@ -23,8 +23,8 @@ std::string MemoryHex(const std::vector<uint8_t>& bytes) {
   for(auto byte:bytes){text+=digits[byte>>4];text+=digits[byte&15];}return text;
 }
 RemoteTransactions::RemoteTransactions(Fabric& fabric,const Json& input):
-    execution_limits_(ReadTransactionLimits(input)),explicit_limits_(input.contains("execution_limits")),
-    transport_(fabric,{2*execution_limits_.connections,2*execution_limits_.remote},input.value("transport_recovery",Json())) {
+    fabric_(fabric),execution_limits_(ReadTransactionLimits(input)),explicit_limits_(input.contains("execution_limits")),
+    transport_(fabric,{2*execution_limits_.connections,2*execution_limits_.remote},input.value("transport_recovery",Json()),input.contains("peer_copy_model")) {
   ValidateTransactionTransport(input,fabric.MaxSimNs());
   if(input.contains("dcqcn_reference"))transport_.ConfigureDcqcnReference(input.at("dcqcn_reference"));
   if(explicit_limits_)memory_.ConfigureRequestLimits(execution_limits_.connections,execution_limits_.remote,execution_limits_.Nodes());
@@ -44,6 +44,11 @@ RemoteTransactions::RemoteTransactions(Fabric& fabric,const Json& input):
           input.at("schema_version")=="moe-rdma-transactions/4" ||
           input.at("schema_version")=="moe-rdma-transactions/5","wrong transaction schema");
   const bool sparse=input.at("schema_version")=="moe-rdma-transactions/5";
+  peer_copy_mode_=input.contains("peer_copy_model");
+  if(peer_copy_mode_)Require(sparse && input.at("peer_copy_model")==Json{{"mode","topology_intra_host_crossbar/1"}} &&
+    !input.contains("application_window_model") && !input.contains("buffer_model"),"unsupported peer copy model combination");
+  if(peer_copy_mode_)Require(static_cast<uint64_t>(std::count_if(input.at("operations").begin(),input.at("operations").end(),
+    [](const auto& op){return op.value("kind",std::string())=="local" && op.contains("copy") && op.at("copy").at("target").contains("owner");}))<=fabric_.MaxMessages(),"peer flow count exceeds protocol budget");
   explicit_submission_=input.contains("submission_model");
   if(explicit_submission_)Require(sparse && input.at("submission_model")==Json{{"mode","explicit_prefix/1"}},"unsupported submission model");
   if(!explicit_submission_)for(const auto& op:input.at("operations"))
@@ -194,26 +199,38 @@ RemoteTransactions::LocalCopy RemoteTransactions::Copy(const Json& input) const 
   const auto owner=input.at("rank").get<unsigned>();const auto& copy=input.at("copy");
   Require(copy.is_object() && copy.size()==2 && copy.contains("source") && copy.contains("target"),"invalid local copy fields");
   auto range=[&](const Json& value,bool source,uint64_t bytes=0) {
-    Require(value.is_object() && value.size()==(source?3u:2u),"invalid local copy range fields");
+    const bool peer=!source && value.contains("owner");
+    Require(value.is_object() && value.size()==(source?3u:peer?3u:2u),"invalid local copy range fields");
     auto integer=[&](const char* key,uint64_t maximum) {
       const auto& v=value.at(key);
       Require(v.is_number_integer() && (v.is_number_unsigned() || v.get<int64_t>()>=0),"invalid local copy integer");
       const auto n=v.get<uint64_t>();Require(n<=maximum,"local copy integer out of bounds");return n;
     };
-    RemoteMemory::ReadLease result{owner,static_cast<uint32_t>(integer("key",UINT32_MAX)),integer("address",UINT64_MAX),source?integer("bytes",32768):bytes};
+    const auto target_owner=peer?static_cast<unsigned>(integer("owner",31)):owner;
+    if(peer)Require(peer_copy_mode_ && input.at("duration_ns")==0 && fabric_.IntraHostPeer(owner,target_owner),
+      "peer copy requires zero declared duration and enabled same-server crossbar");
+    RemoteMemory::ReadLease result{target_owner,static_cast<uint32_t>(integer("key",UINT32_MAX)),integer("address",UINT64_MAX),source?integer("bytes",32768):bytes};
     memory_.CheckRange(result);return result;
   };
   LocalCopy result;result.source=range(copy.at("source"),true);result.target=range(copy.at("target"),false,result.source.bytes);
   const auto& a=result.source;const auto& b=result.target;
-  Require(a.address+a.bytes<=b.address || b.address+b.bytes<=a.address,"local copy source/target overlap");
+  Require(a.owner!=b.owner || a.address+a.bytes<=b.address || b.address+b.bytes<=a.address,"local copy source/target overlap");
   for(const auto& w:LocalWaits(input))if(w.contains("reset_to")) {
     const auto address=w.at("address").get<uint64_t>();
     Require((address+8<=a.address || a.address+a.bytes<=address) &&
-            (address+8<=b.address || b.address+b.bytes<=address),"local copy overlaps own condition reset");
+            (b.owner!=owner || address+8<=b.address || b.address+b.bytes<=address),"local copy overlaps own condition reset");
   }
   return result;
 }
 void RemoteTransactions::ValidateLocalMemory(const Json& input) const {if(input.contains("copy"))Copy(input);}
+void RemoteTransactions::ExecuteLocal(const Json& input,Fabric::Done completed) {
+  StartLocal(input);
+  auto finish=[this,input,completed=std::move(completed)](){CompleteLocal(input);completed();};
+  if(input.contains("copy") && input.at("copy").at("target").contains("owner")) {
+    const auto& copy=local_copies_.at(input.at("id").get<uint64_t>());
+    fabric_.SendPeerCopy(input.at("id"),copy.source.owner,copy.target.owner,copy.source.bytes,std::move(finish));
+  } else ns3::Simulator::Schedule(ns3::NanoSeconds(input.at("duration_ns").get<int64_t>()),std::move(finish));
+}
 void RemoteTransactions::LocalMemoryEvent(uint64_t id,const char* kind,const LocalCopy& copy,const std::vector<uint8_t>* bytes) {
   auto range=[](const auto& r){return Json{{"owner",r.owner},{"key",r.key},{"address",r.address},{"bytes",r.bytes}};};
   Json row={{"order",memory_order_++},{"time_ns",MemoryNow()},{"operation",id},{"kind",kind},
@@ -576,6 +593,8 @@ Json RemoteTransactions::Report() const {
   }
   if(local_memory_mode_) {
     out["local_memory_model"]=local_memory_model_;out["local_memory_events"]=local_memory_events_;
+    if(peer_copy_mode_)out["peer_copy_model"]={{"mode","topology_intra_host_crossbar/1"},
+      {"physical_rdma_packets",false},{"gpu_coherence_modeled",false},{"hardware_calibrated",false}};
     out["active_local_memory_leases"]=Json::array();
     for(const auto& item:local_copies_)if(!item.second.completed) {
       auto range=[](const auto& r){return Json{{"owner",r.owner},{"key",r.key},{"address",r.address},{"bytes",r.bytes}};};

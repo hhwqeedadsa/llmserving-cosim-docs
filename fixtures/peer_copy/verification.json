@@ -1,0 +1,103 @@
+{
+  "passed": true,
+  "reports": {
+    "peer": {
+      "passed": true,
+      "remote_operations": 2,
+      "local_copies": 3,
+      "peer_copies": 3,
+      "source_packets": 2,
+      "mrt1_bytes": 576,
+      "peer_payload_bytes": 512,
+      "memory_events": 20,
+      "final_memory_sha256": {
+        "(0, 1)": "6cc4b710a8693c6758a05ba4a776afbe9c279451c332afe17cea1b7e5ec41794",
+        "(1, 1)": "70ae1c5307f5250d5cb9e40742ba9613fcdf9b8d9eb6dd393330443b2d5effbd",
+        "(2, 1)": "154dc58baafabf03ee3a720808ed57a311a16308b6178188eeca92506eb7d03f",
+        "(4, 1)": "154dc58baafabf03ee3a720808ed57a311a16308b6178188eeca92506eb7d03f",
+        "(5, 1)": "154dc58baafabf03ee3a720808ed57a311a16308b6178188eeca92506eb7d03f"
+      },
+      "physical_hop_transmissions": 24,
+      "physical_hops_and_receive_ack_callbacks_verified": true,
+      "shared_port_schedule_verified": true,
+      "byte_continuity_verified": true,
+      "hardware_calibrated": false
+    },
+    "session": {
+      "passed": true,
+      "remote_operations": 2,
+      "local_copies": 3,
+      "peer_copies": 3,
+      "source_packets": 2,
+      "mrt1_bytes": 576,
+      "peer_payload_bytes": 512,
+      "memory_events": 20,
+      "final_memory_sha256": {
+        "(0, 1)": "6cc4b710a8693c6758a05ba4a776afbe9c279451c332afe17cea1b7e5ec41794",
+        "(1, 1)": "70ae1c5307f5250d5cb9e40742ba9613fcdf9b8d9eb6dd393330443b2d5effbd",
+        "(2, 1)": "154dc58baafabf03ee3a720808ed57a311a16308b6178188eeca92506eb7d03f",
+        "(4, 1)": "154dc58baafabf03ee3a720808ed57a311a16308b6178188eeca92506eb7d03f",
+        "(5, 1)": "154dc58baafabf03ee3a720808ed57a311a16308b6178188eeca92506eb7d03f"
+      },
+      "physical_hop_transmissions": 24,
+      "physical_hops_and_receive_ack_callbacks_verified": true,
+      "shared_port_schedule_verified": true,
+      "byte_continuity_verified": true,
+      "hardware_calibrated": false
+    },
+    "without-peer": {
+      "passed": true,
+      "remote_operations": 1,
+      "local_copies": 1,
+      "peer_copies": 0,
+      "source_packets": 1,
+      "mrt1_bytes": 160,
+      "peer_payload_bytes": 0,
+      "memory_events": 8,
+      "final_memory_sha256": {
+        "(0, 1)": "30500fbe8686df236d779a1d65aed0cdb7d31ad23d2b5db68c36b3cabdc16fd6",
+        "(1, 1)": "70ae1c5307f5250d5cb9e40742ba9613fcdf9b8d9eb6dd393330443b2d5effbd",
+        "(2, 1)": "5341e6b2646979a70e57653007a1f310169421ec9bdd9f1a5648f75ade005af1",
+        "(4, 1)": "06d5a5f959dcc34c0f7929d5bdb95949b6d02f5048853bef8a12d10da8de276b",
+        "(5, 1)": "5341e6b2646979a70e57653007a1f310169421ec9bdd9f1a5648f75ade005af1"
+      },
+      "physical_hop_transmissions": 12,
+      "physical_hops_and_receive_ack_callbacks_verified": true,
+      "shared_port_schedule_verified": false,
+      "byte_continuity_verified": true,
+      "hardware_calibrated": false
+    },
+    "migrated": {
+      "passed": true,
+      "remote_operations": 2,
+      "local_copies": 3,
+      "peer_copies": 3,
+      "source_packets": 2,
+      "mrt1_bytes": 576,
+      "peer_payload_bytes": 512,
+      "memory_events": 20,
+      "final_memory_sha256": {
+        "(0, 1)": "6cc4b710a8693c6758a05ba4a776afbe9c279451c332afe17cea1b7e5ec41794",
+        "(1, 1)": "70ae1c5307f5250d5cb9e40742ba9613fcdf9b8d9eb6dd393330443b2d5effbd",
+        "(2, 1)": "154dc58baafabf03ee3a720808ed57a311a16308b6178188eeca92506eb7d03f",
+        "(4, 1)": "154dc58baafabf03ee3a720808ed57a311a16308b6178188eeca92506eb7d03f",
+        "(5, 1)": "154dc58baafabf03ee3a720808ed57a311a16308b6178188eeca92506eb7d03f"
+      },
+      "physical_hop_transmissions": 24,
+      "physical_hops_and_receive_ack_callbacks_verified": true,
+      "shared_port_schedule_verified": true,
+      "byte_continuity_verified": true,
+      "hardware_calibrated": false
+    }
+  },
+  "corruptions_rejected": [
+    "early-peer-completion",
+    "early-source-release",
+    "hidden-local-packet",
+    "missing-port-wait",
+    "physical-source-port",
+    "wire-payload",
+    "wrong-delivered-byte"
+  ],
+  "new_networks": 0
+}

@@ -26,7 +26,18 @@ def stream_limits(config):
     return dict(value)
 
 
-def validate(topology, protocol, config):
+def validate(topology, protocol, config, *, transaction_peer_copies=False):
+    require(type(transaction_peer_copies) is bool, 'transaction peer mode must be boolean')
+    if transaction_peer_copies:
+        require(topology.get('schema_version') == 'moe-scaleout-physical-topology/2' and
+                topology.get('intra_host', {}).get('enabled') is True and
+                topology['intra_host'].get('kind') == 'nonblocking_chunked_crossbar',
+                'transaction peer mode requires topology/2 enabled crossbar')
+        local = topology['intra_host']
+        fields(local, 'kind enabled rate_bps delay_ns chunk_bytes', 'transaction intra-host fabric')
+        integer(local['rate_bps'], 'intra-host rate', 1, 10**15)
+        integer(local['delay_ns'], 'intra-host delay', 0, 1000000)
+        integer(local['chunk_bytes'], 'intra-host chunk', 64, 1048576)
     counts=stream_limits(config)
     budget=limits(protocol)
     recovery='transport_recovery' in config
@@ -86,7 +97,8 @@ def validate(topology, protocol, config):
     require(not any(k in protocol for k in ('admission','recovery','drop_once','lifecycle_capture')) and
             (recovery or 'faults' not in protocol),
             'stream probe excludes legacy admission/recovery/fault/lifecycle modes')
-    require(not topology.get('intra_host',{}).get('enabled',False),'stream probe does not use intra-host bypass')
+    require(transaction_peer_copies or not topology.get('intra_host',{}).get('enabled',False),
+            'stream probe does not use intra-host bypass')
     require(isinstance(config['streams'],list) and 1<=len(config['streams'])<=counts['max_streams'],
             'stream count exceeds declared budget')
     physical_ports={}

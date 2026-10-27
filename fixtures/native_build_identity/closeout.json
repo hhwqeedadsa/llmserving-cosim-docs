@@ -1,0 +1,144 @@
+{
+  "passed": true,
+  "original_terminal_monitors": [
+    {
+      "path": "affected-regression/probe.json",
+      "status": "completed",
+      "seconds": 0.9591183029988315,
+      "rss": 27598848
+    },
+    {
+      "path": "archive-create-monitor/probe.json",
+      "status": "completed",
+      "seconds": 3.3991670130053535,
+      "rss": 99602432
+    },
+    {
+      "path": "archive-restore-monitor/probe.json",
+      "status": "completed",
+      "seconds": 1.1507005680032307,
+      "rss": 131489792
+    },
+    {
+      "path": "build/logs/compile/probe.json",
+      "status": "completed",
+      "seconds": 279.5378932629974,
+      "rss": 1428586496
+    },
+    {
+      "path": "build/logs/configure/probe.json",
+      "status": "completed",
+      "seconds": 2.208902330006822,
+      "rss": 43102208
+    },
+    {
+      "path": "management/probe.json",
+      "status": "completed",
+      "seconds": 0.4258085750043392,
+      "rss": 23441408
+    },
+    {
+      "path": "network/execution/probe.json",
+      "status": "completed",
+      "seconds": 0.5501201619917993,
+      "rss": 372695040
+    },
+    {
+      "path": "network-corrected-monitor/probe.json",
+      "status": "completed",
+      "seconds": 0.857688280986622,
+      "rss": 407441408
+    },
+    {
+      "path": "network-monitor/probe.json",
+      "status": "child_failed",
+      "seconds": 0.21164797800884116,
+      "rss": 7442432
+    },
+    {
+      "path": "prepare-monitor/probe.json",
+      "status": "completed",
+      "seconds": 0.20260115200653672,
+      "rss": 6393856
+    },
+    {
+      "path": "public-build-monitor/probe.json",
+      "status": "completed",
+      "seconds": 282.1016552240035,
+      "rss": 1472049152
+    },
+    {
+      "path": "regression/probe.json",
+      "status": "child_failed",
+      "seconds": 1.0517124059988419,
+      "rss": 53379072
+    },
+    {
+      "path": "regression-corrected/probe.json",
+      "status": "completed",
+      "seconds": 1.2857912790059345,
+      "rss": 52985856
+    },
+    {
+      "path": "topology-monitor/probe.json",
+      "status": "completed",
+      "seconds": 0.22132505700574256,
+      "rss": 6451200
+    },
+    {
+      "path": "unit/probe.json",
+      "status": "completed",
+      "seconds": 0.4369109910039697,
+      "rss": 29724672
+    },
+    {
+      "path": "verify-monitor/probe.json",
+      "status": "completed",
+      "seconds": 0.3086505380051676,
+      "rss": 21811200
+    },
+    {
+      "path": "verify-remapped-monitor/probe.json",
+      "status": "completed",
+      "seconds": 0.31562470900826156,
+      "rss": 21819392
+    }
+  ],
+  "conservative_monitored_seconds_including_nested": 575.2253178290412,
+  "wall_budget_seconds": 900,
+  "closing_receipt_seconds_reserved": 10,
+  "artifact_usage": {
+    "apparent_bytes": 413111712,
+    "allocated_bytes": 416337920
+  },
+  "artifact_budget_bytes": 1073741824,
+  "closing_receipt_bytes_reserved": 2097152,
+  "peak_sampled_group_rss_bytes": 1472049152,
+  "new_identity_test_methods": 11,
+  "scaleout_regression_cases": 153,
+  "focused_regression_cases": 49,
+  "regression_counts_are_executions_not_claimed_distinct_methods": true,
+  "fresh_configures": 1,
+  "fresh_full_builds": 1,
+  "network_executions": 1,
+  "copied_source_recovery": true,
+  "additional_recovery_builds": 0,
+  "additional_recovery_networks": 0,
+  "preserved_failures": {
+    "regression": "removed shared constant still imported by three modules; corrected before acceptance",
+    "network_command": "argument parser rejected --protocol; no backend launched; --config corrected"
+  },
+  "dependency_checkouts_verified": 13,
+  "dependencies_changed": false,
+  "gpu_executed": false,
+  "downloaded": false,
+  "pushed": false,
+  "same_plane_multi_nic_implemented": false,
+  "overall_research_goal_completed": false,
+  "archive": {
+    "sha256": "d808ea3724c8945114fe0622fba2b4588881c11211aac9cadf6d96a6269c17cb",
+    "members": 203,
+    "compressed_bytes": 17230668,
+    "uncompressed_bytes": 81090567
+  }
+}

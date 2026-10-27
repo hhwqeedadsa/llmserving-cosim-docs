@@ -15,7 +15,8 @@ import subprocess
 import sys
 import time
 
-from .scaleout_rdma import checked_json, digest, limits, monitored, save, NATIVE_COMMIT
+from .scaleout_rdma import checked_json, digest, limits, monitored, save, ROOT
+from .native_identity import locked_native_commit
 from .scaleout_topology import fields, require
 from .scaleout_transactions import validate
 from .host_timing import HostTiming
@@ -150,6 +151,7 @@ class NativeTransactionSession:
         require(self.backend.is_file() and os.access(self.backend, os.X_OK), 'missing native transaction-session executable')
         require(self.output.is_dir() and not (self.output/'result.json').exists(), 'require an existing new session output directory')
         require(shutil.disk_usage(self.output).free >= 8*2**30, 'session output volume below 8GiB reserve')
+        native_commit = locked_native_commit(ROOT)
         self.pending = None
         self.sequence = 0
         self.last_ns = 0
@@ -167,7 +169,8 @@ class NativeTransactionSession:
         argv = [str(self.backend), str(self.topology), str(self.protocol), str(self.output/'initial.json'), str(self.output/'result.json')]
         if self.timing.file is not None:argv.append(str(self.output/'native_host.jsonl'))
         if callback_batches:argv.append('--callback-batches')
-        save(self.output/'native-command.json', dict(command=argv, cwd=str(self.output), native_commit=NATIVE_COMMIT,
+        save(self.output/'native-command.json', dict(command=argv, cwd=str(self.output), native_commit=native_commit,
+             native_commit_role='expected_source_checkout_not_binary_build_identity',
              input_hashes={str(p): digest(p) for p in (self.topology, self.protocol, self.backend, self.output/'initial.json')}))
         try:
             self.child = subprocess.Popen(argv, cwd=self.output, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
@@ -356,10 +359,12 @@ def run(topology, protocol, config, backend, output):
     require(w.get('schema_version') in ('moe-rdma-transactions/4', 'moe-rdma-transactions/5'), 'session frontend requires transactions/4 or /5')
     validate(t, p, w)
     require(backend.is_file() and os.access(backend, os.X_OK), 'missing transaction-session executable')
+    native_commit = locked_native_commit(ROOT)
     output.mkdir(exist_ok=False)
     for name, value in (('topology.json', t), ('protocol.json', p), ('input.json', w)):
         save(output/name, value)
-    save(output/'provenance.json', dict(native_commit=NATIVE_COMMIT, frontend='actual_dependency_callbacks/1',
+    save(output/'provenance.json', dict(native_commit=native_commit, frontend='actual_dependency_callbacks/1',
+         native_commit_role='expected_source_checkout_not_binary_build_identity',
          hardware_calibrated=False, modern_deepep_connected=False,
          hashes={str(path): digest(path) for path in (topology/'topology.json', protocol, config, backend, Path(__file__))}))
     budget = limits(p)

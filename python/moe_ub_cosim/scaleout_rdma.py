@@ -16,7 +16,6 @@ from .scaleout_limits import limits
 ROOT = Path(__file__).resolve().parents[2]
 ASTRA = ROOT / 'third_party/LLMServingSim/astra-sim'
 NS3 = ASTRA / 'extern/network_backend/ns-3'
-NATIVE_COMMIT = '6088174ad6928557482a968d45b9952c85e13112'
 
 
 def save(path, value):
@@ -97,37 +96,36 @@ def validate_protocol(c):
         integer(capture['max_events'], 'capture max_events', 1, 100000)
 
 
-def monitored(command, output, artifacts, *, build=False, runtime=None):
+def monitored(command, output, artifacts, *, build=False, runtime=None, wall_seconds=None):
     budget = runtime or limits({'schema_version':'moe-scaleout-rdma/1'})
+    maximum = wall_seconds if wall_seconds is not None else (300 if build else budget['wall_seconds'])
     argv = [sys.executable, '-m', 'moe_ub_cosim.host_probe', '--output-dir', str(output),
             '--rss-bytes', str(2147483648 if build else budget['rss_bytes']),
             '--address-bytes', str(4294967296 if build else budget['address_bytes']),
             '--artifact-bytes', str(536870912 if build else budget['artifact_bytes']),
-            '--wall-seconds', '300' if build else str(budget['wall_seconds']),
+            '--wall-seconds', str(maximum),
             '--min-free-bytes', '8589934592']
     for root in artifacts:
         argv.extend(['--artifact-root', str(root)])
     argv.extend(['--', *map(str, command)])
     try:
-        subprocess.run(argv, cwd=ROOT, check=True, timeout=330 if build else budget['wall_seconds']+30)
+        subprocess.run(argv, cwd=ROOT, check=True, timeout=maximum+30)
     except (subprocess.CalledProcessError, subprocess.TimeoutExpired) as error:
         raise RuntimeError('bounded RDMA command failed; inspect ' + str(output)) from error
 
 
 def build(directory, *, cmake='cmake', ninja='ninja', protobuf_prefix=None, resume=False):
+    from .native_identity import verify_native_source
+    native_commit = verify_native_source(ROOT)
     directory = Path(directory).resolve()
     previous_build = None
     if resume:
         previous_build = checked_json(directory / 'provenance.json', 1048576)
-        require(previous_build['native_commit'] == NATIVE_COMMIT and
+        require(previous_build['native_commit'] == native_commit and
                 (directory / 'cmake/CMakeCache.txt').is_file(), 'not an owned pinned RDMA build')
     else:
         require(not directory.exists(), 'RDMA build requires a new isolated directory (or explicit --resume)')
     require(shutil.disk_usage(directory.parent).free >= 8589934592, 'build volume below 8GiB reserve')
-    require(subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=NS3, text=True).strip() == NATIVE_COMMIT,
-            'native ns-3 differs from pinned commit')
-    require(subprocess.run(['git', 'diff', '--quiet', 'HEAD', '--'], cwd=NS3).returncode == 0,
-            'tracked native ns-3 source is dirty')
     cmake, ninja = shutil.which(cmake), shutil.which(ninja)
     require(cmake and ninja, 'pass existing cmake and ninja; no installation is attempted')
     schema = ASTRA / 'extern/graph_frontend/chakra/schema/protobuf'
@@ -157,7 +155,7 @@ def build(directory, *, cmake='cmake', ninja='ninja', protobuf_prefix=None, resu
         configure.extend(['-DCMAKE_PREFIX_PATH=' + str(prefix),
                           '-DMOE_PROTOBUF_CONFIG=ON',
                           '-DProtobuf_PROTOC_EXECUTABLE=' + str(prefix / 'bin/protoc')])
-    provenance = dict(native_commit=NATIVE_COMMIT, commands=[], network_executed=False,
+    provenance = dict(native_commit=native_commit, commands=[], network_executed=False,
         platform_head=subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip(),
         sources={str(p.relative_to(ROOT)): digest(p) for p in sorted([*(ROOT/'backend/rdma').glob('*'),
             ROOT/'backend/communication_admission.hh',ROOT/'backend/queue_integral.hh',ROOT/'backend/retransmission_timer.hh',
@@ -171,7 +169,7 @@ def build(directory, *, cmake='cmake', ninja='ninja', protobuf_prefix=None, resu
                   '--target', 'moe-rdma-probe', 'moe-rdma-stream-probe', 'moe-rdma-transaction-probe', 'moe-rdma-transaction-session', 'moe-rdma-service', '--parallel', '2'])]:
             provenance['commands'].append(dict(cwd=str(ROOT), argv=list(map(str, cmd))))
             save(directory / 'provenance.json', provenance)
-            monitored(cmd, logs / name, [directory], build=True)
+            monitored(cmd, logs / name, [directory], build=True, wall_seconds=60 if name == 'configure' else 300)
     finally:
         if previous is not None:
             lock.write_bytes(previous)
@@ -188,7 +186,7 @@ def build(directory, *, cmake='cmake', ninja='ninja', protobuf_prefix=None, resu
     require(native_libraries and 'not found' not in linked and
             all(Path(p).resolve().is_relative_to(directory / 'output') for p in native_libraries),
             'binary links another ns-3 build or unresolved libraries')
-    result = dict(passed=True, **targets, native_commit=NATIVE_COMMIT,
+    result = dict(passed=True, **targets, native_commit=native_commit,
                   linked_ns3_libraries=native_libraries, state='native_rdma_probes_and_service_built_not_executed')
     save(directory / 'backend.json', result)
     return result
@@ -273,6 +271,7 @@ def validate_probe(t, c, batch, *, match_faults=True, max_probe_messages=128):
 
 
 def probe(topology, config, messages, backend, output):
+    from .native_identity import locked_native_commit
     topology, config, messages, backend, output = (Path(p).resolve() for p in (topology, config, messages, backend, output))
     c = checked_json(config, 65536)
     t = checked_json(topology / 'topology.json', 8388608)
@@ -280,9 +279,11 @@ def probe(topology, config, messages, backend, output):
     validate_probe(t, c, batch)
     require(backend.is_file() and os.access(backend, os.X_OK), 'pass the native RDMA probe executable')
     require(shutil.disk_usage(output.parent).free >= 8589934592, 'run volume below 8GiB reserve')
+    native_commit = locked_native_commit(ROOT)
     output.mkdir(exist_ok=False)
     command = [backend, topology/'topology.json', config, messages, output/'result.json']
-    save(output/'inputs.json', dict(command=list(map(str, command)), native_commit=NATIVE_COMMIT,
+    save(output/'inputs.json', dict(command=list(map(str, command)), native_commit=native_commit,
+        native_commit_role='expected_source_checkout_not_binary_build_identity',
         hashes={str(p):digest(p) for p in [topology/'topology.json',config,messages,backend]}))
     monitored(command, output/'execution', [output],runtime=limits(c))
     result = checked_json(output/'result.json', limits(c)['result_json_bytes'])

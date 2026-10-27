@@ -3,7 +3,8 @@ import os
 from pathlib import Path
 import re
 
-from .scaleout_rdma import checked_json, digest, limits, monitored, save, NATIVE_COMMIT
+from .scaleout_rdma import checked_json, digest, limits, monitored, save, ROOT
+from .native_identity import locked_native_commit
 from .scaleout_streams import validate as validate_streams
 from .scaleout_topology import fields, integer, require
 from .memory_registrations import validate_registrations
@@ -336,9 +337,11 @@ def probe(topology, protocol, config, backend, output):
     budget = limits(c)
     budget.update(wall_seconds=min(60, budget['wall_seconds']), rss_bytes=min(2**30, budget['rss_bytes']),
                   address_bytes=min(2*2**30, budget['address_bytes']), artifact_bytes=min(64*2**20, budget['artifact_bytes']))
+    native_commit = locked_native_commit(ROOT)
     output.mkdir(exist_ok=False)
     command = [backend, topology/'topology.json', protocol, config, output/'result.json']
-    save(output/'inputs.json', dict(command=list(map(str, command)), native_commit=NATIVE_COMMIT,
+    save(output/'inputs.json', dict(command=list(map(str, command)), native_commit=native_commit,
+        native_commit_role='expected_source_checkout_not_binary_build_identity',
         scope='MRT1 functional transactions; not RoCE wire-equivalent, GIN or GPU visibility',
         hashes={str(p): digest(p) for p in (topology/'topology.json', protocol, config, backend)}))
     monitored(command, output/'execution', [output], runtime=budget)

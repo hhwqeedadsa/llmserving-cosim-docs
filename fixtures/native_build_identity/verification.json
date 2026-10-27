@@ -1,0 +1,49 @@
+{
+  "passed": true,
+  "native_commit": "68a07f7d5e53bbe97d275af41d4964ad01b864f3",
+  "clean_output_build": true,
+  "independent_messages": 4,
+  "source_payload_bytes": 6000,
+  "source_data_packets": 7,
+  "complete_packet_lineages": 14,
+  "physical_transmissions": 84,
+  "physical_receives": 84,
+  "all_port_bytes_independently_recounted": true,
+  "same_native_libraries": 8,
+  "binaries": {
+    "probe": {
+      "path": "/home/lry/moe-ub-cosim/runs/native_build_identity_20261027/build/output/moe-rdma/ns3.42-moe-rdma-probe",
+      "sha256": "ac5dd98cb86d66cce847c1831fc7b9d375124bbbf4ce5985e9ebeb203a9da59b"
+    },
+    "stream_probe": {
+      "path": "/home/lry/moe-ub-cosim/runs/native_build_identity_20261027/build/output/moe-rdma/ns3.42-moe-rdma-stream-probe",
+      "sha256": "71ddd42e06f3be8045ae9fe8516f50cea6fd47fd53d9d561676b35565d2b0ef7"
+    },
+    "transaction_probe": {
+      "path": "/home/lry/moe-ub-cosim/runs/native_build_identity_20261027/build/output/moe-rdma/ns3.42-moe-rdma-transaction-probe",
+      "sha256": "a8b4b854d883dd33ba661d3a13fb1764e12cdb637a01b91de5d81592f35437eb"
+    },
+    "transaction_session": {
+      "path": "/home/lry/moe-ub-cosim/runs/native_build_identity_20261027/build/output/moe-rdma/ns3.42-moe-rdma-transaction-session",
+      "sha256": "6b7649126b0874cf1cc634283f1fe6210974041706478ef972e115dc5355b421"
+    },
+    "service": {
+      "path": "/home/lry/moe-ub-cosim/runs/native_build_identity_20261027/build/output/moe-rdma/ns3.42-moe-rdma-service",
+      "sha256": "e44743491194097ee2524956189045bf7c4ccea5e5b7d6808d5aab3475154bc9"
+    }
+  },
+  "loaded_libraries": {
+    "/home/lry/moe-ub-cosim/runs/native_build_identity_20261027/build/output/lib/libns3.42-applications.so": "1fdeee1387b3797272c3fb45bafbc2d46533014a9c57306e08732cbe4d560d01",
+    "/home/lry/moe-ub-cosim/runs/native_build_identity_20261027/build/output/lib/libns3.42-point-to-point.so": "58faeac94fe4486c54e5871185eed7234a78c43cd0b8ec9c02bdaabe7aa24443",
+    "/home/lry/moe-ub-cosim/runs/native_build_identity_20261027/build/output/lib/libns3.42-internet.so": "565112e26b32feb172f9dbc6b81aa3092c4de68ca4333141baa224a3798b6450",
+    "/home/lry/moe-ub-cosim/runs/native_build_identity_20261027/build/output/lib/libns3.42-network.so": "6b75d5d58d03dc232009da95e7778eec4f9ff467aee275aa9107fd609a25a5fe",
+    "/home/lry/moe-ub-cosim/runs/native_build_identity_20261027/build/output/lib/libns3.42-core.so": "9b6687317752263fb80091db79922765b20f6efda48996fe5e66891e2f03ba13",
+    "/home/lry/moe-ub-cosim/runs/native_build_identity_20261027/build/output/lib/libns3.42-stats.so": "0c5b4c19c83cae0140affca52fe7cc4fcfe95dc85b7cc2845220fbb7dd7b1270",
+    "/home/lry/moe-ub-cosim/runs/native_build_identity_20261027/build/output/lib/libns3.42-bridge.so": "4149951afed284a95a51995854dcf3ce64af3d6b6fcd8cbab420c35d5335a084",
+    "/home/lry/moe-ub-cosim/runs/native_build_identity_20261027/build/output/lib/libns3.42-traffic-control.so": "f1a730e26915b4fa3b8f7f952cc424a97b7d8245478aef4ddf1cec599e1225dc"
+  },
+  "new_networks": 1,
+  "source_calibrated_to_hardware": false,
+  "same_plane_multi_nic_implemented": false,
+  "research_innovation_proven": false
+}

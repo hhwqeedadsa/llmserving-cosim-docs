@@ -6,6 +6,8 @@
 
 ## 构建与运行
 
+`rdma-build`从`deps.lock.json`读取原生ns-3的`checkout_commit`，并核对ASTRA父仓库gitlink、实际HEAD和已跟踪源码的干净状态；不会跟随工作区HEAD接受未知版本。`--resume`也要求旧构建收据与当前固定版本一致。构建收据的版本和实际链接库来自本次构建；probe/事务/会话输入收据的`native_commit_role`则明确其版本字段只是源码预期，任意传入二进制仍需结合程序及实际加载库的hash核对。
+
 使用已经具备 LLMServingSim 依赖及 Python protobuf 的 Python 环境，以及现有 CMake、Ninja、Protobuf；命令不会安装软件。`--protobuf-prefix` 指向带有 CMake 包配置的既有 Protobuf 安装。输出卷至少留 8 GiB。下面目录须不存在，父目录由使用者创建。
 
 锁定 ASTRA 的构建要求 Chakra C++ schema 已初始化，`rdma-build` 会在缺少 `et_def.pb.h/.cc` 时明确拒绝。新检出可先用同一 Protobuf 安装的编译器生成这两个被忽略的构建输入（不修改 `.proto` 或依赖提交）：

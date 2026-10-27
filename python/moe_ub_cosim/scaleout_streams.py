@@ -2,7 +2,8 @@
 import os
 from pathlib import Path
 
-from .scaleout_rdma import checked_json, digest, limits, monitored, save, validate_probe, NATIVE_COMMIT
+from .scaleout_rdma import checked_json, digest, limits, monitored, save, validate_probe, ROOT
+from .native_identity import locked_native_commit
 from .scaleout_topology import fields, integer, require
 
 
@@ -157,9 +158,11 @@ def probe(topology, protocol, config, backend, output):
     if w['schema_version']!='moe-rdma-stream-work/4':
         budget.update(rss_bytes=min(2**30,budget['rss_bytes']),address_bytes=min(2*2**30,budget['address_bytes']))
     budget.update(wall_seconds=min(60,budget['wall_seconds']),artifact_bytes=min(64*2**20,budget['artifact_bytes']))
+    native_commit=locked_native_commit(ROOT)
     output.mkdir(exist_ok=False)
     command=[backend,topology/'topology.json',protocol,config,output/'result.json']
-    save(output/'inputs.json',dict(command=list(map(str,command)),native_commit=NATIVE_COMMIT,
+    save(output/'inputs.json',dict(command=list(map(str,command)),native_commit=native_commit,
+         native_commit_role='expected_source_checkout_not_binary_build_identity',
          scope='persistent native byte-write probe, not GIN or GPU visibility',
          hashes={str(p):digest(p) for p in (topology/'topology.json',protocol,config,backend)}))
     monitored(command,output/'execution',[output],runtime=budget)

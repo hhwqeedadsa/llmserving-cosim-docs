@@ -1,0 +1,18 @@
+{
+  "reason": "Matplotlib-generated SVG path lines contain trailing whitespace",
+  "exit_code": 2,
+  "output_lines": 4252,
+  "output_sha256": "111ff83f1abf4266c6fbf90440271cc3e42d9af0b9250c51e2b7f119df3ff09c",
+  "first_lines": [
+    "experiments/ep_network_projection/results/20261027/ep_projection.svg:23: trailing whitespace.",
+    "+   <path d=\"M 0 316.8 ",
+    "experiments/ep_network_projection/results/20261027/ep_projection.svg:24: trailing whitespace.",
+    "+L 864 316.8 ",
+    "experiments/ep_network_projection/results/20261027/ep_projection.svg:25: trailing whitespace.",
+    "+L 864 0 "
+  ],
+  "correction_scope": "report formatting only; prior report and archive retained",
+  "statistics_markdown_png_byte_identical": true,
+  "svg_html_change_only_trailing_whitespace": true,
+  "corrected_report_directory": "report-formatted"
+}

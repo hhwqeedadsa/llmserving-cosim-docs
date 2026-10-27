@@ -1,0 +1,21 @@
+{
+  "passed": true,
+  "raw_complete_files": 15,
+  "token_layer_rows": 145232,
+  "expert_selections": 1161856,
+  "grouped_ep_waves_checked": 140882,
+  "coverage_rows_checked": 14,
+  "independent_bitset_and_pair_checks": true,
+  "independent_exact_fraction_shift_expectation": true,
+  "exact_uniform_reference_pairs": 784,
+  "exact_cyclic_shift_pairs": 9,
+  "corruption_classes": [
+    "remote_vectors_sum",
+    "pair_collisions_sum",
+    "uniform_expected_pair_collisions_per_wave",
+    "reference_activation_payload_bytes"
+  ],
+  "new_networks": 0,
+  "large_ep_simulation_proven": false,
+  "independent_requests": 15
+}

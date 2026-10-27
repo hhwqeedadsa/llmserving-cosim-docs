@@ -1,0 +1,49 @@
+{
+  "batch8": [
+    {
+      "ep": 4,
+      "remote_vectors": 18.77490421455939,
+      "collision_vs_uniform": 0.7527053671362812,
+      "collision_vs_preserved_marginals": 1.0012008750483954
+    },
+    {
+      "ep": 8,
+      "remote_vectors": 27.900862068965516,
+      "collision_vs_uniform": 0.5817813970122158,
+      "collision_vs_preserved_marginals": 1.0035029838258458
+    },
+    {
+      "ep": 16,
+      "remote_vectors": 42.6360153256705,
+      "collision_vs_uniform": 0.7910605480631603,
+      "collision_vs_preserved_marginals": 1.0076014522903691
+    },
+    {
+      "ep": 32,
+      "remote_vectors": 52.764367816091955,
+      "collision_vs_uniform": 0.9513289776968507,
+      "collision_vs_preserved_marginals": 1.0169175037363969
+    },
+    {
+      "ep": 64,
+      "remote_vectors": 58.71743295019157,
+      "collision_vs_uniform": 1.0974464102065038,
+      "collision_vs_preserved_marginals": 1.0322495812814039
+    },
+    {
+      "ep": 128,
+      "remote_vectors": 62.10823754789272,
+      "collision_vs_uniform": 1.3075565362481922,
+      "collision_vs_preserved_marginals": 1.056098920102994
+    },
+    {
+      "ep": 256,
+      "remote_vectors": 63.780411877394634,
+      "collision_vs_uniform": 1.6793282204691171,
+      "collision_vs_preserved_marginals": 1.0951696525299706
+    }
+  ],
+  "plot_library_version": "3.10.8",
+  "new_networks": 0,
+  "novelty_proven": false
+}

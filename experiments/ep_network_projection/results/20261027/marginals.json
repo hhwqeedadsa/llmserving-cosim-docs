@@ -1,0 +1,5010 @@
+{
+  "schema_version": "ep-network-marginals/1",
+  "rows": [
+    {
+      "batch": 4,
+      "ep": 4,
+      "observed_collisions": 117389,
+      "independent_cyclic_shift_expected_collisions": 117342.02743055554,
+      "observed_to_shift_expectation": 1.0004003047371264,
+      "layers": [
+        {
+          "layer": 3,
+          "observed_collisions": 2021,
+          "independent_cyclic_shift_expected_collisions": 2027.8814583333333,
+          "observed_to_shift_expectation": 0.9966065776157405
+        },
+        {
+          "layer": 4,
+          "observed_collisions": 1953,
+          "independent_cyclic_shift_expected_collisions": 1972.9687847222224,
+          "observed_to_shift_expectation": 0.9898788136554153
+        },
+        {
+          "layer": 5,
+          "observed_collisions": 1999,
+          "independent_cyclic_shift_expected_collisions": 1996.0435069444443,
+          "observed_to_shift_expectation": 1.0014811766603633
+        },
+        {
+          "layer": 6,
+          "observed_collisions": 1998,
+          "independent_cyclic_shift_expected_collisions": 1985.8822916666668,
+          "observed_to_shift_expectation": 1.0061019267779276
+        },
+        {
+          "layer": 7,
+          "observed_collisions": 1888,
+          "independent_cyclic_shift_expected_collisions": 1891.6453472222224,
+          "observed_to_shift_expectation": 0.9980729224811747
+        },
+        {
+          "layer": 8,
+          "observed_collisions": 1894,
+          "independent_cyclic_shift_expected_collisions": 1913.2776041666666,
+          "observed_to_shift_expectation": 0.989924303653226
+        },
+        {
+          "layer": 9,
+          "observed_collisions": 1916,
+          "independent_cyclic_shift_expected_collisions": 1919.1790625,
+          "observed_to_shift_expectation": 0.9983435300217068
+        },
+        {
+          "layer": 10,
+          "observed_collisions": 2064,
+          "independent_cyclic_shift_expected_collisions": 2068.181527777778,
+          "observed_to_shift_expectation": 0.9979781621092657
+        },
+        {
+          "layer": 11,
+          "observed_collisions": 1969,
+          "independent_cyclic_shift_expected_collisions": 1953.3615277777778,
+          "observed_to_shift_expectation": 1.0080059282420766
+        },
+        {
+          "layer": 12,
+          "observed_collisions": 2062,
+          "independent_cyclic_shift_expected_collisions": 2038.9288541666667,
+          "observed_to_shift_expectation": 1.0113153265677643
+        },
+        {
+          "layer": 13,
+          "observed_collisions": 2071,
+          "independent_cyclic_shift_expected_collisions": 2066.572013888889,
+          "observed_to_shift_expectation": 1.0021426720585354
+        },
+        {
+          "layer": 14,
+          "observed_collisions": 1906,
+          "independent_cyclic_shift_expected_collisions": 1905.3228125,
+          "observed_to_shift_expectation": 1.0003554187750008
+        },
+        {
+          "layer": 15,
+          "observed_collisions": 2006,
+          "independent_cyclic_shift_expected_collisions": 2004.0243402777778,
+          "observed_to_shift_expectation": 1.0009858461708845
+        },
+        {
+          "layer": 16,
+          "observed_collisions": 2131,
+          "independent_cyclic_shift_expected_collisions": 2135.9206944444445,
+          "observed_to_shift_expectation": 0.9976962185640865
+        },
+        {
+          "layer": 17,
+          "observed_collisions": 2055,
+          "independent_cyclic_shift_expected_collisions": 2043.0966666666666,
+          "observed_to_shift_expectation": 1.005826123417231
+        },
+        {
+          "layer": 18,
+          "observed_collisions": 1952,
+          "independent_cyclic_shift_expected_collisions": 1952.765173611111,
+          "observed_to_shift_expectation": 0.9996081589217939
+        },
+        {
+          "layer": 19,
+          "observed_collisions": 2011,
+          "independent_cyclic_shift_expected_collisions": 2013.0173263888892,
+          "observed_to_shift_expectation": 0.9989978594011866
+        },
+        {
+          "layer": 20,
+          "observed_collisions": 2033,
+          "independent_cyclic_shift_expected_collisions": 2018.8083333333334,
+          "observed_to_shift_expectation": 1.00702972463128
+        },
+        {
+          "layer": 21,
+          "observed_collisions": 1990,
+          "independent_cyclic_shift_expected_collisions": 2004.7855555555554,
+          "observed_to_shift_expectation": 0.9926248692711385
+        },
+        {
+          "layer": 22,
+          "observed_collisions": 2091,
+          "independent_cyclic_shift_expected_collisions": 2081.023645833334,
+          "observed_to_shift_expectation": 1.0047939648291075
+        },
+        {
+          "layer": 23,
+          "observed_collisions": 2075,
+          "independent_cyclic_shift_expected_collisions": 2083.585486111111,
+          "observed_to_shift_expectation": 0.9958794653887058
+        },
+        {
+          "layer": 24,
+          "observed_collisions": 1958,
+          "independent_cyclic_shift_expected_collisions": 1964.2975347222223,
+          "observed_to_shift_expectation": 0.9967940016158943
+        },
+        {
+          "layer": 25,
+          "observed_collisions": 2034,
+          "independent_cyclic_shift_expected_collisions": 2020.4517708333333,
+          "observed_to_shift_expectation": 1.0067055444540896
+        },
+        {
+          "layer": 26,
+          "observed_collisions": 2034,
+          "independent_cyclic_shift_expected_collisions": 2015.7411111111112,
+          "observed_to_shift_expectation": 1.009058151757804
+        },
+        {
+          "layer": 27,
+          "observed_collisions": 1993,
+          "independent_cyclic_shift_expected_collisions": 2000.3239236111112,
+          "observed_to_shift_expectation": 0.9963386311963466
+        },
+        {
+          "layer": 28,
+          "observed_collisions": 1954,
+          "independent_cyclic_shift_expected_collisions": 1952.1317708333333,
+          "observed_to_shift_expectation": 1.000957020009909
+        },
+        {
+          "layer": 29,
+          "observed_collisions": 2089,
+          "independent_cyclic_shift_expected_collisions": 2077.136319444445,
+          "observed_to_shift_expectation": 1.00571155607097
+        },
+        {
+          "layer": 30,
+          "observed_collisions": 2200,
+          "independent_cyclic_shift_expected_collisions": 2185.2464930555557,
+          "observed_to_shift_expectation": 1.0067514154541966
+        },
+        {
+          "layer": 31,
+          "observed_collisions": 2073,
+          "independent_cyclic_shift_expected_collisions": 2078.2873958333334,
+          "observed_to_shift_expectation": 0.9974558880336117
+        },
+        {
+          "layer": 32,
+          "observed_collisions": 2061,
+          "independent_cyclic_shift_expected_collisions": 2068.820798611111,
+          "observed_to_shift_expectation": 0.9962196829148462
+        },
+        {
+          "layer": 33,
+          "observed_collisions": 2014,
+          "independent_cyclic_shift_expected_collisions": 2012.854166666667,
+          "observed_to_shift_expectation": 1.0005692579980747
+        },
+        {
+          "layer": 34,
+          "observed_collisions": 2004,
+          "independent_cyclic_shift_expected_collisions": 2016.3276388888887,
+          "observed_to_shift_expectation": 0.9938860933852586
+        },
+        {
+          "layer": 35,
+          "observed_collisions": 2017,
+          "independent_cyclic_shift_expected_collisions": 2021.41375,
+          "observed_to_shift_expectation": 0.9978165034248926
+        },
+        {
+          "layer": 36,
+          "observed_collisions": 1913,
+          "independent_cyclic_shift_expected_collisions": 1889.7979166666667,
+          "observed_to_shift_expectation": 1.0122775473127088
+        },
+        {
+          "layer": 37,
+          "observed_collisions": 2106,
+          "independent_cyclic_shift_expected_collisions": 2106.1560069444445,
+          "observed_to_shift_expectation": 0.9999259281155194
+        },
+        {
+          "layer": 38,
+          "observed_collisions": 2105,
+          "independent_cyclic_shift_expected_collisions": 2106.6074305555558,
+          "observed_to_shift_expectation": 0.9992369577111327
+        },
+        {
+          "layer": 39,
+          "observed_collisions": 2008,
+          "independent_cyclic_shift_expected_collisions": 2004.8602430555557,
+          "observed_to_shift_expectation": 1.0015660727251787
+        },
+        {
+          "layer": 40,
+          "observed_collisions": 1956,
+          "independent_cyclic_shift_expected_collisions": 1937.216701388889,
+          "observed_to_shift_expectation": 1.0096960234741132
+        },
+        {
+          "layer": 41,
+          "observed_collisions": 2048,
+          "independent_cyclic_shift_expected_collisions": 2044.697048611111,
+          "observed_to_shift_expectation": 1.001615374459083
+        },
+        {
+          "layer": 42,
+          "observed_collisions": 1996,
+          "independent_cyclic_shift_expected_collisions": 2009.6823611111113,
+          "observed_to_shift_expectation": 0.9931917792702591
+        },
+        {
+          "layer": 43,
+          "observed_collisions": 2079,
+          "independent_cyclic_shift_expected_collisions": 2087.3608680555553,
+          "observed_to_shift_expectation": 0.9959945267809185
+        },
+        {
+          "layer": 44,
+          "observed_collisions": 2061,
+          "independent_cyclic_shift_expected_collisions": 2053.0069791666665,
+          "observed_to_shift_expectation": 1.0038933237511827
+        },
+        {
+          "layer": 45,
+          "observed_collisions": 2012,
+          "independent_cyclic_shift_expected_collisions": 2017.548402777778,
+          "observed_to_shift_expectation": 0.9972499282940925
+        },
+        {
+          "layer": 46,
+          "observed_collisions": 2091,
+          "independent_cyclic_shift_expected_collisions": 2090.141527777778,
+          "observed_to_shift_expectation": 1.000410724446557
+        },
+        {
+          "layer": 47,
+          "observed_collisions": 2048,
+          "independent_cyclic_shift_expected_collisions": 2041.216875,
+          "observed_to_shift_expectation": 1.003323079033432
+        },
+        {
+          "layer": 48,
+          "observed_collisions": 1970,
+          "independent_cyclic_shift_expected_collisions": 1983.970625,
+          "observed_to_shift_expectation": 0.9929582500748972
+        },
+        {
+          "layer": 49,
+          "observed_collisions": 2022,
+          "independent_cyclic_shift_expected_collisions": 2040.5228124999999,
+          "observed_to_shift_expectation": 0.990922516334279
+        },
+        {
+          "layer": 50,
+          "observed_collisions": 2143,
+          "independent_cyclic_shift_expected_collisions": 2130.653333333333,
+          "observed_to_shift_expectation": 1.0057947796919882
+        },
+        {
+          "layer": 51,
+          "observed_collisions": 2035,
+          "independent_cyclic_shift_expected_collisions": 2047.642361111111,
+          "observed_to_shift_expectation": 0.9938258939396766
+        },
+        {
+          "layer": 52,
+          "observed_collisions": 2054,
+          "independent_cyclic_shift_expected_collisions": 2063.4733680555555,
+          "observed_to_shift_expectation": 0.99540901850142
+        },
+        {
+          "layer": 53,
+          "observed_collisions": 2136,
+          "independent_cyclic_shift_expected_collisions": 2130.6596180555553,
+          "observed_to_shift_expectation": 1.0025064453745636
+        },
+        {
+          "layer": 54,
+          "observed_collisions": 2067,
+          "independent_cyclic_shift_expected_collisions": 2063.8195486111113,
+          "observed_to_shift_expectation": 1.001541051101599
+        },
+        {
+          "layer": 55,
+          "observed_collisions": 1992,
+          "independent_cyclic_shift_expected_collisions": 1984.1058680555554,
+          "observed_to_shift_expectation": 1.0039786848431536
+        },
+        {
+          "layer": 56,
+          "observed_collisions": 2025,
+          "independent_cyclic_shift_expected_collisions": 2024.557638888889,
+          "observed_to_shift_expectation": 1.0002184976622122
+        },
+        {
+          "layer": 57,
+          "observed_collisions": 1883,
+          "independent_cyclic_shift_expected_collisions": 1889.2380208333332,
+          "observed_to_shift_expectation": 0.9966981286822814
+        },
+        {
+          "layer": 58,
+          "observed_collisions": 1997,
+          "independent_cyclic_shift_expected_collisions": 2000.2260069444444,
+          "observed_to_shift_expectation": 0.9983871787821755
+        },
+        {
+          "layer": 59,
+          "observed_collisions": 1984,
+          "independent_cyclic_shift_expected_collisions": 1968.2861805555556,
+          "observed_to_shift_expectation": 1.0079835034151432
+        },
+        {
+          "layer": 60,
+          "observed_collisions": 2142,
+          "independent_cyclic_shift_expected_collisions": 2137.275,
+          "observed_to_shift_expectation": 1.002210759027266
+        }
+      ]
+    },
+    {
+      "batch": 4,
+      "ep": 8,
+      "observed_collisions": 145148,
+      "independent_cyclic_shift_expected_collisions": 144852.10211805557,
+      "observed_to_shift_expectation": 1.0020427586318579,
+      "layers": [
+        {
+          "layer": 3,
+          "observed_collisions": 2385,
+          "independent_cyclic_shift_expected_collisions": 2392.9341319444443,
+          "observed_to_shift_expectation": 0.9966843500460261
+        },
+        {
+          "layer": 4,
+          "observed_collisions": 2352,
+          "independent_cyclic_shift_expected_collisions": 2349.7503472222224,
+          "observed_to_shift_expectation": 1.0009574007640587
+        },
+        {
+          "layer": 5,
+          "observed_collisions": 2405,
+          "independent_cyclic_shift_expected_collisions": 2392.9885416666666,
+          "observed_to_shift_expectation": 1.0050194382982576
+        },
+        {
+          "layer": 6,
+          "observed_collisions": 2391,
+          "independent_cyclic_shift_expected_collisions": 2380.9004513888885,
+          "observed_to_shift_expectation": 1.0042419029343372
+        },
+        {
+          "layer": 7,
+          "observed_collisions": 2531,
+          "independent_cyclic_shift_expected_collisions": 2544.362222222222,
+          "observed_to_shift_expectation": 0.9947483019101928
+        },
+        {
+          "layer": 8,
+          "observed_collisions": 2706,
+          "independent_cyclic_shift_expected_collisions": 2708.8979166666663,
+          "observed_to_shift_expectation": 0.9989302230073578
+        },
+        {
+          "layer": 9,
+          "observed_collisions": 2610,
+          "independent_cyclic_shift_expected_collisions": 2608.489201388889,
+          "observed_to_shift_expectation": 1.0005791853040091
+        },
+        {
+          "layer": 10,
+          "observed_collisions": 2417,
+          "independent_cyclic_shift_expected_collisions": 2404.179652777778,
+          "observed_to_shift_expectation": 1.0053325246336768
+        },
+        {
+          "layer": 11,
+          "observed_collisions": 2437,
+          "independent_cyclic_shift_expected_collisions": 2423.4675,
+          "observed_to_shift_expectation": 1.0055839411917016
+        },
+        {
+          "layer": 12,
+          "observed_collisions": 2410,
+          "independent_cyclic_shift_expected_collisions": 2382.563020833333,
+          "observed_to_shift_expectation": 1.0115157412109377
+        },
+        {
+          "layer": 13,
+          "observed_collisions": 2425,
+          "independent_cyclic_shift_expected_collisions": 2396.1854166666662,
+          "observed_to_shift_expectation": 1.0120251893417405
+        },
+        {
+          "layer": 14,
+          "observed_collisions": 2349,
+          "independent_cyclic_shift_expected_collisions": 2341.5909375,
+          "observed_to_shift_expectation": 1.0031641147825376
+        },
+        {
+          "layer": 15,
+          "observed_collisions": 2411,
+          "independent_cyclic_shift_expected_collisions": 2400.3457986111116,
+          "observed_to_shift_expectation": 1.0044386110513965
+        },
+        {
+          "layer": 16,
+          "observed_collisions": 2289,
+          "independent_cyclic_shift_expected_collisions": 2311.7423263888886,
+          "observed_to_shift_expectation": 0.9901622572164374
+        },
+        {
+          "layer": 17,
+          "observed_collisions": 2556,
+          "independent_cyclic_shift_expected_collisions": 2502.1770486111113,
+          "observed_to_shift_expectation": 1.0215104488384483
+        },
+        {
+          "layer": 18,
+          "observed_collisions": 2460,
+          "independent_cyclic_shift_expected_collisions": 2468.7004513888887,
+          "observed_to_shift_expectation": 0.9964756957920943
+        },
+        {
+          "layer": 19,
+          "observed_collisions": 2478,
+          "independent_cyclic_shift_expected_collisions": 2469.9184722222226,
+          "observed_to_shift_expectation": 1.0032719815931845
+        },
+        {
+          "layer": 20,
+          "observed_collisions": 2659,
+          "independent_cyclic_shift_expected_collisions": 2623.920902777778,
+          "observed_to_shift_expectation": 1.013368961383358
+        },
+        {
+          "layer": 21,
+          "observed_collisions": 2627,
+          "independent_cyclic_shift_expected_collisions": 2627.089479166667,
+          "observed_to_shift_expectation": 0.9999659398100534
+        },
+        {
+          "layer": 22,
+          "observed_collisions": 2563,
+          "independent_cyclic_shift_expected_collisions": 2481.4166319444444,
+          "observed_to_shift_expectation": 1.032877738871133
+        },
+        {
+          "layer": 23,
+          "observed_collisions": 2397,
+          "independent_cyclic_shift_expected_collisions": 2393.93,
+          "observed_to_shift_expectation": 1.0012824100955333
+        },
+        {
+          "layer": 24,
+          "observed_collisions": 2483,
+          "independent_cyclic_shift_expected_collisions": 2499.761840277778,
+          "observed_to_shift_expectation": 0.9932946251088002
+        },
+        {
+          "layer": 25,
+          "observed_collisions": 2381,
+          "independent_cyclic_shift_expected_collisions": 2374.854618055556,
+          "observed_to_shift_expectation": 1.0025876876410547
+        },
+        {
+          "layer": 26,
+          "observed_collisions": 2444,
+          "independent_cyclic_shift_expected_collisions": 2430.858402777778,
+          "observed_to_shift_expectation": 1.00540615496452
+        },
+        {
+          "layer": 27,
+          "observed_collisions": 2756,
+          "independent_cyclic_shift_expected_collisions": 2782.5917708333336,
+          "observed_to_shift_expectation": 0.9904435242308757
+        },
+        {
+          "layer": 28,
+          "observed_collisions": 3036,
+          "independent_cyclic_shift_expected_collisions": 3014.1463194444445,
+          "observed_to_shift_expectation": 1.0072503714947665
+        },
+        {
+          "layer": 29,
+          "observed_collisions": 2702,
+          "independent_cyclic_shift_expected_collisions": 2717.8294444444446,
+          "observed_to_shift_expectation": 0.9941757035281218
+        },
+        {
+          "layer": 30,
+          "observed_collisions": 2559,
+          "independent_cyclic_shift_expected_collisions": 2568.6994097222223,
+          "observed_to_shift_expectation": 0.9962239997075909
+        },
+        {
+          "layer": 31,
+          "observed_collisions": 2464,
+          "independent_cyclic_shift_expected_collisions": 2477.1835069444446,
+          "observed_to_shift_expectation": 0.9946780257064176
+        },
+        {
+          "layer": 32,
+          "observed_collisions": 2627,
+          "independent_cyclic_shift_expected_collisions": 2624.6111805555556,
+          "observed_to_shift_expectation": 1.0009101612696547
+        },
+        {
+          "layer": 33,
+          "observed_collisions": 2583,
+          "independent_cyclic_shift_expected_collisions": 2574.927847222222,
+          "observed_to_shift_expectation": 1.0031349044543076
+        },
+        {
+          "layer": 34,
+          "observed_collisions": 2510,
+          "independent_cyclic_shift_expected_collisions": 2523.104201388889,
+          "observed_to_shift_expectation": 0.9948063177962783
+        },
+        {
+          "layer": 35,
+          "observed_collisions": 2435,
+          "independent_cyclic_shift_expected_collisions": 2406.0779166666666,
+          "observed_to_shift_expectation": 1.0120204267422068
+        },
+        {
+          "layer": 36,
+          "observed_collisions": 2250,
+          "independent_cyclic_shift_expected_collisions": 2256.5725347222224,
+          "observed_to_shift_expectation": 0.997087381583756
+        },
+        {
+          "layer": 37,
+          "observed_collisions": 2401,
+          "independent_cyclic_shift_expected_collisions": 2397.6041319444444,
+          "observed_to_shift_expectation": 1.0014163589436267
+        },
+        {
+          "layer": 38,
+          "observed_collisions": 2678,
+          "independent_cyclic_shift_expected_collisions": 2689.526875,
+          "observed_to_shift_expectation": 0.9957141625513595
+        },
+        {
+          "layer": 39,
+          "observed_collisions": 2645,
+          "independent_cyclic_shift_expected_collisions": 2597.0095833333335,
+          "observed_to_shift_expectation": 1.0184791064979704
+        },
+        {
+          "layer": 40,
+          "observed_collisions": 2479,
+          "independent_cyclic_shift_expected_collisions": 2453.0119444444445,
+          "observed_to_shift_expectation": 1.0105943452963664
+        },
+        {
+          "layer": 41,
+          "observed_collisions": 2423,
+          "independent_cyclic_shift_expected_collisions": 2398.5692708333336,
+          "observed_to_shift_expectation": 1.0101855424663964
+        },
+        {
+          "layer": 42,
+          "observed_collisions": 2549,
+          "independent_cyclic_shift_expected_collisions": 2584.8057986111116,
+          "observed_to_shift_expectation": 0.9861475865496931
+        },
+        {
+          "layer": 43,
+          "observed_collisions": 2571,
+          "independent_cyclic_shift_expected_collisions": 2527.583611111111,
+          "observed_to_shift_expectation": 1.0171770337084134
+        },
+        {
+          "layer": 44,
+          "observed_collisions": 2395,
+          "independent_cyclic_shift_expected_collisions": 2381.4527430555554,
+          "observed_to_shift_expectation": 1.0056886524345063
+        },
+        {
+          "layer": 45,
+          "observed_collisions": 2479,
+          "independent_cyclic_shift_expected_collisions": 2513.1946875000003,
+          "observed_to_shift_expectation": 0.9863939361044824
+        },
+        {
+          "layer": 46,
+          "observed_collisions": 2465,
+          "independent_cyclic_shift_expected_collisions": 2489.3093402777777,
+          "observed_to_shift_expectation": 0.990234504051206
+        },
+        {
+          "layer": 47,
+          "observed_collisions": 2569,
+          "independent_cyclic_shift_expected_collisions": 2572.998090277778,
+          "observed_to_shift_expectation": 0.9984461355440235
+        },
+        {
+          "layer": 48,
+          "observed_collisions": 2555,
+          "independent_cyclic_shift_expected_collisions": 2541.7805208333334,
+          "observed_to_shift_expectation": 1.0052008735838185
+        },
+        {
+          "layer": 49,
+          "observed_collisions": 2480,
+          "independent_cyclic_shift_expected_collisions": 2487.4763541666666,
+          "observed_to_shift_expectation": 0.9969944019149596
+        },
+        {
+          "layer": 50,
+          "observed_collisions": 2505,
+          "independent_cyclic_shift_expected_collisions": 2501.6753125000005,
+          "observed_to_shift_expectation": 1.0013289844143192
+        },
+        {
+          "layer": 51,
+          "observed_collisions": 2469,
+          "independent_cyclic_shift_expected_collisions": 2451.6447569444445,
+          "observed_to_shift_expectation": 1.0070790203215192
+        },
+        {
+          "layer": 52,
+          "observed_collisions": 2595,
+          "independent_cyclic_shift_expected_collisions": 2583.2121875000003,
+          "observed_to_shift_expectation": 1.004563238187339
+        },
+        {
+          "layer": 53,
+          "observed_collisions": 2597,
+          "independent_cyclic_shift_expected_collisions": 2587.4194444444447,
+          "observed_to_shift_expectation": 1.0037027454424237
+        },
+        {
+          "layer": 54,
+          "observed_collisions": 2570,
+          "independent_cyclic_shift_expected_collisions": 2540.7955902777776,
+          "observed_to_shift_expectation": 1.011494198838337
+        },
+        {
+          "layer": 55,
+          "observed_collisions": 2312,
+          "independent_cyclic_shift_expected_collisions": 2302.4558333333334,
+          "observed_to_shift_expectation": 1.004145211616437
+        },
+        {
+          "layer": 56,
+          "observed_collisions": 2466,
+          "independent_cyclic_shift_expected_collisions": 2488.593125,
+          "observed_to_shift_expectation": 0.9909213262814909
+        },
+        {
+          "layer": 57,
+          "observed_collisions": 2591,
+          "independent_cyclic_shift_expected_collisions": 2627.7613194444443,
+          "observed_to_shift_expectation": 0.986010403923513
+        },
+        {
+          "layer": 58,
+          "observed_collisions": 2554,
+          "independent_cyclic_shift_expected_collisions": 2567.5101041666667,
+          "observed_to_shift_expectation": 0.9947380521912097
+        },
+        {
+          "layer": 59,
+          "observed_collisions": 2322,
+          "independent_cyclic_shift_expected_collisions": 2321.573125,
+          "observed_to_shift_expectation": 1.000183873165744
+        },
+        {
+          "layer": 60,
+          "observed_collisions": 2390,
+          "independent_cyclic_shift_expected_collisions": 2388.3689236111113,
+          "observed_to_shift_expectation": 1.000682924808125
+        }
+      ]
+    },
+    {
+      "batch": 4,
+      "ep": 16,
+      "observed_collisions": 173191,
+      "independent_cyclic_shift_expected_collisions": 172703.37309027778,
+      "observed_to_shift_expectation": 1.002823493838,
+      "layers": [
+        {
+          "layer": 3,
+          "observed_collisions": 2996,
+          "independent_cyclic_shift_expected_collisions": 3028.6398958333334,
+          "observed_to_shift_expectation": 0.989222919542783
+        },
+        {
+          "layer": 4,
+          "observed_collisions": 2896,
+          "independent_cyclic_shift_expected_collisions": 2899.2581250000003,
+          "observed_to_shift_expectation": 0.9988762211367432
+        },
+        {
+          "layer": 5,
+          "observed_collisions": 2798,
+          "independent_cyclic_shift_expected_collisions": 2820.325763888889,
+          "observed_to_shift_expectation": 0.9920839769026878
+        },
+        {
+          "layer": 6,
+          "observed_collisions": 2819,
+          "independent_cyclic_shift_expected_collisions": 2839.9892013888893,
+          "observed_to_shift_expectation": 0.992609408029219
+        },
+        {
+          "layer": 7,
+          "observed_collisions": 3033,
+          "independent_cyclic_shift_expected_collisions": 3000.2712152777776,
+          "observed_to_shift_expectation": 1.0109086087136268
+        },
+        {
+          "layer": 8,
+          "observed_collisions": 3076,
+          "independent_cyclic_shift_expected_collisions": 3091.0349305555555,
+          "observed_to_shift_expectation": 0.9951359557904274
+        },
+        {
+          "layer": 9,
+          "observed_collisions": 3134,
+          "independent_cyclic_shift_expected_collisions": 3162.2740625,
+          "observed_to_shift_expectation": 0.9910589462073228
+        },
+        {
+          "layer": 10,
+          "observed_collisions": 2854,
+          "independent_cyclic_shift_expected_collisions": 2859.037152777778,
+          "observed_to_shift_expectation": 0.998238164630745
+        },
+        {
+          "layer": 11,
+          "observed_collisions": 2701,
+          "independent_cyclic_shift_expected_collisions": 2680.748333333333,
+          "observed_to_shift_expectation": 1.0075544826102663
+        },
+        {
+          "layer": 12,
+          "observed_collisions": 3146,
+          "independent_cyclic_shift_expected_collisions": 3073.9535069444446,
+          "observed_to_shift_expectation": 1.023437730236581
+        },
+        {
+          "layer": 13,
+          "observed_collisions": 2895,
+          "independent_cyclic_shift_expected_collisions": 2869.0736458333336,
+          "observed_to_shift_expectation": 1.0090364896015542
+        },
+        {
+          "layer": 14,
+          "observed_collisions": 3017,
+          "independent_cyclic_shift_expected_collisions": 2973.0822222222223,
+          "observed_to_shift_expectation": 1.0147718006079736
+        },
+        {
+          "layer": 15,
+          "observed_collisions": 2982,
+          "independent_cyclic_shift_expected_collisions": 2906.8994791666664,
+          "observed_to_shift_expectation": 1.0258352658465035
+        },
+        {
+          "layer": 16,
+          "observed_collisions": 2779,
+          "independent_cyclic_shift_expected_collisions": 2798.5480208333333,
+          "observed_to_shift_expectation": 0.993014941788452
+        },
+        {
+          "layer": 17,
+          "observed_collisions": 3178,
+          "independent_cyclic_shift_expected_collisions": 3115.9661458333335,
+          "observed_to_shift_expectation": 1.0199083851567572
+        },
+        {
+          "layer": 18,
+          "observed_collisions": 2902,
+          "independent_cyclic_shift_expected_collisions": 2917.307569444444,
+          "observed_to_shift_expectation": 0.9947528434763705
+        },
+        {
+          "layer": 19,
+          "observed_collisions": 2811,
+          "independent_cyclic_shift_expected_collisions": 2767.2495833333337,
+          "observed_to_shift_expectation": 1.0158100725464618
+        },
+        {
+          "layer": 20,
+          "observed_collisions": 2961,
+          "independent_cyclic_shift_expected_collisions": 2923.5542708333332,
+          "observed_to_shift_expectation": 1.0128082893963153
+        },
+        {
+          "layer": 21,
+          "observed_collisions": 3084,
+          "independent_cyclic_shift_expected_collisions": 3085.7714583333327,
+          "observed_to_shift_expectation": 0.9994259269173844
+        },
+        {
+          "layer": 22,
+          "observed_collisions": 3280,
+          "independent_cyclic_shift_expected_collisions": 3204.532152777778,
+          "observed_to_shift_expectation": 1.0235503479522914
+        },
+        {
+          "layer": 23,
+          "observed_collisions": 2914,
+          "independent_cyclic_shift_expected_collisions": 2914.5192361111112,
+          "observed_to_shift_expectation": 0.9998218450217525
+        },
+        {
+          "layer": 24,
+          "observed_collisions": 3098,
+          "independent_cyclic_shift_expected_collisions": 3095.370069444444,
+          "observed_to_shift_expectation": 1.0008496336452681
+        },
+        {
+          "layer": 25,
+          "observed_collisions": 2989,
+          "independent_cyclic_shift_expected_collisions": 2964.4956944444443,
+          "observed_to_shift_expectation": 1.0082659271866974
+        },
+        {
+          "layer": 26,
+          "observed_collisions": 3149,
+          "independent_cyclic_shift_expected_collisions": 3095.994756944445,
+          "observed_to_shift_expectation": 1.0171205855360905
+        },
+        {
+          "layer": 27,
+          "observed_collisions": 3143,
+          "independent_cyclic_shift_expected_collisions": 3190.1581944444442,
+          "observed_to_shift_expectation": 0.9852176000153946
+        },
+        {
+          "layer": 28,
+          "observed_collisions": 3489,
+          "independent_cyclic_shift_expected_collisions": 3493.9831249999997,
+          "observed_to_shift_expectation": 0.9985737982063094
+        },
+        {
+          "layer": 29,
+          "observed_collisions": 3221,
+          "independent_cyclic_shift_expected_collisions": 3216.5192361111112,
+          "observed_to_shift_expectation": 1.0013930474404082
+        },
+        {
+          "layer": 30,
+          "observed_collisions": 2910,
+          "independent_cyclic_shift_expected_collisions": 2915.0575347222225,
+          "observed_to_shift_expectation": 0.9982650309086595
+        },
+        {
+          "layer": 31,
+          "observed_collisions": 2964,
+          "independent_cyclic_shift_expected_collisions": 2945.2017708333333,
+          "observed_to_shift_expectation": 1.006382662591347
+        },
+        {
+          "layer": 32,
+          "observed_collisions": 3241,
+          "independent_cyclic_shift_expected_collisions": 3260.5104513888887,
+          "observed_to_shift_expectation": 0.994016135914983
+        },
+        {
+          "layer": 33,
+          "observed_collisions": 2970,
+          "independent_cyclic_shift_expected_collisions": 2992.7571527777773,
+          "observed_to_shift_expectation": 0.9923959240205458
+        },
+        {
+          "layer": 34,
+          "observed_collisions": 2920,
+          "independent_cyclic_shift_expected_collisions": 2948.0314583333334,
+          "observed_to_shift_expectation": 0.9904914656680153
+        },
+        {
+          "layer": 35,
+          "observed_collisions": 2926,
+          "independent_cyclic_shift_expected_collisions": 2919.5695138888887,
+          "observed_to_shift_expectation": 1.0022025459851256
+        },
+        {
+          "layer": 36,
+          "observed_collisions": 2854,
+          "independent_cyclic_shift_expected_collisions": 2853.5167013888886,
+          "observed_to_shift_expectation": 1.0001693694699163
+        },
+        {
+          "layer": 37,
+          "observed_collisions": 2972,
+          "independent_cyclic_shift_expected_collisions": 2952.389652777778,
+          "observed_to_shift_expectation": 1.0066421948077793
+        },
+        {
+          "layer": 38,
+          "observed_collisions": 3076,
+          "independent_cyclic_shift_expected_collisions": 3063.071770833333,
+          "observed_to_shift_expectation": 1.0042206745822184
+        },
+        {
+          "layer": 39,
+          "observed_collisions": 3107,
+          "independent_cyclic_shift_expected_collisions": 3055.9525000000003,
+          "observed_to_shift_expectation": 1.0167042845070398
+        },
+        {
+          "layer": 40,
+          "observed_collisions": 3130,
+          "independent_cyclic_shift_expected_collisions": 3056.412222222222,
+          "observed_to_shift_expectation": 1.0240765225458608
+        },
+        {
+          "layer": 41,
+          "observed_collisions": 2907,
+          "independent_cyclic_shift_expected_collisions": 2895.1151041666662,
+          "observed_to_shift_expectation": 1.0041051548576527
+        },
+        {
+          "layer": 42,
+          "observed_collisions": 2981,
+          "independent_cyclic_shift_expected_collisions": 3047.8694444444445,
+          "observed_to_shift_expectation": 0.9780602661421959
+        },
+        {
+          "layer": 43,
+          "observed_collisions": 2986,
+          "independent_cyclic_shift_expected_collisions": 2914.290763888889,
+          "observed_to_shift_expectation": 1.0246060677951778
+        },
+        {
+          "layer": 44,
+          "observed_collisions": 2715,
+          "independent_cyclic_shift_expected_collisions": 2705.5962500000005,
+          "observed_to_shift_expectation": 1.0034756664080975
+        },
+        {
+          "layer": 45,
+          "observed_collisions": 3012,
+          "independent_cyclic_shift_expected_collisions": 3038.3621875,
+          "observed_to_shift_expectation": 0.9913235533247302
+        },
+        {
+          "layer": 46,
+          "observed_collisions": 2969,
+          "independent_cyclic_shift_expected_collisions": 2989.967361111111,
+          "observed_to_shift_expectation": 0.9929874280957638
+        },
+        {
+          "layer": 47,
+          "observed_collisions": 3053,
+          "independent_cyclic_shift_expected_collisions": 3066.7676388888885,
+          "observed_to_shift_expectation": 0.9955107003496761
+        },
+        {
+          "layer": 48,
+          "observed_collisions": 2910,
+          "independent_cyclic_shift_expected_collisions": 2896.6295833333334,
+          "observed_to_shift_expectation": 1.0046158531085914
+        },
+        {
+          "layer": 49,
+          "observed_collisions": 2828,
+          "independent_cyclic_shift_expected_collisions": 2878.3654513888887,
+          "observed_to_shift_expectation": 0.9825020650645365
+        },
+        {
+          "layer": 50,
+          "observed_collisions": 3050,
+          "independent_cyclic_shift_expected_collisions": 3025.5498263888885,
+          "observed_to_shift_expectation": 1.0080812331688795
+        },
+        {
+          "layer": 51,
+          "observed_collisions": 2940,
+          "independent_cyclic_shift_expected_collisions": 2889.2650000000003,
+          "observed_to_shift_expectation": 1.017559829229925
+        },
+        {
+          "layer": 52,
+          "observed_collisions": 3003,
+          "independent_cyclic_shift_expected_collisions": 2977.1634375000003,
+          "observed_to_shift_expectation": 1.0086782479505711
+        },
+        {
+          "layer": 53,
+          "observed_collisions": 3178,
+          "independent_cyclic_shift_expected_collisions": 3174.1949305555554,
+          "observed_to_shift_expectation": 1.0011987510306366
+        },
+        {
+          "layer": 54,
+          "observed_collisions": 2888,
+          "independent_cyclic_shift_expected_collisions": 2856.8103125,
+          "observed_to_shift_expectation": 1.0109176613384268
+        },
+        {
+          "layer": 55,
+          "observed_collisions": 2777,
+          "independent_cyclic_shift_expected_collisions": 2764.1452430555555,
+          "observed_to_shift_expectation": 1.0046505359936277
+        },
+        {
+          "layer": 56,
+          "observed_collisions": 2955,
+          "independent_cyclic_shift_expected_collisions": 3019.7493402777777,
+          "observed_to_shift_expectation": 0.9785580414194837
+        },
+        {
+          "layer": 57,
+          "observed_collisions": 2936,
+          "independent_cyclic_shift_expected_collisions": 2925.709826388889,
+          "observed_to_shift_expectation": 1.003517154544274
+        },
+        {
+          "layer": 58,
+          "observed_collisions": 2903,
+          "independent_cyclic_shift_expected_collisions": 2962.511805555556,
+          "observed_to_shift_expectation": 0.979911706868491
+        },
+        {
+          "layer": 59,
+          "observed_collisions": 2835,
+          "independent_cyclic_shift_expected_collisions": 2804.118298611111,
+          "observed_to_shift_expectation": 1.0110129809445574
+        },
+        {
+          "layer": 60,
+          "observed_collisions": 2950,
+          "independent_cyclic_shift_expected_collisions": 2920.1635069444446,
+          "observed_to_shift_expectation": 1.0102174049448263
+        }
+      ]
+    },
+    {
+      "batch": 4,
+      "ep": 32,
+      "observed_collisions": 136876,
+      "independent_cyclic_shift_expected_collisions": 136363.71739583334,
+      "observed_to_shift_expectation": 1.0037567368648335,
+      "layers": [
+        {
+          "layer": 3,
+          "observed_collisions": 2371,
+          "independent_cyclic_shift_expected_collisions": 2447.382708333333,
+          "observed_to_shift_expectation": 0.9687900433090214
+        },
+        {
+          "layer": 4,
+          "observed_collisions": 2245,
+          "independent_cyclic_shift_expected_collisions": 2284.429548611111,
+          "observed_to_shift_expectation": 0.9827398710391032
+        },
+        {
+          "layer": 5,
+          "observed_collisions": 2181,
+          "independent_cyclic_shift_expected_collisions": 2181.271527777778,
+          "observed_to_shift_expectation": 0.9998755185797275
+        },
+        {
+          "layer": 6,
+          "observed_collisions": 2232,
+          "independent_cyclic_shift_expected_collisions": 2249.602986111111,
+          "observed_to_shift_expectation": 0.9921750699035383
+        },
+        {
+          "layer": 7,
+          "observed_collisions": 2370,
+          "independent_cyclic_shift_expected_collisions": 2382.5661111111112,
+          "observed_to_shift_expectation": 0.9947258080048612
+        },
+        {
+          "layer": 8,
+          "observed_collisions": 2513,
+          "independent_cyclic_shift_expected_collisions": 2460.0359027777777,
+          "observed_to_shift_expectation": 1.0215298066025855
+        },
+        {
+          "layer": 9,
+          "observed_collisions": 2363,
+          "independent_cyclic_shift_expected_collisions": 2428.2585763888887,
+          "observed_to_shift_expectation": 0.9731253594557726
+        },
+        {
+          "layer": 10,
+          "observed_collisions": 2362,
+          "independent_cyclic_shift_expected_collisions": 2304.2536805555555,
+          "observed_to_shift_expectation": 1.025060747404566
+        },
+        {
+          "layer": 11,
+          "observed_collisions": 2230,
+          "independent_cyclic_shift_expected_collisions": 2174.751423611111,
+          "observed_to_shift_expectation": 1.0254045477515543
+        },
+        {
+          "layer": 12,
+          "observed_collisions": 2461,
+          "independent_cyclic_shift_expected_collisions": 2433.9814930555553,
+          "observed_to_shift_expectation": 1.0111005391871433
+        },
+        {
+          "layer": 13,
+          "observed_collisions": 2214,
+          "independent_cyclic_shift_expected_collisions": 2202.3928124999998,
+          "observed_to_shift_expectation": 1.0052702621594667
+        },
+        {
+          "layer": 14,
+          "observed_collisions": 2347,
+          "independent_cyclic_shift_expected_collisions": 2346.5074999999997,
+          "observed_to_shift_expectation": 1.0002098863949935
+        },
+        {
+          "layer": 15,
+          "observed_collisions": 2491,
+          "independent_cyclic_shift_expected_collisions": 2425.604375,
+          "observed_to_shift_expectation": 1.0269605487498348
+        },
+        {
+          "layer": 16,
+          "observed_collisions": 2259,
+          "independent_cyclic_shift_expected_collisions": 2271.8899652777773,
+          "observed_to_shift_expectation": 0.9943263250092302
+        },
+        {
+          "layer": 17,
+          "observed_collisions": 2523,
+          "independent_cyclic_shift_expected_collisions": 2482.079513888889,
+          "observed_to_shift_expectation": 1.0164863719643684
+        },
+        {
+          "layer": 18,
+          "observed_collisions": 2222,
+          "independent_cyclic_shift_expected_collisions": 2220.837361111111,
+          "observed_to_shift_expectation": 1.0005235137472235
+        },
+        {
+          "layer": 19,
+          "observed_collisions": 2451,
+          "independent_cyclic_shift_expected_collisions": 2405.4144097222224,
+          "observed_to_shift_expectation": 1.0189512418706437
+        },
+        {
+          "layer": 20,
+          "observed_collisions": 2411,
+          "independent_cyclic_shift_expected_collisions": 2343.8675694444446,
+          "observed_to_shift_expectation": 1.0286417336161477
+        },
+        {
+          "layer": 21,
+          "observed_collisions": 2343,
+          "independent_cyclic_shift_expected_collisions": 2354.9666319444445,
+          "observed_to_shift_expectation": 0.9949185556253237
+        },
+        {
+          "layer": 22,
+          "observed_collisions": 2500,
+          "independent_cyclic_shift_expected_collisions": 2461.689548611111,
+          "observed_to_shift_expectation": 1.0155626656539627
+        },
+        {
+          "layer": 23,
+          "observed_collisions": 2349,
+          "independent_cyclic_shift_expected_collisions": 2365.6360069444445,
+          "observed_to_shift_expectation": 0.9929676387679217
+        },
+        {
+          "layer": 24,
+          "observed_collisions": 2495,
+          "independent_cyclic_shift_expected_collisions": 2535.2855902777774,
+          "observed_to_shift_expectation": 0.984110038556499
+        },
+        {
+          "layer": 25,
+          "observed_collisions": 2386,
+          "independent_cyclic_shift_expected_collisions": 2320.0656597222223,
+          "observed_to_shift_expectation": 1.0284191699495573
+        },
+        {
+          "layer": 26,
+          "observed_collisions": 2353,
+          "independent_cyclic_shift_expected_collisions": 2331.987638888889,
+          "observed_to_shift_expectation": 1.009010494207046
+        },
+        {
+          "layer": 27,
+          "observed_collisions": 2504,
+          "independent_cyclic_shift_expected_collisions": 2521.760625,
+          "observed_to_shift_expectation": 0.9929570535664939
+        },
+        {
+          "layer": 28,
+          "observed_collisions": 2742,
+          "independent_cyclic_shift_expected_collisions": 2766.0578472222223,
+          "observed_to_shift_expectation": 0.9913024786352961
+        },
+        {
+          "layer": 29,
+          "observed_collisions": 2530,
+          "independent_cyclic_shift_expected_collisions": 2483.598055555555,
+          "observed_to_shift_expectation": 1.018683355118856
+        },
+        {
+          "layer": 30,
+          "observed_collisions": 2364,
+          "independent_cyclic_shift_expected_collisions": 2334.6060069444447,
+          "observed_to_shift_expectation": 1.012590558307535
+        },
+        {
+          "layer": 31,
+          "observed_collisions": 2287,
+          "independent_cyclic_shift_expected_collisions": 2300.426354166667,
+          "observed_to_shift_expectation": 0.9941635366233966
+        },
+        {
+          "layer": 32,
+          "observed_collisions": 2499,
+          "independent_cyclic_shift_expected_collisions": 2505.5652777777777,
+          "observed_to_shift_expectation": 0.9973797219190391
+        },
+        {
+          "layer": 33,
+          "observed_collisions": 2285,
+          "independent_cyclic_shift_expected_collisions": 2341.416423611111,
+          "observed_to_shift_expectation": 0.9759050021849163
+        },
+        {
+          "layer": 34,
+          "observed_collisions": 2376,
+          "independent_cyclic_shift_expected_collisions": 2398.0539930555556,
+          "observed_to_shift_expectation": 0.9908033792736023
+        },
+        {
+          "layer": 35,
+          "observed_collisions": 2338,
+          "independent_cyclic_shift_expected_collisions": 2323.16,
+          "observed_to_shift_expectation": 1.006387851030493
+        },
+        {
+          "layer": 36,
+          "observed_collisions": 2169,
+          "independent_cyclic_shift_expected_collisions": 2205.0280902777777,
+          "observed_to_shift_expectation": 0.9836609381818627
+        },
+        {
+          "layer": 37,
+          "observed_collisions": 2347,
+          "independent_cyclic_shift_expected_collisions": 2311.5855555555554,
+          "observed_to_shift_expectation": 1.0153204125883775
+        },
+        {
+          "layer": 38,
+          "observed_collisions": 2510,
+          "independent_cyclic_shift_expected_collisions": 2508.3869444444445,
+          "observed_to_shift_expectation": 1.000643064882445
+        },
+        {
+          "layer": 39,
+          "observed_collisions": 2405,
+          "independent_cyclic_shift_expected_collisions": 2374.0724305555555,
+          "observed_to_shift_expectation": 1.013027222356989
+        },
+        {
+          "layer": 40,
+          "observed_collisions": 2413,
+          "independent_cyclic_shift_expected_collisions": 2385.5119097222223,
+          "observed_to_shift_expectation": 1.0115229314788785
+        },
+        {
+          "layer": 41,
+          "observed_collisions": 2304,
+          "independent_cyclic_shift_expected_collisions": 2306.747951388889,
+          "observed_to_shift_expectation": 0.9988087335734993
+        },
+        {
+          "layer": 42,
+          "observed_collisions": 2472,
+          "independent_cyclic_shift_expected_collisions": 2474.9329166666666,
+          "observed_to_shift_expectation": 0.9988149510449694
+        },
+        {
+          "layer": 43,
+          "observed_collisions": 2458,
+          "independent_cyclic_shift_expected_collisions": 2348.989791666667,
+          "observed_to_shift_expectation": 1.0464072720622544
+        },
+        {
+          "layer": 44,
+          "observed_collisions": 2247,
+          "independent_cyclic_shift_expected_collisions": 2229.9470486111113,
+          "observed_to_shift_expectation": 1.0076472449870546
+        },
+        {
+          "layer": 45,
+          "observed_collisions": 2195,
+          "independent_cyclic_shift_expected_collisions": 2205.6902430555556,
+          "observed_to_shift_expectation": 0.9951533343862707
+        },
+        {
+          "layer": 46,
+          "observed_collisions": 2499,
+          "independent_cyclic_shift_expected_collisions": 2448.5481944444446,
+          "observed_to_shift_expectation": 1.020604783548891
+        },
+        {
+          "layer": 47,
+          "observed_collisions": 2430,
+          "independent_cyclic_shift_expected_collisions": 2412.8610069444444,
+          "observed_to_shift_expectation": 1.0071031829045387
+        },
+        {
+          "layer": 48,
+          "observed_collisions": 2264,
+          "independent_cyclic_shift_expected_collisions": 2260.436770833333,
+          "observed_to_shift_expectation": 1.001576345426974
+        },
+        {
+          "layer": 49,
+          "observed_collisions": 2280,
+          "independent_cyclic_shift_expected_collisions": 2327.987013888889,
+          "observed_to_shift_expectation": 0.9793869065408887
+        },
+        {
+          "layer": 50,
+          "observed_collisions": 2357,
+          "independent_cyclic_shift_expected_collisions": 2304.59875,
+          "observed_to_shift_expectation": 1.0227376891530466
+        },
+        {
+          "layer": 51,
+          "observed_collisions": 2374,
+          "independent_cyclic_shift_expected_collisions": 2335.863923611111,
+          "observed_to_shift_expectation": 1.0163263262056519
+        },
+        {
+          "layer": 52,
+          "observed_collisions": 2383,
+          "independent_cyclic_shift_expected_collisions": 2411.370173611111,
+          "observed_to_shift_expectation": 0.988234832660045
+        },
+        {
+          "layer": 53,
+          "observed_collisions": 2383,
+          "independent_cyclic_shift_expected_collisions": 2366.4285069444445,
+          "observed_to_shift_expectation": 1.0070027440114608
+        },
+        {
+          "layer": 54,
+          "observed_collisions": 2248,
+          "independent_cyclic_shift_expected_collisions": 2226.4809722222226,
+          "observed_to_shift_expectation": 1.0096650400547997
+        },
+        {
+          "layer": 55,
+          "observed_collisions": 2324,
+          "independent_cyclic_shift_expected_collisions": 2279.830138888889,
+          "observed_to_shift_expectation": 1.019374189487923
+        },
+        {
+          "layer": 56,
+          "observed_collisions": 2251,
+          "independent_cyclic_shift_expected_collisions": 2292.4921180555557,
+          "observed_to_shift_expectation": 0.9819008677374436
+        },
+        {
+          "layer": 57,
+          "observed_collisions": 2296,
+          "independent_cyclic_shift_expected_collisions": 2305.0392013888886,
+          "observed_to_shift_expectation": 0.9960785042686293
+        },
+        {
+          "layer": 58,
+          "observed_collisions": 2213,
+          "independent_cyclic_shift_expected_collisions": 2242.410763888889,
+          "observed_to_shift_expectation": 0.9868843102421238
+        },
+        {
+          "layer": 59,
+          "observed_collisions": 2215,
+          "independent_cyclic_shift_expected_collisions": 2194.405729166667,
+          "observed_to_shift_expectation": 1.0093848965848051
+        },
+        {
+          "layer": 60,
+          "observed_collisions": 2242,
+          "independent_cyclic_shift_expected_collisions": 2214.668125,
+          "observed_to_shift_expectation": 1.0123412960576204
+        }
+      ]
+    },
+    {
+      "batch": 4,
+      "ep": 64,
+      "observed_collisions": 89776,
+      "independent_cyclic_shift_expected_collisions": 89000.75239583333,
+      "observed_to_shift_expectation": 1.0087105735996336,
+      "layers": [
+        {
+          "layer": 3,
+          "observed_collisions": 1450,
+          "independent_cyclic_shift_expected_collisions": 1533.4338541666666,
+          "observed_to_shift_expectation": 0.9455901837956955
+        },
+        {
+          "layer": 4,
+          "observed_collisions": 1436,
+          "independent_cyclic_shift_expected_collisions": 1467.937673611111,
+          "observed_to_shift_expectation": 0.9782431678229603
+        },
+        {
+          "layer": 5,
+          "observed_collisions": 1418,
+          "independent_cyclic_shift_expected_collisions": 1415.5283333333332,
+          "observed_to_shift_expectation": 1.0017461089322361
+        },
+        {
+          "layer": 6,
+          "observed_collisions": 1420,
+          "independent_cyclic_shift_expected_collisions": 1450.7412152777779,
+          "observed_to_shift_expectation": 0.9788099938472543
+        },
+        {
+          "layer": 7,
+          "observed_collisions": 1579,
+          "independent_cyclic_shift_expected_collisions": 1579.3647916666669,
+          "observed_to_shift_expectation": 0.9997690263398351
+        },
+        {
+          "layer": 8,
+          "observed_collisions": 1708,
+          "independent_cyclic_shift_expected_collisions": 1656.881701388889,
+          "observed_to_shift_expectation": 1.0308521112691755
+        },
+        {
+          "layer": 9,
+          "observed_collisions": 1470,
+          "independent_cyclic_shift_expected_collisions": 1504.2615972222222,
+          "observed_to_shift_expectation": 0.9772236442880082
+        },
+        {
+          "layer": 10,
+          "observed_collisions": 1565,
+          "independent_cyclic_shift_expected_collisions": 1538.7364930555555,
+          "observed_to_shift_expectation": 1.0170682290716921
+        },
+        {
+          "layer": 11,
+          "observed_collisions": 1490,
+          "independent_cyclic_shift_expected_collisions": 1442.0777083333335,
+          "observed_to_shift_expectation": 1.0332314211569447
+        },
+        {
+          "layer": 12,
+          "observed_collisions": 1467,
+          "independent_cyclic_shift_expected_collisions": 1430.7580555555555,
+          "observed_to_shift_expectation": 1.025330589126316
+        },
+        {
+          "layer": 13,
+          "observed_collisions": 1448,
+          "independent_cyclic_shift_expected_collisions": 1396.3969444444447,
+          "observed_to_shift_expectation": 1.036954431732938
+        },
+        {
+          "layer": 14,
+          "observed_collisions": 1574,
+          "independent_cyclic_shift_expected_collisions": 1555.8775347222222,
+          "observed_to_shift_expectation": 1.0116477453227148
+        },
+        {
+          "layer": 15,
+          "observed_collisions": 1657,
+          "independent_cyclic_shift_expected_collisions": 1621.121076388889,
+          "observed_to_shift_expectation": 1.0221321677533382
+        },
+        {
+          "layer": 16,
+          "observed_collisions": 1496,
+          "independent_cyclic_shift_expected_collisions": 1496.8743749999999,
+          "observed_to_shift_expectation": 0.9994158661444118
+        },
+        {
+          "layer": 17,
+          "observed_collisions": 1716,
+          "independent_cyclic_shift_expected_collisions": 1723.8927430555557,
+          "observed_to_shift_expectation": 0.9954215579319825
+        },
+        {
+          "layer": 18,
+          "observed_collisions": 1454,
+          "independent_cyclic_shift_expected_collisions": 1446.1902083333334,
+          "observed_to_shift_expectation": 1.0054002520703462
+        },
+        {
+          "layer": 19,
+          "observed_collisions": 1628,
+          "independent_cyclic_shift_expected_collisions": 1567.3315972222222,
+          "observed_to_shift_expectation": 1.0387080837809308
+        },
+        {
+          "layer": 20,
+          "observed_collisions": 1605,
+          "independent_cyclic_shift_expected_collisions": 1527.777986111111,
+          "observed_to_shift_expectation": 1.0505453112892758
+        },
+        {
+          "layer": 21,
+          "observed_collisions": 1526,
+          "independent_cyclic_shift_expected_collisions": 1536.704652777778,
+          "observed_to_shift_expectation": 0.9930340207154134
+        },
+        {
+          "layer": 22,
+          "observed_collisions": 1618,
+          "independent_cyclic_shift_expected_collisions": 1565.3175,
+          "observed_to_shift_expectation": 1.0336561113001035
+        },
+        {
+          "layer": 23,
+          "observed_collisions": 1608,
+          "independent_cyclic_shift_expected_collisions": 1586.7958680555557,
+          "observed_to_shift_expectation": 1.0133628605741378
+        },
+        {
+          "layer": 24,
+          "observed_collisions": 1637,
+          "independent_cyclic_shift_expected_collisions": 1643.631284722222,
+          "observed_to_shift_expectation": 0.9959654669609536
+        },
+        {
+          "layer": 25,
+          "observed_collisions": 1668,
+          "independent_cyclic_shift_expected_collisions": 1600.6663888888888,
+          "observed_to_shift_expectation": 1.0420659867530868
+        },
+        {
+          "layer": 26,
+          "observed_collisions": 1621,
+          "independent_cyclic_shift_expected_collisions": 1556.6919791666667,
+          "observed_to_shift_expectation": 1.041310690678678
+        },
+        {
+          "layer": 27,
+          "observed_collisions": 1741,
+          "independent_cyclic_shift_expected_collisions": 1788.4472916666668,
+          "observed_to_shift_expectation": 0.9734701202055274
+        },
+        {
+          "layer": 28,
+          "observed_collisions": 1909,
+          "independent_cyclic_shift_expected_collisions": 1909.3747916666664,
+          "observed_to_shift_expectation": 0.9998037097439947
+        },
+        {
+          "layer": 29,
+          "observed_collisions": 1758,
+          "independent_cyclic_shift_expected_collisions": 1681.934652777778,
+          "observed_to_shift_expectation": 1.0452249123333046
+        },
+        {
+          "layer": 30,
+          "observed_collisions": 1434,
+          "independent_cyclic_shift_expected_collisions": 1468.3571180555555,
+          "observed_to_shift_expectation": 0.9766016607042759
+        },
+        {
+          "layer": 31,
+          "observed_collisions": 1463,
+          "independent_cyclic_shift_expected_collisions": 1451.7325694444444,
+          "observed_to_shift_expectation": 1.0077613678942723
+        },
+        {
+          "layer": 32,
+          "observed_collisions": 1626,
+          "independent_cyclic_shift_expected_collisions": 1635.877465277778,
+          "observed_to_shift_expectation": 0.9939619772951022
+        },
+        {
+          "layer": 33,
+          "observed_collisions": 1473,
+          "independent_cyclic_shift_expected_collisions": 1489.1133333333335,
+          "observed_to_shift_expectation": 0.9891792431290207
+        },
+        {
+          "layer": 34,
+          "observed_collisions": 1511,
+          "independent_cyclic_shift_expected_collisions": 1483.4396180555555,
+          "observed_to_shift_expectation": 1.0185787015588608
+        },
+        {
+          "layer": 35,
+          "observed_collisions": 1485,
+          "independent_cyclic_shift_expected_collisions": 1465.5677083333335,
+          "observed_to_shift_expectation": 1.013259224774245
+        },
+        {
+          "layer": 36,
+          "observed_collisions": 1500,
+          "independent_cyclic_shift_expected_collisions": 1462.6329166666665,
+          "observed_to_shift_expectation": 1.025547820582688
+        },
+        {
+          "layer": 37,
+          "observed_collisions": 1526,
+          "independent_cyclic_shift_expected_collisions": 1514.7286458333333,
+          "observed_to_shift_expectation": 1.0074411705341888
+        },
+        {
+          "layer": 38,
+          "observed_collisions": 1588,
+          "independent_cyclic_shift_expected_collisions": 1596.0528819444446,
+          "observed_to_shift_expectation": 0.994954501799067
+        },
+        {
+          "layer": 39,
+          "observed_collisions": 1549,
+          "independent_cyclic_shift_expected_collisions": 1504.2257291666665,
+          "observed_to_shift_expectation": 1.0297656594786064
+        },
+        {
+          "layer": 40,
+          "observed_collisions": 1592,
+          "independent_cyclic_shift_expected_collisions": 1548.4698263888888,
+          "observed_to_shift_expectation": 1.0281117351266869
+        },
+        {
+          "layer": 41,
+          "observed_collisions": 1517,
+          "independent_cyclic_shift_expected_collisions": 1494.4726388888887,
+          "observed_to_shift_expectation": 1.0150737862473413
+        },
+        {
+          "layer": 42,
+          "observed_collisions": 1610,
+          "independent_cyclic_shift_expected_collisions": 1605.50125,
+          "observed_to_shift_expectation": 1.002802084395761
+        },
+        {
+          "layer": 43,
+          "observed_collisions": 1603,
+          "independent_cyclic_shift_expected_collisions": 1534.2695833333332,
+          "observed_to_shift_expectation": 1.044796831934414
+        },
+        {
+          "layer": 44,
+          "observed_collisions": 1438,
+          "independent_cyclic_shift_expected_collisions": 1456.773923611111,
+          "observed_to_shift_expectation": 0.9871126718382126
+        },
+        {
+          "layer": 45,
+          "observed_collisions": 1413,
+          "independent_cyclic_shift_expected_collisions": 1444.6455555555558,
+          "observed_to_shift_expectation": 0.97809458836885
+        },
+        {
+          "layer": 46,
+          "observed_collisions": 1501,
+          "independent_cyclic_shift_expected_collisions": 1489.5760416666667,
+          "observed_to_shift_expectation": 1.0076692683111037
+        },
+        {
+          "layer": 47,
+          "observed_collisions": 1515,
+          "independent_cyclic_shift_expected_collisions": 1504.9735069444446,
+          "observed_to_shift_expectation": 1.0066622389093827
+        },
+        {
+          "layer": 48,
+          "observed_collisions": 1499,
+          "independent_cyclic_shift_expected_collisions": 1461.7211805555555,
+          "observed_to_shift_expectation": 1.0255033722849087
+        },
+        {
+          "layer": 49,
+          "observed_collisions": 1492,
+          "independent_cyclic_shift_expected_collisions": 1504.0270833333334,
+          "observed_to_shift_expectation": 0.9920034130591066
+        },
+        {
+          "layer": 50,
+          "observed_collisions": 1551,
+          "independent_cyclic_shift_expected_collisions": 1488.9063541666665,
+          "observed_to_shift_expectation": 1.0417041982926367
+        },
+        {
+          "layer": 51,
+          "observed_collisions": 1445,
+          "independent_cyclic_shift_expected_collisions": 1462.6779513888891,
+          "observed_to_shift_expectation": 0.9879139824510905
+        },
+        {
+          "layer": 52,
+          "observed_collisions": 1541,
+          "independent_cyclic_shift_expected_collisions": 1557.5408333333335,
+          "observed_to_shift_expectation": 0.9893801607127474
+        },
+        {
+          "layer": 53,
+          "observed_collisions": 1653,
+          "independent_cyclic_shift_expected_collisions": 1680.0985069444444,
+          "observed_to_shift_expectation": 0.983870882074809
+        },
+        {
+          "layer": 54,
+          "observed_collisions": 1491,
+          "independent_cyclic_shift_expected_collisions": 1467.6655902777775,
+          "observed_to_shift_expectation": 1.015898996254185
+        },
+        {
+          "layer": 55,
+          "observed_collisions": 1596,
+          "independent_cyclic_shift_expected_collisions": 1539.8241319444444,
+          "observed_to_shift_expectation": 1.0364820026457298
+        },
+        {
+          "layer": 56,
+          "observed_collisions": 1484,
+          "independent_cyclic_shift_expected_collisions": 1463.5969791666666,
+          "observed_to_shift_expectation": 1.0139403272374545
+        },
+        {
+          "layer": 57,
+          "observed_collisions": 1526,
+          "independent_cyclic_shift_expected_collisions": 1529.3737152777778,
+          "observed_to_shift_expectation": 0.9977940543608956
+        },
+        {
+          "layer": 58,
+          "observed_collisions": 1453,
+          "independent_cyclic_shift_expected_collisions": 1470.9769791666668,
+          "observed_to_shift_expectation": 0.987778884767557
+        },
+        {
+          "layer": 59,
+          "observed_collisions": 1517,
+          "independent_cyclic_shift_expected_collisions": 1520.2418055555554,
+          "observed_to_shift_expectation": 0.9978675724192635
+        },
+        {
+          "layer": 60,
+          "observed_collisions": 1517,
+          "independent_cyclic_shift_expected_collisions": 1478.9426736111109,
+          "observed_to_shift_expectation": 1.0257327934800644
+        }
+      ]
+    },
+    {
+      "batch": 4,
+      "ep": 128,
+      "observed_collisions": 55296,
+      "independent_cyclic_shift_expected_collisions": 54631.34548611112,
+      "observed_to_shift_expectation": 1.012166175077234,
+      "layers": [
+        {
+          "layer": 3,
+          "observed_collisions": 872,
+          "independent_cyclic_shift_expected_collisions": 929.1763888888888,
+          "observed_to_shift_expectation": 0.9384655168032622
+        },
+        {
+          "layer": 4,
+          "observed_collisions": 882,
+          "independent_cyclic_shift_expected_collisions": 895.2368749999999,
+          "observed_to_shift_expectation": 0.9852141088357202
+        },
+        {
+          "layer": 5,
+          "observed_collisions": 833,
+          "independent_cyclic_shift_expected_collisions": 838.6011111111112,
+          "observed_to_shift_expectation": 0.9933208875627532
+        },
+        {
+          "layer": 6,
+          "observed_collisions": 826,
+          "independent_cyclic_shift_expected_collisions": 866.1700000000001,
+          "observed_to_shift_expectation": 0.9536234226537514
+        },
+        {
+          "layer": 7,
+          "observed_collisions": 961,
+          "independent_cyclic_shift_expected_collisions": 962.5013541666668,
+          "observed_to_shift_expectation": 0.9984401537097403
+        },
+        {
+          "layer": 8,
+          "observed_collisions": 1091,
+          "independent_cyclic_shift_expected_collisions": 1083.9005902777776,
+          "observed_to_shift_expectation": 1.0065498716265142
+        },
+        {
+          "layer": 9,
+          "observed_collisions": 866,
+          "independent_cyclic_shift_expected_collisions": 878.0144791666667,
+          "observed_to_shift_expectation": 0.9863163086125075
+        },
+        {
+          "layer": 10,
+          "observed_collisions": 985,
+          "independent_cyclic_shift_expected_collisions": 953.3501388888889,
+          "observed_to_shift_expectation": 1.0331985697804569
+        },
+        {
+          "layer": 11,
+          "observed_collisions": 933,
+          "independent_cyclic_shift_expected_collisions": 862.7846527777778,
+          "observed_to_shift_expectation": 1.0813822394686328
+        },
+        {
+          "layer": 12,
+          "observed_collisions": 893,
+          "independent_cyclic_shift_expected_collisions": 823.7425347222222,
+          "observed_to_shift_expectation": 1.0840765923312827
+        },
+        {
+          "layer": 13,
+          "observed_collisions": 874,
+          "independent_cyclic_shift_expected_collisions": 838.4384375,
+          "observed_to_shift_expectation": 1.0424140412813554
+        },
+        {
+          "layer": 14,
+          "observed_collisions": 956,
+          "independent_cyclic_shift_expected_collisions": 952.8401388888889,
+          "observed_to_shift_expectation": 1.0033162552480166
+        },
+        {
+          "layer": 15,
+          "observed_collisions": 991,
+          "independent_cyclic_shift_expected_collisions": 994.4871180555555,
+          "observed_to_shift_expectation": 0.9964935513067544
+        },
+        {
+          "layer": 16,
+          "observed_collisions": 922,
+          "independent_cyclic_shift_expected_collisions": 913.773611111111,
+          "observed_to_shift_expectation": 1.009002655350143
+        },
+        {
+          "layer": 17,
+          "observed_collisions": 1149,
+          "independent_cyclic_shift_expected_collisions": 1137.984375,
+          "observed_to_shift_expectation": 1.0096799439798987
+        },
+        {
+          "layer": 18,
+          "observed_collisions": 903,
+          "independent_cyclic_shift_expected_collisions": 874.1507291666667,
+          "observed_to_shift_expectation": 1.0330026274311246
+        },
+        {
+          "layer": 19,
+          "observed_collisions": 1026,
+          "independent_cyclic_shift_expected_collisions": 982.4950347222222,
+          "observed_to_shift_expectation": 1.0442800866572093
+        },
+        {
+          "layer": 20,
+          "observed_collisions": 986,
+          "independent_cyclic_shift_expected_collisions": 908.2068402777778,
+          "observed_to_shift_expectation": 1.085655773852605
+        },
+        {
+          "layer": 21,
+          "observed_collisions": 840,
+          "independent_cyclic_shift_expected_collisions": 857.1323958333335,
+          "observed_to_shift_expectation": 0.98001196090987
+        },
+        {
+          "layer": 22,
+          "observed_collisions": 1006,
+          "independent_cyclic_shift_expected_collisions": 1016.4074652777779,
+          "observed_to_shift_expectation": 0.9897605383339706
+        },
+        {
+          "layer": 23,
+          "observed_collisions": 1100,
+          "independent_cyclic_shift_expected_collisions": 1043.4584027777778,
+          "observed_to_shift_expectation": 1.0541867285477826
+        },
+        {
+          "layer": 24,
+          "observed_collisions": 1092,
+          "independent_cyclic_shift_expected_collisions": 1088.398923611111,
+          "observed_to_shift_expectation": 1.003308599733764
+        },
+        {
+          "layer": 25,
+          "observed_collisions": 1064,
+          "independent_cyclic_shift_expected_collisions": 1014.3363888888889,
+          "observed_to_shift_expectation": 1.0489616774623585
+        },
+        {
+          "layer": 26,
+          "observed_collisions": 1010,
+          "independent_cyclic_shift_expected_collisions": 945.7761805555556,
+          "observed_to_shift_expectation": 1.0679059388096652
+        },
+        {
+          "layer": 27,
+          "observed_collisions": 1173,
+          "independent_cyclic_shift_expected_collisions": 1178.36375,
+          "observed_to_shift_expectation": 0.9954481373005577
+        },
+        {
+          "layer": 28,
+          "observed_collisions": 1288,
+          "independent_cyclic_shift_expected_collisions": 1282.4229166666664,
+          "observed_to_shift_expectation": 1.0043488643729401
+        },
+        {
+          "layer": 29,
+          "observed_collisions": 1131,
+          "independent_cyclic_shift_expected_collisions": 1078.504236111111,
+          "observed_to_shift_expectation": 1.048674601481566
+        },
+        {
+          "layer": 30,
+          "observed_collisions": 898,
+          "independent_cyclic_shift_expected_collisions": 888.2148611111111,
+          "observed_to_shift_expectation": 1.0110166349577265
+        },
+        {
+          "layer": 31,
+          "observed_collisions": 893,
+          "independent_cyclic_shift_expected_collisions": 884.5875347222222,
+          "observed_to_shift_expectation": 1.009510042757294
+        },
+        {
+          "layer": 32,
+          "observed_collisions": 1032,
+          "independent_cyclic_shift_expected_collisions": 1033.7868055555555,
+          "observed_to_shift_expectation": 0.9982715918350349
+        },
+        {
+          "layer": 33,
+          "observed_collisions": 830,
+          "independent_cyclic_shift_expected_collisions": 864.7842708333334,
+          "observed_to_shift_expectation": 0.9597769385886099
+        },
+        {
+          "layer": 34,
+          "observed_collisions": 956,
+          "independent_cyclic_shift_expected_collisions": 942.6014930555556,
+          "observed_to_shift_expectation": 1.0142143918115507
+        },
+        {
+          "layer": 35,
+          "observed_collisions": 892,
+          "independent_cyclic_shift_expected_collisions": 890.2620833333334,
+          "observed_to_shift_expectation": 1.0019521404979526
+        },
+        {
+          "layer": 36,
+          "observed_collisions": 889,
+          "independent_cyclic_shift_expected_collisions": 866.1219097222222,
+          "observed_to_shift_expectation": 1.026414399660107
+        },
+        {
+          "layer": 37,
+          "observed_collisions": 910,
+          "independent_cyclic_shift_expected_collisions": 943.8152430555556,
+          "observed_to_shift_expectation": 0.9641717557494829
+        },
+        {
+          "layer": 38,
+          "observed_collisions": 1079,
+          "independent_cyclic_shift_expected_collisions": 1067.839826388889,
+          "observed_to_shift_expectation": 1.010451168176459
+        },
+        {
+          "layer": 39,
+          "observed_collisions": 966,
+          "independent_cyclic_shift_expected_collisions": 935.3967708333333,
+          "observed_to_shift_expectation": 1.032716842863807
+        },
+        {
+          "layer": 40,
+          "observed_collisions": 1028,
+          "independent_cyclic_shift_expected_collisions": 998.6856250000001,
+          "observed_to_shift_expectation": 1.0293529557912682
+        },
+        {
+          "layer": 41,
+          "observed_collisions": 878,
+          "independent_cyclic_shift_expected_collisions": 874.2590972222223,
+          "observed_to_shift_expectation": 1.0042789406363213
+        },
+        {
+          "layer": 42,
+          "observed_collisions": 950,
+          "independent_cyclic_shift_expected_collisions": 945.9866666666668,
+          "observed_to_shift_expectation": 1.00424248403783
+        },
+        {
+          "layer": 43,
+          "observed_collisions": 934,
+          "independent_cyclic_shift_expected_collisions": 894.9738541666666,
+          "observed_to_shift_expectation": 1.0436059060850127
+        },
+        {
+          "layer": 44,
+          "observed_collisions": 894,
+          "independent_cyclic_shift_expected_collisions": 888.2770833333334,
+          "observed_to_shift_expectation": 1.0064427156503812
+        },
+        {
+          "layer": 45,
+          "observed_collisions": 857,
+          "independent_cyclic_shift_expected_collisions": 847.1078124999999,
+          "observed_to_shift_expectation": 1.011677601544963
+        },
+        {
+          "layer": 46,
+          "observed_collisions": 841,
+          "independent_cyclic_shift_expected_collisions": 851.8519097222221,
+          "observed_to_shift_expectation": 0.9872608024958696
+        },
+        {
+          "layer": 47,
+          "observed_collisions": 900,
+          "independent_cyclic_shift_expected_collisions": 890.3939583333333,
+          "observed_to_shift_expectation": 1.010788529702793
+        },
+        {
+          "layer": 48,
+          "observed_collisions": 1004,
+          "independent_cyclic_shift_expected_collisions": 980.7837499999999,
+          "observed_to_shift_expectation": 1.023671120162829
+        },
+        {
+          "layer": 49,
+          "observed_collisions": 923,
+          "independent_cyclic_shift_expected_collisions": 937.0701388888888,
+          "observed_to_shift_expectation": 0.9849849671812484
+        },
+        {
+          "layer": 50,
+          "observed_collisions": 933,
+          "independent_cyclic_shift_expected_collisions": 881.5223263888888,
+          "observed_to_shift_expectation": 1.0583963356004684
+        },
+        {
+          "layer": 51,
+          "observed_collisions": 889,
+          "independent_cyclic_shift_expected_collisions": 878.4079513888889,
+          "observed_to_shift_expectation": 1.012058233983838
+        },
+        {
+          "layer": 52,
+          "observed_collisions": 941,
+          "independent_cyclic_shift_expected_collisions": 970.0863541666666,
+          "observed_to_shift_expectation": 0.9700167371268172
+        },
+        {
+          "layer": 53,
+          "observed_collisions": 928,
+          "independent_cyclic_shift_expected_collisions": 951.2837152777778,
+          "observed_to_shift_expectation": 0.9755239000690988
+        },
+        {
+          "layer": 54,
+          "observed_collisions": 844,
+          "independent_cyclic_shift_expected_collisions": 840.9735763888889,
+          "observed_to_shift_expectation": 1.0035987142712692
+        },
+        {
+          "layer": 55,
+          "observed_collisions": 1011,
+          "independent_cyclic_shift_expected_collisions": 998.3189930555556,
+          "observed_to_shift_expectation": 1.0127023596993099
+        },
+        {
+          "layer": 56,
+          "observed_collisions": 903,
+          "independent_cyclic_shift_expected_collisions": 873.3668749999999,
+          "observed_to_shift_expectation": 1.0339297560375187
+        },
+        {
+          "layer": 57,
+          "observed_collisions": 917,
+          "independent_cyclic_shift_expected_collisions": 908.7091319444445,
+          "observed_to_shift_expectation": 1.0091237864395781
+        },
+        {
+          "layer": 58,
+          "observed_collisions": 857,
+          "independent_cyclic_shift_expected_collisions": 889.8629861111111,
+          "observed_to_shift_expectation": 0.9630696111378569
+        },
+        {
+          "layer": 59,
+          "observed_collisions": 961,
+          "independent_cyclic_shift_expected_collisions": 945.0809027777777,
+          "observed_to_shift_expectation": 1.0168441634736591
+        },
+        {
+          "layer": 60,
+          "observed_collisions": 905,
+          "independent_cyclic_shift_expected_collisions": 866.2769097222222,
+          "observed_to_shift_expectation": 1.0447005915120082
+        }
+      ]
+    },
+    {
+      "batch": 4,
+      "ep": 256,
+      "observed_collisions": 34621,
+      "independent_cyclic_shift_expected_collisions": 33772.20340277777,
+      "observed_to_shift_expectation": 1.0251329943474288,
+      "layers": [
+        {
+          "layer": 3,
+          "observed_collisions": 530,
+          "independent_cyclic_shift_expected_collisions": 586.9834027777778,
+          "observed_to_shift_expectation": 0.9029216115683756
+        },
+        {
+          "layer": 4,
+          "observed_collisions": 554,
+          "independent_cyclic_shift_expected_collisions": 595.3484027777779,
+          "observed_to_shift_expectation": 0.9305475540291124
+        },
+        {
+          "layer": 5,
+          "observed_collisions": 508,
+          "independent_cyclic_shift_expected_collisions": 509.3582291666667,
+          "observed_to_shift_expectation": 0.9973334500379255
+        },
+        {
+          "layer": 6,
+          "observed_collisions": 468,
+          "independent_cyclic_shift_expected_collisions": 512.3380208333333,
+          "observed_to_shift_expectation": 0.913459436874866
+        },
+        {
+          "layer": 7,
+          "observed_collisions": 635,
+          "independent_cyclic_shift_expected_collisions": 615.2850000000001,
+          "observed_to_shift_expectation": 1.0320420618087551
+        },
+        {
+          "layer": 8,
+          "observed_collisions": 730,
+          "independent_cyclic_shift_expected_collisions": 710.9064236111112,
+          "observed_to_shift_expectation": 1.0268580726727736
+        },
+        {
+          "layer": 9,
+          "observed_collisions": 526,
+          "independent_cyclic_shift_expected_collisions": 515.9568750000001,
+          "observed_to_shift_expectation": 1.0194650473452842
+        },
+        {
+          "layer": 10,
+          "observed_collisions": 599,
+          "independent_cyclic_shift_expected_collisions": 579.7147916666665,
+          "observed_to_shift_expectation": 1.033266717721466
+        },
+        {
+          "layer": 11,
+          "observed_collisions": 621,
+          "independent_cyclic_shift_expected_collisions": 530.3717013888889,
+          "observed_to_shift_expectation": 1.1708769498330736
+        },
+        {
+          "layer": 12,
+          "observed_collisions": 529,
+          "independent_cyclic_shift_expected_collisions": 470.0410416666666,
+          "observed_to_shift_expectation": 1.1254336389951765
+        },
+        {
+          "layer": 13,
+          "observed_collisions": 471,
+          "independent_cyclic_shift_expected_collisions": 447.5122222222222,
+          "observed_to_shift_expectation": 1.0524852207636788
+        },
+        {
+          "layer": 14,
+          "observed_collisions": 654,
+          "independent_cyclic_shift_expected_collisions": 628.3107291666665,
+          "observed_to_shift_expectation": 1.0408862520418922
+        },
+        {
+          "layer": 15,
+          "observed_collisions": 662,
+          "independent_cyclic_shift_expected_collisions": 646.1592708333333,
+          "observed_to_shift_expectation": 1.0245152083730646
+        },
+        {
+          "layer": 16,
+          "observed_collisions": 558,
+          "independent_cyclic_shift_expected_collisions": 543.0619791666666,
+          "observed_to_shift_expectation": 1.0275070275703262
+        },
+        {
+          "layer": 17,
+          "observed_collisions": 829,
+          "independent_cyclic_shift_expected_collisions": 804.9215972222223,
+          "observed_to_shift_expectation": 1.0299139728153301
+        },
+        {
+          "layer": 18,
+          "observed_collisions": 540,
+          "independent_cyclic_shift_expected_collisions": 501.94923611111113,
+          "observed_to_shift_expectation": 1.0758060001917524
+        },
+        {
+          "layer": 19,
+          "observed_collisions": 608,
+          "independent_cyclic_shift_expected_collisions": 562.0748263888889,
+          "observed_to_shift_expectation": 1.0817065121136316
+        },
+        {
+          "layer": 20,
+          "observed_collisions": 610,
+          "independent_cyclic_shift_expected_collisions": 540.8376388888889,
+          "observed_to_shift_expectation": 1.1278800810779368
+        },
+        {
+          "layer": 21,
+          "observed_collisions": 453,
+          "independent_cyclic_shift_expected_collisions": 490.65340277777784,
+          "observed_to_shift_expectation": 0.9232586535330084
+        },
+        {
+          "layer": 22,
+          "observed_collisions": 718,
+          "independent_cyclic_shift_expected_collisions": 712.9176041666667,
+          "observed_to_shift_expectation": 1.0071290087432672
+        },
+        {
+          "layer": 23,
+          "observed_collisions": 740,
+          "independent_cyclic_shift_expected_collisions": 699.0188888888889,
+          "observed_to_shift_expectation": 1.0586266147632315
+        },
+        {
+          "layer": 24,
+          "observed_collisions": 698,
+          "independent_cyclic_shift_expected_collisions": 688.7847916666667,
+          "observed_to_shift_expectation": 1.0133789369986452
+        },
+        {
+          "layer": 25,
+          "observed_collisions": 687,
+          "independent_cyclic_shift_expected_collisions": 660.6957638888889,
+          "observed_to_shift_expectation": 1.0398129328940797
+        },
+        {
+          "layer": 26,
+          "observed_collisions": 652,
+          "independent_cyclic_shift_expected_collisions": 604.933888888889,
+          "observed_to_shift_expectation": 1.0778037269453684
+        },
+        {
+          "layer": 27,
+          "observed_collisions": 800,
+          "independent_cyclic_shift_expected_collisions": 791.4996527777778,
+          "observed_to_shift_expectation": 1.0107395463692121
+        },
+        {
+          "layer": 28,
+          "observed_collisions": 888,
+          "independent_cyclic_shift_expected_collisions": 883.7972222222222,
+          "observed_to_shift_expectation": 1.0047553643212528
+        },
+        {
+          "layer": 29,
+          "observed_collisions": 763,
+          "independent_cyclic_shift_expected_collisions": 702.7153125,
+          "observed_to_shift_expectation": 1.0857882081515051
+        },
+        {
+          "layer": 30,
+          "observed_collisions": 538,
+          "independent_cyclic_shift_expected_collisions": 529.9628472222221,
+          "observed_to_shift_expectation": 1.015165502298707
+        },
+        {
+          "layer": 31,
+          "observed_collisions": 500,
+          "independent_cyclic_shift_expected_collisions": 507.56972222222225,
+          "observed_to_shift_expectation": 0.9850863400813571
+        },
+        {
+          "layer": 32,
+          "observed_collisions": 704,
+          "independent_cyclic_shift_expected_collisions": 661.9687847222223,
+          "observed_to_shift_expectation": 1.0634942556927591
+        },
+        {
+          "layer": 33,
+          "observed_collisions": 497,
+          "independent_cyclic_shift_expected_collisions": 508.6259375,
+          "observed_to_shift_expectation": 0.9771424604157156
+        },
+        {
+          "layer": 34,
+          "observed_collisions": 600,
+          "independent_cyclic_shift_expected_collisions": 590.6616319444445,
+          "observed_to_shift_expectation": 1.0158100129592198
+        },
+        {
+          "layer": 35,
+          "observed_collisions": 541,
+          "independent_cyclic_shift_expected_collisions": 537.7920833333333,
+          "observed_to_shift_expectation": 1.0059649756217746
+        },
+        {
+          "layer": 36,
+          "observed_collisions": 544,
+          "independent_cyclic_shift_expected_collisions": 527.485138888889,
+          "observed_to_shift_expectation": 1.0313086756261958
+        },
+        {
+          "layer": 37,
+          "observed_collisions": 598,
+          "independent_cyclic_shift_expected_collisions": 624.3410069444444,
+          "observed_to_shift_expectation": 0.9578099041205725
+        },
+        {
+          "layer": 38,
+          "observed_collisions": 702,
+          "independent_cyclic_shift_expected_collisions": 683.6266666666668,
+          "observed_to_shift_expectation": 1.0268762677484786
+        },
+        {
+          "layer": 39,
+          "observed_collisions": 576,
+          "independent_cyclic_shift_expected_collisions": 550.8537847222221,
+          "observed_to_shift_expectation": 1.0456495280148765
+        },
+        {
+          "layer": 40,
+          "observed_collisions": 665,
+          "independent_cyclic_shift_expected_collisions": 641.7758333333334,
+          "observed_to_shift_expectation": 1.0361873499443601
+        },
+        {
+          "layer": 41,
+          "observed_collisions": 519,
+          "independent_cyclic_shift_expected_collisions": 504.6351041666667,
+          "observed_to_shift_expectation": 1.028465906780415
+        },
+        {
+          "layer": 42,
+          "observed_collisions": 612,
+          "independent_cyclic_shift_expected_collisions": 578.46875,
+          "observed_to_shift_expectation": 1.0579655340068068
+        },
+        {
+          "layer": 43,
+          "observed_collisions": 550,
+          "independent_cyclic_shift_expected_collisions": 514.9767013888888,
+          "observed_to_shift_expectation": 1.0680094818205437
+        },
+        {
+          "layer": 44,
+          "observed_collisions": 516,
+          "independent_cyclic_shift_expected_collisions": 502.98086805555556,
+          "observed_to_shift_expectation": 1.0258839506058637
+        },
+        {
+          "layer": 45,
+          "observed_collisions": 518,
+          "independent_cyclic_shift_expected_collisions": 505.07572916666663,
+          "observed_to_shift_expectation": 1.0255887782504562
+        },
+        {
+          "layer": 46,
+          "observed_collisions": 537,
+          "independent_cyclic_shift_expected_collisions": 534.4266666666667,
+          "observed_to_shift_expectation": 1.0048151289855793
+        },
+        {
+          "layer": 47,
+          "observed_collisions": 519,
+          "independent_cyclic_shift_expected_collisions": 511.03208333333333,
+          "observed_to_shift_expectation": 1.015591812973256
+        },
+        {
+          "layer": 48,
+          "observed_collisions": 706,
+          "independent_cyclic_shift_expected_collisions": 680.5335416666667,
+          "observed_to_shift_expectation": 1.0374213125057208
+        },
+        {
+          "layer": 49,
+          "observed_collisions": 524,
+          "independent_cyclic_shift_expected_collisions": 566.6105208333333,
+          "observed_to_shift_expectation": 0.9247975121064385
+        },
+        {
+          "layer": 50,
+          "observed_collisions": 575,
+          "independent_cyclic_shift_expected_collisions": 532.4346180555556,
+          "observed_to_shift_expectation": 1.0799448054296181
+        },
+        {
+          "layer": 51,
+          "observed_collisions": 509,
+          "independent_cyclic_shift_expected_collisions": 487.2135416666667,
+          "observed_to_shift_expectation": 1.044716446629964
+        },
+        {
+          "layer": 52,
+          "observed_collisions": 620,
+          "independent_cyclic_shift_expected_collisions": 613.2032986111111,
+          "observed_to_shift_expectation": 1.0110839282898236
+        },
+        {
+          "layer": 53,
+          "observed_collisions": 560,
+          "independent_cyclic_shift_expected_collisions": 570.0804861111111,
+          "observed_to_shift_expectation": 0.9823174334910556
+        },
+        {
+          "layer": 54,
+          "observed_collisions": 501,
+          "independent_cyclic_shift_expected_collisions": 488.7966666666666,
+          "observed_to_shift_expectation": 1.0249660731456163
+        },
+        {
+          "layer": 55,
+          "observed_collisions": 672,
+          "independent_cyclic_shift_expected_collisions": 650.0177083333333,
+          "observed_to_shift_expectation": 1.033817988932994
+        },
+        {
+          "layer": 56,
+          "observed_collisions": 526,
+          "independent_cyclic_shift_expected_collisions": 491.61940972222226,
+          "observed_to_shift_expectation": 1.0699333459946256
+        },
+        {
+          "layer": 57,
+          "observed_collisions": 564,
+          "independent_cyclic_shift_expected_collisions": 541.6497916666667,
+          "observed_to_shift_expectation": 1.041263208584575
+        },
+        {
+          "layer": 58,
+          "observed_collisions": 494,
+          "independent_cyclic_shift_expected_collisions": 509.2940277777777,
+          "observed_to_shift_expectation": 0.9699701411294557
+        },
+        {
+          "layer": 59,
+          "observed_collisions": 560,
+          "independent_cyclic_shift_expected_collisions": 563.9261458333333,
+          "observed_to_shift_expectation": 0.9930378368473561
+        },
+        {
+          "layer": 60,
+          "observed_collisions": 543,
+          "independent_cyclic_shift_expected_collisions": 524.416388888889,
+          "observed_to_shift_expectation": 1.035436747410746
+        }
+      ]
+    },
+    {
+      "batch": 8,
+      "ep": 4,
+      "observed_collisions": 153973,
+      "independent_cyclic_shift_expected_collisions": 153788.3194444445,
+      "observed_to_shift_expectation": 1.0012008750483954,
+      "layers": [
+        {
+          "layer": 3,
+          "observed_collisions": 2609,
+          "independent_cyclic_shift_expected_collisions": 2607.416666666667,
+          "observed_to_shift_expectation": 1.000607242161782
+        },
+        {
+          "layer": 4,
+          "observed_collisions": 2533,
+          "independent_cyclic_shift_expected_collisions": 2536.5555555555557,
+          "observed_to_shift_expectation": 0.9985982741250163
+        },
+        {
+          "layer": 5,
+          "observed_collisions": 2646,
+          "independent_cyclic_shift_expected_collisions": 2629.3333333333335,
+          "observed_to_shift_expectation": 1.006338742393509
+        },
+        {
+          "layer": 6,
+          "observed_collisions": 2576,
+          "independent_cyclic_shift_expected_collisions": 2581.5277777777774,
+          "observed_to_shift_expectation": 0.9978587184591383
+        },
+        {
+          "layer": 7,
+          "observed_collisions": 2516,
+          "independent_cyclic_shift_expected_collisions": 2500.3472222222226,
+          "observed_to_shift_expectation": 1.0062602416331063
+        },
+        {
+          "layer": 8,
+          "observed_collisions": 2468,
+          "independent_cyclic_shift_expected_collisions": 2466.0,
+          "observed_to_shift_expectation": 1.0008110300081103
+        },
+        {
+          "layer": 9,
+          "observed_collisions": 2529,
+          "independent_cyclic_shift_expected_collisions": 2525.180555555555,
+          "observed_to_shift_expectation": 1.0015125431074787
+        },
+        {
+          "layer": 10,
+          "observed_collisions": 2722,
+          "independent_cyclic_shift_expected_collisions": 2719.4166666666665,
+          "observed_to_shift_expectation": 1.000949958630834
+        },
+        {
+          "layer": 11,
+          "observed_collisions": 2521,
+          "independent_cyclic_shift_expected_collisions": 2517.0833333333335,
+          "observed_to_shift_expectation": 1.0015560337692435
+        },
+        {
+          "layer": 12,
+          "observed_collisions": 2811,
+          "independent_cyclic_shift_expected_collisions": 2784.4444444444443,
+          "observed_to_shift_expectation": 1.009537110933759
+        },
+        {
+          "layer": 13,
+          "observed_collisions": 2718,
+          "independent_cyclic_shift_expected_collisions": 2715.041666666667,
+          "observed_to_shift_expectation": 1.0010896088150887
+        },
+        {
+          "layer": 14,
+          "observed_collisions": 2555,
+          "independent_cyclic_shift_expected_collisions": 2557.736111111111,
+          "observed_to_shift_expectation": 0.9989302605928638
+        },
+        {
+          "layer": 15,
+          "observed_collisions": 2687,
+          "independent_cyclic_shift_expected_collisions": 2657.8611111111113,
+          "observed_to_shift_expectation": 1.0109632850140569
+        },
+        {
+          "layer": 16,
+          "observed_collisions": 2849,
+          "independent_cyclic_shift_expected_collisions": 2860.805555555556,
+          "observed_to_shift_expectation": 0.995873345697113
+        },
+        {
+          "layer": 17,
+          "observed_collisions": 2661,
+          "independent_cyclic_shift_expected_collisions": 2656.1111111111113,
+          "observed_to_shift_expectation": 1.0018406191173395
+        },
+        {
+          "layer": 18,
+          "observed_collisions": 2560,
+          "independent_cyclic_shift_expected_collisions": 2550.3055555555557,
+          "observed_to_shift_expectation": 1.0038012874274325
+        },
+        {
+          "layer": 19,
+          "observed_collisions": 2647,
+          "independent_cyclic_shift_expected_collisions": 2664.194444444445,
+          "observed_to_shift_expectation": 0.9935461000302362
+        },
+        {
+          "layer": 20,
+          "observed_collisions": 2639,
+          "independent_cyclic_shift_expected_collisions": 2626.0555555555557,
+          "observed_to_shift_expectation": 1.0049292348050518
+        },
+        {
+          "layer": 21,
+          "observed_collisions": 2614,
+          "independent_cyclic_shift_expected_collisions": 2631.263888888889,
+          "observed_to_shift_expectation": 0.9934389367171458
+        },
+        {
+          "layer": 22,
+          "observed_collisions": 2903,
+          "independent_cyclic_shift_expected_collisions": 2906.430555555555,
+          "observed_to_shift_expectation": 0.9988196671174552
+        },
+        {
+          "layer": 23,
+          "observed_collisions": 2624,
+          "independent_cyclic_shift_expected_collisions": 2621.6388888888887,
+          "observed_to_shift_expectation": 1.0009006240795093
+        },
+        {
+          "layer": 24,
+          "observed_collisions": 2588,
+          "independent_cyclic_shift_expected_collisions": 2576.152777777778,
+          "observed_to_shift_expectation": 1.0045988042030807
+        },
+        {
+          "layer": 25,
+          "observed_collisions": 2653,
+          "independent_cyclic_shift_expected_collisions": 2639.9861111111113,
+          "observed_to_shift_expectation": 1.0049295293009748
+        },
+        {
+          "layer": 26,
+          "observed_collisions": 2623,
+          "independent_cyclic_shift_expected_collisions": 2608.9861111111113,
+          "observed_to_shift_expectation": 1.0053713926759542
+        },
+        {
+          "layer": 27,
+          "observed_collisions": 2465,
+          "independent_cyclic_shift_expected_collisions": 2474.0,
+          "observed_to_shift_expectation": 0.9963621665319321
+        },
+        {
+          "layer": 28,
+          "observed_collisions": 2497,
+          "independent_cyclic_shift_expected_collisions": 2492.4583333333335,
+          "observed_to_shift_expectation": 1.0018221635266387
+        },
+        {
+          "layer": 29,
+          "observed_collisions": 2748,
+          "independent_cyclic_shift_expected_collisions": 2757.486111111111,
+          "observed_to_shift_expectation": 0.9965598698492488
+        },
+        {
+          "layer": 30,
+          "observed_collisions": 2678,
+          "independent_cyclic_shift_expected_collisions": 2675.7361111111113,
+          "observed_to_shift_expectation": 1.000846080777356
+        },
+        {
+          "layer": 31,
+          "observed_collisions": 2788,
+          "independent_cyclic_shift_expected_collisions": 2751.513888888889,
+          "observed_to_shift_expectation": 1.0132603768632418
+        },
+        {
+          "layer": 32,
+          "observed_collisions": 2656,
+          "independent_cyclic_shift_expected_collisions": 2656.986111111111,
+          "observed_to_shift_expectation": 0.9996288610215209
+        },
+        {
+          "layer": 33,
+          "observed_collisions": 2803,
+          "independent_cyclic_shift_expected_collisions": 2784.2777777777783,
+          "observed_to_shift_expectation": 1.0067242652193864
+        },
+        {
+          "layer": 34,
+          "observed_collisions": 2651,
+          "independent_cyclic_shift_expected_collisions": 2666.7500000000005,
+          "observed_to_shift_expectation": 0.9940939345645446
+        },
+        {
+          "layer": 35,
+          "observed_collisions": 2661,
+          "independent_cyclic_shift_expected_collisions": 2665.7222222222226,
+          "observed_to_shift_expectation": 0.9982285392743262
+        },
+        {
+          "layer": 36,
+          "observed_collisions": 2446,
+          "independent_cyclic_shift_expected_collisions": 2435.3055555555557,
+          "observed_to_shift_expectation": 1.0043914179147038
+        },
+        {
+          "layer": 37,
+          "observed_collisions": 2910,
+          "independent_cyclic_shift_expected_collisions": 2900.9027777777783,
+          "observed_to_shift_expectation": 1.0031359969358196
+        },
+        {
+          "layer": 38,
+          "observed_collisions": 2799,
+          "independent_cyclic_shift_expected_collisions": 2792.7638888888887,
+          "observed_to_shift_expectation": 1.0022329532173921
+        },
+        {
+          "layer": 39,
+          "observed_collisions": 2772,
+          "independent_cyclic_shift_expected_collisions": 2767.444444444445,
+          "observed_to_shift_expectation": 1.0016461235797165
+        },
+        {
+          "layer": 40,
+          "observed_collisions": 2708,
+          "independent_cyclic_shift_expected_collisions": 2699.708333333334,
+          "observed_to_shift_expectation": 1.0030713194326546
+        },
+        {
+          "layer": 41,
+          "observed_collisions": 2502,
+          "independent_cyclic_shift_expected_collisions": 2484.013888888889,
+          "observed_to_shift_expectation": 1.0072407449859937
+        },
+        {
+          "layer": 42,
+          "observed_collisions": 2558,
+          "independent_cyclic_shift_expected_collisions": 2558.4027777777774,
+          "observed_to_shift_expectation": 0.9998425667055727
+        },
+        {
+          "layer": 43,
+          "observed_collisions": 2639,
+          "independent_cyclic_shift_expected_collisions": 2637.986111111111,
+          "observed_to_shift_expectation": 1.0003843420117409
+        },
+        {
+          "layer": 44,
+          "observed_collisions": 2622,
+          "independent_cyclic_shift_expected_collisions": 2622.402777777778,
+          "observed_to_shift_expectation": 0.9998464088807444
+        },
+        {
+          "layer": 45,
+          "observed_collisions": 2659,
+          "independent_cyclic_shift_expected_collisions": 2659.541666666666,
+          "observed_to_shift_expectation": 0.9997963308214137
+        },
+        {
+          "layer": 46,
+          "observed_collisions": 2683,
+          "independent_cyclic_shift_expected_collisions": 2688.3333333333335,
+          "observed_to_shift_expectation": 0.9980161190328579
+        },
+        {
+          "layer": 47,
+          "observed_collisions": 2673,
+          "independent_cyclic_shift_expected_collisions": 2663.680555555555,
+          "observed_to_shift_expectation": 1.0034987094924004
+        },
+        {
+          "layer": 48,
+          "observed_collisions": 2695,
+          "independent_cyclic_shift_expected_collisions": 2706.3750000000005,
+          "observed_to_shift_expectation": 0.995796960879405
+        },
+        {
+          "layer": 49,
+          "observed_collisions": 2499,
+          "independent_cyclic_shift_expected_collisions": 2500.5138888888887,
+          "observed_to_shift_expectation": 0.9993945688941719
+        },
+        {
+          "layer": 50,
+          "observed_collisions": 2863,
+          "independent_cyclic_shift_expected_collisions": 2836.8055555555557,
+          "observed_to_shift_expectation": 1.009233782129743
+        },
+        {
+          "layer": 51,
+          "observed_collisions": 2554,
+          "independent_cyclic_shift_expected_collisions": 2555.305555555555,
+          "observed_to_shift_expectation": 0.9994890804535228
+        },
+        {
+          "layer": 52,
+          "observed_collisions": 2673,
+          "independent_cyclic_shift_expected_collisions": 2681.2222222222213,
+          "observed_to_shift_expectation": 0.996933405163483
+        },
+        {
+          "layer": 53,
+          "observed_collisions": 2750,
+          "independent_cyclic_shift_expected_collisions": 2742.430555555555,
+          "observed_to_shift_expectation": 1.0027601225595706
+        },
+        {
+          "layer": 54,
+          "observed_collisions": 2798,
+          "independent_cyclic_shift_expected_collisions": 2792.6249999999995,
+          "observed_to_shift_expectation": 1.001924712412157
+        },
+        {
+          "layer": 55,
+          "observed_collisions": 2693,
+          "independent_cyclic_shift_expected_collisions": 2698.791666666666,
+          "observed_to_shift_expectation": 0.9978539778604625
+        },
+        {
+          "layer": 56,
+          "observed_collisions": 2762,
+          "independent_cyclic_shift_expected_collisions": 2764.611111111111,
+          "observed_to_shift_expectation": 0.9990555231798727
+        },
+        {
+          "layer": 57,
+          "observed_collisions": 2437,
+          "independent_cyclic_shift_expected_collisions": 2453.8333333333335,
+          "observed_to_shift_expectation": 0.9931399850573931
+        },
+        {
+          "layer": 58,
+          "observed_collisions": 2683,
+          "independent_cyclic_shift_expected_collisions": 2687.472222222222,
+          "observed_to_shift_expectation": 0.9983359001126627
+        },
+        {
+          "layer": 59,
+          "observed_collisions": 2582,
+          "independent_cyclic_shift_expected_collisions": 2578.0555555555557,
+          "observed_to_shift_expectation": 1.0015300075422906
+        },
+        {
+          "layer": 60,
+          "observed_collisions": 2814,
+          "independent_cyclic_shift_expected_collisions": 2814.9861111111113,
+          "observed_to_shift_expectation": 0.9996496923706945
+        }
+      ]
+    },
+    {
+      "batch": 8,
+      "ep": 8,
+      "observed_collisions": 183039,
+      "independent_cyclic_shift_expected_collisions": 182400.05555555553,
+      "observed_to_shift_expectation": 1.0035029838258458,
+      "layers": [
+        {
+          "layer": 3,
+          "observed_collisions": 3038,
+          "independent_cyclic_shift_expected_collisions": 3073.472222222222,
+          "observed_to_shift_expectation": 0.9884585837588684
+        },
+        {
+          "layer": 4,
+          "observed_collisions": 3021,
+          "independent_cyclic_shift_expected_collisions": 3049.583333333333,
+          "observed_to_shift_expectation": 0.9906271348544884
+        },
+        {
+          "layer": 5,
+          "observed_collisions": 3044,
+          "independent_cyclic_shift_expected_collisions": 3017.0000000000005,
+          "observed_to_shift_expectation": 1.008949287371561
+        },
+        {
+          "layer": 6,
+          "observed_collisions": 2970,
+          "independent_cyclic_shift_expected_collisions": 2954.1250000000014,
+          "observed_to_shift_expectation": 1.0053738416620823
+        },
+        {
+          "layer": 7,
+          "observed_collisions": 3291,
+          "independent_cyclic_shift_expected_collisions": 3287.2499999999995,
+          "observed_to_shift_expectation": 1.0011407711613052
+        },
+        {
+          "layer": 8,
+          "observed_collisions": 3458,
+          "independent_cyclic_shift_expected_collisions": 3409.1805555555547,
+          "observed_to_shift_expectation": 1.0143199938075704
+        },
+        {
+          "layer": 9,
+          "observed_collisions": 3256,
+          "independent_cyclic_shift_expected_collisions": 3219.7638888888896,
+          "observed_to_shift_expectation": 1.0112542758915204
+        },
+        {
+          "layer": 10,
+          "observed_collisions": 3110,
+          "independent_cyclic_shift_expected_collisions": 3108.2638888888887,
+          "observed_to_shift_expectation": 1.0005585468844256
+        },
+        {
+          "layer": 11,
+          "observed_collisions": 3007,
+          "independent_cyclic_shift_expected_collisions": 3011.236111111111,
+          "observed_to_shift_expectation": 0.998593231830782
+        },
+        {
+          "layer": 12,
+          "observed_collisions": 2996,
+          "independent_cyclic_shift_expected_collisions": 3012.9583333333335,
+          "observed_to_shift_expectation": 0.9943715340681224
+        },
+        {
+          "layer": 13,
+          "observed_collisions": 3118,
+          "independent_cyclic_shift_expected_collisions": 3091.2361111111104,
+          "observed_to_shift_expectation": 1.0086579892078413
+        },
+        {
+          "layer": 14,
+          "observed_collisions": 2888,
+          "independent_cyclic_shift_expected_collisions": 2841.597222222222,
+          "observed_to_shift_expectation": 1.0163298223319241
+        },
+        {
+          "layer": 15,
+          "observed_collisions": 3093,
+          "independent_cyclic_shift_expected_collisions": 3032.1805555555557,
+          "observed_to_shift_expectation": 1.020057989070938
+        },
+        {
+          "layer": 16,
+          "observed_collisions": 2961,
+          "independent_cyclic_shift_expected_collisions": 2982.6666666666665,
+          "observed_to_shift_expectation": 0.99273580688422
+        },
+        {
+          "layer": 17,
+          "observed_collisions": 3490,
+          "independent_cyclic_shift_expected_collisions": 3436.388888888889,
+          "observed_to_shift_expectation": 1.015601002344192
+        },
+        {
+          "layer": 18,
+          "observed_collisions": 3158,
+          "independent_cyclic_shift_expected_collisions": 3145.055555555555,
+          "observed_to_shift_expectation": 1.0041158078818606
+        },
+        {
+          "layer": 19,
+          "observed_collisions": 3165,
+          "independent_cyclic_shift_expected_collisions": 3082.611111111111,
+          "observed_to_shift_expectation": 1.0267269810946709
+        },
+        {
+          "layer": 20,
+          "observed_collisions": 3263,
+          "independent_cyclic_shift_expected_collisions": 3224.888888888889,
+          "observed_to_shift_expectation": 1.0118178059536933
+        },
+        {
+          "layer": 21,
+          "observed_collisions": 3328,
+          "independent_cyclic_shift_expected_collisions": 3343.194444444445,
+          "observed_to_shift_expectation": 0.9954551119604502
+        },
+        {
+          "layer": 22,
+          "observed_collisions": 3373,
+          "independent_cyclic_shift_expected_collisions": 3331.7499999999995,
+          "observed_to_shift_expectation": 1.0123808809184365
+        },
+        {
+          "layer": 23,
+          "observed_collisions": 2971,
+          "independent_cyclic_shift_expected_collisions": 2958.9027777777774,
+          "observed_to_shift_expectation": 1.0040884149060512
+        },
+        {
+          "layer": 24,
+          "observed_collisions": 3089,
+          "independent_cyclic_shift_expected_collisions": 3053.611111111111,
+          "observed_to_shift_expectation": 1.0115891931228964
+        },
+        {
+          "layer": 25,
+          "observed_collisions": 2914,
+          "independent_cyclic_shift_expected_collisions": 2896.347222222222,
+          "observed_to_shift_expectation": 1.0060948416827709
+        },
+        {
+          "layer": 26,
+          "observed_collisions": 3171,
+          "independent_cyclic_shift_expected_collisions": 3135.472222222223,
+          "observed_to_shift_expectation": 1.0113309177246026
+        },
+        {
+          "layer": 27,
+          "observed_collisions": 3367,
+          "independent_cyclic_shift_expected_collisions": 3361.180555555556,
+          "observed_to_shift_expectation": 1.0017313691865868
+        },
+        {
+          "layer": 28,
+          "observed_collisions": 3805,
+          "independent_cyclic_shift_expected_collisions": 3787.1805555555557,
+          "observed_to_shift_expectation": 1.0047052006586548
+        },
+        {
+          "layer": 29,
+          "observed_collisions": 3200,
+          "independent_cyclic_shift_expected_collisions": 3254.763888888889,
+          "observed_to_shift_expectation": 0.9831742360556961
+        },
+        {
+          "layer": 30,
+          "observed_collisions": 3296,
+          "independent_cyclic_shift_expected_collisions": 3316.1388888888887,
+          "observed_to_shift_expectation": 0.993927006810129
+        },
+        {
+          "layer": 31,
+          "observed_collisions": 3011,
+          "independent_cyclic_shift_expected_collisions": 2982.847222222222,
+          "observed_to_shift_expectation": 1.0094382231741672
+        },
+        {
+          "layer": 32,
+          "observed_collisions": 3211,
+          "independent_cyclic_shift_expected_collisions": 3205.694444444445,
+          "observed_to_shift_expectation": 1.0016550409427667
+        },
+        {
+          "layer": 33,
+          "observed_collisions": 3248,
+          "independent_cyclic_shift_expected_collisions": 3208.6111111111113,
+          "observed_to_shift_expectation": 1.012275993420483
+        },
+        {
+          "layer": 34,
+          "observed_collisions": 3231,
+          "independent_cyclic_shift_expected_collisions": 3219.541666666667,
+          "observed_to_shift_expectation": 1.003558995198592
+        },
+        {
+          "layer": 35,
+          "observed_collisions": 3154,
+          "independent_cyclic_shift_expected_collisions": 3150.4861111111113,
+          "observed_to_shift_expectation": 1.0011153481605573
+        },
+        {
+          "layer": 36,
+          "observed_collisions": 2781,
+          "independent_cyclic_shift_expected_collisions": 2788.4305555555557,
+          "observed_to_shift_expectation": 0.9973352194334726
+        },
+        {
+          "layer": 37,
+          "observed_collisions": 3035,
+          "independent_cyclic_shift_expected_collisions": 3052.5416666666674,
+          "observed_to_shift_expectation": 0.9942534226942027
+        },
+        {
+          "layer": 38,
+          "observed_collisions": 3313,
+          "independent_cyclic_shift_expected_collisions": 3338.0972222222217,
+          "observed_to_shift_expectation": 0.9924815784108546
+        },
+        {
+          "layer": 39,
+          "observed_collisions": 3278,
+          "independent_cyclic_shift_expected_collisions": 3206.5416666666665,
+          "observed_to_shift_expectation": 1.0222851722390427
+        },
+        {
+          "layer": 40,
+          "observed_collisions": 3022,
+          "independent_cyclic_shift_expected_collisions": 3033.2638888888896,
+          "observed_to_shift_expectation": 0.9962865450216348
+        },
+        {
+          "layer": 41,
+          "observed_collisions": 3140,
+          "independent_cyclic_shift_expected_collisions": 3114.7500000000005,
+          "observed_to_shift_expectation": 1.0081065896139336
+        },
+        {
+          "layer": 42,
+          "observed_collisions": 3211,
+          "independent_cyclic_shift_expected_collisions": 3226.8194444444453,
+          "observed_to_shift_expectation": 0.995097511739716
+        },
+        {
+          "layer": 43,
+          "observed_collisions": 3193,
+          "independent_cyclic_shift_expected_collisions": 3143.5138888888887,
+          "observed_to_shift_expectation": 1.0157422912257603
+        },
+        {
+          "layer": 44,
+          "observed_collisions": 3017,
+          "independent_cyclic_shift_expected_collisions": 3038.236111111111,
+          "observed_to_shift_expectation": 0.9930103815719099
+        },
+        {
+          "layer": 45,
+          "observed_collisions": 3142,
+          "independent_cyclic_shift_expected_collisions": 3166.472222222222,
+          "observed_to_shift_expectation": 0.992271455264797
+        },
+        {
+          "layer": 46,
+          "observed_collisions": 3231,
+          "independent_cyclic_shift_expected_collisions": 3249.555555555555,
+          "observed_to_shift_expectation": 0.9942898174109281
+        },
+        {
+          "layer": 47,
+          "observed_collisions": 3378,
+          "independent_cyclic_shift_expected_collisions": 3360.222222222222,
+          "observed_to_shift_expectation": 1.0052906553799352
+        },
+        {
+          "layer": 48,
+          "observed_collisions": 3250,
+          "independent_cyclic_shift_expected_collisions": 3209.222222222222,
+          "observed_to_shift_expectation": 1.0127064363120175
+        },
+        {
+          "layer": 49,
+          "observed_collisions": 3029,
+          "independent_cyclic_shift_expected_collisions": 3044.916666666667,
+          "observed_to_shift_expectation": 0.994772708612715
+        },
+        {
+          "layer": 50,
+          "observed_collisions": 3169,
+          "independent_cyclic_shift_expected_collisions": 3193.708333333333,
+          "observed_to_shift_expectation": 0.9922634346175424
+        },
+        {
+          "layer": 51,
+          "observed_collisions": 3025,
+          "independent_cyclic_shift_expected_collisions": 3001.9861111111113,
+          "observed_to_shift_expectation": 1.0076662209740772
+        },
+        {
+          "layer": 52,
+          "observed_collisions": 3143,
+          "independent_cyclic_shift_expected_collisions": 3087.2222222222226,
+          "observed_to_shift_expectation": 1.0180673025013496
+        },
+        {
+          "layer": 53,
+          "observed_collisions": 3129,
+          "independent_cyclic_shift_expected_collisions": 3135.013888888889,
+          "observed_to_shift_expectation": 0.9980817026328963
+        },
+        {
+          "layer": 54,
+          "observed_collisions": 3155,
+          "independent_cyclic_shift_expected_collisions": 3105.347222222222,
+          "observed_to_shift_expectation": 1.015989444730192
+        },
+        {
+          "layer": 55,
+          "observed_collisions": 3060,
+          "independent_cyclic_shift_expected_collisions": 3048.777777777778,
+          "observed_to_shift_expectation": 1.003680892160793
+        },
+        {
+          "layer": 56,
+          "observed_collisions": 2979,
+          "independent_cyclic_shift_expected_collisions": 3001.4027777777787,
+          "observed_to_shift_expectation": 0.9925358975664154
+        },
+        {
+          "layer": 57,
+          "observed_collisions": 3337,
+          "independent_cyclic_shift_expected_collisions": 3346.638888888889,
+          "observed_to_shift_expectation": 0.9971198300118692
+        },
+        {
+          "layer": 58,
+          "observed_collisions": 3345,
+          "independent_cyclic_shift_expected_collisions": 3332.1666666666656,
+          "observed_to_shift_expectation": 1.0038513479717905
+        },
+        {
+          "layer": 59,
+          "observed_collisions": 2934,
+          "independent_cyclic_shift_expected_collisions": 2960.055555555556,
+          "observed_to_shift_expectation": 0.9911976126574199
+        },
+        {
+          "layer": 60,
+          "observed_collisions": 3047,
+          "independent_cyclic_shift_expected_collisions": 3029.972222222222,
+          "observed_to_shift_expectation": 1.005619780159334
+        }
+      ]
+    },
+    {
+      "batch": 8,
+      "ep": 16,
+      "observed_collisions": 217449,
+      "independent_cyclic_shift_expected_collisions": 215808.54166666672,
+      "observed_to_shift_expectation": 1.0076014522903691,
+      "layers": [
+        {
+          "layer": 3,
+          "observed_collisions": 3729,
+          "independent_cyclic_shift_expected_collisions": 3758.9722222222217,
+          "observed_to_shift_expectation": 0.9920264847808578
+        },
+        {
+          "layer": 4,
+          "observed_collisions": 3569,
+          "independent_cyclic_shift_expected_collisions": 3581.472222222223,
+          "observed_to_shift_expectation": 0.9965175711416004
+        },
+        {
+          "layer": 5,
+          "observed_collisions": 3638,
+          "independent_cyclic_shift_expected_collisions": 3573.666666666667,
+          "observed_to_shift_expectation": 1.0180020520473836
+        },
+        {
+          "layer": 6,
+          "observed_collisions": 3545,
+          "independent_cyclic_shift_expected_collisions": 3544.7777777777787,
+          "observed_to_shift_expectation": 1.0000626900291505
+        },
+        {
+          "layer": 7,
+          "observed_collisions": 3963,
+          "independent_cyclic_shift_expected_collisions": 3917.3194444444443,
+          "observed_to_shift_expectation": 1.0116611770378696
+        },
+        {
+          "layer": 8,
+          "observed_collisions": 3979,
+          "independent_cyclic_shift_expected_collisions": 3924.8055555555547,
+          "observed_to_shift_expectation": 1.013808185826616
+        },
+        {
+          "layer": 9,
+          "observed_collisions": 4002,
+          "independent_cyclic_shift_expected_collisions": 3929.027777777778,
+          "observed_to_shift_expectation": 1.0185725900526705
+        },
+        {
+          "layer": 10,
+          "observed_collisions": 3547,
+          "independent_cyclic_shift_expected_collisions": 3557.9583333333344,
+          "observed_to_shift_expectation": 0.9969200501223779
+        },
+        {
+          "layer": 11,
+          "observed_collisions": 3243,
+          "independent_cyclic_shift_expected_collisions": 3296.9583333333326,
+          "observed_to_shift_expectation": 0.9836339049881838
+        },
+        {
+          "layer": 12,
+          "observed_collisions": 3728,
+          "independent_cyclic_shift_expected_collisions": 3725.930555555555,
+          "observed_to_shift_expectation": 1.0005554168048998
+        },
+        {
+          "layer": 13,
+          "observed_collisions": 3631,
+          "independent_cyclic_shift_expected_collisions": 3580.722222222223,
+          "observed_to_shift_expectation": 1.0140412393527063
+        },
+        {
+          "layer": 14,
+          "observed_collisions": 3836,
+          "independent_cyclic_shift_expected_collisions": 3726.4722222222226,
+          "observed_to_shift_expectation": 1.0293918138245137
+        },
+        {
+          "layer": 15,
+          "observed_collisions": 3897,
+          "independent_cyclic_shift_expected_collisions": 3801.8333333333326,
+          "observed_to_shift_expectation": 1.0250317829117532
+        },
+        {
+          "layer": 16,
+          "observed_collisions": 3488,
+          "independent_cyclic_shift_expected_collisions": 3512.097222222222,
+          "observed_to_shift_expectation": 0.9931387940886856
+        },
+        {
+          "layer": 17,
+          "observed_collisions": 4181,
+          "independent_cyclic_shift_expected_collisions": 4100.347222222223,
+          "observed_to_shift_expectation": 1.0196697434160384
+        },
+        {
+          "layer": 18,
+          "observed_collisions": 3664,
+          "independent_cyclic_shift_expected_collisions": 3633.152777777778,
+          "observed_to_shift_expectation": 1.008490483089756
+        },
+        {
+          "layer": 19,
+          "observed_collisions": 3663,
+          "independent_cyclic_shift_expected_collisions": 3537.1805555555547,
+          "observed_to_shift_expectation": 1.0355705462212923
+        },
+        {
+          "layer": 20,
+          "observed_collisions": 3682,
+          "independent_cyclic_shift_expected_collisions": 3616.986111111111,
+          "observed_to_shift_expectation": 1.0179746028576586
+        },
+        {
+          "layer": 21,
+          "observed_collisions": 4019,
+          "independent_cyclic_shift_expected_collisions": 3979.9305555555557,
+          "observed_to_shift_expectation": 1.0098166146115055
+        },
+        {
+          "layer": 22,
+          "observed_collisions": 4245,
+          "independent_cyclic_shift_expected_collisions": 4175.375000000001,
+          "observed_to_shift_expectation": 1.0166751489387178
+        },
+        {
+          "layer": 23,
+          "observed_collisions": 3475,
+          "independent_cyclic_shift_expected_collisions": 3440.5694444444434,
+          "observed_to_shift_expectation": 1.0100072258710406
+        },
+        {
+          "layer": 24,
+          "observed_collisions": 3666,
+          "independent_cyclic_shift_expected_collisions": 3604.027777777778,
+          "observed_to_shift_expectation": 1.0171952676403715
+        },
+        {
+          "layer": 25,
+          "observed_collisions": 3739,
+          "independent_cyclic_shift_expected_collisions": 3656.0138888888896,
+          "observed_to_shift_expectation": 1.022698521841866
+        },
+        {
+          "layer": 26,
+          "observed_collisions": 3932,
+          "independent_cyclic_shift_expected_collisions": 3868.0972222222226,
+          "observed_to_shift_expectation": 1.0165204683612024
+        },
+        {
+          "layer": 27,
+          "observed_collisions": 3991,
+          "independent_cyclic_shift_expected_collisions": 3992.499999999999,
+          "observed_to_shift_expectation": 0.9996242955541643
+        },
+        {
+          "layer": 28,
+          "observed_collisions": 4272,
+          "independent_cyclic_shift_expected_collisions": 4251.513888888889,
+          "observed_to_shift_expectation": 1.0048185450280782
+        },
+        {
+          "layer": 29,
+          "observed_collisions": 3867,
+          "independent_cyclic_shift_expected_collisions": 3887.7777777777774,
+          "observed_to_shift_expectation": 0.9946556158902544
+        },
+        {
+          "layer": 30,
+          "observed_collisions": 3631,
+          "independent_cyclic_shift_expected_collisions": 3628.083333333333,
+          "observed_to_shift_expectation": 1.0008039139123046
+        },
+        {
+          "layer": 31,
+          "observed_collisions": 3695,
+          "independent_cyclic_shift_expected_collisions": 3633.4027777777774,
+          "observed_to_shift_expectation": 1.0169530398883815
+        },
+        {
+          "layer": 32,
+          "observed_collisions": 4137,
+          "independent_cyclic_shift_expected_collisions": 4151.361111111111,
+          "observed_to_shift_expectation": 0.9965406258991361
+        },
+        {
+          "layer": 33,
+          "observed_collisions": 3832,
+          "independent_cyclic_shift_expected_collisions": 3798.097222222222,
+          "observed_to_shift_expectation": 1.0089262532774086
+        },
+        {
+          "layer": 34,
+          "observed_collisions": 3906,
+          "independent_cyclic_shift_expected_collisions": 3814.2083333333335,
+          "observed_to_shift_expectation": 1.0240657191859386
+        },
+        {
+          "layer": 35,
+          "observed_collisions": 3625,
+          "independent_cyclic_shift_expected_collisions": 3644.069444444444,
+          "observed_to_shift_expectation": 0.9947669920304301
+        },
+        {
+          "layer": 36,
+          "observed_collisions": 3555,
+          "independent_cyclic_shift_expected_collisions": 3559.2499999999995,
+          "observed_to_shift_expectation": 0.998805928215214
+        },
+        {
+          "layer": 37,
+          "observed_collisions": 3562,
+          "independent_cyclic_shift_expected_collisions": 3542.2916666666665,
+          "observed_to_shift_expectation": 1.0055637240486974
+        },
+        {
+          "layer": 38,
+          "observed_collisions": 3810,
+          "independent_cyclic_shift_expected_collisions": 3833.9583333333326,
+          "observed_to_shift_expectation": 0.9937510188556216
+        },
+        {
+          "layer": 39,
+          "observed_collisions": 3790,
+          "independent_cyclic_shift_expected_collisions": 3650.277777777777,
+          "observed_to_shift_expectation": 1.0382771478578496
+        },
+        {
+          "layer": 40,
+          "observed_collisions": 3733,
+          "independent_cyclic_shift_expected_collisions": 3704.875,
+          "observed_to_shift_expectation": 1.0075913492358042
+        },
+        {
+          "layer": 41,
+          "observed_collisions": 3758,
+          "independent_cyclic_shift_expected_collisions": 3697.236111111112,
+          "observed_to_shift_expectation": 1.0164349495306175
+        },
+        {
+          "layer": 42,
+          "observed_collisions": 3721,
+          "independent_cyclic_shift_expected_collisions": 3744.236111111111,
+          "observed_to_shift_expectation": 0.9937941651056253
+        },
+        {
+          "layer": 43,
+          "observed_collisions": 3677,
+          "independent_cyclic_shift_expected_collisions": 3609.3749999999995,
+          "observed_to_shift_expectation": 1.018735930735931
+        },
+        {
+          "layer": 44,
+          "observed_collisions": 3475,
+          "independent_cyclic_shift_expected_collisions": 3490.4305555555557,
+          "observed_to_shift_expectation": 0.9955791827655773
+        },
+        {
+          "layer": 45,
+          "observed_collisions": 3896,
+          "independent_cyclic_shift_expected_collisions": 3917.583333333334,
+          "observed_to_shift_expectation": 0.9944906511242049
+        },
+        {
+          "layer": 46,
+          "observed_collisions": 3796,
+          "independent_cyclic_shift_expected_collisions": 3789.4305555555557,
+          "observed_to_shift_expectation": 1.0017336231257261
+        },
+        {
+          "layer": 47,
+          "observed_collisions": 3933,
+          "independent_cyclic_shift_expected_collisions": 3920.194444444444,
+          "observed_to_shift_expectation": 1.0032665613241976
+        },
+        {
+          "layer": 48,
+          "observed_collisions": 3755,
+          "independent_cyclic_shift_expected_collisions": 3727.375,
+          "observed_to_shift_expectation": 1.007411382004762
+        },
+        {
+          "layer": 49,
+          "observed_collisions": 3654,
+          "independent_cyclic_shift_expected_collisions": 3677.4861111111118,
+          "observed_to_shift_expectation": 0.9936135418594373
+        },
+        {
+          "layer": 50,
+          "observed_collisions": 3707,
+          "independent_cyclic_shift_expected_collisions": 3676.777777777777,
+          "observed_to_shift_expectation": 1.0082197576380287
+        },
+        {
+          "layer": 51,
+          "observed_collisions": 3596,
+          "independent_cyclic_shift_expected_collisions": 3588.013888888889,
+          "observed_to_shift_expectation": 1.0022257748599697
+        },
+        {
+          "layer": 52,
+          "observed_collisions": 3812,
+          "independent_cyclic_shift_expected_collisions": 3719.3055555555547,
+          "observed_to_shift_expectation": 1.0249225139101537
+        },
+        {
+          "layer": 53,
+          "observed_collisions": 3816,
+          "independent_cyclic_shift_expected_collisions": 3804.277777777778,
+          "observed_to_shift_expectation": 1.0030813265768068
+        },
+        {
+          "layer": 54,
+          "observed_collisions": 3535,
+          "independent_cyclic_shift_expected_collisions": 3478.6388888888896,
+          "observed_to_shift_expectation": 1.016202058595715
+        },
+        {
+          "layer": 55,
+          "observed_collisions": 3556,
+          "independent_cyclic_shift_expected_collisions": 3525.8888888888887,
+          "observed_to_shift_expectation": 1.0085400056723286
+        },
+        {
+          "layer": 56,
+          "observed_collisions": 3477,
+          "independent_cyclic_shift_expected_collisions": 3514.0972222222226,
+          "observed_to_shift_expectation": 0.9894433136375312
+        },
+        {
+          "layer": 57,
+          "observed_collisions": 3792,
+          "independent_cyclic_shift_expected_collisions": 3749.6805555555557,
+          "observed_to_shift_expectation": 1.011286146597673
+        },
+        {
+          "layer": 58,
+          "observed_collisions": 3702,
+          "independent_cyclic_shift_expected_collisions": 3726.4027777777774,
+          "observed_to_shift_expectation": 0.9934513848252523
+        },
+        {
+          "layer": 59,
+          "observed_collisions": 3599,
+          "independent_cyclic_shift_expected_collisions": 3635.694444444445,
+          "observed_to_shift_expectation": 0.989907170416778
+        },
+        {
+          "layer": 60,
+          "observed_collisions": 3725,
+          "independent_cyclic_shift_expected_collisions": 3681.0555555555547,
+          "observed_to_shift_expectation": 1.011938000875353
+        }
+      ]
+    },
+    {
+      "batch": 8,
+      "ep": 32,
+      "observed_collisions": 172910,
+      "independent_cyclic_shift_expected_collisions": 170033.45833333334,
+      "observed_to_shift_expectation": 1.0169175037363969,
+      "layers": [
+        {
+          "layer": 3,
+          "observed_collisions": 3069,
+          "independent_cyclic_shift_expected_collisions": 3053.083333333333,
+          "observed_to_shift_expectation": 1.0052133089499686
+        },
+        {
+          "layer": 4,
+          "observed_collisions": 2824,
+          "independent_cyclic_shift_expected_collisions": 2787.7500000000005,
+          "observed_to_shift_expectation": 1.0130033180880638
+        },
+        {
+          "layer": 5,
+          "observed_collisions": 2887,
+          "independent_cyclic_shift_expected_collisions": 2794.2361111111113,
+          "observed_to_shift_expectation": 1.0331983000720728
+        },
+        {
+          "layer": 6,
+          "observed_collisions": 2797,
+          "independent_cyclic_shift_expected_collisions": 2776.3472222222217,
+          "observed_to_shift_expectation": 1.007438830997964
+        },
+        {
+          "layer": 7,
+          "observed_collisions": 3203,
+          "independent_cyclic_shift_expected_collisions": 3180.861111111112,
+          "observed_to_shift_expectation": 1.0069600300407817
+        },
+        {
+          "layer": 8,
+          "observed_collisions": 3288,
+          "independent_cyclic_shift_expected_collisions": 3193.375,
+          "observed_to_shift_expectation": 1.0296316592946335
+        },
+        {
+          "layer": 9,
+          "observed_collisions": 3118,
+          "independent_cyclic_shift_expected_collisions": 3032.305555555556,
+          "observed_to_shift_expectation": 1.0282604911920703
+        },
+        {
+          "layer": 10,
+          "observed_collisions": 2947,
+          "independent_cyclic_shift_expected_collisions": 2918.347222222222,
+          "observed_to_shift_expectation": 1.0098181523979042
+        },
+        {
+          "layer": 11,
+          "observed_collisions": 2728,
+          "independent_cyclic_shift_expected_collisions": 2701.763888888889,
+          "observed_to_shift_expectation": 1.0097107342425473
+        },
+        {
+          "layer": 12,
+          "observed_collisions": 2956,
+          "independent_cyclic_shift_expected_collisions": 2960.861111111111,
+          "observed_to_shift_expectation": 0.998358210355471
+        },
+        {
+          "layer": 13,
+          "observed_collisions": 2732,
+          "independent_cyclic_shift_expected_collisions": 2698.7777777777774,
+          "observed_to_shift_expectation": 1.01231009922187
+        },
+        {
+          "layer": 14,
+          "observed_collisions": 3126,
+          "independent_cyclic_shift_expected_collisions": 3022.6250000000005,
+          "observed_to_shift_expectation": 1.03420040527687
+        },
+        {
+          "layer": 15,
+          "observed_collisions": 3354,
+          "independent_cyclic_shift_expected_collisions": 3277.7638888888887,
+          "observed_to_shift_expectation": 1.0232585731295472
+        },
+        {
+          "layer": 16,
+          "observed_collisions": 2895,
+          "independent_cyclic_shift_expected_collisions": 2879.7083333333335,
+          "observed_to_shift_expectation": 1.0053101442565073
+        },
+        {
+          "layer": 17,
+          "observed_collisions": 3437,
+          "independent_cyclic_shift_expected_collisions": 3340.944444444445,
+          "observed_to_shift_expectation": 1.0287510185077406
+        },
+        {
+          "layer": 18,
+          "observed_collisions": 2865,
+          "independent_cyclic_shift_expected_collisions": 2761.3055555555557,
+          "observed_to_shift_expectation": 1.0375526874364984
+        },
+        {
+          "layer": 19,
+          "observed_collisions": 3050,
+          "independent_cyclic_shift_expected_collisions": 2885.888888888889,
+          "observed_to_shift_expectation": 1.0568667462364763
+        },
+        {
+          "layer": 20,
+          "observed_collisions": 3006,
+          "independent_cyclic_shift_expected_collisions": 2903.0555555555557,
+          "observed_to_shift_expectation": 1.035460721462061
+        },
+        {
+          "layer": 21,
+          "observed_collisions": 3092,
+          "independent_cyclic_shift_expected_collisions": 3017.8611111111104,
+          "observed_to_shift_expectation": 1.0245667001095333
+        },
+        {
+          "layer": 22,
+          "observed_collisions": 3411,
+          "independent_cyclic_shift_expected_collisions": 3304.3611111111113,
+          "observed_to_shift_expectation": 1.0322721655724336
+        },
+        {
+          "layer": 23,
+          "observed_collisions": 2956,
+          "independent_cyclic_shift_expected_collisions": 2894.1666666666665,
+          "observed_to_shift_expectation": 1.021364814281601
+        },
+        {
+          "layer": 24,
+          "observed_collisions": 2945,
+          "independent_cyclic_shift_expected_collisions": 2851.6666666666665,
+          "observed_to_shift_expectation": 1.032729398012858
+        },
+        {
+          "layer": 25,
+          "observed_collisions": 2915,
+          "independent_cyclic_shift_expected_collisions": 2828.055555555555,
+          "observed_to_shift_expectation": 1.0307435418917592
+        },
+        {
+          "layer": 26,
+          "observed_collisions": 2939,
+          "independent_cyclic_shift_expected_collisions": 2857.666666666667,
+          "observed_to_shift_expectation": 1.0284614487343986
+        },
+        {
+          "layer": 27,
+          "observed_collisions": 3192,
+          "independent_cyclic_shift_expected_collisions": 3206.638888888889,
+          "observed_to_shift_expectation": 0.9954348183889326
+        },
+        {
+          "layer": 28,
+          "observed_collisions": 3517,
+          "independent_cyclic_shift_expected_collisions": 3464.5972222222217,
+          "observed_to_shift_expectation": 1.0151252149720789
+        },
+        {
+          "layer": 29,
+          "observed_collisions": 3136,
+          "independent_cyclic_shift_expected_collisions": 3088.388888888889,
+          "observed_to_shift_expectation": 1.0154161644870572
+        },
+        {
+          "layer": 30,
+          "observed_collisions": 2916,
+          "independent_cyclic_shift_expected_collisions": 2883.097222222222,
+          "observed_to_shift_expectation": 1.01141230254886
+        },
+        {
+          "layer": 31,
+          "observed_collisions": 2842,
+          "independent_cyclic_shift_expected_collisions": 2830.902777777777,
+          "observed_to_shift_expectation": 1.0039200294370174
+        },
+        {
+          "layer": 32,
+          "observed_collisions": 3245,
+          "independent_cyclic_shift_expected_collisions": 3202.4444444444443,
+          "observed_to_shift_expectation": 1.0132884602040109
+        },
+        {
+          "layer": 33,
+          "observed_collisions": 3048,
+          "independent_cyclic_shift_expected_collisions": 2999.3194444444443,
+          "observed_to_shift_expectation": 1.016230533778496
+        },
+        {
+          "layer": 34,
+          "observed_collisions": 3182,
+          "independent_cyclic_shift_expected_collisions": 3091.4861111111113,
+          "observed_to_shift_expectation": 1.0292784394416565
+        },
+        {
+          "layer": 35,
+          "observed_collisions": 2916,
+          "independent_cyclic_shift_expected_collisions": 2884.3611111111118,
+          "observed_to_shift_expectation": 1.0109691150553268
+        },
+        {
+          "layer": 36,
+          "observed_collisions": 2783,
+          "independent_cyclic_shift_expected_collisions": 2746.555555555555,
+          "observed_to_shift_expectation": 1.0132691451919578
+        },
+        {
+          "layer": 37,
+          "observed_collisions": 2627,
+          "independent_cyclic_shift_expected_collisions": 2609.611111111111,
+          "observed_to_shift_expectation": 1.0066634023800909
+        },
+        {
+          "layer": 38,
+          "observed_collisions": 3231,
+          "independent_cyclic_shift_expected_collisions": 3185.5555555555557,
+          "observed_to_shift_expectation": 1.0142657830484827
+        },
+        {
+          "layer": 39,
+          "observed_collisions": 2971,
+          "independent_cyclic_shift_expected_collisions": 2875.513888888889,
+          "observed_to_shift_expectation": 1.0332066249027951
+        },
+        {
+          "layer": 40,
+          "observed_collisions": 2839,
+          "independent_cyclic_shift_expected_collisions": 2810.944444444444,
+          "observed_to_shift_expectation": 1.0099808289028995
+        },
+        {
+          "layer": 41,
+          "observed_collisions": 2870,
+          "independent_cyclic_shift_expected_collisions": 2831.3472222222217,
+          "observed_to_shift_expectation": 1.0136517264553095
+        },
+        {
+          "layer": 42,
+          "observed_collisions": 3066,
+          "independent_cyclic_shift_expected_collisions": 3015.388888888889,
+          "observed_to_shift_expectation": 1.0167842732649188
+        },
+        {
+          "layer": 43,
+          "observed_collisions": 3000,
+          "independent_cyclic_shift_expected_collisions": 2912.166666666667,
+          "observed_to_shift_expectation": 1.030160819550163
+        },
+        {
+          "layer": 44,
+          "observed_collisions": 2726,
+          "independent_cyclic_shift_expected_collisions": 2722.2222222222226,
+          "observed_to_shift_expectation": 1.0013877551020407
+        },
+        {
+          "layer": 45,
+          "observed_collisions": 2883,
+          "independent_cyclic_shift_expected_collisions": 2881.041666666667,
+          "observed_to_shift_expectation": 1.0006797310000721
+        },
+        {
+          "layer": 46,
+          "observed_collisions": 3140,
+          "independent_cyclic_shift_expected_collisions": 3064.861111111111,
+          "observed_to_shift_expectation": 1.0245162459781576
+        },
+        {
+          "layer": 47,
+          "observed_collisions": 3063,
+          "independent_cyclic_shift_expected_collisions": 3014.944444444444,
+          "observed_to_shift_expectation": 1.015939118096888
+        },
+        {
+          "layer": 48,
+          "observed_collisions": 2863,
+          "independent_cyclic_shift_expected_collisions": 2852.805555555556,
+          "observed_to_shift_expectation": 1.0035734802971732
+        },
+        {
+          "layer": 49,
+          "observed_collisions": 2866,
+          "independent_cyclic_shift_expected_collisions": 2911.305555555555,
+          "observed_to_shift_expectation": 0.9844380623431642
+        },
+        {
+          "layer": 50,
+          "observed_collisions": 2838,
+          "independent_cyclic_shift_expected_collisions": 2754.819444444445,
+          "observed_to_shift_expectation": 1.0301945580220522
+        },
+        {
+          "layer": 51,
+          "observed_collisions": 2856,
+          "independent_cyclic_shift_expected_collisions": 2853.777777777777,
+          "observed_to_shift_expectation": 1.0007786949073356
+        },
+        {
+          "layer": 52,
+          "observed_collisions": 2976,
+          "independent_cyclic_shift_expected_collisions": 2912.6805555555557,
+          "observed_to_shift_expectation": 1.0217392340961218
+        },
+        {
+          "layer": 53,
+          "observed_collisions": 2757,
+          "independent_cyclic_shift_expected_collisions": 2764.375,
+          "observed_to_shift_expectation": 0.9973321275152611
+        },
+        {
+          "layer": 54,
+          "observed_collisions": 2860,
+          "independent_cyclic_shift_expected_collisions": 2817.1944444444443,
+          "observed_to_shift_expectation": 1.0151943915834312
+        },
+        {
+          "layer": 55,
+          "observed_collisions": 2931,
+          "independent_cyclic_shift_expected_collisions": 2879.0277777777787,
+          "observed_to_shift_expectation": 1.0180520044382264
+        },
+        {
+          "layer": 56,
+          "observed_collisions": 2850,
+          "independent_cyclic_shift_expected_collisions": 2766.527777777778,
+          "observed_to_shift_expectation": 1.0301721973994677
+        },
+        {
+          "layer": 57,
+          "observed_collisions": 2926,
+          "independent_cyclic_shift_expected_collisions": 2906.694444444445,
+          "observed_to_shift_expectation": 1.0066417560994256
+        },
+        {
+          "layer": 58,
+          "observed_collisions": 2898,
+          "independent_cyclic_shift_expected_collisions": 2879.7916666666665,
+          "observed_to_shift_expectation": 1.0063227953410983
+        },
+        {
+          "layer": 59,
+          "observed_collisions": 2702,
+          "independent_cyclic_shift_expected_collisions": 2702.555555555556,
+          "observed_to_shift_expectation": 0.9997944332524769
+        },
+        {
+          "layer": 60,
+          "observed_collisions": 2854,
+          "independent_cyclic_shift_expected_collisions": 2787.73611111111,
+          "observed_to_shift_expectation": 1.0237697853196295
+        }
+      ]
+    },
+    {
+      "batch": 8,
+      "ep": 64,
+      "observed_collisions": 114703,
+      "independent_cyclic_shift_expected_collisions": 111119.44444444444,
+      "observed_to_shift_expectation": 1.0322495812814039,
+      "layers": [
+        {
+          "layer": 3,
+          "observed_collisions": 1924,
+          "independent_cyclic_shift_expected_collisions": 1890.847222222222,
+          "observed_to_shift_expectation": 1.0175332926891973
+        },
+        {
+          "layer": 4,
+          "observed_collisions": 1830,
+          "independent_cyclic_shift_expected_collisions": 1824.4444444444446,
+          "observed_to_shift_expectation": 1.0030450669914737
+        },
+        {
+          "layer": 5,
+          "observed_collisions": 1886,
+          "independent_cyclic_shift_expected_collisions": 1785.9444444444446,
+          "observed_to_shift_expectation": 1.056023890254145
+        },
+        {
+          "layer": 6,
+          "observed_collisions": 1856,
+          "independent_cyclic_shift_expected_collisions": 1804.2361111111109,
+          "observed_to_shift_expectation": 1.028690196682191
+        },
+        {
+          "layer": 7,
+          "observed_collisions": 2188,
+          "independent_cyclic_shift_expected_collisions": 2140.055555555555,
+          "observed_to_shift_expectation": 1.0224033643986399
+        },
+        {
+          "layer": 8,
+          "observed_collisions": 2230,
+          "independent_cyclic_shift_expected_collisions": 2157.6388888888887,
+          "observed_to_shift_expectation": 1.0335371741229482
+        },
+        {
+          "layer": 9,
+          "observed_collisions": 1987,
+          "independent_cyclic_shift_expected_collisions": 1855.5694444444446,
+          "observed_to_shift_expectation": 1.070830308156376
+        },
+        {
+          "layer": 10,
+          "observed_collisions": 1964,
+          "independent_cyclic_shift_expected_collisions": 1908.7083333333337,
+          "observed_to_shift_expectation": 1.0289681067039227
+        },
+        {
+          "layer": 11,
+          "observed_collisions": 1881,
+          "independent_cyclic_shift_expected_collisions": 1805.3333333333333,
+          "observed_to_shift_expectation": 1.0419128508124078
+        },
+        {
+          "layer": 12,
+          "observed_collisions": 1819,
+          "independent_cyclic_shift_expected_collisions": 1774.9444444444448,
+          "observed_to_shift_expectation": 1.0248208081630097
+        },
+        {
+          "layer": 13,
+          "observed_collisions": 1820,
+          "independent_cyclic_shift_expected_collisions": 1740.6805555555559,
+          "observed_to_shift_expectation": 1.045568064853306
+        },
+        {
+          "layer": 14,
+          "observed_collisions": 2124,
+          "independent_cyclic_shift_expected_collisions": 2013.1666666666665,
+          "observed_to_shift_expectation": 1.0550542263432403
+        },
+        {
+          "layer": 15,
+          "observed_collisions": 2281,
+          "independent_cyclic_shift_expected_collisions": 2210.847222222222,
+          "observed_to_shift_expectation": 1.0317311739466395
+        },
+        {
+          "layer": 16,
+          "observed_collisions": 1958,
+          "independent_cyclic_shift_expected_collisions": 1926.7638888888891,
+          "observed_to_shift_expectation": 1.0162116963532692
+        },
+        {
+          "layer": 17,
+          "observed_collisions": 2531,
+          "independent_cyclic_shift_expected_collisions": 2453.1111111111113,
+          "observed_to_shift_expectation": 1.031751064408008
+        },
+        {
+          "layer": 18,
+          "observed_collisions": 1900,
+          "independent_cyclic_shift_expected_collisions": 1809.513888888889,
+          "observed_to_shift_expectation": 1.0500057566105077
+        },
+        {
+          "layer": 19,
+          "observed_collisions": 2020,
+          "independent_cyclic_shift_expected_collisions": 1851.9444444444446,
+          "observed_to_shift_expectation": 1.0907454627268636
+        },
+        {
+          "layer": 20,
+          "observed_collisions": 2029,
+          "independent_cyclic_shift_expected_collisions": 1936.0694444444446,
+          "observed_to_shift_expectation": 1.0479995982696901
+        },
+        {
+          "layer": 21,
+          "observed_collisions": 1999,
+          "independent_cyclic_shift_expected_collisions": 1923.7638888888887,
+          "observed_to_shift_expectation": 1.0391088072427461
+        },
+        {
+          "layer": 22,
+          "observed_collisions": 2296,
+          "independent_cyclic_shift_expected_collisions": 2176.430555555555,
+          "observed_to_shift_expectation": 1.0549383228144964
+        },
+        {
+          "layer": 23,
+          "observed_collisions": 2133,
+          "independent_cyclic_shift_expected_collisions": 2050.1388888888887,
+          "observed_to_shift_expectation": 1.040417315900007
+        },
+        {
+          "layer": 24,
+          "observed_collisions": 2020,
+          "independent_cyclic_shift_expected_collisions": 1900.5416666666665,
+          "observed_to_shift_expectation": 1.062854887860917
+        },
+        {
+          "layer": 25,
+          "observed_collisions": 2018,
+          "independent_cyclic_shift_expected_collisions": 1900.3611111111113,
+          "observed_to_shift_expectation": 1.0619034394047915
+        },
+        {
+          "layer": 26,
+          "observed_collisions": 1944,
+          "independent_cyclic_shift_expected_collisions": 1837.4861111111113,
+          "observed_to_shift_expectation": 1.0579671804019681
+        },
+        {
+          "layer": 27,
+          "observed_collisions": 2144,
+          "independent_cyclic_shift_expected_collisions": 2173.402777777778,
+          "observed_to_shift_expectation": 0.9864715467936224
+        },
+        {
+          "layer": 28,
+          "observed_collisions": 2575,
+          "independent_cyclic_shift_expected_collisions": 2460.6944444444443,
+          "observed_to_shift_expectation": 1.0464525596884349
+        },
+        {
+          "layer": 29,
+          "observed_collisions": 2114,
+          "independent_cyclic_shift_expected_collisions": 2089.861111111111,
+          "observed_to_shift_expectation": 1.0115504751777764
+        },
+        {
+          "layer": 30,
+          "observed_collisions": 1908,
+          "independent_cyclic_shift_expected_collisions": 1865.763888888889,
+          "observed_to_shift_expectation": 1.022637436260096
+        },
+        {
+          "layer": 31,
+          "observed_collisions": 1830,
+          "independent_cyclic_shift_expected_collisions": 1784.0694444444443,
+          "observed_to_shift_expectation": 1.0257448249554313
+        },
+        {
+          "layer": 32,
+          "observed_collisions": 2206,
+          "independent_cyclic_shift_expected_collisions": 2135.347222222222,
+          "observed_to_shift_expectation": 1.0330872548700771
+        },
+        {
+          "layer": 33,
+          "observed_collisions": 1924,
+          "independent_cyclic_shift_expected_collisions": 1838.9861111111113,
+          "observed_to_shift_expectation": 1.0462286737106044
+        },
+        {
+          "layer": 34,
+          "observed_collisions": 1969,
+          "independent_cyclic_shift_expected_collisions": 1899.5694444444446,
+          "observed_to_shift_expectation": 1.03655068034423
+        },
+        {
+          "layer": 35,
+          "observed_collisions": 1839,
+          "independent_cyclic_shift_expected_collisions": 1814.0972222222224,
+          "observed_to_shift_expectation": 1.0137273666883588
+        },
+        {
+          "layer": 36,
+          "observed_collisions": 1882,
+          "independent_cyclic_shift_expected_collisions": 1851.958333333333,
+          "observed_to_shift_expectation": 1.0162215672598827
+        },
+        {
+          "layer": 37,
+          "observed_collisions": 1725,
+          "independent_cyclic_shift_expected_collisions": 1691.375,
+          "observed_to_shift_expectation": 1.019880274924248
+        },
+        {
+          "layer": 38,
+          "observed_collisions": 2162,
+          "independent_cyclic_shift_expected_collisions": 2081.597222222222,
+          "observed_to_shift_expectation": 1.0386255212677231
+        },
+        {
+          "layer": 39,
+          "observed_collisions": 1930,
+          "independent_cyclic_shift_expected_collisions": 1822.3055555555563,
+          "observed_to_shift_expectation": 1.0590979071079063
+        },
+        {
+          "layer": 40,
+          "observed_collisions": 1896,
+          "independent_cyclic_shift_expected_collisions": 1825.7222222222217,
+          "observed_to_shift_expectation": 1.038493138179716
+        },
+        {
+          "layer": 41,
+          "observed_collisions": 1926,
+          "independent_cyclic_shift_expected_collisions": 1857.0277777777776,
+          "observed_to_shift_expectation": 1.0371411903729078
+        },
+        {
+          "layer": 42,
+          "observed_collisions": 2013,
+          "independent_cyclic_shift_expected_collisions": 1979.5694444444448,
+          "observed_to_shift_expectation": 1.016887791256516
+        },
+        {
+          "layer": 43,
+          "observed_collisions": 1951,
+          "independent_cyclic_shift_expected_collisions": 1866.3888888888887,
+          "observed_to_shift_expectation": 1.0453341271022474
+        },
+        {
+          "layer": 44,
+          "observed_collisions": 1712,
+          "independent_cyclic_shift_expected_collisions": 1735.638888888889,
+          "observed_to_shift_expectation": 0.9863802954403598
+        },
+        {
+          "layer": 45,
+          "observed_collisions": 1788,
+          "independent_cyclic_shift_expected_collisions": 1799.5972222222229,
+          "observed_to_shift_expectation": 0.9935556567441786
+        },
+        {
+          "layer": 46,
+          "observed_collisions": 1975,
+          "independent_cyclic_shift_expected_collisions": 1920.402777777778,
+          "observed_to_shift_expectation": 1.0284300891740012
+        },
+        {
+          "layer": 47,
+          "observed_collisions": 1928,
+          "independent_cyclic_shift_expected_collisions": 1877.8333333333333,
+          "observed_to_shift_expectation": 1.0267151859412444
+        },
+        {
+          "layer": 48,
+          "observed_collisions": 1869,
+          "independent_cyclic_shift_expected_collisions": 1791.2777777777774,
+          "observed_to_shift_expectation": 1.043389262785721
+        },
+        {
+          "layer": 49,
+          "observed_collisions": 1865,
+          "independent_cyclic_shift_expected_collisions": 1835.375,
+          "observed_to_shift_expectation": 1.016141115575836
+        },
+        {
+          "layer": 50,
+          "observed_collisions": 1919,
+          "independent_cyclic_shift_expected_collisions": 1814.9861111111113,
+          "observed_to_shift_expectation": 1.05730836630216
+        },
+        {
+          "layer": 51,
+          "observed_collisions": 1766,
+          "independent_cyclic_shift_expected_collisions": 1759.0833333333337,
+          "observed_to_shift_expectation": 1.0039319721445827
+        },
+        {
+          "layer": 52,
+          "observed_collisions": 1937,
+          "independent_cyclic_shift_expected_collisions": 1841.6666666666672,
+          "observed_to_shift_expectation": 1.0517647058823527
+        },
+        {
+          "layer": 53,
+          "observed_collisions": 2055,
+          "independent_cyclic_shift_expected_collisions": 2078.9305555555557,
+          "observed_to_shift_expectation": 0.9884890067676355
+        },
+        {
+          "layer": 54,
+          "observed_collisions": 1926,
+          "independent_cyclic_shift_expected_collisions": 1833.4999999999998,
+          "observed_to_shift_expectation": 1.050449959094628
+        },
+        {
+          "layer": 55,
+          "observed_collisions": 1998,
+          "independent_cyclic_shift_expected_collisions": 1926.083333333333,
+          "observed_to_shift_expectation": 1.0373382944663179
+        },
+        {
+          "layer": 56,
+          "observed_collisions": 1880,
+          "independent_cyclic_shift_expected_collisions": 1746.1944444444446,
+          "observed_to_shift_expectation": 1.0766269506705057
+        },
+        {
+          "layer": 57,
+          "observed_collisions": 1940,
+          "independent_cyclic_shift_expected_collisions": 1902.9444444444443,
+          "observed_to_shift_expectation": 1.0194727469126792
+        },
+        {
+          "layer": 58,
+          "observed_collisions": 1783,
+          "independent_cyclic_shift_expected_collisions": 1844.1388888888887,
+          "observed_to_shift_expectation": 0.966846917411017
+        },
+        {
+          "layer": 59,
+          "observed_collisions": 1823,
+          "independent_cyclic_shift_expected_collisions": 1824.6111111111106,
+          "observed_to_shift_expectation": 0.9991170112352711
+        },
+        {
+          "layer": 60,
+          "observed_collisions": 1907,
+          "independent_cyclic_shift_expected_collisions": 1870.9027777777776,
+          "observed_to_shift_expectation": 1.019294012842879
+        }
+      ]
+    },
+    {
+      "batch": 8,
+      "ep": 128,
+      "observed_collisions": 73282,
+      "independent_cyclic_shift_expected_collisions": 69389.33333333331,
+      "observed_to_shift_expectation": 1.056098920102994,
+      "layers": [
+        {
+          "layer": 3,
+          "observed_collisions": 1185,
+          "independent_cyclic_shift_expected_collisions": 1146.7638888888887,
+          "observed_to_shift_expectation": 1.0333426187217656
+        },
+        {
+          "layer": 4,
+          "observed_collisions": 1126,
+          "independent_cyclic_shift_expected_collisions": 1125.652777777778,
+          "observed_to_shift_expectation": 1.00030846299061
+        },
+        {
+          "layer": 5,
+          "observed_collisions": 1177,
+          "independent_cyclic_shift_expected_collisions": 1083.25,
+          "observed_to_shift_expectation": 1.0865451188552966
+        },
+        {
+          "layer": 6,
+          "observed_collisions": 1151,
+          "independent_cyclic_shift_expected_collisions": 1083.9027777777776,
+          "observed_to_shift_expectation": 1.0619033584910498
+        },
+        {
+          "layer": 7,
+          "observed_collisions": 1443,
+          "independent_cyclic_shift_expected_collisions": 1366.763888888889,
+          "observed_to_shift_expectation": 1.0557785523387564
+        },
+        {
+          "layer": 8,
+          "observed_collisions": 1543,
+          "independent_cyclic_shift_expected_collisions": 1495.9583333333333,
+          "observed_to_shift_expectation": 1.0314458401804865
+        },
+        {
+          "layer": 9,
+          "observed_collisions": 1203,
+          "independent_cyclic_shift_expected_collisions": 1080.861111111111,
+          "observed_to_shift_expectation": 1.113001464881396
+        },
+        {
+          "layer": 10,
+          "observed_collisions": 1236,
+          "independent_cyclic_shift_expected_collisions": 1171.3333333333333,
+          "observed_to_shift_expectation": 1.0552077404667046
+        },
+        {
+          "layer": 11,
+          "observed_collisions": 1224,
+          "independent_cyclic_shift_expected_collisions": 1110.375,
+          "observed_to_shift_expectation": 1.1023302938196555
+        },
+        {
+          "layer": 12,
+          "observed_collisions": 1153,
+          "independent_cyclic_shift_expected_collisions": 1041.486111111111,
+          "observed_to_shift_expectation": 1.10707189246136
+        },
+        {
+          "layer": 13,
+          "observed_collisions": 1125,
+          "independent_cyclic_shift_expected_collisions": 1054.2361111111113,
+          "observed_to_shift_expectation": 1.0671233779065936
+        },
+        {
+          "layer": 14,
+          "observed_collisions": 1419,
+          "independent_cyclic_shift_expected_collisions": 1321.1527777777778,
+          "observed_to_shift_expectation": 1.0740620039317514
+        },
+        {
+          "layer": 15,
+          "observed_collisions": 1527,
+          "independent_cyclic_shift_expected_collisions": 1443.7638888888891,
+          "observed_to_shift_expectation": 1.0576521630383544
+        },
+        {
+          "layer": 16,
+          "observed_collisions": 1220,
+          "independent_cyclic_shift_expected_collisions": 1147.111111111111,
+          "observed_to_shift_expectation": 1.063541263076327
+        },
+        {
+          "layer": 17,
+          "observed_collisions": 1871,
+          "independent_cyclic_shift_expected_collisions": 1777.3194444444448,
+          "observed_to_shift_expectation": 1.0527089015136712
+        },
+        {
+          "layer": 18,
+          "observed_collisions": 1208,
+          "independent_cyclic_shift_expected_collisions": 1121.9861111111113,
+          "observed_to_shift_expectation": 1.0766621690207097
+        },
+        {
+          "layer": 19,
+          "observed_collisions": 1314,
+          "independent_cyclic_shift_expected_collisions": 1145.8611111111109,
+          "observed_to_shift_expectation": 1.146735836706989
+        },
+        {
+          "layer": 20,
+          "observed_collisions": 1262,
+          "independent_cyclic_shift_expected_collisions": 1137.111111111111,
+          "observed_to_shift_expectation": 1.1098299785030292
+        },
+        {
+          "layer": 21,
+          "observed_collisions": 1188,
+          "independent_cyclic_shift_expected_collisions": 1109.2916666666667,
+          "observed_to_shift_expectation": 1.0709536866619087
+        },
+        {
+          "layer": 22,
+          "observed_collisions": 1591,
+          "independent_cyclic_shift_expected_collisions": 1522.5000000000002,
+          "observed_to_shift_expectation": 1.044991789819376
+        },
+        {
+          "layer": 23,
+          "observed_collisions": 1516,
+          "independent_cyclic_shift_expected_collisions": 1379.5555555555552,
+          "observed_to_shift_expectation": 1.098904639175258
+        },
+        {
+          "layer": 24,
+          "observed_collisions": 1343,
+          "independent_cyclic_shift_expected_collisions": 1224.4722222222222,
+          "observed_to_shift_expectation": 1.0967990744311609
+        },
+        {
+          "layer": 25,
+          "observed_collisions": 1327,
+          "independent_cyclic_shift_expected_collisions": 1213.9166666666667,
+          "observed_to_shift_expectation": 1.0931557630260176
+        },
+        {
+          "layer": 26,
+          "observed_collisions": 1281,
+          "independent_cyclic_shift_expected_collisions": 1130.2916666666667,
+          "observed_to_shift_expectation": 1.133335790909426
+        },
+        {
+          "layer": 27,
+          "observed_collisions": 1478,
+          "independent_cyclic_shift_expected_collisions": 1457.944444444445,
+          "observed_to_shift_expectation": 1.0137560492321758
+        },
+        {
+          "layer": 28,
+          "observed_collisions": 1870,
+          "independent_cyclic_shift_expected_collisions": 1773.9583333333335,
+          "observed_to_shift_expectation": 1.0541397533763945
+        },
+        {
+          "layer": 29,
+          "observed_collisions": 1434,
+          "independent_cyclic_shift_expected_collisions": 1340.8194444444446,
+          "observed_to_shift_expectation": 1.0694952299070841
+        },
+        {
+          "layer": 30,
+          "observed_collisions": 1194,
+          "independent_cyclic_shift_expected_collisions": 1123.3333333333333,
+          "observed_to_shift_expectation": 1.0629080118694363
+        },
+        {
+          "layer": 31,
+          "observed_collisions": 1113,
+          "independent_cyclic_shift_expected_collisions": 1085.8611111111113,
+          "observed_to_shift_expectation": 1.024992965132639
+        },
+        {
+          "layer": 32,
+          "observed_collisions": 1458,
+          "independent_cyclic_shift_expected_collisions": 1360.25,
+          "observed_to_shift_expectation": 1.0718617901121117
+        },
+        {
+          "layer": 33,
+          "observed_collisions": 1134,
+          "independent_cyclic_shift_expected_collisions": 1090.4027777777776,
+          "observed_to_shift_expectation": 1.0399826771452956
+        },
+        {
+          "layer": 34,
+          "observed_collisions": 1249,
+          "independent_cyclic_shift_expected_collisions": 1194.5000000000005,
+          "observed_to_shift_expectation": 1.045625784847216
+        },
+        {
+          "layer": 35,
+          "observed_collisions": 1135,
+          "independent_cyclic_shift_expected_collisions": 1082.9305555555557,
+          "observed_to_shift_expectation": 1.0480819791973939
+        },
+        {
+          "layer": 36,
+          "observed_collisions": 1201,
+          "independent_cyclic_shift_expected_collisions": 1128.6666666666665,
+          "observed_to_shift_expectation": 1.0640874187832252
+        },
+        {
+          "layer": 37,
+          "observed_collisions": 987,
+          "independent_cyclic_shift_expected_collisions": 1026.7638888888887,
+          "observed_to_shift_expectation": 0.9612726067607236
+        },
+        {
+          "layer": 38,
+          "observed_collisions": 1508,
+          "independent_cyclic_shift_expected_collisions": 1457.2777777777778,
+          "observed_to_shift_expectation": 1.0348061454004802
+        },
+        {
+          "layer": 39,
+          "observed_collisions": 1259,
+          "independent_cyclic_shift_expected_collisions": 1133.2083333333333,
+          "observed_to_shift_expectation": 1.1110048902452476
+        },
+        {
+          "layer": 40,
+          "observed_collisions": 1180,
+          "independent_cyclic_shift_expected_collisions": 1122.916666666667,
+          "observed_to_shift_expectation": 1.0508348794063076
+        },
+        {
+          "layer": 41,
+          "observed_collisions": 1116,
+          "independent_cyclic_shift_expected_collisions": 1061.3611111111109,
+          "observed_to_shift_expectation": 1.0514800177968544
+        },
+        {
+          "layer": 42,
+          "observed_collisions": 1288,
+          "independent_cyclic_shift_expected_collisions": 1219.6944444444443,
+          "observed_to_shift_expectation": 1.0560021863399305
+        },
+        {
+          "layer": 43,
+          "observed_collisions": 1093,
+          "independent_cyclic_shift_expected_collisions": 1065.0694444444448,
+          "observed_to_shift_expectation": 1.0262241637869203
+        },
+        {
+          "layer": 44,
+          "observed_collisions": 1035,
+          "independent_cyclic_shift_expected_collisions": 1048.1111111111106,
+          "observed_to_shift_expectation": 0.987490724053854
+        },
+        {
+          "layer": 45,
+          "observed_collisions": 1077,
+          "independent_cyclic_shift_expected_collisions": 1054.4722222222222,
+          "observed_to_shift_expectation": 1.0213640315060193
+        },
+        {
+          "layer": 46,
+          "observed_collisions": 1202,
+          "independent_cyclic_shift_expected_collisions": 1162.597222222222,
+          "observed_to_shift_expectation": 1.0338920281457944
+        },
+        {
+          "layer": 47,
+          "observed_collisions": 1175,
+          "independent_cyclic_shift_expected_collisions": 1105.611111111111,
+          "observed_to_shift_expectation": 1.0627606652932013
+        },
+        {
+          "layer": 48,
+          "observed_collisions": 1293,
+          "independent_cyclic_shift_expected_collisions": 1240.8611111111109,
+          "observed_to_shift_expectation": 1.042018311656332
+        },
+        {
+          "layer": 49,
+          "observed_collisions": 1192,
+          "independent_cyclic_shift_expected_collisions": 1184.7500000000002,
+          "observed_to_shift_expectation": 1.0061194344798479
+        },
+        {
+          "layer": 50,
+          "observed_collisions": 1185,
+          "independent_cyclic_shift_expected_collisions": 1101.5416666666667,
+          "observed_to_shift_expectation": 1.0757650262889131
+        },
+        {
+          "layer": 51,
+          "observed_collisions": 1104,
+          "independent_cyclic_shift_expected_collisions": 1051.8749999999998,
+          "observed_to_shift_expectation": 1.0495543672014263
+        },
+        {
+          "layer": 52,
+          "observed_collisions": 1297,
+          "independent_cyclic_shift_expected_collisions": 1229.9305555555554,
+          "observed_to_shift_expectation": 1.054531082378183
+        },
+        {
+          "layer": 53,
+          "observed_collisions": 1217,
+          "independent_cyclic_shift_expected_collisions": 1188.1805555555554,
+          "observed_to_shift_expectation": 1.0242551052613122
+        },
+        {
+          "layer": 54,
+          "observed_collisions": 1128,
+          "independent_cyclic_shift_expected_collisions": 1052.0833333333333,
+          "observed_to_shift_expectation": 1.0721584158415842
+        },
+        {
+          "layer": 55,
+          "observed_collisions": 1275,
+          "independent_cyclic_shift_expected_collisions": 1215.0277777777778,
+          "observed_to_shift_expectation": 1.0493587252234744
+        },
+        {
+          "layer": 56,
+          "observed_collisions": 1113,
+          "independent_cyclic_shift_expected_collisions": 1001.4861111111113,
+          "observed_to_shift_expectation": 1.1113484127754585
+        },
+        {
+          "layer": 57,
+          "observed_collisions": 1225,
+          "independent_cyclic_shift_expected_collisions": 1201.1111111111113,
+          "observed_to_shift_expectation": 1.0198889916743754
+        },
+        {
+          "layer": 58,
+          "observed_collisions": 1108,
+          "independent_cyclic_shift_expected_collisions": 1119.513888888889,
+          "observed_to_shift_expectation": 0.9897152782085479
+        },
+        {
+          "layer": 59,
+          "observed_collisions": 1152,
+          "independent_cyclic_shift_expected_collisions": 1138.9444444444443,
+          "observed_to_shift_expectation": 1.011462855470465
+        },
+        {
+          "layer": 60,
+          "observed_collisions": 1174,
+          "independent_cyclic_shift_expected_collisions": 1133.3611111111109,
+          "observed_to_shift_expectation": 1.0358569642900912
+        }
+      ]
+    },
+    {
+      "batch": 8,
+      "ep": 256,
+      "observed_collisions": 48734,
+      "independent_cyclic_shift_expected_collisions": 44499.04166666666,
+      "observed_to_shift_expectation": 1.0951696525299706,
+      "layers": [
+        {
+          "layer": 3,
+          "observed_collisions": 769,
+          "independent_cyclic_shift_expected_collisions": 724.8611111111111,
+          "observed_to_shift_expectation": 1.0608928913584978
+        },
+        {
+          "layer": 4,
+          "observed_collisions": 817,
+          "independent_cyclic_shift_expected_collisions": 775.3055555555555,
+          "observed_to_shift_expectation": 1.053778080326753
+        },
+        {
+          "layer": 5,
+          "observed_collisions": 724,
+          "independent_cyclic_shift_expected_collisions": 663.1111111111111,
+          "observed_to_shift_expectation": 1.0918230563002682
+        },
+        {
+          "layer": 6,
+          "observed_collisions": 699,
+          "independent_cyclic_shift_expected_collisions": 653.9444444444447,
+          "observed_to_shift_expectation": 1.0688981394953696
+        },
+        {
+          "layer": 7,
+          "observed_collisions": 1023,
+          "independent_cyclic_shift_expected_collisions": 939.7638888888887,
+          "observed_to_shift_expectation": 1.0885713018932062
+        },
+        {
+          "layer": 8,
+          "observed_collisions": 1167,
+          "independent_cyclic_shift_expected_collisions": 1084.7777777777778,
+          "observed_to_shift_expectation": 1.0757963740653487
+        },
+        {
+          "layer": 9,
+          "observed_collisions": 790,
+          "independent_cyclic_shift_expected_collisions": 672.8888888888889,
+          "observed_to_shift_expectation": 1.1740422721268164
+        },
+        {
+          "layer": 10,
+          "observed_collisions": 818,
+          "independent_cyclic_shift_expected_collisions": 734.4027777777777,
+          "observed_to_shift_expectation": 1.1138302097320196
+        },
+        {
+          "layer": 11,
+          "observed_collisions": 814,
+          "independent_cyclic_shift_expected_collisions": 695.1388888888888,
+          "observed_to_shift_expectation": 1.170989010989011
+        },
+        {
+          "layer": 12,
+          "observed_collisions": 724,
+          "independent_cyclic_shift_expected_collisions": 611.0694444444446,
+          "observed_to_shift_expectation": 1.1848080550946654
+        },
+        {
+          "layer": 13,
+          "observed_collisions": 670,
+          "independent_cyclic_shift_expected_collisions": 586.1805555555554,
+          "observed_to_shift_expectation": 1.1429925364293332
+        },
+        {
+          "layer": 14,
+          "observed_collisions": 1038,
+          "independent_cyclic_shift_expected_collisions": 911.861111111111,
+          "observed_to_shift_expectation": 1.1383312517135287
+        },
+        {
+          "layer": 15,
+          "observed_collisions": 1120,
+          "independent_cyclic_shift_expected_collisions": 1012.763888888889,
+          "observed_to_shift_expectation": 1.1058846116924257
+        },
+        {
+          "layer": 16,
+          "observed_collisions": 844,
+          "independent_cyclic_shift_expected_collisions": 743.0972222222224,
+          "observed_to_shift_expectation": 1.1357867783114963
+        },
+        {
+          "layer": 17,
+          "observed_collisions": 1471,
+          "independent_cyclic_shift_expected_collisions": 1359.4305555555557,
+          "observed_to_shift_expectation": 1.082070719970576
+        },
+        {
+          "layer": 18,
+          "observed_collisions": 752,
+          "independent_cyclic_shift_expected_collisions": 670.8749999999999,
+          "observed_to_shift_expectation": 1.1209241662008573
+        },
+        {
+          "layer": 19,
+          "observed_collisions": 853,
+          "independent_cyclic_shift_expected_collisions": 684.7777777777778,
+          "observed_to_shift_expectation": 1.245659581372708
+        },
+        {
+          "layer": 20,
+          "observed_collisions": 818,
+          "independent_cyclic_shift_expected_collisions": 686.6944444444445,
+          "observed_to_shift_expectation": 1.1912139476558392
+        },
+        {
+          "layer": 21,
+          "observed_collisions": 750,
+          "independent_cyclic_shift_expected_collisions": 664.7638888888889,
+          "observed_to_shift_expectation": 1.128220128282807
+        },
+        {
+          "layer": 22,
+          "observed_collisions": 1270,
+          "independent_cyclic_shift_expected_collisions": 1176.8055555555557,
+          "observed_to_shift_expectation": 1.0791927298477515
+        },
+        {
+          "layer": 23,
+          "observed_collisions": 1078,
+          "independent_cyclic_shift_expected_collisions": 986.6250000000001,
+          "observed_to_shift_expectation": 1.09261370834917
+        },
+        {
+          "layer": 24,
+          "observed_collisions": 882,
+          "independent_cyclic_shift_expected_collisions": 789.1944444444446,
+          "observed_to_shift_expectation": 1.1175952975960013
+        },
+        {
+          "layer": 25,
+          "observed_collisions": 922,
+          "independent_cyclic_shift_expected_collisions": 834.1388888888889,
+          "observed_to_shift_expectation": 1.1053315128708914
+        },
+        {
+          "layer": 26,
+          "observed_collisions": 881,
+          "independent_cyclic_shift_expected_collisions": 728.1111111111111,
+          "observed_to_shift_expectation": 1.2099801617579735
+        },
+        {
+          "layer": 27,
+          "observed_collisions": 1107,
+          "independent_cyclic_shift_expected_collisions": 1072.8333333333335,
+          "observed_to_shift_expectation": 1.0318471337579616
+        },
+        {
+          "layer": 28,
+          "observed_collisions": 1469,
+          "independent_cyclic_shift_expected_collisions": 1364.0694444444446,
+          "observed_to_shift_expectation": 1.0769246433771495
+        },
+        {
+          "layer": 29,
+          "observed_collisions": 983,
+          "independent_cyclic_shift_expected_collisions": 908.2916666666666,
+          "observed_to_shift_expectation": 1.0822514794256617
+        },
+        {
+          "layer": 30,
+          "observed_collisions": 730,
+          "independent_cyclic_shift_expected_collisions": 665.1111111111111,
+          "observed_to_shift_expectation": 1.0975609756097562
+        },
+        {
+          "layer": 31,
+          "observed_collisions": 642,
+          "independent_cyclic_shift_expected_collisions": 606.2916666666669,
+          "observed_to_shift_expectation": 1.0588962957872308
+        },
+        {
+          "layer": 32,
+          "observed_collisions": 1003,
+          "independent_cyclic_shift_expected_collisions": 897.5416666666669,
+          "observed_to_shift_expectation": 1.1174968664407408
+        },
+        {
+          "layer": 33,
+          "observed_collisions": 712,
+          "independent_cyclic_shift_expected_collisions": 671.5833333333334,
+          "observed_to_shift_expectation": 1.0601811639161185
+        },
+        {
+          "layer": 34,
+          "observed_collisions": 799,
+          "independent_cyclic_shift_expected_collisions": 747.1805555555558,
+          "observed_to_shift_expectation": 1.0693533096641075
+        },
+        {
+          "layer": 35,
+          "observed_collisions": 716,
+          "independent_cyclic_shift_expected_collisions": 663.1666666666667,
+          "observed_to_shift_expectation": 1.0796682583563708
+        },
+        {
+          "layer": 36,
+          "observed_collisions": 793,
+          "independent_cyclic_shift_expected_collisions": 716.8888888888888,
+          "observed_to_shift_expectation": 1.106168629882207
+        },
+        {
+          "layer": 37,
+          "observed_collisions": 655,
+          "independent_cyclic_shift_expected_collisions": 659.875,
+          "observed_to_shift_expectation": 0.9926122371661299
+        },
+        {
+          "layer": 38,
+          "observed_collisions": 1091,
+          "independent_cyclic_shift_expected_collisions": 1036.4583333333333,
+          "observed_to_shift_expectation": 1.0526231155778896
+        },
+        {
+          "layer": 39,
+          "observed_collisions": 822,
+          "independent_cyclic_shift_expected_collisions": 708.4166666666667,
+          "observed_to_shift_expectation": 1.1603340783437242
+        },
+        {
+          "layer": 40,
+          "observed_collisions": 720,
+          "independent_cyclic_shift_expected_collisions": 658.6111111111112,
+          "observed_to_shift_expectation": 1.093209616195698
+        },
+        {
+          "layer": 41,
+          "observed_collisions": 657,
+          "independent_cyclic_shift_expected_collisions": 605.638888888889,
+          "observed_to_shift_expectation": 1.0848048433701782
+        },
+        {
+          "layer": 42,
+          "observed_collisions": 822,
+          "independent_cyclic_shift_expected_collisions": 763.0833333333334,
+          "observed_to_shift_expectation": 1.0772086928033198
+        },
+        {
+          "layer": 43,
+          "observed_collisions": 682,
+          "independent_cyclic_shift_expected_collisions": 634.75,
+          "observed_to_shift_expectation": 1.074438755415518
+        },
+        {
+          "layer": 44,
+          "observed_collisions": 632,
+          "independent_cyclic_shift_expected_collisions": 624.9027777777778,
+          "observed_to_shift_expectation": 1.0113573222501278
+        },
+        {
+          "layer": 45,
+          "observed_collisions": 682,
+          "independent_cyclic_shift_expected_collisions": 627.0555555555555,
+          "observed_to_shift_expectation": 1.0876229290334012
+        },
+        {
+          "layer": 46,
+          "observed_collisions": 794,
+          "independent_cyclic_shift_expected_collisions": 748.5694444444445,
+          "observed_to_shift_expectation": 1.0606898343135982
+        },
+        {
+          "layer": 47,
+          "observed_collisions": 699,
+          "independent_cyclic_shift_expected_collisions": 639.3472222222223,
+          "observed_to_shift_expectation": 1.0933026307214389
+        },
+        {
+          "layer": 48,
+          "observed_collisions": 826,
+          "independent_cyclic_shift_expected_collisions": 791.7916666666665,
+          "observed_to_shift_expectation": 1.043203704678209
+        },
+        {
+          "layer": 49,
+          "observed_collisions": 731,
+          "independent_cyclic_shift_expected_collisions": 722.9166666666667,
+          "observed_to_shift_expectation": 1.0111815561959654
+        },
+        {
+          "layer": 50,
+          "observed_collisions": 757,
+          "independent_cyclic_shift_expected_collisions": 679.8055555555555,
+          "observed_to_shift_expectation": 1.113553712254321
+        },
+        {
+          "layer": 51,
+          "observed_collisions": 700,
+          "independent_cyclic_shift_expected_collisions": 636.6805555555554,
+          "observed_to_shift_expectation": 1.0994524552256715
+        },
+        {
+          "layer": 52,
+          "observed_collisions": 886,
+          "independent_cyclic_shift_expected_collisions": 792.8194444444443,
+          "observed_to_shift_expectation": 1.11753061331745
+        },
+        {
+          "layer": 53,
+          "observed_collisions": 786,
+          "independent_cyclic_shift_expected_collisions": 727.4444444444445,
+          "observed_to_shift_expectation": 1.080494883152589
+        },
+        {
+          "layer": 54,
+          "observed_collisions": 659,
+          "independent_cyclic_shift_expected_collisions": 566.9861111111111,
+          "observed_to_shift_expectation": 1.162285966244519
+        },
+        {
+          "layer": 55,
+          "observed_collisions": 853,
+          "independent_cyclic_shift_expected_collisions": 791.347222222222,
+          "observed_to_shift_expectation": 1.077908629797989
+        },
+        {
+          "layer": 56,
+          "observed_collisions": 675,
+          "independent_cyclic_shift_expected_collisions": 576.7083333333334,
+          "observed_to_shift_expectation": 1.1704356621631384
+        },
+        {
+          "layer": 57,
+          "observed_collisions": 784,
+          "independent_cyclic_shift_expected_collisions": 753.361111111111,
+          "observed_to_shift_expectation": 1.04066959182921
+        },
+        {
+          "layer": 58,
+          "observed_collisions": 690,
+          "independent_cyclic_shift_expected_collisions": 651.9166666666666,
+          "observed_to_shift_expectation": 1.0584174868976097
+        },
+        {
+          "layer": 59,
+          "observed_collisions": 704,
+          "independent_cyclic_shift_expected_collisions": 674.1111111111111,
+          "observed_to_shift_expectation": 1.0443382231745508
+        },
+        {
+          "layer": 60,
+          "observed_collisions": 779,
+          "independent_cyclic_shift_expected_collisions": 722.9027777777778,
+          "observed_to_shift_expectation": 1.077599953889604
+        }
+      ]
+    }
+  ],
+  "reference": "independent_uniform_cyclic_shifts_of_each_request_within_common_prefix",
+  "marginal_rank_popularity_preserved": true,
+  "cyclic_within_request_order_preserved": true,
+  "routes_changed_or_duplicated": false,
+  "future_prediction_claimed": false,
+  "new_networks": 0,
+  "significance_test": false
+}

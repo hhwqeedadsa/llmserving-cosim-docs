@@ -1,0 +1,115 @@
+{
+  "phase_completed": true,
+  "overall_research_goal_completed": false,
+  "monitored_seconds_before_publish": 45.761866610031575,
+  "publish_reserved_seconds": 60,
+  "stage_seconds_limit": 600,
+  "raw_file_count": 15,
+  "independent_requests": 15,
+  "token_layer_rows": 145232,
+  "expert_selections": 1161856,
+  "grouped_ep_waves": 140882,
+  "ep_sizes": [
+    4,
+    8,
+    16,
+    32,
+    64,
+    128,
+    256
+  ],
+  "fixed_source_ranks": 4,
+  "source_confirmation": "All 13 added files from DeepSeek-R1-AWQ/mmlu; 11 complete plus old 4; two incomplete excluded",
+  "source_revision_independently_verified": false,
+  "new_downloads": 0,
+  "new_network_executions": 0,
+  "gpu_executions": 0,
+  "actual_public_compiler_control_checks": [
+    4,
+    8
+  ],
+  "large_ep_packet_execution_proven": false,
+  "conditional_control_formula": "6*R*(R-1) remote, 6*R*R including self; template extrapolation only",
+  "stages_byte_identical_after_offline_recovery": true,
+  "independent_corruption_classes": 4,
+  "dependency_checkouts_checked": 13,
+  "platform_or_dependency_modifications": 0,
+  "pushes": 0,
+  "original_route_files_modified": false,
+  "old_completed_networks_repeated": false,
+  "stage_artifact_limit_bytes": 134217728,
+  "artifact_usage": {
+    "apparent_bytes": 106553178,
+    "allocated_bytes": 107491328
+  },
+  "versioned_artifact_usage": {
+    "apparent_bytes": 836610,
+    "allocated_bytes": 864256
+  },
+  "receipts_reserved_bytes": 2097152,
+  "archive": {
+    "sha256": "750b71f58b31751c682cf05e3638e19d6aa1ddf1ee9cc603df39e1116d56fe05",
+    "members": 201,
+    "compressed_bytes": 3032842,
+    "uncompressed_bytes": 33196292
+  },
+  "result_sha256": {
+    "report.md": "a987c616ac1c5965ee0e127ea699b0b56490972ea6dca128614fc8d6a9b859d6",
+    "report.html": "9151a44655c7e77b09165a58e0ab01e39fce53c0e84e4bc2fefcc69a763e7960",
+    "ep_projection.svg": "dc2a4692a6dd042de366dd5382f20caffde47005dba1cc651882eabe8cebcb5c",
+    "ep_projection.png": "db7886f4dc0f0a2921fafa7c26550bc0719743a80b872bb0579491e0f0e3a88d",
+    "key_metrics.json": "2cf4561447312666b0c10b7c2bdcbc6ccceee8f3874c4599abf191f53fe1e133",
+    "summary.json": "85e0463fe6018ce2c30a0c327b862002f531260d8093b5cba22cfb1f7e2210e6",
+    "marginals.json": "cff4a138c7822b45739eacbb9e1b28e0fe8511fe499fefd6b81187e097b49000",
+    "verification.json": "ed0c2b2785dd2998fe66ab8b2089894444fcbfaed5a5e40f1776ee10a24f3c03",
+    "references.json": "05e93ba5a3de6e81071f57dd9e3ec8770eb2a3a46e63f1987c4705212e5c1819",
+    "recovery.json": "ae3ffa85717a636d77d00fdddafc739716b2c674f0ac01f656f13dd69f229ae5",
+    "checkpoint.json": "77c7e78d0ffd21adfaa5de4b171a932bb1b6c5b033cf7890ce11f967245b287f",
+    "presentation-correction.json": "d1a694fe6075017b2715feb7542f851134095f2dc21ffc4f071af4dcb786e285"
+  },
+  "previous_archive_preserved": {
+    "sha256": "2e67e3b1cc6e25bdfb48c593ae7d56ed383b8f3bbaf4b447de945850551b90b0",
+    "members": 179,
+    "compressed_bytes": 3021263,
+    "uncompressed_bytes": 33133287
+  },
+  "supersedes_closeout": "closeout.json; original preserved",
+  "report_formatting_correction": {
+    "reason": "Matplotlib-generated SVG path lines contain trailing whitespace",
+    "exit_code": 2,
+    "output_lines": 4252,
+    "output_sha256": "111ff83f1abf4266c6fbf90440271cc3e42d9af0b9250c51e2b7f119df3ff09c",
+    "first_lines": [
+      "experiments/ep_network_projection/results/20261027/ep_projection.svg:23: trailing whitespace.",
+      "+   <path d=\"M 0 316.8 ",
+      "experiments/ep_network_projection/results/20261027/ep_projection.svg:24: trailing whitespace.",
+      "+L 864 316.8 ",
+      "experiments/ep_network_projection/results/20261027/ep_projection.svg:25: trailing whitespace.",
+      "+L 864 0 "
+    ],
+    "correction_scope": "report formatting only; prior report and archive retained",
+    "statistics_markdown_png_byte_identical": true,
+    "svg_html_change_only_trailing_whitespace": true,
+    "corrected_report_directory": "report-formatted"
+  },
+  "html_checks": {
+    "tables": 3,
+    "inline_svgs": 1,
+    "remote_assets": []
+  },
+  "final_monitored_seconds": 45.93625729402993,
+  "final_artifact_usage": {
+    "apparent_bytes": 106566009,
+    "allocated_bytes": 107520000
+  },
+  "final_versioned_usage": {
+    "apparent_bytes": 838027,
+    "allocated_bytes": 868352
+  },
+  "git_whitespace_check_passed": true,
+  "staged_path_check": {
+    "passed": true,
+    "receipt": "git-review-corrected.json",
+    "initial_check_failure": "Git text path quoting; corrected by NUL-delimited names; no file content changed"
+  }
+}

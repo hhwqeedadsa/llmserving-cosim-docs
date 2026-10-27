@@ -1,0 +1,82 @@
+{
+  "passed": true,
+  "archive_sha256": "750b71f58b31751c682cf05e3638e19d6aa1ddf1ee9cc603df39e1116d56fe05",
+  "copied_source": true,
+  "empty_cwd": true,
+  "analysis_byte_identical": true,
+  "marginal_reference_byte_identical": true,
+  "verification_byte_identical": true,
+  "reports_and_figures_byte_identical": true,
+  "new_networks": 0,
+  "new_downloads": 0,
+  "new_builds": 0,
+  "historical_native_runtime_required": false,
+  "commands": [
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "experiments.ep_network_projection.study",
+        "analyze",
+        "--run",
+        "/home/lry/moe-ub-cosim/runs/ep_network_projection_20261027/restored-formatted/run",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/ep_network_projection_20261027/restored-formatted/run/recomputed-analysis"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim/runs/ep_network_projection_20261027/restored-formatted/empty-cwd",
+      "exit_code": 0,
+      "stdout": "Projected 15 full traces, 7 EP sizes and 2 batch groupings; zero network execution.\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "experiments.ep_network_projection.marginals",
+        "--run",
+        "/home/lry/moe-ub-cosim/runs/ep_network_projection_20261027/restored-formatted/run",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/ep_network_projection_20261027/restored-formatted/run/recomputed-marginals"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim/runs/ep_network_projection_20261027/restored-formatted/empty-cwd",
+      "exit_code": 0,
+      "stdout": "Computed a stronger rank-popularity-preserving expectation; no network execution.\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "experiments.ep_network_projection.verify",
+        "--run",
+        "/home/lry/moe-ub-cosim/runs/ep_network_projection_20261027/restored-formatted/run",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/ep_network_projection_20261027/restored-formatted/run/reverification.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim/runs/ep_network_projection_20261027/restored-formatted/empty-cwd",
+      "exit_code": 0,
+      "stdout": "Independent EP projection, stronger null and corruption checks passed.\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "experiments.ep_network_projection.report",
+        "report",
+        "--run",
+        "/home/lry/moe-ub-cosim/runs/ep_network_projection_20261027/restored-formatted/run",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/ep_network_projection_20261027/restored-formatted/run/recomputed-report"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim/runs/ep_network_projection_20261027/restored-formatted/empty-cwd",
+      "exit_code": 0,
+      "stdout": "Generated source-backed Chinese review, deterministic SVG and self-contained HTML.\n",
+      "stderr": ""
+    }
+  ]
+}

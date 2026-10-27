@@ -1,0 +1,63 @@
+{
+  "passed": true,
+  "observations": {
+    "batch4-modern": {
+      "complete_state_control_application_identical": true,
+      "phase_sweep_identical": true,
+      "source_packets": 280,
+      "physical_TX": 2528,
+      "trace_sha256": {
+        "old_O0/worker": "1c17a39f5db76881c8c146d4e308ca3ea05599e200aaaf1de2816cc7c4447d2c",
+        "old_O0/native": "0f0c30660c10bf0abe2e2befdbec8997e0d21f887e0f757aaf786192fdf14be3",
+        "optimized_O3/worker": "1d812010c8698f520780aaacd46ca0e7927d2e859cfc834f87e4c3d22d33b30a",
+        "optimized_O3/native": "2f497def40475ddf073ddc8fd81f0dba72e3bb2b570ad6b268a13d1651c9372c"
+      }
+    },
+    "batch4-generic": {
+      "complete_state_control_application_identical": true,
+      "phase_sweep_identical": true,
+      "source_packets": 280,
+      "physical_TX": 2528,
+      "trace_sha256": {
+        "old_O0/worker": "5678bd8ed594c729e1d047257ab12032bee08a403f6a82f6844ac4294bdf46ed",
+        "old_O0/native": "a49120088b809fa23bb5f50e4b5ec6eb60e13d6c0e157048d731b5cdf1adaf62",
+        "optimized_O3/worker": "253cf76ffc99525f8f0ca7c90daeb742977bbe000da4f612bdd6bd1dec89579c",
+        "optimized_O3/native": "eee8fefede8586934f1e296c576ed1eb739c5ee42dda881252548fc1ccc06c6a"
+      }
+    },
+    "batch8-modern": {
+      "complete_state_control_application_identical": true,
+      "phase_sweep_identical": true,
+      "source_packets": 408,
+      "physical_TX": 4000,
+      "trace_sha256": {
+        "old_O0/worker": "3a6ddfb978092f5a1101554ad67c3d0653b2d4fa7a9ae969d8d699e76d29898d",
+        "old_O0/native": "651c5459ef5c0a84297087d613dadfabc9f3af0fff2c641bfc84ef0b53190c6a",
+        "optimized_O3/worker": "58ee50a2cbf59d480f851585c38daa31b6585d31cbd5157c8ef10857e688278d",
+        "optimized_O3/native": "0b9ea4990b1df6a9607c1817acbbd71d2203409667ff76fb0f2aaa02d4f2002b"
+      }
+    },
+    "batch8-generic": {
+      "complete_state_control_application_identical": true,
+      "phase_sweep_identical": true,
+      "source_packets": 408,
+      "physical_TX": 4000,
+      "trace_sha256": {
+        "old_O0/worker": "6a7ec94f652a99c2d914d6e49c638fc9f2f80f1ca5bf7e55018c6acd50c6ca8a",
+        "old_O0/native": "ec62ba3325182d95973376c98182acc76399f4335f86ad4d0a30dbcc2868e6fa",
+        "optimized_O3/worker": "e2c0798df1c0044c91ead21c5f9a5683ff8ee26ae4b35268f29565a0ef71f747",
+        "optimized_O3/native": "c5ae7e8d13362dd9371210e41c814cdf60f77597008b71ca4efdddd13c89207c"
+      }
+    }
+  },
+  "rejected_corruptions": [
+    "parent nesting",
+    "CPU clock regression",
+    "physical packet time",
+    "application event"
+  ],
+  "effective_optimization": "-O3",
+  "loader_metadata_normalization_preregistered": true,
+  "stable_wall_speedup_proven": false,
+  "novel_algorithm_speedup_proven": false
+}

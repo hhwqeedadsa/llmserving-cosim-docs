@@ -1,0 +1,86 @@
+{
+  "state": "completed_research_stage_overall_goal_active",
+  "protocol": "76d034b",
+  "implementation": "b5d962c",
+  "audit": "f08c431",
+  "raw_run": "runs/optimized_host_cost_20261027",
+  "network_observations": 4,
+  "new_physical_benefit_samples": 0,
+  "network_reruns": 0,
+  "new_builds": 0,
+  "downloads": 0,
+  "GPU_executions": 0,
+  "pushes": 0,
+  "platform_changes": 0,
+  "complete_network_control_application_equivalent_conditions": 4,
+  "loader_metadata_normalization_preregistered": true,
+  "independent_phase_methods": 3,
+  "rejected_corruption_classes": 4,
+  "archive": {
+    "sha256": "4d7360e1c18b6847ebeb0fa670aa705232c15bce2b9d0df0279ac4ea127473b9",
+    "members": 450,
+    "compressed_bytes": 15296329,
+    "uncompressed_bytes": 167918543
+  },
+  "archive_path": "runs/optimized_host_cost_20261027/checkpoint.tar.gz",
+  "recovery": {
+    "passed": true,
+    "copied_source": true,
+    "empty_cwd": true,
+    "byte_identical": [
+      "summary.json",
+      "report.md",
+      "report.html",
+      "verification.json"
+    ],
+    "new_networks": 0,
+    "new_builds": 0
+  },
+  "costs": {
+    "batch4-modern": {
+      "native_CPU_fraction": 0.5547420234617196,
+      "run_exclusive_CPU_fraction": 0.036713670295994615,
+      "zero_native_CPU_work_factor": 2.245889018709194
+    },
+    "batch4-generic": {
+      "native_CPU_fraction": 0.5708275247948645,
+      "run_exclusive_CPU_fraction": 0.037292387433193845,
+      "zero_native_CPU_work_factor": 2.3300655512029773
+    },
+    "batch8-modern": {
+      "native_CPU_fraction": 0.5268013542077881,
+      "run_exclusive_CPU_fraction": 0.03879950810109544,
+      "zero_native_CPU_work_factor": 2.113277391835804
+    },
+    "batch8-generic": {
+      "native_CPU_fraction": 0.5543209395041058,
+      "run_exclusive_CPU_fraction": 0.041484284982275,
+      "zero_native_CPU_work_factor": 2.2437670706075554
+    }
+  },
+  "budgets": {
+    "cumulative_wall_limit_s": 600,
+    "cumulative_artifact_limit_bytes": 536870912,
+    "conservative_seconds_including_copied_monitors": 100.5856089220033,
+    "logical_bytes": 349549702,
+    "allocated_bytes": 351059968,
+    "versioned_sources_and_results_bytes": 104767,
+    "reserved_receipt_bytes": 2097152,
+    "host_seconds_per_command": 60,
+    "RSS_bytes": 1073741824,
+    "address_bytes": 2147483648,
+    "host_records_limit": 65536
+  },
+  "pure_packet_CPU_measured": false,
+  "stable_wall_speedup_proven": false,
+  "novel_algorithm_speedup_proven": false,
+  "hardware_calibrated": false,
+  "thousand_GPU_execution_proven": false,
+  "retained_failures": [],
+  "research_decision": "Use optimized baseline: native share around 53-57%, mixed Run exclusive around 3.7-4.2%; prioritize full workflow validation/copy/progress costs before investing in packet aggregation. No paper innovation or stable wall-time speedup proven.",
+  "source_sha256": {
+    "experiments/optimized_host_cost/study.py": "f869ee9cd26ea6cae61e2f6d8e10985e021b128cf84f634382e9ac4130f32633",
+    "experiments/optimized_host_cost/verify.py": "980d9e5ccbbd6112ca8c449d1444cdf4b06fdfa38d5d1d2ab2c2c865553f0197",
+    "experiments/optimized_host_cost/checkpoint.py": "b620cf8f652e4a543d708ba359949d5e1a98d4fb88c98dbb5c6aa2182b88a534"
+  }
+}

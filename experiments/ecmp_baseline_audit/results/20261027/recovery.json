@@ -1,0 +1,62 @@
+{
+  "passed": true,
+  "archive_sha256": "90de588ca3de8b98eb474147e8b5e04a2475112c53ed2755aa53b0df40f6c03b",
+  "copied_source": true,
+  "empty_cwd": true,
+  "all_predictions_identical": true,
+  "verification_identical": true,
+  "reports_identical": true,
+  "new_networks": 0,
+  "new_builds": 0,
+  "commands": [
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "experiments.ecmp_baseline_audit.model",
+        "--observed",
+        "/home/lry/moe-ub-cosim/runs/ecmp_baseline_audit_20261027/recovered/run/observed",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/ecmp_baseline_audit_20261027/recovered/run/recomputed-predictions"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim/runs/ecmp_baseline_audit_20261027/recovered/empty-cwd",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "experiments.ecmp_baseline_audit.verify",
+        "--run",
+        "/home/lry/moe-ub-cosim/runs/ecmp_baseline_audit_20261027/recovered/run",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/ecmp_baseline_audit_20261027/recovered/run/recomputed-verification.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim/runs/ecmp_baseline_audit_20261027/recovered/empty-cwd",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "experiments.ecmp_baseline_audit.study",
+        "report",
+        "--run",
+        "/home/lry/moe-ub-cosim/runs/ecmp_baseline_audit_20261027/recovered/run",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/ecmp_baseline_audit_20261027/recovered/run/recomputed-report"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim/runs/ecmp_baseline_audit_20261027/recovered/empty-cwd",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ]
+}

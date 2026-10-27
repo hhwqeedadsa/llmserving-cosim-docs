@@ -1,0 +1,90 @@
+{
+  "passed": true,
+  "native_connections": 67,
+  "native_remote_operations": 200,
+  "path_queries": 795,
+  "hash_checks": 2895,
+  "source_locations": {
+    "predictor": {
+      "path": "sources/predictor.py",
+      "repository_path": "experiments/shared_uplink_choice/predict.py",
+      "sha256": "9a36971132e677e9da80804b9f65d9a8bb4afa6b6496b241a973d5d66fd7fa56",
+      "anchor_lines": [
+        79
+      ]
+    },
+    "fabric": {
+      "path": "sources/fabric.cc",
+      "repository_path": "backend/rdma/fabric.cc",
+      "sha256": "6f0e537739a9a39e4225c9aae5faeafe58a4f06349bac8a948f6c8097513f70e",
+      "anchor_lines": [
+        151
+      ]
+    },
+    "modern_binding": {
+      "path": "sources/modern_binding.py",
+      "repository_path": "python/moe_ub_cosim/modern_native_layout.py",
+      "sha256": "8a3e653e945d9bbb4592f263faaae7a4a3f18f4407ddd5b023172dfc2b9a5b1d",
+      "anchor_lines": [
+        95
+      ]
+    },
+    "streams": {
+      "path": "sources/streams.cc",
+      "repository_path": "backend/rdma/persistent_streams.cc",
+      "sha256": "dec6dc0877e605de06ce360a720beeada9de7785731bf9ca843af3db6208dcfd",
+      "anchor_lines": [
+        843
+      ]
+    },
+    "cnp_projection": {
+      "path": "sources/cnp_projection.hh",
+      "repository_path": "backend/rdma/cnp_switch.hh",
+      "sha256": "3f1166d5487c6c43b075ede4b4af96e0d30a3e93c43527e83ea61fbee63fefb5",
+      "anchor_lines": [
+        19
+      ]
+    },
+    "native_switch": {
+      "path": "sources/native_switch.cc",
+      "repository_path": "third_party/LLMServingSim/astra-sim/extern/network_backend/ns-3/src/point-to-point/model/switch-node.cc",
+      "sha256": "f8b72cacbfe1d2d228f2acc4d231d9c1ff1168c29a5eba591b293ef3f33add2e",
+      "anchor_lines": [
+        88
+      ]
+    },
+    "native_host": {
+      "path": "sources/native_host.cc",
+      "repository_path": "third_party/LLMServingSim/astra-sim/extern/network_backend/ns-3/src/point-to-point/model/rdma-hw.cc",
+      "sha256": "378100572c4518f7d72135beba713885006187e72d1a8d94c1bf1d8355315a57",
+      "anchor_lines": [
+        233
+      ]
+    },
+    "alibaba_switch": {
+      "path": "sources/alibaba_switch.cc",
+      "repository_path": "data/research/ns-3-alibabacloud-3e0c7c1/simulation/src/point-to-point/model/switch-node.cc",
+      "sha256": "ca9155851134a9ff51b27dc13b96a3a383bae61136ea7026b567ccf9acece21b",
+      "anchor_lines": [
+        88
+      ]
+    },
+    "alibaba_host": {
+      "path": "sources/alibaba_host.cc",
+      "repository_path": "data/research/ns-3-alibabacloud-3e0c7c1/simulation/src/point-to-point/model/rdma-hw.cc",
+      "sha256": "99af828b2a93ddd786d34317cbf2af77f2b6d70c14784fc7617b1b41eb88e3db",
+      "anchor_lines": [
+        812
+      ]
+    }
+  },
+  "corruption_rejections": {
+    "source_hash": true,
+    "connection_port": true,
+    "candidate_order": true,
+    "demand_bytes": true
+  },
+  "observed_only_prediction": true,
+  "multipath_native_networks_executed": 0,
+  "physical_timing_or_speedup_verified": false
+}

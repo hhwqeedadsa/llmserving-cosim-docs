@@ -1,0 +1,670 @@
+{
+  "schema_version": "ecmp-baseline-audit/1",
+  "cases": {
+    "batch4-cores1": {
+      "maximum_shortest_paths": 1,
+      "stages": [
+        {
+          "stage": "dispatch.entry",
+          "deterministic_peak_service_ns": 102.4,
+          "equal_path_peak_service_ns": 102.4,
+          "peak_service_ratio": 1.0,
+          "exact_service_fraction": [
+            512,
+            5
+          ],
+          "split_service_fraction": [
+            512,
+            5
+          ],
+          "agg_core_hop_bytes": 1280
+        },
+        {
+          "stage": "dispatch.counts",
+          "deterministic_peak_service_ns": 747.52,
+          "equal_path_peak_service_ns": 747.52,
+          "peak_service_ratio": 1.0,
+          "exact_service_fraction": [
+            18688,
+            25
+          ],
+          "split_service_fraction": [
+            18688,
+            25
+          ],
+          "agg_core_hop_bytes": 9344
+        },
+        {
+          "stage": "dispatch.data",
+          "deterministic_peak_service_ns": 13916.16,
+          "equal_path_peak_service_ns": 13916.16,
+          "peak_service_ratio": 1.0,
+          "exact_service_fraction": [
+            347904,
+            25
+          ],
+          "split_service_fraction": [
+            347904,
+            25
+          ],
+          "agg_core_hop_bytes": 173952
+        },
+        {
+          "stage": "dispatch.exit",
+          "deterministic_peak_service_ns": 102.4,
+          "equal_path_peak_service_ns": 102.4,
+          "peak_service_ratio": 1.0,
+          "exact_service_fraction": [
+            512,
+            5
+          ],
+          "split_service_fraction": [
+            512,
+            5
+          ],
+          "agg_core_hop_bytes": 1280
+        },
+        {
+          "stage": "combine.entry",
+          "deterministic_peak_service_ns": 102.4,
+          "equal_path_peak_service_ns": 102.4,
+          "peak_service_ratio": 1.0,
+          "exact_service_fraction": [
+            512,
+            5
+          ],
+          "split_service_fraction": [
+            512,
+            5
+          ],
+          "agg_core_hop_bytes": 1280
+        },
+        {
+          "stage": "combine.data",
+          "deterministic_peak_service_ns": 13854.72,
+          "equal_path_peak_service_ns": 13854.72,
+          "peak_service_ratio": 1.0,
+          "exact_service_fraction": [
+            346368,
+            25
+          ],
+          "split_service_fraction": [
+            346368,
+            25
+          ],
+          "agg_core_hop_bytes": 173184
+        },
+        {
+          "stage": "combine.exit",
+          "deterministic_peak_service_ns": 102.4,
+          "equal_path_peak_service_ns": 102.4,
+          "peak_service_ratio": 1.0,
+          "exact_service_fraction": [
+            512,
+            5
+          ],
+          "split_service_fraction": [
+            512,
+            5
+          ],
+          "agg_core_hop_bytes": 1280
+        }
+      ]
+    },
+    "batch4-cores2": {
+      "maximum_shortest_paths": 2,
+      "stages": [
+        {
+          "stage": "dispatch.entry",
+          "deterministic_peak_service_ns": 89.6,
+          "equal_path_peak_service_ns": 51.2,
+          "peak_service_ratio": 1.75,
+          "exact_service_fraction": [
+            448,
+            5
+          ],
+          "split_service_fraction": [
+            256,
+            5
+          ],
+          "agg_core_hop_bytes": 1280
+        },
+        {
+          "stage": "dispatch.counts",
+          "deterministic_peak_service_ns": 560.64,
+          "equal_path_peak_service_ns": 373.76,
+          "peak_service_ratio": 1.5,
+          "exact_service_fraction": [
+            14016,
+            25
+          ],
+          "split_service_fraction": [
+            9344,
+            25
+          ],
+          "agg_core_hop_bytes": 9344
+        },
+        {
+          "stage": "dispatch.data",
+          "deterministic_peak_service_ns": 9277.44,
+          "equal_path_peak_service_ns": 6958.08,
+          "peak_service_ratio": 1.3333333333333333,
+          "exact_service_fraction": [
+            231936,
+            25
+          ],
+          "split_service_fraction": [
+            173952,
+            25
+          ],
+          "agg_core_hop_bytes": 173952
+        },
+        {
+          "stage": "dispatch.exit",
+          "deterministic_peak_service_ns": 89.6,
+          "equal_path_peak_service_ns": 51.2,
+          "peak_service_ratio": 1.75,
+          "exact_service_fraction": [
+            448,
+            5
+          ],
+          "split_service_fraction": [
+            256,
+            5
+          ],
+          "agg_core_hop_bytes": 1280
+        },
+        {
+          "stage": "combine.entry",
+          "deterministic_peak_service_ns": 89.6,
+          "equal_path_peak_service_ns": 51.2,
+          "peak_service_ratio": 1.75,
+          "exact_service_fraction": [
+            448,
+            5
+          ],
+          "split_service_fraction": [
+            256,
+            5
+          ],
+          "agg_core_hop_bytes": 1280
+        },
+        {
+          "stage": "combine.data",
+          "deterministic_peak_service_ns": 13854.72,
+          "equal_path_peak_service_ns": 6927.36,
+          "peak_service_ratio": 2.0,
+          "exact_service_fraction": [
+            346368,
+            25
+          ],
+          "split_service_fraction": [
+            173184,
+            25
+          ],
+          "agg_core_hop_bytes": 173184
+        },
+        {
+          "stage": "combine.exit",
+          "deterministic_peak_service_ns": 89.6,
+          "equal_path_peak_service_ns": 51.2,
+          "peak_service_ratio": 1.75,
+          "exact_service_fraction": [
+            448,
+            5
+          ],
+          "split_service_fraction": [
+            256,
+            5
+          ],
+          "agg_core_hop_bytes": 1280
+        }
+      ]
+    },
+    "batch4-cores4": {
+      "maximum_shortest_paths": 4,
+      "stages": [
+        {
+          "stage": "dispatch.entry",
+          "deterministic_peak_service_ns": 51.2,
+          "equal_path_peak_service_ns": 25.6,
+          "peak_service_ratio": 2.0,
+          "exact_service_fraction": [
+            256,
+            5
+          ],
+          "split_service_fraction": [
+            128,
+            5
+          ],
+          "agg_core_hop_bytes": 1280
+        },
+        {
+          "stage": "dispatch.counts",
+          "deterministic_peak_service_ns": 373.76,
+          "equal_path_peak_service_ns": 186.88,
+          "peak_service_ratio": 2.0,
+          "exact_service_fraction": [
+            9344,
+            25
+          ],
+          "split_service_fraction": [
+            4672,
+            25
+          ],
+          "agg_core_hop_bytes": 9344
+        },
+        {
+          "stage": "dispatch.data",
+          "deterministic_peak_service_ns": 9277.44,
+          "equal_path_peak_service_ns": 3479.04,
+          "peak_service_ratio": 2.6666666666666665,
+          "exact_service_fraction": [
+            231936,
+            25
+          ],
+          "split_service_fraction": [
+            86976,
+            25
+          ],
+          "agg_core_hop_bytes": 173952
+        },
+        {
+          "stage": "dispatch.exit",
+          "deterministic_peak_service_ns": 51.2,
+          "equal_path_peak_service_ns": 25.6,
+          "peak_service_ratio": 2.0,
+          "exact_service_fraction": [
+            256,
+            5
+          ],
+          "split_service_fraction": [
+            128,
+            5
+          ],
+          "agg_core_hop_bytes": 1280
+        },
+        {
+          "stage": "combine.entry",
+          "deterministic_peak_service_ns": 51.2,
+          "equal_path_peak_service_ns": 25.6,
+          "peak_service_ratio": 2.0,
+          "exact_service_fraction": [
+            256,
+            5
+          ],
+          "split_service_fraction": [
+            128,
+            5
+          ],
+          "agg_core_hop_bytes": 1280
+        },
+        {
+          "stage": "combine.data",
+          "deterministic_peak_service_ns": 13854.72,
+          "equal_path_peak_service_ns": 3463.68,
+          "peak_service_ratio": 4.0,
+          "exact_service_fraction": [
+            346368,
+            25
+          ],
+          "split_service_fraction": [
+            86592,
+            25
+          ],
+          "agg_core_hop_bytes": 173184
+        },
+        {
+          "stage": "combine.exit",
+          "deterministic_peak_service_ns": 51.2,
+          "equal_path_peak_service_ns": 25.6,
+          "peak_service_ratio": 2.0,
+          "exact_service_fraction": [
+            256,
+            5
+          ],
+          "split_service_fraction": [
+            128,
+            5
+          ],
+          "agg_core_hop_bytes": 1280
+        }
+      ]
+    },
+    "batch8-cores1": {
+      "maximum_shortest_paths": 1,
+      "stages": [
+        {
+          "stage": "dispatch.entry",
+          "deterministic_peak_service_ns": 102.4,
+          "equal_path_peak_service_ns": 102.4,
+          "peak_service_ratio": 1.0,
+          "exact_service_fraction": [
+            512,
+            5
+          ],
+          "split_service_fraction": [
+            512,
+            5
+          ],
+          "agg_core_hop_bytes": 1280
+        },
+        {
+          "stage": "dispatch.counts",
+          "deterministic_peak_service_ns": 747.52,
+          "equal_path_peak_service_ns": 747.52,
+          "peak_service_ratio": 1.0,
+          "exact_service_fraction": [
+            18688,
+            25
+          ],
+          "split_service_fraction": [
+            18688,
+            25
+          ],
+          "agg_core_hop_bytes": 9344
+        },
+        {
+          "stage": "dispatch.data",
+          "deterministic_peak_service_ns": 27832.32,
+          "equal_path_peak_service_ns": 27832.32,
+          "peak_service_ratio": 1.0,
+          "exact_service_fraction": [
+            695808,
+            25
+          ],
+          "split_service_fraction": [
+            695808,
+            25
+          ],
+          "agg_core_hop_bytes": 347904
+        },
+        {
+          "stage": "dispatch.exit",
+          "deterministic_peak_service_ns": 102.4,
+          "equal_path_peak_service_ns": 102.4,
+          "peak_service_ratio": 1.0,
+          "exact_service_fraction": [
+            512,
+            5
+          ],
+          "split_service_fraction": [
+            512,
+            5
+          ],
+          "agg_core_hop_bytes": 1280
+        },
+        {
+          "stage": "combine.entry",
+          "deterministic_peak_service_ns": 102.4,
+          "equal_path_peak_service_ns": 102.4,
+          "peak_service_ratio": 1.0,
+          "exact_service_fraction": [
+            512,
+            5
+          ],
+          "split_service_fraction": [
+            512,
+            5
+          ],
+          "agg_core_hop_bytes": 1280
+        },
+        {
+          "stage": "combine.data",
+          "deterministic_peak_service_ns": 27709.44,
+          "equal_path_peak_service_ns": 27709.44,
+          "peak_service_ratio": 1.0,
+          "exact_service_fraction": [
+            692736,
+            25
+          ],
+          "split_service_fraction": [
+            692736,
+            25
+          ],
+          "agg_core_hop_bytes": 346368
+        },
+        {
+          "stage": "combine.exit",
+          "deterministic_peak_service_ns": 102.4,
+          "equal_path_peak_service_ns": 102.4,
+          "peak_service_ratio": 1.0,
+          "exact_service_fraction": [
+            512,
+            5
+          ],
+          "split_service_fraction": [
+            512,
+            5
+          ],
+          "agg_core_hop_bytes": 1280
+        }
+      ]
+    },
+    "batch8-cores2": {
+      "maximum_shortest_paths": 2,
+      "stages": [
+        {
+          "stage": "dispatch.entry",
+          "deterministic_peak_service_ns": 76.8,
+          "equal_path_peak_service_ns": 51.2,
+          "peak_service_ratio": 1.5,
+          "exact_service_fraction": [
+            384,
+            5
+          ],
+          "split_service_fraction": [
+            256,
+            5
+          ],
+          "agg_core_hop_bytes": 1280
+        },
+        {
+          "stage": "dispatch.counts",
+          "deterministic_peak_service_ns": 747.52,
+          "equal_path_peak_service_ns": 373.76,
+          "peak_service_ratio": 2.0,
+          "exact_service_fraction": [
+            18688,
+            25
+          ],
+          "split_service_fraction": [
+            9344,
+            25
+          ],
+          "agg_core_hop_bytes": 9344
+        },
+        {
+          "stage": "dispatch.data",
+          "deterministic_peak_service_ns": 18554.88,
+          "equal_path_peak_service_ns": 13916.16,
+          "peak_service_ratio": 1.3333333333333333,
+          "exact_service_fraction": [
+            463872,
+            25
+          ],
+          "split_service_fraction": [
+            347904,
+            25
+          ],
+          "agg_core_hop_bytes": 347904
+        },
+        {
+          "stage": "dispatch.exit",
+          "deterministic_peak_service_ns": 76.8,
+          "equal_path_peak_service_ns": 51.2,
+          "peak_service_ratio": 1.5,
+          "exact_service_fraction": [
+            384,
+            5
+          ],
+          "split_service_fraction": [
+            256,
+            5
+          ],
+          "agg_core_hop_bytes": 1280
+        },
+        {
+          "stage": "combine.entry",
+          "deterministic_peak_service_ns": 76.8,
+          "equal_path_peak_service_ns": 51.2,
+          "peak_service_ratio": 1.5,
+          "exact_service_fraction": [
+            384,
+            5
+          ],
+          "split_service_fraction": [
+            256,
+            5
+          ],
+          "agg_core_hop_bytes": 1280
+        },
+        {
+          "stage": "combine.data",
+          "deterministic_peak_service_ns": 23091.2,
+          "equal_path_peak_service_ns": 13854.72,
+          "peak_service_ratio": 1.6666666666666667,
+          "exact_service_fraction": [
+            115456,
+            5
+          ],
+          "split_service_fraction": [
+            346368,
+            25
+          ],
+          "agg_core_hop_bytes": 346368
+        },
+        {
+          "stage": "combine.exit",
+          "deterministic_peak_service_ns": 76.8,
+          "equal_path_peak_service_ns": 51.2,
+          "peak_service_ratio": 1.5,
+          "exact_service_fraction": [
+            384,
+            5
+          ],
+          "split_service_fraction": [
+            256,
+            5
+          ],
+          "agg_core_hop_bytes": 1280
+        }
+      ]
+    },
+    "batch8-cores4": {
+      "maximum_shortest_paths": 4,
+      "stages": [
+        {
+          "stage": "dispatch.entry",
+          "deterministic_peak_service_ns": 51.2,
+          "equal_path_peak_service_ns": 25.6,
+          "peak_service_ratio": 2.0,
+          "exact_service_fraction": [
+            256,
+            5
+          ],
+          "split_service_fraction": [
+            128,
+            5
+          ],
+          "agg_core_hop_bytes": 1280
+        },
+        {
+          "stage": "dispatch.counts",
+          "deterministic_peak_service_ns": 373.76,
+          "equal_path_peak_service_ns": 186.88,
+          "peak_service_ratio": 2.0,
+          "exact_service_fraction": [
+            9344,
+            25
+          ],
+          "split_service_fraction": [
+            4672,
+            25
+          ],
+          "agg_core_hop_bytes": 9344
+        },
+        {
+          "stage": "dispatch.data",
+          "deterministic_peak_service_ns": 13916.16,
+          "equal_path_peak_service_ns": 6958.08,
+          "peak_service_ratio": 2.0,
+          "exact_service_fraction": [
+            347904,
+            25
+          ],
+          "split_service_fraction": [
+            173952,
+            25
+          ],
+          "agg_core_hop_bytes": 347904
+        },
+        {
+          "stage": "dispatch.exit",
+          "deterministic_peak_service_ns": 51.2,
+          "equal_path_peak_service_ns": 25.6,
+          "peak_service_ratio": 2.0,
+          "exact_service_fraction": [
+            256,
+            5
+          ],
+          "split_service_fraction": [
+            128,
+            5
+          ],
+          "agg_core_hop_bytes": 1280
+        },
+        {
+          "stage": "combine.entry",
+          "deterministic_peak_service_ns": 51.2,
+          "equal_path_peak_service_ns": 25.6,
+          "peak_service_ratio": 2.0,
+          "exact_service_fraction": [
+            256,
+            5
+          ],
+          "split_service_fraction": [
+            128,
+            5
+          ],
+          "agg_core_hop_bytes": 1280
+        },
+        {
+          "stage": "combine.data",
+          "deterministic_peak_service_ns": 23091.2,
+          "equal_path_peak_service_ns": 6927.36,
+          "peak_service_ratio": 3.3333333333333335,
+          "exact_service_fraction": [
+            115456,
+            5
+          ],
+          "split_service_fraction": [
+            173184,
+            25
+          ],
+          "agg_core_hop_bytes": 346368
+        },
+        {
+          "stage": "combine.exit",
+          "deterministic_peak_service_ns": 51.2,
+          "equal_path_peak_service_ns": 25.6,
+          "peak_service_ratio": 2.0,
+          "exact_service_fraction": [
+            256,
+            5
+          ],
+          "split_service_fraction": [
+            128,
+            5
+          ],
+          "agg_core_hop_bytes": 1280
+        }
+      ]
+    }
+  },
+  "new_networks": 0,
+  "hardware_calibrated": false,
+  "latency_measured": false,
+  "new_algorithm_benefit_proven": false,
+  "equal_path_reference_is_hash_expectation": false
+}

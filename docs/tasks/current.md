@@ -13,7 +13,9 @@
 
 ## 当前范围和预算
 
-当前研究`in_progress`：[多路径预测边界与连接需求核查](../../experiments/ecmp_baseline_audit/protocol.md)，平台`1c94423`。以新增完整真实请求的batch4/8公开计划，离线比较1/2/4核心图中的固定ECMP连接需求与最短路径等分参考；分离后端能力、快速预测适用范围和实际网络收益。600受监控秒/256MiB、单命令60秒/RSS1GiB/地址2GiB，最多三次公开拓扑生成，零新网络/构建/下载/GPU/依赖修改/push。先保存协议再执行；普通哈希/多路径功能不作创新，两主候选继续进行中。
+当前研究`completed`：[多路径预测边界与连接需求核查](../../experiments/ecmp_baseline_audit/README.md)、[事前协议](../../experiments/ecmp_baseline_audit/protocol.md)、[报告网页](../../experiments/ecmp_baseline_audit/results/20261027/report.html)，平台`1c94423`、协议`fb67975`。固定新增八份完整真实请求的batch4/8公开计划，三次公开拓扑生成、六条件离线核算。四核心时Dispatch数据峰值帧服务量为最短路径等分参考2.667/2.000倍、Combine为4.000/3.333倍；普通输入哈希即可解释，不是实测时延、可避免收益或随机哈希期望。单核心两参考逐项一致；后端已有ECMP/反馈/选择重传/故障，旧link_phase仅限唯一最短路，不能把预测器的拒绝写成竞品缺功能。
+
+独立核对67个实际旧连接、200项远端操作需求、795组完整简单最短路径、2895个完整哈希值及选路；来源/端口/候选顺序/字节四类篡改拒绝，13固定依赖通过。首次checker漏读put的source窗口长度，失败源码/日志/原failure_preserved账目保留；只修核验器，不重做成功准备/拓扑/预测。124成员/19,490,231B逐hash包，从复制研究源码/空cwd重算全部预测、核验和Markdown/HTML逐字节一致，零新网络/构建；SHA256 `90de588ca3de8b98eb474147e8b5e04a2475112c53ed2755aa53b0df40f6c03b`，原件`runs/ecmp_baseline_audit_20261027/`。受监控4.246秒、分配产物约40.14MiB及2MiB/10秒预留，保持600秒/256MiB和单命令60秒/RSS1GiB/地址2GiB；无下载/GPU/平台依赖修改/push。阶段预算关闭，下一网络研究须把确定性连接哈希列为普通强基线，再检验反馈/到达是否造成有代价误选；本轮没有多路径包级执行、配置后悔值或宿主加速，两主创新与整体目标仍`in_progress`。
 
 当前研究`completed`：[固定校验复用完整成本](../../experiments/static_validation_cost/README.md)、[事前协议](../../experiments/static_validation_cost/protocol.md)、[去留决定](../../experiments/static_validation_cost/decision.md)，平台`0ab7b50`、协议`6ab49f6`。四个真实路由batch/执行器条件各三对无细粒度日志测量共24次，另四次带记录诊断，全部保持旧完整result/control/应用。CPU倍率中位数batch4-modern/generic与batch8-modern/generic依次0.985/1.009/1.050/1.010，墙钟1.003/1.004/1.054/0.983；四条件均未达事前工程阈值，三对不足以声称统计显著，不能将命中次数当提速。缓存继续默认关闭，不作为论文加速正例或追加有利条件。
 

@@ -1,0 +1,39 @@
+{
+  "passed": true,
+  "phase": "completed_with_preserved_checker_failure",
+  "original_execution_sha256": "33f2296ddb1d62826e9f8c326be33aa5cf554d196aa640f8db30f745930789f9",
+  "original_execution_unchanged": true,
+  "records": [
+    {
+      "label": "report-rendered",
+      "status": "completed",
+      "exit_code": 0
+    },
+    {
+      "label": "checkpoint",
+      "status": "completed",
+      "exit_code": 0
+    },
+    {
+      "label": "recovery",
+      "status": "completed",
+      "exit_code": 0
+    }
+  ],
+  "monitored_seconds": 4.245897995991982,
+  "artifact_usage": {
+    "apparent_bytes": 41527902,
+    "allocated_bytes": 42082304
+  },
+  "receipt_reserve_bytes": 2097152,
+  "management_reserve_seconds": 10,
+  "time_budget_seconds": 600,
+  "artifact_budget_bytes": 268435456,
+  "new_networks": 0,
+  "topology_generations": 3,
+  "successful_topology_or_prediction_reruns": 0,
+  "builds": 0,
+  "downloads": 0,
+  "gpu_runs": 0,
+  "pushes": 0
+}

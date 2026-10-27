@@ -45,6 +45,10 @@ def parser():
     hp = sc.add_parser('hybrid-deepep-plan', help='Compile bounded server/rail routing, counts and Dispatch tail obligations; not a complete Hybrid DAG or network execution')
     hp.add_argument('--config', type=Path, required=True, help='Hybrid logical input/1 with explicit domains/rails, BF16 model and choices')
     hp.add_argument('--output', type=Path, required=True, help='New directory for input, logical plan and hash manifest')
+    hb = sc.add_parser('hybrid-deepep-bind', help='Bind Hybrid Dispatch to declared persistent GDAKI DB resources; no network or Combine execution')
+    hb.add_argument('--plan', type=Path, required=True, help='Directory from hybrid-deepep-plan; requires at least two declared SMs')
+    hb.add_argument('--provider', type=Path, required=True, help='Explicit handler, contexts, GIN stride and local-device declarations')
+    hb.add_argument('--output', type=Path, required=True, help='New portable directory for inputs, bindings and hash manifest')
     hr = sc.add_parser('hybrid-deepep-replay', help='Check caller-declared Dispatch visibility and round-robin admission; no transport, final GPU slots or Combine execution')
     hr.add_argument('--plan', type=Path, required=True, help='Directory from hybrid-deepep-plan; integrity and input semantics checked')
     hr.add_argument('--actions', type=Path, required=True, help='Explicit data_visible, tail_visible and forward_step declarations; prefixes allowed')
@@ -231,6 +235,9 @@ def main(argv=None):
             elif args.scaleout_command == 'hybrid-deepep-plan':
                 from .hybrid_deepep_plan import execute
                 value = execute(args.config, args.output)
+            elif args.scaleout_command == 'hybrid-deepep-bind':
+                from .hybrid_deepep_bindings import execute
+                value = execute(args.plan, args.provider, args.output)
             elif args.scaleout_command == 'hybrid-deepep-replay':
                 from .hybrid_deepep_progress import replay
                 value = replay(args.plan, args.actions, args.output)

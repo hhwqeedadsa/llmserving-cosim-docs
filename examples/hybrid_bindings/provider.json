@@ -1,0 +1,17 @@
+{
+  "schema_version": "moe-hybrid-provider-input/1",
+  "devcomm": "two-layer-shared-comm",
+  "backend": "nccl_gin_gdaki",
+  "nic_handler": "gpu_sm_db",
+  "call_contexts": 3,
+  "requested_contexts": 3,
+  "connections": 2,
+  "gin_connection_stride": 2,
+  "local_devices": [[10, 11], [20, 21], [30, 31], [40, 41]],
+  "limits": {
+    "max_bindings": 32768,
+    "max_resources": 8192,
+    "max_input_bytes": 1048576,
+    "max_output_bytes": 16777216
+  }
+}

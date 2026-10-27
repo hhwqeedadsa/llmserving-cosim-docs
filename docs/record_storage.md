@@ -5,6 +5,8 @@
 
 分层逻辑入口输出`moe-hybrid-logical-plan/1`及`moe-hybrid-logical-manifest/1`，保存逐token数据、转发、Combine贡献分区、计数块、通道数据序列及tail/finish义务；hash和重新编译都参与回放准入。`moe-hybrid-progress-replay/1`保存调用者动作、每转发器缓存tail/finish、已消费数量及admissions顺序。`domain_channel_slot`仅是某源通道到目标域的有序位置；`gpu_slot/schedule`为空，不能用于反推真实slot/时间。`admission_complete`及`all_forwarder_admissions_complete`不是collective/网络完成；所有`scope`能力标记仍为false。字段、字节口径及遗漏协议见[分层逻辑示例](../examples/hybrid_logical/README.md)。
 
+`moe-hybrid-dispatch-bindings/1`及`moe-hybrid-bindings-manifest/1`保存原逻辑/provider输入、持久资源表、逐请求绑定、计数API顺序及逐peer数据/进度顺序。文件数组顺序不是WQE预约或网络顺序；`operand_bytes`是请求操作数，不是线上字节，资源数也不是包数。world/rail/provider peer分开记录，同devcomm跨call不重建资源。读取时核hash及重新编译；Combine仍未绑定，没有时间或完整调用结果，见[四文件输出](../examples/hybrid_bindings/README.md#输出怎么看)。
+
 两个会话入口显式开启`--reuse-static-validation`时，退出时另存`static-validation.json`，格式`moe-static-stream-validation/1`。`calls`为静态子检查请求数，`hits`为复用数，`validations`为实际原校验尝试数（包括失败），满足`calls=hits+validations`；`unkeyable`为不支持的类型或递归输入而回退的次数，`entries`仅为0或1。`host_only=true`，没有时长信息，不属于网络/算法观察输入。关闭时不生成；主result、控制消息和原生协议不添加缓存字段。用法见[会话复用说明](../examples/modern_deepep_native/README.md#可选的固定校验复用)。
 
 `modern-deepep-native`另存`modern-plan.json/modern-execution.json`和实际`control.jsonl/result.json`；现代事件以`native_operation/native_event/native_time_ns`指向实际回调，纯零时长控制步骤单独标记。失败保留部分执行，不把输出文件存在当完成证明；字段见[输出说明](../examples/modern_deepep_native/README.md#输出)。

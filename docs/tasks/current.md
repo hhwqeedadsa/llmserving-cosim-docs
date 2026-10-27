@@ -13,7 +13,11 @@
 
 ## 当前范围和预算
 
-当前平台增量`in_progress`：[Hybrid Dispatch持久资源绑定规范](hybrid_binding_spec.md)，起点`cdd52b3`。完整Hybrid联合执行的前置步骤，明确provider/handler、context/设备/peer转换和自域copy/atomic与GIN self的不同；不把绑定当论文创新。新增公开绑定/加载入口与便携示例，覆盖两调用共享与通道通知，不推断发布时刻或绑定未解析Combine。600受监控秒/128MiB含2MiB/10秒管理，单命令60秒/RSS1GiB/地址2GiB/保留128MiB；零网络、构建、GPU、下载、依赖修改/push。与研究分开验收，不重开旧条件，两个创新及整体目标仍进行中。
+当前平台增量`completed`：[Hybrid Dispatch持久资源绑定规范](hybrid_binding_spec.md)、[用户小例](../../examples/hybrid_bindings/README.md)与[验收](../../fixtures/hybrid_bindings/README.md)，起点`cdd52b3`、规范`811b2da`。新增公开`hybrid-deepep-bind`及四文件重编译加载入口，保留多call/通道持久共享、GIN self计数与本地copy/atomic的区别；显式DB/NO_DBR、world/rail/provider peer分别转换。新绑定按固定host拒绝SM1，旧logical抽象输入保持可用；不自动发现NIC或确定预约/门铃时序，也未绑定Combine。
+
+23项相关单元（15 Hybrid/8 direct plan）、新cwd公开命令/11类证据与输入拒绝、11份上游tree/blob/SHA和13固定依赖通过；人工两调用111绑定/16活跃资源/4分配context核对通过。重复、复制源码/空cwd及独立搬迁四文件结果一致，不依赖旧运行或GPU。原始命令/收据`runs/hybrid_binding_20261027/`，资源和源码身份见[收尾](../../fixtures/hybrid_bindings/closeout.json)；保持600受监控秒/128MiB含管理预留及全部单命令限额。零新网络、构建、GPU、下载、依赖修改或push，仅本地提交。
+
+这是完整Hybrid联合执行的前置平台步骤，不是通信算法或论文收益；下一平台范围仍需补实际发布、转发、完整控制/Combine并以同一网络回调推进，研究需对照正确资源DAG及完整成本，不能以绑定数量作贡献或宣布千卡可用。两个创新均未成立，整体目标继续`in_progress`，不重开旧条件。
 
 当前源码核查`completed`：[Hybrid共享QP与请求发布边界](../reviews/Hybrid共享QP与请求发布边界_20261027.md)，起点`2be34d4`、事前范围`58815b1`。跨通道同QP发布、DB/CPU proxy/free-flow的不同分支，以及现有Submit后立即Pump不能表达预约后晚准备的边界已明确。不能将AggregateRequests全局解释成延迟发布，也不能把这些已有机制当新创新。未重复原37条QP统计或新增条件执行；下一平台增量须另行规范Hybrid/provider持久绑定、明确handler及生产者事件，后续研究以正确资源DAG为强基线。
 

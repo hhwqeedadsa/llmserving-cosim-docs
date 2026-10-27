@@ -13,7 +13,13 @@
 
 ## 当前范围和预算
 
-当前平台增量`in_progress`：[RC操作包接入规范](rc_packet_probe_spec.md)，起点`48d84eb`。独立单QP/单在途WQE小例接入同一原生Fabric，区分真实WRITE/Atomic ACK字节与既有MRT1，固定四个新RC条件和一次新legacy检查；累计2400受监控秒/2GiB、最多两构建和五网络，失败保留、不扩大预算。两项创新均未成立，不重开旧实验。
+当前平台增量`completed`：[RC操作包接入规范](rc_packet_probe_spec.md)、[公开小例](../../examples/rc_packet_probe/README.md)与[验收网页](../../fixtures/rc_packet_probe/report.html)，起点`48d84eb`、规范`5842967`、功能`17783e4`。独立单QP/单在途WQE将WRITE、fetch-add与Atomic ACK接入同一原生Fabric；真实字节驱动目标效应与源完成，反馈不另起可靠流。默认关闭解析补丁原生`749794e`，ASTRA/LLM父gitlink及锁同步，本地依赖bundle保存；旧MRT1/modern/UB入口未切换。
+
+四个事前RC条件及一次新legacy均一次通过，24项相关单元和13依赖检查通过。健康4请求/2回复包、36TX/36RX、排空24275ns；三个丢包条件各一次RTO、一次丢弃，排空124324/124289/124275ns。四组独立复算实际包字节、源/目标效应、返回旧值、物理路径/守恒和队列占用/面积，5类篡改拒绝；计数均从41到46一次、返回41。额外约100us来自声明RTO，不是新恢复收益。首次编译缺ErrorModel头文件失败、第二次修复成功，原源码/日志保留；没有失败网络重跑。
+
+299成员/5,198,821B内容包逐hash恢复，复制源码/空cwd重算14输入、核验JSON及HTML逐字节相同，并通过3输入/11参考检查，恢复零网络/构建/HTTP/GPU。包SHA256 `f69837d827e98cced8ccb4bcbebd60f44e88c7d0e5e248bc1e1d435a6d3938cb`，原件`runs/rc_packet_probe_20261027/`，见[核验](../../fixtures/rc_packet_probe/verification.json)、[恢复](../../fixtures/rc_packet_probe/recovery.json)与[资源收尾](../../fixtures/rc_packet_probe/closeout.json)。首版归档选入活跃monitor但hash无错，已加固终态选择并保留原版；原网页链接修正不涉及网络重跑。保持2400受监控秒/2GiB及两构建/五网络上限，额度关闭，仅本地保存不push。
+
+本轮为progress：只有单QP顺序WQE、固定速率、ICRC占位与人工功能负载；不等于完整RoCE、Linux/NIC校准、现代MoE或千卡执行。下一范围仍需独立限定跨QP/发布/控制/Combine等所需部分，不继续把接入功能当创新；紧凑表示的决策价值及减少包处理的宿主净收益均未成立，整体目标继续`in_progress`，旧研究条件保持关闭。
 
 当前平台增量 `completed`：[操作级RC参考范围](rc_operation_reference_spec.md)、[公开小例](../../examples/rc_operation_reference/README.md)及[验收](../../fixtures/rc_operation_reference/README.md)，起点`62da06f`、规范`f817980`。交付独立、无时钟的WRITE/fetch-add状态参考，保留分段可见、Atomic ACK旧值、有限重放、原子信用和源完成。`atomic_return_required/1`拒绝普通ACK推定缺失返回值，与所提取RXE完成分支的已知差异明确保留；未接ns-3，不改变MRT1或旧结果。
 

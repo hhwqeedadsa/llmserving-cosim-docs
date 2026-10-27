@@ -1,0 +1,18 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RC操作包网络接入 · 功能验收</title><style>
+body{font:16px/1.8 system-ui,sans-serif;background:#f2f5fa;color:#172338;margin:0}main{max-width:1060px;margin:40px auto;padding:30px;background:white;border-radius:16px}h1{font-size:28px;line-height:1.4}h2{font-size:21px;margin-top:30px}.note{border-left:4px solid #225dcc;background:#eef4ff;padding:16px}table{border-collapse:collapse;width:100%;font-size:14px}th,td{padding:12px;text-align:left;border-bottom:1px solid #dce2ec}th{background:#eef2f8}.scroll{overflow:auto}code{background:#edf1f6;padding:2px 5px}a{color:#225dcc}.path{padding:18px;background:#f7f9fc;border:1px solid #dce2ec;border-radius:8px}.small{font-size:14px;color:#526075}</style><main>
+<p class="small">2026-10-27 · 独立平台功能验收 · 不作为优化收益实验</p>
+<h1>让写入与原子回复真正经过同一张网络</h1>
+<p class="note">本轮结果：WRITE和fetch-add由实际操作包推进；Atomic ACK直接携带旧值。三个丢包条件均恢复正确，目标计数器只从41增加到46一次，源端均收到旧值41后完成。</p>
+<h2>解决了什么问题</h2><p>旧MRT1入口把原子请求与功能回复放在两条可靠字节流中，回复还有自己的确认。这适合功能联动，但其包数和完成关系不能直接代表RC原子操作。新增独立入口明确区分写入数据、写入确认和携带旧值的原子回复；旧MoE入口尚未切换。</p>
+<div class="path">源GPU → ToR → 汇聚 → 核心 → 汇聚 → ToR → 目标GPU<br>写入：实际收包更新目标字节；确认经反向网络返回<br>原子：实际收包执行加法；Atomic ACK携旧值返回；回复无需再被ACK</div>
+<h2>固定小例与结果</h2><p>2台服务器各1个通信端点，单rail，每链路100Gb/s、1000ns。先写600B，再对目标区768偏移处做64位+5。MTU256B；每次只允许一项WQE在途，RTO显式设为100μs，最多3次重试。</p>
+<div class="scroll"><table><thead><tr><th>条件</th><th>网络排空 / μs</th><th>源请求 / 目标回复包</th><th>逐跳TX / RX / 丢弃</th><th>原子应用次数</th><th>返回旧值</th></tr></thead><tbody><tr><td>正常传输</td><td>24.275</td><td>4 / 2</td><td>36 / 36 / 0</td><td>1</td><td>41</td></tr><tr><td>丢一个中间写入包</td><td>124.324</td><td>7 / 4</td><td>66 / 65 / 1</td><td>1</td><td>41</td></tr><tr><td>丢写入确认</td><td>124.289</td><td>7 / 5</td><td>72 / 71 / 1</td><td>1</td><td>41</td></tr><tr><td>丢原子回复</td><td>124.275</td><td>5 / 3</td><td>48 / 47 / 1</td><td>1</td><td>41</td></tr></tbody></table></div>
+<p class="small">源包数按端点实际发送计；逐跳数包含交换机转发，同一个包沿六条链路产生六次TX。队列排空时间不是推理时延。legacy只检查默认解析和一条小消息完成，其固定模拟截止不与RC时间比较。</p>
+<h2>这些数字说明什么</h2><p>正常约24.3μs包含两项顺序操作的往返等待。三个故障条件约124.3μs，增加部分主要由事前声明的100μs RTO直接决定，不能拿它证明收益空间或新的恢复算法。丢Atomic ACK后，重试命中容量为1的重放缓存，返回原来的41，不重复加法。</p>
+<h2>怎样确认不是后端自报成功</h2><p>独立核验器用Python解码实际UDP/BTH/扩展与数据，再把实际收包顺序交给另一份RC状态参考。最终内存、每次目标副作用、源完成与旧值均吻合；逐跳路径、TX=RX+丢弃、端口字节和队列占用/面积也独立核对。5类证据篡改均被拒绝，另有输入与原状态参考回归。</p>
+<h2>现在能服务什么，仍缺什么</h2><p>这是一条可用于后续协议语义核查的单QP网络基线。采用固定速率调度，保留队列、MMU、PFC及选路；没有完整拥塞反馈、网卡窗口、QP建立、READ/SEND/RNR、多项在途WQE或GPU内存序。ICRC只有4字节零占位，包长包含PPP而非完整以太网开销，不声称与RNIC互通或硬件校准。</p>
+<p>本轮输入为人工功能小例，未执行LLMServingSim或真实路由驱动的完整MoE。已有17份R1-AWQ/MMLU原件中15份完整、899与1479缺层排除；它们仍用于独立研究输入，不能把这里的微秒值推广为真实模型收益。</p>
+<p>两项仿真创新候选——保留关键网络决策的紧凑表示、减少包处理且保留反馈相互作用——仍待与强基线比较。完成RC接入本身不算这两项创新成立。</p>
+<h2>复现与失败记录</h2><p>公开入口为<code>scaleout rdma-rc-probe</code>；输入生成器、资源限制和修改方式见<a href="../../examples/rc_packet_probe/README.md">用户小例</a>，逐条件摘要见<a href="verification.json">verification.json</a>。首轮编译因缺少ErrorModel头文件失败，原日志和源码保留；修正后在第二次构建额度内完成。四个RC网络和一次legacy均只执行一次，没有失败网络重跑。</p>
+</main></html>

@@ -1,0 +1,49 @@
+{
+  "GPU": 0,
+  "HTTP": 0,
+  "UB_linked": false,
+  "all_five_runs_same_native_libraries": true,
+  "backend_sources_match_build": true,
+  "binaries": {
+    "probe": "e8e3e9969ff33d2a6b9e7391015c2fd8378d97fa09ab45707b75fd252c08130f",
+    "rc_probe": "5ec0872a9a0c543a575180d4c70b55a2cdb6080dbeeac3d3bc627608bfa3189c"
+  },
+  "compile_units": 438,
+  "dependencies": [
+    {
+      "baseline": "94f3b005f7174575780bfe29d68e015df9719951",
+      "bundle_sha256": "cb2b1c6fb4d54b293ec29e3bf536fb3b670e8b41c220610bf6252a5f5c7c01ea",
+      "head": "b62f83510572cefd3fb8fa46591fdaaf89b872a7",
+      "name": "LLMServingSim"
+    },
+    {
+      "baseline": "0c51d089094d2a39aa91ac8ba32e4ca28f3e1714",
+      "bundle_sha256": "90d86bdafd1248e0005a0c66444d984dd24de5a3975c8ffbeb9cef5dc78414b3",
+      "head": "acb6edcd0e6dc800a37d6d6fa4c06f44d807f2b5",
+      "name": "ASTRA-sim"
+    },
+    {
+      "baseline": "47f8faddf14036da27b004411701e9729de7479c",
+      "bundle_sha256": "402925c002e976a8699822b98cf4005238aaf449b8e67961278bab3f01aa1814",
+      "head": "749794ec6d9925003377d5e1b6cc07f02d5a6417",
+      "name": "ASTRA-original-ns3-backend"
+    }
+  ],
+  "dependency_bundles_are_local_only": true,
+  "fixed_dependencies_passed": 13,
+  "library_hashes": {
+    "build/output/lib/libns3.42-applications.so": "364a8ab54a86d19c9f755b9b29ff3cf2536c306ebad5f31f31c3876d3842333f",
+    "build/output/lib/libns3.42-bridge.so": "48055334b81b4a4ab011577af954be20c806845391f216ad96059a9a20f82c10",
+    "build/output/lib/libns3.42-core.so": "b6cc6b5447db6800e82abfa251e91d50ec213e65e5f6c2fb84ddf31c9cd092c4",
+    "build/output/lib/libns3.42-internet.so": "5de6b9f76fe16388c7af01c01358f2114207e316455fdfc5452ae612d71d4dee",
+    "build/output/lib/libns3.42-network.so": "6ee2bd8142db2f5c795b3e0760ad7deeeff88ce1f5bc38240973d662141d721f",
+    "build/output/lib/libns3.42-point-to-point.so": "f05ba3ca9c59609053683d148b0bba44e15c3f485d49200128006be1249b2425",
+    "build/output/lib/libns3.42-stats.so": "3b5ba80fb955b8bfa7c67f1b13539c27d967533d0269dd031856c1a510dfa70e",
+    "build/output/lib/libns3.42-traffic-control.so": "6320fe012286062055a0c46d4460e6461ddc7b6ed4f4451fb053c66724ce0c8b"
+  },
+  "linux_header_commit": "adc218676eef25575469234709c2d87185ca223a",
+  "linux_header_sha256": "51794cf32a71c7db7e5bcea72fb372dd5149999b19ed67e473130e56e8081e02",
+  "native_commit": "749794ec6d9925003377d5e1b6cc07f02d5a6417",
+  "platform_head": "17783e494471a1d344a941691c51836cabd9abdf",
+  "push": false
+}

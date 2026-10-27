@@ -1,0 +1,32 @@
+{
+  "GPU": 0,
+  "HTTP": 0,
+  "archive_sha256": "f69837d827e98cced8ccb4bcbebd60f44e88c7d0e5e248bc1e1d435a6d3938cb",
+  "build_attempts": 2,
+  "conservative_monitored_seconds_including_restored_copies": 841.1520284779981,
+  "cumulative_artifact_limit_bytes": 2147483648,
+  "cumulative_wall_limit_seconds": 2400,
+  "disk_usage": {
+    "allocated_bytes": 103768064,
+    "apparent_bytes": 100081885
+  },
+  "first_build_status": "child_failed_missing_error_model_header",
+  "fixed_dependencies": 13,
+  "installations": 0,
+  "legacy_smoke": 1,
+  "live_owned_processes": 0,
+  "management_reserve_bytes": 2097152,
+  "management_reserve_seconds": 10,
+  "network_reruns": 0,
+  "network_runs": 5,
+  "overall_research_goal": "in_progress",
+  "passed": true,
+  "push": false,
+  "rc_conditions": 4,
+  "receipt_count_including_restored_copies": 43,
+  "research_gain_established": false,
+  "resource_scope": "All completed receipts, including archive copies, conservatively counted; final monitor and bookkeeping covered by explicit reserve",
+  "second_build_status": "completed",
+  "status": "closed",
+  "unit_test_methods": 24
+}

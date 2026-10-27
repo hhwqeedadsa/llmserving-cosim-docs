@@ -26,7 +26,7 @@ body{font:16px/1.8 system-ui,sans-serif;background:#f2f5fa;color:#172338;margin:
 <h2>现在能服务什么，仍缺什么</h2><p>这是一条可用于后续协议语义核查的单QP网络基线。采用固定速率调度，保留队列、MMU、PFC及选路；没有完整拥塞反馈、网卡窗口、QP建立、READ/SEND/RNR、多项在途WQE或GPU内存序。ICRC只有4字节零占位，包长包含PPP而非完整以太网开销，不声称与RNIC互通或硬件校准。</p>
 <p>本轮输入为人工功能小例，未执行LLMServingSim或真实路由驱动的完整MoE。已有17份R1-AWQ/MMLU原件中15份完整、899与1479缺层排除；它们仍用于独立研究输入，不能把这里的微秒值推广为真实模型收益。</p>
 <p>两项仿真创新候选——保留关键网络决策的紧凑表示、减少包处理且保留反馈相互作用——仍待与强基线比较。完成RC接入本身不算这两项创新成立。</p>
-<h2>复现与失败记录</h2><p>公开入口为<code>scaleout rdma-rc-probe</code>；输入生成器、资源限制和修改方式见<a href="../../../examples/rc_packet_probe/README.md">用户小例</a>，逐条件摘要见<a href="verification.json">verification.json</a>。首轮编译因缺少ErrorModel头文件失败，原日志和源码保留；修正后在第二次构建额度内完成。四个RC网络和一次legacy均只执行一次，没有失败网络重跑。</p>
+<h2>复现与失败记录</h2><p>公开入口为<code>scaleout rdma-rc-probe</code>；输入生成器、资源限制和修改方式见<a href="../../examples/rc_packet_probe/README.md">用户小例</a>，逐条件摘要见<a href="verification.json">verification.json</a>。首轮编译因缺少ErrorModel头文件失败，原日志和源码保留；修正后在第二次构建额度内完成。四个RC网络和一次legacy均只执行一次，没有失败网络重跑。</p>
 </main></html>\n'''
 
 

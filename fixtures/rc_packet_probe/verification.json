@@ -1,0 +1,88 @@
+{
+  "cases": {
+    "drop_atomic_ack": {
+      "atomic_effects": 1,
+      "atomic_old_values": [
+        41
+      ],
+      "finish_ns": 124275,
+      "memory_sha256": "d98485434bafcc50795ff1a983274274bc8dd26d9d44d84760a59c2baeb618d9",
+      "operations": 2,
+      "passed": true,
+      "physical_drop": 1,
+      "physical_rx": 47,
+      "physical_tx": 48,
+      "physical_tx_bytes": 6408,
+      "queue_events": 80,
+      "request_packets": 5,
+      "response_packets": 3,
+      "target_effects": 4,
+      "timeouts": 1
+    },
+    "drop_write_ack": {
+      "atomic_effects": 1,
+      "atomic_old_values": [
+        41
+      ],
+      "finish_ns": 124289,
+      "memory_sha256": "d98485434bafcc50795ff1a983274274bc8dd26d9d44d84760a59c2baeb618d9",
+      "operations": 2,
+      "passed": true,
+      "physical_drop": 1,
+      "physical_rx": 71,
+      "physical_tx": 72,
+      "physical_tx_bytes": 11040,
+      "queue_events": 120,
+      "request_packets": 7,
+      "response_packets": 5,
+      "target_effects": 4,
+      "timeouts": 1
+    },
+    "drop_write_middle": {
+      "atomic_effects": 1,
+      "atomic_old_values": [
+        41
+      ],
+      "finish_ns": 124324,
+      "memory_sha256": "d98485434bafcc50795ff1a983274274bc8dd26d9d44d84760a59c2baeb618d9",
+      "operations": 2,
+      "passed": true,
+      "physical_drop": 1,
+      "physical_rx": 65,
+      "physical_tx": 66,
+      "physical_tx_bytes": 10740,
+      "queue_events": 110,
+      "request_packets": 7,
+      "response_packets": 4,
+      "target_effects": 4,
+      "timeouts": 1
+    },
+    "healthy": {
+      "atomic_effects": 1,
+      "atomic_old_values": [
+        41
+      ],
+      "finish_ns": 24275,
+      "memory_sha256": "d98485434bafcc50795ff1a983274274bc8dd26d9d44d84760a59c2baeb618d9",
+      "operations": 2,
+      "passed": true,
+      "physical_drop": 0,
+      "physical_rx": 36,
+      "physical_tx": 36,
+      "physical_tx_bytes": 5616,
+      "queue_events": 60,
+      "request_packets": 4,
+      "response_packets": 2,
+      "target_effects": 4,
+      "timeouts": 0
+    },
+    "legacy": {
+      "finish_ns": 5000000,
+      "messages": 1,
+      "passed": true
+    }
+  },
+  "mutations_rejected": 5,
+  "passed": true,
+  "scope": "functional RC packets and independent state replay; no performance/production/MoE equivalence claim"
+}

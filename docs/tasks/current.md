@@ -13,6 +13,8 @@
 
 ## 当前范围和预算
 
+当前研究`in_progress`：[分层结束通知收益空间](../../experiments/hybrid_completion_space/protocol.md)，起点`dd265cd`。固定15完整原件的prefill/首次decode及58层，EP64/128/256、每域8卡、C4/8/16及两源部署，只做固定DeepEP源码约束的控制API/需求核算。先扣除无token通道、无数据对端和因子化参考，再看精确通道/对端关联的剩余空间；Combine按反向矩阵单独核，不能乘2。600受监控秒/256MiB，单命令60秒/1GiB RSS/2GiB地址，零HTTP/编译/网络/GPU/依赖修改；不将API差额当时延或创新。
+
 当前研究已关闭：[输入生成普通图强基线](../../experiments/input_graph_baseline/protocol.md)、[报告与网页](../../experiments/input_graph_baseline/README.md)，起点`157aed4`、协议`1c2fa7f`、初始实现`646b742`。八原件entry1/1..2、layer3，batch8/16与EP4/8/16六条件均完成公开输入编译及静态依赖分析，零runtime.fire/网络；不读已执行绑定或truth。普通传递约简/重复join减少23.07%～36.64%依赖边，但最大整数依赖表仅104,206B（gzip27,926B），操作/slot/动态约束不变；仅依赖压缩对完整canonical表示节省的宽松上界1.21%～2.92%，不是RSS或运行加速。EP16/batch16的1710操作中1536为当前direct模板控制，不能外推真实Hybrid控制开销或直接删除。
 
 六组全原事件可达关系、join闭包及原token选择独立核对，按路由独立核算操作数，四类篡改拒绝；静态slot同步保留，动态Combine约束不删，未验证完整现代CCL或Hybrid。204成员包逐hash恢复，复制研究/平台源码至新根空cwd重算图、核验和报告逐字节一致；[恢复](../../experiments/input_graph_baseline/results/20261027/recovery.json)与[实际资源](../../experiments/input_graph_baseline/results/20261027/closeout.json)保留命令/hash，原件`runs/input_graph_baseline_20261027/`。保持600受监控秒/256MiB及单命令60秒/1GiB RSS/2GiB地址，13依赖本轮检查通过，零HTTP/构建/网络/GPU/依赖修改/push。六条件额度关闭；普通图优化归入强基线，不作为MoE创新。此轮为progress，两项创新与整体目标继续`in_progress`；下一判别须定位正确目标协议/分层算法中实际处理的实质成本，避免继续为静态图格式投入研究预算。

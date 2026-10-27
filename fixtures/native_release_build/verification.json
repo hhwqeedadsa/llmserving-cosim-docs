@@ -1,0 +1,133 @@
+{
+  "passed": true,
+  "effective_optimization": "-O3",
+  "translation_units": 437,
+  "optimization_sequences": [
+    {
+      "flags": [
+        "-O3"
+      ],
+      "units": 437
+    }
+  ],
+  "retained_warnings": [
+    "-Wall",
+    "-Wpedantic"
+  ],
+  "compiler_database_sha256": "a65a9186dafc1cb3bfd3e59d0c766c8a209553f262d9d7a64d24a4d2087f56bd",
+  "source_hashes_checked": 45,
+  "binaries": {
+    "probe": "fe4f2842fbacc5c3f3b6ab4ff3cc7db413f91cd19f72100cd8f01261f3b1f8b0",
+    "stream_probe": "38605bb9006736fc8c2bdd472aa0c4ae5afbefe14c62b620e38ded09d952d019",
+    "transaction_probe": "549ef66e9087490cb5c287bd15ee182503dfec930decd72bad5dc4054a92a54b",
+    "transaction_session": "b8176643b08c8a3e4d03aa3e34e20827bc573a3ee3d03ec42fcd4a126e3b4a57",
+    "service": "fe73bc2d877c5b500758b0394b924bbe7edcaa86964aa3ba874efed18eda4a92"
+  },
+  "libraries": {
+    "libns3.42-applications.so": "1540ae69677c01fa86de51633ee96e1c7beb4092b05766fad6589d296c1b2994",
+    "libns3.42-point-to-point.so": "c10dd04ff9e2c0502a2be40c86b09df9dfbf5517de296f3ee98208cf512139a4",
+    "libns3.42-internet.so": "27f5f560857c594678df25e468daa0bcd90e62e86a12cabcb2bfda55d014d697",
+    "libns3.42-network.so": "5c75d4c38b922775f55c9f77550f82f93af0e7b328a1e0abc793cb486ac6188e",
+    "libns3.42-core.so": "dc5b3979736dfbbf229f5b194c716d0b82f6913dde14746cf4cb7c49c978a02b",
+    "libns3.42-stats.so": "4091a8fb0a6a460c4293f0237bec9e6c4f1e212940c8d29bb813c3475b6c6236",
+    "libns3.42-bridge.so": "e4f51eb5eaa887b8f423999c7e2ae92a2f98fd76b18ddd0252da830f96a32162",
+    "libns3.42-traffic-control.so": "05017ccd0877b83583b0315ba17284d5ce031b24715fa20ce571d1f569c0c041"
+  },
+  "probe": {
+    "passed": true,
+    "physical_TX": 84,
+    "physical_RX": 84,
+    "port_counters_checked": 40,
+    "finish_ns": 5000000,
+    "messages": 4,
+    "payload_bytes": 6000
+  },
+  "modern_physical": {
+    "passed": true,
+    "physical_tx": 552,
+    "physical_rx": 552,
+    "arrival_drops": 0,
+    "local_drops": 0,
+    "source_packets": 46,
+    "streams": 8,
+    "work": 46,
+    "shared_queue_ports": [],
+    "cnp_packets": 0,
+    "finish_ns": 106206,
+    "network_passed": true
+  },
+  "modern_application": {
+    "passed": true,
+    "modern_operations": 60,
+    "modern_events": 322,
+    "native_remote_operations": 50,
+    "native_local_operations": 47,
+    "paths": {
+      "gin_self": 20,
+      "rdma": 30,
+      "local": 10
+    },
+    "calls": 2,
+    "ranks": 2,
+    "decisions": 63,
+    "finish_ns": 106206,
+    "actual_target_applications": 50,
+    "actual_source_packets": 46,
+    "retransmitted_source_packets": 0,
+    "decoded_frames": 46,
+    "observed_out_of_order_data_packets": 0,
+    "physical_capture_events": 2024,
+    "scope": "functional byte/event acceptance, not numerical model or calibrated GPU/provider performance"
+  },
+  "strict_original_result_equivalence": false,
+  "original_control_application_identical": true,
+  "complete_state_except_loader_enumeration_identical": true,
+  "loader_enumeration": {
+    "original": [
+      "linux-vdso.so.1",
+      "libns3.42-applications.so",
+      "libns3.42-point-to-point.so",
+      "libns3.42-internet.so",
+      "libns3.42-network.so",
+      "libns3.42-core.so",
+      "/usr/lib/x86_64-linux-gnu/libstdc++.so.6",
+      "/usr/lib/x86_64-linux-gnu/libm.so.6",
+      "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1",
+      "/usr/lib/x86_64-linux-gnu/libc.so.6",
+      "libns3.42-stats.so",
+      "libns3.42-bridge.so",
+      "libns3.42-traffic-control.so",
+      "/lib64/ld-linux-x86-64.so.2"
+    ],
+    "optimized": [
+      "linux-vdso.so.1",
+      "libns3.42-applications.so",
+      "libns3.42-point-to-point.so",
+      "libns3.42-internet.so",
+      "libns3.42-network.so",
+      "libns3.42-core.so",
+      "/usr/lib/x86_64-linux-gnu/libstdc++.so.6",
+      "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1",
+      "/usr/lib/x86_64-linux-gnu/libc.so.6",
+      "libns3.42-stats.so",
+      "/usr/lib/x86_64-linux-gnu/libm.so.6",
+      "libns3.42-bridge.so",
+      "libns3.42-traffic-control.so",
+      "/lib64/ld-linux-x86-64.so.2"
+    ],
+    "same_multiset": true,
+    "original_strict_failure_preserved": true
+  },
+  "acceptance": "functional_checks_passed_with_strict_loader_order_deviation",
+  "rejected_corruptions": [
+    "port bytes",
+    "modern physical packet time",
+    "modern application event"
+  ],
+  "actual_networks": 2,
+  "builds": 1,
+  "hardware_calibrated": false,
+  "performance_speedup_measured": false,
+  "dependencies_changed": false,
+  "novel_algorithm": false
+}

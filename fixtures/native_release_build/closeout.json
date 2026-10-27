@@ -1,0 +1,71 @@
+{
+  "state": "completed_functional_acceptance_with_documented_strict_metadata_deviation",
+  "protocol": "bb6e839",
+  "implementation": "e5a4d7e",
+  "audit": "7eb1649",
+  "raw_run": "runs/native_release_build_20261027",
+  "actual_networks": 2,
+  "network_reruns": 0,
+  "fresh_builds": 1,
+  "configure_attempts": 1,
+  "compile_attempts": 1,
+  "compile_tasks": 446,
+  "programs": 5,
+  "libraries": 8,
+  "compile_wall_seconds": 395.5890902329993,
+  "effective_optimization": "-O3",
+  "translation_units": 437,
+  "unit_tests": 28,
+  "dependency_check_exit_code": 0,
+  "original_strict_result_equivalence": false,
+  "complete_state_except_loader_enumeration_identical": true,
+  "original_control_application_identical": true,
+  "acceptance_limitation": "Original strict result comparison failed on loader enumeration order only; preserve false. Separate complete state comparison and library multiset/hash checks passed; no network rerun.",
+  "archive": {
+    "sha256": "2b93cc921820cc72cdc66b34596b30b4ca742622a497045a2600c64aa3513d99",
+    "members": 323,
+    "compressed_bytes": 9989226,
+    "uncompressed_bytes": 38081596
+  },
+  "archive_path": "runs/native_release_build_20261027/checkpoint.tar.gz",
+  "recovery": {
+    "passed": true,
+    "copied_source": true,
+    "empty_cwd": true,
+    "byte_identical_verification": true,
+    "new_networks": 0,
+    "new_builds": 0
+  },
+  "budgets": {
+    "cumulative_wall_limit_s": 2400,
+    "cumulative_artifact_limit_bytes": 2147483648,
+    "conservative_monitored_seconds_including_copied_records": 1613.4129365090484,
+    "logical_bytes": 142975431,
+    "allocated_bytes": 146636800,
+    "reserved_receipt_bytes": 2097152,
+    "compile_time_limit_s": 900,
+    "outer_build_time_limit_s": 1000,
+    "build_RSS_limit_bytes": 2147483648,
+    "build_address_limit_bytes": 4294967296,
+    "build_artifact_limit_bytes": 536870912
+  },
+  "retained_failures": [
+    {
+      "kind": "verifier assumed BOOL cache entry; actual UNINITIALIZED=ON exports database",
+      "evidence": "monitor/independent-acceptance/stderr.log",
+      "network_reruns": 0
+    },
+    {
+      "kind": "strict loaded-library enumeration order changed after optimization",
+      "evidence": "monitor/independent-acceptance-cache-type-corrected/stderr.log",
+      "network_reruns": 0
+    }
+  ],
+  "dependencies_changed": false,
+  "downloads": 0,
+  "GPU_executions": 0,
+  "pushes": 0,
+  "novel_algorithm": false,
+  "performance_speedup_measured": false,
+  "research_decision": "Build now provides an optimized baseline with two bounded functionality checks; perform any host-cost comparison under a separate preregistration."
+}

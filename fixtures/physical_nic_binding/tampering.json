@@ -1,0 +1,15 @@
+{
+  "passed": true,
+  "rejected": {
+    "source_binding": "stream address differs from physical endpoint",
+    "wrong_reverse_nic": "arrival without link transmission",
+    "wire_ip": "packet wire addresses differ from bound NICs",
+    "port_counter": "port byte counter mismatch",
+    "queue_area": "independent queue integral mismatch",
+    "fake_callback": "fabricated ACK time",
+    "incomplete_capture": "incomplete capture",
+    "atomic_memory": "wrong final memory",
+    "target_time": "target side effect precedes actual request acceptance",
+    "atomic_reply": "wrong returned value/arrival"
+  }
+}

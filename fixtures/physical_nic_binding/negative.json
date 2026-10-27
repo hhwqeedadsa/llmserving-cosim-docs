@@ -1,0 +1,79 @@
+{
+  "passed": true,
+  "rejected_before_output_and_backend": 3,
+  "actual_networks": 0,
+  "commands": [
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-stream-probe",
+        "--topology",
+        "/home/lry/moe-ub-cosim/runs/physical_nic_binding_20261027/independent-topology",
+        "--protocol",
+        "/home/lry/moe-ub-cosim/runs/physical_nic_binding_20261027/inputs/protocol.json",
+        "--config",
+        "/home/lry/moe-ub-cosim/runs/physical_nic_binding_20261027/negative/rdma-stream-probe.json",
+        "--backend",
+        "/home/lry/moe-ub-cosim/runs/physical_nic_binding_20261027/negative/marker-backend",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/physical_nic_binding_20261027/negative/rdma-stream-probe"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 1,
+      "output_created": false,
+      "marker_started": false
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-transaction-probe",
+        "--topology",
+        "/home/lry/moe-ub-cosim/runs/physical_nic_binding_20261027/independent-topology",
+        "--protocol",
+        "/home/lry/moe-ub-cosim/runs/physical_nic_binding_20261027/inputs/protocol.json",
+        "--config",
+        "/home/lry/moe-ub-cosim/runs/physical_nic_binding_20261027/negative/rdma-transaction-probe.json",
+        "--backend",
+        "/home/lry/moe-ub-cosim/runs/physical_nic_binding_20261027/negative/marker-backend",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/physical_nic_binding_20261027/negative/rdma-transaction-probe"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 1,
+      "output_created": false,
+      "marker_started": false
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "modern-deepep-native",
+        "--topology",
+        "/home/lry/moe-ub-cosim/runs/physical_nic_binding_20261027/independent-topology",
+        "--protocol",
+        "/home/lry/moe-ub-cosim/runs/physical_nic_binding_20261027/inputs/protocol.json",
+        "--config",
+        "/home/lry/moe-ub-cosim/runs/physical_nic_binding_20261027/negative/modern-deepep-native.json",
+        "--backend",
+        "/home/lry/moe-ub-cosim/runs/physical_nic_binding_20261027/negative/marker-backend",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/physical_nic_binding_20261027/negative/modern-deepep-native"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 1,
+      "output_created": false,
+      "marker_started": false
+    }
+  ]
+}

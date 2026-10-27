@@ -1,0 +1,35 @@
+{
+  "passed": true,
+  "dependencies": [
+    {
+      "name": "LLMServingSim",
+      "path": "third_party/LLMServingSim",
+      "baseline": "e96d8391d9ad4768bfd7c4a1206abcfb8e34e9a1",
+      "commit": "94f3b005f7174575780bfe29d68e015df9719951",
+      "bundle": "LLMServingSim.bundle",
+      "sha256": "6e397512087d7b0d278d2f724817ca4a196204a144d2a287686f15eae2385db4",
+      "requires_baseline": true
+    },
+    {
+      "name": "ASTRA-sim",
+      "path": "third_party/LLMServingSim/astra-sim",
+      "baseline": "8ecf388a667de9d45866da1ee9829938d6218686",
+      "commit": "0c51d089094d2a39aa91ac8ba32e4ca28f3e1714",
+      "bundle": "ASTRA-sim.bundle",
+      "sha256": "3bf004bafd195960ca4b34d164df22b6a67b660f847cca95f4bb660e757b316a",
+      "requires_baseline": true
+    },
+    {
+      "name": "ASTRA-original-ns3-backend",
+      "path": "third_party/LLMServingSim/astra-sim/extern/network_backend/ns-3",
+      "baseline": "68a07f7d5e53bbe97d275af41d4964ad01b864f3",
+      "commit": "47f8faddf14036da27b004411701e9729de7479c",
+      "bundle": "ASTRA-original-ns3-backend.bundle",
+      "sha256": "debcc40409024d409a408273df299e0f2b133a40652c1412974f045104f7ff87",
+      "requires_baseline": true
+    }
+  ],
+  "pushed": false,
+  "remote_availability_verified": false,
+  "new_local_commits": 3
+}

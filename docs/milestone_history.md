@@ -4,6 +4,7 @@
 
 | 阶段 | 交付内容 | 证据入口 |
 |---|---|---|
+| 物理NIC绑定（2026-10-27） | 同plane多rail、共享Agg及实际正反向绑定；8次功能网络、有限分区失败及离线恢复；不作为论文创新或硬件精度证据 | [共享rail示例](../examples/scaleout_multirail_native/README.md)、[独立验收](../fixtures/physical_nic_binding/README.md) |
 | M0：原生基线与联合构建 | 固定上游版本、复现原生样例，检查 ASTRA/Chakra 与一套 UB/ns-3 的联合链接 | [联合链接检查](../scripts/m0_joint_build/README.md)、[原始环境记录](archive/README.md#历史记录) |
 | M1：计算与一对收发 | 使用 ns-3 时间执行计算，分开接收就绪与发送完成，记录端口实际包及来源 | [最小传输](../fixtures/m1_transfer/README.md) |
 | M2：MoE 层与连续图 | 单层任务生成、分块与发送槽、延迟反馈，以及连续图的身份和回收 | [单层](../fixtures/m2_single_layer/README.md)、[延迟反馈](../fixtures/m2_delay_feedback/README.md)、[变体](../fixtures/m2_variants/README.md)、[连续图](../fixtures/m2_sequence/README.md) |

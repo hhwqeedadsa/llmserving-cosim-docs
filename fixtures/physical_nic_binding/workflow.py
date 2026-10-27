@@ -131,6 +131,26 @@ def native_api(repository, stage):
     run(stage, 'native-api', [executable])
 
 
+def dependencies(repository, stage):
+    directory = stage/'dependency-bundles'; directory.mkdir()
+    expected = {'LLMServingSim': 'e96d8391d9ad4768bfd7c4a1206abcfb8e34e9a1',
+                'ASTRA-sim': '8ecf388a667de9d45866da1ee9829938d6218686',
+                'ASTRA-original-ns3-backend': '68a07f7d5e53bbe97d275af41d4964ad01b864f3'}
+    rows = []
+    for dep in load(repository/'deps.lock.json')['dependencies']:
+        if dep['name'] not in expected: continue
+        name, baseline = dep['name'], expected[dep['name']]
+        target = directory/(name+'.bundle')
+        checkout = repository/dep['path']
+        run(stage, 'bundle-'+name, ['git','-C',checkout,'bundle','create',target,
+            'codex/physical-nic-20261027','^'+baseline])
+        run(stage, 'bundle-verify-'+name, ['git','-C',checkout,'bundle','verify',target])
+        rows.append(dict(name=name, path=dep['path'], baseline=baseline, commit=dep['checkout_commit'],
+                         bundle=target.name, sha256=sha(target), requires_baseline=True))
+    save(directory/'identities.json', dict(passed=True, dependencies=rows, pushed=False,
+         remote_availability_verified=False, new_local_commits=3))
+
+
 def networks(repository, stage, selected):
     backend = load(stage/'build/backend.json')
     inputs = stage/'inputs'
@@ -179,7 +199,7 @@ def networks(repository, stage, selected):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('action', choices=('prepare', 'before', 'build', 'native-api', 'networks'))
+    parser.add_argument('action', choices=('prepare', 'before', 'build', 'native-api', 'networks', 'dependencies'))
     parser.add_argument('--repository', type=Path, required=True)
     parser.add_argument('--stage', type=Path, required=True)
     parser.add_argument('--previous-build', type=Path)
@@ -194,6 +214,7 @@ def main():
     elif args.action == 'before': before(repository, stage, args.previous_build.resolve())
     elif args.action == 'build': build(repository, stage, args)
     elif args.action == 'native-api': native_api(repository, stage)
+    elif args.action == 'dependencies': dependencies(repository, stage)
     else: networks(repository, stage, args.case)
 
 

@@ -1,0 +1,409 @@
+{
+  "passed": true,
+  "platform_stage_completed": true,
+  "overall_research_goal_completed": false,
+  "conservative_monitored_seconds_including_nested": 614.7119451561302,
+  "wall_budget_seconds": 1800,
+  "closing_receipt_seconds_reserved": 10,
+  "artifact_usage": {
+    "apparent_bytes": 440649284,
+    "allocated_bytes": 447283200
+  },
+  "artifact_budget_bytes": 2147483648,
+  "artifact_scope": "stage plus fixtures/example/native test and conservative full backend/Python/docs source trees",
+  "closing_receipt_bytes_reserved": 4194304,
+  "terminal_monitors": [
+    {
+      "path": "after-single/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.5487312040058896,
+      "rss_bytes": 372731904
+    },
+    {
+      "path": "after-single-network/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.8629632060037693,
+      "rss_bytes": 407425024
+    },
+    {
+      "path": "alternate/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.8759656949987402,
+      "rss_bytes": 517464064
+    },
+    {
+      "path": "alternate-network/probe.json",
+      "status": "completed",
+      "wall_seconds": 1.1843055610079318,
+      "rss_bytes": 552177664
+    },
+    {
+      "path": "archive-create/probe.json",
+      "status": "completed",
+      "wall_seconds": 3.8181897129979916,
+      "rss_bytes": 104075264
+    },
+    {
+      "path": "archive-restore/probe.json",
+      "status": "completed",
+      "wall_seconds": 1.6325955940119456,
+      "rss_bytes": 172478464
+    },
+    {
+      "path": "before-network/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.773046479007462,
+      "rss_bytes": 406401024
+    },
+    {
+      "path": "before-single/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.5525490540021565,
+      "rss_bytes": 373739520
+    },
+    {
+      "path": "before-topology/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.12177961600536946,
+      "rss_bytes": 6422528
+    },
+    {
+      "path": "build/logs/compile/probe.json",
+      "status": "completed",
+      "wall_seconds": 279.5561140350037,
+      "rss_bytes": 1494192128
+    },
+    {
+      "path": "build/logs/configure/probe.json",
+      "status": "completed",
+      "wall_seconds": 1.8377802070026519,
+      "rss_bytes": 47906816
+    },
+    {
+      "path": "bundle-ASTRA-original-ns3-backend/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.22938276900094934,
+      "rss_bytes": 7487488
+    },
+    {
+      "path": "bundle-ASTRA-sim/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.2326406210049754,
+      "rss_bytes": 6463488
+    },
+    {
+      "path": "bundle-LLMServingSim/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.2327763130015228,
+      "rss_bytes": 7532544
+    },
+    {
+      "path": "bundle-verify-ASTRA-original-ns3-backend/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.2297429739992367,
+      "rss_bytes": 7487488
+    },
+    {
+      "path": "bundle-verify-ASTRA-sim/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.10026802800712176,
+      "rss_bytes": 0
+    },
+    {
+      "path": "bundle-verify-LLMServingSim/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.22996123300981708,
+      "rss_bytes": 8597504
+    },
+    {
+      "path": "complete-functional-verification/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.8643657329957932,
+      "rss_bytes": 71790592
+    },
+    {
+      "path": "dependency-check/probe.json",
+      "status": "child_failed",
+      "wall_seconds": 0.5517431560001569,
+      "rss_bytes": 20168704
+    },
+    {
+      "path": "dependency-check-saved-parent/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.4449432809924474,
+      "rss_bytes": 23388160
+    },
+    {
+      "path": "focused-regressions/probe.json",
+      "status": "completed",
+      "wall_seconds": 1.5330143050086917,
+      "rss_bytes": 32739328
+    },
+    {
+      "path": "fresh-build/probe.json",
+      "status": "child_failed",
+      "wall_seconds": 0.12504133000038564,
+      "rss_bytes": 6393856
+    },
+    {
+      "path": "fresh-build-saved-source/probe.json",
+      "status": "completed",
+      "wall_seconds": 281.8666019319935,
+      "rss_bytes": 1527132160
+    },
+    {
+      "path": "independent/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.7757666609977605,
+      "rss_bytes": 514367488
+    },
+    {
+      "path": "independent-network/probe.json",
+      "status": "completed",
+      "wall_seconds": 1.0618128890055232,
+      "rss_bytes": 548102144
+    },
+    {
+      "path": "independent-topology-command/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.2114954920107266,
+      "rss_bytes": 6434816
+    },
+    {
+      "path": "modern/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 1.7419674010016024,
+      "rss_bytes": 436236288
+    },
+    {
+      "path": "modern-network/probe.json",
+      "status": "completed",
+      "wall_seconds": 2.0888243009976577,
+      "rss_bytes": 470302720
+    },
+    {
+      "path": "native-api/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.2069243349978933,
+      "rss_bytes": 10596352
+    },
+    {
+      "path": "native-api-compile/probe.json",
+      "status": "child_failed",
+      "wall_seconds": 2.4301333030016394,
+      "rss_bytes": 334835712
+    },
+    {
+      "path": "native-api-compile-linked/probe.json",
+      "status": "completed",
+      "wall_seconds": 2.427749552007299,
+      "rss_bytes": 333926400
+    },
+    {
+      "path": "negative-preflight/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.4421714750060346,
+      "rss_bytes": 30855168
+    },
+    {
+      "path": "packet-and-side-effect-verification/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.778878219993203,
+      "rss_bytes": 28577792
+    },
+    {
+      "path": "packet-audit/probe.json",
+      "status": "child_failed",
+      "wall_seconds": 0.22390584301319905,
+      "rss_bytes": 6393856
+    },
+    {
+      "path": "packet-audit-priority/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.32680782600073144,
+      "rss_bytes": 22249472
+    },
+    {
+      "path": "partition/execution/probe.json",
+      "status": "child_failed",
+      "wall_seconds": 0.665085643006023,
+      "rss_bytes": 412463104
+    },
+    {
+      "path": "partition-network/probe.json",
+      "status": "child_failed",
+      "wall_seconds": 0.995216827999684,
+      "rss_bytes": 445075456
+    },
+    {
+      "path": "redundant-topology-command/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.21872221899684519,
+      "rss_bytes": 6438912
+    },
+    {
+      "path": "route-unit/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.1230493059993023,
+      "rss_bytes": 6422528
+    },
+    {
+      "path": "scaleout-regressions/probe.json",
+      "status": "completed",
+      "wall_seconds": 1.3882470079988707,
+      "rss_bytes": 60104704
+    },
+    {
+      "path": "shared-congestion/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.8673624700022629,
+      "rss_bytes": 413601792
+    },
+    {
+      "path": "shared-congestion-network/probe.json",
+      "status": "completed",
+      "wall_seconds": 1.1755275030009216,
+      "rss_bytes": 446246912
+    },
+    {
+      "path": "shared-slow-topology-command/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.21098335999704432,
+      "rss_bytes": 6443008
+    },
+    {
+      "path": "shared-topology-command/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.21584159700432792,
+      "rss_bytes": 7471104
+    },
+    {
+      "path": "source-runtime-final-verification/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.9809923279972281,
+      "rss_bytes": 63815680
+    },
+    {
+      "path": "syntax-api/probe.json",
+      "status": "completed",
+      "wall_seconds": 1.7903608690103283,
+      "rss_bytes": 306655232
+    },
+    {
+      "path": "syntax-api-idle/probe.json",
+      "status": "completed",
+      "wall_seconds": 1.7484643820062047,
+      "rss_bytes": 305610752
+    },
+    {
+      "path": "syntax-fabric/probe.json",
+      "status": "completed",
+      "wall_seconds": 4.7818082199955825,
+      "rss_bytes": 683339776
+    },
+    {
+      "path": "syntax-native/probe.json",
+      "status": "completed",
+      "wall_seconds": 1.2130192030017497,
+      "rss_bytes": 201736192
+    },
+    {
+      "path": "syntax-native-freeze/probe.json",
+      "status": "completed",
+      "wall_seconds": 1.2105095190054271,
+      "rss_bytes": 205959168
+    },
+    {
+      "path": "syntax-streams/probe.json",
+      "status": "completed",
+      "wall_seconds": 4.376182760010124,
+      "rss_bytes": 630566912
+    },
+    {
+      "path": "transactions/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.6415335810015677,
+      "rss_bytes": 413810688
+    },
+    {
+      "path": "transactions-network/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.9880990230012685,
+      "rss_bytes": 437567488
+    }
+  ],
+  "fresh_configures": 1,
+  "fresh_full_compiles": 1,
+  "actual_network_executions": 8,
+  "native_object_assertions": 20,
+  "route_test_methods": 10,
+  "exhaustive_nic_pairs": 512,
+  "scaleout_regression_executions": 153,
+  "focused_regression_executions": 52,
+  "counts_include_reused_methods": true,
+  "mutation_classes_rejected": 10,
+  "public_negative_entries": 3,
+  "dependency_checkouts_verified": 13,
+  "local_dependency_commits": [
+    {
+      "name": "LLMServingSim",
+      "path": "third_party/LLMServingSim",
+      "baseline": "e96d8391d9ad4768bfd7c4a1206abcfb8e34e9a1",
+      "commit": "94f3b005f7174575780bfe29d68e015df9719951",
+      "bundle": "LLMServingSim.bundle",
+      "sha256": "6e397512087d7b0d278d2f724817ca4a196204a144d2a287686f15eae2385db4",
+      "requires_baseline": true
+    },
+    {
+      "name": "ASTRA-sim",
+      "path": "third_party/LLMServingSim/astra-sim",
+      "baseline": "8ecf388a667de9d45866da1ee9829938d6218686",
+      "commit": "0c51d089094d2a39aa91ac8ba32e4ca28f3e1714",
+      "bundle": "ASTRA-sim.bundle",
+      "sha256": "3bf004bafd195960ca4b34d164df22b6a67b660f847cca95f4bb660e757b316a",
+      "requires_baseline": true
+    },
+    {
+      "name": "ASTRA-original-ns3-backend",
+      "path": "third_party/LLMServingSim/astra-sim/extern/network_backend/ns-3",
+      "baseline": "68a07f7d5e53bbe97d275af41d4964ad01b864f3",
+      "commit": "47f8faddf14036da27b004411701e9729de7479c",
+      "bundle": "ASTRA-original-ns3-backend.bundle",
+      "sha256": "debcc40409024d409a408273df299e0f2b133a40652c1412974f045104f7ff87",
+      "requires_baseline": true
+    }
+  ],
+  "copied_source_recovery": true,
+  "additional_recovery_networks": 0,
+  "additional_recovery_builds": 0,
+  "same_plane_physical_nic_binding": true,
+  "shared_agg_actual_contention": true,
+  "alternate_path_case_had_no_actual_packet_loss": true,
+  "production_fault_or_gpu_calibration": false,
+  "public_example_byte_identical": true,
+  "gpu_executed": false,
+  "downloaded": false,
+  "pushed": false,
+  "archive": {
+    "sha256": "4cff1ee79454faca83ecc1aa732c4d0927f6ff4e6498fbb518f405cf519e2b27",
+    "members": 554,
+    "compressed_bytes": 18009701,
+    "uncompressed_bytes": 85687037
+  },
+  "failures_preserved": [
+    "dependency-check/probe.json",
+    "fresh-build/probe.json",
+    "native-api-compile/probe.json",
+    "packet-audit/probe.json",
+    "partition-network/probe.json",
+    "partition/execution/probe.json"
+  ],
+  "source_saving_failure": {
+    "action": "git commit -m Bind persistent RDMA queue pairs to registered local NIC addresses",
+    "repository": "third_party/LLMServingSim/astra-sim/extern/network_backend/ns-3",
+    "exit_code": 128,
+    "reason": "Author identity unknown; unable to auto-detect email address",
+    "correction": "Use per-command Codex <codex@local.invalid>, as in existing local commits; no global/local identity config change",
+    "network_executed": false
+  }
+}

@@ -1,0 +1,160 @@
+{
+  "independent": {
+    "passed": true,
+    "physical_tx": 792,
+    "physical_rx": 792,
+    "arrival_drops": 0,
+    "local_drops": 0,
+    "source_packets": 66,
+    "streams": 2,
+    "work": 2,
+    "shared_queue_ports": [],
+    "cnp_packets": 0,
+    "finish_ns": 15159,
+    "network_passed": true
+  },
+  "shared-congestion": {
+    "passed": true,
+    "physical_tx": 1902,
+    "physical_rx": 1902,
+    "arrival_drops": 0,
+    "local_drops": 0,
+    "source_packets": 132,
+    "streams": 4,
+    "work": 4,
+    "shared_queue_ports": [
+      [
+        10,
+        3
+      ],
+      [
+        12,
+        5
+      ]
+    ],
+    "cnp_packets": 53,
+    "finish_ns": 96569,
+    "network_passed": true
+  },
+  "transactions": {
+    "passed": true,
+    "physical_tx": 120,
+    "physical_rx": 120,
+    "arrival_drops": 0,
+    "local_drops": 0,
+    "source_packets": 10,
+    "streams": 4,
+    "work": 10,
+    "shared_queue_ports": [],
+    "cnp_packets": 0,
+    "finish_ns": 66398,
+    "network_passed": true,
+    "memory": {
+      "operations": 6,
+      "atomic_replies": 4,
+      "final_atomic_value": 10
+    }
+  },
+  "modern": {
+    "passed": true,
+    "physical_tx": 552,
+    "physical_rx": 552,
+    "arrival_drops": 0,
+    "local_drops": 0,
+    "source_packets": 46,
+    "streams": 8,
+    "work": 46,
+    "shared_queue_ports": [],
+    "cnp_packets": 0,
+    "finish_ns": 106206,
+    "network_passed": true,
+    "application_events": 322,
+    "functional_acceptance": {
+      "passed": true,
+      "modern_operations": 60,
+      "modern_events": 322,
+      "native_remote_operations": 50,
+      "native_local_operations": 47,
+      "paths": {
+        "gin_self": 20,
+        "rdma": 30,
+        "local": 10
+      },
+      "calls": 2,
+      "ranks": 2,
+      "decisions": 63,
+      "finish_ns": 106206,
+      "actual_target_applications": 50,
+      "actual_source_packets": 46,
+      "retransmitted_source_packets": 0,
+      "decoded_frames": 46,
+      "observed_out_of_order_data_packets": 0,
+      "physical_capture_events": 2024,
+      "scope": "functional byte/event acceptance, not numerical model or calibrated GPU/provider performance"
+    }
+  },
+  "alternate": {
+    "passed": true,
+    "physical_tx": 1584,
+    "physical_rx": 1584,
+    "arrival_drops": 0,
+    "local_drops": 0,
+    "source_packets": 132,
+    "streams": 4,
+    "work": 4,
+    "shared_queue_ports": [
+      [
+        13,
+        5
+      ]
+    ],
+    "cnp_packets": 0,
+    "finish_ns": 17879,
+    "network_passed": true
+  },
+  "partition": {
+    "passed": true,
+    "physical_tx": 1293,
+    "physical_rx": 1287,
+    "arrival_drops": 6,
+    "local_drops": 93,
+    "source_packets": 198,
+    "streams": 4,
+    "work": 4,
+    "shared_queue_ports": [
+      [
+        10,
+        3
+      ]
+    ],
+    "cnp_packets": 0,
+    "finish_ns": 560000,
+    "network_passed": false
+  },
+  "single_compatibility": {
+    "passed": true,
+    "ignored_fields": [
+      "loaded_libraries"
+    ]
+  },
+  "passed": true,
+  "native_source_commit": "47f8faddf14036da27b004411701e9729de7479c",
+  "native_object_checks": 20,
+  "binaries": {
+    "probe": "ceef8aa4bb87adc2ef384b1dc3496b6ab66d3eb864f768f6a80c9c4be1e6c8b6",
+    "stream_probe": "dbbdcbcf0d65e77a46846614df810ceca0ce8f5caebc5277c23266f87da1becc",
+    "transaction_probe": "c319c69d039fb44722f13cd186982368ea741cecf88ac92462ac9d418a2d3070",
+    "transaction_session": "81d73bf820e52260b19b2e993798d6afea3d4766d6dc79c6c54c36e8bb8e6273",
+    "service": "b6f7da8a3fbc3422b7f9bebef14bc5357e4e6a2dae3375656d5ace3720dcf5de"
+  },
+  "libraries": {
+    "libns3.42-applications.so": "6546f3c773238b7ff260ccea32aa38af1d6a4488b66a6a3033425aeb26813b1c",
+    "libns3.42-point-to-point.so": "a1ccff4a2c357a3757522e857eaf0c0e3a68ff803ae7ced8382763e54de4ec11",
+    "libns3.42-internet.so": "9ba3b00b940a7d4cd812dea72fb5b6583d6b78c0a2c7ae013b20c183a48e91fe",
+    "libns3.42-network.so": "022d566d9d1f9772fb4713ac65b5d43379d459834fabf1708320423e48196f97",
+    "libns3.42-core.so": "023bb8acce7796af7ca95e28dd55004d256d389594d3870f750d8b7f878e0e37",
+    "libns3.42-stats.so": "3af77dc5faeaa79da1c190caf9cda53e74b8217ec5f9cc8196c3f48726e423e5",
+    "libns3.42-bridge.so": "75afeb64b2cf5442706b1f77a74befcac9fbfad85bfec7af16e55bb702337b99",
+    "libns3.42-traffic-control.so": "e73f16d6dd51a31de4a5c6f7d20790e43536e41f8fa62d317254425accf788d7"
+  }
+}

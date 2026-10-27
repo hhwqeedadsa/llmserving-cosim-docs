@@ -14,6 +14,10 @@
 ## 当前范围和预算
 
 
+当前新增数据接收 `in_progress`：[接收与统计协议](../../experiments/route_coverage/local_additions_protocol.md)。用户确认新增13份均为R1/MMLU；先完整校验、保留缺层文件、登记用户来源与固定版本身份缺项，再扩展离线需求覆盖。旧四请求manifest不改，不伪造远端身份已验证的新平台manifest。180秒/128MiB、每命令60秒/RSS1GiB/地址2GiB、源文件≤64份/64MiB，不执行新网络、下载或GPU。
+
+
+
 当前研究 `in_progress`：[完整普通DAG的网络配置迁移判别](../../experiments/static_dag_transfer/protocol.md)，起点`04bb879`。以已归档三组现代调用作参考，只从原网络提取完整native DAG，冻结后通过公开事务会话在三种网络执行，最多3次新网络；原网络等价性不通过则停止，不能删控制消息或把转换错误当语义贡献。内存盘已清空，先按hash从持久归档恢复运行时/八库和原始证据。900秒/512MiB、每命令60秒/RSS1GiB/地址2GiB、网络1ms/result16MiB/capture20000；不改平台/依赖、不构建安装下载/GPU或push。详细边界、竞争解释及去留条件见协议。
 
 

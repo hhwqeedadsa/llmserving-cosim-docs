@@ -1,0 +1,21 @@
+{
+  "completed": true,
+  "monitored_seconds_before_finalizer": 7.276570264992188,
+  "finalizer_reserved_seconds": 60,
+  "stage_seconds_limit": 180,
+  "stage_bytes_limit": 134217728,
+  "new_files_received": 13,
+  "new_structure_valid_files": 11,
+  "new_remote_revision_verified_files": 0,
+  "formal_network_manifest_created": false,
+  "network_simulations": 0,
+  "old_manifest_unchanged": true,
+  "user_source_confirmation": "All 13 from cognitivecomputations/DeepSeek-R1-AWQ/mmlu",
+  "sha256": {
+    "intake.json": "6fb24dd4229bbd42d73900062f769806aecda2b20a78c30c62c564ffe6cda558",
+    "traffic-demand.json": "0ad5874a22328016918edfe92aa824c658d3d0a87f9c0e2098a5ead01a1cf536",
+    "verification.json": "fbc3cbf6ec497aab0363c160108023bf79993e356b696f905ec3c2166dccaed7",
+    "local_only_witnesses.json": "f1ce47151d32b3d42aa395db800772bf3b8d4da7b77b1fca1b04e7922d4e5e09",
+    "report.md": "849ab30e8994e6da928f6208010f2c47b0f95911ffb86e84f2975159d590beca"
+  }
+}

@@ -1,0 +1,263 @@
+{
+  "schema_version": "moe-local-route-demand/1",
+  "input_scope": "structure_valid_files_only_remote_identity_pending_for_new_files",
+  "batch_definition": "distinct_requests_per_EP_group",
+  "ranks": 4,
+  "expert_placement": "contiguous_64_experts_per_rank",
+  "source_assignment": "eligible_order_modulo4",
+  "activation": "declared_BF16_not_collection_evidence",
+  "hidden_size": 7168,
+  "excluded": [
+    "metadata",
+    "headers",
+    "control",
+    "ACK",
+    "Combine",
+    "compute",
+    "arrivals",
+    "queues",
+    "latency"
+  ],
+  "eligible_order": [
+    "900.json",
+    "901.json",
+    "905.json",
+    "1003.json",
+    "1004.json",
+    "1007.json",
+    "1008.json",
+    "1011.json",
+    "1472.json",
+    "1477.json",
+    "1480.json",
+    "1481.json",
+    "1808.json",
+    "2675.json",
+    "6447.json"
+  ],
+  "source_count_changes_with_batch": true,
+  "batches": [
+    {
+      "batch": 1,
+      "state": "offline_demand_only",
+      "groups": [
+        [
+          "900.json"
+        ],
+        [
+          "901.json"
+        ],
+        [
+          "905.json"
+        ],
+        [
+          "1003.json"
+        ],
+        [
+          "1004.json"
+        ],
+        [
+          "1007.json"
+        ],
+        [
+          "1008.json"
+        ],
+        [
+          "1011.json"
+        ],
+        [
+          "1472.json"
+        ],
+        [
+          "1477.json"
+        ],
+        [
+          "1480.json"
+        ],
+        [
+          "1481.json"
+        ],
+        [
+          "1808.json"
+        ],
+        [
+          "2675.json"
+        ],
+        [
+          "6447.json"
+        ]
+      ],
+      "common_decode_steps_per_group": [
+        128,
+        75,
+        128,
+        128,
+        72,
+        128,
+        128,
+        128,
+        128,
+        128,
+        128,
+        128,
+        128,
+        128,
+        128
+      ],
+      "unused_decode_steps": 0,
+      "unused_request_files": [],
+      "dispatch_payload_bytes": {
+        "count": 105038,
+        "minimum": 0,
+        "median": 28672,
+        "p95_nearest_rank": 43008,
+        "maximum": 43008
+      },
+      "layer_step_group_waves": 105038,
+      "zero_remote_demand_waves": 6
+    },
+    {
+      "batch": 2,
+      "state": "offline_demand_only",
+      "groups": [
+        [
+          "900.json",
+          "901.json"
+        ],
+        [
+          "905.json",
+          "1003.json"
+        ],
+        [
+          "1004.json",
+          "1007.json"
+        ],
+        [
+          "1008.json",
+          "1011.json"
+        ],
+        [
+          "1472.json",
+          "1477.json"
+        ],
+        [
+          "1480.json",
+          "1481.json"
+        ],
+        [
+          "1808.json",
+          "2675.json"
+        ]
+      ],
+      "common_decode_steps_per_group": [
+        75,
+        128,
+        72,
+        128,
+        128,
+        128,
+        128
+      ],
+      "unused_decode_steps": 109,
+      "unused_request_files": [
+        "6447.json"
+      ],
+      "dispatch_payload_bytes": {
+        "count": 45646,
+        "minimum": 28672,
+        "median": 71680,
+        "p95_nearest_rank": 86016,
+        "maximum": 86016
+      },
+      "layer_step_group_waves": 45646,
+      "zero_remote_demand_waves": 0
+    },
+    {
+      "batch": 4,
+      "state": "offline_demand_only",
+      "groups": [
+        [
+          "900.json",
+          "901.json",
+          "905.json",
+          "1003.json"
+        ],
+        [
+          "1004.json",
+          "1007.json",
+          "1008.json",
+          "1011.json"
+        ],
+        [
+          "1472.json",
+          "1477.json",
+          "1480.json",
+          "1481.json"
+        ]
+      ],
+      "common_decode_steps_per_group": [
+        75,
+        72,
+        128
+      ],
+      "unused_decode_steps": 327,
+      "unused_request_files": [
+        "1808.json",
+        "2675.json",
+        "6447.json"
+      ],
+      "dispatch_payload_bytes": {
+        "count": 15950,
+        "minimum": 71680,
+        "median": 129024,
+        "p95_nearest_rank": 157696,
+        "maximum": 172032
+      },
+      "layer_step_group_waves": 15950,
+      "zero_remote_demand_waves": 0
+    },
+    {
+      "batch": 8,
+      "state": "offline_demand_only",
+      "groups": [
+        [
+          "900.json",
+          "901.json",
+          "905.json",
+          "1003.json",
+          "1004.json",
+          "1007.json",
+          "1008.json",
+          "1011.json"
+        ]
+      ],
+      "common_decode_steps_per_group": [
+        72
+      ],
+      "unused_decode_steps": 339,
+      "unused_request_files": [
+        "1472.json",
+        "1477.json",
+        "1480.json",
+        "1481.json",
+        "1808.json",
+        "2675.json",
+        "6447.json"
+      ],
+      "dispatch_payload_bytes": {
+        "count": 4176,
+        "minimum": 186368,
+        "median": 272384,
+        "p95_nearest_rank": 301056,
+        "maximum": 344064
+      },
+      "layer_step_group_waves": 4176,
+      "zero_remote_demand_waves": 0
+    },
+    {
+      "batch": 16,
+      "state": "insufficient_distinct_valid_requests",
+      "available": 15
+    }
+  ]
+}

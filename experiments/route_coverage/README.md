@@ -2,6 +2,31 @@
 
 本目录盘点当前可读取的真实请求文件，准备少量、分来源的后续数据，并核算其声明部署下的通信需求。它不运行网络，不生成实测GPU时间。边界与获取预算见[事前协议](protocol.md)，实际结果见[报告](results/20261026/report.md)。
 
+2026-10-27用户又提供13份R1/MMLU文件，11份结构完整、2份缺层；加上原四份，当前离线可分析15份。新增远端固定修订内容身份仍待核验，接收结果见[新增数据报告](results/local_additions_20261027/report.md)，不能沿用旧报告的“本机只有四份”作为当前事实。
+
+## 用户新增文件的接收
+
+该操作只写本地接收报告与离线需求，不生成来源身份尚未核实的可执行平台manifest。目录来源须由用户明确确认；当前已确认全部为DeepSeek-R1-AWQ/MMLU。完整规则见[接收协议](local_additions_protocol.md)。
+
+```bash
+PYTHONPATH=python:. PYTHONDONTWRITEBYTECODE=1 python3 -B \
+  experiments/route_coverage/local_additions.py \
+  --directory data/moe-trace-small \
+  --existing-manifest data/moe-trace-small/manifest.json \
+  --catalog-cache runs/moe_trace_dataset_review_20261018/dataset-api.json \
+  --output-dir runs/my-local-additions
+
+PYTHONPATH=python:. PYTHONDONTWRITEBYTECODE=1 python3 -B \
+  experiments/route_coverage/check_local_additions.py \
+  --directory data/moe-trace-small \
+  --existing-manifest data/moe-trace-small/manifest.json \
+  --catalog-cache runs/moe_trace_dataset_review_20261018/dataset-api.json \
+  --analysis-dir runs/my-local-additions \
+  --output runs/my-local-additions-check.json
+```
+
+单文件8MiB、总源64MiB、最多64文件；扫描只接收数字名JSON，完整文件保留全部入口，缺层文件整份排除且记录位置。当前独立checker针对这17个原件的已知完整/缺层结果，不把固定期望当通用数据质量证明。`intake.json`记录来源、结构、SHA256及拒绝原因；`traffic-demand.json`记录合格文件、batch分组、共同观察长度及未用请求/步骤，不会修改旧manifest。
+
 ## 现有原件的操作
 
 从仓库根目录执行，输出目录必须不存在。原件由用户先前下载，位于 `data/moe-trace-small/`，不随Git分发。

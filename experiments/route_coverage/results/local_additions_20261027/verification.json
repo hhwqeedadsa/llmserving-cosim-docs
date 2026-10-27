@@ -1,0 +1,72 @@
+{
+  "passed": true,
+  "independent_source_rows": 145232,
+  "independent_expert_choices": 1161856,
+  "independent_demand_waves": 170810,
+  "complete_files": 15,
+  "new_complete_files": 11,
+  "rejected_files": {
+    "899.json": [
+      {
+        "entry_index": 127,
+        "missing": [
+          "43",
+          "44",
+          "45",
+          "46",
+          "47",
+          "48",
+          "49",
+          "50",
+          "51",
+          "52",
+          "53",
+          "54",
+          "55",
+          "56",
+          "57",
+          "58",
+          "59",
+          "60"
+        ],
+        "extra": []
+      }
+    ],
+    "1479.json": [
+      {
+        "entry_index": 128,
+        "missing": [
+          "38",
+          "39",
+          "40",
+          "41",
+          "42",
+          "43",
+          "44",
+          "45",
+          "46",
+          "47",
+          "48",
+          "49",
+          "50",
+          "51",
+          "52",
+          "53",
+          "54",
+          "55",
+          "56",
+          "57",
+          "58",
+          "59",
+          "60"
+        ],
+        "extra": []
+      }
+    ]
+  },
+  "rejected_files_excluded_from_all_groups": true,
+  "original_manifest_unchanged": true,
+  "deterministic_reanalysis": true,
+  "network_simulations": 0,
+  "new_remote_identities_verified": 0
+}

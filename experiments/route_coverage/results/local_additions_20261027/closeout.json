@@ -1,0 +1,90 @@
+{
+  "completed": true,
+  "monitored_seconds": 7.6156389489915455,
+  "artifact_bytes": 331855,
+  "stage_seconds_limit": 180,
+  "stage_bytes_limit": 134217728,
+  "native_network_executions": 0,
+  "platform_modified": false,
+  "pushed": false,
+  "commands": [
+    {
+      "command": [
+        "python3",
+        "-B",
+        "experiments/route_coverage/local_additions.py",
+        "--directory",
+        "data/moe-trace-small",
+        "--existing-manifest",
+        "data/moe-trace-small/manifest.json",
+        "--catalog-cache",
+        "runs/moe_trace_dataset_review_20261018/dataset-api.json",
+        "--output-dir",
+        "runs/route_local_additions_20261027/intake"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 1.7363813830015715,
+      "peak_sampled_group_rss_bytes": 104095744
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "experiments/route_coverage/local_additions.py",
+        "--directory",
+        "data/moe-trace-small",
+        "--existing-manifest",
+        "data/moe-trace-small/manifest.json",
+        "--catalog-cache",
+        "runs/moe_trace_dataset_review_20261018/dataset-api.json",
+        "--output-dir",
+        "runs/route_local_additions_20261027/final-intake"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 1.84740853299445,
+      "peak_sampled_group_rss_bytes": 105172992
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "experiments/route_coverage/check_local_additions.py",
+        "--directory",
+        "data/moe-trace-small",
+        "--existing-manifest",
+        "data/moe-trace-small/manifest.json",
+        "--catalog-cache",
+        "runs/moe_trace_dataset_review_20261018/dataset-api.json",
+        "--analysis-dir",
+        "runs/route_local_additions_20261027/final-intake",
+        "--output",
+        "runs/route_local_additions_20261027/verification.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 3.692780348996166,
+      "peak_sampled_group_rss_bytes": 139935744
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "experiments/route_coverage/finalize_local_additions.py",
+        "--stage",
+        "runs/route_local_additions_20261027",
+        "--output-dir",
+        "experiments/route_coverage/results/local_additions_20261027"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.33906868399935775,
+      "peak_sampled_group_rss_bytes": 29011968
+    }
+  ]
+}

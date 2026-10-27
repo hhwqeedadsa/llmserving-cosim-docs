@@ -1,0 +1,1360 @@
+{
+  "schema_version": "moe-local-route-intake/1",
+  "input_files": 17,
+  "input_bytes": 34752148,
+  "source": {
+    "dataset_id": "core12345/MoE_expert_selection_trace",
+    "collector_model_id": "cognitivecomputations/DeepSeek-R1-AWQ",
+    "confirmed_directory": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/",
+    "reference_catalog_revision": "27febb7b2d24169560a9f6f83d38eb53f94916cf",
+    "newly_supplied_download_revision": null,
+    "newly_supplied_remote_identity_verified": false,
+    "catalog_complete": false,
+    "selection": "user_convenience_sample_not_random_or_heldout"
+  },
+  "existing_manifest_sha256": "caf6870f867e3307c52873a4fa1491c9225ff77f9735742b8a74313f80717a16",
+  "populations": {
+    "existing_four": {
+      "files": 4,
+      "prompt_tokens": 149,
+      "decode_steps": 512,
+      "token_layer_rows": 38338,
+      "expert_choices": 306704
+    },
+    "new_user_supplied": {
+      "files": 11,
+      "prompt_tokens": 544,
+      "decode_steps": 1299,
+      "token_layer_rows": 106894,
+      "expert_choices": 855152
+    },
+    "all": {
+      "files": 15,
+      "prompt_tokens": 693,
+      "decode_steps": 1811,
+      "token_layer_rows": 145232,
+      "expert_choices": 1161856
+    }
+  },
+  "rejected_files": [
+    "899.json",
+    "1479.json"
+  ],
+  "files": [
+    {
+      "name": "899.json",
+      "local_path": "/home/lry/moe-ub-cosim/data/moe-trace-small/899.json",
+      "bytes": 2096227,
+      "sha256": "075c65f23f25c6145ab3ab66fcdad215cd17a88515d57a74cf2aa980bb4925dd",
+      "group": "new_user_supplied",
+      "origin_candidates": [
+        "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/college_chemistry/899.json"
+      ],
+      "origin_directory_user_confirmed": true,
+      "source_identity": "user_directory_and_historical_path_only",
+      "remote_revision_content_verified": false,
+      "original_path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/college_chemistry/899.json",
+      "duplicate_of": null,
+      "observed_entries": 128,
+      "layer_set_errors": [
+        {
+          "entry_index": 127,
+          "missing": [
+            "43",
+            "44",
+            "45",
+            "46",
+            "47",
+            "48",
+            "49",
+            "50",
+            "51",
+            "52",
+            "53",
+            "54",
+            "55",
+            "56",
+            "57",
+            "58",
+            "59",
+            "60"
+          ],
+          "extra": []
+        }
+      ],
+      "structure_valid": false,
+      "rejection_reason": "Missing/extra source layer",
+      "eligible_offline": false
+    },
+    {
+      "name": "900.json",
+      "local_path": "/home/lry/moe-ub-cosim/data/moe-trace-small/900.json",
+      "bytes": 1789762,
+      "sha256": "cee894cf6401b3b518b8bd8784762fd629528006c660a91383069bc80146163d",
+      "group": "new_user_supplied",
+      "origin_candidates": [
+        "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/college_chemistry/900.json"
+      ],
+      "origin_directory_user_confirmed": true,
+      "source_identity": "user_directory_and_historical_path_only",
+      "remote_revision_content_verified": false,
+      "original_path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/college_chemistry/900.json",
+      "duplicate_of": null,
+      "observed_entries": 129,
+      "layer_set_errors": [],
+      "structure_valid": true,
+      "prompt_tokens": 14,
+      "decode_entries": 128,
+      "token_layer_rows": 8236,
+      "expert_choices": 65888,
+      "eligible_offline": true
+    },
+    {
+      "name": "901.json",
+      "local_path": "/home/lry/moe-ub-cosim/data/moe-trace-small/901.json",
+      "bytes": 1549435,
+      "sha256": "8a6a2620152ce43255c7243f16a9a05f17a7cc9df993e5da4923e1ae4f1221e5",
+      "group": "new_user_supplied",
+      "origin_candidates": [
+        "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/college_chemistry/901.json"
+      ],
+      "origin_directory_user_confirmed": true,
+      "source_identity": "user_directory_and_historical_path_only",
+      "remote_revision_content_verified": false,
+      "original_path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/college_chemistry/901.json",
+      "duplicate_of": null,
+      "observed_entries": 76,
+      "layer_set_errors": [],
+      "structure_valid": true,
+      "prompt_tokens": 53,
+      "decode_entries": 75,
+      "token_layer_rows": 7424,
+      "expert_choices": 59392,
+      "eligible_offline": true
+    },
+    {
+      "name": "905.json",
+      "local_path": "/home/lry/moe-ub-cosim/data/moe-trace-small/905.json",
+      "bytes": 1844899,
+      "sha256": "abab099e678cb7fad8d9dbba30d06fa4099410d32d11f766c30c2426daac2851",
+      "group": "new_user_supplied",
+      "origin_candidates": [
+        "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/college_chemistry/905.json"
+      ],
+      "origin_directory_user_confirmed": true,
+      "source_identity": "user_directory_and_historical_path_only",
+      "remote_revision_content_verified": false,
+      "original_path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/college_chemistry/905.json",
+      "duplicate_of": null,
+      "observed_entries": 129,
+      "layer_set_errors": [],
+      "structure_valid": true,
+      "prompt_tokens": 19,
+      "decode_entries": 128,
+      "token_layer_rows": 8526,
+      "expert_choices": 68208,
+      "eligible_offline": true
+    },
+    {
+      "name": "1003.json",
+      "local_path": "/home/lry/moe-ub-cosim/data/moe-trace-small/1003.json",
+      "bytes": 2124100,
+      "sha256": "f57f4047a5813f8f0c02b0a0eea52c914ef4cec3b9bed890791c686ad6995187",
+      "group": "new_user_supplied",
+      "origin_candidates": [
+        "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/college_computer_science/1003.json"
+      ],
+      "origin_directory_user_confirmed": true,
+      "source_identity": "user_directory_and_historical_path_only",
+      "remote_revision_content_verified": false,
+      "original_path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/college_computer_science/1003.json",
+      "duplicate_of": null,
+      "observed_entries": 129,
+      "layer_set_errors": [],
+      "structure_valid": true,
+      "prompt_tokens": 44,
+      "decode_entries": 128,
+      "token_layer_rows": 9976,
+      "expert_choices": 79808,
+      "eligible_offline": true
+    },
+    {
+      "name": "1004.json",
+      "local_path": "/home/lry/moe-ub-cosim/data/moe-trace-small/1004.json",
+      "bytes": 1008882,
+      "sha256": "b4666178efd2472f056e631728980b37d572e4a74147471d2c3dde66a7642b40",
+      "group": "new_user_supplied",
+      "origin_candidates": [
+        "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/college_computer_science/1004.json"
+      ],
+      "origin_directory_user_confirmed": true,
+      "source_identity": "user_directory_and_historical_path_only",
+      "remote_revision_content_verified": false,
+      "original_path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/college_computer_science/1004.json",
+      "duplicate_of": null,
+      "observed_entries": 73,
+      "layer_set_errors": [],
+      "structure_valid": true,
+      "prompt_tokens": 8,
+      "decode_entries": 72,
+      "token_layer_rows": 4640,
+      "expert_choices": 37120,
+      "eligible_offline": true
+    },
+    {
+      "name": "1007.json",
+      "local_path": "/home/lry/moe-ub-cosim/data/moe-trace-small/1007.json",
+      "bytes": 2113095,
+      "sha256": "fe6242fe706a21168c1775a2697bf84e4f45357fd34263d5638e2e92789ab179",
+      "group": "new_user_supplied",
+      "origin_candidates": [
+        "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/college_computer_science/1007.json"
+      ],
+      "origin_directory_user_confirmed": true,
+      "source_identity": "user_directory_and_historical_path_only",
+      "remote_revision_content_verified": false,
+      "original_path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/college_computer_science/1007.json",
+      "duplicate_of": null,
+      "observed_entries": 129,
+      "layer_set_errors": [],
+      "structure_valid": true,
+      "prompt_tokens": 43,
+      "decode_entries": 128,
+      "token_layer_rows": 9918,
+      "expert_choices": 79344,
+      "eligible_offline": true
+    },
+    {
+      "name": "1008.json",
+      "local_path": "/home/lry/moe-ub-cosim/data/moe-trace-small/1008.json",
+      "bytes": 3117490,
+      "sha256": "adca5765840be6c91bc24e6904361a3f8d0207620f6a590bab415e2638b1d75c",
+      "group": "new_user_supplied",
+      "origin_candidates": [
+        "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/college_computer_science/1008.json"
+      ],
+      "origin_directory_user_confirmed": true,
+      "source_identity": "user_directory_and_historical_path_only",
+      "remote_revision_content_verified": false,
+      "original_path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/college_computer_science/1008.json",
+      "duplicate_of": null,
+      "observed_entries": 129,
+      "layer_set_errors": [],
+      "structure_valid": true,
+      "prompt_tokens": 133,
+      "decode_entries": 128,
+      "token_layer_rows": 15138,
+      "expert_choices": 121104,
+      "eligible_offline": true
+    },
+    {
+      "name": "1011.json",
+      "local_path": "/home/lry/moe-ub-cosim/data/moe-trace-small/1011.json",
+      "bytes": 2482170,
+      "sha256": "e0e7ea297df844c59bb90bdf7806f601d3ddaf99ab18ccd641db2c6e81f933bb",
+      "group": "new_user_supplied",
+      "origin_candidates": [
+        "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/college_computer_science/1011.json"
+      ],
+      "origin_directory_user_confirmed": true,
+      "source_identity": "user_directory_and_historical_path_only",
+      "remote_revision_content_verified": false,
+      "original_path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/college_computer_science/1011.json",
+      "duplicate_of": null,
+      "observed_entries": 129,
+      "layer_set_errors": [],
+      "structure_valid": true,
+      "prompt_tokens": 76,
+      "decode_entries": 128,
+      "token_layer_rows": 11832,
+      "expert_choices": 94656,
+      "eligible_offline": true
+    },
+    {
+      "name": "1472.json",
+      "local_path": "/home/lry/moe-ub-cosim/data/moe-trace-small/1472.json",
+      "bytes": 2804150,
+      "sha256": "3085c39e9b9950a7e68f30eed8517eaecbfe3d0ad75d813925ff788a1c164255",
+      "group": "existing_four",
+      "origin_candidates": [
+        "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/computer_security/1472.json"
+      ],
+      "origin_directory_user_confirmed": false,
+      "source_identity": "existing_manifest",
+      "remote_revision_content_verified": true,
+      "original_path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/computer_security/1472.json",
+      "duplicate_of": null,
+      "observed_entries": 129,
+      "layer_set_errors": [],
+      "structure_valid": true,
+      "prompt_tokens": 105,
+      "decode_entries": 128,
+      "token_layer_rows": 13514,
+      "expert_choices": 108112,
+      "eligible_offline": true
+    },
+    {
+      "name": "1477.json",
+      "local_path": "/home/lry/moe-ub-cosim/data/moe-trace-small/1477.json",
+      "bytes": 3061462,
+      "sha256": "0dd8cd33c9a2d0175f222e36274cbbf873cc5de9b3abbc024c6a81895d88c048",
+      "group": "new_user_supplied",
+      "origin_candidates": [
+        "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/computer_security/1477.json"
+      ],
+      "origin_directory_user_confirmed": true,
+      "source_identity": "user_directory_and_historical_path_only",
+      "remote_revision_content_verified": false,
+      "original_path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/computer_security/1477.json",
+      "duplicate_of": null,
+      "observed_entries": 129,
+      "layer_set_errors": [],
+      "structure_valid": true,
+      "prompt_tokens": 128,
+      "decode_entries": 128,
+      "token_layer_rows": 14848,
+      "expert_choices": 118784,
+      "eligible_offline": true
+    },
+    {
+      "name": "1479.json",
+      "local_path": "/home/lry/moe-ub-cosim/data/moe-trace-small/1479.json",
+      "bytes": 1816729,
+      "sha256": "cde13495f16a93f445c1a2a5ec12bb0b4505ac1fcceae46a63a67b9669d3a71d",
+      "group": "new_user_supplied",
+      "origin_candidates": [
+        "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/computer_security/1479.json"
+      ],
+      "origin_directory_user_confirmed": true,
+      "source_identity": "user_directory_and_historical_path_only",
+      "remote_revision_content_verified": false,
+      "original_path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/computer_security/1479.json",
+      "duplicate_of": null,
+      "observed_entries": 129,
+      "layer_set_errors": [
+        {
+          "entry_index": 128,
+          "missing": [
+            "38",
+            "39",
+            "40",
+            "41",
+            "42",
+            "43",
+            "44",
+            "45",
+            "46",
+            "47",
+            "48",
+            "49",
+            "50",
+            "51",
+            "52",
+            "53",
+            "54",
+            "55",
+            "56",
+            "57",
+            "58",
+            "59",
+            "60"
+          ],
+          "extra": []
+        }
+      ],
+      "structure_valid": false,
+      "rejection_reason": "Missing/extra source layer",
+      "eligible_offline": false
+    },
+    {
+      "name": "1480.json",
+      "local_path": "/home/lry/moe-ub-cosim/data/moe-trace-small/1480.json",
+      "bytes": 1866991,
+      "sha256": "adef7e2065576fae3a5db8eea07966e819b4428447209253d2cc2861f6d3485f",
+      "group": "new_user_supplied",
+      "origin_candidates": [
+        "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/computer_security/1480.json"
+      ],
+      "origin_directory_user_confirmed": true,
+      "source_identity": "user_directory_and_historical_path_only",
+      "remote_revision_content_verified": false,
+      "original_path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/computer_security/1480.json",
+      "duplicate_of": null,
+      "observed_entries": 129,
+      "layer_set_errors": [],
+      "structure_valid": true,
+      "prompt_tokens": 21,
+      "decode_entries": 128,
+      "token_layer_rows": 8642,
+      "expert_choices": 69136,
+      "eligible_offline": true
+    },
+    {
+      "name": "1481.json",
+      "local_path": "/home/lry/moe-ub-cosim/data/moe-trace-small/1481.json",
+      "bytes": 1687265,
+      "sha256": "4035bb389e7e7b0c10325de3df3491bee2c22ac9ff575b5e5d2a8ccf2db3fc84",
+      "group": "new_user_supplied",
+      "origin_candidates": [
+        "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/computer_security/1481.json"
+      ],
+      "origin_directory_user_confirmed": true,
+      "source_identity": "user_directory_and_historical_path_only",
+      "remote_revision_content_verified": false,
+      "original_path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/computer_security/1481.json",
+      "duplicate_of": null,
+      "observed_entries": 129,
+      "layer_set_errors": [],
+      "structure_valid": true,
+      "prompt_tokens": 5,
+      "decode_entries": 128,
+      "token_layer_rows": 7714,
+      "expert_choices": 61712,
+      "eligible_offline": true
+    },
+    {
+      "name": "1808.json",
+      "local_path": "/home/lry/moe-ub-cosim/data/moe-trace-small/1808.json",
+      "bytes": 1945385,
+      "sha256": "c8c9cf4917498a2195960dbd9c65e9efe027af6606db098d40b0db8f7c266092",
+      "group": "existing_four",
+      "origin_candidates": [
+        "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/econometrics/1808.json"
+      ],
+      "origin_directory_user_confirmed": false,
+      "source_identity": "existing_manifest",
+      "remote_revision_content_verified": true,
+      "original_path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/econometrics/1808.json",
+      "duplicate_of": null,
+      "observed_entries": 129,
+      "layer_set_errors": [],
+      "structure_valid": true,
+      "prompt_tokens": 28,
+      "decode_entries": 128,
+      "token_layer_rows": 9048,
+      "expert_choices": 72384,
+      "eligible_offline": true
+    },
+    {
+      "name": "2675.json",
+      "local_path": "/home/lry/moe-ub-cosim/data/moe-trace-small/2675.json",
+      "bytes": 1744578,
+      "sha256": "848633cf8afa1c9247d9cdaf5968bb09a5f2e2d409387f4a333ce7a6e35390cd",
+      "group": "existing_four",
+      "origin_candidates": [
+        "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/high_school_biology/2675.json"
+      ],
+      "origin_directory_user_confirmed": false,
+      "source_identity": "existing_manifest",
+      "remote_revision_content_verified": true,
+      "original_path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/high_school_biology/2675.json",
+      "duplicate_of": null,
+      "observed_entries": 129,
+      "layer_set_errors": [],
+      "structure_valid": true,
+      "prompt_tokens": 10,
+      "decode_entries": 128,
+      "token_layer_rows": 8004,
+      "expert_choices": 64032,
+      "eligible_offline": true
+    },
+    {
+      "name": "6447.json",
+      "local_path": "/home/lry/moe-ub-cosim/data/moe-trace-small/6447.json",
+      "bytes": 1699528,
+      "sha256": "265c8e66cfb49da12be0d8037cd7a8be6997f4207bcb0a48ca3c616bbe253b96",
+      "group": "existing_four",
+      "origin_candidates": [
+        "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/international_law/6447.json"
+      ],
+      "origin_directory_user_confirmed": false,
+      "source_identity": "existing_manifest",
+      "remote_revision_content_verified": true,
+      "original_path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/international_law/6447.json",
+      "duplicate_of": null,
+      "observed_entries": 129,
+      "layer_set_errors": [],
+      "structure_valid": true,
+      "prompt_tokens": 6,
+      "decode_entries": 128,
+      "token_layer_rows": 7772,
+      "expert_choices": 62176,
+      "eligible_offline": true
+    }
+  ],
+  "layers": [
+    {
+      "layer_id": 3,
+      "prefill": {
+        "selections": 5544,
+        "peak_to_mean": 3.2323232323232323,
+        "inactive_experts": 10,
+        "top8_selection_share": 0.0946969696969697
+      },
+      "decode": {
+        "selections": 14488,
+        "peak_to_mean": 3.2689122032026505,
+        "inactive_experts": 1,
+        "top8_selection_share": 0.08897018221976809
+      }
+    },
+    {
+      "layer_id": 4,
+      "prefill": {
+        "selections": 5544,
+        "peak_to_mean": 4.2481962481962485,
+        "inactive_experts": 8,
+        "top8_selection_share": 0.09884559884559885
+      },
+      "decode": {
+        "selections": 14488,
+        "peak_to_mean": 3.4632799558255107,
+        "inactive_experts": 3,
+        "top8_selection_share": 0.09504417448923247
+      }
+    },
+    {
+      "layer_id": 5,
+      "prefill": {
+        "selections": 5544,
+        "peak_to_mean": 3.832611832611833,
+        "inactive_experts": 4,
+        "top8_selection_share": 0.09036796536796536
+      },
+      "decode": {
+        "selections": 14488,
+        "peak_to_mean": 4.081722805080067,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.08448371065709552
+      }
+    },
+    {
+      "layer_id": 6,
+      "prefill": {
+        "selections": 5544,
+        "peak_to_mean": 6.372294372294372,
+        "inactive_experts": 1,
+        "top8_selection_share": 0.10804473304473304
+      },
+      "decode": {
+        "selections": 14488,
+        "peak_to_mean": 5.265599116510216,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.08952236333517394
+      }
+    },
+    {
+      "layer_id": 7,
+      "prefill": {
+        "selections": 5544,
+        "peak_to_mean": 10.897546897546897,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.1240981240981241
+      },
+      "decode": {
+        "selections": 14488,
+        "peak_to_mean": 9.311982330204307,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.11209276642738818
+      }
+    },
+    {
+      "layer_id": 8,
+      "prefill": {
+        "selections": 5544,
+        "peak_to_mean": 9.696969696969697,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.15313852813852813
+      },
+      "decode": {
+        "selections": 14488,
+        "peak_to_mean": 12.70458310325787,
+        "inactive_experts": 1,
+        "top8_selection_share": 0.12051352843732745
+      }
+    },
+    {
+      "layer_id": 9,
+      "prefill": {
+        "selections": 5544,
+        "peak_to_mean": 15.191919191919192,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.16756854256854256
+      },
+      "decode": {
+        "selections": 14488,
+        "peak_to_mean": 4.417448923246825,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.10091109884041966
+      }
+    },
+    {
+      "layer_id": 10,
+      "prefill": {
+        "selections": 5544,
+        "peak_to_mean": 7.341991341991342,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.12734487734487734
+      },
+      "decode": {
+        "selections": 14488,
+        "peak_to_mean": 5.760353395913859,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.11209276642738818
+      }
+    },
+    {
+      "layer_id": 11,
+      "prefill": {
+        "selections": 5544,
+        "peak_to_mean": 8.773448773448774,
+        "inactive_experts": 2,
+        "top8_selection_share": 0.13275613275613277
+      },
+      "decode": {
+        "selections": 14488,
+        "peak_to_mean": 5.3362782992821645,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.10028989508558807
+      }
+    },
+    {
+      "layer_id": 12,
+      "prefill": {
+        "selections": 5544,
+        "peak_to_mean": 4.663780663780663,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.10624098124098125
+      },
+      "decode": {
+        "selections": 14488,
+        "peak_to_mean": 3.5692987299834344,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.08082551076753175
+      }
+    },
+    {
+      "layer_id": 13,
+      "prefill": {
+        "selections": 5544,
+        "peak_to_mean": 5.633477633477633,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.11056998556998557
+      },
+      "decode": {
+        "selections": 14488,
+        "peak_to_mean": 3.710657095527333,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.08475980121479845
+      }
+    },
+    {
+      "layer_id": 14,
+      "prefill": {
+        "selections": 5544,
+        "peak_to_mean": 19.486291486291485,
+        "inactive_experts": 1,
+        "top8_selection_share": 0.1993145743145743
+      },
+      "decode": {
+        "selections": 14488,
+        "peak_to_mean": 9.223633351739371,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.11844284925455549
+      }
+    },
+    {
+      "layer_id": 15,
+      "prefill": {
+        "selections": 5544,
+        "peak_to_mean": 6.603174603174603,
+        "inactive_experts": 2,
+        "top8_selection_share": 0.14267676767676768
+      },
+      "decode": {
+        "selections": 14488,
+        "peak_to_mean": 6.184428492545555,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.13466316951960242
+      }
+    },
+    {
+      "layer_id": 16,
+      "prefill": {
+        "selections": 5544,
+        "peak_to_mean": 15.284271284271284,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.16053391053391053
+      },
+      "decode": {
+        "selections": 14488,
+        "peak_to_mean": 4.735505245720597,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.11312810601877415
+      }
+    },
+    {
+      "layer_id": 17,
+      "prefill": {
+        "selections": 5544,
+        "peak_to_mean": 10.02020202020202,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.1387085137085137
+      },
+      "decode": {
+        "selections": 14488,
+        "peak_to_mean": 12.474875759249034,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.11657923799006074
+      }
+    },
+    {
+      "layer_id": 18,
+      "prefill": {
+        "selections": 5544,
+        "peak_to_mean": 5.264069264069264,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.1275252525252525
+      },
+      "decode": {
+        "selections": 14488,
+        "peak_to_mean": 5.901711761457758,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.09138597459966868
+      }
+    },
+    {
+      "layer_id": 19,
+      "prefill": {
+        "selections": 5544,
+        "peak_to_mean": 6.418470418470418,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.14195526695526695
+      },
+      "decode": {
+        "selections": 14488,
+        "peak_to_mean": 5.778023191606847,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.11492269464384318
+      }
+    },
+    {
+      "layer_id": 20,
+      "prefill": {
+        "selections": 5544,
+        "peak_to_mean": 11.636363636363637,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.1423160173160173
+      },
+      "decode": {
+        "selections": 14488,
+        "peak_to_mean": 5.442297073440089,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.11312810601877415
+      }
+    },
+    {
+      "layer_id": 21,
+      "prefill": {
+        "selections": 5544,
+        "peak_to_mean": 8.219336219336219,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.15656565656565657
+      },
+      "decode": {
+        "selections": 14488,
+        "peak_to_mean": 6.431805632247377,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.09697680839315295
+      }
+    },
+    {
+      "layer_id": 22,
+      "prefill": {
+        "selections": 5544,
+        "peak_to_mean": 6.88023088023088,
+        "inactive_experts": 2,
+        "top8_selection_share": 0.1471861471861472
+      },
+      "decode": {
+        "selections": 14488,
+        "peak_to_mean": 7.739370513528438,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.1404610712313639
+      }
+    },
+    {
+      "layer_id": 23,
+      "prefill": {
+        "selections": 5544,
+        "peak_to_mean": 7.388167388167388,
+        "inactive_experts": 5,
+        "top8_selection_share": 0.18235930735930736
+      },
+      "decode": {
+        "selections": 14488,
+        "peak_to_mean": 8.481501932633904,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.12596631695196026
+      }
+    },
+    {
+      "layer_id": 24,
+      "prefill": {
+        "selections": 5544,
+        "peak_to_mean": 16.946608946608947,
+        "inactive_experts": 8,
+        "top8_selection_share": 0.20707070707070707
+      },
+      "decode": {
+        "selections": 14488,
+        "peak_to_mean": 8.728879072335726,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.1394257316399779
+      }
+    },
+    {
+      "layer_id": 25,
+      "prefill": {
+        "selections": 5544,
+        "peak_to_mean": 17.73160173160173,
+        "inactive_experts": 8,
+        "top8_selection_share": 0.19913419913419914
+      },
+      "decode": {
+        "selections": 14488,
+        "peak_to_mean": 6.785201546107123,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.1315571507454445
+      }
+    },
+    {
+      "layer_id": 26,
+      "prefill": {
+        "selections": 5544,
+        "peak_to_mean": 11.544011544011545,
+        "inactive_experts": 3,
+        "top8_selection_share": 0.16883116883116883
+      },
+      "decode": {
+        "selections": 14488,
+        "peak_to_mean": 5.141910546659305,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.11443953616786307
+      }
+    },
+    {
+      "layer_id": 27,
+      "prefill": {
+        "selections": 5544,
+        "peak_to_mean": 8.819624819624819,
+        "inactive_experts": 3,
+        "top8_selection_share": 0.1708152958152958
+      },
+      "decode": {
+        "selections": 14488,
+        "peak_to_mean": 11.838763114301491,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.12341247929320817
+      }
+    },
+    {
+      "layer_id": 28,
+      "prefill": {
+        "selections": 5544,
+        "peak_to_mean": 13.437229437229437,
+        "inactive_experts": 6,
+        "top8_selection_share": 0.20887445887445888
+      },
+      "decode": {
+        "selections": 14488,
+        "peak_to_mean": 11.626725565985643,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.13756212037548315
+      }
+    },
+    {
+      "layer_id": 29,
+      "prefill": {
+        "selections": 5544,
+        "peak_to_mean": 7.0187590187590185,
+        "inactive_experts": 2,
+        "top8_selection_share": 0.16576479076479075
+      },
+      "decode": {
+        "selections": 14488,
+        "peak_to_mean": 10.60187741579238,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.12375759249033683
+      }
+    },
+    {
+      "layer_id": 30,
+      "prefill": {
+        "selections": 5544,
+        "peak_to_mean": 7.526695526695526,
+        "inactive_experts": 1,
+        "top8_selection_share": 0.1488095238095238
+      },
+      "decode": {
+        "selections": 14488,
+        "peak_to_mean": 6.502484815019327,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.10098012147984539
+      }
+    },
+    {
+      "layer_id": 31,
+      "prefill": {
+        "selections": 5544,
+        "peak_to_mean": 7.711399711399712,
+        "inactive_experts": 2,
+        "top8_selection_share": 0.15367965367965367
+      },
+      "decode": {
+        "selections": 14488,
+        "peak_to_mean": 5.95472114853672,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.10615681943677527
+      }
+    },
+    {
+      "layer_id": 32,
+      "prefill": {
+        "selections": 5544,
+        "peak_to_mean": 16.623376623376622,
+        "inactive_experts": 2,
+        "top8_selection_share": 0.18272005772005773
+      },
+      "decode": {
+        "selections": 14488,
+        "peak_to_mean": 8.605190502484815,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.14688017669795694
+      }
+    },
+    {
+      "layer_id": 33,
+      "prefill": {
+        "selections": 5544,
+        "peak_to_mean": 7.757575757575758,
+        "inactive_experts": 1,
+        "top8_selection_share": 0.15313852813852813
+      },
+      "decode": {
+        "selections": 14488,
+        "peak_to_mean": 4.700165654334622,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.09718387631143015
+      }
+    },
+    {
+      "layer_id": 34,
+      "prefill": {
+        "selections": 5544,
+        "peak_to_mean": 15.607503607503608,
+        "inactive_experts": 2,
+        "top8_selection_share": 0.2418831168831169
+      },
+      "decode": {
+        "selections": 14488,
+        "peak_to_mean": 6.431805632247377,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.12879624516841523
+      }
+    },
+    {
+      "layer_id": 35,
+      "prefill": {
+        "selections": 5544,
+        "peak_to_mean": 10.98989898989899,
+        "inactive_experts": 3,
+        "top8_selection_share": 0.17424242424242425
+      },
+      "decode": {
+        "selections": 14488,
+        "peak_to_mean": 3.9050248481501932,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.09890944229707344
+      }
+    },
+    {
+      "layer_id": 36,
+      "prefill": {
+        "selections": 5544,
+        "peak_to_mean": 9.235209235209235,
+        "inactive_experts": 1,
+        "top8_selection_share": 0.16666666666666666
+      },
+      "decode": {
+        "selections": 14488,
+        "peak_to_mean": 6.467145223633351,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.11526780784097183
+      }
+    },
+    {
+      "layer_id": 37,
+      "prefill": {
+        "selections": 5544,
+        "peak_to_mean": 6.695526695526696,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.1443001443001443
+      },
+      "decode": {
+        "selections": 14488,
+        "peak_to_mean": 5.283268912203202,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.11816675869685257
+      }
+    },
+    {
+      "layer_id": 38,
+      "prefill": {
+        "selections": 5544,
+        "peak_to_mean": 12.975468975468976,
+        "inactive_experts": 1,
+        "top8_selection_share": 0.19426406926406928
+      },
+      "decode": {
+        "selections": 14488,
+        "peak_to_mean": 9.912755383765875,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.13970182219768085
+      }
+    },
+    {
+      "layer_id": 39,
+      "prefill": {
+        "selections": 5544,
+        "peak_to_mean": 14.314574314574315,
+        "inactive_experts": 2,
+        "top8_selection_share": 0.21518759018759018
+      },
+      "decode": {
+        "selections": 14488,
+        "peak_to_mean": 6.41413583655439,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.11920209828823854
+      }
+    },
+    {
+      "layer_id": 40,
+      "prefill": {
+        "selections": 5544,
+        "peak_to_mean": 14.73015873015873,
+        "inactive_experts": 1,
+        "top8_selection_share": 0.19101731601731603
+      },
+      "decode": {
+        "selections": 14488,
+        "peak_to_mean": 4.64715626725566,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.11816675869685257
+      }
+    },
+    {
+      "layer_id": 41,
+      "prefill": {
+        "selections": 5544,
+        "peak_to_mean": 10.712842712842713,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.1746031746031746
+      },
+      "decode": {
+        "selections": 14488,
+        "peak_to_mean": 4.117062396466041,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.0951131971286582
+      }
+    },
+    {
+      "layer_id": 42,
+      "prefill": {
+        "selections": 5544,
+        "peak_to_mean": 8.126984126984127,
+        "inactive_experts": 3,
+        "top8_selection_share": 0.16702741702741702
+      },
+      "decode": {
+        "selections": 14488,
+        "peak_to_mean": 4.18774157923799,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.09483710657095527
+      }
+    },
+    {
+      "layer_id": 43,
+      "prefill": {
+        "selections": 5544,
+        "peak_to_mean": 5.079365079365079,
+        "inactive_experts": 4,
+        "top8_selection_share": 0.13023088023088022
+      },
+      "decode": {
+        "selections": 14488,
+        "peak_to_mean": 4.399779127553837,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.10098012147984539
+      }
+    },
+    {
+      "layer_id": 44,
+      "prefill": {
+        "selections": 5544,
+        "peak_to_mean": 13.16017316017316,
+        "inactive_experts": 5,
+        "top8_selection_share": 0.17857142857142858
+      },
+      "decode": {
+        "selections": 14488,
+        "peak_to_mean": 3.887355052457206,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.09283545002760905
+      }
+    },
+    {
+      "layer_id": 45,
+      "prefill": {
+        "selections": 5544,
+        "peak_to_mean": 14.822510822510823,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.16955266955266957
+      },
+      "decode": {
+        "selections": 14488,
+        "peak_to_mean": 4.9828823854224185,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.09780508006626173
+      }
+    },
+    {
+      "layer_id": 46,
+      "prefill": {
+        "selections": 5544,
+        "peak_to_mean": 10.712842712842713,
+        "inactive_experts": 1,
+        "top8_selection_share": 0.19552669552669552
+      },
+      "decode": {
+        "selections": 14488,
+        "peak_to_mean": 6.2197680839315295,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.11209276642738818
+      }
+    },
+    {
+      "layer_id": 47,
+      "prefill": {
+        "selections": 5544,
+        "peak_to_mean": 5.217893217893218,
+        "inactive_experts": 1,
+        "top8_selection_share": 0.14646464646464646
+      },
+      "decode": {
+        "selections": 14488,
+        "peak_to_mean": 3.2335726118166757,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.09200717835450027
+      }
+    },
+    {
+      "layer_id": 48,
+      "prefill": {
+        "selections": 5544,
+        "peak_to_mean": 17.823953823953826,
+        "inactive_experts": 2,
+        "top8_selection_share": 0.2296176046176046
+      },
+      "decode": {
+        "selections": 14488,
+        "peak_to_mean": 7.1032578685808945,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.12886526780784097
+      }
+    },
+    {
+      "layer_id": 49,
+      "prefill": {
+        "selections": 5544,
+        "peak_to_mean": 7.203463203463204,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.15025252525252525
+      },
+      "decode": {
+        "selections": 14488,
+        "peak_to_mean": 5.3362782992821645,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.10829652125897295
+      }
+    },
+    {
+      "layer_id": 50,
+      "prefill": {
+        "selections": 5544,
+        "peak_to_mean": 8.45021645021645,
+        "inactive_experts": 2,
+        "top8_selection_share": 0.16161616161616163
+      },
+      "decode": {
+        "selections": 14488,
+        "peak_to_mean": 5.848702374378796,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.09828823854224185
+      }
+    },
+    {
+      "layer_id": 51,
+      "prefill": {
+        "selections": 5544,
+        "peak_to_mean": 8.357864357864358,
+        "inactive_experts": 2,
+        "top8_selection_share": 0.16486291486291485
+      },
+      "decode": {
+        "selections": 14488,
+        "peak_to_mean": 4.823854224185533,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.09911651021535063
+      }
+    },
+    {
+      "layer_id": 52,
+      "prefill": {
+        "selections": 5544,
+        "peak_to_mean": 6.233766233766234,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.16937229437229437
+      },
+      "decode": {
+        "selections": 14488,
+        "peak_to_mean": 7.474323578133628,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.11616510215350635
+      }
+    },
+    {
+      "layer_id": 53,
+      "prefill": {
+        "selections": 5544,
+        "peak_to_mean": 5.3564213564213565,
+        "inactive_experts": 1,
+        "top8_selection_share": 0.13167388167388167
+      },
+      "decode": {
+        "selections": 14488,
+        "peak_to_mean": 3.834345665378244,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.103395913859746
+      }
+    },
+    {
+      "layer_id": 54,
+      "prefill": {
+        "selections": 5544,
+        "peak_to_mean": 11.728715728715729,
+        "inactive_experts": 1,
+        "top8_selection_share": 0.15584415584415584
+      },
+      "decode": {
+        "selections": 14488,
+        "peak_to_mean": 4.25842076200994,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.09815019326339039
+      }
+    },
+    {
+      "layer_id": 55,
+      "prefill": {
+        "selections": 5544,
+        "peak_to_mean": 19.532467532467532,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.22655122655122656
+      },
+      "decode": {
+        "selections": 14488,
+        "peak_to_mean": 8.393152954168967,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.12803699613473218
+      }
+    },
+    {
+      "layer_id": 56,
+      "prefill": {
+        "selections": 5544,
+        "peak_to_mean": 7.803751803751804,
+        "inactive_experts": 2,
+        "top8_selection_share": 0.16684704184704185
+      },
+      "decode": {
+        "selections": 14488,
+        "peak_to_mean": 3.5516289342904472,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.08365543898398675
+      }
+    },
+    {
+      "layer_id": 57,
+      "prefill": {
+        "selections": 5544,
+        "peak_to_mean": 8.58874458874459,
+        "inactive_experts": 3,
+        "top8_selection_share": 0.16684704184704185
+      },
+      "decode": {
+        "selections": 14488,
+        "peak_to_mean": 5.8663721700717835,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.10836554389839867
+      }
+    },
+    {
+      "layer_id": 58,
+      "prefill": {
+        "selections": 5544,
+        "peak_to_mean": 8.126984126984127,
+        "inactive_experts": 2,
+        "top8_selection_share": 0.1553030303030303
+      },
+      "decode": {
+        "selections": 14488,
+        "peak_to_mean": 5.3362782992821645,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.1058117062396466
+      }
+    },
+    {
+      "layer_id": 59,
+      "prefill": {
+        "selections": 5544,
+        "peak_to_mean": 9.142857142857142,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.14303751803751805
+      },
+      "decode": {
+        "selections": 14488,
+        "peak_to_mean": 5.230259525124241,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.10401711761457758
+      }
+    },
+    {
+      "layer_id": 60,
+      "prefill": {
+        "selections": 5544,
+        "peak_to_mean": 6.372294372294372,
+        "inactive_experts": 4,
+        "top8_selection_share": 0.13275613275613277
+      },
+      "decode": {
+        "selections": 14488,
+        "peak_to_mean": 5.778023191606847,
+        "inactive_experts": 0,
+        "top8_selection_share": 0.11022915516289343
+      }
+    }
+  ],
+  "infer_eos_from_eof": false,
+  "formal_network_input_admitted": false,
+  "network_simulations": 0
+}

@@ -14,7 +14,9 @@
 ## 当前范围和预算
 
 
-当前新增数据接收 `in_progress`：[接收与统计协议](../../experiments/route_coverage/local_additions_protocol.md)。用户确认新增13份均为R1/MMLU；先完整校验、保留缺层文件、登记用户来源与固定版本身份缺项，再扩展离线需求覆盖。旧四请求manifest不改，不伪造远端身份已验证的新平台manifest。180秒/128MiB、每命令60秒/RSS1GiB/地址2GiB、源文件≤64份/64MiB，不执行新网络、下载或GPU。
+当前新增数据接收与离线分析 `completed`，新增文件远端固定版本内容身份仍待核验：[协议](../../experiments/route_coverage/local_additions_protocol.md)、[报告](../../experiments/route_coverage/results/local_additions_20261027/report.md)。用户确认新增13份均来自DeepSeek-R1-AWQ/MMLU；11份完整，899.json末入口缺18层、1479.json末入口缺23层，原件保留并整份排除。合并旧4份后共15份完整且内容不重复的请求，覆盖6学科、693个Prefill token、1,811个Decode步骤、145,232条token-layer路由行及1,161,856次专家选择；不称随机抽样、严格留出或独立采集运行。
+
+按声明的EP4连续专家放置和源分配完成batch1/2/4/8离线Dispatch需求；batch8使用8份不同新请求的共同72步，batch16因完整请求不足不可用，没有复制或补齐。另保存6个远端token数据为零的单token层见证，不能省略完整调用的控制通信。独立重数170,810个需求波次、缺层定位、旧manifest不变及确定性复算通过，见[核验](../../experiments/route_coverage/results/local_additions_20261027/verification.json)和[收尾](../../experiments/route_coverage/results/local_additions_20261027/closeout.json)。受监控累计7.62秒、新产物约324KiB，保持180秒/128MiB及每命令60秒/RSS1GiB/地址2GiB等限额；零新网络、无下载/GPU/平台或依赖修改。新文件只有用户确认目录及历史路径定位，未伪造固定版本已验证的平台manifest；旧四请求manifest保持不变，仅本地提交不push，整体研究目标继续`in_progress`。
 
 
 
@@ -28,7 +30,7 @@
 
 
 
-当前数据覆盖盘点与扩充清单 `completed`，新增原件获取 `unavailable`：[报告](../../experiments/route_coverage/results/20261026/report.md)，起点`01a4d68`，规范`d05865d`。四份当前可读原件完整核hash/格式：58个MoE层、149个Prefill token、512个Decode步骤，共38,338条token-layer路由行/306,704次专家选择，仍只有4个不同请求文件；历史1024清单引用路径存在原件为0，不把旧清单当当前可读数据。独立重数51,968个声明需求波次，7项微型/非法输入检查及确定性复算通过；batch1/2/4仅为声明部署的离线需求，未执行新网络，不是拥塞/时延结果。
+上一轮数据覆盖盘点与扩充清单 `completed`，该轮新增原件获取 `unavailable`：[报告](../../experiments/route_coverage/results/20261026/report.md)，起点`01a4d68`，规范`d05865d`。该轮四份可读原件完整核hash/格式：58个MoE层、149个Prefill token、512个Decode步骤，共38,338条token-layer路由行/306,704次专家选择，当时只有4个不同请求文件；历史1024清单引用路径存在原件为0，不把旧清单当当前可读数据。独立重数51,968个声明需求波次，7项微型/非法输入检查及确定性复算通过；batch1/2/4仅为声明部署的离线需求，未执行新网络，不是拥塞/时延结果。
 
 已交付同修订R1的64候选/四来源清单与32/32请求级开发/留出候选划分；来源目录4请求和原件1请求均连接错误URLError，新增原件为0，不改称HTTP权限拒绝。回退历史可见目录缺完整性、远端大小及摘要，未自动获取、未保证64份符合128MiB预算；留出身份、有效文件数和远端身份仍待原件核验。13固定依赖、源码语法、本地链接/64唯一URL通过。第一次资源命令因本机无/usr/bin/time在HTTP前失败，日志保留，改用既有host_probe；没有网络重试、安装或改变限额。四监控命令合计约50秒，新产物小于1MiB，保持600秒/512MiB、单命令60秒/RSS1GiB/地址2GiB等原边界。见[入口及下载目录](../../experiments/route_coverage/README.md)、[执行记录](../../experiments/route_coverage/results/20261026/execution.json)和[收尾](../../experiments/route_coverage/results/20261026/closeout.json)。零新仿真网络/模型/GPU、平台和依赖未改，仅本地提交不push。该轮以盘点/清单交付收尾；64份原件尚未获得，完整千卡现代应用、匹配GPU校准与论文主创新仍未完成，整体目标继续in_progress。
 

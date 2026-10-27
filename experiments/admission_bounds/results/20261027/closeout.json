@@ -1,0 +1,173 @@
+{
+  "state": "offline_generic_admission_bounds_and_tail_audit_completed",
+  "overall_goal": "in_progress",
+  "new_networks": 0,
+  "monitored_seconds": 14.939256876969012,
+  "stage_limit_seconds": 300,
+  "artifact_usage_before_closeout": {
+    "apparent_bytes": 36635327,
+    "allocated_bytes": 36941824
+  },
+  "reserved_receipt_bytes": 1048576,
+  "stage_limit_bytes": 134217728,
+  "maximum_sampled_group_rss_bytes": 99893248,
+  "markdown_local_links_checked": 3,
+  "independent_archive_reanalysis": true,
+  "checkpoint": {
+    "sha256": "370fbee4af17faf457318a599df2d1c880af71ed0ae2122da203fcd342c346de",
+    "members": 61,
+    "compressed_bytes": 779659,
+    "uncompressed_bytes": 15896379
+  },
+  "platform_modified": false,
+  "dependencies_modified": false,
+  "limits_increased": false,
+  "downloaded": false,
+  "GPU_executed": false,
+  "pushed": false,
+  "commands": [
+    {
+      "command": [
+        "python3",
+        "-B",
+        "experiments/admission_bounds/checkpoint.py",
+        "create",
+        "--repository",
+        ".",
+        "--stage",
+        "/dev/shm/moe-admission-bounds-20261027",
+        "--output",
+        "runs/admission_bounds_20261027/checkpoint.tar.gz"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.4452834699914092,
+      "peak_sampled_group_rss_bytes": 34267136
+    },
+    {
+      "command": [
+        "bash",
+        "scripts/check_deps.sh"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.44895802599785384,
+      "peak_sampled_group_rss_bytes": 22446080
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "experiments/admission_bounds/evaluate.py",
+        "--stage",
+        "/dev/shm/moe-admission-bounds-20261027",
+        "--output",
+        "/dev/shm/moe-admission-bounds-20261027/evaluation"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.44420624199847225,
+      "peak_sampled_group_rss_bytes": 54231040
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "experiments/admission_bounds/evaluate.py",
+        "--stage",
+        "/dev/shm/moe-admission-bounds-20261027",
+        "--output",
+        "/dev/shm/moe-admission-bounds-20261027/evaluation-timeline"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.44406652299221605,
+      "peak_sampled_group_rss_bytes": 55209984
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "experiments/admission_bounds/predict.py",
+        "--observed",
+        "/dev/shm/moe-admission-bounds-20261027/observed",
+        "--output",
+        "/dev/shm/moe-admission-bounds-20261027/predictions"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 3.686617008992471,
+      "peak_sampled_group_rss_bytes": 15888384
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "experiments/admission_bounds/prepare.py",
+        "--repository",
+        ".",
+        "--stage",
+        "/dev/shm/moe-admission-bounds-20261027"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.4446237219963223,
+      "peak_sampled_group_rss_bytes": 99893248
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "experiments/admission_bounds/checkpoint.py",
+        "restore",
+        "--archive",
+        "runs/admission_bounds_20261027/checkpoint.tar.gz",
+        "--output",
+        "runs/admission_bounds_20261027/restored"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 4.053680130993598,
+      "peak_sampled_group_rss_bytes": 83697664
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "experiments/admission_bounds/summarize.py",
+        "--stage",
+        "/dev/shm/moe-admission-bounds-20261027",
+        "--output",
+        "experiments/admission_bounds/results/20261027"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.44903724700270686,
+      "peak_sampled_group_rss_bytes": 48295936
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "experiments/admission_bounds/verify.py",
+        "--stage",
+        "/dev/shm/moe-admission-bounds-20261027",
+        "--repository",
+        "."
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 4.522784507003962,
+      "peak_sampled_group_rss_bytes": 89661440
+    }
+  ]
+}

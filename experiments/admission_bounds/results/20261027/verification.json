@@ -1,0 +1,27 @@
+{
+  "passed": true,
+  "small_checks": 7,
+  "independent": {
+    "baseline": {
+      "independent_bound_comparisons": 89562,
+      "reply_tail_ns": 2008,
+      "actual_ACK_TX_and_final_RX_checked": true
+    },
+    "bandwidth": {
+      "independent_bound_comparisons": 89508,
+      "reply_tail_ns": 2004,
+      "actual_ACK_TX_and_final_RX_checked": true
+    }
+  },
+  "truth_unavailable_prediction_byte_identical": {
+    "baseline": true,
+    "bandwidth": true
+  },
+  "rejected_corruptions": [
+    "missing_callback_bound",
+    "nonconservative_bound",
+    "early_reply_ack",
+    "incomplete_capture",
+    "changed_work"
+  ]
+}

@@ -1,0 +1,420 @@
+{
+  "baseline": {
+    "decisions": 66,
+    "work": 164,
+    "callbacks": 850,
+    "checks": {
+      "work_bounds": 12906,
+      "callback_bounds": 76656
+    },
+    "timing_bounds": {
+      "causal": {
+        "all_work": {
+          "finite_boundaries": 64,
+          "positive_boundaries": 0,
+          "maximum_horizon_ns": 0,
+          "p50_horizon_ns": 0,
+          "p50_slack_to_actual_ns": 6,
+          "union_window_ns": 0
+        },
+        "wire": {
+          "finite_boundaries": 60,
+          "positive_boundaries": 0,
+          "maximum_horizon_ns": 0,
+          "p50_horizon_ns": 0,
+          "p50_slack_to_actual_ns": 98,
+          "union_window_ns": 0
+        },
+        "plane:0": {
+          "finite_boundaries": 60,
+          "positive_boundaries": 0,
+          "maximum_horizon_ns": 0,
+          "p50_horizon_ns": 0,
+          "p50_slack_to_actual_ns": 100,
+          "union_window_ns": 0,
+          "transport_live_overlap_ns": 0,
+          "not_covered_by_saved_transport_work_ns": 0,
+          "physical_transmissions_in_uncovered_windows": 0,
+          "physical_transmissions_in_windows": 0,
+          "certified_packet_skip_ns": 0
+        },
+        "plane:1": {
+          "finite_boundaries": 53,
+          "positive_boundaries": 0,
+          "maximum_horizon_ns": 0,
+          "p50_horizon_ns": 0,
+          "p50_slack_to_actual_ns": 200,
+          "union_window_ns": 0,
+          "transport_live_overlap_ns": 0,
+          "not_covered_by_saved_transport_work_ns": 0,
+          "physical_transmissions_in_uncovered_windows": 0,
+          "physical_transmissions_in_windows": 0,
+          "certified_packet_skip_ns": 0
+        }
+      },
+      "propagation": {
+        "all_work": {
+          "finite_boundaries": 64,
+          "positive_boundaries": 14,
+          "maximum_horizon_ns": 11590,
+          "p50_horizon_ns": 0,
+          "p50_slack_to_actual_ns": 6,
+          "union_window_ns": 48861
+        },
+        "wire": {
+          "finite_boundaries": 60,
+          "positive_boundaries": 15,
+          "maximum_horizon_ns": 11986,
+          "p50_horizon_ns": 0,
+          "p50_slack_to_actual_ns": 94,
+          "union_window_ns": 43373
+        },
+        "plane:0": {
+          "finite_boundaries": 60,
+          "positive_boundaries": 15,
+          "maximum_horizon_ns": 11986,
+          "p50_horizon_ns": 0,
+          "p50_slack_to_actual_ns": 94,
+          "union_window_ns": 43373,
+          "transport_live_overlap_ns": 43373,
+          "not_covered_by_saved_transport_work_ns": 0,
+          "physical_transmissions_in_uncovered_windows": 0,
+          "physical_transmissions_in_windows": 1243,
+          "certified_packet_skip_ns": 0
+        },
+        "plane:1": {
+          "finite_boundaries": 53,
+          "positive_boundaries": 22,
+          "maximum_horizon_ns": 23994,
+          "p50_horizon_ns": 0,
+          "p50_slack_to_actual_ns": 200,
+          "union_window_ns": 35335,
+          "transport_live_overlap_ns": 16497,
+          "not_covered_by_saved_transport_work_ns": 18838,
+          "physical_transmissions_in_uncovered_windows": 0,
+          "physical_transmissions_in_windows": 669,
+          "certified_packet_skip_ns": 0
+        }
+      },
+      "declared": {
+        "all_work": {
+          "finite_boundaries": 64,
+          "positive_boundaries": 31,
+          "maximum_horizon_ns": 11590,
+          "p50_horizon_ns": 0,
+          "p50_slack_to_actual_ns": 4,
+          "union_window_ns": 50565
+        },
+        "wire": {
+          "finite_boundaries": 60,
+          "positive_boundaries": 53,
+          "maximum_horizon_ns": 11986,
+          "p50_horizon_ns": 98,
+          "p50_slack_to_actual_ns": 0,
+          "union_window_ns": 45329
+        },
+        "plane:0": {
+          "finite_boundaries": 60,
+          "positive_boundaries": 53,
+          "maximum_horizon_ns": 11986,
+          "p50_horizon_ns": 100,
+          "p50_slack_to_actual_ns": 0,
+          "union_window_ns": 45329,
+          "transport_live_overlap_ns": 45329,
+          "not_covered_by_saved_transport_work_ns": 0,
+          "physical_transmissions_in_uncovered_windows": 0,
+          "physical_transmissions_in_windows": 1319,
+          "certified_packet_skip_ns": 0
+        },
+        "plane:1": {
+          "finite_boundaries": 53,
+          "positive_boundaries": 53,
+          "maximum_horizon_ns": 25094,
+          "p50_horizon_ns": 100,
+          "p50_slack_to_actual_ns": 100,
+          "union_window_ns": 36047,
+          "transport_live_overlap_ns": 16709,
+          "not_covered_by_saved_transport_work_ns": 19338,
+          "physical_transmissions_in_uncovered_windows": 0,
+          "physical_transmissions_in_windows": 674,
+          "certified_packet_skip_ns": 0
+        }
+      }
+    },
+    "naive_application_quiet_checks": 32,
+    "naive_application_quiet_false": [],
+    "evaluation_only_application_quiet_timeline": {
+      "plane:0": {
+        "quiet_interval_ns": 9175,
+        "live_transport_overlap_ns": 6024,
+        "live_overlap_examples": [
+          [
+            63523,
+            69547
+          ]
+        ],
+        "future_truth_only_not_an_earlier_frontend_observation": true
+      },
+      "plane:1": {
+        "quiet_interval_ns": 32575,
+        "live_transport_overlap_ns": 0,
+        "live_overlap_examples": [],
+        "future_truth_only_not_an_earlier_frontend_observation": true
+      }
+    },
+    "atomic_reply_tail_count": 48,
+    "maximum_atomic_reply_tail_ns": 6038,
+    "reply_tail_examples": [
+      {
+        "operation": 1,
+        "connection": 1,
+        "stream": 3,
+        "completed_ns": 4028,
+        "response_ns": 4028,
+        "response_acked_ns": 6036,
+        "tail_ns": 2008
+      },
+      {
+        "operation": 89,
+        "connection": 1,
+        "stream": 3,
+        "completed_ns": 26785,
+        "response_ns": 26785,
+        "response_acked_ns": 28793,
+        "tail_ns": 2008
+      },
+      {
+        "operation": 101,
+        "connection": 1,
+        "stream": 3,
+        "completed_ns": 33617,
+        "response_ns": 33617,
+        "response_acked_ns": 35625,
+        "tail_ns": 2008
+      },
+      {
+        "operation": 153,
+        "connection": 1,
+        "stream": 3,
+        "completed_ns": 55333,
+        "response_ns": 55333,
+        "response_acked_ns": 57341,
+        "tail_ns": 2008
+      }
+    ],
+    "physical_ACK_transmissions_after_connection_operations_complete": 44,
+    "finished_ns": 69547,
+    "packet_skip_safety_proven": false,
+    "speedup_measured": false,
+    "hardware_calibrated": false
+  },
+  "bandwidth": {
+    "decisions": 66,
+    "work": 164,
+    "callbacks": 850,
+    "checks": {
+      "work_bounds": 12882,
+      "callback_bounds": 76626
+    },
+    "timing_bounds": {
+      "causal": {
+        "all_work": {
+          "finite_boundaries": 64,
+          "positive_boundaries": 0,
+          "maximum_horizon_ns": 0,
+          "p50_horizon_ns": 0,
+          "p50_slack_to_actual_ns": 3,
+          "union_window_ns": 0
+        },
+        "wire": {
+          "finite_boundaries": 60,
+          "positive_boundaries": 0,
+          "maximum_horizon_ns": 0,
+          "p50_horizon_ns": 0,
+          "p50_slack_to_actual_ns": 98,
+          "union_window_ns": 0
+        },
+        "plane:0": {
+          "finite_boundaries": 60,
+          "positive_boundaries": 0,
+          "maximum_horizon_ns": 0,
+          "p50_horizon_ns": 0,
+          "p50_slack_to_actual_ns": 98,
+          "union_window_ns": 0,
+          "transport_live_overlap_ns": 0,
+          "not_covered_by_saved_transport_work_ns": 0,
+          "physical_transmissions_in_uncovered_windows": 0,
+          "physical_transmissions_in_windows": 0,
+          "certified_packet_skip_ns": 0
+        },
+        "plane:1": {
+          "finite_boundaries": 52,
+          "positive_boundaries": 0,
+          "maximum_horizon_ns": 0,
+          "p50_horizon_ns": 0,
+          "p50_slack_to_actual_ns": 200,
+          "union_window_ns": 0,
+          "transport_live_overlap_ns": 0,
+          "not_covered_by_saved_transport_work_ns": 0,
+          "physical_transmissions_in_uncovered_windows": 0,
+          "physical_transmissions_in_windows": 0,
+          "certified_packet_skip_ns": 0
+        }
+      },
+      "propagation": {
+        "all_work": {
+          "finite_boundaries": 64,
+          "positive_boundaries": 14,
+          "maximum_horizon_ns": 11696,
+          "p50_horizon_ns": 0,
+          "p50_slack_to_actual_ns": 3,
+          "union_window_ns": 48327
+        },
+        "wire": {
+          "finite_boundaries": 60,
+          "positive_boundaries": 15,
+          "maximum_horizon_ns": 11993,
+          "p50_horizon_ns": 0,
+          "p50_slack_to_actual_ns": 97,
+          "union_window_ns": 42583
+        },
+        "plane:0": {
+          "finite_boundaries": 60,
+          "positive_boundaries": 15,
+          "maximum_horizon_ns": 11993,
+          "p50_horizon_ns": 0,
+          "p50_slack_to_actual_ns": 97,
+          "union_window_ns": 42583,
+          "transport_live_overlap_ns": 42583,
+          "not_covered_by_saved_transport_work_ns": 0,
+          "physical_transmissions_in_uncovered_windows": 0,
+          "physical_transmissions_in_windows": 1278,
+          "certified_packet_skip_ns": 0
+        },
+        "plane:1": {
+          "finite_boundaries": 52,
+          "positive_boundaries": 22,
+          "maximum_horizon_ns": 23997,
+          "p50_horizon_ns": 0,
+          "p50_slack_to_actual_ns": 200,
+          "union_window_ns": 33154,
+          "transport_live_overlap_ns": 14234,
+          "not_covered_by_saved_transport_work_ns": 18920,
+          "physical_transmissions_in_uncovered_windows": 0,
+          "physical_transmissions_in_windows": 669,
+          "certified_packet_skip_ns": 0
+        }
+      },
+      "declared": {
+        "all_work": {
+          "finite_boundaries": 64,
+          "positive_boundaries": 31,
+          "maximum_horizon_ns": 11696,
+          "p50_horizon_ns": 0,
+          "p50_slack_to_actual_ns": 1,
+          "union_window_ns": 49877
+        },
+        "wire": {
+          "finite_boundaries": 60,
+          "positive_boundaries": 53,
+          "maximum_horizon_ns": 11993,
+          "p50_horizon_ns": 97,
+          "p50_slack_to_actual_ns": 0,
+          "union_window_ns": 44259
+        },
+        "plane:0": {
+          "finite_boundaries": 60,
+          "positive_boundaries": 53,
+          "maximum_horizon_ns": 11993,
+          "p50_horizon_ns": 98,
+          "p50_slack_to_actual_ns": 0,
+          "union_window_ns": 44259,
+          "transport_live_overlap_ns": 44259,
+          "not_covered_by_saved_transport_work_ns": 0,
+          "physical_transmissions_in_uncovered_windows": 0,
+          "physical_transmissions_in_windows": 1356,
+          "certified_packet_skip_ns": 0
+        },
+        "plane:1": {
+          "finite_boundaries": 52,
+          "positive_boundaries": 52,
+          "maximum_horizon_ns": 25097,
+          "p50_horizon_ns": 100,
+          "p50_slack_to_actual_ns": 100,
+          "union_window_ns": 33709,
+          "transport_live_overlap_ns": 14339,
+          "not_covered_by_saved_transport_work_ns": 19370,
+          "physical_transmissions_in_uncovered_windows": 0,
+          "physical_transmissions_in_windows": 674,
+          "certified_packet_skip_ns": 0
+        }
+      }
+    },
+    "naive_application_quiet_checks": 35,
+    "naive_application_quiet_false": [],
+    "evaluation_only_application_quiet_timeline": {
+      "plane:0": {
+        "quiet_interval_ns": 7576,
+        "live_transport_overlap_ns": 6012,
+        "live_overlap_examples": [
+          [
+            59468,
+            65480
+          ]
+        ],
+        "future_truth_only_not_an_earlier_frontend_observation": true
+      },
+      "plane:1": {
+        "quiet_interval_ns": 31915,
+        "live_transport_overlap_ns": 0,
+        "live_overlap_examples": [],
+        "future_truth_only_not_an_earlier_frontend_observation": true
+      }
+    },
+    "atomic_reply_tail_count": 48,
+    "maximum_atomic_reply_tail_ns": 6012,
+    "reply_tail_examples": [
+      {
+        "operation": 1,
+        "connection": 1,
+        "stream": 3,
+        "completed_ns": 4014,
+        "response_ns": 4014,
+        "response_acked_ns": 6018,
+        "tail_ns": 2004
+      },
+      {
+        "operation": 89,
+        "connection": 1,
+        "stream": 3,
+        "completed_ns": 24478,
+        "response_ns": 24478,
+        "response_acked_ns": 26482,
+        "tail_ns": 2004
+      },
+      {
+        "operation": 101,
+        "connection": 1,
+        "stream": 3,
+        "completed_ns": 31395,
+        "response_ns": 31395,
+        "response_acked_ns": 33399,
+        "tail_ns": 2004
+      },
+      {
+        "operation": 153,
+        "connection": 1,
+        "stream": 3,
+        "completed_ns": 51374,
+        "response_ns": 51374,
+        "response_acked_ns": 53378,
+        "tail_ns": 2004
+      }
+    ],
+    "physical_ACK_transmissions_after_connection_operations_complete": 44,
+    "finished_ns": 65480,
+    "packet_skip_safety_proven": false,
+    "speedup_measured": false,
+    "hardware_calibrated": false
+  }
+}

@@ -13,6 +13,8 @@
 
 ## 当前范围和预算
 
+当前研究`in_progress`：[固定校验复用后的完整流程成本](../../experiments/static_validation_cost/protocol.md)，平台`0ab7b50`。四个真实路由batch/执行器条件，默认/复用三对无细粒度日志测量共24次，再四次带记录诊断；Linux wait4完整命令CPU、墙钟、采样组RSS及完整网络/应用对照。原件`runs/static_validation_cost_20261027/`，1800受监控秒/2GiB、每命令60秒/RSS1GiB/地址2GiB；任何失败关闭余下网络，不重跑或扩限。普通缓存仅作强基线工程，不当论文贡献，零平台/依赖变更、构建/下载/GPU/push。
+
 当前平台`completed`：[会话固定传输声明校验复用](static_stream_validation_spec.md)、[验收与恢复](../../fixtures/static_stream_validation/README.md)。两个公开会话入口新增默认关闭的`--reuse-static-validation`，单会话保留完整拓扑/协议/派生streams的不可变类型安全键，动态完整历史和原生准入保持。81项单元、13依赖及两原件各4类证据篡改拒绝通过；六次固定网络全部完成，默认/开启完整result与control严格相同，迁移仅对应八个同hash原生库根路径/枚举多重集合。现代两rank两调用64次静态请求仅执行1次原检查（437回调/97节点），事务9次仅执行1次（11回调/2节点、实际旧值7/终值10/后继107）；不等于64倍或9倍加速。
 
 1560成员/51,199,960B包逐hash恢复，复制源码根/空cwd离线核验JSON逐字节一致，零恢复网络；SHA256 `768c9f474a5a625167d03816102f0c63519575d6c3845eecd08fd76398ea9019`。原件`runs/static_stream_validation_20261027/`，保守含复制收据70.295监控秒、116.60MiB分配产物及另计2MiB收据/10秒管理预留，保持900秒/512MiB与全部单命令上限。核验器曾误计系统库和误读副作用身份字段，两次错误/三版源码均保留；只离线纠正并继续未开始条件，零网络失败、重跑或扩限。实际O3/10运行时文件及八库身份核对，零构建/安装下载/GPU/依赖修改/push；仅本地保存。见[核验](../../fixtures/static_stream_validation/verification.json)、[恢复](../../fixtures/static_stream_validation/recovery.json)与[收尾](../../fixtures/static_stream_validation/closeout.json)。

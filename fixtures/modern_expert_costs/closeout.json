@@ -1,0 +1,59 @@
+{
+  "phase_completed": true,
+  "overall_research_goal_completed": false,
+  "network_executions": 4,
+  "new_downloads": 0,
+  "new_builds": 0,
+  "gpu_executions": 0,
+  "dependency_modifications": 0,
+  "pushes": 0,
+  "unit_tests": 48,
+  "admission_rejection_classes": 8,
+  "corruption_classes": 4,
+  "dependency_checkouts": 13,
+  "monitored_seconds_before_closeout": 26.91580325801624,
+  "driver_conservatively_added": true,
+  "stage_seconds_limit": 600,
+  "artifact_usage": {
+    "apparent_bytes": 62240690,
+    "allocated_bytes": 63913984
+  },
+  "versioned_usage": {
+    "apparent_bytes": 85105,
+    "allocated_bytes": 110592
+  },
+  "artifact_limit_bytes": 268435456,
+  "receipts_reserved_bytes": 2097152,
+  "archive": {
+    "sha256": "8c378e6137d57b2a5dbd67d11d48cb31bc2b3f85650c64b90abf9aa05473281a",
+    "members": 593,
+    "compressed_bytes": 6360378,
+    "uncompressed_bytes": 25434551,
+    "networks_already_recorded": 3,
+    "additional_networks_on_restore": 1
+  },
+  "previous_archive_preserved": true,
+  "source_bound_correction_preserved": true,
+  "result_sha256": {
+    "verify.py": "b1d407bb206208ed52a48d2869b4da6c3f27830846c354e4f87693599f5f39d2",
+    "accept.py": "252ca1b72b52d11f868d62302f71d2e4639f03cdbdfb263602be8f252de79cad",
+    "checkpoint.py": "54369f9532b92a5af1abadd80ae7597c52c26e36586768b1723c4b4b6e3029b5",
+    "README.md": "b1c6518c35cfb92aaf733494f52e2c687e0705f0970c79c34c732c11df808b75",
+    "closeout.py": "a601c62eda2f9e91c6177f33ef5e91bbb5752b146d3e9767f1b34ec6a9c97fc1",
+    "verification.json": "ff3bf0ca2d2e10c030623ee9d25cb0044a58d90b02801a13e8054211d295d87e",
+    "checkpoint.json": "f6ff66e8bb3a3b06ae1845287d8eb3c77b12d92e224861d1f6654ace52cfe4c2",
+    "recovery.json": "6daf83d73b0e3d21993d7cd46da70c82d78c61103a8d5ad5071ce46a20c4a576",
+    "report.html": "7e23751e657697b095bfe356bd4c3d2e7e0ede0196acad35d9e8b80f86f5487f"
+  },
+  "final_conservative_monitored_seconds": 27.209483114012983,
+  "final_artifact_usage": {
+    "apparent_bytes": 62242875,
+    "allocated_bytes": 63922176
+  },
+  "final_versioned_usage": {
+    "apparent_bytes": 85175,
+    "allocated_bytes": 110592
+  },
+  "all_owned_children_exited": true,
+  "link_and_html_checks_passed": true
+}

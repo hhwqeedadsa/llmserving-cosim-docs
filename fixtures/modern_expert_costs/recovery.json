@@ -1,0 +1,124 @@
+{
+  "passed": true,
+  "archive_sha256": "8c378e6137d57b2a5dbd67d11d48cb31bc2b3f85650c64b90abf9aa05473281a",
+  "member_hashes_checked": true,
+  "copied_source": true,
+  "empty_cwd": true,
+  "offline_reports_byte_identical": 3,
+  "migrated_verification_byte_identical": true,
+  "migration": {
+    "passed": true,
+    "whole_native_state": true,
+    "control_byte_identical": true,
+    "modern_state_identical_except_declared_matrix": false,
+    "library_root_mapping_only": true
+  },
+  "actual_library_hashes_checked": 8,
+  "additional_networks": 1,
+  "new_builds": 0,
+  "new_downloads": 0,
+  "new_gpu_executions": 0,
+  "commands": [
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "fixtures.modern_expert_costs.verify",
+        "--run",
+        "/home/lry/moe-ub-cosim/runs/modern_expert_costs_20261027/restored/run/fixed",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/modern_expert_costs_20261027/restored/fixed-reverification.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim/runs/modern_expert_costs_20261027/restored/empty-cwd",
+      "network": false,
+      "state": "terminal",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "fixtures.modern_expert_costs.verify",
+        "--run",
+        "/home/lry/moe-ub-cosim/runs/modern_expert_costs_20261027/restored/run/equal",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/modern_expert_costs_20261027/restored/equal-reverification.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim/runs/modern_expert_costs_20261027/restored/empty-cwd",
+      "network": false,
+      "state": "terminal",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "fixtures.modern_expert_costs.verify",
+        "--run",
+        "/home/lry/moe-ub-cosim/runs/modern_expert_costs_20261027/restored/run/skew",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/modern_expert_costs_20261027/restored/skew-reverification.json",
+        "--corruptions"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim/runs/modern_expert_costs_20261027/restored/empty-cwd",
+      "network": false,
+      "state": "terminal",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "modern-deepep-native",
+        "--topology",
+        "/home/lry/moe-ub-cosim/runs/modern_expert_costs_20261027/restored/run/topology",
+        "--protocol",
+        "/home/lry/moe-ub-cosim/runs/modern_expert_costs_20261027/restored/run/inputs/rdma.json",
+        "--config",
+        "/home/lry/moe-ub-cosim/runs/modern_expert_costs_20261027/restored/run/inputs/skew.json",
+        "--backend",
+        "/home/lry/moe-ub-cosim/runs/modern_expert_costs_20261027/restored/run/runtime/run-transaction-session",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/modern_expert_costs_20261027/restored/migrated-skew",
+        "--callback-batches"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim/runs/modern_expert_costs_20261027/restored/empty-cwd",
+      "network": true,
+      "state": "terminal",
+      "exit_code": 0,
+      "stdout": "completed child exit 0 sampled group RSS 526032896\n{\n  \"passed\": true,\n  \"output\": \"/home/lry/moe-ub-cosim/runs/modern_expert_costs_20261027/restored/migrated-skew\",\n  \"finish_ns\": 110631,\n  \"functional_modern_graph_executed\": true,\n  \"gpu_visibility_modeled\": false,\n  \"numeric_expert_computation\": false\n}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "fixtures.modern_expert_costs.verify",
+        "--run",
+        "/home/lry/moe-ub-cosim/runs/modern_expert_costs_20261027/restored/migrated-skew",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/modern_expert_costs_20261027/restored/migrated-verification.json",
+        "--corruptions"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim/runs/modern_expert_costs_20261027/restored/empty-cwd",
+      "network": false,
+      "state": "terminal",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ]
+}

@@ -59,7 +59,9 @@ def parser():
     mw.add_argument('--output', type=Path, required=True, help='New JSON file with execution, relative window map and shadow state')
     mn = sc.add_parser('modern-deepep-native', help='Drive the complete modern functional graph with actual native transaction callbacks and synthetic operands; no GPU/GIN timing claim')
     for name in ('topology','protocol','config','backend','output'):
-        mn.add_argument('--'+name,type=Path,required=True)
+        mn.add_argument('--'+name,type=Path,required=True,**(
+            {'help':'Native input v1 fixed costs or v2 explicit per-call/rank expert durations; no automatic GPU profile'}
+            if name=='config' else {}))
     callback_mode=mn.add_mutually_exclusive_group()
     callback_mode.add_argument('--callback-wakeups',action='store_true',help='Subscribe to actual callbacks needed by the next modern event; requires a session backend supporting wake_on')
     callback_mode.add_argument('--callback-batches',action='store_true',help='Boundedly buffer original callback batches and process their original times; requires a supporting session backend')

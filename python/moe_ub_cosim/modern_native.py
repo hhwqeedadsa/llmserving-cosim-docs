@@ -115,7 +115,7 @@ class ModernNativeController:
             resolved=self.layout.windows.resolve(op)
             target=self.layout.main(resolved['target'] if op['path']=='local' else resolved['source'])
             copy=self._copy(self.layout.inputs[self.layout.token_key(op)],target);duration=costs['reduction_ns']
-        elif kind=='expert_stage_done':duration=costs['expert_ns']
+        elif kind=='expert_stage_done':duration=self.layout.expert_duration(call,rank)
         elif kind=='counts_ready':
             source=self.layout.zero_sources[rank]
             target=dict(key=1,address=MAIN_BASE+self.layout.description['counts']['recv_base'])
@@ -217,6 +217,8 @@ class ModernNativeController:
             scope='native callback-driven modern functional graph and synthetic full-size operands; not GIN/GPU timing')
         if self.callback_batches:result['callback_batches']=dict(mode='callback_batches/1',logical_steps=self.logical_steps,
             physical_decisions=self.decisions,physical_decision_limit=256,logical_step_limit=16384)
+        if self.layout.config['schema_version']=='moe-modern-native-input/2':
+            result['expert_stage']=deepcopy(self.layout.config['expert_stage'])
         return result
 
 

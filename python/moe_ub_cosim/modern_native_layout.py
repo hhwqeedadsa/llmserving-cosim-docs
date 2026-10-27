@@ -19,8 +19,11 @@ INPUT_BASE=40*2**20
 
 class ModernNativeLayout:
     def __init__(self, topology, protocol, config):
-        fields(config,'schema_version modern deployment provider costs','modern native input')
-        require(config['schema_version']=='moe-modern-native-input/1','unsupported modern native schema')
+        require(isinstance(config,dict),'invalid modern native input')
+        version=config.get('schema_version')
+        require(version in ('moe-modern-native-input/1','moe-modern-native-input/2'),'unsupported modern native schema')
+        fields(config,'schema_version modern deployment provider costs'+
+            (' expert_stage' if version=='moe-modern-native-input/2' else ''),'modern native input')
         self.config=deepcopy(config);self.modern=self.config['modern'];self.plan=compile_plan(self.modern)
         require(len(encoded(self.modern))<=self.modern['limits']['max_input_bytes'],'modern serialized input budget exceeded')
         require(len(encoded(self.plan))<=self.modern['limits']['max_output_bytes'],'modern serialized plan budget exceeded')
@@ -37,8 +40,24 @@ class ModernNativeLayout:
         horizon=protocol.get('limits',{}).get('max_sim_ns',5000000)
         integer(p['self_service']['apply_ns'],0,horizon,'self apply')
         integer(p['self_service']['complete_ns'],p['self_service']['apply_ns'],horizon,'self complete')
-        fields(config['costs'],'source_prepare_ns expert_ns reduction_ns local_copy_ns','declared local costs')
+        fields(config['costs'],'source_prepare_ns reduction_ns local_copy_ns'+
+            (' expert_ns' if version=='moe-modern-native-input/1' else ''),'declared local costs')
         for name,value in config['costs'].items():integer(value,0,horizon,name)
+        calls=len(self.modern['calls'])
+        if version=='moe-modern-native-input/1':
+            self._expert_durations=tuple((config['costs']['expert_ns'],)*self.ranks for _ in range(calls))
+        else:
+            stage=self.config['expert_stage']
+            fields(stage,'mode durations_ns source','declared expert stage')
+            require(stage['mode']=='per_call_rank_declared_ns/1','unsupported expert stage mode')
+            require(type(stage['source']) is str and stage['source'].strip() and len(stage['source'])<=512,
+                'expert stage requires a source description of 1..512 characters')
+            rows=stage['durations_ns']
+            require(type(rows) is list and len(rows)==calls,'expert stage must cover every call')
+            for row in rows:
+                require(type(row) is list and len(row)==self.ranks,'expert stage must cover every rank')
+                for value in row:integer(value,0,horizon,'expert stage duration')
+            self._expert_durations=tuple(tuple(row) for row in rows)
         require(isinstance(config['deployment'],list) and len(config['deployment'])==self.ranks,'incomplete deployment')
         gpus={n['id'] for n in topology['nodes'] if n['kind']=='gpu'};self.deployment={};nodes=set()
         for row in config['deployment']:
@@ -123,6 +142,11 @@ class ModernNativeLayout:
         validate(topology,protocol,self.initial,allow_no_remote=True)
 
     def node(self,rank):return self.deployment[rank]['node']
+
+    def expert_duration(self,call,rank):
+        integer(call,0,len(self._expert_durations)-1,'expert stage call')
+        integer(rank,0,self.ranks-1,'expert stage rank')
+        return self._expert_durations[call][rank]
 
     @staticmethod
     def token_key(op):

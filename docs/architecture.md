@@ -1,12 +1,14 @@
 # 系统架构与执行过程
 
+现代原生入口可使用显式的逐调用/rank专家阶段耗时矩阵。在实际Dispatch完成后，专家节点进入既有每GPU串行lane，真实完成回调再解锁Combine；矩阵不控制网络时刻、不替代网络反馈。固定成本v1保持兼容，v2输入与来源边界见[专家阶段成本](../examples/modern_deepep_native/README.md#按调用和rank修改专家计算耗时)。
+
 持久传输在创建QP前为本地地址注册实际NIC归属；同GPU/plane多NIC使用物理别名，目的路由只从指定NIC进入GPU。发送、ACK/CNP与事务回复共享同一Fabric的实际端口、交换机和MMU；重建路由保留绑定与持久状态。普通SEND/RECV仍使用原路由域，范围见[多rail示例](../examples/scaleout_multirail_native/README.md)。
 
 原生事务会话每次网络通知仍正常推进依赖、本地条件和排空检查。操作状态收集通过`RemoteTransactions::TakeOperationProgressUpdates()`消费实际变化的id，按原id/阶段顺序交付回调，再与本地事件和控制闹钟稳定按时间排序；最终`Report/OperationProgress`仍读取全量状态。增量索引不是前端可见的调度信息，也不改变网络或GPU模型。
 
 现代事务入口可选复用HostTiming，分别记录Python控制推进和原生session/Simulator宿主阶段。观测不参与就绪、时钟或选路；同进程嵌套和跨进程等待不能相加，失败只解释已闭合阶段与最近快照。见[现代入口](../examples/modern_deepep_native/README.md#可选的宿主开销观测)。
 
-`modern_native.py`提供功能接入：现代事件由同一次原生事务会话的实际回调推进，本地copy/计数清零/声明计算也在该时钟执行。必要self、动态slot和跨调用复用保留；accepted/visible采用显式native-apply功能假设。四rank原始路由仍未完成验收，已遇到控制交互和宿主限时两种限制，见[公开范围](../examples/modern_deepep_native/README.md)。
+`modern_native.py`提供功能接入：现代事件由同一次原生事务会话的实际回调推进，本地copy/计数清零/声明计算也在该时钟执行。必要self、动态slot和跨调用复用保留；accepted/visible采用显式native-apply功能假设。默认逐批交付曾遇到控制交互和宿主限时限制；显式callback-batches后，指定四rank单层调用已经完成，不表示任意输入或千卡验收，见[公开范围](../examples/modern_deepep_native/README.md)。
 
 transactions/5的可选`declared_service_fifo/1`为每个self连接调度独立start/apply/complete事件。它沿用源保护和目标NIC权限，释放由实际complete回调触发；不占本地GPU计算槽，也不创建网络载体或ACK。见[混合服务](../examples/scaleout_self_peer/README.md)。
 

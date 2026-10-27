@@ -49,7 +49,7 @@ Python阶段区分 `controller_advance/wake_conditions/python_candidate_copy/pyt
 
 ## 怎样修改
 
-输入格式`moe-modern-native-input/1`。`modern`沿用[现代计划](../modern_deepep_partial_order/README.md)的完整配置与专家选择。可改模型形状、token数量/专家选择、调用次数及context，但仍受原计划和事务的有界容量约束，不等于完整模型部署或服务请求调度。
+输入格式为固定成本的`moe-modern-native-input/1`或显式专家阶段矩阵的`moe-modern-native-input/2`。`modern`沿用[现代计划](../modern_deepep_partial_order/README.md)的完整配置与专家选择。可改模型形状、token数量/专家选择、调用次数及context，但仍受原计划和事务的有界容量约束，不等于完整模型部署或服务请求调度。
 
 `deployment`逐逻辑rank声明物理GPU节点和设备到NIC/plane的对应；设备编号须覆盖`modern.execution.local_devices`。相同communicator/source/context/peer身份跨阶段和调用复用连接。Combine槽位在实际运行时分配；只为所有可能绑定预留连接，不提前选择slot顺序。预留集合上限64，未使用连接也会占用原生对象，不可称作活跃GIN QP数量。
 
@@ -59,7 +59,25 @@ Python阶段区分 `controller_advance/wake_conditions/python_candidate_copy/pyt
 
 选择性重传使用同目录 `input-selective.json` 替换上面命令的 `--config`。该输入保留完整现代操作和成本，只显式配置已有 `selective_repeat/1` 及 `provider.dcqcn_reference`；后者直接传给v5事务层的既有Figure7参考控制器。接收缓冲、发送窗口和控制周期均为声明参数，没有自动硬件校准。配合 `drop-first-rdma.json` 可检验首远端signal请求丢失后的完整调用。缺少控制器或非法窗口明确拒绝，不静默回退到GBN。该接入是已有恢复机制的基线能力，不是新恢复算法。
 
-`costs`必须声明`source_prepare_ns/expert_ns/reduction_ns/local_copy_ns`。本地带成本工作沿现有每GPU串行lane；控制依赖和slot分配为零时长逻辑步骤。此入口没有模拟CUDA各SM并发；成本是使用者条件，GPU名称不能自动生成实测成本。
+v1的`costs`必须声明`source_prepare_ns/expert_ns/reduction_ns/local_copy_ns`。本地带成本工作沿现有每GPU串行lane；控制依赖和slot分配为零时长逻辑步骤。此入口没有模拟CUDA各SM并发；成本是使用者条件，GPU名称不能自动生成实测成本。
+
+### 按调用和rank修改专家计算耗时
+
+将运行命令的`--config`改为本目录`input-expert-costs.json`，并使用新的输出目录。该v2小例保留选择性重传，将两次调用、两个逻辑rank的专家阶段分别声明为：
+
+```json
+"expert_stage": {
+  "mode": "per_call_rank_declared_ns/1",
+  "durations_ns": [[0, 5000], [7000, 100]],
+  "source": "Synthetic readiness scenario; not a measured GPU profile."
+}
+```
+
+第一行对应`modern.calls[0]`，第二行对应`modern.calls[1]`；列依次为逻辑rank 0和1，与物理node编号无关。每行必须覆盖所有rank，每次调用都必须有一行。所有值为0到协议`limits.max_sim_ns`内的整数纳秒，布尔值、浮点数和缺项均拒绝。`source`必须是1—512字符的非空说明；它用于追踪假设来源，不能把填写说明当作硬件校准。
+
+v2的`costs`只声明`source_prepare_ns/reduction_ns/local_copy_ns`，不再接受`expert_ns`；不存在静默覆盖。v1不接受`expert_stage`。专家节点在实际Dispatch完成后才进入原生每GPU串行lane；耗时从实际`local_started`起计，排队另计，零成本也必须等待实际完成回调。后续Combine不能在该rank专家阶段完成前开始。
+
+这些数值控制的是相对计算时间，不能填写为绝对通信发起时刻，也不能从将来的网络结果反推。入口不根据专家token数自动预测成本；现有GPU profile需要先匹配算子、形状和精度，再明确转换为矩阵。本小例仅验证不均匀就绪时间与通信依赖的接入，没有数值专家计算、自动热点模型或实机收益结论。
 
 数据内容为每call/源/token或Combine贡献生成的32B标记及显式零填充，保留现代布局的完整发送长度。主窗口跨phase/call实际复用；不可变输入、provider功能信号域与主窗口分开。这里不执行数值BF16专家、完整LLMServingSim服务调度或真实模型KV。
 
@@ -68,6 +86,8 @@ Python阶段区分 `controller_advance/wake_conditions/python_candidate_copy/pyt
 `modern-plan.json`保存现代操作图，`initial.json`保存原生初始窗口/连接，`control.jsonl`记录实际DECIDE/COMMIT，`result.json`保存包、字节及目标应用。失败后仍保留这些已取得的文件。
 
 `modern-execution.json`保存逐现代事件的`time_ns/origin`；实际回调事件另有`native_operation/native_event/native_time_ns`，并保存实际增量事务及绑定。顶层scope说明本功能接入；内部`runtime`仍是窗口影子核查器，不能把其`simulated_packets=false`误读为整个外部运行未发包，也不能把外部网络执行误称为GPU校准。
+
+v2另保存原始`expert_stage`矩阵和来源说明，实际专家节点的`native_operations[].duration_ns`与`result.json.session.events`中的`local_started/completed`对应。`completed-local_started`是声明计算时间，提交后至实际开始的等待不能算入计算成本。v1没有新增此快照字段，硬件校准、GPU可见和数值专家计算标记继续为false。
 
 显式启用订阅时另存 `callback-delivery.json`，记录策略和生成器哈希；原生 `session.callback_wakeups` 记录过滤命令数、略去的无关交互批数及积累回调数。正常结束须无待交付回调；超时、缺少 `result.json` 或部分日志不能作为成功证据。
 

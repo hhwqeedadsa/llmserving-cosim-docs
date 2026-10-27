@@ -12,6 +12,12 @@ ROOT=Path(__file__).resolve().parents[2]
 
 
 def example():return json.loads((ROOT/'examples/modern_deepep_native/input.json').read_text())
+def expert_matrix(rows=None):
+    cfg=example();cfg['schema_version']='moe-modern-native-input/2';cfg['costs'].pop('expert_ns')
+    cfg['expert_stage']=dict(mode='per_call_rank_declared_ns/1',
+        durations_ns=[[1000,1000],[1000,1000]] if rows is None else rows,
+        source='unit input, declared costs; not a measured GPU profile')
+    return cfg
 def protocol():return json.loads((ROOT/'examples/modern_deepep_native/rdma.json').read_text())
 def topology():
     return dict(schema_version='moe-scaleout-physical-topology/1',nodes=[dict(id=i,kind='gpu') for i in range(8)]+[dict(id=8,kind='tor',plane=0),dict(id=9,kind='tor',plane=1)],
@@ -137,6 +143,54 @@ class ModernNativeTests(unittest.TestCase):
         c.advance(dict(now_ns=1,events=[callback],drained=False))
         with self.assertRaisesRegex(ValueError,'unknown or duplicate'):
             c.advance(dict(now_ns=1,events=[callback],drained=False))
+
+    def test_equal_matrix_preserves_entire_declared_transcript(self):
+        fixed=declared_callback_drive(example()).snapshot()
+        matrix=declared_callback_drive(expert_matrix()).snapshot()
+        self.assertEqual(matrix.pop('expert_stage'),expert_matrix()['expert_stage'])
+        self.assertEqual(matrix,fixed)
+        self.assertNotIn('expert_stage',fixed)
+
+    def test_matrix_selects_call_rank_and_preserves_callback_requirement(self):
+        rows=[[0,5000],[7000,100]];cfg=expert_matrix(rows)
+        c=declared_callback_drive(cfg)
+        costs={task['event']:c.native_nodes[identity]['duration_ns'] for identity,task in c.tasks.items()
+            if task['role']=='event' and task['event'].endswith('.experts_done')}
+        self.assertEqual(costs,{f'm{call}.r{rank}.experts_done':value
+            for call,row in enumerate(rows) for rank,value in enumerate(row)})
+        idle=ModernNativeController(topology(),protocol(),expert_matrix([[0,0],[0,0]]))
+        idle.advance(dict(now_ns=0,events=[],drained=True))
+        self.assertFalse(any(e['kind']=='expert_stage_done' for e in idle.log))
+
+    def test_matrix_source_and_durations_isolated_from_caller_and_snapshot(self):
+        cfg=expert_matrix([[0,5000],[7000,100]])
+        c=ModernNativeController(topology(),protocol(),cfg)
+        cfg['expert_stage']['durations_ns'][0][0]=9999
+        cfg['expert_stage']['source']='mutated'
+        self.assertEqual(c.layout.expert_duration(0,0),0)
+        state=c.snapshot();state['expert_stage']['durations_ns'][0][0]=8888
+        self.assertEqual(c.snapshot()['expert_stage']['durations_ns'][0][0],0)
+        self.assertNotEqual(c.snapshot()['expert_stage']['source'],'mutated')
+
+    def test_matrix_invalid_types_shapes_ranges_sources_and_mixed_versions_rejected(self):
+        mutations=[lambda c:c.update(schema_version='moe-modern-native-input/1'),
+            lambda c:c['costs'].update(expert_ns=1000),lambda c:c.pop('expert_stage'),
+            lambda c:c['expert_stage'].update(mode='measured_gpu_profile'),
+            lambda c:c['expert_stage'].update(unknown=True),
+            lambda c:c['expert_stage'].update(source=' '),
+            lambda c:c['expert_stage'].update(source='x'*513),
+            lambda c:c['expert_stage'].update(source=' '*513+'x'),
+            lambda c:c['expert_stage'].update(durations_ns=[[1,2]]),
+            lambda c:c['expert_stage'].update(durations_ns=[[1,2,3],[4,5,6]]),
+            lambda c:c['expert_stage'].update(durations_ns=[[True,1],[2,3]]),
+            lambda c:c['expert_stage'].update(durations_ns=[[1.0,1],[2,3]]),
+            lambda c:c['expert_stage'].update(durations_ns=[[-1,1],[2,3]]),
+            lambda c:c['expert_stage'].update(durations_ns=[[1000001,1],[2,3]]),
+            lambda c:c['expert_stage'].update(durations_ns={'0':[1,2],'1':[3,4]})]
+        for index,change in enumerate(mutations):
+            cfg=expert_matrix();change(cfg)
+            with self.subTest(index=index),self.assertRaises(ValueError):
+                ModernNativeLayout(topology(),protocol(),cfg)
 
 
 if __name__=='__main__':unittest.main()

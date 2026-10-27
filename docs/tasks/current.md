@@ -15,6 +15,8 @@
 
 已完成条目记录各阶段当时的能力和限制；后续状态以上方最新增量及现行使用文档为准，旧阶段的“尚未实现”不表示该限制仍然有效。
 
+当前共享上联配置选择研究 `in_progress`：[事前协议](../../experiments/shared_uplink_choice/protocol.md)。平台固定`5e7f792`，研究与平台分别提交；沿已确认八份真实新增请求，batch4/8、同plane双NIC/共享Agg，对比接入与核心带宽升级。预测先冻结，加入七阶段端点、每NIC及每有向链路负载和原网络冻结通用图强基线；Combine仅利用slot双射多重集合，不偷看未来动态绑定。独立1200秒/1GiB、12次网络与逐步失败停止，无构建/下载/GPU/依赖修改/push；未见强基线有代价误判前不把精细语义当创新，两项候选及整体目标仍进行中。
+
 当前物理NIC绑定`completed`：[独立规范](physical_nic_binding_spec.md)、[公开示例](../../examples/scaleout_multirail_native/README.md)、[验收与恢复](../../fixtures/physical_nic_binding/README.md)，起点`b78aa59`、实现`364fd7c`。同plane多rail使用GPU/NIC物理地址及原生本地接口注册，QP、ACK/CNP和MRT1回复保持指定NIC，别名最短跳/ECMP路由参与故障重建，共享Agg/MMU只建一次。原生补丁`47f8fad`、ASTRA指针`0c51d08`、LLMServingSim指针`94f3b00`均仅本地保存；没有上游升级或push。
 
 全新公开构建446项任务/5程序，编译279.556秒；20项原生对象检查、10项路由方法（512物理NIC配对独立枚举）、153项Scale-Out和52项定向回归通过，计数包含复用。8次功能网络完成旧/新单NIC兼容、独立rail、共享Agg拥塞、跨NIC事务、现代两调用、替代路径故障和预期分区失败：单NIC除加载路径外完整一致；共享条件53个实际CNP；事务6操作/4回复/原子终值10；现代2rank两调用322事件完整。分区中同GPU的NIC2健康，NIC1的99个源包均未改绑，3流完成、1流560us有限失败。替代路径条件没有实际丢包，不能作为恢复性能收益证据。

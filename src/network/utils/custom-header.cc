@@ -28,6 +28,9 @@ namespace ns3 {
 NS_LOG_COMPONENT_DEFINE ("CustomHeader");
 
 NS_OBJECT_ENSURE_REGISTERED (CustomHeader);
+bool CustomHeader::m_roceReference = false;
+void CustomHeader::SetRoceReference(bool enabled) { m_roceReference = enabled; }
+bool CustomHeader::RoceReferenceEnabled() { return m_roceReference; }
 
 CustomHeader::CustomHeader ()
   : brief(1), headerType(L3_Header | L4_Header), 
@@ -93,7 +96,7 @@ uint32_t CustomHeader::GetSerializedSize (void) const{
 		if (l3Prot == 0x6) // TCP
 			len += tcp.length * 4;
 		else if (l3Prot == 0x11) // UDP
-			len += GetUdpHeaderSize();
+			len += roce.present ? 8 + roce.headerBytes : GetUdpHeaderSize();
 		else if (l3Prot == 0xFC || l3Prot == 0xFD)
 			len += GetAckSerializedSize();
 		else if (l3Prot == 0xFF)
@@ -104,6 +107,7 @@ uint32_t CustomHeader::GetSerializedSize (void) const{
 	return len;
 }
 void CustomHeader::Serialize (Buffer::Iterator start) const{
+  NS_ABORT_MSG_IF(roce.present, "RC reference CustomHeader is a read-only projection");
   Buffer::Iterator i = start;
   
   // ppp
@@ -186,6 +190,7 @@ void CustomHeader::Serialize (Buffer::Iterator start) const{
 uint32_t
 CustomHeader::Deserialize (Buffer::Iterator start)
 {
+  roce = RoceReference{};
   Buffer::Iterator i = start;
 
   // L2
@@ -282,6 +287,34 @@ CustomHeader::Deserialize (Buffer::Iterator start)
 		  // udp header
 		  udp.sport = i.ReadNtohU16 ();
 		  udp.dport = i.ReadNtohU16 ();
+		  if (m_roceReference && udp.dport == 4791) {
+			  NS_ABORT_MSG_IF(i.GetRemainingSize() < 20, "truncated RC reference UDP/BTH/ICRC");
+			  udp.payload_size = i.ReadNtohU16(); i.Next(2);
+			  roce.present = true;
+			  roce.opcode = i.ReadU8();
+			  roce.pad = (i.ReadU8() >> 4) & 3;
+			  i.Next(2); // P_Key; full endpoint decoder validates reserved fields.
+			  roce.dqpn = i.ReadNtohU32() & 0xffffff;
+			  const auto sequence = i.ReadNtohU32();
+			  roce.ackRequested = sequence & 0x80000000;
+			  roce.psn = sequence & 0xffffff;
+			  uint32_t extra = 0;
+			  switch (roce.opcode) {
+			    case 0x06: case 0x0a: extra = 16; break; // RETH
+			    case 0x07: case 0x08: break;
+			    case 0x14: extra = 28; break; // ATMETH
+			    case 0x11: extra = 4; break; // AETH
+			    case 0x12: extra = 12; break; // AETH + original value
+			    default: NS_ABORT_MSG("unsupported RC reference opcode");
+			  }
+			  NS_ABORT_MSG_IF(i.GetRemainingSize() < extra + roce.pad + 4 ||
+			      udp.payload_size != 8 + 12 + i.GetRemainingSize(), "invalid RC reference length");
+			  roce.headerBytes = 12 + extra;
+			  udp.seq = roce.psn;
+			  // Explicit reference QoS; never interpret BTH bits as legacy PG/INT.
+			  udp.pg = (roce.opcode == 0x11 || roce.opcode == 0x12) ? 0 : 3;
+			  l4Size = 8 + roce.headerBytes;
+		  } else {
 		  if (brief){
 			  i.Next(4);
 		  }else{
@@ -296,6 +329,7 @@ CustomHeader::Deserialize (Buffer::Iterator start)
 			  udp.ih.Deserialize(i);
 
 		  l4Size = GetUdpHeaderSize();
+		  }
 	  }else if (l3Prot == 0xFF){
 		  cnp.qIndex = i.ReadU8();
 		  cnp.fid = i.ReadU16();

@@ -61,6 +61,16 @@ public:
   virtual void Serialize (Buffer::Iterator start) const;
   virtual uint32_t Deserialize (Buffer::Iterator start);
 
+  // Read-only RC reference framing. Off by default; the standalone reference
+  // entry owns this process-wide setting and resets it after Simulator::Destroy.
+  static void SetRoceReference(bool enabled);
+  static bool RoceReferenceEnabled();
+  struct RoceReference {
+    bool present = false, ackRequested = false;
+    uint8_t opcode = 0, pad = 0;
+    uint32_t dqpn = 0, psn = 0, headerBytes = 0;
+  } roce;
+
   uint32_t brief, headerType, getInt;
   enum HeaderType{
 	L2_Header = 1,
@@ -137,6 +147,8 @@ public:
   static uint32_t GetAckSerializedSize(void);
   static uint32_t GetUdpHeaderSize(void); // include udp, seqTs, INT
   static uint32_t GetStaticWholeHeaderSize(void); // ppp + ip + udp + int
+private:
+  static bool m_roceReference;
 };
 
 } // namespace ns3

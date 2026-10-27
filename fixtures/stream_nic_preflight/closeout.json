@@ -1,0 +1,37 @@
+{
+  "passed": true,
+  "original_terminal_monitors": 8,
+  "monitored_wall_seconds": 3.4339262900030008,
+  "wall_budget_seconds": 300,
+  "wall_receipt_reserve_seconds": 10,
+  "artifact_usage": {
+    "apparent_bytes": 1920325,
+    "allocated_bytes": 2404352
+  },
+  "artifact_budget_bytes": 134217728,
+  "receipt_reserve_bytes": 2097152,
+  "peak_sampled_group_rss_bytes": 58454016,
+  "new_unit_tests": 8,
+  "affected_regression_tests": 69,
+  "independent_graphs": 64,
+  "independent_directional_path_sets": 128,
+  "public_negative_entries": 3,
+  "public_topology_generation": true,
+  "copied_source_recovery": true,
+  "initial_native_failure_inferred_from_fixed_source_only": true,
+  "network_executions": 0,
+  "builds": 0,
+  "dependency_checkouts_verified": 13,
+  "dependencies_modified": false,
+  "downloaded": false,
+  "gpu_executed": false,
+  "pushed": false,
+  "same_plane_multi_rail_implemented": false,
+  "novel_algorithm_or_speedup_proven": false,
+  "archive": {
+    "sha256": "35f9fa77853f173168fe622bd522259e99cae186da025c10e83f1c6ddd0c2b2f",
+    "members": 166,
+    "compressed_bytes": 350932,
+    "uncompressed_bytes": 1314618
+  }
+}

@@ -1,6 +1,8 @@
 # 模型依据与适用范围
 
-现代native入口已验证两rank两调用的实际网络与self/计数/屏障，但四原始请求的四rank调用在256次控制交互处失败；不能宣称完整代表性负载已验收。数据为完整布局长度的合成标记；本地串行声明成本、功能信号地址和native-apply可见性均非实测GPU/provider。见[验收状态](../fixtures/modern_native/README.md)。
+持久流/事务/现代MoE入口的端点多NIC支持须与拓扑生成功能分开：初始正反向最短路均须只有声明NIC，同plane多候选在启动前拒绝。它验证固定原生Open已有要求，不改变路由，也未实现同plane多rail绑定。交换机内部ECMP、双plane和普通SEND/RECV服务的范围分别说明，见[使用约束](../examples/scaleout_rdma_streams/README.md#nic绑定和多rail边界)与[准入验收](../fixtures/stream_nic_preflight/README.md)。
+
+现代native入口的默认逐批交付曾在四原始请求的四rank调用达到256次同步上限而失败，见[历史记录](../fixtures/modern_native/README.md)。显式callback-batches后，该单层调用及[新增请求batch4/8](../experiments/compact_network_choice/results/20261027/report.md)已完整执行，不等于完整模型、千卡或现代provider性能验收。数据为完整布局长度的合成标记；本地串行声明成本、功能信号地址和native-apply可见性均非实测GPU/provider。交付规则见[批次验收](../fixtures/native_callback_batches/README.md)。
 
 显式self服务用于保留必要的同节点计数/屏障操作，声明时长不等于provider测量。小例核查FIFO、真实原子旧值、源捕获和远端丢包后的恰好一次应用；物理loopback/NIC争用、GPU可见、现代完整映射仍缺。见[功能验收](../fixtures/self_peer_service/README.md)。
 

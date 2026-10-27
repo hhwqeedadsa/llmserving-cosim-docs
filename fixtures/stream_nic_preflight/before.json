@@ -1,0 +1,53 @@
+{
+  "passed": true,
+  "old_stream_validator_accepted": true,
+  "old_modern_layout_accepted": true,
+  "same_plane": 0,
+  "rails": 2,
+  "shortest_paths": [
+    {
+      "nodes": [
+        0,
+        8,
+        12,
+        20,
+        18,
+        14,
+        4
+      ],
+      "source_nic": 1,
+      "hops": 6
+    },
+    {
+      "nodes": [
+        0,
+        10,
+        13,
+        21,
+        19,
+        16,
+        4
+      ],
+      "source_nic": 2,
+      "hops": 6
+    }
+  ],
+  "native_source_guard_requires": [
+    1
+  ],
+  "native_failure_inferred_from_fixed_source_not_executed": true,
+  "source_hashes": {
+    "python/moe_ub_cosim/scaleout_streams.py": "1430865643058b9cac0874d9115d0c2a750ac89014b5ad8af6e8d0d0da95e46b",
+    "backend/rdma/persistent_streams.cc": "90a894ac5f51ea8b82d9a3eae8342f0b961a81adfce8150d84fb9a291a7f8e10",
+    "backend/rdma/fabric.cc": "3fc5ca6b07c29140328d4e5a31af999ea589fe309fda31d2e9849b3b34e2f8c9"
+  },
+  "inputs": {
+    "topology-config.json": "2b7f313e18415dd8a5b3387e0c1bf116b8df55048e1cd27b9f6c698234efdc65",
+    "topology.json": "eb115584e3516b5fceb2e6019cffbfb7600c1e074388c9c60bf96a54e5a70d8e",
+    "modern.json": "f2619e6d4adf2a837486832132089de459666be5b34ca42f30814fe48cbae626",
+    "protocol.json": "8a2ec1514e01dbf1367942a6050977599cfd97ce35cce0790f05fc49b242510d",
+    "work.json": "08abe644ae6ef07b10cf5ec61d8b4e903124cea49db7835777edf60e45404247",
+    "initial.json": "e1bcfab5de6e10d3d666ed1c862686dac9ca121f382a4cc106ae4e3b4d7848b0"
+  },
+  "network_executions": 0
+}

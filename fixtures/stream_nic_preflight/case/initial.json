@@ -1,0 +1,303 @@
+{
+  "schema_version": "moe-rdma-transactions/5",
+  "connections": [
+    {
+      "id": 0,
+      "src": 0,
+      "dst": 0,
+      "plane": 0,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4,
+      "self_service": {
+        "apply_ns": 200,
+        "complete_ns": 500
+      }
+    },
+    {
+      "id": 1,
+      "src": 0,
+      "dst": 4,
+      "plane": 0,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4,
+      "request_port": 24002,
+      "response_port": 24003
+    },
+    {
+      "id": 2,
+      "src": 0,
+      "dst": 4,
+      "plane": 0,
+      "source_nic": 2,
+      "destination_nic": 2,
+      "queue_depth": 4,
+      "request_port": 24004,
+      "response_port": 24005
+    },
+    {
+      "id": 3,
+      "src": 4,
+      "dst": 0,
+      "plane": 0,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4,
+      "request_port": 24006,
+      "response_port": 24007
+    },
+    {
+      "id": 4,
+      "src": 4,
+      "dst": 4,
+      "plane": 0,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4,
+      "self_service": {
+        "apply_ns": 200,
+        "complete_ns": 500
+      }
+    },
+    {
+      "id": 5,
+      "src": 4,
+      "dst": 0,
+      "plane": 0,
+      "source_nic": 2,
+      "destination_nic": 2,
+      "queue_depth": 4,
+      "request_port": 24010,
+      "response_port": 24011
+    }
+  ],
+  "windows": [
+    {
+      "owner": 0,
+      "key": 1,
+      "address": 4096,
+      "bytes": 18874368,
+      "segments": [],
+      "initialization": "zero_fill/1",
+      "allow_atomic": false
+    },
+    {
+      "owner": 0,
+      "key": 2,
+      "address": 33554432,
+      "bytes": 192,
+      "segments": [],
+      "initialization": "zero_fill/1",
+      "allow_atomic": true
+    },
+    {
+      "owner": 0,
+      "key": 3,
+      "address": 41943040,
+      "bytes": 3072,
+      "segments": [
+        {
+          "offset": 64,
+          "hex": "fdfffffffffffffffdfffffffffffffffefffffffffffffffefffffffffffffffefffffffffffffffeffffffffffffff"
+        },
+        {
+          "offset": 128,
+          "hex": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+        },
+        {
+          "offset": 192,
+          "hex": "220baf5a93ae6c67c5fdbefa3b9d0c2d71cc4f6833c447f7bd9f7d25573001b6"
+        },
+        {
+          "offset": 768,
+          "hex": "1669665fcaafebd8dcdedf13aa5a31ad1ff5b74fda7c54bf60c526fb96642b01"
+        },
+        {
+          "offset": 1344,
+          "hex": "ffeff441f72e6ac3f7aee4f38d2e60d7e2879ecd792536c4d30e395272ddc007"
+        },
+        {
+          "offset": 1920,
+          "hex": "e57a8797accd08db94e7e52da3a69f750a407ad99e4ca9f3c6eb9307ca7a7da4"
+        },
+        {
+          "offset": 2496,
+          "hex": "964c3fa7522c77523a9d6d0cf018eeaae56901b1218f5305703f2623d3e15000"
+        }
+      ],
+      "initialization": "zero_fill/1",
+      "allow_atomic": false
+    },
+    {
+      "owner": 4,
+      "key": 1,
+      "address": 4096,
+      "bytes": 18874368,
+      "segments": [],
+      "initialization": "zero_fill/1",
+      "allow_atomic": false
+    },
+    {
+      "owner": 4,
+      "key": 2,
+      "address": 33554432,
+      "bytes": 192,
+      "segments": [],
+      "initialization": "zero_fill/1",
+      "allow_atomic": true
+    },
+    {
+      "owner": 4,
+      "key": 3,
+      "address": 41943040,
+      "bytes": 2496,
+      "segments": [
+        {
+          "offset": 64,
+          "hex": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+        },
+        {
+          "offset": 128,
+          "hex": "fefffffffffffffffefffffffffffffffefffffffffffffffffffffffffffffffeffffffffffffffffffffffffffffff"
+        },
+        {
+          "offset": 192,
+          "hex": "f93a6755d13b40d33eae82813ed780b5f6b77c513ea1db0712cbdb496c21bdc1"
+        },
+        {
+          "offset": 768,
+          "hex": "4ce2de480d367739310265758476dbeae2eb37385455b26d23583d91af9d08f6"
+        },
+        {
+          "offset": 1344,
+          "hex": "aec6e3ca556c68eee96c9f6ee497190bef1958465d48b1d7ae8402c91dabd245"
+        },
+        {
+          "offset": 1920,
+          "hex": "27213d7385e63ec5120e7bf206aa26c7b9b0db594646eee12d1775b3b45aa8b5"
+        }
+      ],
+      "initialization": "zero_fill/1",
+      "allow_atomic": false
+    }
+  ],
+  "operations": [],
+  "local_model": {
+    "mode": "serial_per_gpu/1",
+    "duration_source": "declared_ns"
+  },
+  "source_model": {
+    "capture": "registered_window_at_publish/1",
+    "release": "transaction_completed/1"
+  },
+  "local_memory_model": {
+    "mode": "guarded_copy/1",
+    "acquire": "admission/1",
+    "capture": "start/1",
+    "commit": "completion/1"
+  },
+  "submission_model": {
+    "mode": "explicit_prefix/1"
+  },
+  "self_peer_model": {
+    "mode": "declared_service_fifo/1"
+  },
+  "transport_recovery": {
+    "mode": "go_back_n/1",
+    "initial_rto_ns": 80000,
+    "max_rto_ns": 640000,
+    "max_retries": 3,
+    "max_events": 1000
+  },
+  "registration_model": {
+    "mode": "nic_scoped_aliases/1"
+  },
+  "registrations": [
+    {
+      "id": 0,
+      "owner": 0,
+      "nic": 1,
+      "key": 1,
+      "window_key": 1,
+      "address": 4096,
+      "bytes": 18874368,
+      "allow_atomic": false
+    },
+    {
+      "id": 1,
+      "owner": 0,
+      "nic": 1,
+      "key": 2,
+      "window_key": 2,
+      "address": 33554432,
+      "bytes": 192,
+      "allow_atomic": true
+    },
+    {
+      "id": 2,
+      "owner": 0,
+      "nic": 2,
+      "key": 1,
+      "window_key": 1,
+      "address": 4096,
+      "bytes": 18874368,
+      "allow_atomic": false
+    },
+    {
+      "id": 3,
+      "owner": 0,
+      "nic": 2,
+      "key": 2,
+      "window_key": 2,
+      "address": 33554432,
+      "bytes": 192,
+      "allow_atomic": true
+    },
+    {
+      "id": 4,
+      "owner": 4,
+      "nic": 1,
+      "key": 1,
+      "window_key": 1,
+      "address": 4096,
+      "bytes": 18874368,
+      "allow_atomic": false
+    },
+    {
+      "id": 5,
+      "owner": 4,
+      "nic": 1,
+      "key": 2,
+      "window_key": 2,
+      "address": 33554432,
+      "bytes": 192,
+      "allow_atomic": true
+    },
+    {
+      "id": 6,
+      "owner": 4,
+      "nic": 2,
+      "key": 1,
+      "window_key": 1,
+      "address": 4096,
+      "bytes": 18874368,
+      "allow_atomic": false
+    },
+    {
+      "id": 7,
+      "owner": 4,
+      "nic": 2,
+      "key": 2,
+      "window_key": 2,
+      "address": 33554432,
+      "bytes": 192,
+      "allow_atomic": true
+    }
+  ],
+  "execution_limits": {
+    "max_connections": 64,
+    "max_remote_operations": 1024,
+    "max_local_operations": 256
+  }
+}

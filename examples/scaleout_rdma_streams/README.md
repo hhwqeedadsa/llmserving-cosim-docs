@@ -23,7 +23,15 @@ PYTHONPATH=python python3 -m moe_ub_cosim scaleout rdma-stream-probe \
 
 `moe-rdma-stream-work/4`沿用v3的write/local依赖语义，并显式声明三项上限：`max_streams`为1—4096，`max_work`为1—65536，`max_link_transmissions`为1—2000000。最后一项累计全网每条物理链路上的发送事件，包括数据、ACK及其他控制包；一次端到端包经过六跳会计六次。超限失败，不截断。输出在`persistent_transport.execution_limits/link_transmissions`保存生效声明和实际次数，只有v4增加这些字段。
 
-v4使用协议`limits`已经验证的RSS/地址预算，仍限每命令60秒和64MiB产物；旧v1—v3继续夹限1GiB RSS/2GiB地址空间。8MiB输入、每条流64MiB累计序号、工作id≤65535、全局唯一wire_port以及原有采集/结果限制仍独立生效；最大声明不表示全部参数组合都已通过。各NIC必须是端点实际端口并属于声明plane，native仍检查正反向唯一可达。
+v4使用协议`limits`已经验证的RSS/地址预算，仍限每命令60秒和64MiB产物；旧v1—v3继续夹限1GiB RSS/2GiB地址空间。8MiB输入、每条流64MiB累计序号、工作id≤65535、全局唯一wire_port以及原有采集/结果限制仍独立生效；最大声明不表示全部参数组合都已通过。各NIC必须是端点实际端口并属于声明plane。
+
+### NIC绑定和多rail边界
+
+本持久传输入口要求：对每条stream的目标GPU/plane，源端最短跳路由只含声明的source_nic；反向路由也只含destination_nic。Python在创建运行输出和启动原生后端前检查，原生Open保留同一断言。错误会列出stream、方向、声明端口及实际候选，例如`requires unique shortest NIC 1; candidates [1, 2]`。这是初始最短跳路由，不按带宽/时延加权，也不代替故障后的路由检查。
+
+拓扑生成器支持画出同plane多rail，但这个持久入口没有实现同一目标地址的显式多NIC绑定；此类输入不能直接用于持久流、事务或现代MoE实验。双plane中每端点/plane唯一NIC，以及端点NIC唯一而交换机内部存在ECMP的拓扑仍可用。多个物理NIC不必然不支持，判定针对实际端点对的最短路。
+
+不要用ECMP端口hash凑声明NIC，或简单把rail改成plane来绕过检查：共享Agg/MMU的两rail改成独立plane可能删除真实竞争。完整多NIC支持需要独立实现连接/端点地址/NIC及正反向ACK、CNP和重传绑定。此限制不改变普通SEND/RECV的Scale-Out服务能力；它也不是新增拥塞机制或优化收益。最小反例和准入验收见[NIC边界检查](../../fixtures/stream_nic_preflight/README.md)。
 
 生成一个可直接执行的合成小例（输出须不存在）：
 

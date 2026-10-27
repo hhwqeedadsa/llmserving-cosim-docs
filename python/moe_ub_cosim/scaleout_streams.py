@@ -109,6 +109,10 @@ def validate(topology, protocol, config):
         checks.append(dict(id=s['id'],src=s['src'],dst=s['dst'],plane=s['plane'],bytes=1,ready_ns=0))
     validate_probe(topology,protocol,checks,match_faults=False,
                    max_probe_messages=counts['max_streams'] if config['schema_version'].endswith('/4') else 128)
+    # Open already requires these exact singleton routes in the fixed native
+    # adapter. Reject before output creation or allocating Fabric's MMUs.
+    from .scaleout_stream_routes import validate_nic_routes
+    validate_nic_routes(topology,config['streams'])
     for rule in protocol.get('faults',[]):
         require(rule['message_id'] in ids,'fault names an unopened persistent stream')
         require(rule['sequence']<=64*2**20,'persistent fault sequence exceeds stream budget')

@@ -1,0 +1,97 @@
+{
+  "passed": true,
+  "public_commands": 4,
+  "rejected_before_output_and_backend": 3,
+  "marker_backend_started": false,
+  "supported_dual_plane_admitted": true,
+  "network_executions": 0,
+  "fake_backend_is_negative_startup_check_only": true,
+  "commands": [
+    {
+      "label": "topology",
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "topology",
+        "--config",
+        "/home/lry/moe-ub-cosim/runs/stream_nic_preflight_20261027/before/topology-config.json",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/stream_nic_preflight_20261027/after/topology"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim/runs/stream_nic_preflight_20261027/after/empty-cwd",
+      "exit_code": 0
+    },
+    {
+      "label": "rdma-stream-probe",
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-stream-probe",
+        "--topology",
+        "/home/lry/moe-ub-cosim/runs/stream_nic_preflight_20261027/after/topology",
+        "--protocol",
+        "/home/lry/moe-ub-cosim/runs/stream_nic_preflight_20261027/before/protocol.json",
+        "--config",
+        "/home/lry/moe-ub-cosim/runs/stream_nic_preflight_20261027/before/work.json",
+        "--backend",
+        "/home/lry/moe-ub-cosim/runs/stream_nic_preflight_20261027/after/marker-backend",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/stream_nic_preflight_20261027/after/rdma-stream-probe"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim/runs/stream_nic_preflight_20261027/after/empty-cwd",
+      "exit_code": 1
+    },
+    {
+      "label": "rdma-transaction-probe",
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-transaction-probe",
+        "--topology",
+        "/home/lry/moe-ub-cosim/runs/stream_nic_preflight_20261027/after/topology",
+        "--protocol",
+        "/home/lry/moe-ub-cosim/runs/stream_nic_preflight_20261027/before/protocol.json",
+        "--config",
+        "/home/lry/moe-ub-cosim/runs/stream_nic_preflight_20261027/before/initial.json",
+        "--backend",
+        "/home/lry/moe-ub-cosim/runs/stream_nic_preflight_20261027/after/marker-backend",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/stream_nic_preflight_20261027/after/rdma-transaction-probe"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim/runs/stream_nic_preflight_20261027/after/empty-cwd",
+      "exit_code": 1
+    },
+    {
+      "label": "modern-deepep-native",
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "modern-deepep-native",
+        "--topology",
+        "/home/lry/moe-ub-cosim/runs/stream_nic_preflight_20261027/after/topology",
+        "--protocol",
+        "/home/lry/moe-ub-cosim/runs/stream_nic_preflight_20261027/before/protocol.json",
+        "--config",
+        "/home/lry/moe-ub-cosim/runs/stream_nic_preflight_20261027/before/modern.json",
+        "--backend",
+        "/home/lry/moe-ub-cosim/runs/stream_nic_preflight_20261027/after/marker-backend",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/stream_nic_preflight_20261027/after/modern-deepep-native"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim/runs/stream_nic_preflight_20261027/after/empty-cwd",
+      "exit_code": 1
+    }
+  ]
+}

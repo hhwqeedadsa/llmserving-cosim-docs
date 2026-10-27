@@ -13,7 +13,11 @@
 
 ## 当前范围和预算
 
-当前持久连接NIC准入修复 `in_progress`：[独立范围](stream_nic_preflight_spec.md)，起点`2180762`。继续研究共享上联/多rail前，源码发现Python只验端口/plane，而原生Open要求正反向唯一NIC；同plane多rail会被前端接受、原生分配后拒绝。先保存最小反例并将现有限制提前为纯准入，独立路径枚举和公共CLI假后端证明未启动网络；不把它称为多rail实现或创新。300秒/128MiB、单命令60秒/RSS1GiB/地址2GiB，零新网络/构建/下载/GPU/依赖修改/push。网络性能对照另行预注册，两个主创新和整体目标继续进行。
+当前持久连接NIC准入修复 `completed`：[独立范围](stream_nic_preflight_spec.md)、[验收](../../fixtures/stream_nic_preflight/README.md)，起点`2180762`、规范`10e71d1`。最小双rail单plane有两条6跳路径，旧stream/modern校验接受，而固定原生Open要求正反向唯一NIC；旧原生失败未实际执行，原件与源码推断边界保留。新增纯最短跳准入按目的/plane分组、只保留当前距离表，三个公共入口均在创建运行输出/调用marker后端前拒绝；保留双plane、交换机ECMP和多物理NIC但唯一最短路。没有修改路由/包/计时/原生或依赖，也未实现真正同plane多rail绑定。
+
+8项新单元条件含64图/128方向独立路径集合、128次边顺序核对；69项受影响回归、4条公共CLI/3次拒绝、13依赖检查通过。166成员包逐成员核hash，复制Python源码/空cwd复核公开准入结论相同、生成拓扑逐字节一致；这都是零新网络的功能边界证据，详见[恢复](../../fixtures/stream_nic_preflight/recovery.json)、[收尾](../../fixtures/stream_nic_preflight/closeout.json)。累计受监控3.434秒/约2.294MiB分配产物，保持300秒/128MiB及单命令上限，无构建/下载/GPU/push。
+
+研究顺序调整见[多rail建模与绑定要求](../reviews/多rail网络建模边界与原生绑定改进_20261027.md)：先独立实现物理NIC/端点定位、QP和反向ACK/CNP绑定，在实际共享Agg/MMU中验证，再另行预注册共享上联/多rail的同资源对照；不能通过删除Open断言或把共享rail复制成独立plane来做性能研究。此前双plane交互分域不能推广到共享Agg多rail。修复本身不是创新，两主创新和整体目标继续`in_progress`。
 
 当前新请求/batch通信表示研究 `completed`：[事前协议](../../experiments/compact_network_choice/protocol.md)、[报告](../../experiments/compact_network_choice/results/20261027/report.md)，起点`6aa55ff`、规范`90e188e`。固定8份完整新请求entry1/layer3，EP4下batch4/8，三网络各现代/完整通用图共12次执行全部完成。应用阶段100G/200G/传播减半分别57.390/53.422/33.402us与59.797/54.620/35.857us。仅字节基线选择200G，配置选择后悔值59.94%/52.33%；普通七阶段operand/帧基线已均选对，最大绝对相对时延误差仍23.57%/19.14%，不能将排序正确当预测精确或新增语义收益。
 

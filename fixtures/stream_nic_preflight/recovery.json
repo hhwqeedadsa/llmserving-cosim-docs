@@ -1,0 +1,20 @@
+{
+  "passed": true,
+  "archive_sha256": "35f9fa77853f173168fe622bd522259e99cae186da025c10e83f1c6ddd0c2b2f",
+  "hash_verified_members": 165,
+  "copied_source_root": true,
+  "empty_cwd": true,
+  "public_acceptance_equal": {
+    "passed": true,
+    "public_commands": true,
+    "rejected_before_output_and_backend": true,
+    "marker_backend_started": true,
+    "supported_dual_plane_admitted": true,
+    "network_executions": true,
+    "fake_backend_is_negative_startup_check_only": true
+  },
+  "topology_byte_identical": true,
+  "independent_path_unit_tests_repeated": 8,
+  "network_executions": 0,
+  "backend_was_not_started": true
+}

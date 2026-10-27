@@ -53,6 +53,8 @@ Python阶段区分 `controller_advance/wake_conditions/python_candidate_copy/pyt
 
 `deployment`逐逻辑rank声明物理GPU节点和设备到NIC/plane的对应；设备编号须覆盖`modern.execution.local_devices`。相同communicator/source/context/peer身份跨阶段和调用复用连接。Combine槽位在实际运行时分配；只为所有可能绑定预留连接，不提前选择slot顺序。预留集合上限64，未使用连接也会占用原生对象，不可称作活跃GIN QP数量。
 
+现代入口复用持久事务传输，正反向初始最短路都必须只有声明的NIC；不支持同一plane内同一目标地址有多个候选端点NIC。Python在创建运行输出和启动后端前拒绝，交换机内部ECMP不受此限制。拓扑能生成多rail不等于本入口已能执行它；具体规则、共享Agg不能简单改成独立plane的原因及后续所需绑定见[持久流NIC边界](../scaleout_rdma_streams/README.md#nic绑定和多rail边界)。
+
 `provider.mode=functional_mrt1/1`及`target_visibility=native_apply_functional/1`必须显式填写。功能模型的accepted/visible来自目标实际applied，local_complete来自事务实际completed；前者不释放源保护。这个声明不证明真实GPU可见性、GIN CQ或RoCE报文等价。`self_service`给出开始后apply/complete的相对纳秒时长，`queue_depth`为2—32内2的幂；`transport_recovery`沿用现有明确的恢复输入。
 
 选择性重传使用同目录 `input-selective.json` 替换上面命令的 `--config`。该输入保留完整现代操作和成本，只显式配置已有 `selective_repeat/1` 及 `provider.dcqcn_reference`；后者直接传给v5事务层的既有Figure7参考控制器。接收缓冲、发送窗口和控制周期均为声明参数，没有自动硬件校准。配合 `drop-first-rdma.json` 可检验首远端signal请求丢失后的完整调用。缺少控制器或非法窗口明确拒绝，不静默回退到GBN。该接入是已有恢复机制的基线能力，不是新恢复算法。

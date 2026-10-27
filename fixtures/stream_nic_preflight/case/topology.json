@@ -1,0 +1,671 @@
+{
+  "schema_version": "moe-scaleout-physical-topology/1",
+  "nodes": [
+    {
+      "id": 0,
+      "kind": "gpu",
+      "pod": 0,
+      "segment": 0,
+      "server": 0,
+      "server_in_segment": 0,
+      "gpu_slot": 0
+    },
+    {
+      "id": 1,
+      "kind": "gpu",
+      "pod": 0,
+      "segment": 0,
+      "server": 0,
+      "server_in_segment": 0,
+      "gpu_slot": 1
+    },
+    {
+      "id": 2,
+      "kind": "gpu",
+      "pod": 0,
+      "segment": 0,
+      "server": 1,
+      "server_in_segment": 1,
+      "gpu_slot": 0
+    },
+    {
+      "id": 3,
+      "kind": "gpu",
+      "pod": 0,
+      "segment": 0,
+      "server": 1,
+      "server_in_segment": 1,
+      "gpu_slot": 1
+    },
+    {
+      "id": 4,
+      "kind": "gpu",
+      "pod": 1,
+      "segment": 0,
+      "server": 2,
+      "server_in_segment": 0,
+      "gpu_slot": 0
+    },
+    {
+      "id": 5,
+      "kind": "gpu",
+      "pod": 1,
+      "segment": 0,
+      "server": 2,
+      "server_in_segment": 0,
+      "gpu_slot": 1
+    },
+    {
+      "id": 6,
+      "kind": "gpu",
+      "pod": 1,
+      "segment": 0,
+      "server": 3,
+      "server_in_segment": 1,
+      "gpu_slot": 0
+    },
+    {
+      "id": 7,
+      "kind": "gpu",
+      "pod": 1,
+      "segment": 0,
+      "server": 3,
+      "server_in_segment": 1,
+      "gpu_slot": 1
+    },
+    {
+      "id": 8,
+      "kind": "tor",
+      "plane": 0,
+      "pod": 0,
+      "segment": 0,
+      "rail": 0,
+      "index": 0
+    },
+    {
+      "id": 9,
+      "kind": "tor",
+      "plane": 0,
+      "pod": 0,
+      "segment": 0,
+      "rail": 0,
+      "index": 1
+    },
+    {
+      "id": 10,
+      "kind": "tor",
+      "plane": 0,
+      "pod": 0,
+      "segment": 0,
+      "rail": 1,
+      "index": 0
+    },
+    {
+      "id": 11,
+      "kind": "tor",
+      "plane": 0,
+      "pod": 0,
+      "segment": 0,
+      "rail": 1,
+      "index": 1
+    },
+    {
+      "id": 12,
+      "kind": "agg",
+      "plane": 0,
+      "pod": 0,
+      "rail": 0,
+      "index": 0
+    },
+    {
+      "id": 13,
+      "kind": "agg",
+      "plane": 0,
+      "pod": 0,
+      "rail": 1,
+      "index": 0
+    },
+    {
+      "id": 14,
+      "kind": "tor",
+      "plane": 0,
+      "pod": 1,
+      "segment": 0,
+      "rail": 0,
+      "index": 0
+    },
+    {
+      "id": 15,
+      "kind": "tor",
+      "plane": 0,
+      "pod": 1,
+      "segment": 0,
+      "rail": 0,
+      "index": 1
+    },
+    {
+      "id": 16,
+      "kind": "tor",
+      "plane": 0,
+      "pod": 1,
+      "segment": 0,
+      "rail": 1,
+      "index": 0
+    },
+    {
+      "id": 17,
+      "kind": "tor",
+      "plane": 0,
+      "pod": 1,
+      "segment": 0,
+      "rail": 1,
+      "index": 1
+    },
+    {
+      "id": 18,
+      "kind": "agg",
+      "plane": 0,
+      "pod": 1,
+      "rail": 0,
+      "index": 0
+    },
+    {
+      "id": 19,
+      "kind": "agg",
+      "plane": 0,
+      "pod": 1,
+      "rail": 1,
+      "index": 0
+    },
+    {
+      "id": 20,
+      "kind": "core",
+      "plane": 0,
+      "rail": 0,
+      "index": 0
+    },
+    {
+      "id": 21,
+      "kind": "core",
+      "plane": 0,
+      "rail": 1,
+      "index": 0
+    }
+  ],
+  "links": [
+    {
+      "id": 0,
+      "src": 0,
+      "dst": 8,
+      "src_port": 1,
+      "dst_port": 1,
+      "tier": "access",
+      "rate_bps": 100000000000,
+      "delay_ns": 1000
+    },
+    {
+      "id": 1,
+      "src": 0,
+      "dst": 10,
+      "src_port": 2,
+      "dst_port": 1,
+      "tier": "access",
+      "rate_bps": 100000000000,
+      "delay_ns": 1000
+    },
+    {
+      "id": 2,
+      "src": 1,
+      "dst": 8,
+      "src_port": 1,
+      "dst_port": 2,
+      "tier": "access",
+      "rate_bps": 100000000000,
+      "delay_ns": 1000
+    },
+    {
+      "id": 3,
+      "src": 1,
+      "dst": 10,
+      "src_port": 2,
+      "dst_port": 2,
+      "tier": "access",
+      "rate_bps": 100000000000,
+      "delay_ns": 1000
+    },
+    {
+      "id": 4,
+      "src": 2,
+      "dst": 9,
+      "src_port": 1,
+      "dst_port": 1,
+      "tier": "access",
+      "rate_bps": 100000000000,
+      "delay_ns": 1000
+    },
+    {
+      "id": 5,
+      "src": 2,
+      "dst": 11,
+      "src_port": 2,
+      "dst_port": 1,
+      "tier": "access",
+      "rate_bps": 100000000000,
+      "delay_ns": 1000
+    },
+    {
+      "id": 6,
+      "src": 3,
+      "dst": 9,
+      "src_port": 1,
+      "dst_port": 2,
+      "tier": "access",
+      "rate_bps": 100000000000,
+      "delay_ns": 1000
+    },
+    {
+      "id": 7,
+      "src": 3,
+      "dst": 11,
+      "src_port": 2,
+      "dst_port": 2,
+      "tier": "access",
+      "rate_bps": 100000000000,
+      "delay_ns": 1000
+    },
+    {
+      "id": 8,
+      "src": 4,
+      "dst": 14,
+      "src_port": 1,
+      "dst_port": 1,
+      "tier": "access",
+      "rate_bps": 100000000000,
+      "delay_ns": 1000
+    },
+    {
+      "id": 9,
+      "src": 4,
+      "dst": 16,
+      "src_port": 2,
+      "dst_port": 1,
+      "tier": "access",
+      "rate_bps": 100000000000,
+      "delay_ns": 1000
+    },
+    {
+      "id": 10,
+      "src": 5,
+      "dst": 14,
+      "src_port": 1,
+      "dst_port": 2,
+      "tier": "access",
+      "rate_bps": 100000000000,
+      "delay_ns": 1000
+    },
+    {
+      "id": 11,
+      "src": 5,
+      "dst": 16,
+      "src_port": 2,
+      "dst_port": 2,
+      "tier": "access",
+      "rate_bps": 100000000000,
+      "delay_ns": 1000
+    },
+    {
+      "id": 12,
+      "src": 6,
+      "dst": 15,
+      "src_port": 1,
+      "dst_port": 1,
+      "tier": "access",
+      "rate_bps": 100000000000,
+      "delay_ns": 1000
+    },
+    {
+      "id": 13,
+      "src": 6,
+      "dst": 17,
+      "src_port": 2,
+      "dst_port": 1,
+      "tier": "access",
+      "rate_bps": 100000000000,
+      "delay_ns": 1000
+    },
+    {
+      "id": 14,
+      "src": 7,
+      "dst": 15,
+      "src_port": 1,
+      "dst_port": 2,
+      "tier": "access",
+      "rate_bps": 100000000000,
+      "delay_ns": 1000
+    },
+    {
+      "id": 15,
+      "src": 7,
+      "dst": 17,
+      "src_port": 2,
+      "dst_port": 2,
+      "tier": "access",
+      "rate_bps": 100000000000,
+      "delay_ns": 1000
+    },
+    {
+      "id": 16,
+      "src": 8,
+      "dst": 12,
+      "src_port": 3,
+      "dst_port": 1,
+      "tier": "tor_agg",
+      "rate_bps": 100000000000,
+      "delay_ns": 1000
+    },
+    {
+      "id": 17,
+      "src": 9,
+      "dst": 12,
+      "src_port": 3,
+      "dst_port": 2,
+      "tier": "tor_agg",
+      "rate_bps": 100000000000,
+      "delay_ns": 1000
+    },
+    {
+      "id": 18,
+      "src": 10,
+      "dst": 13,
+      "src_port": 3,
+      "dst_port": 1,
+      "tier": "tor_agg",
+      "rate_bps": 100000000000,
+      "delay_ns": 1000
+    },
+    {
+      "id": 19,
+      "src": 11,
+      "dst": 13,
+      "src_port": 3,
+      "dst_port": 2,
+      "tier": "tor_agg",
+      "rate_bps": 100000000000,
+      "delay_ns": 1000
+    },
+    {
+      "id": 20,
+      "src": 12,
+      "dst": 20,
+      "src_port": 3,
+      "dst_port": 1,
+      "tier": "agg_core",
+      "rate_bps": 100000000000,
+      "delay_ns": 1000
+    },
+    {
+      "id": 21,
+      "src": 13,
+      "dst": 21,
+      "src_port": 3,
+      "dst_port": 1,
+      "tier": "agg_core",
+      "rate_bps": 100000000000,
+      "delay_ns": 1000
+    },
+    {
+      "id": 22,
+      "src": 14,
+      "dst": 18,
+      "src_port": 3,
+      "dst_port": 1,
+      "tier": "tor_agg",
+      "rate_bps": 100000000000,
+      "delay_ns": 1000
+    },
+    {
+      "id": 23,
+      "src": 15,
+      "dst": 18,
+      "src_port": 3,
+      "dst_port": 2,
+      "tier": "tor_agg",
+      "rate_bps": 100000000000,
+      "delay_ns": 1000
+    },
+    {
+      "id": 24,
+      "src": 16,
+      "dst": 19,
+      "src_port": 3,
+      "dst_port": 1,
+      "tier": "tor_agg",
+      "rate_bps": 100000000000,
+      "delay_ns": 1000
+    },
+    {
+      "id": 25,
+      "src": 17,
+      "dst": 19,
+      "src_port": 3,
+      "dst_port": 2,
+      "tier": "tor_agg",
+      "rate_bps": 100000000000,
+      "delay_ns": 1000
+    },
+    {
+      "id": 26,
+      "src": 18,
+      "dst": 20,
+      "src_port": 3,
+      "dst_port": 2,
+      "tier": "agg_core",
+      "rate_bps": 100000000000,
+      "delay_ns": 1000
+    },
+    {
+      "id": 27,
+      "src": 19,
+      "dst": 21,
+      "src_port": 3,
+      "dst_port": 2,
+      "tier": "agg_core",
+      "rate_bps": 100000000000,
+      "delay_ns": 1000
+    }
+  ],
+  "nic_ports": [
+    {
+      "gpu": 0,
+      "server": 0,
+      "gpu_slot": 0,
+      "nic": 0,
+      "rail": 0,
+      "plane": 0,
+      "gpu_port": 1,
+      "tor": 8,
+      "tor_port": 1,
+      "rate_bps": 100000000000
+    },
+    {
+      "gpu": 0,
+      "server": 0,
+      "gpu_slot": 0,
+      "nic": 1,
+      "rail": 1,
+      "plane": 0,
+      "gpu_port": 2,
+      "tor": 10,
+      "tor_port": 1,
+      "rate_bps": 100000000000
+    },
+    {
+      "gpu": 1,
+      "server": 0,
+      "gpu_slot": 1,
+      "nic": 0,
+      "rail": 0,
+      "plane": 0,
+      "gpu_port": 1,
+      "tor": 8,
+      "tor_port": 2,
+      "rate_bps": 100000000000
+    },
+    {
+      "gpu": 1,
+      "server": 0,
+      "gpu_slot": 1,
+      "nic": 1,
+      "rail": 1,
+      "plane": 0,
+      "gpu_port": 2,
+      "tor": 10,
+      "tor_port": 2,
+      "rate_bps": 100000000000
+    },
+    {
+      "gpu": 2,
+      "server": 1,
+      "gpu_slot": 0,
+      "nic": 0,
+      "rail": 0,
+      "plane": 0,
+      "gpu_port": 1,
+      "tor": 9,
+      "tor_port": 1,
+      "rate_bps": 100000000000
+    },
+    {
+      "gpu": 2,
+      "server": 1,
+      "gpu_slot": 0,
+      "nic": 1,
+      "rail": 1,
+      "plane": 0,
+      "gpu_port": 2,
+      "tor": 11,
+      "tor_port": 1,
+      "rate_bps": 100000000000
+    },
+    {
+      "gpu": 3,
+      "server": 1,
+      "gpu_slot": 1,
+      "nic": 0,
+      "rail": 0,
+      "plane": 0,
+      "gpu_port": 1,
+      "tor": 9,
+      "tor_port": 2,
+      "rate_bps": 100000000000
+    },
+    {
+      "gpu": 3,
+      "server": 1,
+      "gpu_slot": 1,
+      "nic": 1,
+      "rail": 1,
+      "plane": 0,
+      "gpu_port": 2,
+      "tor": 11,
+      "tor_port": 2,
+      "rate_bps": 100000000000
+    },
+    {
+      "gpu": 4,
+      "server": 2,
+      "gpu_slot": 0,
+      "nic": 0,
+      "rail": 0,
+      "plane": 0,
+      "gpu_port": 1,
+      "tor": 14,
+      "tor_port": 1,
+      "rate_bps": 100000000000
+    },
+    {
+      "gpu": 4,
+      "server": 2,
+      "gpu_slot": 0,
+      "nic": 1,
+      "rail": 1,
+      "plane": 0,
+      "gpu_port": 2,
+      "tor": 16,
+      "tor_port": 1,
+      "rate_bps": 100000000000
+    },
+    {
+      "gpu": 5,
+      "server": 2,
+      "gpu_slot": 1,
+      "nic": 0,
+      "rail": 0,
+      "plane": 0,
+      "gpu_port": 1,
+      "tor": 14,
+      "tor_port": 2,
+      "rate_bps": 100000000000
+    },
+    {
+      "gpu": 5,
+      "server": 2,
+      "gpu_slot": 1,
+      "nic": 1,
+      "rail": 1,
+      "plane": 0,
+      "gpu_port": 2,
+      "tor": 16,
+      "tor_port": 2,
+      "rate_bps": 100000000000
+    },
+    {
+      "gpu": 6,
+      "server": 3,
+      "gpu_slot": 0,
+      "nic": 0,
+      "rail": 0,
+      "plane": 0,
+      "gpu_port": 1,
+      "tor": 15,
+      "tor_port": 1,
+      "rate_bps": 100000000000
+    },
+    {
+      "gpu": 6,
+      "server": 3,
+      "gpu_slot": 0,
+      "nic": 1,
+      "rail": 1,
+      "plane": 0,
+      "gpu_port": 2,
+      "tor": 17,
+      "tor_port": 1,
+      "rate_bps": 100000000000
+    },
+    {
+      "gpu": 7,
+      "server": 3,
+      "gpu_slot": 1,
+      "nic": 0,
+      "rail": 0,
+      "plane": 0,
+      "gpu_port": 1,
+      "tor": 15,
+      "tor_port": 2,
+      "rate_bps": 100000000000
+    },
+    {
+      "gpu": 7,
+      "server": 3,
+      "gpu_slot": 1,
+      "nic": 1,
+      "rail": 1,
+      "plane": 0,
+      "gpu_port": 2,
+      "tor": 17,
+      "tor_port": 2,
+      "rate_bps": 100000000000
+    }
+  ]
+}

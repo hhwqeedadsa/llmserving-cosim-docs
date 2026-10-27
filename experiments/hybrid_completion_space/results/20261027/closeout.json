@@ -1,0 +1,59 @@
+{
+  "GPU": 0,
+  "HTTP": 0,
+  "administrative_artifact_reserve_bytes": 2097152,
+  "administrative_wall_reserve_seconds": 10,
+  "archive_sha256": "0ebbe5681bd65f983fcc29b65b7e45080a2c6f89684cf49a9650eeec206339a2",
+  "artifact_usage": {
+    "allocated_bytes": 106278912,
+    "apparent_bytes": 105558235
+  },
+  "builds": 0,
+  "completed_aggregate_conditions": 36,
+  "completed_layer_conditions": 2088,
+  "counter_inputs_and_original_accounting_reruns": 0,
+  "dependencies_checked": 13,
+  "dependency_changes": 0,
+  "failed_receipt_paths_including_copy": [
+    "runs/hybrid_completion_space_20261027/verify-monitor/probe.json",
+    "runs/hybrid_completion_space_20261027/recovered/verify-monitor/probe.json"
+  ],
+  "first_verifier_failure": "Dispatch kSyncAtStart source literal incorrectly true; actual false, corrected offline only",
+  "initial_implementation": "a7ea2bf",
+  "limits": {
+    "address_bytes": 2147483648,
+    "artifact_bytes": 268435456,
+    "min_free_bytes": 8589934592,
+    "monitored_seconds": 600,
+    "per_command_seconds": 60,
+    "rss_bytes": 1073741824
+  },
+  "monitored_seconds_conservatively_including_recovered_receipt_copies": 31.30963064492971,
+  "native_network_runs": 0,
+  "new_innovations_established": 0,
+  "offline_archive_recomputation": true,
+  "overall_research_goal_complete": false,
+  "protocol_commit": "45baae7",
+  "push": false,
+  "recovery_passed": true,
+  "resource_receipts": [
+    "runs/hybrid_completion_space_20261027/execute-monitor/probe.json",
+    "runs/hybrid_completion_space_20261027/verify-monitor/probe.json",
+    "runs/hybrid_completion_space_20261027/verify-corrected-monitor/probe.json",
+    "runs/hybrid_completion_space_20261027/report-monitor/probe.json",
+    "runs/hybrid_completion_space_20261027/prepare-monitor/probe.json",
+    "runs/hybrid_completion_space_20261027/dependencies-monitor/probe.json",
+    "runs/hybrid_completion_space_20261027/recovered/execute-monitor/probe.json",
+    "runs/hybrid_completion_space_20261027/recovered/prepare-monitor/probe.json",
+    "runs/hybrid_completion_space_20261027/recovered/report-monitor/probe.json",
+    "runs/hybrid_completion_space_20261027/recovered/verify-corrected-monitor/probe.json",
+    "runs/hybrid_completion_space_20261027/recovered/verify-monitor/probe.json",
+    "runs/hybrid_completion_space_20261027-prepare-monitor/probe.json",
+    "runs/hybrid_completion_space_20261027-recovery-monitor/probe.json"
+  ],
+  "run_root": "runs/hybrid_completion_space_20261027",
+  "safe_new_protocol_verified": false,
+  "screening_gate_passed_count": 6,
+  "source_originals_and_failed_verifier_preserved": true,
+  "status": "closed_with_source_anchor_failure_preserved"
+}

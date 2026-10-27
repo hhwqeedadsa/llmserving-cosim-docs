@@ -1,0 +1,67 @@
+{
+  "GPU": 0,
+  "HTTP": 0,
+  "all_36_conditions_and_2088_layers_byte_equal": true,
+  "archive_members": 171,
+  "archive_sha256": "0ebbe5681bd65f983fcc29b65b7e45080a2c6f89684cf49a9650eeec206339a2",
+  "builds": 0,
+  "commands": [
+    [
+      "/usr/bin/python3",
+      "-B",
+      "-m",
+      "experiments.hybrid_completion_space.analysis.study",
+      "execute",
+      "--stage",
+      "/home/lry/moe-ub-cosim/runs/hybrid_completion_space_20261027/recovered/offline-recomputed"
+    ],
+    [
+      "/usr/bin/python3",
+      "-B",
+      "-m",
+      "experiments.hybrid_completion_space.analysis.verify",
+      "--stage",
+      "/home/lry/moe-ub-cosim/runs/hybrid_completion_space_20261027/recovered/offline-recomputed",
+      "--output",
+      "/home/lry/moe-ub-cosim/runs/hybrid_completion_space_20261027/recovered/offline-recomputed/verification.json"
+    ],
+    [
+      "/usr/bin/python3",
+      "-B",
+      "-m",
+      "experiments.hybrid_completion_space.analysis.report",
+      "--stage",
+      "/home/lry/moe-ub-cosim/runs/hybrid_completion_space_20261027/recovered/offline-recomputed",
+      "--output",
+      "/home/lry/moe-ub-cosim/runs/hybrid_completion_space_20261027/recovered/offline-recomputed/report"
+    ]
+  ],
+  "copied_source_empty_cwd": true,
+  "initial_verifier_failure_preserved": true,
+  "member_hashes_verified": true,
+  "network_runs": 0,
+  "passed": true,
+  "public_dispatch_verification_report_byte_equal": true,
+  "terminal_monitors_in_archive": [
+    {
+      "path": "execute-monitor/probe.json",
+      "status": "completed"
+    },
+    {
+      "path": "verify-monitor/probe.json",
+      "status": "child_failed"
+    },
+    {
+      "path": "verify-corrected-monitor/probe.json",
+      "status": "completed"
+    },
+    {
+      "path": "report-monitor/probe.json",
+      "status": "completed"
+    },
+    {
+      "path": "prepare-monitor/probe.json",
+      "status": "completed"
+    }
+  ]
+}

@@ -61,7 +61,7 @@ def sources_check(stage):
     paths={Path(name).name:stage/'observed/library'/name for name in s['library']}
     anchors={
         'hybrid_dispatch.cuh':['int kScaleoutUpdateInterval = 6,','update_scaleout_tail(true);',
-            'comm::kHybridDispatchTag0, false, true, true>','/* do not scale-out */ false, true'],
+            'comm::kHybridDispatchTag0, false, false, true>','/* do not scale-out */ false, true'],
         'hybrid_combine.cuh':['// Replay the dispatch','gin.flush<ncclCoopWarp>();',
             'const auto expected_signal = math::pack2<int, int64_t>(1, 0);','// No barrier at epilogue',
             'comm::kHybridCombineTag0, false, true, true>'],

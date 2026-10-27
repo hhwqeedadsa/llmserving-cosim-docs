@@ -1,0 +1,82 @@
+{
+  "GPU": 0,
+  "aggregate_conditions": 36,
+  "bitset_directions_verified": true,
+  "latency_benefit_measured": false,
+  "layer_conditions": 2088,
+  "network_runs": 0,
+  "new_innovations_established": 0,
+  "passed": true,
+  "public_small_dispatch_check": true,
+  "safe_protocol_implementation_verified": false,
+  "screening_gate_passed_count": 6,
+  "source_anchors": [
+    {
+      "anchor": "int kScaleoutUpdateInterval = 6,",
+      "file": "hybrid_dispatch.cuh",
+      "line": 27
+    },
+    {
+      "anchor": "update_scaleout_tail(true);",
+      "file": "hybrid_dispatch.cuh",
+      "line": 460
+    },
+    {
+      "anchor": "comm::kHybridDispatchTag0, false, false, true>",
+      "file": "hybrid_dispatch.cuh",
+      "line": 83
+    },
+    {
+      "anchor": "/* do not scale-out */ false, true",
+      "file": "hybrid_dispatch.cuh",
+      "line": 662
+    },
+    {
+      "anchor": "// Replay the dispatch",
+      "file": "hybrid_combine.cuh",
+      "line": 390
+    },
+    {
+      "anchor": "gin.flush<ncclCoopWarp>();",
+      "file": "hybrid_combine.cuh",
+      "line": 591
+    },
+    {
+      "anchor": "const auto expected_signal = math::pack2<int, int64_t>(1, 0);",
+      "file": "hybrid_combine.cuh",
+      "line": 590
+    },
+    {
+      "anchor": "// No barrier at epilogue",
+      "file": "hybrid_combine.cuh",
+      "line": 624
+    },
+    {
+      "anchor": "comm::kHybridCombineTag0, false, true, true>",
+      "file": "hybrid_combine.cuh",
+      "line": 97
+    },
+    {
+      "anchor": "barrier_gin.signal<team_t>",
+      "file": "barrier.cuh",
+      "line": 165
+    },
+    {
+      "anchor": "ncclTeamTagRail, kTag, kFlushStores>",
+      "file": "barrier.cuh",
+      "line": 192
+    },
+    {
+      "anchor": "void red_add_rel(dtype_t* sym_ptr",
+      "file": "handle.cuh",
+      "line": 98
+    }
+  ],
+  "source_files": 15,
+  "tamper_rejected": [
+    "empty_finishes_omitted",
+    "combine_not_transposed",
+    "periodic_removed",
+    "baseline_weakened"
+  ]
+}

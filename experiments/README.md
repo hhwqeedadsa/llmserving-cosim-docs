@@ -18,6 +18,7 @@
 | [route_alignment](route_alignment/README.md) | 保持每请求热度/通信量的跨请求时间对齐筛选 | EP8单层首条件完成；原检查失败后停止其余31条件，修正后仅离线核验，未测得对齐收益 |
 | [rc_completion_reachability](rc_completion_reachability/README.md) | 请求重试状态与原子返回问题的MoE适用性筛选 | 固定v6.12部分原函数的五种前缀；未证明完整栈/当前版本漏洞，暂不作为MoE跨机主线 |
 | [input_graph_baseline](input_graph_baseline/README.md) | 从真实输入直接生成普通依赖图的强基线与通用压缩 | EP4/8/16六组静态可达关系保持；依赖边压缩归入普通基线，没有网络或全流程加速证据 |
+| [hybrid_completion_space](hybrid_completion_space/README.md) | 分层MoE结束通知扣除普通活动集合后的剩余空间 | 36组/2088层离线需求；decode无额外关联收益，prefill仍须击败通道调参，未测时延 |
 
 Scale-Up 的[方案](scaleup_issue_screening/plan.md)覆盖本地竞争与服务不足、下游阻塞与排队传播、多平面推进差异。新增 Scale-Out 的[研究报告](../docs/reviews/scaleout_scaling_hotspots_20261015.md)关注跨机 All-to-All-v、多 EP 组和热点到网络资源的映射；不将旧 UB 结果改称 RDMA 结果。目录和迭代规范见[仓库组织方案](../docs/repository_layout.md)。
 

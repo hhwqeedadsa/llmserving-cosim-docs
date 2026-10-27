@@ -13,6 +13,8 @@
 
 ## 当前范围和预算
 
+完整候选准入重复处理`in_progress`：[事前协议](../../experiments/session_admission_profile/protocol.md)。固定O3阶段四份真实完成调用的候选前缀，最多四次离线cProfile，通过公开完整校验入口区分静态拓扑重复、动态历史扫描和复制；不重跑网络、不改平台。原始CPU、剖析时间和循环计数分开，不直接换算收益。累计600受监控秒/256MiB、每命令60秒/RSS1GiB/地址2GiB，失败保留不加限。结果尚未取得，两项创新继续未证实。
+
 专家就绪与网络配置选择`completed`：[事前协议](../../experiments/readiness_network_choice/protocol.md)、[报告与网页](../../experiments/readiness_network_choice/README.md)、[两候选取舍](../../experiments/readiness_network_choice/decision.md)。平台`9365a33`、协议`a8b3146`、执行`5756775`；八完整原件entry1/layer3、EP4/batch8，四种声明专家耗时与三网络共24次健康网络完成，12组现代/冻结完整图完整包/队列/回调/应用/内存等价。所有参考获得最长耗时、预测事前冻结；端点/单NIC模型仍误选access，后悔值8.29%～31.03%，普通逐链路模型全部选core、后悔值0，未达到事前5%决策缺口判据。核心升级绝对节省30.344～30.387us，相对改善7.78%～24.02%；不同资源、声明计算，不能称同成本算法/GPU收益。逐链路绝对误差仍11.319～11.711us，长计算稀释相对误差，不是准确性提升。
 
 配对Dispatch/计算开始时刻相同、专家本地排队为0；最后完成者rank3→rank0，应用增量差额拆成完成者开始时刻偏移及其后通信尾段，不能全归拥塞。12组独立物理与计算因果审计、18组slot排列、6类篡改拒绝、13依赖核查通过。749成员包逐hash复制源码/空cwd恢复，四份无truth预测、核验和Markdown/HTML/指标逐字节一致，无恢复网络。SHA256 `bd17dee3887f2f73cf18cc578faa221dff44bcf3202aea826c30e4998dd16de8`，原件`runs/readiness_network_choice_20261027/`。保守含嵌套/复制收据239.610受监控秒、约637.83MiB分配产物，另计摘要/2MiB预留，保持1800秒/2GiB和全部单命令上限；零构建/下载/GPU/平台依赖变更/push。收尾脚本误读probe的exit_code字段而非child_exit_code，失败记录保留，仅继续离线收尾、未重跑网络。停止把本组网络升级选择作为新增MoE语义正例；两项创新与整体目标仍in_progress，不自动扩条件。

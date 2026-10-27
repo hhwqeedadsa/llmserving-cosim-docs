@@ -13,6 +13,8 @@
 
 ## 当前范围和预算
 
+当前平台增量进行中：[多连接RC共享网络参考](rc_concurrent_fabric_spec.md)，起点`f00cea6`。上一GIN筛选为progress；下一缺项是同一网络中独立QP序号、共享NIC/目标内存、真实Atomic ACK和连接级恢复。仅新增CPU驱动并只读复用已hash的当前固定native runtime，不重建ns-3、不改旧入口或依赖；2次有界CPU构建/3个新功能网络，累计1200受监控秒/512MiB，不重开旧条件。已有重传/多连接与构建复用不算创新，两项主创新及整体目标仍进行中。
+
 当前筛选已关闭：[GIN完成等待范围](../../experiments/gin_flush_scope/protocol.md)、[中文报告与网页](../../experiments/gin_flush_scope/README.md)，起点`1ac7af3`、协议`4e30e85`、定位更正`42967a6`、实现`4c3d381`。7份固定来源/18锚点、六个EP/stride配置及六个有限偏序完成独立核验，四类篡改拒绝、13依赖通过。共享context的完成前缀可包括其他通道；紧凑stride8下EP64/128/256每lane最多扫描一次，不存在本轮检查的同lane前后peer串行采样链。声明stride1下可有，但host正常RAIL或条件CUSTOM_STRIDE及实际gin_min_stride必须核实，不当默认部署。正确动态资源DAG能表达该关系，flushAsync是已有API；没有新的机制或性能收益。
 
 固定Hybrid最多32跨机域，8卡/域下单组最多256卡；EP512/1024只列源码拒绝边界，不执行。1024卡可研究多个合法EP组共享网络，不能把多小组当单EP1024。首次定位器误把flush/fence相同循环要求全文件唯一，在任何六条件计算前失败；原源码/状态/日志保留，只限定函数后完成未开始条件，不重复准备或重跑成功条件。45成员包逐hash恢复，复制研究源码/空cwd离线重算分析、独立核验及报告逐字节一致；SHA256 `6be7f99d31ddb2158fa72156efb726d81794a98faeed083b8a19bfd2a181900b`。见[恢复](../../experiments/gin_flush_scope/results/20261027/recovery.json)与[收尾](../../experiments/gin_flush_scope/results/20261027/closeout.json)，原件`runs/gin_flush_scope_20261027/`；保守含复制收据2.485受监控秒、约1.29MiB分配产物加2MiB/10秒管理预留，保持300秒/64MiB及原单命令上限。零网络/GPU/HTTP/构建/平台依赖修改/push，本轮额度关闭，整体为progress、两项主创新及完整目标仍`in_progress`。后续优先限定输入驱动完整Hybrid与正确资源DAG的参考，不再以未核provider配置或已知flush方法制造创新，不自动重开关闭条件。

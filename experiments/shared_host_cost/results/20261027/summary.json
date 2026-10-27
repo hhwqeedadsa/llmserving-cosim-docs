@@ -1,0 +1,1384 @@
+{
+  "execution": {
+    "state": "completed",
+    "closed": true,
+    "records": [
+      {
+        "label": "prepare",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "experiments.shared_host_cost.prepare",
+          "--repository",
+          "/home/lry/moe-ub-cosim",
+          "--stage",
+          "/home/lry/moe-ub-cosim/runs/shared_host_cost_20261027/stage"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim/runs/shared_host_cost_20261027/stage/empty-cwd",
+        "network": false,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "batch4-modern",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "modern-deepep-native",
+          "--topology",
+          "/home/lry/moe-ub-cosim/runs/shared_host_cost_20261027/stage/observed/baseline-topology",
+          "--protocol",
+          "/home/lry/moe-ub-cosim/runs/shared_host_cost_20261027/stage/observed/baseline-protocol.json",
+          "--config",
+          "/home/lry/moe-ub-cosim/runs/shared_host_cost_20261027/stage/observed/batch4/input.json",
+          "--backend",
+          "/home/lry/moe-ub-cosim/runs/shared_host_cost_20261027/stage/runtime/run-transaction-session",
+          "--output",
+          "/home/lry/moe-ub-cosim/runs/shared_host_cost_20261027/stage/truth/batch4/modern",
+          "--callback-batches",
+          "--host-timing"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim/runs/shared_host_cost_20261027/stage/empty-cwd",
+        "network": true,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "batch4-modern-compare",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "experiments.shared_host_cost.analyze",
+          "compare",
+          "--stage",
+          "/home/lry/moe-ub-cosim/runs/shared_host_cost_20261027/stage",
+          "--batch",
+          "4",
+          "--mode",
+          "modern"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim/runs/shared_host_cost_20261027/stage/empty-cwd",
+        "network": false,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "batch4-modern-host-check",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "host-timing-check",
+          "--run",
+          "/home/lry/moe-ub-cosim/runs/shared_host_cost_20261027/stage/truth/batch4/modern",
+          "--output",
+          "/home/lry/moe-ub-cosim/runs/shared_host_cost_20261027/stage/truth/batch4/modern/host-summary.json"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim/runs/shared_host_cost_20261027/stage/empty-cwd",
+        "network": false,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "batch4-generic",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "experiments.shared_host_cost.generic",
+          "--stage",
+          "/home/lry/moe-ub-cosim/runs/shared_host_cost_20261027/stage",
+          "--batch",
+          "4"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim/runs/shared_host_cost_20261027/stage/empty-cwd",
+        "network": true,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "batch4-generic-compare",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "experiments.shared_host_cost.analyze",
+          "compare",
+          "--stage",
+          "/home/lry/moe-ub-cosim/runs/shared_host_cost_20261027/stage",
+          "--batch",
+          "4",
+          "--mode",
+          "generic"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim/runs/shared_host_cost_20261027/stage/empty-cwd",
+        "network": false,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "batch4-generic-host-check",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "host-timing-check",
+          "--run",
+          "/home/lry/moe-ub-cosim/runs/shared_host_cost_20261027/stage/truth/batch4/generic",
+          "--output",
+          "/home/lry/moe-ub-cosim/runs/shared_host_cost_20261027/stage/truth/batch4/generic/host-summary.json"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim/runs/shared_host_cost_20261027/stage/empty-cwd",
+        "network": false,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "batch8-modern",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "modern-deepep-native",
+          "--topology",
+          "/home/lry/moe-ub-cosim/runs/shared_host_cost_20261027/stage/observed/baseline-topology",
+          "--protocol",
+          "/home/lry/moe-ub-cosim/runs/shared_host_cost_20261027/stage/observed/baseline-protocol.json",
+          "--config",
+          "/home/lry/moe-ub-cosim/runs/shared_host_cost_20261027/stage/observed/batch8/input.json",
+          "--backend",
+          "/home/lry/moe-ub-cosim/runs/shared_host_cost_20261027/stage/runtime/run-transaction-session",
+          "--output",
+          "/home/lry/moe-ub-cosim/runs/shared_host_cost_20261027/stage/truth/batch8/modern",
+          "--callback-batches",
+          "--host-timing"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim/runs/shared_host_cost_20261027/stage/empty-cwd",
+        "network": true,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "batch8-modern-compare",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "experiments.shared_host_cost.analyze",
+          "compare",
+          "--stage",
+          "/home/lry/moe-ub-cosim/runs/shared_host_cost_20261027/stage",
+          "--batch",
+          "8",
+          "--mode",
+          "modern"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim/runs/shared_host_cost_20261027/stage/empty-cwd",
+        "network": false,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "batch8-modern-host-check",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "host-timing-check",
+          "--run",
+          "/home/lry/moe-ub-cosim/runs/shared_host_cost_20261027/stage/truth/batch8/modern",
+          "--output",
+          "/home/lry/moe-ub-cosim/runs/shared_host_cost_20261027/stage/truth/batch8/modern/host-summary.json"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim/runs/shared_host_cost_20261027/stage/empty-cwd",
+        "network": false,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "batch8-generic",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "experiments.shared_host_cost.generic",
+          "--stage",
+          "/home/lry/moe-ub-cosim/runs/shared_host_cost_20261027/stage",
+          "--batch",
+          "8"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim/runs/shared_host_cost_20261027/stage/empty-cwd",
+        "network": true,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "batch8-generic-compare",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "experiments.shared_host_cost.analyze",
+          "compare",
+          "--stage",
+          "/home/lry/moe-ub-cosim/runs/shared_host_cost_20261027/stage",
+          "--batch",
+          "8",
+          "--mode",
+          "generic"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim/runs/shared_host_cost_20261027/stage/empty-cwd",
+        "network": false,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "batch8-generic-host-check",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "host-timing-check",
+          "--run",
+          "/home/lry/moe-ub-cosim/runs/shared_host_cost_20261027/stage/truth/batch8/generic",
+          "--output",
+          "/home/lry/moe-ub-cosim/runs/shared_host_cost_20261027/stage/truth/batch8/generic/host-summary.json"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim/runs/shared_host_cost_20261027/stage/empty-cwd",
+        "network": false,
+        "state": "terminal",
+        "exit_code": 0
+      }
+    ],
+    "network_attempt_limit": 4,
+    "network_reruns": 0,
+    "scope": "four new observations of previously accepted conditions, to acquire missing host phases"
+  },
+  "measurements": {
+    "batch4-modern": {
+      "worker_root": {
+        "count": 1,
+        "inclusive_wall_ns": 5595234257,
+        "inclusive_cpu_ns": 739190155,
+        "exclusive_wall_ns": 15068456,
+        "exclusive_cpu_ns": 14837281
+      },
+      "native_root": {
+        "count": 1,
+        "inclusive_wall_ns": 5461198778,
+        "inclusive_cpu_ns": 4710802635,
+        "exclusive_wall_ns": 589126625,
+        "exclusive_cpu_ns": 573373025
+      },
+      "worker_phases": {
+        "controller_init": {
+          "count": 1,
+          "inclusive_wall_ns": 27331648,
+          "inclusive_cpu_ns": 27030991,
+          "exclusive_wall_ns": 27331648,
+          "exclusive_cpu_ns": 27030991
+        },
+        "session_init": {
+          "count": 1,
+          "inclusive_wall_ns": 4495251,
+          "inclusive_cpu_ns": 4052148,
+          "exclusive_wall_ns": 4495251,
+          "exclusive_cpu_ns": 4052148
+        },
+        "python_wait_line": {
+          "count": 68,
+          "inclusive_wall_ns": 4774772437,
+          "inclusive_cpu_ns": 4957194,
+          "exclusive_wall_ns": 4774772437,
+          "exclusive_cpu_ns": 4957194
+        },
+        "native_receive": {
+          "count": 68,
+          "inclusive_wall_ns": 4804809190,
+          "inclusive_cpu_ns": 34778467,
+          "exclusive_wall_ns": 30036753,
+          "exclusive_cpu_ns": 29821273
+        },
+        "controller_advance": {
+          "count": 67,
+          "inclusive_wall_ns": 211486603,
+          "inclusive_cpu_ns": 175379915,
+          "exclusive_wall_ns": 211486603,
+          "exclusive_cpu_ns": 175379915
+        },
+        "wake_conditions": {
+          "count": 67,
+          "inclusive_wall_ns": 36581743,
+          "inclusive_cpu_ns": 34274659,
+          "exclusive_wall_ns": 36581743,
+          "exclusive_cpu_ns": 34274659
+        },
+        "python_candidate_copy": {
+          "count": 67,
+          "inclusive_wall_ns": 144800744,
+          "inclusive_cpu_ns": 129390628,
+          "exclusive_wall_ns": 144800744,
+          "exclusive_cpu_ns": 129390628
+        },
+        "python_candidate_validate": {
+          "count": 67,
+          "inclusive_wall_ns": 284753468,
+          "inclusive_cpu_ns": 260340437,
+          "exclusive_wall_ns": 284753468,
+          "exclusive_cpu_ns": 260340437
+        },
+        "python_command_write": {
+          "count": 67,
+          "inclusive_wall_ns": 5944440,
+          "inclusive_cpu_ns": 5831383,
+          "exclusive_wall_ns": 5944440,
+          "exclusive_cpu_ns": 5831383
+        },
+        "native_commit": {
+          "count": 67,
+          "inclusive_wall_ns": 447140195,
+          "inclusive_cpu_ns": 405066527,
+          "exclusive_wall_ns": 11641543,
+          "exclusive_cpu_ns": 9504079
+        },
+        "modern_report_write": {
+          "count": 1,
+          "inclusive_wall_ns": 48321171,
+          "inclusive_cpu_ns": 43770167,
+          "exclusive_wall_ns": 48321171,
+          "exclusive_cpu_ns": 43770167
+        },
+        "modern_worker": {
+          "count": 1,
+          "inclusive_wall_ns": 5595234257,
+          "inclusive_cpu_ns": 739190155,
+          "exclusive_wall_ns": 15068456,
+          "exclusive_cpu_ns": 14837281
+        }
+      },
+      "native_phases": {
+        "session_pump": {
+          "count": 2759,
+          "inclusive_wall_ns": 374709487,
+          "inclusive_cpu_ns": 373739323,
+          "exclusive_wall_ns": 374709487,
+          "exclusive_cpu_ns": 373739323
+        },
+        "operation_progress_snapshot": {
+          "count": 2759,
+          "inclusive_wall_ns": 77680917,
+          "inclusive_cpu_ns": 77544451,
+          "exclusive_wall_ns": 77680917,
+          "exclusive_cpu_ns": 77544451
+        },
+        "session_events": {
+          "count": 2759,
+          "inclusive_wall_ns": 427329001,
+          "inclusive_cpu_ns": 425958030,
+          "exclusive_wall_ns": 349648084,
+          "exclusive_cpu_ns": 348413579
+        },
+        "session_drained": {
+          "count": 2759,
+          "inclusive_wall_ns": 473085566,
+          "inclusive_cpu_ns": 472623241,
+          "exclusive_wall_ns": 473085566,
+          "exclusive_cpu_ns": 472623241
+        },
+        "session_decide_write": {
+          "count": 67,
+          "inclusive_wall_ns": 13932460,
+          "inclusive_cpu_ns": 13887457,
+          "exclusive_wall_ns": 13932460,
+          "exclusive_cpu_ns": 13887457
+        },
+        "session_frontend_wait": {
+          "count": 67,
+          "inclusive_wall_ns": 724496131,
+          "inclusive_cpu_ns": 4144423,
+          "exclusive_wall_ns": 724496131,
+          "exclusive_cpu_ns": 4144423
+        },
+        "session_candidate_copy": {
+          "count": 67,
+          "inclusive_wall_ns": 63703301,
+          "inclusive_cpu_ns": 63568122,
+          "exclusive_wall_ns": 63703301,
+          "exclusive_cpu_ns": 63568122
+        },
+        "session_candidate_validate": {
+          "count": 67,
+          "inclusive_wall_ns": 864130393,
+          "inclusive_cpu_ns": 860804026,
+          "exclusive_wall_ns": 864130393,
+          "exclusive_cpu_ns": 860804026
+        },
+        "session_wakeup_validate": {
+          "count": 67,
+          "inclusive_wall_ns": 2452741,
+          "inclusive_cpu_ns": 2438238,
+          "exclusive_wall_ns": 2452741,
+          "exclusive_cpu_ns": 2438238
+        },
+        "session_apply_commit": {
+          "count": 67,
+          "inclusive_wall_ns": 9000343,
+          "inclusive_cpu_ns": 8974875,
+          "exclusive_wall_ns": 9000343,
+          "exclusive_cpu_ns": 8974875
+        },
+        "session_exchange": {
+          "count": 67,
+          "inclusive_wall_ns": 1834920906,
+          "inclusive_cpu_ns": 1109143533,
+          "exclusive_wall_ns": 157205537,
+          "exclusive_cpu_ns": 155326392
+        },
+        "session_progress": {
+          "count": 2759,
+          "inclusive_wall_ns": 4097486376,
+          "inclusive_cpu_ns": 3363472483,
+          "exclusive_wall_ns": 987441416,
+          "exclusive_cpu_ns": 982008356
+        },
+        "simulator_run": {
+          "count": 1,
+          "inclusive_wall_ns": 4620522851,
+          "inclusive_cpu_ns": 3885940888,
+          "exclusive_wall_ns": 523036475,
+          "exclusive_cpu_ns": 522468405
+        },
+        "report_build": {
+          "count": 1,
+          "inclusive_wall_ns": 85666886,
+          "inclusive_cpu_ns": 85604709,
+          "exclusive_wall_ns": 85666886,
+          "exclusive_cpu_ns": 85604709
+        },
+        "report_write": {
+          "count": 1,
+          "inclusive_wall_ns": 163269332,
+          "inclusive_cpu_ns": 163269277,
+          "exclusive_wall_ns": 163269332,
+          "exclusive_cpu_ns": 163269277
+        },
+        "simulator_cleanup": {
+          "count": 1,
+          "inclusive_wall_ns": 2613084,
+          "inclusive_cpu_ns": 2614736,
+          "exclusive_wall_ns": 2613084,
+          "exclusive_cpu_ns": 2614736
+        },
+        "native_total": {
+          "count": 1,
+          "inclusive_wall_ns": 5461198778,
+          "inclusive_cpu_ns": 4710802635,
+          "exclusive_wall_ns": 589126625,
+          "exclusive_cpu_ns": 573373025
+        }
+      },
+      "observed_CPU_ns": 5449992790,
+      "all_native_CPU_fraction": 0.8643685994674499,
+      "zero_native_CPU_work_factor": 7.372923939984021,
+      "run_exclusive_CPU_fraction": 0.095865889209736,
+      "pure_packet_CPU_measured": false,
+      "wall_speedup_bound": false,
+      "last_native_snapshot": {
+        "collected_callbacks": 865,
+        "decisions": 67,
+        "finished": true,
+        "local_busy_ranks": 0,
+        "now_ns": 93925,
+        "pending_callbacks": 0,
+        "processed_events": 11334,
+        "registered_nodes": 167,
+        "submitted_nodes": 167
+      },
+      "last_snapshot_name": "session_progress_exit",
+      "source_packets": 280,
+      "physical_TX": 2528,
+      "trace_records": {
+        "worker": 1153,
+        "native": 34058
+      }
+    },
+    "batch4-generic": {
+      "worker_root": {
+        "count": 1,
+        "inclusive_wall_ns": 5892919679,
+        "inclusive_cpu_ns": 1148137300,
+        "exclusive_wall_ns": 11095266,
+        "exclusive_cpu_ns": 11007911
+      },
+      "native_root": {
+        "count": 1,
+        "inclusive_wall_ns": 5801009508,
+        "inclusive_cpu_ns": 4707717691,
+        "exclusive_wall_ns": 569899727,
+        "exclusive_cpu_ns": 569132325
+      },
+      "worker_phases": {
+        "controller_init": {
+          "count": 1,
+          "inclusive_wall_ns": 18769313,
+          "inclusive_cpu_ns": 18552941,
+          "exclusive_wall_ns": 18769313,
+          "exclusive_cpu_ns": 18552941
+        },
+        "session_init": {
+          "count": 1,
+          "inclusive_wall_ns": 10032974,
+          "inclusive_cpu_ns": 9588523,
+          "exclusive_wall_ns": 10032974,
+          "exclusive_cpu_ns": 9588523
+        },
+        "python_wait_line": {
+          "count": 68,
+          "inclusive_wall_ns": 4740046099,
+          "inclusive_cpu_ns": 7357895,
+          "exclusive_wall_ns": 4740046099,
+          "exclusive_cpu_ns": 7357895
+        },
+        "native_receive": {
+          "count": 68,
+          "inclusive_wall_ns": 4783533875,
+          "inclusive_cpu_ns": 50774174,
+          "exclusive_wall_ns": 43487776,
+          "exclusive_cpu_ns": 43416279
+        },
+        "controller_advance": {
+          "count": 67,
+          "inclusive_wall_ns": 144321752,
+          "inclusive_cpu_ns": 140189115,
+          "exclusive_wall_ns": 144321752,
+          "exclusive_cpu_ns": 140189115
+        },
+        "wake_conditions": {
+          "count": 67,
+          "inclusive_wall_ns": 53433294,
+          "inclusive_cpu_ns": 52065920,
+          "exclusive_wall_ns": 53433294,
+          "exclusive_cpu_ns": 52065920
+        },
+        "python_candidate_copy": {
+          "count": 67,
+          "inclusive_wall_ns": 274512958,
+          "inclusive_cpu_ns": 270719960,
+          "exclusive_wall_ns": 274512958,
+          "exclusive_cpu_ns": 270719960
+        },
+        "python_candidate_validate": {
+          "count": 67,
+          "inclusive_wall_ns": 560075436,
+          "inclusive_cpu_ns": 558217376,
+          "exclusive_wall_ns": 560075436,
+          "exclusive_cpu_ns": 558217376
+        },
+        "python_command_write": {
+          "count": 67,
+          "inclusive_wall_ns": 10637429,
+          "inclusive_cpu_ns": 10639857,
+          "exclusive_wall_ns": 10637429,
+          "exclusive_cpu_ns": 10639857
+        },
+        "native_commit": {
+          "count": 67,
+          "inclusive_wall_ns": 862081310,
+          "inclusive_cpu_ns": 856306220,
+          "exclusive_wall_ns": 16855487,
+          "exclusive_cpu_ns": 16729027
+        },
+        "generic_report_write": {
+          "count": 1,
+          "inclusive_wall_ns": 9651895,
+          "inclusive_cpu_ns": 9652496,
+          "exclusive_wall_ns": 9651895,
+          "exclusive_cpu_ns": 9652496
+        },
+        "generic_worker": {
+          "count": 1,
+          "inclusive_wall_ns": 5892919679,
+          "inclusive_cpu_ns": 1148137300,
+          "exclusive_wall_ns": 11095266,
+          "exclusive_cpu_ns": 11007911
+        }
+      },
+      "native_phases": {
+        "session_pump": {
+          "count": 2759,
+          "inclusive_wall_ns": 371906979,
+          "inclusive_cpu_ns": 372029661,
+          "exclusive_wall_ns": 371906979,
+          "exclusive_cpu_ns": 372029661
+        },
+        "operation_progress_snapshot": {
+          "count": 2759,
+          "inclusive_wall_ns": 77173249,
+          "inclusive_cpu_ns": 77411376,
+          "exclusive_wall_ns": 77173249,
+          "exclusive_cpu_ns": 77411376
+        },
+        "session_events": {
+          "count": 2759,
+          "inclusive_wall_ns": 424884485,
+          "inclusive_cpu_ns": 425050546,
+          "exclusive_wall_ns": 347711236,
+          "exclusive_cpu_ns": 347639170
+        },
+        "session_drained": {
+          "count": 2759,
+          "inclusive_wall_ns": 479295202,
+          "inclusive_cpu_ns": 479466432,
+          "exclusive_wall_ns": 479295202,
+          "exclusive_cpu_ns": 479466432
+        },
+        "session_decide_write": {
+          "count": 67,
+          "inclusive_wall_ns": 13882956,
+          "inclusive_cpu_ns": 13894768,
+          "exclusive_wall_ns": 13882956,
+          "exclusive_cpu_ns": 13894768
+        },
+        "session_frontend_wait": {
+          "count": 67,
+          "inclusive_wall_ns": 1093258622,
+          "inclusive_cpu_ns": 4164517,
+          "exclusive_wall_ns": 1093258622,
+          "exclusive_cpu_ns": 4164517
+        },
+        "session_candidate_copy": {
+          "count": 67,
+          "inclusive_wall_ns": 62065050,
+          "inclusive_cpu_ns": 62076859,
+          "exclusive_wall_ns": 62065050,
+          "exclusive_cpu_ns": 62076859
+        },
+        "session_candidate_validate": {
+          "count": 67,
+          "inclusive_wall_ns": 865116015,
+          "inclusive_cpu_ns": 863952215,
+          "exclusive_wall_ns": 865116015,
+          "exclusive_cpu_ns": 863952215
+        },
+        "session_wakeup_validate": {
+          "count": 67,
+          "inclusive_wall_ns": 2444001,
+          "inclusive_cpu_ns": 2453305,
+          "exclusive_wall_ns": 2444001,
+          "exclusive_cpu_ns": 2453305
+        },
+        "session_apply_commit": {
+          "count": 67,
+          "inclusive_wall_ns": 8700653,
+          "inclusive_cpu_ns": 8703573,
+          "exclusive_wall_ns": 8700653,
+          "exclusive_cpu_ns": 8703573
+        },
+        "session_exchange": {
+          "count": 67,
+          "inclusive_wall_ns": 2201542527,
+          "inclusive_cpu_ns": 1111019776,
+          "exclusive_wall_ns": 156075230,
+          "exclusive_cpu_ns": 155774539
+        },
+        "session_progress": {
+          "count": 2759,
+          "inclusive_wall_ns": 4460408018,
+          "inclusive_cpu_ns": 3367722785,
+          "exclusive_wall_ns": 982778825,
+          "exclusive_cpu_ns": 980156370
+        },
+        "simulator_run": {
+          "count": 1,
+          "inclusive_wall_ns": 4986015979,
+          "inclusive_cpu_ns": 3893685905,
+          "exclusive_wall_ns": 525607961,
+          "exclusive_cpu_ns": 525963120
+        },
+        "report_build": {
+          "count": 1,
+          "inclusive_wall_ns": 80373970,
+          "inclusive_cpu_ns": 80294980,
+          "exclusive_wall_ns": 80373970,
+          "exclusive_cpu_ns": 80294980
+        },
+        "report_write": {
+          "count": 1,
+          "inclusive_wall_ns": 162833652,
+          "inclusive_cpu_ns": 162716858,
+          "exclusive_wall_ns": 162833652,
+          "exclusive_cpu_ns": 162716858
+        },
+        "simulator_cleanup": {
+          "count": 1,
+          "inclusive_wall_ns": 1886180,
+          "inclusive_cpu_ns": 1887623,
+          "exclusive_wall_ns": 1886180,
+          "exclusive_cpu_ns": 1887623
+        },
+        "native_total": {
+          "count": 1,
+          "inclusive_wall_ns": 5801009508,
+          "inclusive_cpu_ns": 4707717691,
+          "exclusive_wall_ns": 569899727,
+          "exclusive_cpu_ns": 569132325
+        }
+      },
+      "observed_CPU_ns": 5855854991,
+      "all_native_CPU_fraction": 0.8039334475043185,
+      "zero_native_CPU_work_factor": 5.100308988306538,
+      "run_exclusive_CPU_fraction": 0.08981833068072297,
+      "pure_packet_CPU_measured": false,
+      "wall_speedup_bound": false,
+      "last_native_snapshot": {
+        "collected_callbacks": 865,
+        "decisions": 67,
+        "finished": true,
+        "local_busy_ranks": 0,
+        "now_ns": 93925,
+        "pending_callbacks": 0,
+        "processed_events": 11334,
+        "registered_nodes": 167,
+        "submitted_nodes": 167
+      },
+      "last_snapshot_name": "session_progress_exit",
+      "source_packets": 280,
+      "physical_TX": 2528,
+      "trace_records": {
+        "worker": 1086,
+        "native": 34058
+      }
+    },
+    "batch8-modern": {
+      "worker_root": {
+        "count": 1,
+        "inclusive_wall_ns": 9814027583,
+        "inclusive_cpu_ns": 1722637511,
+        "exclusive_wall_ns": 29926956,
+        "exclusive_cpu_ns": 29535760
+      },
+      "native_root": {
+        "count": 1,
+        "inclusive_wall_ns": 9661359402,
+        "inclusive_cpu_ns": 7914994615,
+        "exclusive_wall_ns": 599832589,
+        "exclusive_cpu_ns": 593200349
+      },
+      "worker_phases": {
+        "controller_init": {
+          "count": 1,
+          "inclusive_wall_ns": 32910354,
+          "inclusive_cpu_ns": 31057011,
+          "exclusive_wall_ns": 32910354,
+          "exclusive_cpu_ns": 31057011
+        },
+        "session_init": {
+          "count": 1,
+          "inclusive_wall_ns": 4938319,
+          "inclusive_cpu_ns": 4428586,
+          "exclusive_wall_ns": 4938319,
+          "exclusive_cpu_ns": 4428586
+        },
+        "python_wait_line": {
+          "count": 93,
+          "inclusive_wall_ns": 8020607624,
+          "inclusive_cpu_ns": 9117133,
+          "exclusive_wall_ns": 8020607624,
+          "exclusive_cpu_ns": 9117133
+        },
+        "native_receive": {
+          "count": 93,
+          "inclusive_wall_ns": 8077366799,
+          "inclusive_cpu_ns": 63807433,
+          "exclusive_wall_ns": 56759175,
+          "exclusive_cpu_ns": 54690300
+        },
+        "controller_advance": {
+          "count": 92,
+          "inclusive_wall_ns": 401754307,
+          "inclusive_cpu_ns": 381521289,
+          "exclusive_wall_ns": 401754307,
+          "exclusive_cpu_ns": 381521289
+        },
+        "wake_conditions": {
+          "count": 92,
+          "inclusive_wall_ns": 78776011,
+          "inclusive_cpu_ns": 77620274,
+          "exclusive_wall_ns": 78776011,
+          "exclusive_cpu_ns": 77620274
+        },
+        "python_candidate_copy": {
+          "count": 92,
+          "inclusive_wall_ns": 381460897,
+          "inclusive_cpu_ns": 361905997,
+          "exclusive_wall_ns": 381460897,
+          "exclusive_cpu_ns": 361905997
+        },
+        "python_candidate_validate": {
+          "count": 92,
+          "inclusive_wall_ns": 710109037,
+          "inclusive_cpu_ns": 679559899,
+          "exclusive_wall_ns": 710109037,
+          "exclusive_cpu_ns": 679559899
+        },
+        "python_command_write": {
+          "count": 92,
+          "inclusive_wall_ns": 11642507,
+          "inclusive_cpu_ns": 11614529,
+          "exclusive_wall_ns": 11642507,
+          "exclusive_cpu_ns": 11614529
+        },
+        "native_commit": {
+          "count": 92,
+          "inclusive_wall_ns": 1127894304,
+          "inclusive_cpu_ns": 1074272158,
+          "exclusive_wall_ns": 24681863,
+          "exclusive_cpu_ns": 21191733
+        },
+        "modern_report_write": {
+          "count": 1,
+          "inclusive_wall_ns": 60460533,
+          "inclusive_cpu_ns": 60395000,
+          "exclusive_wall_ns": 60460533,
+          "exclusive_cpu_ns": 60395000
+        },
+        "modern_worker": {
+          "count": 1,
+          "inclusive_wall_ns": 9814027583,
+          "inclusive_cpu_ns": 1722637511,
+          "exclusive_wall_ns": 29926956,
+          "exclusive_cpu_ns": 29535760
+        }
+      },
+      "native_phases": {
+        "session_pump": {
+          "count": 4290,
+          "inclusive_wall_ns": 676058552,
+          "inclusive_cpu_ns": 667283605,
+          "exclusive_wall_ns": 676058552,
+          "exclusive_cpu_ns": 667283605
+        },
+        "operation_progress_snapshot": {
+          "count": 4290,
+          "inclusive_wall_ns": 116012060,
+          "inclusive_cpu_ns": 115444745,
+          "exclusive_wall_ns": 116012060,
+          "exclusive_cpu_ns": 115444745
+        },
+        "session_events": {
+          "count": 4290,
+          "inclusive_wall_ns": 814217835,
+          "inclusive_cpu_ns": 808146868,
+          "exclusive_wall_ns": 698205775,
+          "exclusive_cpu_ns": 692702123
+        },
+        "session_drained": {
+          "count": 4290,
+          "inclusive_wall_ns": 885179513,
+          "inclusive_cpu_ns": 879023518,
+          "exclusive_wall_ns": 885179513,
+          "exclusive_cpu_ns": 879023518
+        },
+        "session_decide_write": {
+          "count": 92,
+          "inclusive_wall_ns": 17532312,
+          "inclusive_cpu_ns": 17439166,
+          "exclusive_wall_ns": 17532312,
+          "exclusive_cpu_ns": 17439166
+        },
+        "session_frontend_wait": {
+          "count": 92,
+          "inclusive_wall_ns": 1669119153,
+          "inclusive_cpu_ns": 6108005,
+          "exclusive_wall_ns": 1669119153,
+          "exclusive_cpu_ns": 6108005
+        },
+        "session_candidate_copy": {
+          "count": 92,
+          "inclusive_wall_ns": 112891049,
+          "inclusive_cpu_ns": 112055751,
+          "exclusive_wall_ns": 112891049,
+          "exclusive_cpu_ns": 112055751
+        },
+        "session_candidate_validate": {
+          "count": 92,
+          "inclusive_wall_ns": 1530310819,
+          "inclusive_cpu_ns": 1510536875,
+          "exclusive_wall_ns": 1530310819,
+          "exclusive_cpu_ns": 1510536875
+        },
+        "session_wakeup_validate": {
+          "count": 92,
+          "inclusive_wall_ns": 3405719,
+          "inclusive_cpu_ns": 3365941,
+          "exclusive_wall_ns": 3405719,
+          "exclusive_cpu_ns": 3365941
+        },
+        "session_apply_commit": {
+          "count": 92,
+          "inclusive_wall_ns": 12049298,
+          "inclusive_cpu_ns": 11765290,
+          "exclusive_wall_ns": 12049298,
+          "exclusive_cpu_ns": 11765290
+        },
+        "session_exchange": {
+          "count": 92,
+          "inclusive_wall_ns": 3637168952,
+          "inclusive_cpu_ns": 1949659909,
+          "exclusive_wall_ns": 291860602,
+          "exclusive_cpu_ns": 288388881
+        },
+        "session_progress": {
+          "count": 4290,
+          "inclusive_wall_ns": 7680843979,
+          "inclusive_cpu_ns": 5953511597,
+          "exclusive_wall_ns": 1668219127,
+          "exclusive_cpu_ns": 1649397697
+        },
+        "simulator_run": {
+          "count": 1,
+          "inclusive_wall_ns": 8641317266,
+          "inclusive_cpu_ns": 6901660674,
+          "exclusive_wall_ns": 960473287,
+          "exclusive_cpu_ns": 948149077
+        },
+        "report_build": {
+          "count": 1,
+          "inclusive_wall_ns": 131534555,
+          "inclusive_cpu_ns": 131533766,
+          "exclusive_wall_ns": 131534555,
+          "exclusive_cpu_ns": 131533766
+        },
+        "report_write": {
+          "count": 1,
+          "inclusive_wall_ns": 286578067,
+          "inclusive_cpu_ns": 286500907,
+          "exclusive_wall_ns": 286578067,
+          "exclusive_cpu_ns": 286500907
+        },
+        "simulator_cleanup": {
+          "count": 1,
+          "inclusive_wall_ns": 2096925,
+          "inclusive_cpu_ns": 2098919,
+          "exclusive_wall_ns": 2096925,
+          "exclusive_cpu_ns": 2098919
+        },
+        "native_total": {
+          "count": 1,
+          "inclusive_wall_ns": 9661359402,
+          "inclusive_cpu_ns": 7914994615,
+          "exclusive_wall_ns": 599832589,
+          "exclusive_cpu_ns": 593200349
+        }
+      },
+      "observed_CPU_ns": 9637632126,
+      "all_native_CPU_fraction": 0.8212592586562065,
+      "zero_native_CPU_work_factor": 5.594695381041193,
+      "run_exclusive_CPU_fraction": 0.09837987843944812,
+      "pure_packet_CPU_measured": false,
+      "wall_speedup_bound": false,
+      "last_native_snapshot": {
+        "collected_callbacks": 1033,
+        "decisions": 92,
+        "finished": true,
+        "local_busy_ranks": 0,
+        "now_ns": 133377,
+        "pending_callbacks": 0,
+        "processed_events": 17742,
+        "registered_nodes": 207,
+        "submitted_nodes": 207
+      },
+      "last_snapshot_name": "session_progress_exit",
+      "source_packets": 408,
+      "physical_TX": 4000,
+      "trace_records": {
+        "worker": 1578,
+        "native": 52780
+      }
+    },
+    "batch8-generic": {
+      "worker_root": {
+        "count": 1,
+        "inclusive_wall_ns": 9486701387,
+        "inclusive_cpu_ns": 1330841848,
+        "exclusive_wall_ns": 10815108,
+        "exclusive_cpu_ns": 10702505
+      },
+      "native_root": {
+        "count": 1,
+        "inclusive_wall_ns": 9385242099,
+        "inclusive_cpu_ns": 7919832971,
+        "exclusive_wall_ns": 597723110,
+        "exclusive_cpu_ns": 597290607
+      },
+      "worker_phases": {
+        "controller_init": {
+          "count": 1,
+          "inclusive_wall_ns": 22950535,
+          "inclusive_cpu_ns": 22950761,
+          "exclusive_wall_ns": 22950535,
+          "exclusive_cpu_ns": 22950761
+        },
+        "session_init": {
+          "count": 1,
+          "inclusive_wall_ns": 10335444,
+          "inclusive_cpu_ns": 9885601,
+          "exclusive_wall_ns": 10335444,
+          "exclusive_cpu_ns": 9885601
+        },
+        "python_wait_line": {
+          "count": 93,
+          "inclusive_wall_ns": 7973775267,
+          "inclusive_cpu_ns": 8701756,
+          "exclusive_wall_ns": 7973775267,
+          "exclusive_cpu_ns": 8701756
+        },
+        "native_receive": {
+          "count": 93,
+          "inclusive_wall_ns": 8030248644,
+          "inclusive_cpu_ns": 55367390,
+          "exclusive_wall_ns": 56473377,
+          "exclusive_cpu_ns": 46665634
+        },
+        "controller_advance": {
+          "count": 92,
+          "inclusive_wall_ns": 185965504,
+          "inclusive_cpu_ns": 158312481,
+          "exclusive_wall_ns": 185965504,
+          "exclusive_cpu_ns": 158312481
+        },
+        "wake_conditions": {
+          "count": 92,
+          "inclusive_wall_ns": 79238813,
+          "inclusive_cpu_ns": 66730949,
+          "exclusive_wall_ns": 79238813,
+          "exclusive_cpu_ns": 66730949
+        },
+        "python_candidate_copy": {
+          "count": 92,
+          "inclusive_wall_ns": 381874343,
+          "inclusive_cpu_ns": 333965854,
+          "exclusive_wall_ns": 381874343,
+          "exclusive_cpu_ns": 333965854
+        },
+        "python_candidate_validate": {
+          "count": 92,
+          "inclusive_wall_ns": 724316687,
+          "inclusive_cpu_ns": 633955123,
+          "exclusive_wall_ns": 724316687,
+          "exclusive_cpu_ns": 633955123
+        },
+        "python_command_write": {
+          "count": 92,
+          "inclusive_wall_ns": 10908761,
+          "inclusive_cpu_ns": 10769559,
+          "exclusive_wall_ns": 10908761,
+          "exclusive_cpu_ns": 10769559
+        },
+        "native_commit": {
+          "count": 92,
+          "inclusive_wall_ns": 1136816770,
+          "inclusive_cpu_ns": 998212999,
+          "exclusive_wall_ns": 19716979,
+          "exclusive_cpu_ns": 19522463
+        },
+        "generic_report_write": {
+          "count": 1,
+          "inclusive_wall_ns": 10330569,
+          "inclusive_cpu_ns": 8679162,
+          "exclusive_wall_ns": 10330569,
+          "exclusive_cpu_ns": 8679162
+        },
+        "generic_worker": {
+          "count": 1,
+          "inclusive_wall_ns": 9486701387,
+          "inclusive_cpu_ns": 1330841848,
+          "exclusive_wall_ns": 10815108,
+          "exclusive_cpu_ns": 10702505
+        }
+      },
+      "native_phases": {
+        "session_pump": {
+          "count": 4290,
+          "inclusive_wall_ns": 668829190,
+          "inclusive_cpu_ns": 667726483,
+          "exclusive_wall_ns": 668829190,
+          "exclusive_cpu_ns": 667726483
+        },
+        "operation_progress_snapshot": {
+          "count": 4290,
+          "inclusive_wall_ns": 115563462,
+          "inclusive_cpu_ns": 115534752,
+          "exclusive_wall_ns": 115563462,
+          "exclusive_cpu_ns": 115534752
+        },
+        "session_events": {
+          "count": 4290,
+          "inclusive_wall_ns": 808193632,
+          "inclusive_cpu_ns": 806275655,
+          "exclusive_wall_ns": 692630170,
+          "exclusive_cpu_ns": 690740903
+        },
+        "session_drained": {
+          "count": 4290,
+          "inclusive_wall_ns": 882489690,
+          "inclusive_cpu_ns": 880490332,
+          "exclusive_wall_ns": 882489690,
+          "exclusive_cpu_ns": 880490332
+        },
+        "session_decide_write": {
+          "count": 92,
+          "inclusive_wall_ns": 17332343,
+          "inclusive_cpu_ns": 17345100,
+          "exclusive_wall_ns": 17332343,
+          "exclusive_cpu_ns": 17345100
+        },
+        "session_frontend_wait": {
+          "count": 92,
+          "inclusive_wall_ns": 1444899721,
+          "inclusive_cpu_ns": 6011713,
+          "exclusive_wall_ns": 1444899721,
+          "exclusive_cpu_ns": 6011713
+        },
+        "session_candidate_copy": {
+          "count": 92,
+          "inclusive_wall_ns": 113381867,
+          "inclusive_cpu_ns": 112499308,
+          "exclusive_wall_ns": 113381867,
+          "exclusive_cpu_ns": 112499308
+        },
+        "session_candidate_validate": {
+          "count": 92,
+          "inclusive_wall_ns": 1520423591,
+          "inclusive_cpu_ns": 1514520652,
+          "exclusive_wall_ns": 1520423591,
+          "exclusive_cpu_ns": 1514520652
+        },
+        "session_wakeup_validate": {
+          "count": 92,
+          "inclusive_wall_ns": 3381419,
+          "inclusive_cpu_ns": 3390892,
+          "exclusive_wall_ns": 3381419,
+          "exclusive_cpu_ns": 3390892
+        },
+        "session_apply_commit": {
+          "count": 92,
+          "inclusive_wall_ns": 11843323,
+          "inclusive_cpu_ns": 11794388,
+          "exclusive_wall_ns": 11843323,
+          "exclusive_cpu_ns": 11794388
+        },
+        "session_exchange": {
+          "count": 92,
+          "inclusive_wall_ns": 3400648205,
+          "inclusive_cpu_ns": 1953809037,
+          "exclusive_wall_ns": 289385941,
+          "exclusive_cpu_ns": 288246984
+        },
+        "session_progress": {
+          "count": 4290,
+          "inclusive_wall_ns": 7428851108,
+          "inclusive_cpu_ns": 5966831851,
+          "exclusive_wall_ns": 1668690391,
+          "exclusive_cpu_ns": 1658530344
+        },
+        "simulator_run": {
+          "count": 1,
+          "inclusive_wall_ns": 8368691311,
+          "inclusive_cpu_ns": 6904105215,
+          "exclusive_wall_ns": 939840203,
+          "exclusive_cpu_ns": 937273364
+        },
+        "report_build": {
+          "count": 1,
+          "inclusive_wall_ns": 132252329,
+          "inclusive_cpu_ns": 132210109,
+          "exclusive_wall_ns": 132252329,
+          "exclusive_cpu_ns": 132210109
+        },
+        "report_write": {
+          "count": 1,
+          "inclusive_wall_ns": 284647236,
+          "inclusive_cpu_ns": 284296819,
+          "exclusive_wall_ns": 284647236,
+          "exclusive_cpu_ns": 284296819
+        },
+        "simulator_cleanup": {
+          "count": 1,
+          "inclusive_wall_ns": 1928113,
+          "inclusive_cpu_ns": 1930221,
+          "exclusive_wall_ns": 1928113,
+          "exclusive_cpu_ns": 1930221
+        },
+        "native_total": {
+          "count": 1,
+          "inclusive_wall_ns": 9385242099,
+          "inclusive_cpu_ns": 7919832971,
+          "exclusive_wall_ns": 597723110,
+          "exclusive_cpu_ns": 597290607
+        }
+      },
+      "observed_CPU_ns": 9250674819,
+      "all_native_CPU_fraction": 0.8561357010121491,
+      "zero_native_CPU_work_factor": 6.950994840522931,
+      "run_exclusive_CPU_fraction": 0.10131945856262618,
+      "pure_packet_CPU_measured": false,
+      "wall_speedup_bound": false,
+      "last_native_snapshot": {
+        "collected_callbacks": 1033,
+        "decisions": 92,
+        "finished": true,
+        "local_busy_ranks": 0,
+        "now_ns": 133377,
+        "pending_callbacks": 0,
+        "processed_events": 17742,
+        "registered_nodes": 207,
+        "submitted_nodes": 207
+      },
+      "last_snapshot_name": "session_progress_exit",
+      "source_packets": 408,
+      "physical_TX": 4000,
+      "trace_records": {
+        "worker": 1486,
+        "native": 52780
+      }
+    }
+  },
+  "hardware_calibrated": false,
+  "compiler": {
+    "translation_units": 437,
+    "optimization_sequences": [
+      {
+        "flags": [
+          "-O3",
+          "-O0"
+        ],
+        "units": 437
+      }
+    ],
+    "effective_optimization": "-O0",
+    "release_label_is_optimized": false,
+    "important_units": [
+      {
+        "source": "fabric.cc",
+        "flags": [
+          "-O3",
+          "-O0"
+        ],
+        "effective": "-O0"
+      },
+      {
+        "source": "persistent_streams.cc",
+        "flags": [
+          "-O3",
+          "-O0"
+        ],
+        "effective": "-O0"
+      },
+      {
+        "source": "remote_transactions.cc",
+        "flags": [
+          "-O3",
+          "-O0"
+        ],
+        "effective": "-O0"
+      },
+      {
+        "source": "persistent_streams.cc",
+        "flags": [
+          "-O3",
+          "-O0"
+        ],
+        "effective": "-O0"
+      },
+      {
+        "source": "transaction_session.cc",
+        "flags": [
+          "-O3",
+          "-O0"
+        ],
+        "effective": "-O0"
+      },
+      {
+        "source": "remote_transactions.cc",
+        "flags": [
+          "-O3",
+          "-O0"
+        ],
+        "effective": "-O0"
+      },
+      {
+        "source": "persistent_streams.cc",
+        "flags": [
+          "-O3",
+          "-O0"
+        ],
+        "effective": "-O0"
+      },
+      {
+        "source": "simulator.cc",
+        "flags": [
+          "-O3",
+          "-O0"
+        ],
+        "effective": "-O0"
+      },
+      {
+        "source": "default-simulator-impl.cc",
+        "flags": [
+          "-O3",
+          "-O0"
+        ],
+        "effective": "-O0"
+      },
+      {
+        "source": "qbb-net-device.cc",
+        "flags": [
+          "-O3",
+          "-O0"
+        ],
+        "effective": "-O0"
+      },
+      {
+        "source": "rdma-hw.cc",
+        "flags": [
+          "-O3",
+          "-O0"
+        ],
+        "effective": "-O0"
+      },
+      {
+        "source": "switch-node.cc",
+        "flags": [
+          "-O3",
+          "-O0"
+        ],
+        "effective": "-O0"
+      }
+    ],
+    "progress_full_scan_development_oracle": false,
+    "cause": "NS3_WARNINGS=ON adds -Wall -O0 after the Release flags",
+    "source": "third_party/LLMServingSim/astra-sim/extern/network_backend/ns-3/build-support/macros-and-definitions.cmake",
+    "source_line": 231,
+    "optimized_backend_performance_measured": false
+  },
+  "optimized_backend_performance_measured": false,
+  "pure_packet_CPU_measured": false,
+  "wall_speedup_measured": false,
+  "novel_simulator_speedup_proven": false
+}

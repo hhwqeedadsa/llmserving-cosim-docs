@@ -1,0 +1,64 @@
+{
+  "passed": true,
+  "observations": {
+    "batch4-modern": {
+      "equivalent": true,
+      "phase_sweep_identical": true,
+      "complete_result_and_control": true,
+      "records": {
+        "worker": 1153,
+        "native": 34058
+      },
+      "physical_TX": 2528,
+      "CPU_ns": 5449992790
+    },
+    "batch4-generic": {
+      "equivalent": true,
+      "phase_sweep_identical": true,
+      "complete_result_and_control": true,
+      "records": {
+        "worker": 1086,
+        "native": 34058
+      },
+      "physical_TX": 2528,
+      "CPU_ns": 5855854991
+    },
+    "batch8-modern": {
+      "equivalent": true,
+      "phase_sweep_identical": true,
+      "complete_result_and_control": true,
+      "records": {
+        "worker": 1578,
+        "native": 52780
+      },
+      "physical_TX": 4000,
+      "CPU_ns": 9637632126
+    },
+    "batch8-generic": {
+      "equivalent": true,
+      "phase_sweep_identical": true,
+      "complete_result_and_control": true,
+      "records": {
+        "worker": 1486,
+        "native": 52780
+      },
+      "physical_TX": 4000,
+      "CPU_ns": 9250674819
+    }
+  },
+  "rejected_corruptions": [
+    "parent nesting",
+    "CPU timestamp regression",
+    "physical packet time",
+    "application completion"
+  ],
+  "immutable_copied_files": 117,
+  "runtime_members": 10,
+  "compiler_units": 437,
+  "effective_optimization": "-O0",
+  "original_live_library_hash_checks_preserved": true,
+  "offline_projection_requires_anchored_references": true,
+  "no_new_networks": true,
+  "optimized_backend_performance_measured": false,
+  "new_simulator_speedup_proven": false
+}

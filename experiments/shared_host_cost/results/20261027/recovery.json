@@ -1,0 +1,47 @@
+{
+  "passed": true,
+  "sha256": "042e8c258b7f1e193fcfa68e20ba8f7da5ad6156fef29f01f23418509492b5cf",
+  "members": 463,
+  "copied_source": true,
+  "empty_cwd": true,
+  "identical_verification": true,
+  "identical_reports": true,
+  "historical_library_paths_required": false,
+  "new_builds": 0,
+  "new_networks": 0,
+  "commands": [
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "experiments.shared_host_cost.verify",
+        "--stage",
+        "/home/lry/moe-ub-cosim/runs/shared_host_cost_20261027/recovery/run/stage",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/shared_host_cost_20261027/recovery/run/stage/recovery-verification.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim/runs/shared_host_cost_20261027/recovery/empty-cwd",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "experiments.shared_host_cost.analyze",
+        "report",
+        "--stage",
+        "/home/lry/moe-ub-cosim/runs/shared_host_cost_20261027/recovery/run/stage",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/shared_host_cost_20261027/recovery/run/stage/recovered-report"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim/runs/shared_host_cost_20261027/recovery/empty-cwd",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ]
+}

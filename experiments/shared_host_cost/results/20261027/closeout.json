@@ -1,0 +1,129 @@
+{
+  "state": "completed_stage_overall_research_active",
+  "protocol": "047f0a4",
+  "execution_implementation": "0d7bbab",
+  "audit_implementation": "64bd589",
+  "raw_run": "runs/shared_host_cost_20261027",
+  "new_network_observations": 4,
+  "new_physical_benefit_samples": 0,
+  "network_reruns": 0,
+  "new_builds": 0,
+  "downloads": 0,
+  "GPU_executions": 0,
+  "pushes": 0,
+  "archive": {
+    "sha256": "042e8c258b7f1e193fcfa68e20ba8f7da5ad6156fef29f01f23418509492b5cf",
+    "members": 463,
+    "compressed_bytes": 17285072,
+    "uncompressed_bytes": 175753049
+  },
+  "archive_path": "runs/shared_host_cost_20261027/checkpoint.tar.gz",
+  "verification": {
+    "passed": true,
+    "observations": {
+      "batch4-modern": {
+        "equivalent": true,
+        "phase_sweep_identical": true,
+        "complete_result_and_control": true,
+        "records": {
+          "worker": 1153,
+          "native": 34058
+        },
+        "physical_TX": 2528,
+        "CPU_ns": 5449992790
+      },
+      "batch4-generic": {
+        "equivalent": true,
+        "phase_sweep_identical": true,
+        "complete_result_and_control": true,
+        "records": {
+          "worker": 1086,
+          "native": 34058
+        },
+        "physical_TX": 2528,
+        "CPU_ns": 5855854991
+      },
+      "batch8-modern": {
+        "equivalent": true,
+        "phase_sweep_identical": true,
+        "complete_result_and_control": true,
+        "records": {
+          "worker": 1578,
+          "native": 52780
+        },
+        "physical_TX": 4000,
+        "CPU_ns": 9637632126
+      },
+      "batch8-generic": {
+        "equivalent": true,
+        "phase_sweep_identical": true,
+        "complete_result_and_control": true,
+        "records": {
+          "worker": 1486,
+          "native": 52780
+        },
+        "physical_TX": 4000,
+        "CPU_ns": 9250674819
+      }
+    },
+    "rejected_corruptions": [
+      "parent nesting",
+      "CPU timestamp regression",
+      "physical packet time",
+      "application completion"
+    ],
+    "immutable_copied_files": 117,
+    "runtime_members": 10,
+    "compiler_units": 437,
+    "effective_optimization": "-O0",
+    "original_live_library_hash_checks_preserved": true,
+    "offline_projection_requires_anchored_references": true,
+    "no_new_networks": true,
+    "optimized_backend_performance_measured": false,
+    "new_simulator_speedup_proven": false
+  },
+  "recovery": {
+    "passed": true,
+    "copied_source": true,
+    "empty_cwd": true,
+    "byte_identical_files": [
+      "summary.json",
+      "report.md",
+      "report.html",
+      "verification.json"
+    ],
+    "new_networks": 0,
+    "new_builds": 0,
+    "historical_library_paths_required": false
+  },
+  "budgets": {
+    "cumulative_wall_limit_s": 900,
+    "cumulative_artifact_limit_bytes": 805306368,
+    "conservative_seconds_including_copied_monitors": 162.48392018694722,
+    "logical_bytes": 367198120,
+    "allocated_bytes": 368713728,
+    "versioned_sources_and_results_bytes": 99639,
+    "reserved_receipt_bytes": 2097152,
+    "host_seconds_per_command": 60,
+    "RSS_limit_bytes": 1073741824,
+    "address_limit_bytes": 2147483648,
+    "host_trace_record_limit": 65536
+  },
+  "effective_compiler_optimization": "-O0",
+  "optimized_backend_performance_measured": false,
+  "packet_CPU_measured": false,
+  "wall_speedup_measured": false,
+  "novel_simulator_speedup_proven": false,
+  "research_decision": "First establish an actually optimized strong baseline. Native fraction includes orchestration and validation; it is not packet CPU. Compiler optimization is not a paper contribution.",
+  "retained_prior_analysis": "stage/report-before-compiler-check",
+  "retained_failures": [],
+  "source_sha256": {
+    "experiments/shared_host_cost/prepare.py": "07a4568d6d59a2d5bd8de89bb4af787934b495b0911ce7d3a4142e2848de407f",
+    "experiments/shared_host_cost/generic.py": "397e8077bb10c803fced85d56a366f63354e27046330ce4b5e999381db9fb121",
+    "experiments/shared_host_cost/analyze.py": "52ff635eef6b632aabb4bd0ee8b41b73cfa3252a540c184ebc782ea223c5267b",
+    "experiments/shared_host_cost/run.py": "3b7fe74a10baed84efe7903abb2072b403c78ce92516760751bc741f683728d4",
+    "experiments/shared_host_cost/compiler.py": "459559d4007fd2447d141b68dfecc33991dd5060d05b9176f9c090254ebeac50",
+    "experiments/shared_host_cost/verify.py": "64fa7fd8ece60c1d8fb65d0873103714c44b47e490da76266b666e0127947601",
+    "experiments/shared_host_cost/checkpoint.py": "d07f0a1ccea3befc8acf39910fc9c8046410fdd943e667be93ed53becfaccf39"
+  }
+}

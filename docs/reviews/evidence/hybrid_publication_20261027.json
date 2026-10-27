@@ -1,0 +1,136 @@
+{
+  "checker_sha256": "a90144c07bc21f7f82273bce5cd89a69e96a86a71f06ac0be753569f567fab7f",
+  "document_links_checked": [
+    "../../experiments/route_coverage/results/local_additions_20261027/report.md",
+    "现代连接共享范围与网络优化对象_20261024.md",
+    "../tasks/submission_prefix_spec.md",
+    "evidence/hybrid_publication_20261027.json"
+  ],
+  "platform": [
+    {
+      "bytes": 23252,
+      "git_blob_sha": "c15bb3c2bc3acf7412c6c74b50cd65f5c422bfd9",
+      "path": "python/moe_ub_cosim/modern_deepep_plan.py",
+      "sha256": "b4035bc7e537940d0160162604a82acc770b34c66ae9f5e8a1272db647a6ed1e"
+    },
+    {
+      "bytes": 11438,
+      "git_blob_sha": "fde2336cf313c9f77633816ad3ac8b7d892dae75",
+      "path": "python/moe_ub_cosim/hybrid_deepep_plan.py",
+      "sha256": "4e0af58a2f82d57b7ed68f9dc63b7058d9fdb690e80733fbb827d5efc9661904"
+    },
+    {
+      "bytes": 6214,
+      "git_blob_sha": "211a4009ad5f6685e94b0d8197774719d3042a6d",
+      "path": "backend/rdma/gin_work_queue.hh",
+      "sha256": "2616252a1620bee3ebb89c603914d7476d904b9a9b9ec2a68e67fcc4f04c3b22"
+    },
+    {
+      "bytes": 40148,
+      "git_blob_sha": "f40f669b4e37b3b31668e60005f23b47c878e446",
+      "path": "backend/rdma/remote_transactions.cc",
+      "sha256": "8252278aa5f0eed5904b01822750974a2f6774900006e2be503032a8335da78c"
+    },
+    {
+      "bytes": 18544,
+      "git_blob_sha": "9d4f8a02509e49c4e9a1e4d1dc14faecda6fcee9",
+      "path": "backend/rdma/transaction_session.cc",
+      "sha256": "8d8d21791c816024a8101571ef1bff822433d402233eb2eb6f45111b512bd1b2"
+    }
+  ],
+  "platform_revision": "2be34d4",
+  "protocol_commit": "58815b1",
+  "schema_version": "hybrid-publication-source-audit/1",
+  "scope": {
+    "gpu_execution": false,
+    "hardware_calibrated": false,
+    "innovation_established": false,
+    "new_networks": 0,
+    "platform_changed": false,
+    "simulation_equivalence_proven": false,
+    "source_identities_checked": true,
+    "source_semantics_manually_reviewed": true
+  },
+  "upstream": [
+    {
+      "bytes": 11335,
+      "cache": "deepep_modern_20261022",
+      "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+      "git_blob_sha": "732c598ca1986636c300036533141ebeb49a320e",
+      "path": "deep_ep/include/deep_ep/comm/barrier.cuh",
+      "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/comm/barrier.cuh",
+      "sha256": "e4361353f31a2f3a36e019bb2ef013991017a205c16ab92f76f9da2a2652260f",
+      "tree_response_sha256": "cff0af9ecd9cc8212d6dbeec55ac03abf755b3e2c445477ef54f066e948756fd"
+    },
+    {
+      "bytes": 11249,
+      "cache": "deepep_modern_20261022",
+      "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+      "git_blob_sha": "b459a34a7d9012a95ca9821b947a60e5819fa736",
+      "path": "deep_ep/include/deep_ep/comm/handle.cuh",
+      "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/comm/handle.cuh",
+      "sha256": "24c321c8bc35a09620b7c842c9333f64d7e208faa45b832241deab430f65f068",
+      "tree_response_sha256": "cff0af9ecd9cc8212d6dbeec55ac03abf755b3e2c445477ef54f066e948756fd"
+    },
+    {
+      "bytes": 36817,
+      "cache": "deepep_modern_20261022",
+      "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+      "git_blob_sha": "0cb8e7da20940881c945720b45dd0eeea8feffc1",
+      "path": "deep_ep/include/deep_ep/impls/ep/hybrid_dispatch.cuh",
+      "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/impls/ep/hybrid_dispatch.cuh",
+      "sha256": "d7e6e98aeb605392c668bf46de3520072f02b61f145cfc5779dd9c32f0e73db9",
+      "tree_response_sha256": "cff0af9ecd9cc8212d6dbeec55ac03abf755b3e2c445477ef54f066e948756fd"
+    },
+    {
+      "bytes": 81127,
+      "cache": "nccl_gin_20261022",
+      "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+      "git_blob_sha": "cfcd5470bbedca8be3d0657fc002bf950814c0f1",
+      "path": "src/include/nccl_device/impl/gin__funcs.h",
+      "public_url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/src/include/nccl_device/impl/gin__funcs.h",
+      "sha256": "8ed25a57375cef3856c81a49be3b89024e567bd1e1dbe6f39ebffb1e7836255d",
+      "tree_response_sha256": "c4bbf500304593e3e83de591b39dc6a554b22c8c0ad0d296cb8f55d6f7e4638f"
+    },
+    {
+      "bytes": 35130,
+      "cache": "nccl_gin_20261022",
+      "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+      "git_blob_sha": "6ad2c76b3e88e3419298c7b6772c399246a8bc29",
+      "path": "src/include/nccl_device/gin/gdaki/gin_gdaki.h",
+      "public_url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/src/include/nccl_device/gin/gdaki/gin_gdaki.h",
+      "sha256": "510dae47c9c4e9b8a1dd58c63e9197e4b69f8c6dbc559cb3e7aed7ee41e54b9e",
+      "tree_response_sha256": "c4bbf500304593e3e83de591b39dc6a554b22c8c0ad0d296cb8f55d6f7e4638f"
+    },
+    {
+      "bytes": 60093,
+      "cache": "nccl_gin_20261022",
+      "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+      "git_blob_sha": "976ab919d4ee438147f635d247721704bd511868",
+      "path": "src/transport/net_ib/gdaki/gin_host_gdaki.cc",
+      "public_url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/src/transport/net_ib/gdaki/gin_host_gdaki.cc",
+      "sha256": "d554a0295c463782d60a36b746ed8e998c7e427493f00e6b6813f9d945fdd361",
+      "tree_response_sha256": "c4bbf500304593e3e83de591b39dc6a554b22c8c0ad0d296cb8f55d6f7e4638f"
+    },
+    {
+      "bytes": 56066,
+      "cache": "nccl_gin_20261022",
+      "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+      "git_blob_sha": "910b710c56bd8d0da730270cda9f521ee8e4fd83",
+      "path": "src/transport/net_ib/gdaki/doca-gpunetio/include/device/doca_gpunetio_dev_verbs_qp.cuh",
+      "public_url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/src/transport/net_ib/gdaki/doca-gpunetio/include/device/doca_gpunetio_dev_verbs_qp.cuh",
+      "sha256": "fa84c6402f05bd58ea1e5d8eb8d4ead02161aba966ea3297b90ed652878cd8e8",
+      "tree_response_sha256": "c4bbf500304593e3e83de591b39dc6a554b22c8c0ad0d296cb8f55d6f7e4638f"
+    },
+    {
+      "bytes": 49998,
+      "cache": "nccl_gin_20261022",
+      "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+      "git_blob_sha": "3dda5b1c442bbb287c573e629e390ccbe807df86",
+      "path": "src/transport/net_ib/gdaki/doca-gpunetio/include/device/doca_gpunetio_dev_verbs_onesided.cuh",
+      "public_url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/src/transport/net_ib/gdaki/doca-gpunetio/include/device/doca_gpunetio_dev_verbs_onesided.cuh",
+      "sha256": "e75f82a971ad18d19150a68521707233867169c294d2a1f64d933063f674cbb6",
+      "tree_response_sha256": "c4bbf500304593e3e83de591b39dc6a554b22c8c0ad0d296cb8f55d6f7e4638f"
+    }
+  ]
+}

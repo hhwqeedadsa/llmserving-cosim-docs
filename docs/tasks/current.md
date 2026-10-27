@@ -13,6 +13,8 @@
 
 ## 当前范围和预算
 
+当前研究 `in_progress`：[包级交互范围前置核算](../../experiments/interaction_scope/protocol.md)，起点`a0367d2`。只从已核hash持久包恢复100G/200G公开参考，按实际IP/端口和完整捕获核对request/response/ACK路径、NIC/端口/共享MMU的耦合及具体队列等待；应用屏障单独分析，不以逻辑图连通代替物理干扰证据。事后分析不作在线策略输入，不声称实际加速。300秒/128MiB、单命令60秒/RSS1GiB/地址2GiB/96MiB，零新网络/构建/GPU/下载/平台依赖修改/push。若共享闭包过大，收缩静态分域候选并列出安全解除耦合所需条件。
+
 当前通用事件图强基线的首轮执行与判别 `completed`：[独立协议](../../experiments/static_dag_transfer/event_graph_protocol.md)、[结果报告](../../experiments/static_dag_transfer/results/event_graph_20261027/report.md)。只从原网络提取576事件/164项native工作/29连接，保留开始/提交门槛、共享准备和24条slot同步边；解释器只经公开NativeTransactionSession使用现有回调批次，不调用现代控制器或测试驱动，不嵌入参考时刻。原网络离线提交/事件等价后，实际执行100G和200G两次，均完整完成、264源包/8,800捕获、66同步/369逻辑批次；原网络严格逐项一致，200G的16项临时任务编号按稳定身份对应后，工作/after、完整事务与内存、提交、应用事件及回调一致，包和队列原件本来就相同。
 
 200G原始编号严格比较失败保留，按事前规则未执行第三组，不加上限或重跑。两次应用阶段57.479/53.446us，全部事件/源保护63.523/59.468us、排空69.547/65.480us；完整通用图已能解释这两条件，不能把添加MoE语义当独有贡献，也未完成三网络排序。独立重数528源包/1,700回调、7项人工检查、6类篡改拒绝及13固定依赖通过。证据包逐成员hash恢复后从复制源码/空cwd离线重算，摘要与报告逐字节一致，见[核验](../../experiments/static_dag_transfer/results/event_graph_20261027/independent-verification.json)、[恢复](../../experiments/static_dag_transfer/results/event_graph_20261027/recovery.json)和[收尾](../../experiments/static_dag_transfer/results/event_graph_20261027/closeout.json)。持久证据`runs/generic_event_dag_20261027/`，受监控17.60秒、产物约164.5MiB，保持900秒/512MiB及所有单命令/网络上限；无平台/依赖修改、安装下载/GPU或push。候选一收紧为更精简表示的决策可靠性与成本，候选二仍须证明实际交互范围可减少包级成本；均未成立，整体目标继续`in_progress`。

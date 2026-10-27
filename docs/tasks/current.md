@@ -13,6 +13,8 @@
 
 ## 当前范围和预算
 
+当前平台增量`in_progress`：[RC操作包接入规范](rc_packet_probe_spec.md)，起点`48d84eb`。独立单QP/单在途WQE小例接入同一原生Fabric，区分真实WRITE/Atomic ACK字节与既有MRT1，固定四个新RC条件和一次新legacy检查；累计2400受监控秒/2GiB、最多两构建和五网络，失败保留、不扩大预算。两项创新均未成立，不重开旧实验。
+
 当前平台增量 `completed`：[操作级RC参考范围](rc_operation_reference_spec.md)、[公开小例](../../examples/rc_operation_reference/README.md)及[验收](../../fixtures/rc_operation_reference/README.md)，起点`62da06f`、规范`f817980`。交付独立、无时钟的WRITE/fetch-add状态参考，保留分段可见、Atomic ACK旧值、有限重放、原子信用和源完成。`atomic_return_required/1`拒绝普通ACK推定缺失返回值，与所提取RXE完成分支的已知差异明确保留；未接ns-3，不改变MRT1或旧结果。
 
 Linux v6.12固定`adc218676eef25575469234709c2d87185ca223a`，5层tree与9份源码blob核对通过。13个未修改函数/2段switch在显式替代环境下完成五项对照；“丢WRITE确认和原子回复→重复WRITE累计ACK恰好覆盖原子PSN”可完成却不写回旧值，尚未证明完整内核/当前版本/NIC可达性，不称生产漏洞。11项参考单元、空cwd公开小例、四类证据篡改拒绝及13依赖通过。两次枚举定位生成失败保留；两次小型C构建均成功且分支输出一致。

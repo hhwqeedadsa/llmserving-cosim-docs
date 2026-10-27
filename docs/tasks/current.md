@@ -13,6 +13,8 @@
 
 ## 当前范围和预算
 
+当前源码核查`in_progress`：[Hybrid共享QP与请求发布边界](../reviews/Hybrid共享QP与请求发布边界_20261027.md)，起点`2be34d4`。只核固定DeepEP/NCCL调用链与现有原生适配器；不重复原37条QP统计，不执行新研究条件。已定位跨通道同QP发布、DB/CPU proxy/free-flow差异，以及当前Submit后立即Pump不能表达预约后晚准备的边界。随后只核八份上游来源身份、五份平台源码身份和文档链接；单命令60秒/RSS1GiB/地址2GiB/新产物16MiB，失败保留、不扩限。平台功能与实验均未启动新阶段；零网络、构建、GPU、下载、依赖修改或push，整体目标继续`in_progress`。
+
 当前研究`completed`：[Hybrid跨通道slot与逆映射核查](../../experiments/hybrid_slot_audit/README.md)、[事前协议](../../experiments/hybrid_slot_audit/protocol.md)、[中文网页](../../experiments/hybrid_slot_audit/results/20261027/report.html)及[研究决定](../../experiments/hybrid_slot_audit/decision.md)。起点`0e04667`，平台`19670ba`、协议`40343b4`，执行前`453ddb3`补齐对齐常量来源。实际资源是入口GPU本地的按目标计数器、同入口跨通道共享，目标缓冲按入口分区，不是全部入口共用目标全局计数器。8公开plan和150人工/6真实前缀声明交错完成：六人工条件6/90/24/6/20/4种具体布局、各一种原token/贡献关联；真实2/4通道各3布局、各一种关联，每次634目标GPU逻辑副本。不能将动态slot本身当独有语义或用布局数换算加速。
 
 七份固定源码tree/blob/SHA、原选择独立副本/通道顺序、连续slot/分区地址/去重/元数据/list/结束核对及六类篡改拒绝通过；错误全目标计数器和旧逆映射负控制均拒绝。410成员/2,863,770B包逐成员hash恢复，复制源码/空cwd重算参考、156轨迹及index、核验和中文报告逐字节一致；不重跑公开plan或启动网络。SHA256 `26bb71f914af1800c77ac92ac6d64fc4fb9d0bc31479fa9676f6bb31e83899ef`，原件`runs/hybrid_slot_audit_20261027/`。含恢复共10主monitor结束、约8.317受监控秒、约77.5MiB分配产物，另留2MiB/10秒管理额度；保持600秒/256MiB、单命令60秒/RSS1GiB/地址2GiB及128MiB空闲。零新网络/构建/GPU/下载/平台依赖修改/push。

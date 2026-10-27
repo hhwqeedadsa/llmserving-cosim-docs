@@ -49,15 +49,32 @@ SwitchNode::SwitchNode(){
 	m_node_type = 1;
 	m_mmu = CreateObject<SwitchMmu>();
 	for (uint32_t i = 0; i < pCnt; i++)
-		for (uint32_t j = 0; j < pCnt; j++)
-			for (uint32_t k = 0; k < qCnt; k++)
-				m_bytes[i][j][k] = 0;
-	for (uint32_t i = 0; i < pCnt; i++)
 		m_txBytes[i] = 0;
 	for (uint32_t i = 0; i < pCnt; i++)
 		m_lastPktSize[i] = m_lastPktTs[i] = 0;
 	for (uint32_t i = 0; i < pCnt; i++)
 		m_u[i] = 0;
+}
+
+void SwitchNode::InitializeByteCounters(uint32_t ports){
+	NS_ABORT_MSG_IF(m_counterPorts != 0 || ports == 0 || ports > pCnt || ports < GetNDevices(),
+	                "invalid or repeated switch byte counter initialization");
+	m_bytes.assign(size_t(ports) * ports * qCnt, 0);
+	m_counterPorts = ports;
+}
+
+uint32_t& SwitchNode::ByteCounter(uint32_t inDev, uint32_t outDev, uint32_t qidx){
+	// Ordinary upstream callers retain the full legacy domain on first use.
+	if (m_counterPorts == 0) InitializeByteCounters(pCnt);
+	NS_ABORT_MSG_IF(inDev >= m_counterPorts || outDev >= m_counterPorts || qidx >= qCnt,
+	                "switch byte counter index out of bounds");
+	return m_bytes[(size_t(inDev) * m_counterPorts + outDev) * qCnt + qidx];
+}
+
+uint32_t SwitchNode::ReadByteCounter(uint32_t inDev, uint32_t outDev, uint32_t qidx) const {
+	NS_ABORT_MSG_IF(inDev >= m_counterPorts || outDev >= m_counterPorts || qidx >= qCnt,
+	                "switch byte counter read out of bounds");
+	return m_bytes[(size_t(inDev) * m_counterPorts + outDev) * qCnt + qidx];
 }
 
 int SwitchNode::GetOutDev(Ptr<const Packet> p, CustomHeader &ch){
@@ -140,7 +157,7 @@ void SwitchNode::SendToDev(Ptr<Packet>p, CustomHeader &ch){
 			}
 			CheckAndSendPfc(inDev, qIndex);
 		}
-		m_bytes[inDev][idx][qIndex] += p->GetSize();
+		ByteCounter(inDev, idx, qIndex) += p->GetSize();
 		m_devices[idx]->SwitchSend(qIndex, p, ch);
 	}else
 	{
@@ -211,10 +228,10 @@ void SwitchNode::SwitchNotifyDrop(uint32_t ifIndex, uint32_t qIndex, Ptr<const P
 	NS_ABORT_MSG_IF(!p->PeekPacketTag(tag), "queued switch data has no ingress tag");
 	const uint32_t inDev = tag.GetFlowId();
 	NS_ABORT_MSG_IF(inDev >= pCnt || ifIndex >= pCnt || qIndex >= qCnt ||
-	                m_bytes[inDev][ifIndex][qIndex] < p->GetSize(), "invalid switch drop accounting");
+	                ByteCounter(inDev, ifIndex, qIndex) < p->GetSize(), "invalid switch drop accounting");
 	m_mmu->RemoveFromIngressAdmission(inDev, qIndex, p->GetSize());
 	m_mmu->RemoveFromEgressAdmission(ifIndex, qIndex, p->GetSize());
-	m_bytes[inDev][ifIndex][qIndex] -= p->GetSize();
+	ByteCounter(inDev, ifIndex, qIndex) -= p->GetSize();
 	Ptr<QbbNetDevice> ingress = DynamicCast<QbbNetDevice>(m_devices[inDev]);
 	if (ingress->IsLinkUp()) CheckAndSendResume(inDev, qIndex);
 	else if (m_mmu->CheckShouldResume(inDev, qIndex)) m_mmu->SetResume(inDev, qIndex);
@@ -227,7 +244,7 @@ void SwitchNode::SwitchNotifyDequeue(uint32_t ifIndex, uint32_t qIndex, Ptr<Pack
 		uint32_t inDev = t.GetFlowId();
 		m_mmu->RemoveFromIngressAdmission(inDev, qIndex, p->GetSize());
 		m_mmu->RemoveFromEgressAdmission(ifIndex, qIndex, p->GetSize());
-		m_bytes[inDev][ifIndex][qIndex] -= p->GetSize();
+		ByteCounter(inDev, ifIndex, qIndex) -= p->GetSize();
 		if (m_ecnEnabled){
 			bool egressCongested = m_mmu->ShouldSendCN(ifIndex, qIndex);
 			if (egressCongested){

@@ -2,6 +2,7 @@
 #define SWITCH_NODE_H
 
 #include <unordered_map>
+#include <vector>
 #include <ns3/node.h>
 #include "qbb-net-device.h"
 #include "switch-mmu.h"
@@ -18,7 +19,10 @@ class SwitchNode : public Node{
 	std::unordered_map<uint32_t, std::vector<int> > m_rtTable; // map from ip address (u32) to possible ECMP port (index of dev)
 
 	// monitor of PFC
-	uint32_t m_bytes[pCnt][pCnt][qCnt]; // m_bytes[inDev][outDev][qidx] is the bytes from inDev enqueued for outDev at qidx
+	// Exact ingress/egress/priority attribution, dimensioned before traffic.
+	std::vector<uint32_t> m_bytes;
+	uint32_t m_counterPorts = 0;
+	uint32_t& ByteCounter(uint32_t inDev, uint32_t outDev, uint32_t qidx);
 	
 	uint64_t m_txBytes[pCnt]; // counter of tx bytes
 
@@ -44,6 +48,10 @@ public:
 
 	static TypeId GetTypeId (void);
 	SwitchNode();
+	void InitializeByteCounters(uint32_t ports);
+	uint32_t ByteCounterSlots() const { return m_counterPorts; }
+	uint64_t ByteCounterStorageBytes() const { return uint64_t(m_bytes.size()) * sizeof(uint32_t); }
+	uint32_t ReadByteCounter(uint32_t inDev, uint32_t outDev, uint32_t qidx) const;
 	void SetEcmpSeed(uint32_t seed);
 	void AddTableEntry(Ipv4Address &dstAddr, uint32_t intf_idx);
 	void ClearTable();

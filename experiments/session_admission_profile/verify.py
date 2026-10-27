@@ -51,6 +51,12 @@ def scan(run, case, profile=None, summary=None):
     for path in ('scaleout_transactions.py', 'scaleout_streams.py'):
         fn, = [r for r in profile['functions'] if r['path'] == 'python/moe_ub_cosim/'+path and r['function'] == 'validate']
         need(fn['calls'] == len(prefixes) and fn['primitive_calls'] == fn['calls'], 'profile call count differs')
+    main, = [r for r in profile['functions'] if r['path'] == 'python/moe_ub_cosim/scaleout_transactions.py' and r['function'] == 'validate']
+    static, = [r for r in profile['functions'] if r['path'] == 'python/moe_ub_cosim/scaleout_streams.py' and r['function'] == 'validate']
+    need(all(0 <= r['primitive_calls'] <= r['calls'] and 0 <= r['exclusive_wall_seconds'] <= r['cumulative_wall_seconds']
+             for r in profile['functions']), 'invalid profile counts or intervals')
+    need(summary['static_streams_validation_fraction'] == static['cumulative_wall_seconds']/main['cumulative_wall_seconds'],
+         'static profile fraction differs')
     need(all(r['copy_cpu_ns'] >= 0 and r['copy_wall_ns'] >= 0 and r['profiled_validation_cpu_ns'] >= 0 and
              r['profiled_validation_wall_ns'] >= 0 for r in profile['prefixes']), 'negative measurement')
     roots = {}
@@ -68,8 +74,9 @@ def scan(run, case, profile=None, summary=None):
         per_history_loop_pairs_enumerated=pair_visits, original_cpu_ns=sum(roots.values()), passed=True)
 
 
-def source_checks(run):
-    need(all(sha(run/name) == expected for name, expected in load(run/'inputs.json')['files'].items()), 'source hash changed')
+def source_checks(run, inputs=None):
+    inputs = load(run/'inputs.json') if inputs is None else inputs
+    need(all(sha(run/name) == expected for name, expected in inputs['files'].items()), 'source hash changed')
 
 
 def verify(run):
@@ -101,8 +108,10 @@ def verify(run):
     bad_summary['original_total_cpu_ns'] += 1
     reject('old CPU arithmetic', lambda: scan(run, case, summary=bad_summary))
     # Check a deliberately wrong expected identity without mutating source data.
-    observed, expected = next(iter(load(run/'inputs.json')['files'].items()))
-    reject('source hash', lambda: need(sha(run/observed) == '0'*64, 'source hash changed'))
+    bad_inputs = load(run/'inputs.json')
+    observed = next(iter(bad_inputs['files']))
+    bad_inputs['files'][observed] = '0'*64
+    reject('source hash', lambda: source_checks(run, bad_inputs))
     return dict(passed=True, cases=checks, rejected_corruption_classes=rejected,
         independent_prefix_scan=True, independent_original_CPU_roots=True, new_profiles=0, new_networks=0)
 

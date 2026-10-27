@@ -21,16 +21,32 @@ def report(stage, output):
         for method, choice in prediction['choices'].items():
             evaluations[method] = dict(**choice, actual_best=[n for n in CONDITIONS if times[n] == best],
                 regret_fraction=(times[choice['selected']]-best)/best,
+                maximum_absolute_error_ns=max(abs(prediction['predictions'][n]['methods'][method]['estimated_application_ns']-times[n])
+                                              for n in CONDITIONS),
                 errors={n: (prediction['predictions'][n]['methods'][method]['estimated_application_ns']-times[n])/times[n]
                         for n in CONDITIONS})
         profiles[profile] = dict(expert_durations_ns=prediction['expert_durations_ns'], metrics=metrics,
             evaluations=evaluations, network_improvement_fraction={n: (times['baseline']-times[n])/times['baseline']
-            for n in CONDITIONS}, expert_max_fraction={n: max(prediction['expert_durations_ns'])/times[n] for n in CONDITIONS})
+            for n in CONDITIONS}, core_absolute_improvement_ns=times['baseline']-times['core'],
+            expert_max_fraction={n: max(prediction['expert_durations_ns'])/times[n] for n in CONDITIONS})
     contrasts = {}
     for suffix in ('1', '10'):
         balanced, routed = profiles['balanced'+suffix], profiles['routed'+suffix]
-        contrasts[suffix] = {n: dict(application_increase_ns=routed['metrics'][n]['application_ns']-balanced['metrics'][n]['application_ns'],
-            max_compute_increase_ns=max(routed['expert_durations_ns'])-max(balanced['expert_durations_ns'])) for n in CONDITIONS}
+        contrasts[suffix] = {}
+        for name in CONDITIONS:
+            balanced_experts = verification['audits']['balanced'+suffix+'-'+name]['expert']['ranks']
+            routed_experts = verification['audits']['routed'+suffix+'-'+name]['expert']['ranks']
+            assert [r['start_ns'] for r in balanced_experts] == [r['start_ns'] for r in routed_experts]
+            assert all(r['queued_ns'] == 0 for r in balanced_experts+routed_experts)
+            application_delta = routed['metrics'][name]['application_ns']-balanced['metrics'][name]['application_ns']
+            compute_delta = max(routed['expert_durations_ns'])-max(balanced['expert_durations_ns'])
+            completion_delta = max(r['completed_ns'] for r in routed_experts)-max(r['completed_ns'] for r in balanced_experts)
+            contrasts[suffix][name] = dict(application_increase_ns=application_delta, max_compute_increase_ns=compute_delta,
+                latest_expert_completion_increase_ns=completion_delta, latest_rank_change_offset_ns=completion_delta-compute_delta,
+                post_last_expert_tail_change_ns=application_delta-completion_delta,
+                balanced_latest_rank=max(balanced_experts, key=lambda r: r['completed_ns'])['rank'],
+                routed_latest_rank=max(routed_experts, key=lambda r: r['completed_ns'])['rank'],
+                dispatch_and_expert_starts_unchanged=True)
     gap = any(p['evaluations']['link_phase']['regret_fraction'] > .05 for p in profiles.values())
     all_link_choices_correct = all(p['evaluations']['link_phase']['regret_fraction'] == 0 for p in profiles.values())
     summary = dict(profiles=profiles, paired_contrasts=contrasts,
@@ -52,21 +68,24 @@ def report(stage, output):
         for name, metric in row['metrics'].items():
             lines.append(f"| {profile} | {durations} | {name} | {metric['application_ns']/1000:.3f} | {100*row['network_improvement_fraction'][name]:.2f}% | {metric['all_events_ns']/1000:.3f} | {metric['drain_ns']/1000:.3f} |")
     lines += ['', 'baseline=接入100G/核心25G；access=200G/25G；core=100G/50G。传播均1μs。升级资源不同，上表是配置敏感性，不是同成本算法收益、可消除上界或商业ROI。', '',
-        '## 简单模型是否会选错', '', '| 条件 | 模型 | 选择 | 实际最优 | 后悔值 | 最大绝对相对时延误差 |',
-        '|---|---|---|---|---:|---:|']
+        f"核心升级节省的绝对时间为{min(r['core_absolute_improvement_ns'] for r in profiles.values())/1000:.3f}～{max(r['core_absolute_improvement_ns'] for r in profiles.values())/1000:.3f}μs，基本保持。相对改善24.02%～7.78%的差别主要来自计算增加后总时延分母变大。", '',
+        '## 简单模型是否会选错', '', '| 条件 | 模型 | 选择 | 实际最优 | 后悔值 | 最大绝对相对时延误差 | 最大绝对时延误差 μs |',
+        '|---|---|---|---|---:|---:|---:|']
     for profile, row in profiles.items():
         for method, ev in row['evaluations'].items():
-            lines.append(f"| {profile} | {method} | {ev['selected']} | {','.join(ev['actual_best'])} | {100*ev['regret_fraction']:.2f}% | {100*max(map(abs,ev['errors'].values())):.2f}% |")
+            lines.append(f"| {profile} | {method} | {ev['selected']} | {','.join(ev['actual_best'])} | {100*ev['regret_fraction']:.2f}% | {100*max(map(abs,ev['errors'].values())):.2f}% | {ev['maximum_absolute_error_ns']/1000:.3f} |")
     lines += ['', '所有参考都知道专家耗时向量最大值。volume只计端点总数据字节；endpoint_phase加入七阶段/帧/传播；nic_phase拆到绑定网卡；link_phase进一步保留共享有向链路。后三者仍是普通服务量近似，不能把排序正确当时延精确。完整图保留全部本地工作、依赖和基线动态绑定，不含参考时刻。', '',
+        '逐链路参考绝对误差仍约11.3～11.7μs；长计算下相对误差减小主要来自分母增大，不能称预测能力提高。', '',
         '## 计算与网络如何共同影响结果', '',
         '真实选择对应四个专家分区的贡献数为28/10/10/16。均分和按路由条件总计算耗时相同，但最长单卡耗时不同；线性贡献计时只是敏感性假设，不能当作真实GPU的专家热点计算成本。', '',
-        '| 系数 ns/贡献 | 网络 | 按路由相对均分多花 μs | 最长计算增加 μs | 差额 μs |',
-        '|---|---|---:|---:|---:|']
+        '| 系数 ns/贡献 | 网络 | 应用增加 μs | 最长计算增加 μs | 最晚专家完成增加 μs | 完成者变化偏移 μs | 后续尾段变化 μs |',
+        '|---|---|---:|---:|---:|---:|---:|']
     for suffix, rows in contrasts.items():
         for name, row in rows.items():
             delta, maximum = row['application_increase_ns'], row['max_compute_increase_ns']
-            lines.append(f'| {int(suffix)*1000} | {name} | {delta/1000:.3f} | {maximum/1000:.3f} | {(delta-maximum)/1000:.3f} |')
-    lines += ['', '差额只能提示就绪顺序/通信重叠是否改变，不能直接归为拥塞，也不等于网络优化收益。计算增加本来就会抬高完成时间；真正的研究问题是能否在相同资源和正确性下，比已有强方法减少关键等待。', '',
+            lines.append(f"| {int(suffix)*1000} | {name} | {delta/1000:.3f} | {maximum/1000:.3f} | {row['latest_expert_completion_increase_ns']/1000:.3f} | {row['latest_rank_change_offset_ns']/1000:.3f} | {row['post_last_expert_tail_change_ns']/1000:.3f} |")
+    lines += ['', '配对Dispatch与专家开始时刻完全相同，没有本地专家排队。均分条件最后完成的是rank3，按路由条件变为rank0；开始时刻不同，使最晚完成的增量略小于耗时向量最大值的增量。表中把差额精确分成这项偏移与最后专家完成后的尾段变化；尾段包含控制屏障、通信等，不能单独归为拥塞或称可消除收益。', '',
+        '计算增加本来就会抬高完成时间；真正的研究问题是能否在相同资源和正确性下，比已有强方法减少关键等待。', '',
         '## 证据与后续取舍', '',
         f"独立审计{len(verification['audits'])}组实际物理包、NIC路径、串行传播、帧负载与队列积分；逐卡核对专家工作和Dispatch/Combine依赖。拒绝{len(verification['rejected_corruptions'])}类篡改，移除truth后的四份预测逐字节一致。", '',
         '此次没有新调度或网络算法，不证明两项论文创新。若逐链路参考已足够选对，不能继续靠更多同类小场景把输入摘要包装成创新；后续应先确定实际配置决策缺口或可省的宿主重复处理，并验证成本、误差和留出泛化。', '',
@@ -96,7 +115,7 @@ def report(stage, output):
     labels = ('配置变化的实际结果', '预测方法与误选代价', '均分与按路由计算的差别')
     for label, table in zip(labels, rendered):
         html += '<section class="card"><h2>'+label+'</h2>'+table+'</section>'
-    html += '<section class="card"><h2>这些数字说明什么</h2><p>核心链路升级的改善是本配置内的参数收益。接入升级和核心升级增加的资源不同，不能换算为同成本收益或商业回报。</p><p>按路由计算与均分计算保持总量相同，但最长单卡耗时不同。线性计时是敏感性假设，不是真实GPU模型。普通模型已知道最长耗时；只有它仍产生有代价的误选，才值得研究更细的表示。</p><p>完整图读取各条件baseline的实际绑定后冻结，不含参考时刻；所有通信仍在持续网络内由真实完成回调推进。它能表达这些行为，本身不构成新的MoE创新。</p></section>'
+    html += '<section class="card"><h2>这些数字说明什么</h2><p>核心升级节省的绝对时间约30.34～30.39μs，四条件基本保持。相对改善24.02%～7.78%的差别主要来自计算增加后分母变大；逐链路相对误差变小也不能称预测能力提高，其绝对误差仍约11.3～11.7μs。</p><p>这些是不同网络资源配置的参数收益，不能换算为同成本算法收益或商业回报。按路由与均分条件总计算量相同、最长单卡耗时不同；线性计时是假设，不是真实GPU模型。</p><p>配对Dispatch与计算开始时刻相同，没有本地专家排队；最后完成者由rank3变为rank0。表中将差额分成完成者变化与后续尾段变化，不把尾段差值直接当拥塞或可消除收益。</p><p>完整图读取各条件baseline的实际绑定后冻结，不含参考时刻；所有通信仍在持续网络内由真实完成回调推进。它能表达这些行为，本身不构成新的MoE创新。</p></section>'
     html += '<p class="note">数据与来源、限制、因果核验见同目录 report.md / summary.json / verification.json。两项论文创新仍需独立方法和强基线证据。</p></html>'
     (output/'report.html').write_text(html+'\n')
 

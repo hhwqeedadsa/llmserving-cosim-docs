@@ -23,4 +23,16 @@ PYTHONPATH=python:. python3 -B -m experiments.readiness_network_choice.report \
   --output runs/readiness_network_choice_new/stage/report
 ```
 
-每条命令必须保持协议的host_probe监控与累计预算，不能只限制单次网络。保存原始来源、prediction/input identity、execution账目、完整捕获和失败；原始路由不提交Git。结果和归档恢复入口在本轮完成后链接，不把未运行命令当完成证据。
+每条命令必须保持协议的host_probe监控与累计预算，不能只限制单次网络。保存原始来源、prediction/input identity、execution账目、完整捕获和失败；原始路由不提交Git。
+
+2026-10-27结果：24次网络完成、12组现代/完整图完整行为等价；四种计算条件下逐链路参考均选core，后悔值0。端点/单NIC参考仍错选access，后悔值8.29%～31.03%，不能用这些弱参考支持新语义创新。核心升级绝对节省30.344～30.387μs，相对改善7.78%～24.02%；资源不同、计算声明，不能称同成本优化或GPU收益。逐链路绝对时延误差仍11.319～11.711μs，计算变长只稀释相对误差。
+
+结果：[网页](results/20261027/report.html)、[解释与全部对照](results/20261027/report.md)、[指标](results/20261027/summary.json)、[独立核验](results/20261027/verification.json)、[研究取舍](decision.md)。原件与归档位于`runs/readiness_network_choice_20261027/`。两项主创新仍未成立，不自动增加网络条件。
+
+从逐成员hash归档复制源码、在空cwd离线恢复验证和报告，不执行网络；目标目录必须不存在，仍遵守原预算：
+
+```bash
+PYTHONPATH=python:. python3 -B -m experiments.readiness_network_choice.checkpoint restore \
+  --archive runs/readiness_network_choice_20261027/checkpoint.tar.gz \
+  --output runs/readiness_network_choice_recovery_new
+```

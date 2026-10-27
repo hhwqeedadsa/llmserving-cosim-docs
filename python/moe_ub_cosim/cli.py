@@ -98,6 +98,9 @@ def parser():
     rt.add_argument('--config', type=Path, required=True)
     rt.add_argument('--backend', type=Path, required=True, help='transaction_probe executable from rdma-build')
     rt.add_argument('--output', type=Path, required=True, help='New bounded result directory')
+    rc = sc.add_parser('rdma-rc-probe', help='One-QP WRITE/fetch-add packets and Atomic ACK on native fabric; fixed rate, zero ICRC placeholder, no MoE/NIC calibration')
+    for name in ('topology','protocol','config','backend','output'):
+        rc.add_argument('--'+name,type=Path,required=True)
     session = sc.add_parser('rdma-transaction-session', help='Submit v4/v5 work after actual native callbacks; optional NIC registrations/local views, v5 sparse/prefix, same-server peer copy and explicit self-peer service; not modern GIN/GPU timing')
     for name in ('topology', 'protocol', 'config', 'backend', 'output'):
         session.add_argument('--'+name, type=Path, required=True)
@@ -210,6 +213,9 @@ def main(argv=None):
             elif args.scaleout_command == 'rdma-transaction-probe':
                 from .scaleout_transactions import probe
                 value = probe(args.topology, args.protocol, args.config, args.backend, args.output)
+            elif args.scaleout_command == 'rdma-rc-probe':
+                from .rc_packet import probe
+                value = probe(args.topology,args.protocol,args.config,args.backend,args.output)
             elif args.scaleout_command == 'rdma-transaction-session':
                 from .transaction_session import run
                 value = run(args.topology, args.protocol, args.config, args.backend, args.output,

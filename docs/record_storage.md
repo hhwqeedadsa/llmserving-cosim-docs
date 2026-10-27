@@ -1,5 +1,9 @@
 # 观测记录与存储格式
 
+独立RC的丢包数在`rc_reference.drops`，对应其物理错误模型与逐跳`drop`记录；通用`fault_drops`仍专指legacy故障规则，两者不能混用。
+
+独立RC probe的`result.json.rc_reference`保存`operations`源完成时刻/原子旧值、`target_effects`逐目标副作用、`memory_hex`最终注册区、`endpoint_events.body_hex`实际请求/响应体及`physical_packets.packet_hex`逐跳完整模型包。时间单位均为ns；物理发送、接收和丢弃分别为`tx/rx/drop`，`packet_uid`仅是本次仿真的关联记录，不在包中。`physical_packets`包含2字节PPP与IPv4/UDP/BTH/扩展/填充/ICRC占位；不含完整以太网开销。Fabric端口的UDP载荷扣除RC扩展、填充及ICRC后才是数据字节；原子操作数和返回旧值位于扩展中。输出及资源字段见[公开小例](../examples/rc_packet_probe/README.md)。
+
 启用 `peer_copy_model` 时，peer local_work 的 `duration_ns=0`，`duration_source=topology_intra_host_crossbar/1`，实际耗时为 `completed_ns-start_ns`。`transactions.local_memory_events` 的 source/target 分别保留 owner；目标只在 committed 时改变。机内流以 `2147483648+local_node_id` 记录在 messages，`completion_kind=local_data_ready_no_RDMA_ACK`；兼容字段 ack_ns/ack_callbacks 表示本地数据就绪，不代表物理 ACK。`intra_host_links` 统计共享端口字节、繁忙和最大等待，peer 不计入 transport.source_packets。见[小例](../examples/scaleout_peer_copy/README.md)。
 
 

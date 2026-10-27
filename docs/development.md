@@ -81,7 +81,7 @@
 | ASTRA-sim | LLMServingSim | `baoy21/astra-sim` 的 `cosim` 分支保存项目修改 |
 | Chakra、fmt、spdlog | ASTRA-sim | 原上游固定提交 |
 | analytical 内存与网络后端、csg-htsim | ASTRA-sim | 原上游固定提交 |
-| 原生 ns-3 后端 | ASTRA-sim | 固定上游基线及本地交换机关闭、NIC唤醒、物理地址绑定补丁；只链接独立Scale-Out入口 |
+| 原生 ns-3 后端 | ASTRA-sim | 固定上游基线及本地交换机关闭、NIC唤醒、物理地址绑定、默认关闭RC包解析补丁；只链接独立Scale-Out入口 |
 | googletest、yaml-cpp | analytical 网络后端 | 原上游固定提交 |
 | ns-3-ub-tools | ns-3-UB | GitCode 配套仓库固定提交 |
 

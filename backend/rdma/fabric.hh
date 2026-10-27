@@ -22,6 +22,7 @@ Json ReadJson(const std::string& path);
 // An independent native RDMA network. No ASTRA execution or UB object lives here.
 class Fabric {
   friend class PersistentStreams;
+  friend class RcPacketProbe;
  public:
   using Done = std::function<void()>;
   Fabric(const Json& topology, const Json& config);

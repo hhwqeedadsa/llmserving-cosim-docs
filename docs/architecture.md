@@ -1,5 +1,7 @@
 # 系统架构与执行过程
 
+独立`rdma-rc-probe`将WRITE/原子请求和Atomic ACK放在同一原生`Fabric`时钟与物理队列中：目标从收到的操作字段/字节更新内存，源从实际反馈完成，有限重放缓存防止重复原子副作用。该入口只检查单QP顺序WQE；没有将MRT1、modern控制器或LLMServingSim连接到RC路径。固定速率调度、线格式近似及公开命令见[操作包小例](../examples/rc_packet_probe/README.md)。
+
 显式 peer-copy 事务保留源 GPU 串行 lane，准入时保护源读/目标写，开始时捕获字节，经 `Fabric::SendPeerCopy` 复用 `SendLocal` 的分块机内端口。实际交付先提交窗口并释放保护，再发出 local 完成通知；网络接收可触发该转发，转发完成又可触发后续持久 RDMA。纯 stream 入口仍拒绝机内旁路，混合模式的远端事务始终走物理网络。详见[配置与范围](../examples/scaleout_peer_copy/README.md)。
 
 

@@ -1,5 +1,7 @@
 # 模型依据与适用范围
 
+新增[RC操作包小例](../examples/rc_packet_probe/README.md)将独立参考中的有限WRITE/fetch-add分支接入同一原生ns-3网络，用实际字节和Atomic ACK驱动目标效应/源完成。其适用范围为一个QP、一次一项WQE、固定速率、ICRC占位；不是完整RXE、RoCE硬件或现代MoE基线，不升级旧MRT1结果的证据等级。逐实际包重放独立Python参考的验收见[操作包核验](../fixtures/rc_packet_probe/README.md)。
+
 新增[独立RC操作状态参考](../examples/rc_operation_reference/README.md)支持有限WRITE/fetch-add、目标逐包副作用、携旧值Atomic ACK、有限重放与源完成。它未接入ns-3或MoE入口，没有时钟和NIC成本；`atomic_return_required/1`在普通ACK恰好覆盖待完成原子时显式拒绝推定，和所提取Linux v6.12 RXE分支存在已记录差异。原函数只在明确替代环境中执行，不等于完整RXE或硬件复现，见[验收边界](../fixtures/rc_operation_reference/README.md)。旧MRT1仍是功能载体，不能因新增独立参考而升级旧结果的精度。
 
 现代原生v2输入支持按调用/rank显式声明专家阶段耗时，v1固定成本继续保留。该接口检验的是实际Dispatch完成→专家本地工作→真实完成回调→Combine的因果关系；不会从专家token数或GPU名称自动预测计算成本，`source`说明也不构成实机校准。使用与限制见[专家成本矩阵](../examples/modern_deepep_native/README.md#按调用和rank修改专家计算耗时)。

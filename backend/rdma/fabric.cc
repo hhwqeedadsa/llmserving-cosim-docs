@@ -455,7 +455,7 @@ void Fabric::PacketEvent(unsigned event,unsigned node,unsigned port,Ptr<const Pa
   packet_events_.push_back({Now(),node,port,event,static_cast<int64_t>(p->GetUid()),PacketFlow(p),
       h.l3Prot,sequence,p->GetSize(),h.GetIpv4EcnBits(),
       ports_.at(node).at(port).device->GetQueue()->GetNBytesTotal(),
-      h.l3Prot==0x11?static_cast<int64_t>(p->GetSize()-h.GetSerializedSize()):0});
+      h.l3Prot==0x11?static_cast<int64_t>(p->GetSize()-h.GetSerializedSize()-(h.roce.present?h.roce.pad+4:0)):0});
   if(capture_wire_headers_) {
     const bool data=h.l3Prot==0x11;
     const bool ack=h.l3Prot==0xfc || h.l3Prot==0xfd;
@@ -601,8 +601,8 @@ void Fabric::TxTrace(Fabric* f,unsigned node,unsigned port,Ptr<const Packet> p) 
   f->PacketEvent(0,node,port,p);
   auto& row=f->ports_.at(node).at(port); const auto h=Header(p); const uint64_t size=p->GetSize();
   row.wire+=size;
-  if(h.l3Prot==0x11)row.data+=size;else row.control+=size;
-  if(h.l3Prot!=0x11)return;
+  if(h.l3Prot==0x11 && !(h.roce.present && (h.roce.opcode==0x11 || h.roce.opcode==0x12)))row.data+=size;else row.control+=size;
+  if(h.l3Prot!=0x11 || (h.roce.present && (h.roce.opcode==0x11 || h.roce.opcode==0x12)))return;
   ++row.packets;
   auto it=f->port_to_flow_.find({h.sip,h.dip,h.udp.sport}); if(it==f->port_to_flow_.end())return;
   auto& flow=f->flows_.at(it->second);

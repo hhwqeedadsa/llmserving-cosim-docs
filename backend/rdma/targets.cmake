@@ -9,6 +9,14 @@ target_include_directories(moe-rdma-fabric PUBLIC "${CMAKE_CURRENT_LIST_DIR}" "$
 target_link_libraries(moe-rdma-fabric PUBLIC ${libcore} ${libnetwork} ${libinternet} ${libpoint-to-point} ${libapplications})
 set_target_properties(moe-rdma-fabric PROPERTIES CXX_STANDARD 20 CXX_STANDARD_REQUIRED ON)
 build_exec(
+  EXECNAME moe-rdma-rc-probe
+  SOURCE_FILES "${CMAKE_CURRENT_LIST_DIR}/rc_packet_probe.cc"
+  LIBRARIES_TO_LINK moe-rdma-fabric ${libcore} ${libnetwork} ${libinternet} ${libpoint-to-point} ${libapplications}
+  EXECUTABLE_DIRECTORY_PATH "${CMAKE_OUTPUT_DIRECTORY}/moe-rdma"
+  IGNORE_PCH)
+target_include_directories(moe-rdma-rc-probe PRIVATE "${CMAKE_CURRENT_LIST_DIR}" "${MOE_ASTRA}/extern/helper")
+set_target_properties(moe-rdma-rc-probe PROPERTIES CXX_STANDARD 20 CXX_STANDARD_REQUIRED ON)
+build_exec(
   EXECNAME moe-rdma-probe
   SOURCE_FILES "${CMAKE_CURRENT_LIST_DIR}/probe.cc"
   LIBRARIES_TO_LINK moe-rdma-fabric ${libcore} ${libnetwork} ${libinternet} ${libpoint-to-point} ${libapplications}
@@ -53,4 +61,4 @@ build_exec(
 target_include_directories(moe-rdma-service PRIVATE "${CMAKE_CURRENT_LIST_DIR}" "${MOE_ASTRA}/extern/helper")
 set_target_properties(moe-rdma-service PROPERTIES CXX_STANDARD 20 CXX_STANDARD_REQUIRED ON)
 file(GENERATE OUTPUT "${CMAKE_BINARY_DIR}/moe-rdma-targets.json" CONTENT
-  "{\"probe\":\"$<TARGET_FILE:moe-rdma-probe>\",\"stream_probe\":\"$<TARGET_FILE:moe-rdma-stream-probe>\",\"transaction_probe\":\"$<TARGET_FILE:moe-rdma-transaction-probe>\",\"transaction_session\":\"$<TARGET_FILE:moe-rdma-transaction-session>\",\"service\":\"$<TARGET_FILE:moe-rdma-service>\",\"ns3_core\":\"$<TARGET_FILE:ns3::libcore>\"}\n")
+  "{\"probe\":\"$<TARGET_FILE:moe-rdma-probe>\",\"rc_probe\":\"$<TARGET_FILE:moe-rdma-rc-probe>\",\"stream_probe\":\"$<TARGET_FILE:moe-rdma-stream-probe>\",\"transaction_probe\":\"$<TARGET_FILE:moe-rdma-transaction-probe>\",\"transaction_session\":\"$<TARGET_FILE:moe-rdma-transaction-session>\",\"service\":\"$<TARGET_FILE:moe-rdma-service>\",\"ns3_core\":\"$<TARGET_FILE:ns3::libcore>\"}\n")

@@ -13,6 +13,8 @@
 
 ## 当前范围和预算
 
+当前原生构建身份修复`in_progress`：[独立规范](native_build_identity_spec.md)，起点`b27f008`。为多NIC实现核查公开构建时发现，Python仍固定`6088174`而父gitlink/锁文件已为`68a07f7`，正确的干净依赖被误拒绝。先统一预期身份并独立验收公开构建；不改依赖、不借此放行多NIC。累计900秒/1GiB，配置60秒、编译300秒/两并发，最多一个公开小网络；完整边界见规范。两项主创新未成立，整体目标继续进行。
+
 当前持久连接NIC准入修复 `completed`：[独立范围](stream_nic_preflight_spec.md)、[验收](../../fixtures/stream_nic_preflight/README.md)，起点`2180762`、规范`10e71d1`。最小双rail单plane有两条6跳路径，旧stream/modern校验接受，而固定原生Open要求正反向唯一NIC；旧原生失败未实际执行，原件与源码推断边界保留。新增纯最短跳准入按目的/plane分组、只保留当前距离表，三个公共入口均在创建运行输出/调用marker后端前拒绝；保留双plane、交换机ECMP和多物理NIC但唯一最短路。没有修改路由/包/计时/原生或依赖，也未实现真正同plane多rail绑定。
 
 8项新单元条件含64图/128方向独立路径集合、128次边顺序核对；69项受影响回归、4条公共CLI/3次拒绝、13依赖检查通过。166成员包逐成员核hash，复制Python源码/空cwd复核公开准入结论相同、生成拓扑逐字节一致；这都是零新网络的功能边界证据，详见[恢复](../../fixtures/stream_nic_preflight/recovery.json)、[收尾](../../fixtures/stream_nic_preflight/closeout.json)。累计受监控3.434秒/约2.294MiB分配产物，保持300秒/128MiB及单命令上限，无构建/下载/GPU/push。

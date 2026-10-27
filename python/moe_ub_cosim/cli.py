@@ -116,7 +116,7 @@ def parser():
         causal.add_argument('--'+name, type=Path, required=True)
     rs = sc.add_parser('rdma-stream-probe', help='Execute persistent native byte writes; optional source_rate_capture or dcqcn_reference; not GIN/GPU visibility or hardware calibration')
     rs.add_argument('--topology', type=Path, required=True, help='Generated physical RDMA topology directory; no intra-host bypass')
-    rs.add_argument('--protocol', type=Path, required=True, help='Native DCQCN, ACK interval 1; optional switch_links/1; transport_recovery belongs in work config, legacy recovery/admission excluded')
+    rs.add_argument('--protocol', type=Path, required=True, help='Native DCQCN, ACK interval 1; optional switch_links/1 and switch_counter_storage=legacy_dense|port_dense (default legacy_dense); transport_recovery belongs in work config, legacy recovery/admission excluded')
     rs.add_argument('--config', type=Path, required=True, help='NIC-bound causal work; v1 fixed 16/64 counts, v2/v3 up to 128/8192, v4 up to 4096 streams/65536 work with explicit link-transmission budget')
     rs.add_argument('--backend', type=Path, required=True, help='stream_probe executable returned by rdma-build')
     rs.add_argument('--output', type=Path, required=True, help='New result directory; maximum 60s/64MiB artifacts; v1-v3 RSS capped at 1GiB, v4 uses protocol host limits')

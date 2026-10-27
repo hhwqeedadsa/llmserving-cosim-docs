@@ -35,8 +35,10 @@ def checked_json(path, maximum):
 def validate_protocol(c):
     fields(c, 'schema_version cc_mode payload_bytes chunk_bytes ack_interval_bytes base_rtt_ns '
            'switch_buffer_bytes ecn_by_rate seed' + (' limits' if c.get('schema_version') == 'moe-scaleout-rdma/2' else '')
-           + ''.join(' '+key for key in ('drop_once','faults','packet_capture','admission','lifecycle_capture','queue_metrics','recovery','mmu_snapshot','link_failures','local_failover') if key in c), 'RDMA protocol')
+           + ''.join(' '+key for key in ('drop_once','faults','packet_capture','admission','lifecycle_capture','queue_metrics','recovery','mmu_snapshot','link_failures','local_failover','switch_counter_storage') if key in c), 'RDMA protocol')
     budget=limits(c)
+    require(c.get('switch_counter_storage','legacy_dense') in ('legacy_dense','port_dense'),
+            'switch_counter_storage must be legacy_dense or port_dense')
     from .scaleout_admission import validate_options
     validate_options(c)
     from .scaleout_mmu import validate_options as validate_mmu_options
@@ -210,8 +212,15 @@ def validate_probe(t, c, batch, *, match_faults=True, max_probe_messages=128):
     nodes = t['nodes']; gpus = {n['id'] for n in nodes if n['kind'] == 'gpu'}
     require(len(nodes)-len(gpus) <= budget['max_switches'] and len(t['links']) <= budget['max_links'], 'native graph budget exceeded')
     require(0 < len(gpus) <= budget['max_gpus'], 'GPU budget exceeded')
-    require((len(nodes)-len(gpus))*1025*1025*8*4 + 268435456 < budget['rss_bytes'],
-            'fixed switch counters alone exceed declared RSS budget')
+    if c.get('switch_counter_storage','legacy_dense') == 'port_dense':
+        degree=[0]*len(nodes)
+        for link in t['links']:
+            degree[link['src']]+=1;degree[link['dst']]+=1
+        counter_bytes=sum((degree[n['id']]+1)**2*8*4 for n in nodes if n['kind']!='gpu')
+    else:
+        counter_bytes=(len(nodes)-len(gpus))*1025*1025*8*4
+    require(counter_bytes + 268435456 < budget['rss_bytes'],
+            'switch counters alone exceed declared RSS budget')
     require(all(str(l['rate_bps']) in c['ecn_by_rate'] for l in t['links']), 'missing ECN threshold for link rate')
     from .scaleout_fabric_buffers import require_buffers
     require_buffers(t,c)

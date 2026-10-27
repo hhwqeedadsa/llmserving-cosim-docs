@@ -1,5 +1,7 @@
 # 观测记录与存储格式
 
+原生协议显式指定`switch_counter_storage`时，结果同名对象保存`mode/payload_bytes/switches/nonzero_columns/scope`。各交换机的`actual_device_slots`包含slot0，`storage_slots`为实际或1025，`payload_bytes=storage_slots²×8×4`；`nonzero`逐行是`[ingress,egress,priority,bytes]`，按三个索引升序，只省略零值。优先级0保留上游累计只加不减的定义，不是末态队列占用。其余优先级保留入队、出队和丢弃核对。载荷字节不含容器、MMU、路由、QP和包，不能当成完整RSS；缺省协议不新增此对象。用法见[计数存储示例](../examples/scaleout_counter_storage/README.md)。
+
 独立RC的丢包数在`rc_reference.drops`，对应其物理错误模型与逐跳`drop`记录；通用`fault_drops`仍专指legacy故障规则，两者不能混用。
 
 独立RC probe的`result.json.rc_reference`保存`operations`源完成时刻/原子旧值、`target_effects`逐目标副作用、`memory_hex`最终注册区、`endpoint_events.body_hex`实际请求/响应体及`physical_packets.packet_hex`逐跳完整模型包。时间单位均为ns；物理发送、接收和丢弃分别为`tx/rx/drop`，`packet_uid`仅是本次仿真的关联记录，不在包中。`physical_packets`包含2字节PPP与IPv4/UDP/BTH/扩展/填充/ICRC占位；不含完整以太网开销。Fabric端口的UDP载荷扣除RC扩展、填充及ICRC后才是数据字节；原子操作数和返回旧值位于扩展中。输出及资源字段见[公开小例](../examples/rc_packet_probe/README.md)。

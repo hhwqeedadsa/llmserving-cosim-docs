@@ -70,6 +70,8 @@ moe-ub build --build-dir build/default --jobs 2
 
 ## 运行小例
 
+原生Scale-Out协议可显式设置`switch_counter_storage=port_dense`降低交换机计数矩阵内存，默认仍为`legacy_dense`。这是存储方式选择，包和排队行为保留；需当前原生构建，配置与便携示例见[计数存储](../examples/scaleout_counter_storage/README.md)。
+
 修改非UB拓扑的带宽或延迟后，先用`scaleout rdma-preflight --topology <拓扑目录> --protocol <协议JSON> --output <新报告JSON>`检查每台交换机的缓冲保留量；不需要backend。可选`--transactions <事务JSON>`检查计划中的地址与依赖。容量失败会保存逐端口原因并返回退出码1，各Python运行入口也会提前拒绝；通过不代表网络执行或性能验证。说明见[RDMA小例](../examples/scaleout_rdma/README.md#修改哪些参数)。
 
 检查同一原生连接在多次传输和空闲后是否保留序号，可用`scaleout rdma-stream-probe --topology ... --protocol ... --config ... --backend ... --output ...`。后续工作按真实接收/ACK回调就绪；它是独立字节传输检查，不执行现代MoE或GPU可见性。构建输出的`stream_probe`路径、输入和上限见[持久传输小例](../examples/scaleout_rdma_streams/README.md)。

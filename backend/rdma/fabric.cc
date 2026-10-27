@@ -94,6 +94,8 @@ Fabric::Fabric(const Json& topology, const Json& config): topology_(topology), c
   }
   fault_counts_.resize(fault_rules_.size(),0);
   const auto& ns = topology.at("nodes");
+  const auto counter_mode=config.value("switch_counter_storage",std::string("legacy_dense"));
+  Require(counter_mode=="legacy_dense" || counter_mode=="port_dense","invalid switch_counter_storage");
   const auto link_failures=LinkFailureEvents(config,topology,MaxSimNs());
   local_failover_=config.contains("local_failover");
   const auto limit=[&](const char* key,unsigned fallback){return config.contains("limits")?config.at("limits").at(key).get<unsigned>():fallback;};
@@ -102,7 +104,7 @@ Fabric::Fabric(const Json& topology, const Json& config): topology_(topology), c
           "execution limits exceed supported bounds");
   Require(ns.size() <= gpu_limit+sw_limit && topology.at("links").size() <= link_limit, "native graph budget exceeded");
   unsigned switches = 0;
-  // Validate counts before constructing SwitchNode's large fixed MMU arrays.
+  // Validate counts before allocating switch state. m_bytes is not the MMU.
   unsigned gpu_count=0, switch_count=0;
   for (const auto& n : ns) {
     if(n.at("kind") == "gpu") ++gpu_count;
@@ -206,6 +208,8 @@ Fabric::Fabric(const Json& topology, const Json& config): topology_(topology), c
   for(unsigned host=0;host<nodes_.GetN();++host) {
     if(host>=gpus_) {
       auto sw=DynamicCast<SwitchNode>(nodes_.Get(host));
+      Require(nodes_.Get(host)->GetNDevices()<=1025,"switch supports at most 1024 physical ports");
+      sw->InitializeByteCounters(counter_mode=="port_dense" ? nodes_.Get(host)->GetNDevices() : 1025);
       sw->m_mmu->ConfigBufferSize(config.at("switch_buffer_bytes"));
       sw->m_mmu->node_id=host;
       for(auto n:adjacency_[host]) {
@@ -700,6 +704,23 @@ Json Fabric::Report() {
     {"wire_byte_scope","Native model packet sizes; excludes unmodelled Ethernet preamble/FCS/IFG"},
     {"queue_scope","BEgressQueue native hooks: enqueue after byte addition; dequeue before byte subtraction; excludes bytes already being serialized"},
     {"rx_qp_scope","Accepted receive state retained until Fabric teardown; no waiting receives at service completion"}};
+  if(config_.contains("switch_counter_storage")) {
+    Json switches=Json::array();uint64_t total=0;
+    for(unsigned host=gpus_;host<nodes_.GetN();++host) {
+      auto sw=DynamicCast<SwitchNode>(nodes_.Get(host));const auto actual=nodes_.Get(host)->GetNDevices();
+      Json nonzero=Json::array();
+      for(unsigned in=0;in<actual;++in)for(unsigned out=0;out<actual;++out)for(unsigned q=0;q<8;++q) {
+        const auto bytes=sw->ReadByteCounter(in,out,q);
+        if(bytes)nonzero.push_back({in,out,q,bytes});
+      }
+      total+=sw->ByteCounterStorageBytes();
+      switches.push_back({{"node",host},{"actual_device_slots",actual},{"storage_slots",sw->ByteCounterSlots()},
+        {"payload_bytes",sw->ByteCounterStorageBytes()},{"nonzero",nonzero}});
+    }
+    r["switch_counter_storage"]={{"mode",config_.at("switch_counter_storage")},{"payload_bytes",total},
+      {"switches",switches},{"nonzero_columns",{"ingress","egress","priority","bytes"}},
+      {"scope","exact m_bytes payload only; excludes vector/object/MMU/routing/packet/QP/observer storage; priority-0 legacy accounting preserved"}};
+  }
   if(multi_nic_addresses_) {
     Json bindings=Json::array();
     for(const auto& entry:nic_endpoints_) {

@@ -13,6 +13,8 @@
 
 ## 当前范围和预算
 
+当前补验收`in_progress`：[交换机对象边界](switch_counter_bounds_spec.md)，起点`8b52958`。旧轮结果不改写、额度保持关闭；新范围只用相同已hash原生库，一次独立编译、八项原对象条件和搬迁/空cwd复核，180受监控秒/64MiB，零网络/HTTP/GPU/依赖修改/push。完成后回到强基线之外的两项研究判别，不能以工程验收替代主目标。
+
 当前平台增量 `in_progress`（功能/资源对照完成，原生对象边界验收未完成）：[交换机存储规范](switch_counter_storage_spec.md)、[公开示例](../../examples/scaleout_counter_storage/README.md)、[结果网页](../../fixtures/switch_counter_storage/report.html)与[边界/失败](../../fixtures/switch_counter_storage/README.md)。起点`6996c49`、规范`f57214f`、功能`93f23dd`、准备/检查器更正`ee6ba7f`。原生`e929264`、ASTRA/LLM父gitlink及锁同步，本地增量bundle保存，不push。默认legacy保留；port_dense精确保存同一计数，不改MMU、包或事件，不是论文创新。
 
 4项新增Python方法、153项Scale-Out回归、13固定依赖通过；完整公开Release构建448任务成功。另一个独立对象检查器漏链接applications库而失败，8个初始化/索引条件未执行；命令修正但构建额度关闭，不计通过。8网络各执行一次：旧/新默认兼容，legacy/port在101CNP共享拥塞、断链有限失败、新1024短任务下全部动态输出及快照一致，6类篡改拒绝。断链1.5ms有限失败保留；检查器从TX改为实际选路的入队时刻，仅离线复核。初始生成器16ToR偏离事前32ToR，headroom预检零网络拒绝；原件保留，仅修正到既定32ToR条件，不扩预算或重跑网络。

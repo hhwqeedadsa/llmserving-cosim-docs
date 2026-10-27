@@ -13,6 +13,8 @@
 
 ## 当前范围和预算
 
+当前研究`in_progress`：[输入生成普通图强基线](../../experiments/input_graph_baseline/protocol.md)，起点`157aed4`。八原件entry1/1..2、layer3，batch8/16与EP4/8/16六条件；仅公开输入编译/静态依赖接口，比较整数图、传递约简和重复join。静态slot同步保留，动态Combine约束不删；不读已执行绑定或truth。600受监控秒/256MiB及普通单命令60秒/1GiB RSS/2GiB地址，零HTTP/构建/网络/GPU/依赖修改。失败即停余下条件，不将普通图优化算作MoE创新或全流程提速。
+
 当前筛选已关闭：[RC完成/返回值的版本与可达性筛选](../../experiments/rc_completion_reachability/protocol.md)、[报告与网页](../../experiments/rc_completion_reachability/README.md)，起点`95e5752`、协议`2a07086`/`8edfdee`。固定Linux v6.12核对9blob/5tree，一次小型CPU编译执行10个未修改函数/2个枚举的五种顺序前缀。累计ACK先于原子重发到达时，posted状态挡住旧分支；重发后pending时可通过一个后续门槛。带FENCE的自身额度阻塞只在显式替代环境成立；未执行完整内核/包校验/定时器，未证明漏洞或死锁。
 
 首次GitHub提交详情HTTP200达到524289B检测哨兵，超过512KiB单响应上限，全部HTTP立即关闭；保留失败、未重试或换API，当前版本未核验。缓存DeepEP所核跨机tail接口不返回旧值，消费slot旧值的原子位于本地；不能把该RXE分支提升为MoE跨机主创新，也不能据此删Atomic ACK。四类篡改拒绝及13固定依赖检查通过，67成员包逐hash恢复，复制源码/空cwd重生成原函数、既有二进制五记录、核验及报告逐字节一致，无恢复编译/网络。

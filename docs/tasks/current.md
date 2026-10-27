@@ -13,6 +13,8 @@
 
 ## 当前范围和预算
 
+当前筛选进行中：[GIN完成等待范围](../../experiments/gin_flush_scope/protocol.md)，起点`1ac7af3`。仅核固定源码、EP64/128/256两种声明provider stride与六个有限事件次序，区分共享context完成、每lane逐peer扫描和固定Hybrid的32跨机域限制；EP512/1024仅列拒绝边界。300受监控秒/64MiB及原单命令上限，零网络/GPU/构建/HTTP/平台依赖修改/push；不重开已关闭实验。普通flushAsync与完整动态资源DAG为强基线，不预设新创新或性能收益。
+
 当前研究已关闭：[分层结束通知收益空间](../../experiments/hybrid_completion_space/protocol.md)、[报告与网页](../../experiments/hybrid_completion_space/README.md)，起点`dd265cd`、协议`45baae7`、初始实现`a7ea2bf`。15完整原件prefill/首次decode及58层，EP64/128/256、每域8卡、C4/8/16和两源部署共36组/2088层，只核固定DeepEP的API/需求。扣除无token通道、无数据对端及普通因子化参考后，18组decode剩余关联节省均0；六组C16/prefill控制API仍有10.37%～15.05%差额，达到事前筛选门槛。加入数据API后比例更低，不等于包、WQE、时延或新方法收益。C4普通参考又比C16精确参考少5.87%～27.80%控制调用，但通道并发/服务成本未测，不能选胜者；下一判别必须同时考虑通道调参与共享网络完成，不能仅开发bitmap。
 
 两方向分别用独立位图/阈值递推核对，四类篡改拒绝、小R4/C4公开Dispatch编译/绑定子集核对通过，13固定依赖检查通过；未执行runtime/完整Hybrid/GPU或大EP网络。首次核验器把Dispatch入口kSyncAtStart文字误填true，实际false；旧源码/失败日志保留，只修文字锚点离线核，未重跑原36计数条件。171成员包逐hash恢复，复制研究/平台源码至新根空cwd重算36组/2088层、公开子集、核验和报告逐字节一致。见[恢复](../../experiments/hybrid_completion_space/results/20261027/recovery.json)与[资源](../../experiments/hybrid_completion_space/results/20261027/closeout.json)，原件`runs/hybrid_completion_space_20261027/`。保守含复制收据31.310受监控秒、约101.36MiB分配产物加2MiB预留，保持600秒/256MiB及单命令上限；零HTTP/原生编译/网络/GPU/依赖修改/push，额度关闭。此轮为progress：有条件API空间被定位，协议安全、端到端/宿主收益及两项主创新仍未成立，整体目标继续`in_progress`。

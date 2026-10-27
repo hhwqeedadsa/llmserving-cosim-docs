@@ -69,8 +69,8 @@ def create(repo, run, archive):
         for path in (repo/directory).glob('*.py'):
             files['source/'+str(path.relative_to(repo))] = path
     for directory in ('experiments/readiness_network_choice', 'experiments/shared_uplink_choice'):
-        for name in ('README.md', 'protocol.md'):
-            files['source/'+directory+'/'+name] = repo/directory/name
+        for path in (repo/directory).glob('*.md'):
+            files['source/'+str(path.relative_to(repo))] = path
     files['source/deps.lock.json'] = repo/'deps.lock.json'
     for name in load(run/'stage/runtime-identity.json')['sources']:
         files['source/'+name] = repo/name

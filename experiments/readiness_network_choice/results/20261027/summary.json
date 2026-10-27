@@ -1,0 +1,560 @@
+{
+  "profiles": {
+    "balanced1": {
+      "expert_durations_ns": [
+        16000,
+        16000,
+        16000,
+        16000
+      ],
+      "metrics": {
+        "baseline": {
+          "application_ns": 126398,
+          "all_events_ns": 132498,
+          "drain_ns": 148954,
+          "source_packets": 408,
+          "capture_events": 14282,
+          "decisions": 92,
+          "operations": 207,
+          "events": 714,
+          "connections": 36
+        },
+        "access": {
+          "application_ns": 125834,
+          "all_events_ns": 131940,
+          "drain_ns": 145091,
+          "source_packets": 408,
+          "capture_events": 14370,
+          "decisions": 92,
+          "operations": 207,
+          "events": 714,
+          "connections": 36
+        },
+        "core": {
+          "application_ns": 96031,
+          "all_events_ns": 102091,
+          "drain_ns": 131918,
+          "source_packets": 408,
+          "capture_events": 14084,
+          "decisions": 92,
+          "operations": 207,
+          "events": 714,
+          "connections": 36
+        }
+      },
+      "evaluations": {
+        "volume": {
+          "selected": "access",
+          "tied_best": [
+            "access"
+          ],
+          "actual_best": [
+            "core"
+          ],
+          "regret_fraction": 0.31034770022180336,
+          "maximum_absolute_error_ns": 106370.32,
+          "errors": {
+            "baseline": -0.818609788129559,
+            "access": -0.8453225678274553,
+            "core": -0.7612504295487915
+          }
+        },
+        "endpoint_phase": {
+          "selected": "access",
+          "tied_best": [
+            "access"
+          ],
+          "actual_best": [
+            "core"
+          ],
+          "regret_fraction": 0.31034770022180336,
+          "maximum_absolute_error_ns": 64308.4,
+          "errors": {
+            "baseline": -0.4853462871247962,
+            "access": -0.5110574248613252,
+            "core": -0.32260207641282496
+          }
+        },
+        "nic_phase": {
+          "selected": "access",
+          "tied_best": [
+            "access"
+          ],
+          "actual_best": [
+            "core"
+          ],
+          "regret_fraction": 0.31034770022180336,
+          "maximum_absolute_error_ns": 63099.6,
+          "errors": {
+            "baseline": -0.4662194022057311,
+            "access": -0.5014511181397714,
+            "core": -0.29742687257239847
+          }
+        },
+        "link_phase": {
+          "selected": "core",
+          "tied_best": [
+            "core"
+          ],
+          "actual_best": [
+            "core"
+          ],
+          "regret_fraction": 0.0,
+          "maximum_absolute_error_ns": 11699.119999999995,
+          "errors": {
+            "baseline": -0.09255779363597522,
+            "access": -0.08849055104343814,
+            "core": -0.10081702783476167
+          }
+        }
+      },
+      "network_improvement_fraction": {
+        "baseline": 0.0,
+        "access": 0.004462095919239228,
+        "core": 0.2402490545736483
+      },
+      "core_absolute_improvement_ns": 30367,
+      "expert_max_fraction": {
+        "baseline": 0.12658428139685754,
+        "access": 0.12715164422969943,
+        "core": 0.1666128645958076
+      }
+    },
+    "routed1": {
+      "expert_durations_ns": [
+        28000,
+        10000,
+        10000,
+        16000
+      ],
+      "metrics": {
+        "baseline": {
+          "application_ns": 138018,
+          "all_events_ns": 144118,
+          "drain_ns": 157630,
+          "source_packets": 408,
+          "capture_events": 14238,
+          "decisions": 92,
+          "operations": 207,
+          "events": 714,
+          "connections": 36
+        },
+        "access": {
+          "application_ns": 137491,
+          "all_events_ns": 143581,
+          "drain_ns": 155771,
+          "source_packets": 408,
+          "capture_events": 14326,
+          "decisions": 92,
+          "operations": 207,
+          "events": 714,
+          "connections": 36
+        },
+        "core": {
+          "application_ns": 107674,
+          "all_events_ns": 113734,
+          "drain_ns": 141452,
+          "source_packets": 408,
+          "capture_events": 14040,
+          "decisions": 92,
+          "operations": 207,
+          "events": 714,
+          "connections": 36
+        }
+      },
+      "evaluations": {
+        "volume": {
+          "selected": "access",
+          "tied_best": [
+            "access"
+          ],
+          "actual_best": [
+            "core"
+          ],
+          "regret_fraction": 0.276919219124394,
+          "maximum_absolute_error_ns": 106027.32,
+          "errors": {
+            "baseline": -0.746936196727963,
+            "access": -0.7711582576314087,
+            "core": -0.6756193695785426
+          }
+        },
+        "endpoint_phase": {
+          "selected": "access",
+          "tied_best": [
+            "access"
+          ],
+          "actual_best": [
+            "core"
+          ],
+          "regret_fraction": 0.276919219124394,
+          "maximum_absolute_error_ns": 63965.399999999994,
+          "errors": {
+            "baseline": -0.4417307887377008,
+            "access": -0.46523336072906585,
+            "core": -0.2844029199249586
+          }
+        },
+        "nic_phase": {
+          "selected": "access",
+          "tied_best": [
+            "access"
+          ],
+          "actual_best": [
+            "core"
+          ],
+          "regret_fraction": 0.276919219124394,
+          "maximum_absolute_error_ns": 62756.600000000006,
+          "errors": {
+            "baseline": -0.42421423292614,
+            "access": -0.45644151253536597,
+            "core": -0.26194996006463955
+          }
+        },
+        "link_phase": {
+          "selected": "core",
+          "tied_best": [
+            "core"
+          ],
+          "actual_best": [
+            "core"
+          ],
+          "regret_fraction": 0.0,
+          "maximum_absolute_error_ns": 11319.119999999995,
+          "errors": {
+            "baseline": -0.08201191148980565,
+            "access": -0.07849328319671829,
+            "core": -0.08659992198673773
+          }
+        }
+      },
+      "network_improvement_fraction": {
+        "baseline": 0.0,
+        "access": 0.0038183425350316624,
+        "core": 0.21985538118216463
+      },
+      "core_absolute_improvement_ns": 30344,
+      "expert_max_fraction": {
+        "baseline": 0.2028720891477923,
+        "access": 0.20364969343447933,
+        "core": 0.26004420751527757
+      }
+    },
+    "balanced10": {
+      "expert_durations_ns": [
+        160000,
+        160000,
+        160000,
+        160000
+      ],
+      "metrics": {
+        "baseline": {
+          "application_ns": 270410,
+          "all_events_ns": 276510,
+          "drain_ns": 292302,
+          "source_packets": 408,
+          "capture_events": 14282,
+          "decisions": 92,
+          "operations": 207,
+          "events": 714,
+          "connections": 36
+        },
+        "access": {
+          "application_ns": 269796,
+          "all_events_ns": 275886,
+          "drain_ns": 291047,
+          "source_packets": 408,
+          "capture_events": 14370,
+          "decisions": 92,
+          "operations": 207,
+          "events": 714,
+          "connections": 36
+        },
+        "core": {
+          "application_ns": 240023,
+          "all_events_ns": 246083,
+          "drain_ns": 274165,
+          "source_packets": 408,
+          "capture_events": 14084,
+          "decisions": 92,
+          "operations": 207,
+          "events": 714,
+          "connections": 36
+        }
+      },
+      "evaluations": {
+        "volume": {
+          "selected": "access",
+          "tied_best": [
+            "access"
+          ],
+          "actual_best": [
+            "core"
+          ],
+          "regret_fraction": 0.12404227928156884,
+          "maximum_absolute_error_ns": 106332.32,
+          "errors": {
+            "baseline": -0.3826879183462151,
+            "access": -0.3941211878604576,
+            "core": -0.30453598196839476
+          }
+        },
+        "endpoint_phase": {
+          "selected": "access",
+          "tied_best": [
+            "access"
+          ],
+          "actual_best": [
+            "core"
+          ],
+          "regret_fraction": 0.12404227928156884,
+          "maximum_absolute_error_ns": 64270.399999999994,
+          "errors": {
+            "baseline": -0.22691024740209306,
+            "access": -0.23821850583403756,
+            "core": -0.12903680063993864
+          }
+        },
+        "nic_phase": {
+          "selected": "access",
+          "tied_best": [
+            "access"
+          ],
+          "actual_best": [
+            "core"
+          ],
+          "regret_fraction": 0.12404227928156884,
+          "maximum_absolute_error_ns": 63061.600000000006,
+          "errors": {
+            "baseline": -0.21796974963943647,
+            "access": -0.23373808358908213,
+            "core": -0.1189644325752116
+          }
+        },
+        "link_phase": {
+          "selected": "core",
+          "tied_best": [
+            "core"
+          ],
+          "actual_best": [
+            "core"
+          ],
+          "regret_fraction": 0.0,
+          "maximum_absolute_error_ns": 11711.119999999995,
+          "errors": {
+            "baseline": -0.04330875337450536,
+            "access": -0.0411315215940933,
+            "core": -0.040302637663890535
+          }
+        }
+      },
+      "network_improvement_fraction": {
+        "baseline": 0.0,
+        "access": 0.002270626086313376,
+        "core": 0.11237380274398136
+      },
+      "core_absolute_improvement_ns": 30387,
+      "expert_max_fraction": {
+        "baseline": 0.5916940941533227,
+        "access": 0.5930406677637919,
+        "core": 0.6666027838998763
+      }
+    },
+    "routed10": {
+      "expert_durations_ns": [
+        280000,
+        100000,
+        100000,
+        160000
+      ],
+      "metrics": {
+        "baseline": {
+          "application_ns": 390023,
+          "all_events_ns": 396123,
+          "drain_ns": 410314,
+          "source_packets": 408,
+          "capture_events": 14326,
+          "decisions": 92,
+          "operations": 207,
+          "events": 714,
+          "connections": 36
+        },
+        "access": {
+          "application_ns": 389491,
+          "all_events_ns": 395581,
+          "drain_ns": 412462,
+          "source_packets": 408,
+          "capture_events": 14370,
+          "decisions": 92,
+          "operations": 207,
+          "events": 714,
+          "connections": 36
+        },
+        "core": {
+          "application_ns": 359666,
+          "all_events_ns": 365726,
+          "drain_ns": 392458,
+          "source_packets": 408,
+          "capture_events": 14018,
+          "decisions": 92,
+          "operations": 207,
+          "events": 714,
+          "connections": 36
+        }
+      },
+      "evaluations": {
+        "volume": {
+          "selected": "access",
+          "tied_best": [
+            "access"
+          ],
+          "actual_best": [
+            "core"
+          ],
+          "regret_fraction": 0.08292415741271068,
+          "maximum_absolute_error_ns": 106027.32,
+          "errors": {
+            "baseline": -0.26433220604938684,
+            "access": -0.2722202053449245,
+            "core": -0.20223941100910292
+          }
+        },
+        "endpoint_phase": {
+          "selected": "access",
+          "tied_best": [
+            "access"
+          ],
+          "actual_best": [
+            "core"
+          ],
+          "regret_fraction": 0.08292415741271068,
+          "maximum_absolute_error_ns": 63965.40000000002,
+          "errors": {
+            "baseline": -0.1563287293313471,
+            "access": -0.16422818499015387,
+            "core": -0.0851200836331485
+          }
+        },
+        "nic_phase": {
+          "selected": "access",
+          "tied_best": [
+            "access"
+          ],
+          "actual_best": [
+            "core"
+          ],
+          "regret_fraction": 0.08292415741271068,
+          "maximum_absolute_error_ns": 62756.59999999998,
+          "errors": {
+            "baseline": -0.1501301205313533,
+            "access": -0.16112464729608636,
+            "core": -0.07839829174845554
+          }
+        },
+        "link_phase": {
+          "selected": "core",
+          "tied_best": [
+            "core"
+          ],
+          "actual_best": [
+            "core"
+          ],
+          "regret_fraction": 0.0,
+          "maximum_absolute_error_ns": 11324.119999999995,
+          "errors": {
+            "baseline": -0.029034492837601872,
+            "access": -0.027708265402794918,
+            "core": -0.025903365900585538
+          }
+        }
+      },
+      "network_improvement_fraction": {
+        "baseline": 0.0,
+        "access": 0.0013640221217723057,
+        "core": 0.07783387133579302
+      },
+      "core_absolute_improvement_ns": 30357,
+      "expert_max_fraction": {
+        "baseline": 0.7179063798801609,
+        "access": 0.7188869575933718,
+        "core": 0.7785000528267892
+      }
+    }
+  },
+  "paired_contrasts": {
+    "1": {
+      "baseline": {
+        "application_increase_ns": 11620,
+        "max_compute_increase_ns": 12000,
+        "latest_expert_completion_increase_ns": 11774,
+        "latest_rank_change_offset_ns": -226,
+        "post_last_expert_tail_change_ns": -154,
+        "balanced_latest_rank": 3,
+        "routed_latest_rank": 0,
+        "dispatch_and_expert_starts_unchanged": true
+      },
+      "access": {
+        "application_increase_ns": 11657,
+        "max_compute_increase_ns": 12000,
+        "latest_expert_completion_increase_ns": 11838,
+        "latest_rank_change_offset_ns": -162,
+        "post_last_expert_tail_change_ns": -181,
+        "balanced_latest_rank": 3,
+        "routed_latest_rank": 0,
+        "dispatch_and_expert_starts_unchanged": true
+      },
+      "core": {
+        "application_increase_ns": 11643,
+        "max_compute_increase_ns": 12000,
+        "latest_expert_completion_increase_ns": 11755,
+        "latest_rank_change_offset_ns": -245,
+        "post_last_expert_tail_change_ns": -112,
+        "balanced_latest_rank": 3,
+        "routed_latest_rank": 0,
+        "dispatch_and_expert_starts_unchanged": true
+      }
+    },
+    "10": {
+      "baseline": {
+        "application_increase_ns": 119613,
+        "max_compute_increase_ns": 120000,
+        "latest_expert_completion_increase_ns": 119774,
+        "latest_rank_change_offset_ns": -226,
+        "post_last_expert_tail_change_ns": -161,
+        "balanced_latest_rank": 3,
+        "routed_latest_rank": 0,
+        "dispatch_and_expert_starts_unchanged": true
+      },
+      "access": {
+        "application_increase_ns": 119695,
+        "max_compute_increase_ns": 120000,
+        "latest_expert_completion_increase_ns": 119838,
+        "latest_rank_change_offset_ns": -162,
+        "post_last_expert_tail_change_ns": -143,
+        "balanced_latest_rank": 3,
+        "routed_latest_rank": 0,
+        "dispatch_and_expert_starts_unchanged": true
+      },
+      "core": {
+        "application_increase_ns": 119643,
+        "max_compute_increase_ns": 120000,
+        "latest_expert_completion_increase_ns": 119755,
+        "latest_rank_change_offset_ns": -245,
+        "post_last_expert_tail_change_ns": -112,
+        "balanced_latest_rank": 3,
+        "routed_latest_rank": 0,
+        "dispatch_and_expert_starts_unchanged": true
+      }
+    }
+  },
+  "meaningful_link_choice_gap": false,
+  "all_link_choices_correct": true,
+  "decision_regret_threshold": 0.05,
+  "full_graph_equivalence_count": 12,
+  "network_attempts": 24,
+  "hardware_calibrated": false,
+  "new_MoE_semantic_benefit_proven": false,
+  "simulator_speedup_proven": false,
+  "costs_declared_not_measured": true,
+  "independent_holdout": false
+}

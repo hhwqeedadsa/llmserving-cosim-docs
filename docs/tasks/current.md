@@ -13,7 +13,9 @@
 
 ## 当前范围和预算
 
-专家就绪与网络配置选择`in_progress`：[事前协议](../../experiments/readiness_network_choice/protocol.md)。平台固定`9365a33`，八个已确认完整原件、单层EP4/batch8；两种声明线性系数、均分/按真实贡献量共四成本条件，对照baseline/access/core及冻结完整图。全部预测在新网络前冻结，逐链路基线获得最长专家耗时，不以缺少计算输入制造收益。最多24次健康网络，累计1800受监控秒/2GiB、每命令60秒/RSS1GiB/地址2GiB，失败保留并停止，不加预算/重跑。仅本地研究，无平台/依赖修改、GPU、下载或push；结果尚未取得，不宣称新语义收益。
+专家就绪与网络配置选择`completed`：[事前协议](../../experiments/readiness_network_choice/protocol.md)、[报告与网页](../../experiments/readiness_network_choice/README.md)、[两候选取舍](../../experiments/readiness_network_choice/decision.md)。平台`9365a33`、协议`a8b3146`、执行`5756775`；八完整原件entry1/layer3、EP4/batch8，四种声明专家耗时与三网络共24次健康网络完成，12组现代/冻结完整图完整包/队列/回调/应用/内存等价。所有参考获得最长耗时、预测事前冻结；端点/单NIC模型仍误选access，后悔值8.29%～31.03%，普通逐链路模型全部选core、后悔值0，未达到事前5%决策缺口判据。核心升级绝对节省30.344～30.387us，相对改善7.78%～24.02%；不同资源、声明计算，不能称同成本算法/GPU收益。逐链路绝对误差仍11.319～11.711us，长计算稀释相对误差，不是准确性提升。
+
+配对Dispatch/计算开始时刻相同、专家本地排队为0；最后完成者rank3→rank0，应用增量差额拆成完成者开始时刻偏移及其后通信尾段，不能全归拥塞。12组独立物理与计算因果审计、18组slot排列、6类篡改拒绝、13依赖核查通过。749成员包逐hash复制源码/空cwd恢复，四份无truth预测、核验和Markdown/HTML/指标逐字节一致，无恢复网络。SHA256 `bd17dee3887f2f73cf18cc578faa221dff44bcf3202aea826c30e4998dd16de8`，原件`runs/readiness_network_choice_20261027/`。保守含嵌套/复制收据239.610受监控秒、约637.83MiB分配产物，另计摘要/2MiB预留，保持1800秒/2GiB和全部单命令上限；零构建/下载/GPU/平台依赖变更/push。收尾脚本误读probe的exit_code字段而非child_exit_code，失败记录保留，仅继续离线收尾、未重跑网络。停止把本组网络升级选择作为新增MoE语义正例；两项创新与整体目标仍in_progress，不自动扩条件。
 
 按调用/rank的专家阶段成本接口`completed`：[平台范围](modern_expert_costs_spec.md)、[功能验收和复现](../../fixtures/modern_expert_costs/README.md)、[解释网页](../../fixtures/modern_expert_costs/report.html)。v2显式矩阵保留v1固定模式，真实Dispatch完成后提交本地专家工作，实际完成再解锁Combine。48项单元、8类公开入口拒绝、4类证据篡改及13固定依赖通过；v1旧源码对实际回调回放完整提交/快照一致，等值矩阵完整result/control/现代执行保持（仅新增来源说明单列）。固定/等值/异值与复制源码空cwd迁移共4次实际网络完成，每条件两rank两调用、60现代操作/322事件/100源数据包；声明成本，不是GPU/模型性能或论文收益。593成员归档逐hash恢复，三份离线核验逐字节一致，迁移完整行为仅允许运行库根路径变化，8库实际身份核对。SHA256 `8c378e6137d57b2a5dbd67d11d48cb31bc2b3f85650c64b90abf9aa05473281a`，原件`runs/modern_expert_costs_20261027/`；来源说明字符上限检查补强后新归档保留旧包，未重跑已成功网络。保持600受监控秒/256MiB及全部原上限，零构建/下载/GPU/依赖修改/push。下一研究用真实路由和显式就绪条件检验充分利用输入的逐链路/完整DAG强基线，仍须匹配成本依据、实际误判与收益；两项创新和完整目标仍in_progress。
 

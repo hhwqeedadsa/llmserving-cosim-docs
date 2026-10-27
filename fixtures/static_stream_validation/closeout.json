@@ -1,0 +1,71 @@
+{
+  "passed": true,
+  "networks_completed": 6,
+  "networks_failed": 0,
+  "new_networks_on_restore": 0,
+  "no_successful_network_repeated": true,
+  "unit_suites": [
+    {
+      "suite": "unit-initial",
+      "tests": 11
+    },
+    {
+      "suite": "unit-scaleout_transactions_test.py",
+      "tests": 17
+    },
+    {
+      "suite": "unit-scaleout_streams_test.py",
+      "tests": 13
+    },
+    {
+      "suite": "unit-stream_nic_routes_test.py",
+      "tests": 10
+    },
+    {
+      "suite": "unit-transaction_session_alarms_test.py",
+      "tests": 9
+    },
+    {
+      "suite": "unit-modern_native_test.py",
+      "tests": 15
+    },
+    {
+      "suite": "unit-session_host_timing_test.py",
+      "tests": 6
+    }
+  ],
+  "unit_tests": 81,
+  "fixed_dependencies": 13,
+  "conservative_monitored_seconds_including_copied_receipts": 70.29531973495614,
+  "terminal_probe_count_including_copies": 71,
+  "peak_sampled_group_rss_bytes": 603418624,
+  "artifact_usage_before_final_receipts": {
+    "apparent_bytes": 115920137,
+    "allocated_bytes": 122265600
+  },
+  "budget_seconds": 900,
+  "budget_artifact_bytes": 536870912,
+  "remaining_final_management_seconds_reserved": 10,
+  "remaining_receipt_bytes_reserved": 2097152,
+  "preserved_checker_failure_probes": [
+    "monitor/driver/probe.json",
+    "monitor/continued-driver/probe.json",
+    "monitor/transaction-full-verify/probe.json",
+    "restored/monitor/continued-driver/probe.json",
+    "restored/monitor/driver/probe.json",
+    "restored/monitor/transaction-full-verify/probe.json"
+  ],
+  "archived_source_snapshots": 3,
+  "checkpoint_sha256": "768c9f474a5a625167d03816102f0c63519575d6c3845eecd08fd76398ea9019",
+  "actual_runtime_files_checked": 10,
+  "original_and_migrated_library_hashes_checked": true,
+  "no_remaining_monitored_processes": true,
+  "performance_measured": false,
+  "hardware_calibrated": false,
+  "research_goal_complete": false,
+  "new_builds": 0,
+  "new_downloads": 0,
+  "new_gpu_runs": 0,
+  "dependency_changes": 0,
+  "pushes": 0
+}

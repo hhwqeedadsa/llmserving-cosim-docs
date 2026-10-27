@@ -255,6 +255,8 @@ MRT1帧用网络字节序编码，32B头依次是magic=0x4d525431、verb、连�
 
 ## 在线追加工作与实际回调
 
+公开`rdma-transaction-session`命令可增加`--reuse-static-validation`，Python类对应`reuse_static_validation=True`；默认关闭。仅复用本会话内类型与内容完全匹配的拓扑/协议/派生传输声明检查，所有动态任务和原生准入完整执行。退出时的`static-validation.json`仅记录宿主校验次数，字段与边界见[固定校验复用](../modern_deepep_native/README.md#可选的固定校验复用)。不改变通信结果，也不代表已测得加速。
+
 `rdma-transaction-session`让前端根据本次实际接收、ACK、原子回复和本地完成继续提交事务。它使用同一原生网络时钟与持续存在的QP；前端计算/等待所花的宿主时间不计入仿真时钟。MRT1规则和v4范围保持，不是现代GIN、GPU可见性或硬件校准。
 
 默认前端读取普通v4程序，但完整程序只保留在Python侧；后端启动文件`initial.json`的operations为空。只有`after`中的真实事件全部发生后，前端才递交对应节点。节点自身的`local_wait`、队列前缀和资源准入继续由原生后端检查。

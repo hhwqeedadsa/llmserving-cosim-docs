@@ -1,5 +1,7 @@
 # 系统架构与执行过程
 
+事务会话可选持有一份`StaticStreamValidationCache`，仅复用纯Python传输声明校验。不可变键覆盖完整拓扑、协议和派生streams，并区分内建JSON类型；不保留可变别名，不共享全局状态。完整动态候选与原生校验照常执行，缓存不参与网络控制。公开选项、计数和默认行为见[固定校验复用](../examples/modern_deepep_native/README.md#可选的固定校验复用)。
+
 现代原生入口可使用显式的逐调用/rank专家阶段耗时矩阵。在实际Dispatch完成后，专家节点进入既有每GPU串行lane，真实完成回调再解锁Combine；矩阵不控制网络时刻、不替代网络反馈。固定成本v1保持兼容，v2输入与来源边界见[专家阶段成本](../examples/modern_deepep_native/README.md#按调用和rank修改专家计算耗时)。
 
 持久传输在创建QP前为本地地址注册实际NIC归属；同GPU/plane多NIC使用物理别名，目的路由只从指定NIC进入GPU。发送、ACK/CNP与事务回复共享同一Fabric的实际端口、交换机和MMU；重建路由保留绑定与持久状态。普通SEND/RECV仍使用原路由域，范围见[多rail示例](../examples/scaleout_multirail_native/README.md)。

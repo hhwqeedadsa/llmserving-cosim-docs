@@ -1,0 +1,1128 @@
+{
+  "passed": true,
+  "networks": 6,
+  "reports": {
+    "modern-full": {
+      "passed": true,
+      "cached": false,
+      "counters": null,
+      "delivery": {
+        "decisions": 63,
+        "callbacks": 437,
+        "nodes": 97
+      },
+      "application": {
+        "passed": true,
+        "expert_stages": [
+          {
+            "call": 0,
+            "rank": 0,
+            "operation": 29,
+            "declared_ns": 0,
+            "dispatch_complete_ns": 24244,
+            "admitted_ns": 24244,
+            "started_ns": 24244,
+            "completed_ns": 24244,
+            "combine_begin_ns": 24244
+          },
+          {
+            "call": 0,
+            "rank": 1,
+            "operation": 33,
+            "declared_ns": 5000,
+            "dispatch_complete_ns": 24713,
+            "admitted_ns": 24713,
+            "started_ns": 24713,
+            "completed_ns": 29713,
+            "combine_begin_ns": 29713
+          },
+          {
+            "call": 1,
+            "rank": 0,
+            "operation": 82,
+            "declared_ns": 7000,
+            "dispatch_complete_ns": 73090,
+            "admitted_ns": 73090,
+            "started_ns": 73090,
+            "completed_ns": 80090,
+            "combine_begin_ns": 80090
+          },
+          {
+            "call": 1,
+            "rank": 1,
+            "operation": 78,
+            "declared_ns": 100,
+            "dispatch_complete_ns": 67254,
+            "admitted_ns": 67254,
+            "started_ns": 67254,
+            "completed_ns": 67354,
+            "combine_begin_ns": 67354
+          }
+        ],
+        "application": {
+          "passed": true,
+          "selective_enabled": true,
+          "application": {
+            "passed": true,
+            "modern_operations": 60,
+            "modern_events": 322,
+            "native_remote_operations": 50,
+            "native_local_operations": 47,
+            "paths": {
+              "gin_self": 20,
+              "rdma": 30,
+              "local": 10
+            },
+            "calls": 2,
+            "ranks": 2,
+            "decisions": 63,
+            "finish_ns": 110631,
+            "actual_target_applications": 50,
+            "actual_source_packets": 100,
+            "retransmitted_source_packets": 0,
+            "decoded_frames": 46,
+            "complete_work_records": 46,
+            "physical_capture_events": 4400,
+            "checked_captured_endpoint_data_records": 200,
+            "observed_endpoint_ack_records": 200,
+            "full_physical_path_or_ack_audit_complete": false,
+            "omitted_physical_records": 0,
+            "transport_scope": "complete source bytes/frames/work/transaction memory; physical data and ACK validation restricted to capture prefix",
+            "scope": "functional byte/event acceptance, not numerical model or calibrated GPU/provider performance"
+          },
+          "delivery": {
+            "physical_decisions": 63,
+            "logical_steps": 214,
+            "callbacks": 437,
+            "native_nodes": 97,
+            "peak_batches": 10,
+            "peak_compact_bytes": 1442
+          },
+          "configured_faults": [],
+          "actual_fault_drops": 0,
+          "actual_feedback_received": 100,
+          "recovery": {
+            "columns": [
+              "time_ns",
+              "event",
+              "source",
+              "message_id",
+              "acknowledged_bytes",
+              "highest_sent_bytes",
+              "retries_since_progress",
+              "rto_ns",
+              "deadline_ns"
+            ],
+            "complete": true,
+            "complete_scope": "complete denotes ACKed published prefix; connection persists until explicit Close",
+            "config": {
+              "inflight_bytes": 522289,
+              "initial_rto_ns": 80000,
+              "max_events": 30000,
+              "max_retries": 3,
+              "max_rto_ns": 640000,
+              "mode": "selective_repeat/1",
+              "receive_buffer_bytes": 524288
+            },
+            "duplicate_ack_responses": 0,
+            "event_codes": {
+              "ack_progress": 1,
+              "complete": 3,
+              "old_feedback": 6,
+              "prefix_published": 5,
+              "retry_exhausted": 4,
+              "timeout_retransmit": 2,
+              "timer_started": 0
+            },
+            "failed": false,
+            "identity_scope": "message_id in records and fault rules means persistent stream ID; sequences cover the whole connection",
+            "observations": 173,
+            "old_feedback_packets": 0,
+            "omitted_events": 0,
+            "receiver_columns": [
+              "time_ns",
+              "receiver",
+              "sender_ipv4",
+              "receiver_ipv4",
+              "sender_port",
+              "receiver_port",
+              "ack_sequence",
+              "duplicate_offset"
+            ],
+            "states": [
+              {
+                "acknowledged_bytes": 1104,
+                "deadline_ns": -1,
+                "failed": false,
+                "highest_sent_bytes": 1104,
+                "prefix_complete": true,
+                "published_bytes": 1104,
+                "retries_since_progress": 0,
+                "rto_ns": 80000,
+                "stream": 2,
+                "timeout_expiries": 0,
+                "timeout_retransmissions": 0
+              },
+              {
+                "acknowledged_bytes": 320,
+                "deadline_ns": -1,
+                "failed": false,
+                "highest_sent_bytes": 320,
+                "prefix_complete": true,
+                "published_bytes": 320,
+                "retries_since_progress": 0,
+                "rto_ns": 80000,
+                "stream": 3,
+                "timeout_expiries": 0,
+                "timeout_retransmissions": 0
+              },
+              {
+                "acknowledged_bytes": 1216,
+                "deadline_ns": -1,
+                "failed": false,
+                "highest_sent_bytes": 1216,
+                "prefix_complete": true,
+                "published_bytes": 1216,
+                "retries_since_progress": 0,
+                "rto_ns": 80000,
+                "stream": 4,
+                "timeout_expiries": 0,
+                "timeout_retransmissions": 0
+              },
+              {
+                "acknowledged_bytes": 1712,
+                "deadline_ns": -1,
+                "failed": false,
+                "highest_sent_bytes": 1712,
+                "prefix_complete": true,
+                "published_bytes": 1712,
+                "retries_since_progress": 0,
+                "rto_ns": 80000,
+                "stream": 6,
+                "timeout_expiries": 0,
+                "timeout_retransmissions": 0
+              },
+              {
+                "acknowledged_bytes": 320,
+                "deadline_ns": -1,
+                "failed": false,
+                "highest_sent_bytes": 320,
+                "prefix_complete": true,
+                "published_bytes": 320,
+                "retries_since_progress": 0,
+                "rto_ns": 80000,
+                "stream": 7,
+                "timeout_expiries": 0,
+                "timeout_retransmissions": 0
+              },
+              {
+                "acknowledged_bytes": 608,
+                "deadline_ns": -1,
+                "failed": false,
+                "highest_sent_bytes": 608,
+                "prefix_complete": true,
+                "published_bytes": 608,
+                "retries_since_progress": 0,
+                "rto_ns": 80000,
+                "stream": 10,
+                "timeout_expiries": 0,
+                "timeout_retransmissions": 0
+              }
+            ]
+          },
+          "selective_summary": {
+            "inflight_bytes": 522289,
+            "max_packet_overshoot_bytes": 63,
+            "max_reorder_packets_per_stream": 4096,
+            "receive_buffer_bytes": 524288,
+            "scope": "bounded byte-only selective-repeat reference, not IRN reproduction, modern GIN or hardware calibration; source uses received feedback only",
+            "states": [
+              {
+                "held_ranges": [],
+                "native_window_bytes": 522289,
+                "peak_reorder_bytes": 0,
+                "receiver_prefix": 1104,
+                "rejected_packets": 0,
+                "reorder_bytes": 0,
+                "source_sacked_ranges": [],
+                "stream": 2
+              },
+              {
+                "held_ranges": [],
+                "native_window_bytes": 522289,
+                "peak_reorder_bytes": 0,
+                "receiver_prefix": 320,
+                "rejected_packets": 0,
+                "reorder_bytes": 0,
+                "source_sacked_ranges": [],
+                "stream": 3
+              },
+              {
+                "held_ranges": [],
+                "native_window_bytes": 522289,
+                "peak_reorder_bytes": 0,
+                "receiver_prefix": 1216,
+                "rejected_packets": 0,
+                "reorder_bytes": 0,
+                "source_sacked_ranges": [],
+                "stream": 4
+              },
+              {
+                "held_ranges": [],
+                "native_window_bytes": 522289,
+                "peak_reorder_bytes": 0,
+                "receiver_prefix": 0,
+                "rejected_packets": 0,
+                "reorder_bytes": 0,
+                "source_sacked_ranges": [],
+                "stream": 5
+              },
+              {
+                "held_ranges": [],
+                "native_window_bytes": 522289,
+                "peak_reorder_bytes": 0,
+                "receiver_prefix": 1712,
+                "rejected_packets": 0,
+                "reorder_bytes": 0,
+                "source_sacked_ranges": [],
+                "stream": 6
+              },
+              {
+                "held_ranges": [],
+                "native_window_bytes": 522289,
+                "peak_reorder_bytes": 0,
+                "receiver_prefix": 320,
+                "rejected_packets": 0,
+                "reorder_bytes": 0,
+                "source_sacked_ranges": [],
+                "stream": 7
+              },
+              {
+                "held_ranges": [],
+                "native_window_bytes": 522289,
+                "peak_reorder_bytes": 0,
+                "receiver_prefix": 608,
+                "rejected_packets": 0,
+                "reorder_bytes": 0,
+                "source_sacked_ranges": [],
+                "stream": 10
+              },
+              {
+                "held_ranges": [],
+                "native_window_bytes": 522289,
+                "peak_reorder_bytes": 0,
+                "receiver_prefix": 0,
+                "rejected_packets": 0,
+                "reorder_bytes": 0,
+                "source_sacked_ranges": [],
+                "stream": 11
+              }
+            ],
+            "wire_format": "MSR1 16-byte big-endian magic/begin/end/valid after native ACK header; actual model bytes, not production RoCE"
+          },
+          "capture_complete": true,
+          "omitted_events": 0,
+          "full_wire_reconstruction_claimed": false,
+          "finish_ns": 110631
+        },
+        "hardware_calibrated": false,
+        "numeric_expert_computation": false,
+        "declared_duration_not_observed_profile": true
+      }
+    },
+    "modern-cached": {
+      "passed": true,
+      "cached": true,
+      "counters": {
+        "schema_version": "moe-static-stream-validation/1",
+        "host_only": true,
+        "calls": 64,
+        "hits": 63,
+        "validations": 1,
+        "unkeyable": 0,
+        "entries": 1
+      },
+      "delivery": {
+        "decisions": 63,
+        "callbacks": 437,
+        "nodes": 97
+      },
+      "application": {
+        "passed": true,
+        "expert_stages": [
+          {
+            "call": 0,
+            "rank": 0,
+            "operation": 29,
+            "declared_ns": 0,
+            "dispatch_complete_ns": 24244,
+            "admitted_ns": 24244,
+            "started_ns": 24244,
+            "completed_ns": 24244,
+            "combine_begin_ns": 24244
+          },
+          {
+            "call": 0,
+            "rank": 1,
+            "operation": 33,
+            "declared_ns": 5000,
+            "dispatch_complete_ns": 24713,
+            "admitted_ns": 24713,
+            "started_ns": 24713,
+            "completed_ns": 29713,
+            "combine_begin_ns": 29713
+          },
+          {
+            "call": 1,
+            "rank": 0,
+            "operation": 82,
+            "declared_ns": 7000,
+            "dispatch_complete_ns": 73090,
+            "admitted_ns": 73090,
+            "started_ns": 73090,
+            "completed_ns": 80090,
+            "combine_begin_ns": 80090
+          },
+          {
+            "call": 1,
+            "rank": 1,
+            "operation": 78,
+            "declared_ns": 100,
+            "dispatch_complete_ns": 67254,
+            "admitted_ns": 67254,
+            "started_ns": 67254,
+            "completed_ns": 67354,
+            "combine_begin_ns": 67354
+          }
+        ],
+        "application": {
+          "passed": true,
+          "selective_enabled": true,
+          "application": {
+            "passed": true,
+            "modern_operations": 60,
+            "modern_events": 322,
+            "native_remote_operations": 50,
+            "native_local_operations": 47,
+            "paths": {
+              "gin_self": 20,
+              "rdma": 30,
+              "local": 10
+            },
+            "calls": 2,
+            "ranks": 2,
+            "decisions": 63,
+            "finish_ns": 110631,
+            "actual_target_applications": 50,
+            "actual_source_packets": 100,
+            "retransmitted_source_packets": 0,
+            "decoded_frames": 46,
+            "complete_work_records": 46,
+            "physical_capture_events": 4400,
+            "checked_captured_endpoint_data_records": 200,
+            "observed_endpoint_ack_records": 200,
+            "full_physical_path_or_ack_audit_complete": false,
+            "omitted_physical_records": 0,
+            "transport_scope": "complete source bytes/frames/work/transaction memory; physical data and ACK validation restricted to capture prefix",
+            "scope": "functional byte/event acceptance, not numerical model or calibrated GPU/provider performance"
+          },
+          "delivery": {
+            "physical_decisions": 63,
+            "logical_steps": 214,
+            "callbacks": 437,
+            "native_nodes": 97,
+            "peak_batches": 10,
+            "peak_compact_bytes": 1442
+          },
+          "configured_faults": [],
+          "actual_fault_drops": 0,
+          "actual_feedback_received": 100,
+          "recovery": {
+            "columns": [
+              "time_ns",
+              "event",
+              "source",
+              "message_id",
+              "acknowledged_bytes",
+              "highest_sent_bytes",
+              "retries_since_progress",
+              "rto_ns",
+              "deadline_ns"
+            ],
+            "complete": true,
+            "complete_scope": "complete denotes ACKed published prefix; connection persists until explicit Close",
+            "config": {
+              "inflight_bytes": 522289,
+              "initial_rto_ns": 80000,
+              "max_events": 30000,
+              "max_retries": 3,
+              "max_rto_ns": 640000,
+              "mode": "selective_repeat/1",
+              "receive_buffer_bytes": 524288
+            },
+            "duplicate_ack_responses": 0,
+            "event_codes": {
+              "ack_progress": 1,
+              "complete": 3,
+              "old_feedback": 6,
+              "prefix_published": 5,
+              "retry_exhausted": 4,
+              "timeout_retransmit": 2,
+              "timer_started": 0
+            },
+            "failed": false,
+            "identity_scope": "message_id in records and fault rules means persistent stream ID; sequences cover the whole connection",
+            "observations": 173,
+            "old_feedback_packets": 0,
+            "omitted_events": 0,
+            "receiver_columns": [
+              "time_ns",
+              "receiver",
+              "sender_ipv4",
+              "receiver_ipv4",
+              "sender_port",
+              "receiver_port",
+              "ack_sequence",
+              "duplicate_offset"
+            ],
+            "states": [
+              {
+                "acknowledged_bytes": 1104,
+                "deadline_ns": -1,
+                "failed": false,
+                "highest_sent_bytes": 1104,
+                "prefix_complete": true,
+                "published_bytes": 1104,
+                "retries_since_progress": 0,
+                "rto_ns": 80000,
+                "stream": 2,
+                "timeout_expiries": 0,
+                "timeout_retransmissions": 0
+              },
+              {
+                "acknowledged_bytes": 320,
+                "deadline_ns": -1,
+                "failed": false,
+                "highest_sent_bytes": 320,
+                "prefix_complete": true,
+                "published_bytes": 320,
+                "retries_since_progress": 0,
+                "rto_ns": 80000,
+                "stream": 3,
+                "timeout_expiries": 0,
+                "timeout_retransmissions": 0
+              },
+              {
+                "acknowledged_bytes": 1216,
+                "deadline_ns": -1,
+                "failed": false,
+                "highest_sent_bytes": 1216,
+                "prefix_complete": true,
+                "published_bytes": 1216,
+                "retries_since_progress": 0,
+                "rto_ns": 80000,
+                "stream": 4,
+                "timeout_expiries": 0,
+                "timeout_retransmissions": 0
+              },
+              {
+                "acknowledged_bytes": 1712,
+                "deadline_ns": -1,
+                "failed": false,
+                "highest_sent_bytes": 1712,
+                "prefix_complete": true,
+                "published_bytes": 1712,
+                "retries_since_progress": 0,
+                "rto_ns": 80000,
+                "stream": 6,
+                "timeout_expiries": 0,
+                "timeout_retransmissions": 0
+              },
+              {
+                "acknowledged_bytes": 320,
+                "deadline_ns": -1,
+                "failed": false,
+                "highest_sent_bytes": 320,
+                "prefix_complete": true,
+                "published_bytes": 320,
+                "retries_since_progress": 0,
+                "rto_ns": 80000,
+                "stream": 7,
+                "timeout_expiries": 0,
+                "timeout_retransmissions": 0
+              },
+              {
+                "acknowledged_bytes": 608,
+                "deadline_ns": -1,
+                "failed": false,
+                "highest_sent_bytes": 608,
+                "prefix_complete": true,
+                "published_bytes": 608,
+                "retries_since_progress": 0,
+                "rto_ns": 80000,
+                "stream": 10,
+                "timeout_expiries": 0,
+                "timeout_retransmissions": 0
+              }
+            ]
+          },
+          "selective_summary": {
+            "inflight_bytes": 522289,
+            "max_packet_overshoot_bytes": 63,
+            "max_reorder_packets_per_stream": 4096,
+            "receive_buffer_bytes": 524288,
+            "scope": "bounded byte-only selective-repeat reference, not IRN reproduction, modern GIN or hardware calibration; source uses received feedback only",
+            "states": [
+              {
+                "held_ranges": [],
+                "native_window_bytes": 522289,
+                "peak_reorder_bytes": 0,
+                "receiver_prefix": 1104,
+                "rejected_packets": 0,
+                "reorder_bytes": 0,
+                "source_sacked_ranges": [],
+                "stream": 2
+              },
+              {
+                "held_ranges": [],
+                "native_window_bytes": 522289,
+                "peak_reorder_bytes": 0,
+                "receiver_prefix": 320,
+                "rejected_packets": 0,
+                "reorder_bytes": 0,
+                "source_sacked_ranges": [],
+                "stream": 3
+              },
+              {
+                "held_ranges": [],
+                "native_window_bytes": 522289,
+                "peak_reorder_bytes": 0,
+                "receiver_prefix": 1216,
+                "rejected_packets": 0,
+                "reorder_bytes": 0,
+                "source_sacked_ranges": [],
+                "stream": 4
+              },
+              {
+                "held_ranges": [],
+                "native_window_bytes": 522289,
+                "peak_reorder_bytes": 0,
+                "receiver_prefix": 0,
+                "rejected_packets": 0,
+                "reorder_bytes": 0,
+                "source_sacked_ranges": [],
+                "stream": 5
+              },
+              {
+                "held_ranges": [],
+                "native_window_bytes": 522289,
+                "peak_reorder_bytes": 0,
+                "receiver_prefix": 1712,
+                "rejected_packets": 0,
+                "reorder_bytes": 0,
+                "source_sacked_ranges": [],
+                "stream": 6
+              },
+              {
+                "held_ranges": [],
+                "native_window_bytes": 522289,
+                "peak_reorder_bytes": 0,
+                "receiver_prefix": 320,
+                "rejected_packets": 0,
+                "reorder_bytes": 0,
+                "source_sacked_ranges": [],
+                "stream": 7
+              },
+              {
+                "held_ranges": [],
+                "native_window_bytes": 522289,
+                "peak_reorder_bytes": 0,
+                "receiver_prefix": 608,
+                "rejected_packets": 0,
+                "reorder_bytes": 0,
+                "source_sacked_ranges": [],
+                "stream": 10
+              },
+              {
+                "held_ranges": [],
+                "native_window_bytes": 522289,
+                "peak_reorder_bytes": 0,
+                "receiver_prefix": 0,
+                "rejected_packets": 0,
+                "reorder_bytes": 0,
+                "source_sacked_ranges": [],
+                "stream": 11
+              }
+            ],
+            "wire_format": "MSR1 16-byte big-endian magic/begin/end/valid after native ACK header; actual model bytes, not production RoCE"
+          },
+          "capture_complete": true,
+          "omitted_events": 0,
+          "full_wire_reconstruction_claimed": false,
+          "finish_ns": 110631
+        },
+        "hardware_calibrated": false,
+        "numeric_expert_computation": false,
+        "declared_duration_not_observed_profile": true
+      }
+    },
+    "transaction-full": {
+      "passed": true,
+      "cached": false,
+      "counters": null,
+      "delivery": {
+        "decisions": 8,
+        "callbacks": 11,
+        "nodes": 2
+      },
+      "application": {
+        "operations": 2,
+        "frames": 3,
+        "source_packets": 3,
+        "source_bytes": 120,
+        "actual_returned_value": 7,
+        "final_atomic_value": 10,
+        "final_put_value": 107
+      }
+    },
+    "transaction-cached": {
+      "passed": true,
+      "cached": true,
+      "counters": {
+        "schema_version": "moe-static-stream-validation/1",
+        "host_only": true,
+        "calls": 9,
+        "hits": 8,
+        "validations": 1,
+        "unkeyable": 0,
+        "entries": 1
+      },
+      "delivery": {
+        "decisions": 8,
+        "callbacks": 11,
+        "nodes": 2
+      },
+      "application": {
+        "operations": 2,
+        "frames": 3,
+        "source_packets": 3,
+        "source_bytes": 120,
+        "actual_returned_value": 7,
+        "final_atomic_value": 10,
+        "final_put_value": 107
+      }
+    },
+    "modern-migrated": {
+      "passed": true,
+      "cached": true,
+      "counters": {
+        "schema_version": "moe-static-stream-validation/1",
+        "host_only": true,
+        "calls": 64,
+        "hits": 63,
+        "validations": 1,
+        "unkeyable": 0,
+        "entries": 1
+      },
+      "delivery": {
+        "decisions": 63,
+        "callbacks": 437,
+        "nodes": 97
+      },
+      "application": {
+        "passed": true,
+        "expert_stages": [
+          {
+            "call": 0,
+            "rank": 0,
+            "operation": 29,
+            "declared_ns": 0,
+            "dispatch_complete_ns": 24244,
+            "admitted_ns": 24244,
+            "started_ns": 24244,
+            "completed_ns": 24244,
+            "combine_begin_ns": 24244
+          },
+          {
+            "call": 0,
+            "rank": 1,
+            "operation": 33,
+            "declared_ns": 5000,
+            "dispatch_complete_ns": 24713,
+            "admitted_ns": 24713,
+            "started_ns": 24713,
+            "completed_ns": 29713,
+            "combine_begin_ns": 29713
+          },
+          {
+            "call": 1,
+            "rank": 0,
+            "operation": 82,
+            "declared_ns": 7000,
+            "dispatch_complete_ns": 73090,
+            "admitted_ns": 73090,
+            "started_ns": 73090,
+            "completed_ns": 80090,
+            "combine_begin_ns": 80090
+          },
+          {
+            "call": 1,
+            "rank": 1,
+            "operation": 78,
+            "declared_ns": 100,
+            "dispatch_complete_ns": 67254,
+            "admitted_ns": 67254,
+            "started_ns": 67254,
+            "completed_ns": 67354,
+            "combine_begin_ns": 67354
+          }
+        ],
+        "application": {
+          "passed": true,
+          "selective_enabled": true,
+          "application": {
+            "passed": true,
+            "modern_operations": 60,
+            "modern_events": 322,
+            "native_remote_operations": 50,
+            "native_local_operations": 47,
+            "paths": {
+              "gin_self": 20,
+              "rdma": 30,
+              "local": 10
+            },
+            "calls": 2,
+            "ranks": 2,
+            "decisions": 63,
+            "finish_ns": 110631,
+            "actual_target_applications": 50,
+            "actual_source_packets": 100,
+            "retransmitted_source_packets": 0,
+            "decoded_frames": 46,
+            "complete_work_records": 46,
+            "physical_capture_events": 4400,
+            "checked_captured_endpoint_data_records": 200,
+            "observed_endpoint_ack_records": 200,
+            "full_physical_path_or_ack_audit_complete": false,
+            "omitted_physical_records": 0,
+            "transport_scope": "complete source bytes/frames/work/transaction memory; physical data and ACK validation restricted to capture prefix",
+            "scope": "functional byte/event acceptance, not numerical model or calibrated GPU/provider performance"
+          },
+          "delivery": {
+            "physical_decisions": 63,
+            "logical_steps": 214,
+            "callbacks": 437,
+            "native_nodes": 97,
+            "peak_batches": 10,
+            "peak_compact_bytes": 1442
+          },
+          "configured_faults": [],
+          "actual_fault_drops": 0,
+          "actual_feedback_received": 100,
+          "recovery": {
+            "columns": [
+              "time_ns",
+              "event",
+              "source",
+              "message_id",
+              "acknowledged_bytes",
+              "highest_sent_bytes",
+              "retries_since_progress",
+              "rto_ns",
+              "deadline_ns"
+            ],
+            "complete": true,
+            "complete_scope": "complete denotes ACKed published prefix; connection persists until explicit Close",
+            "config": {
+              "inflight_bytes": 522289,
+              "initial_rto_ns": 80000,
+              "max_events": 30000,
+              "max_retries": 3,
+              "max_rto_ns": 640000,
+              "mode": "selective_repeat/1",
+              "receive_buffer_bytes": 524288
+            },
+            "duplicate_ack_responses": 0,
+            "event_codes": {
+              "ack_progress": 1,
+              "complete": 3,
+              "old_feedback": 6,
+              "prefix_published": 5,
+              "retry_exhausted": 4,
+              "timeout_retransmit": 2,
+              "timer_started": 0
+            },
+            "failed": false,
+            "identity_scope": "message_id in records and fault rules means persistent stream ID; sequences cover the whole connection",
+            "observations": 173,
+            "old_feedback_packets": 0,
+            "omitted_events": 0,
+            "receiver_columns": [
+              "time_ns",
+              "receiver",
+              "sender_ipv4",
+              "receiver_ipv4",
+              "sender_port",
+              "receiver_port",
+              "ack_sequence",
+              "duplicate_offset"
+            ],
+            "states": [
+              {
+                "acknowledged_bytes": 1104,
+                "deadline_ns": -1,
+                "failed": false,
+                "highest_sent_bytes": 1104,
+                "prefix_complete": true,
+                "published_bytes": 1104,
+                "retries_since_progress": 0,
+                "rto_ns": 80000,
+                "stream": 2,
+                "timeout_expiries": 0,
+                "timeout_retransmissions": 0
+              },
+              {
+                "acknowledged_bytes": 320,
+                "deadline_ns": -1,
+                "failed": false,
+                "highest_sent_bytes": 320,
+                "prefix_complete": true,
+                "published_bytes": 320,
+                "retries_since_progress": 0,
+                "rto_ns": 80000,
+                "stream": 3,
+                "timeout_expiries": 0,
+                "timeout_retransmissions": 0
+              },
+              {
+                "acknowledged_bytes": 1216,
+                "deadline_ns": -1,
+                "failed": false,
+                "highest_sent_bytes": 1216,
+                "prefix_complete": true,
+                "published_bytes": 1216,
+                "retries_since_progress": 0,
+                "rto_ns": 80000,
+                "stream": 4,
+                "timeout_expiries": 0,
+                "timeout_retransmissions": 0
+              },
+              {
+                "acknowledged_bytes": 1712,
+                "deadline_ns": -1,
+                "failed": false,
+                "highest_sent_bytes": 1712,
+                "prefix_complete": true,
+                "published_bytes": 1712,
+                "retries_since_progress": 0,
+                "rto_ns": 80000,
+                "stream": 6,
+                "timeout_expiries": 0,
+                "timeout_retransmissions": 0
+              },
+              {
+                "acknowledged_bytes": 320,
+                "deadline_ns": -1,
+                "failed": false,
+                "highest_sent_bytes": 320,
+                "prefix_complete": true,
+                "published_bytes": 320,
+                "retries_since_progress": 0,
+                "rto_ns": 80000,
+                "stream": 7,
+                "timeout_expiries": 0,
+                "timeout_retransmissions": 0
+              },
+              {
+                "acknowledged_bytes": 608,
+                "deadline_ns": -1,
+                "failed": false,
+                "highest_sent_bytes": 608,
+                "prefix_complete": true,
+                "published_bytes": 608,
+                "retries_since_progress": 0,
+                "rto_ns": 80000,
+                "stream": 10,
+                "timeout_expiries": 0,
+                "timeout_retransmissions": 0
+              }
+            ]
+          },
+          "selective_summary": {
+            "inflight_bytes": 522289,
+            "max_packet_overshoot_bytes": 63,
+            "max_reorder_packets_per_stream": 4096,
+            "receive_buffer_bytes": 524288,
+            "scope": "bounded byte-only selective-repeat reference, not IRN reproduction, modern GIN or hardware calibration; source uses received feedback only",
+            "states": [
+              {
+                "held_ranges": [],
+                "native_window_bytes": 522289,
+                "peak_reorder_bytes": 0,
+                "receiver_prefix": 1104,
+                "rejected_packets": 0,
+                "reorder_bytes": 0,
+                "source_sacked_ranges": [],
+                "stream": 2
+              },
+              {
+                "held_ranges": [],
+                "native_window_bytes": 522289,
+                "peak_reorder_bytes": 0,
+                "receiver_prefix": 320,
+                "rejected_packets": 0,
+                "reorder_bytes": 0,
+                "source_sacked_ranges": [],
+                "stream": 3
+              },
+              {
+                "held_ranges": [],
+                "native_window_bytes": 522289,
+                "peak_reorder_bytes": 0,
+                "receiver_prefix": 1216,
+                "rejected_packets": 0,
+                "reorder_bytes": 0,
+                "source_sacked_ranges": [],
+                "stream": 4
+              },
+              {
+                "held_ranges": [],
+                "native_window_bytes": 522289,
+                "peak_reorder_bytes": 0,
+                "receiver_prefix": 0,
+                "rejected_packets": 0,
+                "reorder_bytes": 0,
+                "source_sacked_ranges": [],
+                "stream": 5
+              },
+              {
+                "held_ranges": [],
+                "native_window_bytes": 522289,
+                "peak_reorder_bytes": 0,
+                "receiver_prefix": 1712,
+                "rejected_packets": 0,
+                "reorder_bytes": 0,
+                "source_sacked_ranges": [],
+                "stream": 6
+              },
+              {
+                "held_ranges": [],
+                "native_window_bytes": 522289,
+                "peak_reorder_bytes": 0,
+                "receiver_prefix": 320,
+                "rejected_packets": 0,
+                "reorder_bytes": 0,
+                "source_sacked_ranges": [],
+                "stream": 7
+              },
+              {
+                "held_ranges": [],
+                "native_window_bytes": 522289,
+                "peak_reorder_bytes": 0,
+                "receiver_prefix": 608,
+                "rejected_packets": 0,
+                "reorder_bytes": 0,
+                "source_sacked_ranges": [],
+                "stream": 10
+              },
+              {
+                "held_ranges": [],
+                "native_window_bytes": 522289,
+                "peak_reorder_bytes": 0,
+                "receiver_prefix": 0,
+                "rejected_packets": 0,
+                "reorder_bytes": 0,
+                "source_sacked_ranges": [],
+                "stream": 11
+              }
+            ],
+            "wire_format": "MSR1 16-byte big-endian magic/begin/end/valid after native ACK header; actual model bytes, not production RoCE"
+          },
+          "capture_complete": true,
+          "omitted_events": 0,
+          "full_wire_reconstruction_claimed": false,
+          "finish_ns": 110631
+        },
+        "hardware_calibrated": false,
+        "numeric_expert_computation": false,
+        "declared_duration_not_observed_profile": true
+      }
+    },
+    "transaction-migrated": {
+      "passed": true,
+      "cached": true,
+      "counters": {
+        "schema_version": "moe-static-stream-validation/1",
+        "host_only": true,
+        "calls": 9,
+        "hits": 8,
+        "validations": 1,
+        "unkeyable": 0,
+        "entries": 1
+      },
+      "delivery": {
+        "decisions": 8,
+        "callbacks": 11,
+        "nodes": 2
+      },
+      "application": {
+        "operations": 2,
+        "frames": 3,
+        "source_packets": 3,
+        "source_bytes": 120,
+        "actual_returned_value": 7,
+        "final_atomic_value": 10,
+        "final_put_value": 107
+      }
+    }
+  },
+  "comparisons": {
+    "modern-cached": {
+      "passed": true,
+      "whole_result_equal": true,
+      "control_byte_identical": true,
+      "modern": true,
+      "migrated_library_roots_and_enumeration_only": false
+    },
+    "modern-migrated": {
+      "passed": true,
+      "whole_result_equal": true,
+      "control_byte_identical": true,
+      "modern": true,
+      "migrated_library_roots_and_enumeration_only": true
+    },
+    "transaction-cached": {
+      "passed": true,
+      "whole_result_equal": true,
+      "control_byte_identical": true,
+      "modern": false,
+      "migrated_library_roots_and_enumeration_only": false
+    },
+    "transaction-migrated": {
+      "passed": true,
+      "whole_result_equal": true,
+      "control_byte_identical": true,
+      "modern": false,
+      "migrated_library_roots_and_enumeration_only": true
+    }
+  },
+  "corruptions_rejected": {
+    "modern": [
+      "actual_callback",
+      "actual_payload",
+      "cache_counter",
+      "transaction_completion"
+    ],
+    "transaction": [
+      "actual_callback",
+      "actual_payload",
+      "cache_counter",
+      "transaction_completion"
+    ]
+  },
+  "copied_source_hashes_verified": true,
+  "actual_runtime_identity_sha256": "e0a6015eb54f6cd9f5ca77cc9c2ff22c9fe1389d52e58fc55ca5b58627d43ac6",
+  "performance_measured": false,
+  "hardware_calibrated": false,
+  "research_innovation_proven": false
+}

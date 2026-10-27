@@ -13,7 +13,11 @@
 
 ## 当前范围和预算
 
-当前平台`in_progress`：[会话固定传输声明校验复用](static_stream_validation_spec.md)。只为纯streams校验增加默认关闭、类型安全的会话内复用，动态完整历史和原生准入保持；先完成功能与六个固定小网络/迁移对照，不做性能测量或论文收益声明。原件`runs/static_stream_validation_20261027/`，900受监控秒/512MiB及单命令60秒/RSS1GiB/地址2GiB；失败关闭剩余网络、不提高上限、不重跑，平台与后续研究分开提交。
+当前平台`completed`：[会话固定传输声明校验复用](static_stream_validation_spec.md)、[验收与恢复](../../fixtures/static_stream_validation/README.md)。两个公开会话入口新增默认关闭的`--reuse-static-validation`，单会话保留完整拓扑/协议/派生streams的不可变类型安全键，动态完整历史和原生准入保持。81项单元、13依赖及两原件各4类证据篡改拒绝通过；六次固定网络全部完成，默认/开启完整result与control严格相同，迁移仅对应八个同hash原生库根路径/枚举多重集合。现代两rank两调用64次静态请求仅执行1次原检查（437回调/97节点），事务9次仅执行1次（11回调/2节点、实际旧值7/终值10/后继107）；不等于64倍或9倍加速。
+
+1560成员/51,199,960B包逐hash恢复，复制源码根/空cwd离线核验JSON逐字节一致，零恢复网络；SHA256 `768c9f474a5a625167d03816102f0c63519575d6c3845eecd08fd76398ea9019`。原件`runs/static_stream_validation_20261027/`，保守含复制收据70.295监控秒、116.60MiB分配产物及另计2MiB收据/10秒管理预留，保持900秒/512MiB与全部单命令上限。核验器曾误计系统库和误读副作用身份字段，两次错误/三版源码均保留；只离线纠正并继续未开始条件，零网络失败、重跑或扩限。实际O3/10运行时文件及八库身份核对，零构建/安装下载/GPU/依赖修改/push；仅本地保存。见[核验](../../fixtures/static_stream_validation/verification.json)、[恢复](../../fixtures/static_stream_validation/recovery.json)与[收尾](../../fixtures/static_stream_validation/closeout.json)。
+
+本平台阶段预算关闭。下一步先独立登记O3下完整现代/通用图流程的配对CPU、墙钟和RSS测量，保留构键/键内存开销与可能无收益结果，再决定是否采用；本阶段未测加速，普通缓存不是论文主贡献。两个创新候选及整体目标仍`in_progress`。
 
 完整候选准入重复处理`completed`：[事前协议](../../experiments/session_admission_profile/protocol.md)、[结果、网页与恢复](../../experiments/session_admission_profile/README.md)。协议`fd51ac1`、执行`1df7c1d`，固定O3四份真实完成调用，四次离线cProfile完成。主校验源码与旧`d3e639f`一致；167/207个最终节点在67/92条实际COMMIT中累计进入主操作循环6769/11719次（40.53/56.61倍），每段远端历史循环累计187819/346900对。固定streams子校验占剖析33.57%～35.68%，超过事前10%工程优先级门槛，下一步有依据的是类型安全的固定校验复用对照；不省略动态历史、写顺序或native检查。旧完整CPU中候选复制/校验占35.22%～41.47%，全部免费仅为1.544～1.708倍宽松CPU工作量界，不是实际提速；剖析比例不能乘旧CPU。
 

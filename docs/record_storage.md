@@ -1,5 +1,7 @@
 # 观测记录与存储格式
 
+两个会话入口显式开启`--reuse-static-validation`时，退出时另存`static-validation.json`，格式`moe-static-stream-validation/1`。`calls`为静态子检查请求数，`hits`为复用数，`validations`为实际原校验尝试数（包括失败），满足`calls=hits+validations`；`unkeyable`为不支持的类型或递归输入而回退的次数，`entries`仅为0或1。`host_only=true`，没有时长信息，不属于网络/算法观察输入。关闭时不生成；主result、控制消息和原生协议不添加缓存字段。用法见[会话复用说明](../examples/modern_deepep_native/README.md#可选的固定校验复用)。
+
 `modern-deepep-native`另存`modern-plan.json/modern-execution.json`和实际`control.jsonl/result.json`；现代事件以`native_operation/native_event/native_time_ns`指向实际回调，纯零时长控制步骤单独标记。失败保留部分执行，不把输出文件存在当完成证明；字段见[输出说明](../examples/modern_deepep_native/README.md#输出)。
 
 使用`moe-modern-native-input/2`时，现代快照增加`expert_stage`，保留`mode=per_call_rank_declared_ns/1`、按调用/rank的`durations_ns`及`source`说明。实际专家节点时长仍在`native_operations[].duration_ns`，开始/完成由原生session回调给出；输入矩阵不是绝对就绪时刻或硬件profile。v1快照保持无此字段，详见[成本输入](../examples/modern_deepep_native/README.md#按调用和rank修改专家计算耗时)。

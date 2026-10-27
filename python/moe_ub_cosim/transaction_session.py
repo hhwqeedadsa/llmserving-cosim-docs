@@ -20,6 +20,7 @@ from .native_identity import locked_native_commit
 from .scaleout_topology import fields, require
 from .scaleout_transactions import validate
 from .host_timing import HostTiming
+from .static_stream_validation import StaticStreamValidationCache
 
 
 def _control_plan(current, alarms, cancel_alarms, now_ns, max_ns):
@@ -135,9 +136,12 @@ class NativeTransactionSession:
     visibility. Cumulative work/connection budgets retain the v4 bounds.
     """
 
-    def __init__(self, topology, protocol, initial, backend, output, *, timing=None, callback_batches=False):
+    def __init__(self, topology, protocol, initial, backend, output, *, timing=None, callback_batches=False,
+                 reuse_static_validation=False):
         require(timing is None or isinstance(timing,HostTiming), 'invalid host timing observer')
         require(type(callback_batches) is bool, 'callback_batches must be boolean')
+        require(type(reuse_static_validation) is bool, 'reuse_static_validation must be boolean')
+        self._stream_cache = StaticStreamValidationCache() if reuse_static_validation else None
         self.callback_batches = callback_batches
         self.timing=timing if timing is not None else HostTiming()
         self.topology, self.protocol = Path(topology).resolve(), Path(protocol).resolve()
@@ -147,7 +151,7 @@ class NativeTransactionSession:
                 'session requires v4/v5 initial configuration with empty operations')
         self.t = checked_json(self.topology, 8388608)
         self.p = checked_json(self.protocol, 65536)
-        validate(self.t, self.p, self.config, allow_no_remote=True)
+        validate(self.t, self.p, self.config, allow_no_remote=True, stream_cache=self._stream_cache)
         require(self.backend.is_file() and os.access(self.backend, os.X_OK), 'missing native transaction-session executable')
         require(self.output.is_dir() and not (self.output/'result.json').exists(), 'require an existing new session output directory')
         require(shutil.disk_usage(self.output).free >= 8*2**30, 'session output volume below 8GiB reserve')
@@ -210,6 +214,8 @@ class NativeTransactionSession:
             self.selector.close()
             for handle in (self.errors, self.logs, self.transcript):
                 handle.close()
+            if self._stream_cache is not None:
+                save(self.output/'static-validation.json', self._stream_cache.snapshot())
 
     def _line(self):
         while b'\n' not in self._buffer:
@@ -299,7 +305,8 @@ class NativeTransactionSession:
             candidate = deepcopy(self.config)
             candidate['operations'].extend(deepcopy(submissions))
         with self._phase('python_candidate_validate'):
-            validate(self.t, self.p, candidate, allow_no_remote=True)
+            validate(self.t, self.p, candidate, allow_no_remote=True,
+                     stream_cache=getattr(self, '_stream_cache', None))
             control, extra = _control_plan(self._alarms, alarms, cancel_alarms,
                                           self.pending['now_ns'], limits(self.p)['max_sim_ns'])
             if wake_on is not None:
@@ -330,12 +337,13 @@ class NativeTransactionSession:
         self.sequence += 1
 
 
-def dependency_frontend(topology, protocol, config, backend, output):
+def dependency_frontend(topology, protocol, config, backend, output, *, reuse_static_validation=False):
     """Known program stays in the frontend; submit only after actual events."""
     config = checked_json(Path(config), 4*2**20)
     initial = dict(config, operations=[])
     seen, submitted = set(), set()
-    with NativeTransactionSession(topology, protocol, initial, backend, output) as session:
+    with NativeTransactionSession(topology, protocol, initial, backend, output,
+                                  reuse_static_validation=reuse_static_validation) as session:
         while (event := session.receive()) is not None:
             for transition in event['events']:
                 seen.add((transition['operation'], transition['event']))
@@ -352,7 +360,8 @@ def dependency_frontend(topology, protocol, config, backend, output):
             submitted.update(op['id'] for op in ready)
 
 
-def run(topology, protocol, config, backend, output):
+def run(topology, protocol, config, backend, output, *, reuse_static_validation=False):
+    require(type(reuse_static_validation) is bool, 'reuse_static_validation must be boolean')
     topology, protocol, config, backend, output = (Path(p).resolve() for p in (topology, protocol, config, backend, output))
     t, p, w = (checked_json(path, size) for path, size in
                ((topology/'topology.json', 8388608), (protocol, 65536), (config, 4*2**20)))
@@ -372,6 +381,8 @@ def run(topology, protocol, config, backend, output):
                   address_bytes=min(2**31, budget['address_bytes']), artifact_bytes=min(64*2**20, budget['artifact_bytes']))
     command = [sys.executable, '-m', 'moe_ub_cosim.transaction_session', '--worker',
                output/'topology.json', output/'protocol.json', output/'input.json', backend, output]
+    if reuse_static_validation:
+        command.append('--reuse-static-validation')
     monitored(command, output/'execution', [output], runtime=budget)
     result = checked_json(output/'result.json', budget['result_json_bytes'])
     require(result['passed'] and result['session']['finished'] and result['transactions']['transport']['physical_drained'], 'transaction session incomplete')
@@ -380,5 +391,8 @@ def run(topology, protocol, config, backend, output):
 
 
 if __name__ == '__main__':
-    require(sys.argv[1:2] == ['--worker'] and len(sys.argv) == 7, 'internal session worker requires five paths')
-    dependency_frontend(*sys.argv[2:])
+    flags = sys.argv[7:]
+    require(sys.argv[1:2] == ['--worker'] and len(sys.argv) >= 7 and len(set(flags)) == len(flags) and
+            set(flags) <= {'--reuse-static-validation'},
+            'internal session worker requires five paths and supported unique flags')
+    dependency_frontend(*sys.argv[2:7], reuse_static_validation='--reuse-static-validation' in flags)

@@ -9,6 +9,7 @@ from .scaleout_streams import validate as validate_streams
 from .scaleout_topology import fields, integer, require
 from .memory_registrations import validate_registrations
 from .application_windows import validate_application_windows
+from .static_stream_validation import StaticStreamValidationCache
 
 
 def _hex(text, maximum, name):
@@ -69,7 +70,9 @@ def execution_limits(config):
     return dict(value)
 
 
-def validate(topology, protocol, config, *, allow_no_remote=False):
+def validate(topology, protocol, config, *, allow_no_remote=False, stream_cache=None):
+    require(stream_cache is None or type(stream_cache) is StaticStreamValidationCache,
+            'invalid static streams validation cache')
     local_mode = isinstance(config, dict) and config.get('schema_version') in ('moe-rdma-transactions/2', 'moe-rdma-transactions/3', 'moe-rdma-transactions/4', 'moe-rdma-transactions/5')
     sparse_mode = isinstance(config, dict) and config.get('schema_version') == 'moe-rdma-transactions/5'
     memory_mode = sparse_mode or (isinstance(config, dict) and config.get('schema_version') == 'moe-rdma-transactions/4')
@@ -133,7 +136,10 @@ def validate(topology, protocol, config, *, allow_no_remote=False):
             limits=dict(max_streams=2*counts['max_connections'], max_work=2*counts['max_remote_operations']))
     if 'transport_recovery' in config:descriptor['transport_recovery']=config['transport_recovery']
     if reference:descriptor['dcqcn_reference']=config['dcqcn_reference']
-    validate_streams(topology, protocol, descriptor)
+    if stream_cache is None:
+        validate_streams(topology, protocol, descriptor)
+    else:
+        stream_cache.validate(topology, protocol, descriptor)
     windows = config['windows']
     require(isinstance(windows, list) and 1 <= len(windows) <= 16, 'require 1..16 remote windows')
     gpus = {n['id'] for n in topology['nodes'] if n['kind'] == 'gpu'}

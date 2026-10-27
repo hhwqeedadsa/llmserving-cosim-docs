@@ -222,7 +222,8 @@ class ModernNativeController:
         return result
 
 
-def worker(topology,protocol,config,backend,output,*,callback_wakeups=False,host_timing=False,callback_batches=False):
+def worker(topology,protocol,config,backend,output,*,callback_wakeups=False,host_timing=False,callback_batches=False,
+           reuse_static_validation=False):
     require(not (callback_wakeups and callback_batches),'mutually exclusive callback modes')
     output=Path(output);timing=HostTiming(output/'worker_host.jsonl' if host_timing else None)
     complete=False
@@ -234,7 +235,9 @@ def worker(topology,protocol,config,backend,output,*,callback_wakeups=False,host
                 save(output/'modern-plan.json',controller.layout.plan);save(output/'functional-windows.json',controller.layout.description)
             try:
                 with timing.span('session_init'):
-                    session=NativeTransactionSession(topology,protocol,controller.layout.initial,backend,output,timing=timing,callback_batches=callback_batches)
+                    session_options = dict(reuse_static_validation=True) if reuse_static_validation else {}
+                    session=NativeTransactionSession(topology,protocol,controller.layout.initial,backend,output,timing=timing,
+                        callback_batches=callback_batches,**session_options)
                 with session:
                     while True:
                         with timing.span('native_receive'):event=session.receive()
@@ -262,11 +265,13 @@ def worker(topology,protocol,config,backend,output,*,callback_wakeups=False,host
         timing.close(complete)
 
 
-def run(topology,protocol,config,backend,output,*,callback_wakeups=False,host_timing=False,callback_batches=False):
+def run(topology,protocol,config,backend,output,*,callback_wakeups=False,host_timing=False,callback_batches=False,
+        reuse_static_validation=False):
     require(type(callback_wakeups) is bool,'callback_wakeups must be boolean')
     require(type(callback_batches) is bool,'callback_batches must be boolean')
     require(not (callback_wakeups and callback_batches),'mutually exclusive callback modes')
     require(type(host_timing) is bool,'host_timing must be boolean')
+    require(type(reuse_static_validation) is bool,'reuse_static_validation must be boolean')
     topology,protocol,config,backend,output=(Path(p).resolve() for p in (topology,protocol,config,backend,output))
     t,p,c=(checked_json(path,maximum) for path,maximum in ((topology/'topology.json',8*2**20),(protocol,65536),(config,4*2**20)))
     ModernNativeLayout(t,p,c)  # Pure admission before creating output or native network.
@@ -281,6 +286,8 @@ def run(topology,protocol,config,backend,output,*,callback_wakeups=False,host_ti
         command.append('--callback-wakeups')
         save(output/'callback-delivery.json',dict(mode='next_event/1',bookkeeping_deferred=False,
              decision_limit=256,source_sha256=digest(Path(__file__).with_name('modern_native_wakeups.py'))))
+    if reuse_static_validation:
+        command.append('--reuse-static-validation')
     if callback_batches:
         command.append('--callback-batches')
         save(output/'callback-delivery.json',dict(mode='callback_batches/1',historical_batch_times_preserved=True,
@@ -305,6 +312,6 @@ def run(topology,protocol,config,backend,output,*,callback_wakeups=False,host_ti
 if __name__=='__main__':
     flags=sys.argv[7:]
     require(sys.argv[1:2]==['--worker'] and len(sys.argv)>=7 and len(set(flags))==len(flags) and
-        set(flags)<={'--callback-wakeups','--host-timing','--callback-batches'},'internal modern worker requires five paths and supported unique flags')
+        set(flags)<={'--callback-wakeups','--host-timing','--callback-batches','--reuse-static-validation'},'internal modern worker requires five paths and supported unique flags')
     worker(*sys.argv[2:7],callback_wakeups='--callback-wakeups' in flags,host_timing='--host-timing' in flags,
-           callback_batches='--callback-batches' in flags)
+           callback_batches='--callback-batches' in flags,reuse_static_validation='--reuse-static-validation' in flags)

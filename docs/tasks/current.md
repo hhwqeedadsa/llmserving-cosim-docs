@@ -13,7 +13,11 @@
 
 ## 当前范围和预算
 
-当前研究`in_progress`：[Hybrid转发的静态因果充分性核查](../../experiments/hybrid_causality_audit/protocol.md)。平台固定`19670ba`。先检验到达次序是否会改变有效消费顺序，避免无依据把动态轮询当创新；比较源码缓存状态机与事前固定tail/finish门槛DAG，保留反例和未覆盖。固定1527有限状态根、14输入/56条公开逻辑CLI及5/6粒度假设失效见证；600秒/256MiB、单命令60秒/RSS1GiB/地址2GiB，零新网络/构建/GPU/下载/平台或依赖改动/push。不重开旧研究，两项创新仍未成立。
+当前研究`completed`：[Hybrid转发的静态因果充分性核查](../../experiments/hybrid_causality_audit/README.md)、[事前协议](../../experiments/hybrid_causality_audit/protocol.md)、[中文网页](../../experiments/hybrid_causality_audit/results/20261027/report.html)与[研究取舍](../../experiments/hybrid_causality_audit/decision.md)。平台固定`19670ba`、协议`f32dba9`。1527根条件、1,049,283联合状态和2,711,060非平凡转换中，源码转录的单转发器与事前固定tail/finish门槛DAG一致；14次公开plan/42次逻辑replay完成，包含15份完整R1-AWQ/MMLU的声明EP16有限前缀，仅检查ingress0/channel0。不能再用默认6/6条件下的动态轮询支持普通任务图无法表达的主张。5/6粒度抽象控制确有不同块边界，不是部署或性能正例。
+
+独立按块轮次排序、原token/来源/slot/阻塞/完成前缀、六类证据篡改拒绝及13固定依赖核对通过。508成员/2,727,259B包逐hash恢复，复制源码/空cwd重算全部1527有限条件的转换hash、预测、核验及报告逐字节一致；未重跑公开回放或启动网络。归档SHA256 `a7d7cf2833f52c059705f5a23f95b72fc9d7cd1a09e44ab690be74b9a7a8fcc8`，原件`runs/hybrid_causality_audit_20261027/`。全部13主monitor结束，含恢复约74.631受监控秒、约69.8MiB本轮分配产物，另留2MiB/10秒管理额度；保持600秒/256MiB及原单命令60秒/RSS1GiB/地址2GiB，不扩限、无失败条件重跑。零新网络/构建/GPU/下载/平台或依赖修改/push。
+
+本阶段额度关闭。总体为progress，两项论文创新仍未成立；没有推理收益、宿主加速或千卡结论。后续先独立限定跨转发器共享GPU slot和返回元数据的实际完成顺序问题，与已有动态绑定DAG比较；不能直接将未验证部分当新创新，也不自动开始完整Hybrid功能或重开旧实验。
 
 当前平台`completed`：[共享机内peer字节转发](peer_copy_spec.md)、[用户小例](../../examples/scaleout_peer_copy/README.md)、[验收与网页](../../fixtures/peer_copy/README.md)。起点`28637a0`、规范`695f44e`。transactions/5显式peer模式接入已有共享crossbar，保留源lane、开始捕获实际字节、交付提交/释放保护；纯stream入口仍拒绝机内旁路，静态校验键区分混合权限。同一ns-3时钟和持续NIC完成实际远端接收→机内peer→后继远端发送，不生成peer RDMA包或假ACK。
 

@@ -1,0 +1,290 @@
+{
+  "passed": true,
+  "raw_route_files": 15,
+  "library_files": 6,
+  "exhaustive_roots": 1527,
+  "states": 1049283,
+  "edges": 2711060,
+  "families": {
+    "2": {
+      "roots": 128,
+      "states": 11340,
+      "edges": 21448
+    },
+    "3": {
+      "roots": 375,
+      "states": 278655,
+      "edges": 693132
+    },
+    "4": {
+      "roots": 1024,
+      "states": 759288,
+      "edges": 1996480
+    }
+  },
+  "public_replays": {
+    "synthetic-00/publish-first": {
+      "admitted_transfers": 6,
+      "macro_attempts": 2,
+      "actions": 10,
+      "focused_complete": true
+    },
+    "synthetic-00/reverse-drain": {
+      "admitted_transfers": 6,
+      "macro_attempts": 5,
+      "actions": 13,
+      "focused_complete": true
+    },
+    "synthetic-00/alternating-once": {
+      "admitted_transfers": 6,
+      "macro_attempts": 4,
+      "actions": 12,
+      "focused_complete": true
+    },
+    "synthetic-01/publish-first": {
+      "admitted_transfers": 6,
+      "macro_attempts": 2,
+      "actions": 11,
+      "focused_complete": true
+    },
+    "synthetic-01/reverse-drain": {
+      "admitted_transfers": 6,
+      "macro_attempts": 5,
+      "actions": 14,
+      "focused_complete": true
+    },
+    "synthetic-01/alternating-once": {
+      "admitted_transfers": 6,
+      "macro_attempts": 4,
+      "actions": 13,
+      "focused_complete": true
+    },
+    "synthetic-02/publish-first": {
+      "admitted_transfers": 12,
+      "macro_attempts": 3,
+      "actions": 18,
+      "focused_complete": true
+    },
+    "synthetic-02/reverse-drain": {
+      "admitted_transfers": 12,
+      "macro_attempts": 7,
+      "actions": 22,
+      "focused_complete": true
+    },
+    "synthetic-02/alternating-once": {
+      "admitted_transfers": 12,
+      "macro_attempts": 5,
+      "actions": 20,
+      "focused_complete": true
+    },
+    "synthetic-03/publish-first": {
+      "admitted_transfers": 13,
+      "macro_attempts": 4,
+      "actions": 20,
+      "focused_complete": true
+    },
+    "synthetic-03/reverse-drain": {
+      "admitted_transfers": 13,
+      "macro_attempts": 8,
+      "actions": 23,
+      "focused_complete": true
+    },
+    "synthetic-03/alternating-once": {
+      "admitted_transfers": 13,
+      "macro_attempts": 5,
+      "actions": 22,
+      "focused_complete": true
+    },
+    "synthetic-04/publish-first": {
+      "admitted_transfers": 25,
+      "macro_attempts": 6,
+      "actions": 36,
+      "focused_complete": true
+    },
+    "synthetic-04/reverse-drain": {
+      "admitted_transfers": 25,
+      "macro_attempts": 12,
+      "actions": 42,
+      "focused_complete": true
+    },
+    "synthetic-04/alternating-once": {
+      "admitted_transfers": 25,
+      "macro_attempts": 7,
+      "actions": 37,
+      "focused_complete": true
+    },
+    "synthetic-05/publish-first": {
+      "admitted_transfers": 13,
+      "macro_attempts": 4,
+      "actions": 21,
+      "focused_complete": true
+    },
+    "synthetic-05/reverse-drain": {
+      "admitted_transfers": 13,
+      "macro_attempts": 9,
+      "actions": 26,
+      "focused_complete": true
+    },
+    "synthetic-05/alternating-once": {
+      "admitted_transfers": 13,
+      "macro_attempts": 6,
+      "actions": 24,
+      "focused_complete": true
+    },
+    "synthetic-06/publish-first": {
+      "admitted_transfers": 13,
+      "macro_attempts": 4,
+      "actions": 22,
+      "focused_complete": true
+    },
+    "synthetic-06/reverse-drain": {
+      "admitted_transfers": 13,
+      "macro_attempts": 9,
+      "actions": 27,
+      "focused_complete": true
+    },
+    "synthetic-06/alternating-once": {
+      "admitted_transfers": 13,
+      "macro_attempts": 6,
+      "actions": 24,
+      "focused_complete": true
+    },
+    "synthetic-07/publish-first": {
+      "admitted_transfers": 13,
+      "macro_attempts": 4,
+      "actions": 21,
+      "focused_complete": true
+    },
+    "synthetic-07/reverse-drain": {
+      "admitted_transfers": 13,
+      "macro_attempts": 9,
+      "actions": 25,
+      "focused_complete": true
+    },
+    "synthetic-07/alternating-once": {
+      "admitted_transfers": 13,
+      "macro_attempts": 6,
+      "actions": 25,
+      "focused_complete": true
+    },
+    "synthetic-08/publish-first": {
+      "admitted_transfers": 31,
+      "macro_attempts": 7,
+      "actions": 45,
+      "focused_complete": true
+    },
+    "synthetic-08/reverse-drain": {
+      "admitted_transfers": 31,
+      "macro_attempts": 15,
+      "actions": 53,
+      "focused_complete": true
+    },
+    "synthetic-08/alternating-once": {
+      "admitted_transfers": 31,
+      "macro_attempts": 9,
+      "actions": 48,
+      "focused_complete": true
+    },
+    "synthetic-09/publish-first": {
+      "admitted_transfers": 14,
+      "macro_attempts": 5,
+      "actions": 24,
+      "focused_complete": true
+    },
+    "synthetic-09/reverse-drain": {
+      "admitted_transfers": 14,
+      "macro_attempts": 11,
+      "actions": 30,
+      "focused_complete": true
+    },
+    "synthetic-09/alternating-once": {
+      "admitted_transfers": 14,
+      "macro_attempts": 7,
+      "actions": 27,
+      "focused_complete": true
+    },
+    "synthetic-10/publish-first": {
+      "admitted_transfers": 14,
+      "macro_attempts": 5,
+      "actions": 24,
+      "focused_complete": true
+    },
+    "synthetic-10/reverse-drain": {
+      "admitted_transfers": 14,
+      "macro_attempts": 11,
+      "actions": 30,
+      "focused_complete": true
+    },
+    "synthetic-10/alternating-once": {
+      "admitted_transfers": 14,
+      "macro_attempts": 7,
+      "actions": 27,
+      "focused_complete": true
+    },
+    "synthetic-11/publish-first": {
+      "admitted_transfers": 38,
+      "macro_attempts": 9,
+      "actions": 56,
+      "focused_complete": true
+    },
+    "synthetic-11/reverse-drain": {
+      "admitted_transfers": 38,
+      "macro_attempts": 19,
+      "actions": 65,
+      "focused_complete": true
+    },
+    "synthetic-11/alternating-once": {
+      "admitted_transfers": 38,
+      "macro_attempts": 11,
+      "actions": 60,
+      "focused_complete": true
+    },
+    "synthetic-12/publish-first": {
+      "admitted_transfers": 0,
+      "macro_attempts": 1,
+      "actions": 5,
+      "focused_complete": true
+    },
+    "synthetic-12/reverse-drain": {
+      "admitted_transfers": 0,
+      "macro_attempts": 5,
+      "actions": 9,
+      "focused_complete": true
+    },
+    "synthetic-12/alternating-once": {
+      "admitted_transfers": 0,
+      "macro_attempts": 5,
+      "actions": 10,
+      "focused_complete": true
+    },
+    "real-prefill-prefix/publish-first": {
+      "admitted_transfers": 30,
+      "macro_attempts": 7,
+      "actions": 42,
+      "focused_complete": true
+    },
+    "real-prefill-prefix/reverse-drain": {
+      "admitted_transfers": 30,
+      "macro_attempts": 13,
+      "actions": 47,
+      "focused_complete": true
+    },
+    "real-prefill-prefix/alternating-once": {
+      "admitted_transfers": 30,
+      "macro_attempts": 8,
+      "actions": 43,
+      "focused_complete": true
+    }
+  },
+  "corruption_rejections": {
+    "dag_gate": "rejected",
+    "predicted_source": "rejected",
+    "transfer_identity": "rejected",
+    "source_channel": "rejected",
+    "final_prefix": "rejected",
+    "action_identity": "rejected"
+  },
+  "new_networks": 0,
+  "gpu_executed": false,
+  "boundary": "finite source-model enumeration and caller-declared single-forwarder logical replay only; certificates are deterministic hashes, not formal proofs"
+}

@@ -1,0 +1,21 @@
+{
+  "all_completed_monitors": 13,
+  "monitored_wall_seconds": 74.63054584799102,
+  "max_sampled_group_rss_bytes": 46764032,
+  "aggregate_artifact_usage_before_final_receipt": {
+    "apparent_bytes": 71383810,
+    "allocated_bytes": 73162752
+  },
+  "monitored_stage_allocation_note": "Exact per-monitor accounting in original run; final copy and receipt covered by 2MiB/10sec reserve",
+  "wall_budget_seconds": 600,
+  "artifact_budget_bytes": 268435456,
+  "public_cli_commands": 56,
+  "new_networks": 0,
+  "overall_goal": "in_progress",
+  "paper_innovations_established": 0,
+  "versioned_result_allocation_before_final_receipt": {
+    "apparent_bytes": 22259,
+    "allocated_bytes": 45056
+  },
+  "metadata_correction": "Initial administration receipt used lexicographically last monitor rather than final aggregate; preserved as final-resources-initial.json. No experiment was rerun."
+}

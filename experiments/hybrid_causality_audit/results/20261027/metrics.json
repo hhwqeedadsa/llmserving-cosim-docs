@@ -1,0 +1,95 @@
+{
+  "exhaustive_roots": 1527,
+  "states": 1049283,
+  "edges": 2711060,
+  "public_replays": 42,
+  "hypothetical_parameter_control": {
+    "progress_interval": 5,
+    "consumption_chunk": 6,
+    "sizes": [
+      1,
+      10
+    ],
+    "early_actions": [
+      [
+        "publish",
+        0
+      ],
+      [
+        "publish",
+        1
+      ],
+      [
+        "attempt"
+      ],
+      [
+        "attempt"
+      ],
+      [
+        "publish",
+        1
+      ],
+      [
+        "publish",
+        1
+      ]
+    ],
+    "late_actions": [
+      [
+        "publish",
+        0
+      ],
+      [
+        "publish",
+        1
+      ],
+      [
+        "publish",
+        1
+      ],
+      [
+        "publish",
+        1
+      ]
+    ],
+    "early_admissions": [
+      [
+        1,
+        0,
+        5
+      ],
+      [
+        0,
+        0,
+        1
+      ],
+      [
+        1,
+        5,
+        10
+      ]
+    ],
+    "late_admissions": [
+      [
+        1,
+        0,
+        6
+      ],
+      [
+        0,
+        0,
+        1
+      ],
+      [
+        1,
+        6,
+        10
+      ]
+    ],
+    "deployed_configuration": false,
+    "gpu_executed": false
+  },
+  "measured_speedup": null,
+  "measured_inference_benefit": null,
+  "paper_innovations_established": 0
+}

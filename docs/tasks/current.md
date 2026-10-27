@@ -13,6 +13,8 @@
 
 ## 当前范围和预算
 
+当前研究`in_progress`：[Hybrid跨通道slot与逆映射核查](../../experiments/hybrid_slot_audit/protocol.md)。起点`0e04667`，平台固定`19670ba`。先纠正资源身份：入口GPU本地按目标分计数器、同入口跨通道共享，目标缓冲按入口分区；再检验声明交错是否只改变slot/epilogue行号，普通符号buffer/DAG保留逆映射是否足够。固定8公开plan、150人工/6真实前缀声明交错，六份固定库源码；600秒/256MiB、单命令60秒/RSS1GiB/地址2GiB，零新网络/构建/GPU/下载/平台依赖修改/push。不从地址改号推断网络等价/加速，不重开旧研究，两创新仍未成立。
+
 当前研究`completed`：[Hybrid转发的静态因果充分性核查](../../experiments/hybrid_causality_audit/README.md)、[事前协议](../../experiments/hybrid_causality_audit/protocol.md)、[中文网页](../../experiments/hybrid_causality_audit/results/20261027/report.html)与[研究取舍](../../experiments/hybrid_causality_audit/decision.md)。平台固定`19670ba`、协议`f32dba9`。1527根条件、1,049,283联合状态和2,711,060非平凡转换中，源码转录的单转发器与事前固定tail/finish门槛DAG一致；14次公开plan/42次逻辑replay完成，包含15份完整R1-AWQ/MMLU的声明EP16有限前缀，仅检查ingress0/channel0。不能再用默认6/6条件下的动态轮询支持普通任务图无法表达的主张。5/6粒度抽象控制确有不同块边界，不是部署或性能正例。
 
 独立按块轮次排序、原token/来源/slot/阻塞/完成前缀、六类证据篡改拒绝及13固定依赖核对通过。508成员/2,727,259B包逐hash恢复，复制源码/空cwd重算全部1527有限条件的转换hash、预测、核验及报告逐字节一致；未重跑公开回放或启动网络。归档SHA256 `a7d7cf2833f52c059705f5a23f95b72fc9d7cd1a09e44ab690be74b9a7a8fcc8`，原件`runs/hybrid_causality_audit_20261027/`。全部13主monitor结束，含恢复约74.631受监控秒、约69.8MiB本轮分配产物，另留2MiB/10秒管理额度；保持600秒/256MiB及原单命令60秒/RSS1GiB/地址2GiB，不扩限、无失败条件重跑。零新网络/构建/GPU/下载/平台或依赖修改/push。

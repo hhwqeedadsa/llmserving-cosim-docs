@@ -13,6 +13,8 @@
 
 ## 当前范围和预算
 
+当前研究`in_progress`：[真实路由的请求间对齐](../../experiments/route_alignment/protocol.md)，起点`e3ab387`。固定八份原件entry1..8/layer3，EP8/八台单卡服务器，两个共享Clos带宽条件、两类对齐及八共同循环起点，共32次公开持续字节探针，每条件一次。先验源/冻结输入和逐连接ECMP两级预测，再执行；1200受监控秒/1GiB、每网络30秒/1ms模拟、零新构建/下载/GPU。只筛选平均热度遗漏的等待收益空间，不能当现代CCL/前端服务或两项论文创新；失败全局停止、旧轮额度保持关闭。
+
 当前补验收`completed`：[交换机对象边界规范](switch_counter_bounds_spec.md)、[结果](../../fixtures/switch_counter_bounds/README.md)，起点`8b52958`、规范`3864640`。相同已hash原生库完成一次独立编译，八项原对象条件及搬迁/空cwd复核全部通过；加载器证明使用搬迁后的八库。保守含嵌套监控4.621秒、约16.24MiB，保持180秒/64MiB；零网络/ns-3构建/HTTP/GPU/依赖修改/push。闭包整理首次漏设PYTHONPATH在写入前失败，仅修环境离线收尾。与原轮合并后存储功能完整验收，旧轮false结论及额度保持关闭，不回填历史。下一研究回到强基线之外的两项判别，工程验收不能替代主目标。
 
 当前平台增量 `completed`（原轮功能/资源对照加上述独立对象补验收）：[交换机存储规范](switch_counter_storage_spec.md)、[公开示例](../../examples/scaleout_counter_storage/README.md)、[结果网页](../../fixtures/switch_counter_storage/report.html)与[原轮边界/失败](../../fixtures/switch_counter_storage/README.md)。起点`6996c49`、规范`f57214f`、功能`93f23dd`、准备/检查器更正`ee6ba7f`。原生`e929264`、ASTRA/LLM父gitlink及锁同步，本地增量bundle保存，不push。默认legacy保留；port_dense精确保存同一计数，不改MMU、包或事件，不是论文创新。

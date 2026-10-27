@@ -6,6 +6,8 @@
 
 验收使用一次全新构建、一个普通probe及一个已固定归档的共享Agg/双NIC/两rank两调用modern功能小例。普通probe独立核对消息字节、物理包及端口；modern独立核对包路径、队列和应用数据/事件，并比较旧完整result、control和应用快照。只有实际加载库的位置在逐hash检查后按库名对应，其他内容必须相同。这里不启用宿主计时、不比较运行速度；编译优化不是论文算法贡献。
 
+实际偏差单独保留：事前只允许库路径差异的严格比较未通过，优化后`dl_iterate_phdr`列举库的顺序发生变化。后续解释核对库名多重集合及实际库hash，并逐项确认其余完整result、control和应用快照一致；`strict_original_result_equivalence=false`保留在收据中，不把这项严格条件改写成通过。这是构建元数据的实际差异，不能由该功能小例证明所有输入都不受加载顺序影响。首版检查另误把CMake缓存条目的类型限定为BOOL，而本版本为UNINITIALIZED=ON，已只读更正并保留失败；没有因此重新编译或重跑网络。
+
 原件目录`runs/native_release_build_20261027/`，公开命令、退出、日志与预算分别保存在`commands.json`及各`monitor/`、`build/logs/`。版本化收据：[独立验收](verification.json)、[离线恢复](recovery.json)、[收尾与资源](closeout.json)。
 
 只读复核已经保存的原件，不执行网络：

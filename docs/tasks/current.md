@@ -13,7 +13,9 @@
 
 ## 当前范围和预算
 
-当前研究`in_progress`：[固定校验复用后的完整流程成本](../../experiments/static_validation_cost/protocol.md)，平台`0ab7b50`。四个真实路由batch/执行器条件，默认/复用三对无细粒度日志测量共24次，再四次带记录诊断；Linux wait4完整命令CPU、墙钟、采样组RSS及完整网络/应用对照。原件`runs/static_validation_cost_20261027/`，1800受监控秒/2GiB、每命令60秒/RSS1GiB/地址2GiB；任何失败关闭余下网络，不重跑或扩限。普通缓存仅作强基线工程，不当论文贡献，零平台/依赖变更、构建/下载/GPU/push。
+当前研究`completed`：[固定校验复用完整成本](../../experiments/static_validation_cost/README.md)、[事前协议](../../experiments/static_validation_cost/protocol.md)、[去留决定](../../experiments/static_validation_cost/decision.md)，平台`0ab7b50`、协议`6ab49f6`。四个真实路由batch/执行器条件各三对无细粒度日志测量共24次，另四次带记录诊断，全部保持旧完整result/control/应用。CPU倍率中位数batch4-modern/generic与batch8-modern/generic依次0.985/1.009/1.050/1.010，墙钟1.003/1.004/1.054/0.983；四条件均未达事前工程阈值，三对不足以声称统计显著，不能将命中次数当提速。缓存继续默认关闭，不作为论文加速正例或追加有利条件。
+
+独立wait4原数/12配对/8时钟扫描、五类篡改拒绝与13依赖通过。811成员/343,249,853B归档逐hash恢复，从复制源码/空cwd重算摘要、Markdown、HTML和核验逐字节相同，零恢复网络；SHA256 `69a27112c02930f6aeab86a4d1146d3b28828da0d681771a3c43ebdf974beb50`。原件`runs/static_validation_cost_20261027/`，保守含复制收据230.959监控秒、673.04MiB分配产物及另计2MiB/10秒管理预留，保持1800秒/2GiB及全部单命令上限。零失败网络/重跑/扩限、平台/依赖更改、构建安装下载、GPU或push；仅本地保存。四次诊断native占根CPU约56%—62%，Run exclusive约3.7%—4.6%仍非纯包CPU；动态历史/复制及会话准入/推进明显，不能以native占比承诺包聚合收益。本阶段额度关闭，两项主创新与整体目标仍`in_progress`，下一选择须回到强基线的实际决策缺口或跨队列/反馈的可省处理，不再追逐静态缓存正收益。
 
 当前平台`completed`：[会话固定传输声明校验复用](static_stream_validation_spec.md)、[验收与恢复](../../fixtures/static_stream_validation/README.md)。两个公开会话入口新增默认关闭的`--reuse-static-validation`，单会话保留完整拓扑/协议/派生streams的不可变类型安全键，动态完整历史和原生准入保持。81项单元、13依赖及两原件各4类证据篡改拒绝通过；六次固定网络全部完成，默认/开启完整result与control严格相同，迁移仅对应八个同hash原生库根路径/枚举多重集合。现代两rank两调用64次静态请求仅执行1次原检查（437回调/97节点），事务9次仅执行1次（11回调/2节点、实际旧值7/终值10/后继107）；不等于64倍或9倍加速。
 

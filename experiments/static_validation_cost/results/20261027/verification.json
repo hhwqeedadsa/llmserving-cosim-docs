@@ -1,0 +1,17 @@
+{
+  "passed": true,
+  "kernel_receipts": 28,
+  "complete_networks_and_snapshots": 28,
+  "pairs_checked": 12,
+  "diagnostic_clock_sweeps": 8,
+  "corruptions_rejected": [
+    "kernel_CPU_arithmetic",
+    "predeclared_pair_order",
+    "actual_packet",
+    "application_completion",
+    "static_reuse_count"
+  ],
+  "new_networks": 0,
+  "statistical_significance_claimed": false,
+  "research_innovation_proven": false
+}

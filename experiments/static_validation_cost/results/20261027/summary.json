@@ -1,0 +1,1172 @@
+{
+  "passed": true,
+  "cases": {
+    "batch4-modern": {
+      "pairs": [
+        {
+          "pair": 0,
+          "first": "full",
+          "full": {
+            "subtree_CPU_ns": 2137652000,
+            "elapsed_wall_ns": 2139673286,
+            "max_single_process_rss_kib": 418104,
+            "sampled_group_RSS_bytes": 498327552
+          },
+          "cached": {
+            "subtree_CPU_ns": 1965171000,
+            "elapsed_wall_ns": 1957270262,
+            "max_single_process_rss_kib": 419368,
+            "sampled_group_RSS_bytes": 485675008
+          },
+          "CPU_speedup": 1.087768952421952,
+          "wall_speedup": 1.093192558810767,
+          "group_RSS_ratio": 1.0260514619685763
+        },
+        {
+          "pair": 1,
+          "first": "cached",
+          "cached": {
+            "subtree_CPU_ns": 2259035000,
+            "elapsed_wall_ns": 2221808841,
+            "max_single_process_rss_kib": 416880,
+            "sampled_group_RSS_bytes": 484724736
+          },
+          "full": {
+            "subtree_CPU_ns": 1875469000,
+            "elapsed_wall_ns": 1843246671,
+            "max_single_process_rss_kib": 419696,
+            "sampled_group_RSS_bytes": 485810176
+          },
+          "CPU_speedup": 0.8302080313054025,
+          "wall_speedup": 0.8296153282792703,
+          "group_RSS_ratio": 1.002239291538858
+        },
+        {
+          "pair": 2,
+          "first": "full",
+          "full": {
+            "subtree_CPU_ns": 1918806000,
+            "elapsed_wall_ns": 1945727321,
+            "max_single_process_rss_kib": 419464,
+            "sampled_group_RSS_bytes": 486944768
+          },
+          "cached": {
+            "subtree_CPU_ns": 1948012000,
+            "elapsed_wall_ns": 1939679902,
+            "max_single_process_rss_kib": 419012,
+            "sampled_group_RSS_bytes": 491024384
+          },
+          "CPU_speedup": 0.9850072792159391,
+          "wall_speedup": 1.0031177407126632,
+          "group_RSS_ratio": 0.9916916223859058
+        }
+      ],
+      "median_CPU_speedup": 0.9850072792159391,
+      "CPU_speedup_range": [
+        0.8302080313054025,
+        1.087768952421952
+      ],
+      "median_wall_speedup": 1.0031177407126632,
+      "wall_speedup_range": [
+        0.8296153282792703,
+        1.093192558810767
+      ],
+      "engineering_threshold_met": false,
+      "statistical_significance_claimed": false
+    },
+    "batch4-generic": {
+      "pairs": [
+        {
+          "pair": 0,
+          "first": "cached",
+          "cached": {
+            "subtree_CPU_ns": 1523647000,
+            "elapsed_wall_ns": 1542051472,
+            "max_single_process_rss_kib": 416436,
+            "sampled_group_RSS_bytes": 460685312
+          },
+          "full": {
+            "subtree_CPU_ns": 1537493000,
+            "elapsed_wall_ns": 1548406498,
+            "max_single_process_rss_kib": 420068,
+            "sampled_group_RSS_bytes": 466210816
+          },
+          "CPU_speedup": 1.0090874067287239,
+          "wall_speedup": 1.004121150373637,
+          "group_RSS_ratio": 1.0119940963084146
+        },
+        {
+          "pair": 1,
+          "first": "full",
+          "full": {
+            "subtree_CPU_ns": 1489847000,
+            "elapsed_wall_ns": 1482677608,
+            "max_single_process_rss_kib": 420032,
+            "sampled_group_RSS_bytes": 453980160
+          },
+          "cached": {
+            "subtree_CPU_ns": 1299406000,
+            "elapsed_wall_ns": 1352932220,
+            "max_single_process_rss_kib": 418156,
+            "sampled_group_RSS_bytes": 451796992
+          },
+          "CPU_speedup": 1.1465600435891476,
+          "wall_speedup": 1.0958993998975055,
+          "group_RSS_ratio": 1.0048321879929647
+        },
+        {
+          "pair": 2,
+          "first": "cached",
+          "cached": {
+            "subtree_CPU_ns": 1558170000,
+            "elapsed_wall_ns": 1593052114,
+            "max_single_process_rss_kib": 419920,
+            "sampled_group_RSS_bytes": 452878336
+          },
+          "full": {
+            "subtree_CPU_ns": 1464628000,
+            "elapsed_wall_ns": 1455135656,
+            "max_single_process_rss_kib": 420048,
+            "sampled_group_RSS_bytes": 468070400
+          },
+          "CPU_speedup": 0.9399667558738777,
+          "wall_speedup": 0.9134262735111,
+          "group_RSS_ratio": 1.0335455745889333
+        }
+      ],
+      "median_CPU_speedup": 1.0090874067287239,
+      "CPU_speedup_range": [
+        0.9399667558738777,
+        1.1465600435891476
+      ],
+      "median_wall_speedup": 1.004121150373637,
+      "wall_speedup_range": [
+        0.9134262735111,
+        1.0958993998975055
+      ],
+      "engineering_threshold_met": false,
+      "statistical_significance_claimed": false
+    },
+    "batch8-modern": {
+      "pairs": [
+        {
+          "pair": 0,
+          "first": "full",
+          "full": {
+            "subtree_CPU_ns": 2816500000,
+            "elapsed_wall_ns": 2862103519,
+            "max_single_process_rss_kib": 441092,
+            "sampled_group_RSS_bytes": 512212992
+          },
+          "cached": {
+            "subtree_CPU_ns": 2635017000,
+            "elapsed_wall_ns": 2728916892,
+            "max_single_process_rss_kib": 441620,
+            "sampled_group_RSS_bytes": 518266880
+          },
+          "CPU_speedup": 1.0688735594495216,
+          "wall_speedup": 1.0488056735587827,
+          "group_RSS_ratio": 0.9883189757369794
+        },
+        {
+          "pair": 1,
+          "first": "cached",
+          "cached": {
+            "subtree_CPU_ns": 2488305000,
+            "elapsed_wall_ns": 2413159808,
+            "max_single_process_rss_kib": 439996,
+            "sampled_group_RSS_bytes": 495136768
+          },
+          "full": {
+            "subtree_CPU_ns": 2597212000,
+            "elapsed_wall_ns": 2624085894,
+            "max_single_process_rss_kib": 441448,
+            "sampled_group_RSS_bytes": 493178880
+          },
+          "CPU_speedup": 1.0437675445735148,
+          "wall_speedup": 1.0874065966542072,
+          "group_RSS_ratio": 0.9960457632586881
+        },
+        {
+          "pair": 2,
+          "first": "full",
+          "full": {
+            "subtree_CPU_ns": 2613086000,
+            "elapsed_wall_ns": 2689448853,
+            "max_single_process_rss_kib": 441000,
+            "sampled_group_RSS_bytes": 515391488
+          },
+          "cached": {
+            "subtree_CPU_ns": 2488031000,
+            "elapsed_wall_ns": 2550666562,
+            "max_single_process_rss_kib": 439028,
+            "sampled_group_RSS_bytes": 492134400
+          },
+          "CPU_speedup": 1.0502626374028299,
+          "wall_speedup": 1.0544102051862003,
+          "group_RSS_ratio": 1.047257594673325
+        }
+      ],
+      "median_CPU_speedup": 1.0502626374028299,
+      "CPU_speedup_range": [
+        1.0437675445735148,
+        1.0688735594495216
+      ],
+      "median_wall_speedup": 1.0544102051862003,
+      "wall_speedup_range": [
+        1.0488056735587827,
+        1.0874065966542072
+      ],
+      "engineering_threshold_met": false,
+      "statistical_significance_claimed": false
+    },
+    "batch8-generic": {
+      "pairs": [
+        {
+          "pair": 0,
+          "first": "cached",
+          "cached": {
+            "subtree_CPU_ns": 2160616000,
+            "elapsed_wall_ns": 2246633481,
+            "max_single_process_rss_kib": 440924,
+            "sampled_group_RSS_bytes": 474988544
+          },
+          "full": {
+            "subtree_CPU_ns": 2480358000,
+            "elapsed_wall_ns": 2524220391,
+            "max_single_process_rss_kib": 441312,
+            "sampled_group_RSS_bytes": 462401536
+          },
+          "CPU_speedup": 1.1479865001462546,
+          "wall_speedup": 1.1235568295174,
+          "group_RSS_ratio": 0.9735003966748301
+        },
+        {
+          "pair": 1,
+          "first": "full",
+          "full": {
+            "subtree_CPU_ns": 2003363000,
+            "elapsed_wall_ns": 2061854882,
+            "max_single_process_rss_kib": 441096,
+            "sampled_group_RSS_bytes": 482615296
+          },
+          "cached": {
+            "subtree_CPU_ns": 2320052000,
+            "elapsed_wall_ns": 2308136592,
+            "max_single_process_rss_kib": 441328,
+            "sampled_group_RSS_bytes": 462352384
+          },
+          "CPU_speedup": 0.8634991801907889,
+          "wall_speedup": 0.8932984681870162,
+          "group_RSS_ratio": 1.0438256894550801
+        },
+        {
+          "pair": 2,
+          "first": "cached",
+          "cached": {
+            "subtree_CPU_ns": 2102559000,
+            "elapsed_wall_ns": 2187848372,
+            "max_single_process_rss_kib": 441072,
+            "sampled_group_RSS_bytes": 483667968
+          },
+          "full": {
+            "subtree_CPU_ns": 2124284000,
+            "elapsed_wall_ns": 2150359898,
+            "max_single_process_rss_kib": 441328,
+            "sampled_group_RSS_bytes": 473821184
+          },
+          "CPU_speedup": 1.0103326470267897,
+          "wall_speedup": 0.9828651407109487,
+          "group_RSS_ratio": 0.9796414386490858
+        }
+      ],
+      "median_CPU_speedup": 1.0103326470267897,
+      "CPU_speedup_range": [
+        0.8634991801907889,
+        1.1479865001462546
+      ],
+      "median_wall_speedup": 0.9828651407109487,
+      "wall_speedup_range": [
+        0.8932984681870162,
+        1.1235568295174
+      ],
+      "engineering_threshold_met": false,
+      "statistical_significance_claimed": false
+    }
+  },
+  "diagnostics": {
+    "batch4-modern": {
+      "worker_phases": {
+        "controller_init": {
+          "count": 1,
+          "inclusive_wall_ns": 30268759,
+          "inclusive_cpu_ns": 26259572,
+          "exclusive_wall_ns": 30268759,
+          "exclusive_cpu_ns": 26259572
+        },
+        "session_init": {
+          "count": 1,
+          "inclusive_wall_ns": 4875106,
+          "inclusive_cpu_ns": 4455689,
+          "exclusive_wall_ns": 4875106,
+          "exclusive_cpu_ns": 4455689
+        },
+        "python_wait_line": {
+          "count": 68,
+          "inclusive_wall_ns": 1035884563,
+          "inclusive_cpu_ns": 3759627,
+          "exclusive_wall_ns": 1035884563,
+          "exclusive_cpu_ns": 3759627
+        },
+        "native_receive": {
+          "count": 68,
+          "inclusive_wall_ns": 1058803935,
+          "inclusive_cpu_ns": 26652856,
+          "exclusive_wall_ns": 22919372,
+          "exclusive_cpu_ns": 22893229
+        },
+        "controller_advance": {
+          "count": 67,
+          "inclusive_wall_ns": 217736492,
+          "inclusive_cpu_ns": 172430354,
+          "exclusive_wall_ns": 217736492,
+          "exclusive_cpu_ns": 172430354
+        },
+        "wake_conditions": {
+          "count": 67,
+          "inclusive_wall_ns": 44807515,
+          "inclusive_cpu_ns": 32138505,
+          "exclusive_wall_ns": 44807515,
+          "exclusive_cpu_ns": 32138505
+        },
+        "python_candidate_copy": {
+          "count": 67,
+          "inclusive_wall_ns": 169204376,
+          "inclusive_cpu_ns": 123378090,
+          "exclusive_wall_ns": 169204376,
+          "exclusive_cpu_ns": 123378090
+        },
+        "python_candidate_validate": {
+          "count": 67,
+          "inclusive_wall_ns": 242965619,
+          "inclusive_cpu_ns": 193025085,
+          "exclusive_wall_ns": 242965619,
+          "exclusive_cpu_ns": 193025085
+        },
+        "python_command_write": {
+          "count": 67,
+          "inclusive_wall_ns": 5530369,
+          "inclusive_cpu_ns": 5526236,
+          "exclusive_wall_ns": 5530369,
+          "exclusive_cpu_ns": 5526236
+        },
+        "native_commit": {
+          "count": 67,
+          "inclusive_wall_ns": 429251030,
+          "inclusive_cpu_ns": 330881761,
+          "exclusive_wall_ns": 11550666,
+          "exclusive_cpu_ns": 8952350
+        },
+        "modern_report_write": {
+          "count": 1,
+          "inclusive_wall_ns": 42778140,
+          "inclusive_cpu_ns": 36774899,
+          "exclusive_wall_ns": 42778140,
+          "exclusive_cpu_ns": 36774899
+        },
+        "modern_worker": {
+          "count": 1,
+          "inclusive_wall_ns": 1844361518,
+          "inclusive_cpu_ns": 643351826,
+          "exclusive_wall_ns": 15840541,
+          "exclusive_cpu_ns": 13758190
+        }
+      },
+      "native_phases": {
+        "session_pump": {
+          "count": 2759,
+          "inclusive_wall_ns": 52889724,
+          "inclusive_cpu_ns": 52982383,
+          "exclusive_wall_ns": 52889724,
+          "exclusive_cpu_ns": 52982383
+        },
+        "operation_progress_snapshot": {
+          "count": 2759,
+          "inclusive_wall_ns": 20223027,
+          "inclusive_cpu_ns": 20279960,
+          "exclusive_wall_ns": 20223027,
+          "exclusive_cpu_ns": 20279960
+        },
+        "session_events": {
+          "count": 2759,
+          "inclusive_wall_ns": 80892700,
+          "inclusive_cpu_ns": 81058521,
+          "exclusive_wall_ns": 60669673,
+          "exclusive_cpu_ns": 60778561
+        },
+        "session_drained": {
+          "count": 2759,
+          "inclusive_wall_ns": 62075150,
+          "inclusive_cpu_ns": 62334624,
+          "exclusive_wall_ns": 62075150,
+          "exclusive_cpu_ns": 62334624
+        },
+        "session_decide_write": {
+          "count": 67,
+          "inclusive_wall_ns": 3101187,
+          "inclusive_cpu_ns": 3111264,
+          "exclusive_wall_ns": 3101187,
+          "exclusive_cpu_ns": 3111264
+        },
+        "session_frontend_wait": {
+          "count": 67,
+          "inclusive_wall_ns": 717904281,
+          "inclusive_cpu_ns": 3884628,
+          "exclusive_wall_ns": 717904281,
+          "exclusive_cpu_ns": 3884628
+        },
+        "session_candidate_copy": {
+          "count": 67,
+          "inclusive_wall_ns": 18038464,
+          "inclusive_cpu_ns": 18039859,
+          "exclusive_wall_ns": 18038464,
+          "exclusive_cpu_ns": 18039859
+        },
+        "session_candidate_validate": {
+          "count": 67,
+          "inclusive_wall_ns": 185058673,
+          "inclusive_cpu_ns": 184471254,
+          "exclusive_wall_ns": 185058673,
+          "exclusive_cpu_ns": 184471254
+        },
+        "session_wakeup_validate": {
+          "count": 67,
+          "inclusive_wall_ns": 968135,
+          "inclusive_cpu_ns": 963631,
+          "exclusive_wall_ns": 968135,
+          "exclusive_cpu_ns": 963631
+        },
+        "session_apply_commit": {
+          "count": 67,
+          "inclusive_wall_ns": 2198325,
+          "inclusive_cpu_ns": 2195984,
+          "exclusive_wall_ns": 2198325,
+          "exclusive_cpu_ns": 2195984
+        },
+        "session_exchange": {
+          "count": 67,
+          "inclusive_wall_ns": 986445912,
+          "inclusive_cpu_ns": 271799234,
+          "exclusive_wall_ns": 59176847,
+          "exclusive_cpu_ns": 59132614
+        },
+        "session_progress": {
+          "count": 2759,
+          "inclusive_wall_ns": 1360073277,
+          "inclusive_cpu_ns": 644480055,
+          "exclusive_wall_ns": 177769791,
+          "exclusive_cpu_ns": 176305293
+        },
+        "simulator_run": {
+          "count": 1,
+          "inclusive_wall_ns": 1430504214,
+          "inclusive_cpu_ns": 714855658,
+          "exclusive_wall_ns": 70430937,
+          "exclusive_cpu_ns": 70375603
+        },
+        "report_build": {
+          "count": 1,
+          "inclusive_wall_ns": 12520070,
+          "inclusive_cpu_ns": 12520780,
+          "exclusive_wall_ns": 12520070,
+          "exclusive_cpu_ns": 12520780
+        },
+        "report_write": {
+          "count": 1,
+          "inclusive_wall_ns": 28678926,
+          "inclusive_cpu_ns": 28569281,
+          "exclusive_wall_ns": 28678926,
+          "exclusive_cpu_ns": 28569281
+        },
+        "simulator_cleanup": {
+          "count": 1,
+          "inclusive_wall_ns": 324977,
+          "inclusive_cpu_ns": 325249,
+          "exclusive_wall_ns": 324977,
+          "exclusive_cpu_ns": 325249
+        },
+        "native_total": {
+          "count": 1,
+          "inclusive_wall_ns": 1729029396,
+          "inclusive_cpu_ns": 1012689575,
+          "exclusive_wall_ns": 257001209,
+          "exclusive_cpu_ns": 256418607
+        }
+      },
+      "observed_root_CPU_ns": 1656041401,
+      "worker_root_CPU_ns": 643351826,
+      "native_root_CPU_ns": 1012689575,
+      "native_CPU_fraction": 0.611512232960171,
+      "run_exclusive_fraction": 0.042496282374041926,
+      "all_native_free_CPU_work_factor": 2.57408362590083,
+      "pure_packet_CPU_measured": false
+    },
+    "batch4-generic": {
+      "worker_phases": {
+        "controller_init": {
+          "count": 1,
+          "inclusive_wall_ns": 18312446,
+          "inclusive_cpu_ns": 18314220,
+          "exclusive_wall_ns": 18312446,
+          "exclusive_cpu_ns": 18314220
+        },
+        "session_init": {
+          "count": 1,
+          "inclusive_wall_ns": 10657110,
+          "inclusive_cpu_ns": 10229001,
+          "exclusive_wall_ns": 10657110,
+          "exclusive_cpu_ns": 10229001
+        },
+        "python_wait_line": {
+          "count": 68,
+          "inclusive_wall_ns": 887189086,
+          "inclusive_cpu_ns": 4289945,
+          "exclusive_wall_ns": 887189086,
+          "exclusive_cpu_ns": 4289945
+        },
+        "native_receive": {
+          "count": 68,
+          "inclusive_wall_ns": 917155460,
+          "inclusive_cpu_ns": 34246131,
+          "exclusive_wall_ns": 29966374,
+          "exclusive_cpu_ns": 29956186
+        },
+        "controller_advance": {
+          "count": 67,
+          "inclusive_wall_ns": 111099090,
+          "inclusive_cpu_ns": 109493847,
+          "exclusive_wall_ns": 111099090,
+          "exclusive_cpu_ns": 109493847
+        },
+        "wake_conditions": {
+          "count": 67,
+          "inclusive_wall_ns": 38608260,
+          "inclusive_cpu_ns": 38480402,
+          "exclusive_wall_ns": 38608260,
+          "exclusive_cpu_ns": 38480402
+        },
+        "python_candidate_copy": {
+          "count": 67,
+          "inclusive_wall_ns": 152685000,
+          "inclusive_cpu_ns": 152387878,
+          "exclusive_wall_ns": 152685000,
+          "exclusive_cpu_ns": 152387878
+        },
+        "python_candidate_validate": {
+          "count": 67,
+          "inclusive_wall_ns": 256876977,
+          "inclusive_cpu_ns": 255522258,
+          "exclusive_wall_ns": 256876977,
+          "exclusive_cpu_ns": 255522258
+        },
+        "python_command_write": {
+          "count": 67,
+          "inclusive_wall_ns": 7244369,
+          "inclusive_cpu_ns": 7244933,
+          "exclusive_wall_ns": 7244369,
+          "exclusive_cpu_ns": 7244933
+        },
+        "native_commit": {
+          "count": 67,
+          "inclusive_wall_ns": 427787625,
+          "inclusive_cpu_ns": 426038673,
+          "exclusive_wall_ns": 10981279,
+          "exclusive_cpu_ns": 10883604
+        },
+        "generic_report_write": {
+          "count": 1,
+          "inclusive_wall_ns": 3830105,
+          "inclusive_cpu_ns": 3830804,
+          "exclusive_wall_ns": 3830105,
+          "exclusive_cpu_ns": 3830804
+        },
+        "generic_worker": {
+          "count": 1,
+          "inclusive_wall_ns": 1534482449,
+          "inclusive_cpu_ns": 647611951,
+          "exclusive_wall_ns": 7032353,
+          "exclusive_cpu_ns": 6978873
+        }
+      },
+      "native_phases": {
+        "session_pump": {
+          "count": 2759,
+          "inclusive_wall_ns": 44517362,
+          "inclusive_cpu_ns": 40022489,
+          "exclusive_wall_ns": 44517362,
+          "exclusive_cpu_ns": 40022489
+        },
+        "operation_progress_snapshot": {
+          "count": 2759,
+          "inclusive_wall_ns": 15809587,
+          "inclusive_cpu_ns": 15603350,
+          "exclusive_wall_ns": 15809587,
+          "exclusive_cpu_ns": 15603350
+        },
+        "session_events": {
+          "count": 2759,
+          "inclusive_wall_ns": 63225053,
+          "inclusive_cpu_ns": 62296115,
+          "exclusive_wall_ns": 47415466,
+          "exclusive_cpu_ns": 46692765
+        },
+        "session_drained": {
+          "count": 2759,
+          "inclusive_wall_ns": 48717564,
+          "inclusive_cpu_ns": 48363087,
+          "exclusive_wall_ns": 48717564,
+          "exclusive_cpu_ns": 48363087
+        },
+        "session_decide_write": {
+          "count": 67,
+          "inclusive_wall_ns": 2402570,
+          "inclusive_cpu_ns": 2397964,
+          "exclusive_wall_ns": 2402570,
+          "exclusive_cpu_ns": 2397964
+        },
+        "session_frontend_wait": {
+          "count": 67,
+          "inclusive_wall_ns": 600009518,
+          "inclusive_cpu_ns": 2946695,
+          "exclusive_wall_ns": 600009518,
+          "exclusive_cpu_ns": 2946695
+        },
+        "session_candidate_copy": {
+          "count": 67,
+          "inclusive_wall_ns": 15676111,
+          "inclusive_cpu_ns": 15491617,
+          "exclusive_wall_ns": 15676111,
+          "exclusive_cpu_ns": 15491617
+        },
+        "session_candidate_validate": {
+          "count": 67,
+          "inclusive_wall_ns": 124356954,
+          "inclusive_cpu_ns": 115693112,
+          "exclusive_wall_ns": 124356954,
+          "exclusive_cpu_ns": 115693112
+        },
+        "session_wakeup_validate": {
+          "count": 67,
+          "inclusive_wall_ns": 593366,
+          "inclusive_cpu_ns": 589596,
+          "exclusive_wall_ns": 593366,
+          "exclusive_cpu_ns": 589596
+        },
+        "session_apply_commit": {
+          "count": 67,
+          "inclusive_wall_ns": 1604681,
+          "inclusive_cpu_ns": 1603978,
+          "exclusive_wall_ns": 1604681,
+          "exclusive_cpu_ns": 1603978
+        },
+        "session_exchange": {
+          "count": 67,
+          "inclusive_wall_ns": 787028280,
+          "inclusive_cpu_ns": 178490489,
+          "exclusive_wall_ns": 42385080,
+          "exclusive_cpu_ns": 39767527
+        },
+        "session_progress": {
+          "count": 2759,
+          "inclusive_wall_ns": 1085175948,
+          "inclusive_cpu_ns": 466170324,
+          "exclusive_wall_ns": 141687689,
+          "exclusive_cpu_ns": 136998144
+        },
+        "simulator_run": {
+          "count": 1,
+          "inclusive_wall_ns": 1142596220,
+          "inclusive_cpu_ns": 520492517,
+          "exclusive_wall_ns": 57420272,
+          "exclusive_cpu_ns": 54322193
+        },
+        "report_build": {
+          "count": 1,
+          "inclusive_wall_ns": 10820833,
+          "inclusive_cpu_ns": 10778476,
+          "exclusive_wall_ns": 10820833,
+          "exclusive_cpu_ns": 10778476
+        },
+        "report_write": {
+          "count": 1,
+          "inclusive_wall_ns": 26093735,
+          "inclusive_cpu_ns": 25988264,
+          "exclusive_wall_ns": 26093735,
+          "exclusive_cpu_ns": 25988264
+        },
+        "simulator_cleanup": {
+          "count": 1,
+          "inclusive_wall_ns": 332238,
+          "inclusive_cpu_ns": 332639,
+          "exclusive_wall_ns": 332238,
+          "exclusive_cpu_ns": 332639
+        },
+        "native_total": {
+          "count": 1,
+          "inclusive_wall_ns": 1461501909,
+          "inclusive_cpu_ns": 835116966,
+          "exclusive_wall_ns": 281658883,
+          "exclusive_cpu_ns": 277525070
+        }
+      },
+      "observed_root_CPU_ns": 1482728917,
+      "worker_root_CPU_ns": 647611951,
+      "native_root_CPU_ns": 835116966,
+      "native_CPU_fraction": 0.5632297019536714,
+      "run_exclusive_fraction": 0.03663663153606655,
+      "all_native_free_CPU_work_factor": 2.2895329752801303,
+      "pure_packet_CPU_measured": false
+    },
+    "batch8-modern": {
+      "worker_phases": {
+        "controller_init": {
+          "count": 1,
+          "inclusive_wall_ns": 31426962,
+          "inclusive_cpu_ns": 31359284,
+          "exclusive_wall_ns": 31426962,
+          "exclusive_cpu_ns": 31359284
+        },
+        "session_init": {
+          "count": 1,
+          "inclusive_wall_ns": 5075909,
+          "inclusive_cpu_ns": 4846182,
+          "exclusive_wall_ns": 5075909,
+          "exclusive_cpu_ns": 4846182
+        },
+        "python_wait_line": {
+          "count": 93,
+          "inclusive_wall_ns": 1316620069,
+          "inclusive_cpu_ns": 5189970,
+          "exclusive_wall_ns": 1316620069,
+          "exclusive_cpu_ns": 5189970
+        },
+        "native_receive": {
+          "count": 93,
+          "inclusive_wall_ns": 1347112607,
+          "inclusive_cpu_ns": 35548613,
+          "exclusive_wall_ns": 30492538,
+          "exclusive_cpu_ns": 30358643
+        },
+        "controller_advance": {
+          "count": 92,
+          "inclusive_wall_ns": 248529860,
+          "inclusive_cpu_ns": 247106664,
+          "exclusive_wall_ns": 248529860,
+          "exclusive_cpu_ns": 247106664
+        },
+        "wake_conditions": {
+          "count": 92,
+          "inclusive_wall_ns": 52967030,
+          "inclusive_cpu_ns": 52592233,
+          "exclusive_wall_ns": 52967030,
+          "exclusive_cpu_ns": 52592233
+        },
+        "python_candidate_copy": {
+          "count": 92,
+          "inclusive_wall_ns": 206117744,
+          "inclusive_cpu_ns": 204281747,
+          "exclusive_wall_ns": 206117744,
+          "exclusive_cpu_ns": 204281747
+        },
+        "python_candidate_validate": {
+          "count": 92,
+          "inclusive_wall_ns": 332158614,
+          "inclusive_cpu_ns": 330070941,
+          "exclusive_wall_ns": 332158614,
+          "exclusive_cpu_ns": 330070941
+        },
+        "python_command_write": {
+          "count": 92,
+          "inclusive_wall_ns": 7957438,
+          "inclusive_cpu_ns": 7949606,
+          "exclusive_wall_ns": 7957438,
+          "exclusive_cpu_ns": 7949606
+        },
+        "native_commit": {
+          "count": 92,
+          "inclusive_wall_ns": 559571823,
+          "inclusive_cpu_ns": 555523633,
+          "exclusive_wall_ns": 13338027,
+          "exclusive_cpu_ns": 13221339
+        },
+        "modern_report_write": {
+          "count": 1,
+          "inclusive_wall_ns": 52023536,
+          "inclusive_cpu_ns": 50344200,
+          "exclusive_wall_ns": 52023536,
+          "exclusive_cpu_ns": 50344200
+        },
+        "modern_worker": {
+          "count": 1,
+          "inclusive_wall_ns": 2319598504,
+          "inclusive_cpu_ns": 1000104251,
+          "exclusive_wall_ns": 22890777,
+          "exclusive_cpu_ns": 22783442
+        }
+      },
+      "native_phases": {
+        "session_pump": {
+          "count": 4290,
+          "inclusive_wall_ns": 71047645,
+          "inclusive_cpu_ns": 70937145,
+          "exclusive_wall_ns": 71047645,
+          "exclusive_cpu_ns": 70937145
+        },
+        "operation_progress_snapshot": {
+          "count": 4290,
+          "inclusive_wall_ns": 23956433,
+          "inclusive_cpu_ns": 23732536,
+          "exclusive_wall_ns": 23956433,
+          "exclusive_cpu_ns": 23732536
+        },
+        "session_events": {
+          "count": 4290,
+          "inclusive_wall_ns": 116821583,
+          "inclusive_cpu_ns": 114811322,
+          "exclusive_wall_ns": 92865150,
+          "exclusive_cpu_ns": 91078786
+        },
+        "session_drained": {
+          "count": 4290,
+          "inclusive_wall_ns": 91415004,
+          "inclusive_cpu_ns": 91331838,
+          "exclusive_wall_ns": 91415004,
+          "exclusive_cpu_ns": 91331838
+        },
+        "session_decide_write": {
+          "count": 92,
+          "inclusive_wall_ns": 3265261,
+          "inclusive_cpu_ns": 3275493,
+          "exclusive_wall_ns": 3265261,
+          "exclusive_cpu_ns": 3275493
+        },
+        "session_frontend_wait": {
+          "count": 92,
+          "inclusive_wall_ns": 895112145,
+          "inclusive_cpu_ns": 3962392,
+          "exclusive_wall_ns": 895112145,
+          "exclusive_cpu_ns": 3962392
+        },
+        "session_candidate_copy": {
+          "count": 92,
+          "inclusive_wall_ns": 24553498,
+          "inclusive_cpu_ns": 24421782,
+          "exclusive_wall_ns": 24553498,
+          "exclusive_cpu_ns": 24421782
+        },
+        "session_candidate_validate": {
+          "count": 92,
+          "inclusive_wall_ns": 234170846,
+          "inclusive_cpu_ns": 231096381,
+          "exclusive_wall_ns": 234170846,
+          "exclusive_cpu_ns": 231096381
+        },
+        "session_wakeup_validate": {
+          "count": 92,
+          "inclusive_wall_ns": 942193,
+          "inclusive_cpu_ns": 938185,
+          "exclusive_wall_ns": 942193,
+          "exclusive_cpu_ns": 938185
+        },
+        "session_apply_commit": {
+          "count": 92,
+          "inclusive_wall_ns": 2209483,
+          "inclusive_cpu_ns": 2196282,
+          "exclusive_wall_ns": 2209483,
+          "exclusive_cpu_ns": 2196282
+        },
+        "session_exchange": {
+          "count": 92,
+          "inclusive_wall_ns": 1237839890,
+          "inclusive_cpu_ns": 341976025,
+          "exclusive_wall_ns": 77586464,
+          "exclusive_cpu_ns": 76085510
+        },
+        "session_progress": {
+          "count": 4290,
+          "inclusive_wall_ns": 1751713504,
+          "inclusive_cpu_ns": 849468266,
+          "exclusive_wall_ns": 234589382,
+          "exclusive_cpu_ns": 230411936
+        },
+        "simulator_run": {
+          "count": 1,
+          "inclusive_wall_ns": 1849151986,
+          "inclusive_cpu_ns": 945538062,
+          "exclusive_wall_ns": 97438482,
+          "exclusive_cpu_ns": 96069796
+        },
+        "report_build": {
+          "count": 1,
+          "inclusive_wall_ns": 19435010,
+          "inclusive_cpu_ns": 19435553,
+          "exclusive_wall_ns": 19435010,
+          "exclusive_cpu_ns": 19435553
+        },
+        "report_write": {
+          "count": 1,
+          "inclusive_wall_ns": 46533582,
+          "inclusive_cpu_ns": 45753907,
+          "exclusive_wall_ns": 46533582,
+          "exclusive_cpu_ns": 45753907
+        },
+        "simulator_cleanup": {
+          "count": 1,
+          "inclusive_wall_ns": 413948,
+          "inclusive_cpu_ns": 414188,
+          "exclusive_wall_ns": 413948,
+          "exclusive_cpu_ns": 414188
+        },
+        "native_total": {
+          "count": 1,
+          "inclusive_wall_ns": 2192239905,
+          "inclusive_cpu_ns": 1284289768,
+          "exclusive_wall_ns": 276705379,
+          "exclusive_cpu_ns": 273148058
+        }
+      },
+      "observed_root_CPU_ns": 2284394019,
+      "worker_root_CPU_ns": 1000104251,
+      "native_root_CPU_ns": 1284289768,
+      "native_CPU_fraction": 0.5622015104741876,
+      "run_exclusive_fraction": 0.04205482732004999,
+      "all_native_free_CPU_work_factor": 2.2841558934639505,
+      "pure_packet_CPU_measured": false
+    },
+    "batch8-generic": {
+      "worker_phases": {
+        "controller_init": {
+          "count": 1,
+          "inclusive_wall_ns": 22697271,
+          "inclusive_cpu_ns": 22623975,
+          "exclusive_wall_ns": 22697271,
+          "exclusive_cpu_ns": 22623975
+        },
+        "session_init": {
+          "count": 1,
+          "inclusive_wall_ns": 11153868,
+          "inclusive_cpu_ns": 10646158,
+          "exclusive_wall_ns": 11153868,
+          "exclusive_cpu_ns": 10646158
+        },
+        "python_wait_line": {
+          "count": 93,
+          "inclusive_wall_ns": 1426589275,
+          "inclusive_cpu_ns": 5007033,
+          "exclusive_wall_ns": 1426589275,
+          "exclusive_cpu_ns": 5007033
+        },
+        "native_receive": {
+          "count": 93,
+          "inclusive_wall_ns": 1463936327,
+          "inclusive_cpu_ns": 38322588,
+          "exclusive_wall_ns": 37347052,
+          "exclusive_cpu_ns": 33315555
+        },
+        "controller_advance": {
+          "count": 92,
+          "inclusive_wall_ns": 138050817,
+          "inclusive_cpu_ns": 130530128,
+          "exclusive_wall_ns": 138050817,
+          "exclusive_cpu_ns": 130530128
+        },
+        "wake_conditions": {
+          "count": 92,
+          "inclusive_wall_ns": 56475650,
+          "inclusive_cpu_ns": 50175043,
+          "exclusive_wall_ns": 56475650,
+          "exclusive_cpu_ns": 50175043
+        },
+        "python_candidate_copy": {
+          "count": 92,
+          "inclusive_wall_ns": 228367992,
+          "inclusive_cpu_ns": 209112808,
+          "exclusive_wall_ns": 228367992,
+          "exclusive_cpu_ns": 209112808
+        },
+        "python_candidate_validate": {
+          "count": 92,
+          "inclusive_wall_ns": 382898075,
+          "inclusive_cpu_ns": 360050343,
+          "exclusive_wall_ns": 382898075,
+          "exclusive_cpu_ns": 360050343
+        },
+        "python_command_write": {
+          "count": 92,
+          "inclusive_wall_ns": 8306641,
+          "inclusive_cpu_ns": 8307618,
+          "exclusive_wall_ns": 8306641,
+          "exclusive_cpu_ns": 8307618
+        },
+        "native_commit": {
+          "count": 92,
+          "inclusive_wall_ns": 633758667,
+          "inclusive_cpu_ns": 591427763,
+          "exclusive_wall_ns": 14185959,
+          "exclusive_cpu_ns": 13956994
+        },
+        "generic_report_write": {
+          "count": 1,
+          "inclusive_wall_ns": 3899104,
+          "inclusive_cpu_ns": 3899384,
+          "exclusive_wall_ns": 3899104,
+          "exclusive_cpu_ns": 3899384
+        },
+        "generic_worker": {
+          "count": 1,
+          "inclusive_wall_ns": 2337924738,
+          "inclusive_cpu_ns": 855429950,
+          "exclusive_wall_ns": 7953034,
+          "exclusive_cpu_ns": 7804911
+        }
+      },
+      "native_phases": {
+        "session_pump": {
+          "count": 4290,
+          "inclusive_wall_ns": 76862209,
+          "inclusive_cpu_ns": 76962886,
+          "exclusive_wall_ns": 76862209,
+          "exclusive_cpu_ns": 76962886
+        },
+        "operation_progress_snapshot": {
+          "count": 4290,
+          "inclusive_wall_ns": 25498274,
+          "inclusive_cpu_ns": 25543597,
+          "exclusive_wall_ns": 25498274,
+          "exclusive_cpu_ns": 25543597
+        },
+        "session_events": {
+          "count": 4290,
+          "inclusive_wall_ns": 122133912,
+          "inclusive_cpu_ns": 121936110,
+          "exclusive_wall_ns": 96635638,
+          "exclusive_cpu_ns": 96392513
+        },
+        "session_drained": {
+          "count": 4290,
+          "inclusive_wall_ns": 94034795,
+          "inclusive_cpu_ns": 94356558,
+          "exclusive_wall_ns": 94034795,
+          "exclusive_cpu_ns": 94356558
+        },
+        "session_decide_write": {
+          "count": 92,
+          "inclusive_wall_ns": 3655887,
+          "inclusive_cpu_ns": 3624626,
+          "exclusive_wall_ns": 3655887,
+          "exclusive_cpu_ns": 3624626
+        },
+        "session_frontend_wait": {
+          "count": 92,
+          "inclusive_wall_ns": 853872866,
+          "inclusive_cpu_ns": 4413623,
+          "exclusive_wall_ns": 853872866,
+          "exclusive_cpu_ns": 4413623
+        },
+        "session_candidate_copy": {
+          "count": 92,
+          "inclusive_wall_ns": 27948432,
+          "inclusive_cpu_ns": 27960847,
+          "exclusive_wall_ns": 27948432,
+          "exclusive_cpu_ns": 27960847
+        },
+        "session_candidate_validate": {
+          "count": 92,
+          "inclusive_wall_ns": 300285231,
+          "inclusive_cpu_ns": 297984139,
+          "exclusive_wall_ns": 300285231,
+          "exclusive_cpu_ns": 297984139
+        },
+        "session_wakeup_validate": {
+          "count": 92,
+          "inclusive_wall_ns": 1196167,
+          "inclusive_cpu_ns": 1192836,
+          "exclusive_wall_ns": 1196167,
+          "exclusive_cpu_ns": 1192836
+        },
+        "session_apply_commit": {
+          "count": 92,
+          "inclusive_wall_ns": 2487051,
+          "inclusive_cpu_ns": 2484764,
+          "exclusive_wall_ns": 2487051,
+          "exclusive_cpu_ns": 2484764
+        },
+        "session_exchange": {
+          "count": 92,
+          "inclusive_wall_ns": 1284382577,
+          "inclusive_cpu_ns": 432173753,
+          "exclusive_wall_ns": 94936943,
+          "exclusive_cpu_ns": 94512918
+        },
+        "session_progress": {
+          "count": 4290,
+          "inclusive_wall_ns": 1822099125,
+          "inclusive_cpu_ns": 967258119,
+          "exclusive_wall_ns": 244685632,
+          "exclusive_cpu_ns": 241828812
+        },
+        "simulator_run": {
+          "count": 1,
+          "inclusive_wall_ns": 1926905867,
+          "inclusive_cpu_ns": 1071576677,
+          "exclusive_wall_ns": 104806742,
+          "exclusive_cpu_ns": 104318558
+        },
+        "report_build": {
+          "count": 1,
+          "inclusive_wall_ns": 17383648,
+          "inclusive_cpu_ns": 17384693,
+          "exclusive_wall_ns": 17383648,
+          "exclusive_cpu_ns": 17384693
+        },
+        "report_write": {
+          "count": 1,
+          "inclusive_wall_ns": 47701810,
+          "inclusive_cpu_ns": 47562540,
+          "exclusive_wall_ns": 47701810,
+          "exclusive_cpu_ns": 47562540
+        },
+        "simulator_cleanup": {
+          "count": 1,
+          "inclusive_wall_ns": 309892,
+          "inclusive_cpu_ns": 310049,
+          "exclusive_wall_ns": 309892,
+          "exclusive_cpu_ns": 310049
+        },
+        "native_total": {
+          "count": 1,
+          "inclusive_wall_ns": 2259898665,
+          "inclusive_cpu_ns": 1403572345,
+          "exclusive_wall_ns": 267597448,
+          "exclusive_cpu_ns": 266738386
+        }
+      },
+      "observed_root_CPU_ns": 2259002295,
+      "worker_root_CPU_ns": 855429950,
+      "native_root_CPU_ns": 1403572345,
+      "native_CPU_fraction": 0.6213240013552089,
+      "run_exclusive_fraction": 0.046179040291767386,
+      "all_native_free_CPU_work_factor": 2.6407799902259677,
+      "pure_packet_CPU_measured": false
+    }
+  },
+  "network_observations": 28,
+  "paired_networks": 24,
+  "diagnostic_networks": 4,
+  "coarse_measurement_includes_monitor_and_report_cost": true,
+  "hardware_calibrated": false,
+  "pure_packet_CPU_measured": false,
+  "inference_acceleration_measured": false,
+  "thousand_gpu_generalization": false,
+  "novel_algorithm_proven": false
+}

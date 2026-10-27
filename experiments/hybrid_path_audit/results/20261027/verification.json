@@ -1,0 +1,20 @@
+{
+  "passed": true,
+  "cases": 6,
+  "source_files": 15,
+  "library_sources": 6,
+  "token_layer_rows": 145232,
+  "bitmask_cases_checked": true,
+  "independent_tail_counter_expansion": true,
+  "overlap_subgraphs": 6,
+  "rejected_corruptions": [
+    "source content identity",
+    "invalid route expert",
+    "remote domain boundary",
+    "Combine reduction branch",
+    "zero data finish omission"
+  ],
+  "new_networks": 0,
+  "new_GPU_runs": 0,
+  "full_execution_or_timing_claim": false
+}

@@ -1,0 +1,35 @@
+{
+  "passed": true,
+  "all_monitors_terminal": true,
+  "conservative_seconds_including_copied_and_outer_receipts": 172.028383501005,
+  "run_artifact_usage": {
+    "apparent_bytes": 65209850,
+    "allocated_bytes": 65470464
+  },
+  "versioned_experiment_usage": {
+    "apparent_bytes": 125606,
+    "allocated_bytes": 167936
+  },
+  "receipt_reserve_bytes": 2097152,
+  "management_reserve_seconds": 10,
+  "time_budget_seconds": 600,
+  "artifact_budget_bytes": 402653184,
+  "new_networks": 0,
+  "probe_receipts": [
+    "monitor/analyze-continued/probe.json",
+    "monitor/checkpoint/probe.json",
+    "monitor/dependencies/probe.json",
+    "monitor/finish/probe.json",
+    "monitor/prepare/probe.json",
+    "monitor/prepare-continued/probe.json",
+    "monitor/recovery/probe.json",
+    "monitor/report-continued/probe.json",
+    "monitor/verify-continued/probe.json",
+    "recovered/run/monitor/analyze-continued/probe.json",
+    "recovered/run/monitor/dependencies/probe.json",
+    "recovered/run/monitor/prepare/probe.json",
+    "recovered/run/monitor/prepare-continued/probe.json",
+    "recovered/run/monitor/report-continued/probe.json",
+    "recovered/run/monitor/verify-continued/probe.json"
+  ]
+}

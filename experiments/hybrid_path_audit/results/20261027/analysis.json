@@ -1,0 +1,1732 @@
+{
+  "schema_version": "hybrid-path-audit/1",
+  "cases": [
+    {
+      "ep": 64,
+      "servers": 8,
+      "gpus_per_server": 8,
+      "binding": "contiguous",
+      "phases": {
+        "prefill": {
+          "tokens": 40194,
+          "expert_contributions": 321552,
+          "destination_gpus": 299929,
+          "destination_domains": 159562,
+          "direct_cross_server_vectors": 263140,
+          "hybrid_cross_server_vectors": 139867,
+          "hybrid_intra_server_remote_gpu_vectors": 262971,
+          "hybrid_ingress_self_gpu_copies": 36958,
+          "combine_multiple_reduction_vectors": 139867,
+          "combine_no_multiple_unexpanded_vectors": 263140,
+          "combine_no_multiple_expanded_vectors": 282303,
+          "declared_collectives": 58,
+          "data_carrying_remote_channels": 21686,
+          "dispatch_remote_finish_calls": 103936,
+          "dispatch_empty_channel_finish_calls": 82250,
+          "dispatch_remote_periodic_tail_calls": 15019,
+          "dispatch_remote_count_block_put_calls": 51968,
+          "dispatch_remote_count_operand_bytes": 4157440,
+          "dispatch_hidden_bytes_direct": 3772375040,
+          "dispatch_hidden_bytes_hybrid": 2005133312,
+          "hybrid_intra_server_remote_gpu_hidden_bytes": 3769952256
+        },
+        "decode": {
+          "tokens": 105038,
+          "expert_contributions": 840304,
+          "destination_gpus": 783444,
+          "destination_domains": 417624,
+          "direct_cross_server_vectors": 687383,
+          "hybrid_cross_server_vectors": 366220,
+          "hybrid_intra_server_remote_gpu_vectors": 685639,
+          "hybrid_ingress_self_gpu_copies": 97805,
+          "combine_multiple_reduction_vectors": 366220,
+          "combine_no_multiple_unexpanded_vectors": 687383,
+          "combine_no_multiple_expanded_vectors": 737291,
+          "declared_collectives": 7424,
+          "data_carrying_remote_channels": 366220,
+          "dispatch_remote_finish_calls": 13303808,
+          "dispatch_empty_channel_finish_calls": 12937588,
+          "dispatch_remote_periodic_tail_calls": 0,
+          "dispatch_remote_count_block_put_calls": 6651904,
+          "dispatch_remote_count_operand_bytes": 532152320,
+          "dispatch_hidden_bytes_direct": 9854322688,
+          "dispatch_hidden_bytes_hybrid": 5250129920,
+          "hybrid_intra_server_remote_gpu_hidden_bytes": 9829320704
+        }
+      },
+      "prefill_overlap_witness": {
+        "ep": 64,
+        "binding": "contiguous",
+        "entry": 0,
+        "layer": 3,
+        "source_rank": 1,
+        "request_index": 1,
+        "channel": 0,
+        "destination_domain": 1,
+        "stream_tokens": 7,
+        "first_seven_token_indices": [
+          4,
+          12,
+          20,
+          24,
+          32,
+          40,
+          48
+        ],
+        "first_seven_choices": [
+          [
+            0,
+            30,
+            55,
+            117,
+            120,
+            125,
+            152,
+            109
+          ],
+          [
+            6,
+            20,
+            50,
+            142,
+            243,
+            247,
+            248,
+            153
+          ],
+          [
+            45,
+            119,
+            125,
+            215,
+            217,
+            230,
+            249,
+            109
+          ],
+          [
+            44,
+            50,
+            82,
+            131,
+            236,
+            240,
+            249,
+            84
+          ],
+          [
+            17,
+            59,
+            101,
+            103,
+            122,
+            245,
+            249,
+            10
+          ],
+          [
+            0,
+            3,
+            30,
+            41,
+            55,
+            103,
+            152,
+            120
+          ],
+          [
+            2,
+            23,
+            31,
+            39,
+            66,
+            94,
+            123,
+            33
+          ]
+        ],
+        "necessary_order_subgraph": {
+          "after": {
+            "issue.0": [],
+            "visible.0": [
+              "issue.0"
+            ],
+            "issue.1": [
+              "issue.0"
+            ],
+            "visible.1": [
+              "issue.1"
+            ],
+            "issue.2": [
+              "issue.1"
+            ],
+            "visible.2": [
+              "issue.2"
+            ],
+            "issue.3": [
+              "issue.2"
+            ],
+            "visible.3": [
+              "issue.3"
+            ],
+            "issue.4": [
+              "issue.3"
+            ],
+            "visible.4": [
+              "issue.4"
+            ],
+            "issue.5": [
+              "issue.4"
+            ],
+            "visible.5": [
+              "issue.5"
+            ],
+            "issue.6": [
+              "issue.5",
+              "tail.6.release"
+            ],
+            "visible.6": [
+              "issue.6"
+            ],
+            "tail.6.release": [
+              "visible.0",
+              "visible.1",
+              "visible.2",
+              "visible.3",
+              "visible.4",
+              "visible.5"
+            ],
+            "tail.6.visible": [
+              "tail.6.release"
+            ],
+            "finish.release": [
+              "visible.0",
+              "visible.1",
+              "visible.2",
+              "visible.3",
+              "visible.4",
+              "visible.5",
+              "visible.6",
+              "tail.6.release"
+            ],
+            "finish.visible": [
+              "finish.release"
+            ],
+            "forward.0": [
+              "tail.6.visible"
+            ],
+            "forward.1": [
+              "tail.6.visible",
+              "forward.0"
+            ],
+            "forward.2": [
+              "tail.6.visible",
+              "forward.1"
+            ],
+            "forward.3": [
+              "tail.6.visible",
+              "forward.2"
+            ],
+            "forward.4": [
+              "tail.6.visible",
+              "forward.3"
+            ],
+            "forward.5": [
+              "tail.6.visible",
+              "forward.4"
+            ],
+            "forward.6": [
+              "finish.visible",
+              "forward.5"
+            ]
+          },
+          "linear_extension": [
+            "issue.0",
+            "visible.0",
+            "issue.1",
+            "visible.1",
+            "issue.2",
+            "visible.2",
+            "issue.3",
+            "visible.3",
+            "issue.4",
+            "visible.4",
+            "issue.5",
+            "visible.5",
+            "tail.6.release",
+            "tail.6.visible",
+            "forward.0",
+            "forward.1",
+            "forward.2",
+            "forward.3",
+            "forward.4",
+            "forward.5",
+            "issue.6",
+            "visible.6",
+            "finish.release",
+            "finish.visible",
+            "forward.6"
+          ],
+          "scope": "necessary_single_channel_source_projection_not_full_execution_or_timing"
+        }
+      }
+    },
+    {
+      "ep": 64,
+      "servers": 8,
+      "gpus_per_server": 8,
+      "binding": "spread",
+      "phases": {
+        "prefill": {
+          "tokens": 40194,
+          "expert_contributions": 321552,
+          "destination_gpus": 299929,
+          "destination_domains": 159562,
+          "direct_cross_server_vectors": 262240,
+          "hybrid_cross_server_vectors": 139457,
+          "hybrid_intra_server_remote_gpu_vectors": 262421,
+          "hybrid_ingress_self_gpu_copies": 37508,
+          "combine_multiple_reduction_vectors": 139457,
+          "combine_no_multiple_unexpanded_vectors": 262240,
+          "combine_no_multiple_expanded_vectors": 281099,
+          "declared_collectives": 58,
+          "data_carrying_remote_channels": 21696,
+          "dispatch_remote_finish_calls": 103936,
+          "dispatch_empty_channel_finish_calls": 82240,
+          "dispatch_remote_periodic_tail_calls": 14962,
+          "dispatch_remote_count_block_put_calls": 51968,
+          "dispatch_remote_count_operand_bytes": 4157440,
+          "dispatch_hidden_bytes_direct": 3759472640,
+          "dispatch_hidden_bytes_hybrid": 1999255552,
+          "hybrid_intra_server_remote_gpu_hidden_bytes": 3762067456
+        },
+        "decode": {
+          "tokens": 105038,
+          "expert_contributions": 840304,
+          "destination_gpus": 783444,
+          "destination_domains": 417624,
+          "direct_cross_server_vectors": 686612,
+          "hybrid_cross_server_vectors": 365990,
+          "hybrid_intra_server_remote_gpu_vectors": 685694,
+          "hybrid_ingress_self_gpu_copies": 97750,
+          "combine_multiple_reduction_vectors": 365990,
+          "combine_no_multiple_unexpanded_vectors": 686612,
+          "combine_no_multiple_expanded_vectors": 736390,
+          "declared_collectives": 7424,
+          "data_carrying_remote_channels": 365990,
+          "dispatch_remote_finish_calls": 13303808,
+          "dispatch_empty_channel_finish_calls": 12937818,
+          "dispatch_remote_periodic_tail_calls": 0,
+          "dispatch_remote_count_block_put_calls": 6651904,
+          "dispatch_remote_count_operand_bytes": 532152320,
+          "dispatch_hidden_bytes_direct": 9843269632,
+          "dispatch_hidden_bytes_hybrid": 5246832640,
+          "hybrid_intra_server_remote_gpu_hidden_bytes": 9830109184
+        }
+      },
+      "prefill_overlap_witness": {
+        "ep": 64,
+        "binding": "spread",
+        "entry": 0,
+        "layer": 3,
+        "source_rank": 4,
+        "request_index": 1,
+        "channel": 0,
+        "destination_domain": 1,
+        "stream_tokens": 7,
+        "first_seven_token_indices": [
+          4,
+          12,
+          20,
+          24,
+          32,
+          40,
+          48
+        ],
+        "first_seven_choices": [
+          [
+            0,
+            30,
+            55,
+            117,
+            120,
+            125,
+            152,
+            109
+          ],
+          [
+            6,
+            20,
+            50,
+            142,
+            243,
+            247,
+            248,
+            153
+          ],
+          [
+            45,
+            119,
+            125,
+            215,
+            217,
+            230,
+            249,
+            109
+          ],
+          [
+            44,
+            50,
+            82,
+            131,
+            236,
+            240,
+            249,
+            84
+          ],
+          [
+            17,
+            59,
+            101,
+            103,
+            122,
+            245,
+            249,
+            10
+          ],
+          [
+            0,
+            3,
+            30,
+            41,
+            55,
+            103,
+            152,
+            120
+          ],
+          [
+            2,
+            23,
+            31,
+            39,
+            66,
+            94,
+            123,
+            33
+          ]
+        ],
+        "necessary_order_subgraph": {
+          "after": {
+            "issue.0": [],
+            "visible.0": [
+              "issue.0"
+            ],
+            "issue.1": [
+              "issue.0"
+            ],
+            "visible.1": [
+              "issue.1"
+            ],
+            "issue.2": [
+              "issue.1"
+            ],
+            "visible.2": [
+              "issue.2"
+            ],
+            "issue.3": [
+              "issue.2"
+            ],
+            "visible.3": [
+              "issue.3"
+            ],
+            "issue.4": [
+              "issue.3"
+            ],
+            "visible.4": [
+              "issue.4"
+            ],
+            "issue.5": [
+              "issue.4"
+            ],
+            "visible.5": [
+              "issue.5"
+            ],
+            "issue.6": [
+              "issue.5",
+              "tail.6.release"
+            ],
+            "visible.6": [
+              "issue.6"
+            ],
+            "tail.6.release": [
+              "visible.0",
+              "visible.1",
+              "visible.2",
+              "visible.3",
+              "visible.4",
+              "visible.5"
+            ],
+            "tail.6.visible": [
+              "tail.6.release"
+            ],
+            "finish.release": [
+              "visible.0",
+              "visible.1",
+              "visible.2",
+              "visible.3",
+              "visible.4",
+              "visible.5",
+              "visible.6",
+              "tail.6.release"
+            ],
+            "finish.visible": [
+              "finish.release"
+            ],
+            "forward.0": [
+              "tail.6.visible"
+            ],
+            "forward.1": [
+              "tail.6.visible",
+              "forward.0"
+            ],
+            "forward.2": [
+              "tail.6.visible",
+              "forward.1"
+            ],
+            "forward.3": [
+              "tail.6.visible",
+              "forward.2"
+            ],
+            "forward.4": [
+              "tail.6.visible",
+              "forward.3"
+            ],
+            "forward.5": [
+              "tail.6.visible",
+              "forward.4"
+            ],
+            "forward.6": [
+              "finish.visible",
+              "forward.5"
+            ]
+          },
+          "linear_extension": [
+            "issue.0",
+            "visible.0",
+            "issue.1",
+            "visible.1",
+            "issue.2",
+            "visible.2",
+            "issue.3",
+            "visible.3",
+            "issue.4",
+            "visible.4",
+            "issue.5",
+            "visible.5",
+            "tail.6.release",
+            "tail.6.visible",
+            "forward.0",
+            "forward.1",
+            "forward.2",
+            "forward.3",
+            "forward.4",
+            "forward.5",
+            "issue.6",
+            "visible.6",
+            "finish.release",
+            "finish.visible",
+            "forward.6"
+          ],
+          "scope": "necessary_single_channel_source_projection_not_full_execution_or_timing"
+        }
+      }
+    },
+    {
+      "ep": 128,
+      "servers": 16,
+      "gpus_per_server": 8,
+      "binding": "contiguous",
+      "phases": {
+        "prefill": {
+          "tokens": 40194,
+          "expert_contributions": 321552,
+          "destination_gpus": 314122,
+          "destination_domains": 227457,
+          "direct_cross_server_vectors": 294395,
+          "hybrid_cross_server_vectors": 213071,
+          "hybrid_intra_server_remote_gpu_vectors": 275274,
+          "hybrid_ingress_self_gpu_copies": 38848,
+          "combine_multiple_reduction_vectors": 213071,
+          "combine_no_multiple_unexpanded_vectors": 294395,
+          "combine_no_multiple_expanded_vectors": 301354,
+          "declared_collectives": 58,
+          "data_carrying_remote_channels": 42471,
+          "dispatch_remote_finish_calls": 445440,
+          "dispatch_empty_channel_finish_calls": 402969,
+          "dispatch_remote_periodic_tail_calls": 19798,
+          "dispatch_remote_count_block_put_calls": 222720,
+          "dispatch_remote_count_operand_bytes": 10690560,
+          "dispatch_hidden_bytes_direct": 4220446720,
+          "dispatch_hidden_bytes_hybrid": 3054585856,
+          "hybrid_intra_server_remote_gpu_hidden_bytes": 3946328064
+        },
+        "decode": {
+          "tokens": 105038,
+          "expert_contributions": 840304,
+          "destination_gpus": 821090,
+          "destination_domains": 594938,
+          "direct_cross_server_vectors": 769312,
+          "hybrid_cross_server_vectors": 557520,
+          "hybrid_intra_server_remote_gpu_vectors": 719819,
+          "hybrid_ingress_self_gpu_copies": 101271,
+          "combine_multiple_reduction_vectors": 557520,
+          "combine_no_multiple_unexpanded_vectors": 769312,
+          "combine_no_multiple_expanded_vectors": 787303,
+          "declared_collectives": 7424,
+          "data_carrying_remote_channels": 557520,
+          "dispatch_remote_finish_calls": 57016320,
+          "dispatch_empty_channel_finish_calls": 56458800,
+          "dispatch_remote_periodic_tail_calls": 0,
+          "dispatch_remote_count_block_put_calls": 28508160,
+          "dispatch_remote_count_operand_bytes": 1368391680,
+          "dispatch_hidden_bytes_direct": 11028856832,
+          "dispatch_hidden_bytes_hybrid": 7992606720,
+          "hybrid_intra_server_remote_gpu_hidden_bytes": 10319325184
+        }
+      },
+      "prefill_overlap_witness": {
+        "ep": 128,
+        "binding": "contiguous",
+        "entry": 0,
+        "layer": 3,
+        "source_rank": 1,
+        "request_index": 1,
+        "channel": 0,
+        "destination_domain": 1,
+        "stream_tokens": 7,
+        "first_seven_token_indices": [
+          0,
+          4,
+          12,
+          32,
+          40,
+          48,
+          52
+        ],
+        "first_seven_choices": [
+          [
+            9,
+            16,
+            25,
+            96,
+            143,
+            195,
+            210,
+            197
+          ],
+          [
+            0,
+            30,
+            55,
+            117,
+            120,
+            125,
+            152,
+            109
+          ],
+          [
+            6,
+            20,
+            50,
+            142,
+            243,
+            247,
+            248,
+            153
+          ],
+          [
+            17,
+            59,
+            101,
+            103,
+            122,
+            245,
+            249,
+            10
+          ],
+          [
+            0,
+            3,
+            30,
+            41,
+            55,
+            103,
+            152,
+            120
+          ],
+          [
+            2,
+            23,
+            31,
+            39,
+            66,
+            94,
+            123,
+            33
+          ],
+          [
+            2,
+            26,
+            124,
+            210,
+            227,
+            236,
+            252,
+            20
+          ]
+        ],
+        "necessary_order_subgraph": {
+          "after": {
+            "issue.0": [],
+            "visible.0": [
+              "issue.0"
+            ],
+            "issue.1": [
+              "issue.0"
+            ],
+            "visible.1": [
+              "issue.1"
+            ],
+            "issue.2": [
+              "issue.1"
+            ],
+            "visible.2": [
+              "issue.2"
+            ],
+            "issue.3": [
+              "issue.2"
+            ],
+            "visible.3": [
+              "issue.3"
+            ],
+            "issue.4": [
+              "issue.3"
+            ],
+            "visible.4": [
+              "issue.4"
+            ],
+            "issue.5": [
+              "issue.4"
+            ],
+            "visible.5": [
+              "issue.5"
+            ],
+            "issue.6": [
+              "issue.5",
+              "tail.6.release"
+            ],
+            "visible.6": [
+              "issue.6"
+            ],
+            "tail.6.release": [
+              "visible.0",
+              "visible.1",
+              "visible.2",
+              "visible.3",
+              "visible.4",
+              "visible.5"
+            ],
+            "tail.6.visible": [
+              "tail.6.release"
+            ],
+            "finish.release": [
+              "visible.0",
+              "visible.1",
+              "visible.2",
+              "visible.3",
+              "visible.4",
+              "visible.5",
+              "visible.6",
+              "tail.6.release"
+            ],
+            "finish.visible": [
+              "finish.release"
+            ],
+            "forward.0": [
+              "tail.6.visible"
+            ],
+            "forward.1": [
+              "tail.6.visible",
+              "forward.0"
+            ],
+            "forward.2": [
+              "tail.6.visible",
+              "forward.1"
+            ],
+            "forward.3": [
+              "tail.6.visible",
+              "forward.2"
+            ],
+            "forward.4": [
+              "tail.6.visible",
+              "forward.3"
+            ],
+            "forward.5": [
+              "tail.6.visible",
+              "forward.4"
+            ],
+            "forward.6": [
+              "finish.visible",
+              "forward.5"
+            ]
+          },
+          "linear_extension": [
+            "issue.0",
+            "visible.0",
+            "issue.1",
+            "visible.1",
+            "issue.2",
+            "visible.2",
+            "issue.3",
+            "visible.3",
+            "issue.4",
+            "visible.4",
+            "issue.5",
+            "visible.5",
+            "tail.6.release",
+            "tail.6.visible",
+            "forward.0",
+            "forward.1",
+            "forward.2",
+            "forward.3",
+            "forward.4",
+            "forward.5",
+            "issue.6",
+            "visible.6",
+            "finish.release",
+            "finish.visible",
+            "forward.6"
+          ],
+          "scope": "necessary_single_channel_source_projection_not_full_execution_or_timing"
+        }
+      }
+    },
+    {
+      "ep": 128,
+      "servers": 16,
+      "gpus_per_server": 8,
+      "binding": "spread",
+      "phases": {
+        "prefill": {
+          "tokens": 40194,
+          "expert_contributions": 321552,
+          "destination_gpus": 314122,
+          "destination_domains": 227457,
+          "direct_cross_server_vectors": 294202,
+          "hybrid_cross_server_vectors": 213169,
+          "hybrid_intra_server_remote_gpu_vectors": 275279,
+          "hybrid_ingress_self_gpu_copies": 38843,
+          "combine_multiple_reduction_vectors": 213169,
+          "combine_no_multiple_unexpanded_vectors": 294202,
+          "combine_no_multiple_expanded_vectors": 301121,
+          "declared_collectives": 58,
+          "data_carrying_remote_channels": 42554,
+          "dispatch_remote_finish_calls": 445440,
+          "dispatch_empty_channel_finish_calls": 402886,
+          "dispatch_remote_periodic_tail_calls": 19781,
+          "dispatch_remote_count_block_put_calls": 222720,
+          "dispatch_remote_count_operand_bytes": 10690560,
+          "dispatch_hidden_bytes_direct": 4217679872,
+          "dispatch_hidden_bytes_hybrid": 3055990784,
+          "hybrid_intra_server_remote_gpu_hidden_bytes": 3946399744
+        },
+        "decode": {
+          "tokens": 105038,
+          "expert_contributions": 840304,
+          "destination_gpus": 821090,
+          "destination_domains": 594938,
+          "direct_cross_server_vectors": 770547,
+          "hybrid_cross_server_vectors": 558397,
+          "hybrid_intra_server_remote_gpu_vectors": 719064,
+          "hybrid_ingress_self_gpu_copies": 102026,
+          "combine_multiple_reduction_vectors": 558397,
+          "combine_no_multiple_unexpanded_vectors": 770547,
+          "combine_no_multiple_expanded_vectors": 788519,
+          "declared_collectives": 7424,
+          "data_carrying_remote_channels": 558397,
+          "dispatch_remote_finish_calls": 57016320,
+          "dispatch_empty_channel_finish_calls": 56457923,
+          "dispatch_remote_periodic_tail_calls": 0,
+          "dispatch_remote_count_block_put_calls": 28508160,
+          "dispatch_remote_count_operand_bytes": 1368391680,
+          "dispatch_hidden_bytes_direct": 11046561792,
+          "dispatch_hidden_bytes_hybrid": 8005179392,
+          "hybrid_intra_server_remote_gpu_hidden_bytes": 10308501504
+        }
+      },
+      "prefill_overlap_witness": {
+        "ep": 128,
+        "binding": "spread",
+        "entry": 0,
+        "layer": 3,
+        "source_rank": 8,
+        "request_index": 1,
+        "channel": 0,
+        "destination_domain": 0,
+        "stream_tokens": 8,
+        "first_seven_token_indices": [
+          0,
+          4,
+          12,
+          16,
+          32,
+          40,
+          48
+        ],
+        "first_seven_choices": [
+          [
+            9,
+            16,
+            25,
+            96,
+            143,
+            195,
+            210,
+            197
+          ],
+          [
+            0,
+            30,
+            55,
+            117,
+            120,
+            125,
+            152,
+            109
+          ],
+          [
+            6,
+            20,
+            50,
+            142,
+            243,
+            247,
+            248,
+            153
+          ],
+          [
+            8,
+            80,
+            84,
+            92,
+            203,
+            228,
+            243,
+            87
+          ],
+          [
+            17,
+            59,
+            101,
+            103,
+            122,
+            245,
+            249,
+            10
+          ],
+          [
+            0,
+            3,
+            30,
+            41,
+            55,
+            103,
+            152,
+            120
+          ],
+          [
+            2,
+            23,
+            31,
+            39,
+            66,
+            94,
+            123,
+            33
+          ]
+        ],
+        "necessary_order_subgraph": {
+          "after": {
+            "issue.0": [],
+            "visible.0": [
+              "issue.0"
+            ],
+            "issue.1": [
+              "issue.0"
+            ],
+            "visible.1": [
+              "issue.1"
+            ],
+            "issue.2": [
+              "issue.1"
+            ],
+            "visible.2": [
+              "issue.2"
+            ],
+            "issue.3": [
+              "issue.2"
+            ],
+            "visible.3": [
+              "issue.3"
+            ],
+            "issue.4": [
+              "issue.3"
+            ],
+            "visible.4": [
+              "issue.4"
+            ],
+            "issue.5": [
+              "issue.4"
+            ],
+            "visible.5": [
+              "issue.5"
+            ],
+            "issue.6": [
+              "issue.5",
+              "tail.6.release"
+            ],
+            "visible.6": [
+              "issue.6"
+            ],
+            "issue.7": [
+              "issue.6"
+            ],
+            "visible.7": [
+              "issue.7"
+            ],
+            "tail.6.release": [
+              "visible.0",
+              "visible.1",
+              "visible.2",
+              "visible.3",
+              "visible.4",
+              "visible.5"
+            ],
+            "tail.6.visible": [
+              "tail.6.release"
+            ],
+            "finish.release": [
+              "visible.0",
+              "visible.1",
+              "visible.2",
+              "visible.3",
+              "visible.4",
+              "visible.5",
+              "visible.6",
+              "visible.7",
+              "tail.6.release"
+            ],
+            "finish.visible": [
+              "finish.release"
+            ],
+            "forward.0": [
+              "tail.6.visible"
+            ],
+            "forward.1": [
+              "tail.6.visible",
+              "forward.0"
+            ],
+            "forward.2": [
+              "tail.6.visible",
+              "forward.1"
+            ],
+            "forward.3": [
+              "tail.6.visible",
+              "forward.2"
+            ],
+            "forward.4": [
+              "tail.6.visible",
+              "forward.3"
+            ],
+            "forward.5": [
+              "tail.6.visible",
+              "forward.4"
+            ],
+            "forward.6": [
+              "finish.visible",
+              "forward.5"
+            ],
+            "forward.7": [
+              "finish.visible",
+              "forward.6"
+            ]
+          },
+          "linear_extension": [
+            "issue.0",
+            "visible.0",
+            "issue.1",
+            "visible.1",
+            "issue.2",
+            "visible.2",
+            "issue.3",
+            "visible.3",
+            "issue.4",
+            "visible.4",
+            "issue.5",
+            "visible.5",
+            "tail.6.release",
+            "tail.6.visible",
+            "forward.0",
+            "forward.1",
+            "forward.2",
+            "forward.3",
+            "forward.4",
+            "forward.5",
+            "issue.6",
+            "visible.6",
+            "issue.7",
+            "visible.7",
+            "finish.release",
+            "finish.visible",
+            "forward.6",
+            "forward.7"
+          ],
+          "scope": "necessary_single_channel_source_projection_not_full_execution_or_timing"
+        }
+      }
+    },
+    {
+      "ep": 256,
+      "servers": 32,
+      "gpus_per_server": 8,
+      "binding": "contiguous",
+      "phases": {
+        "prefill": {
+          "tokens": 40194,
+          "expert_contributions": 321552,
+          "destination_gpus": 321552,
+          "destination_domains": 273565,
+          "direct_cross_server_vectors": 311796,
+          "hybrid_cross_server_vectors": 265159,
+          "hybrid_intra_server_remote_gpu_vectors": 281294,
+          "hybrid_ingress_self_gpu_copies": 40258,
+          "combine_multiple_reduction_vectors": 265159,
+          "combine_no_multiple_unexpanded_vectors": 311796,
+          "combine_no_multiple_expanded_vectors": 311796,
+          "declared_collectives": 58,
+          "data_carrying_remote_channels": 74104,
+          "dispatch_remote_finish_calls": 1841152,
+          "dispatch_empty_channel_finish_calls": 1767048,
+          "dispatch_remote_periodic_tail_calls": 18203,
+          "dispatch_remote_count_block_put_calls": 920576,
+          "dispatch_remote_count_operand_bytes": 29458432,
+          "dispatch_hidden_bytes_direct": 4469907456,
+          "dispatch_hidden_bytes_hybrid": 3801319424,
+          "hybrid_intra_server_remote_gpu_hidden_bytes": 4032630784
+        },
+        "decode": {
+          "tokens": 105038,
+          "expert_contributions": 840304,
+          "destination_gpus": 840304,
+          "destination_domains": 714348,
+          "direct_cross_server_vectors": 813682,
+          "hybrid_cross_server_vectors": 691696,
+          "hybrid_intra_server_remote_gpu_vectors": 735871,
+          "hybrid_ingress_self_gpu_copies": 104433,
+          "combine_multiple_reduction_vectors": 691696,
+          "combine_no_multiple_unexpanded_vectors": 813682,
+          "combine_no_multiple_expanded_vectors": 813682,
+          "declared_collectives": 7424,
+          "data_carrying_remote_channels": 691696,
+          "dispatch_remote_finish_calls": 235667456,
+          "dispatch_empty_channel_finish_calls": 234975760,
+          "dispatch_remote_periodic_tail_calls": 0,
+          "dispatch_remote_count_block_put_calls": 117833728,
+          "dispatch_remote_count_operand_bytes": 3770679296,
+          "dispatch_hidden_bytes_direct": 11664945152,
+          "dispatch_hidden_bytes_hybrid": 9916153856,
+          "hybrid_intra_server_remote_gpu_hidden_bytes": 10549446656
+        }
+      },
+      "prefill_overlap_witness": {
+        "ep": 256,
+        "binding": "contiguous",
+        "entry": 0,
+        "layer": 3,
+        "source_rank": 1,
+        "request_index": 1,
+        "channel": 0,
+        "destination_domain": 15,
+        "stream_tokens": 7,
+        "first_seven_token_indices": [
+          4,
+          20,
+          32,
+          36,
+          40,
+          48,
+          52
+        ],
+        "first_seven_choices": [
+          [
+            0,
+            30,
+            55,
+            117,
+            120,
+            125,
+            152,
+            109
+          ],
+          [
+            45,
+            119,
+            125,
+            215,
+            217,
+            230,
+            249,
+            109
+          ],
+          [
+            17,
+            59,
+            101,
+            103,
+            122,
+            245,
+            249,
+            10
+          ],
+          [
+            120,
+            147,
+            153,
+            167,
+            183,
+            237,
+            249,
+            99
+          ],
+          [
+            0,
+            3,
+            30,
+            41,
+            55,
+            103,
+            152,
+            120
+          ],
+          [
+            2,
+            23,
+            31,
+            39,
+            66,
+            94,
+            123,
+            33
+          ],
+          [
+            2,
+            26,
+            124,
+            210,
+            227,
+            236,
+            252,
+            20
+          ]
+        ],
+        "necessary_order_subgraph": {
+          "after": {
+            "issue.0": [],
+            "visible.0": [
+              "issue.0"
+            ],
+            "issue.1": [
+              "issue.0"
+            ],
+            "visible.1": [
+              "issue.1"
+            ],
+            "issue.2": [
+              "issue.1"
+            ],
+            "visible.2": [
+              "issue.2"
+            ],
+            "issue.3": [
+              "issue.2"
+            ],
+            "visible.3": [
+              "issue.3"
+            ],
+            "issue.4": [
+              "issue.3"
+            ],
+            "visible.4": [
+              "issue.4"
+            ],
+            "issue.5": [
+              "issue.4"
+            ],
+            "visible.5": [
+              "issue.5"
+            ],
+            "issue.6": [
+              "issue.5",
+              "tail.6.release"
+            ],
+            "visible.6": [
+              "issue.6"
+            ],
+            "tail.6.release": [
+              "visible.0",
+              "visible.1",
+              "visible.2",
+              "visible.3",
+              "visible.4",
+              "visible.5"
+            ],
+            "tail.6.visible": [
+              "tail.6.release"
+            ],
+            "finish.release": [
+              "visible.0",
+              "visible.1",
+              "visible.2",
+              "visible.3",
+              "visible.4",
+              "visible.5",
+              "visible.6",
+              "tail.6.release"
+            ],
+            "finish.visible": [
+              "finish.release"
+            ],
+            "forward.0": [
+              "tail.6.visible"
+            ],
+            "forward.1": [
+              "tail.6.visible",
+              "forward.0"
+            ],
+            "forward.2": [
+              "tail.6.visible",
+              "forward.1"
+            ],
+            "forward.3": [
+              "tail.6.visible",
+              "forward.2"
+            ],
+            "forward.4": [
+              "tail.6.visible",
+              "forward.3"
+            ],
+            "forward.5": [
+              "tail.6.visible",
+              "forward.4"
+            ],
+            "forward.6": [
+              "finish.visible",
+              "forward.5"
+            ]
+          },
+          "linear_extension": [
+            "issue.0",
+            "visible.0",
+            "issue.1",
+            "visible.1",
+            "issue.2",
+            "visible.2",
+            "issue.3",
+            "visible.3",
+            "issue.4",
+            "visible.4",
+            "issue.5",
+            "visible.5",
+            "tail.6.release",
+            "tail.6.visible",
+            "forward.0",
+            "forward.1",
+            "forward.2",
+            "forward.3",
+            "forward.4",
+            "forward.5",
+            "issue.6",
+            "visible.6",
+            "finish.release",
+            "finish.visible",
+            "forward.6"
+          ],
+          "scope": "necessary_single_channel_source_projection_not_full_execution_or_timing"
+        }
+      }
+    },
+    {
+      "ep": 256,
+      "servers": 32,
+      "gpus_per_server": 8,
+      "binding": "spread",
+      "phases": {
+        "prefill": {
+          "tokens": 40194,
+          "expert_contributions": 321552,
+          "destination_gpus": 321552,
+          "destination_domains": 273565,
+          "direct_cross_server_vectors": 310757,
+          "hybrid_cross_server_vectors": 264482,
+          "hybrid_intra_server_remote_gpu_vectors": 281294,
+          "hybrid_ingress_self_gpu_copies": 40258,
+          "combine_multiple_reduction_vectors": 264482,
+          "combine_no_multiple_unexpanded_vectors": 310757,
+          "combine_no_multiple_expanded_vectors": 310757,
+          "declared_collectives": 58,
+          "data_carrying_remote_channels": 74184,
+          "dispatch_remote_finish_calls": 1841152,
+          "dispatch_empty_channel_finish_calls": 1766968,
+          "dispatch_remote_periodic_tail_calls": 18078,
+          "dispatch_remote_count_block_put_calls": 920576,
+          "dispatch_remote_count_operand_bytes": 29458432,
+          "dispatch_hidden_bytes_direct": 4455012352,
+          "dispatch_hidden_bytes_hybrid": 3791613952,
+          "hybrid_intra_server_remote_gpu_hidden_bytes": 4032630784
+        },
+        "decode": {
+          "tokens": 105038,
+          "expert_contributions": 840304,
+          "destination_gpus": 840304,
+          "destination_domains": 714348,
+          "direct_cross_server_vectors": 814740,
+          "hybrid_cross_server_vectors": 692662,
+          "hybrid_intra_server_remote_gpu_vectors": 735871,
+          "hybrid_ingress_self_gpu_copies": 104433,
+          "combine_multiple_reduction_vectors": 692662,
+          "combine_no_multiple_unexpanded_vectors": 814740,
+          "combine_no_multiple_expanded_vectors": 814740,
+          "declared_collectives": 7424,
+          "data_carrying_remote_channels": 692662,
+          "dispatch_remote_finish_calls": 235667456,
+          "dispatch_empty_channel_finish_calls": 234974794,
+          "dispatch_remote_periodic_tail_calls": 0,
+          "dispatch_remote_count_block_put_calls": 117833728,
+          "dispatch_remote_count_operand_bytes": 3770679296,
+          "dispatch_hidden_bytes_direct": 11680112640,
+          "dispatch_hidden_bytes_hybrid": 9930002432,
+          "hybrid_intra_server_remote_gpu_hidden_bytes": 10549446656
+        }
+      },
+      "prefill_overlap_witness": {
+        "ep": 256,
+        "binding": "spread",
+        "entry": 0,
+        "layer": 3,
+        "source_rank": 17,
+        "request_index": 1,
+        "channel": 0,
+        "destination_domain": 15,
+        "stream_tokens": 7,
+        "first_seven_token_indices": [
+          4,
+          20,
+          32,
+          36,
+          40,
+          48,
+          52
+        ],
+        "first_seven_choices": [
+          [
+            0,
+            30,
+            55,
+            117,
+            120,
+            125,
+            152,
+            109
+          ],
+          [
+            45,
+            119,
+            125,
+            215,
+            217,
+            230,
+            249,
+            109
+          ],
+          [
+            17,
+            59,
+            101,
+            103,
+            122,
+            245,
+            249,
+            10
+          ],
+          [
+            120,
+            147,
+            153,
+            167,
+            183,
+            237,
+            249,
+            99
+          ],
+          [
+            0,
+            3,
+            30,
+            41,
+            55,
+            103,
+            152,
+            120
+          ],
+          [
+            2,
+            23,
+            31,
+            39,
+            66,
+            94,
+            123,
+            33
+          ],
+          [
+            2,
+            26,
+            124,
+            210,
+            227,
+            236,
+            252,
+            20
+          ]
+        ],
+        "necessary_order_subgraph": {
+          "after": {
+            "issue.0": [],
+            "visible.0": [
+              "issue.0"
+            ],
+            "issue.1": [
+              "issue.0"
+            ],
+            "visible.1": [
+              "issue.1"
+            ],
+            "issue.2": [
+              "issue.1"
+            ],
+            "visible.2": [
+              "issue.2"
+            ],
+            "issue.3": [
+              "issue.2"
+            ],
+            "visible.3": [
+              "issue.3"
+            ],
+            "issue.4": [
+              "issue.3"
+            ],
+            "visible.4": [
+              "issue.4"
+            ],
+            "issue.5": [
+              "issue.4"
+            ],
+            "visible.5": [
+              "issue.5"
+            ],
+            "issue.6": [
+              "issue.5",
+              "tail.6.release"
+            ],
+            "visible.6": [
+              "issue.6"
+            ],
+            "tail.6.release": [
+              "visible.0",
+              "visible.1",
+              "visible.2",
+              "visible.3",
+              "visible.4",
+              "visible.5"
+            ],
+            "tail.6.visible": [
+              "tail.6.release"
+            ],
+            "finish.release": [
+              "visible.0",
+              "visible.1",
+              "visible.2",
+              "visible.3",
+              "visible.4",
+              "visible.5",
+              "visible.6",
+              "tail.6.release"
+            ],
+            "finish.visible": [
+              "finish.release"
+            ],
+            "forward.0": [
+              "tail.6.visible"
+            ],
+            "forward.1": [
+              "tail.6.visible",
+              "forward.0"
+            ],
+            "forward.2": [
+              "tail.6.visible",
+              "forward.1"
+            ],
+            "forward.3": [
+              "tail.6.visible",
+              "forward.2"
+            ],
+            "forward.4": [
+              "tail.6.visible",
+              "forward.3"
+            ],
+            "forward.5": [
+              "tail.6.visible",
+              "forward.4"
+            ],
+            "forward.6": [
+              "finish.visible",
+              "forward.5"
+            ]
+          },
+          "linear_extension": [
+            "issue.0",
+            "visible.0",
+            "issue.1",
+            "visible.1",
+            "issue.2",
+            "visible.2",
+            "issue.3",
+            "visible.3",
+            "issue.4",
+            "visible.4",
+            "issue.5",
+            "visible.5",
+            "tail.6.release",
+            "tail.6.visible",
+            "forward.0",
+            "forward.1",
+            "forward.2",
+            "forward.3",
+            "forward.4",
+            "forward.5",
+            "issue.6",
+            "visible.6",
+            "finish.release",
+            "finish.visible",
+            "forward.6"
+          ],
+          "scope": "necessary_single_channel_source_projection_not_full_execution_or_timing"
+        }
+      }
+    }
+  ],
+  "source_evidence": {
+    "deep_ep/include/deep_ep/impls/ep/dispatch.cuh": {
+      "sha256": "447ec0ef779bb2a74f7efa8ece04254c2036ab4000999f566356d6f94df9335a",
+      "anchor_lines": {
+        "ptx::deduplicate": [
+          104,
+          340
+        ]
+      }
+    },
+    "deep_ep/include/deep_ep/impls/ep/hybrid_dispatch.cuh": {
+      "sha256": "d7e6e98aeb605392c668bf46de3520072f02b61f145cfc5779dd9c32f0e73db9",
+      "anchor_lines": {
+        "int kScaleoutUpdateInterval = 6,": [
+          27
+        ],
+        "update_scaleout_tail(true);": [
+          460
+        ],
+        "stored_dst_scaleout_rank_idx = dst_expert_idx >= 0 ? dst_expert_idx / kNumExpertsPerScaleout : -1;": [
+          395
+        ],
+        "if (ptx::deduplicate(stored_dst_scaleup_rank_idx, lane_idx) and stored_dst_scaleup_rank_idx >= 0)": [
+          584
+        ],
+        "if (lane_idx < kNumScaleoutRanks and": [
+          339
+        ],
+        "stored_scaleout_tail >= stored_old_scaleout_tail + kScaleoutUpdateInterval or finish_flag": [
+          340
+        ],
+        "As scale-out tokens have already been consumed by forwarders, no need to do scale-out barrier again": [
+          659
+        ]
+      }
+    },
+    "deep_ep/include/deep_ep/impls/ep/hybrid_combine.cuh": {
+      "sha256": "7a5091f7acd501fe0500564d1ef775e10150d880512e178e6c6bb40285eb1248",
+      "anchor_lines": {
+        "if constexpr (not kAllowMultipleReduction)": [
+          454
+        ],
+        "auto topk_valid_mask = kUseExpandedLayout ?": [
+          458
+        ],
+        "flush_last_tma_and_issue_rdma();": [
+          529,
+          577
+        ],
+        "// Replay the dispatch": [
+          390
+        ],
+        "token_metadata_at_forward": [
+          38,
+          363,
+          365,
+          393,
+          394,
+          399,
+          401
+        ]
+      }
+    },
+    "csrc/kernels/comm/context.cpp": {
+      "sha256": "c420b55314b9525dcb7e9f6c9d23a11cfe62a20268887493b76fc52881bb5e6a",
+      "anchor_lines": {
+        "NCCL_GIN_CONNECTION_RAIL : NCCL_GIN_CONNECTION_FULL": [
+          145
+        ]
+      }
+    },
+    "deep_ep/include/deep_ep/comm/barrier.cuh": {
+      "sha256": "e4361353f31a2f3a36e019bb2ef013991017a205c16ab92f76f9da2a2652260f",
+      "anchor_lines": {
+        "barrier_gin.signal<team_t>": [
+          165
+        ]
+      }
+    }
+  },
+  "declared_channels": 4,
+  "dispatch_tail_interval": 6,
+  "hidden_bytes_per_vector": 14336,
+  "library_commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+  "input_identity_sha256": "189b27e7a0217f92db9a8fcc5d5eac9ffa422ac65974748ffc698b583ba1d400",
+  "only_data_vectors_and_named_dispatch_control_subset": true,
+  "collective_alignment_is_declared": true,
+  "EOS_not_inferred": true,
+  "packet_networks": 0,
+  "actual_GPU_or_provider_runs": 0,
+  "full_hybrid_model_implemented": false,
+  "new_method_latency_benefit_proven": false,
+  "simulator_speedup_proven": false
+}

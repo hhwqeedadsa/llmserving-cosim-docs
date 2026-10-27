@@ -1,0 +1,114 @@
+{
+  "cases": [
+    {
+      "ep": 64,
+      "binding": "contiguous",
+      "phase": "prefill",
+      "direct_vectors": 263140,
+      "hybrid_vectors": 139867,
+      "hidden_data_reduction_fraction": 0.46846925590940186,
+      "hybrid_intra_gpu_vectors": 262971
+    },
+    {
+      "ep": 64,
+      "binding": "contiguous",
+      "phase": "decode",
+      "direct_vectors": 687383,
+      "hybrid_vectors": 366220,
+      "hidden_data_reduction_fraction": 0.46722569513648143,
+      "hybrid_intra_gpu_vectors": 685639
+    },
+    {
+      "ep": 64,
+      "binding": "spread",
+      "phase": "prefill",
+      "direct_vectors": 262240,
+      "hybrid_vectors": 139457,
+      "hidden_data_reduction_fraction": 0.46820851128737034,
+      "hybrid_intra_gpu_vectors": 262421
+    },
+    {
+      "ep": 64,
+      "binding": "spread",
+      "phase": "decode",
+      "direct_vectors": 686612,
+      "hybrid_vectors": 365990,
+      "hidden_data_reduction_fraction": 0.46696241836728747,
+      "hybrid_intra_gpu_vectors": 685694
+    },
+    {
+      "ep": 128,
+      "binding": "contiguous",
+      "phase": "prefill",
+      "direct_vectors": 294395,
+      "hybrid_vectors": 213071,
+      "hidden_data_reduction_fraction": 0.2762411046383261,
+      "hybrid_intra_gpu_vectors": 275274
+    },
+    {
+      "ep": 128,
+      "binding": "contiguous",
+      "phase": "decode",
+      "direct_vectors": 769312,
+      "hybrid_vectors": 557520,
+      "hidden_data_reduction_fraction": 0.2753005282642153,
+      "hybrid_intra_gpu_vectors": 719819
+    },
+    {
+      "ep": 128,
+      "binding": "spread",
+      "phase": "prefill",
+      "direct_vectors": 294202,
+      "hybrid_vectors": 213169,
+      "hidden_data_reduction_fraction": 0.27543320575658903,
+      "hybrid_intra_gpu_vectors": 275279
+    },
+    {
+      "ep": 128,
+      "binding": "spread",
+      "phase": "decode",
+      "direct_vectors": 770547,
+      "hybrid_vectors": 558397,
+      "hidden_data_reduction_fraction": 0.275323893286198,
+      "hybrid_intra_gpu_vectors": 719064
+    },
+    {
+      "ep": 256,
+      "binding": "contiguous",
+      "phase": "prefill",
+      "direct_vectors": 311796,
+      "hybrid_vectors": 265159,
+      "hidden_data_reduction_fraction": 0.14957536337861935,
+      "hybrid_intra_gpu_vectors": 281294
+    },
+    {
+      "ep": 256,
+      "binding": "contiguous",
+      "phase": "decode",
+      "direct_vectors": 813682,
+      "hybrid_vectors": 691696,
+      "hidden_data_reduction_fraction": 0.14991851853672564,
+      "hybrid_intra_gpu_vectors": 735871
+    },
+    {
+      "ep": 256,
+      "binding": "spread",
+      "phase": "prefill",
+      "direct_vectors": 310757,
+      "hybrid_vectors": 264482,
+      "hidden_data_reduction_fraction": 0.1489105635593084,
+      "hybrid_intra_gpu_vectors": 281294
+    },
+    {
+      "ep": 256,
+      "binding": "spread",
+      "phase": "decode",
+      "direct_vectors": 814740,
+      "hybrid_vectors": 692662,
+      "hidden_data_reduction_fraction": 0.1498367577386651,
+      "hybrid_intra_gpu_vectors": 735871
+    }
+  ],
+  "new_networks": 0,
+  "new_method_gain_proven": false
+}

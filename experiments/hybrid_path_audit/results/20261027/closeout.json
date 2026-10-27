@@ -1,0 +1,40 @@
+{
+  "passed": true,
+  "phase": "completed_with_preserved_input_preparation_failure",
+  "original_execution_sha256": "6ab1fd7d712a193078473d29a0c60e7a43884dca58229ac0b27ec0b3ed52b962",
+  "original_execution_unchanged": true,
+  "records": [
+    {
+      "label": "dependencies",
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "label": "checkpoint",
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "label": "recovery",
+      "exit_code": 0,
+      "status": "completed"
+    }
+  ],
+  "conservative_monitored_seconds": 129.95706462001544,
+  "artifact_usage": {
+    "apparent_bytes": 65207086,
+    "allocated_bytes": 65462272
+  },
+  "time_budget_seconds": 600,
+  "artifact_budget_bytes": 402653184,
+  "management_reserve_seconds": 10,
+  "receipt_reserve_bytes": 2097152,
+  "network_runs": 0,
+  "builds": 0,
+  "downloads": 0,
+  "GPU_runs": 0,
+  "dependency_changes": 0,
+  "pushes": 0,
+  "research_innovations_established": false,
+  "overall_goal_complete": false
+}

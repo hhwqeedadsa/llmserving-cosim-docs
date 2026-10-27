@@ -13,7 +13,11 @@
 
 ## 当前范围和预算
 
-当前研究`in_progress`：[分层EP通信路径离线核查](../../experiments/hybrid_path_audit/protocol.md)，平台`83a9d7d`。固定15完整真实请求、58层和全部可用行，EP64/128/256、每服务器8GPU、两种事前源绑定；核对direct跨机GPU副本、hybrid域去重/域内转发、Combine归约分支和零数据通道finish。以固定源码和独立位图模型判别当前大规模研究需要补的语义，不重开EP4网络或把已知分层通信当创新。独立600受监控秒/384MiB，单命令60秒/RSS1GiB/地址2GiB，零网络/构建/下载/GPU/平台依赖变更/push，原件`runs/hybrid_path_audit_20261027/`。前一目标轮为progress：完成实际ECMP负面筛选及失败解释/离线复现，下一行动改为分层协议边界，而非追加同类四卡配置。
+当前研究`completed`：[分层EP通信路径离线核查](../../experiments/hybrid_path_audit/README.md)、[事前协议](../../experiments/hybrid_path_audit/protocol.md)、[报告网页](../../experiments/hybrid_path_audit/results/20261027/report.html)及[方向取舍](../../experiments/hybrid_path_audit/decision.md)。平台`83a9d7d`、协议`7d96d19`、初实现`1ef9062`。固定15完整真实请求、58层全部145232条token×层行、EP64/128/256、每服务器8GPU与两种事前源绑定。Hybrid跨机隐藏向量份数相对逐目标GPU发送减少46.7%～46.9%/27.5%～27.6%/14.9%～15.0%；另计域内转发及Combine三种归约分支，不能当全网字节、时延或本项目新算法收益。零数据通道仍需finish；六组真实prefill前缀支持无时间的单通道必要偏序，不是完整可执行流程或GPU重叠观测。
+
+六份固定DeepEP源码经缓存tree/blob/SHA256准入，独立位图/逐expert展开复核六条件及五类篡改拒绝，13固定依赖通过。首次准备发现旧ECMP包只含8份原文而非15份，失败/原源码/部分复制和原failed execution保留；其余7份从本地读取、逐hash匹配原清单，所有输入/参数/预算不变，后续另存continuation（修正`1aacbbf`）。68成员/31,231,768B包逐hash复制源码/空cwd重算分析、核验及JSON/Markdown/HTML字节一致，恢复零网络；SHA256 `e4a91fb1dab3fc4c44f6c2ed3081d58fd56847a168b94766154811939da8ab87`，原件`runs/hybrid_path_audit_20261027/`。全部已闭合外层/嵌套/复制收据保守172.028秒，原件约62.43MiB分配产物及版本化材料/2MiB收据预留，保持600秒/384MiB及单命令60秒/RSS1GiB/地址2GiB。见[最终资源核查](../../experiments/hybrid_path_audit/results/20261027/final-resources.json)。零网络/构建/下载/GPU/平台依赖修改/push。
+
+本阶段额度关闭，不补有利样本或将EP投影写成实际百卡/千卡执行。下一项实际工作应独立规范输入驱动的Hybrid逻辑表示及域/rail/逐token数据、通知和转发来源，先做小规模独立参考，不扩大现原生四卡/事务上限；再检验正确分层模型与完整DAG之外的实际决策或成本差距。两个论文创新及总体目标仍`in_progress`。本目标轮为progress：确定并量化direct到大EP分层路径的实质建模缺项，给出源码与全量真实路由依据，而非追加已被解释的EP4排序案例。
 
 当前研究`completed`（保留严格比较失败，部分条件未执行）：[相同核心上联总带宽的多路径选择](../../experiments/ecmp_network_choice/README.md)、[事前协议](../../experiments/ecmp_network_choice/protocol.md)、[结果网页](../../experiments/ecmp_network_choice/results/20261027/report.html)与[研究决定](../../experiments/ecmp_network_choice/decision.md)。平台`9a8ce2c`、协议`ae8cdd8`、执行`09f442c`。冻结真实batch4/8输入及三个普通参考；batch4在1×100G、2×50G、4×25G三网络的现代/完整图共6次底层执行全部完成，应用阶段58.568/63.668/75.879us。单核心相对四核心缩短22.81%，是拓扑敏感性，不是新方法或同设备成本收益。保留连接哈希的两种普通参考均选对、后悔值0；绝对时间最大相对误差仍14.23%/26.74%。路径等分参考并列，只因事前规则选中单核心。
 

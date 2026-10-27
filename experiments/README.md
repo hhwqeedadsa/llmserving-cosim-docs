@@ -15,6 +15,7 @@
 | [scaleout_e2e](scaleout_e2e/README.md) | 小规模LLMServingSim→ASTRA→非UB ns-3多层多轮与网络对照 | 30次主对照、共享网络/协议验收及7组可视化；声明成本与合成路由 |
 | [scaleout_faults](scaleout_faults/README.md) | 数据/ACK丢弃到协议、图节点与服务的传播 | 4组实际服务对照，保留恢复与5ms内失败，非生产恢复校准 |
 | [scaleout_admission](scaleout_admission/README.md) | 软件准入、发送资源与队列/业务指标分离 | 7组固定输入对照，保留无收益和ACK占用额度的故障传播 |
+| [route_alignment](route_alignment/README.md) | 保持每请求热度/通信量的跨请求时间对齐筛选 | EP8单层首条件完成；原检查失败后停止其余31条件，修正后仅离线核验，未测得对齐收益 |
 
 Scale-Up 的[方案](scaleup_issue_screening/plan.md)覆盖本地竞争与服务不足、下游阻塞与排队传播、多平面推进差异。新增 Scale-Out 的[研究报告](../docs/reviews/scaleout_scaling_hotspots_20261015.md)关注跨机 All-to-All-v、多 EP 组和热点到网络资源的映射；不将旧 UB 结果改称 RDMA 结果。目录和迭代规范见[仓库组织方案](../docs/repository_layout.md)。
 

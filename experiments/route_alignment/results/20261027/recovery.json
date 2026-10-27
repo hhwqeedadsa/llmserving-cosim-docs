@@ -1,0 +1,49 @@
+{
+  "GPU": 0,
+  "HTTP": 0,
+  "archive_members": 145,
+  "archive_sha256": "2dcc2338ecb529f613dcd8dafcf5a2aec54da889d2a968fe38977ec6a06ea3fc",
+  "builds": 0,
+  "commands": [
+    [
+      "/usr/bin/python3",
+      "-B",
+      "-m",
+      "experiments.route_alignment.analysis.close",
+      "--stage",
+      "/home/lry/moe-ub-cosim/runs/route_alignment_20261027/recovered",
+      "--output",
+      "/home/lry/moe-ub-cosim/runs/route_alignment_20261027/recovered/reanalysis"
+    ],
+    [
+      "/usr/bin/python3",
+      "-B",
+      "-m",
+      "experiments.route_alignment.tests.check"
+    ],
+    [
+      "/usr/bin/python3",
+      "-B",
+      "-c",
+      "from pathlib import Path;from experiments.route_alignment.analysis.prepare import predictions;predictions(Path(__import__(\"sys\").argv[1]),Path(__import__(\"sys\").argv[2]))",
+      "/home/lry/moe-ub-cosim/runs/route_alignment_20261027/recovered/observed",
+      "/home/lry/moe-ub-cosim/runs/route_alignment_20261027/recovered/repredicted"
+    ],
+    [
+      "/usr/bin/python3",
+      "-B",
+      "-c",
+      "from pathlib import Path;from experiments.route_alignment.analysis.prepare import predictions;predictions(Path(__import__(\"sys\").argv[1]),Path(__import__(\"sys\").argv[2]))",
+      "/home/lry/moe-ub-cosim/runs/route_alignment_20261027/recovered/observed",
+      "/home/lry/moe-ub-cosim/runs/route_alignment_20261027/recovered/prediction-without-truth"
+    ]
+  ],
+  "copied_source_empty_cwd": true,
+  "member_hashes_verified": true,
+  "network_runs": 0,
+  "passed": true,
+  "prediction_without_truth_byte_equal": true,
+  "predictions_byte_equal": true,
+  "repeated_small_input_invariants": true,
+  "report_and_summary_byte_equal": true
+}

@@ -1,0 +1,52 @@
+{
+  "GPU": 0,
+  "HTTP": 0,
+  "administrative_artifact_reserve_bytes": 2097152,
+  "administrative_wall_reserve_seconds": 120,
+  "artifact_usage": {
+    "allocated_bytes": 113078272,
+    "apparent_bytes": 112034826
+  },
+  "builds": 0,
+  "comparison_complete": false,
+  "copied_source_offline_recovery_passed": true,
+  "corrected_offline_audit_passed": true,
+  "counter_object_bounds_supplement": "separate specification and commit e3ab387; not part of this research budget",
+  "dependencies_checked": 13,
+  "first_execution_command": [
+    "python3",
+    "-B",
+    "-m",
+    "experiments.route_alignment.analysis.run",
+    "--repository",
+    "/home/lry/moe-ub-cosim",
+    "--stage",
+    "/home/lry/moe-ub-cosim/runs/route_alignment_20261027"
+  ],
+  "first_execution_cwd": "/home/lry/moe-ub-cosim",
+  "first_execution_exit": 1,
+  "first_native_execution_passed": true,
+  "initial_auditor_failure": "KeyError -1; incorrectly required optional message_id; original source and error retained",
+  "inputs_predictions_unchanged": true,
+  "limits": {
+    "address_bytes": 2147483648,
+    "artifact_bytes": 1073741824,
+    "min_free_bytes": 8589934592,
+    "monitored_seconds": 1200,
+    "per_network_seconds": 30,
+    "rss_bytes": 1073741824
+  },
+  "monitored_seconds_conservatively_including_recovered_receipt_copies": 15.90617930299777,
+  "native_network_runs": 1,
+  "network_reruns": 0,
+  "overall_research_goal_complete": false,
+  "protocol_commit": "59b8ae7",
+  "push": false,
+  "recorded_from_tool_output": true,
+  "remaining_conditions_not_executed": 31,
+  "run_root": "runs/route_alignment_20261027",
+  "source_commit": "7cb45b2",
+  "source_originals_preserved": true,
+  "status": "closed_after_auditor_failure",
+  "without_truth_predictions_equal": true
+}

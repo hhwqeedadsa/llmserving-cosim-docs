@@ -59,12 +59,18 @@ def audit(work, meta, topology, protocol, result):
         target = tx if row[3]==0 else rx;assert row[4] not in target;target[row[4]]=(row,h)
     assert set(tx)==set(rx)
     cnp_stream = {e['packet_uid']:e['stream'] for e in tr['dcqcn_reference']['events'] if e['kind']=='cnp_generated'}
+    header_stream = {(0x0b000001+s['src']*32,0x0b000001+s['dst']*32,s['wire_port']):sid
+                     for sid,s in streams.items()}
     counters = Counter();data_counters=Counter();control_counters=Counter();data_uids=set()
     physical_tx=0
     for uid,(row,h) in tx.items():
         other,other_h=rx[uid];assert h==other_h and row[8]==other[8]
         proto=row[6];assert proto in (17,252,255)
-        sid=cnp_stream[uid] if proto==255 else row[5]
+        # message_id may be -1 when recovery recording is not enabled. Resolve
+        # ordinary data/ACK independently from actual wire IPs and ports.
+        sid=(cnp_stream[uid] if proto==255 else header_stream[
+            (h[1],h[2],h[4]) if proto==17 else (h[2],h[1],h[5])])
+        if proto!=255 and row[5]!=-1:assert row[5]==sid
         s=streams[sid];forward=proto==17;src,dst=(s['src'],s['dst']) if forward else (s['dst'],s['src'])
         assert row[1]==src and other[1]==dst
         assert h[1:3]==[0x0b000001+src*32,0x0b000001+dst*32]

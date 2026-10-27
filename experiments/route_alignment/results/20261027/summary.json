@@ -1,0 +1,416 @@
+{
+  "benefit_measured": false,
+  "comparison_complete": false,
+  "first_condition": "core100-aligned-0",
+  "first_condition_prediction_error": {
+    "marginal_link_ns": -0.026890885237869422,
+    "temporal_link_ns": 0.025607462777976642
+  },
+  "input_predictions_frozen_unchanged": true,
+  "input_verification": {
+    "input_variants": 16,
+    "passed": true,
+    "predictions": 32,
+    "raw_requests": 8,
+    "same_connection_bytes": true,
+    "source_revision_independently_verified": false
+  },
+  "metrics": {
+    "application_ns": 310233,
+    "cnp_packets": 2,
+    "ecn_observations": 8,
+    "endpoint_packets": 6946,
+    "finish_ns": 310233,
+    "physical_tx": 33484,
+    "queues": [
+      {
+        "area_byte_ns": 14113100,
+        "changes": 1632,
+        "final_bytes": 0,
+        "node": 8,
+        "peak_bytes": 4120,
+        "port": 1
+      },
+      {
+        "area_byte_ns": 10716964,
+        "changes": 1504,
+        "final_bytes": 0,
+        "node": 8,
+        "peak_bytes": 6108,
+        "port": 2
+      },
+      {
+        "area_byte_ns": 167578792,
+        "changes": 1680,
+        "final_bytes": 0,
+        "node": 8,
+        "peak_bytes": 21104,
+        "port": 3
+      },
+      {
+        "area_byte_ns": 11194100,
+        "changes": 882,
+        "final_bytes": 0,
+        "node": 8,
+        "peak_bytes": 4072,
+        "port": 4
+      },
+      {
+        "area_byte_ns": 51872188,
+        "changes": 1984,
+        "final_bytes": 0,
+        "node": 9,
+        "peak_bytes": 10972,
+        "port": 1
+      },
+      {
+        "area_byte_ns": 29398760,
+        "changes": 1888,
+        "final_bytes": 0,
+        "node": 9,
+        "peak_bytes": 6108,
+        "port": 2
+      },
+      {
+        "area_byte_ns": 31245432,
+        "changes": 1122,
+        "final_bytes": 0,
+        "node": 9,
+        "peak_bytes": 12216,
+        "port": 3
+      },
+      {
+        "area_byte_ns": 260159192,
+        "changes": 2176,
+        "final_bytes": 0,
+        "node": 9,
+        "peak_bytes": 19812,
+        "port": 4
+      },
+      {
+        "area_byte_ns": 3705220,
+        "changes": 1328,
+        "final_bytes": 0,
+        "node": 10,
+        "peak_bytes": 4072,
+        "port": 1
+      },
+      {
+        "area_byte_ns": 94330848,
+        "changes": 2224,
+        "final_bytes": 0,
+        "node": 10,
+        "peak_bytes": 14624,
+        "port": 2
+      },
+      {
+        "area_byte_ns": 177051772,
+        "changes": 1874,
+        "final_bytes": 0,
+        "node": 10,
+        "peak_bytes": 17032,
+        "port": 3
+      },
+      {
+        "area_byte_ns": 9773716,
+        "changes": 1232,
+        "final_bytes": 0,
+        "node": 11,
+        "peak_bytes": 4072,
+        "port": 1
+      },
+      {
+        "area_byte_ns": 6365248,
+        "changes": 1072,
+        "final_bytes": 0,
+        "node": 11,
+        "peak_bytes": 4444,
+        "port": 2
+      },
+      {
+        "area_byte_ns": 360435932,
+        "changes": 2130,
+        "final_bytes": 0,
+        "node": 11,
+        "peak_bytes": 36100,
+        "port": 3
+      },
+      {
+        "area_byte_ns": 35063620,
+        "changes": 1986,
+        "final_bytes": 0,
+        "node": 12,
+        "peak_bytes": 6528,
+        "port": 1
+      },
+      {
+        "area_byte_ns": 60985884,
+        "changes": 1760,
+        "final_bytes": 0,
+        "node": 12,
+        "peak_bytes": 10972,
+        "port": 2
+      },
+      {
+        "area_byte_ns": 40115896,
+        "changes": 1504,
+        "final_bytes": 0,
+        "node": 12,
+        "peak_bytes": 4072,
+        "port": 3
+      },
+      {
+        "area_byte_ns": 30403256,
+        "changes": 1600,
+        "final_bytes": 0,
+        "node": 12,
+        "peak_bytes": 4444,
+        "port": 4
+      },
+      {
+        "area_byte_ns": 18570364,
+        "changes": 1538,
+        "final_bytes": 0,
+        "node": 13,
+        "peak_bytes": 6108,
+        "port": 1
+      },
+      {
+        "area_byte_ns": 22679328,
+        "changes": 1600,
+        "final_bytes": 0,
+        "node": 13,
+        "peak_bytes": 8888,
+        "port": 2
+      },
+      {
+        "area_byte_ns": 280513416,
+        "changes": 2032,
+        "final_bytes": 0,
+        "node": 13,
+        "peak_bytes": 17032,
+        "port": 3
+      },
+      {
+        "area_byte_ns": 6035580,
+        "changes": 592,
+        "final_bytes": 0,
+        "node": 13,
+        "peak_bytes": 4072,
+        "port": 4
+      },
+      {
+        "area_byte_ns": 101683176,
+        "changes": 1954,
+        "final_bytes": 0,
+        "node": 14,
+        "peak_bytes": 18148,
+        "port": 1
+      },
+      {
+        "area_byte_ns": 10024752,
+        "changes": 832,
+        "final_bytes": 0,
+        "node": 14,
+        "peak_bytes": 4444,
+        "port": 2
+      },
+      {
+        "area_byte_ns": 992014952,
+        "changes": 2624,
+        "final_bytes": 0,
+        "node": 14,
+        "peak_bytes": 45360,
+        "port": 3
+      },
+      {
+        "area_byte_ns": 27192152,
+        "changes": 1152,
+        "final_bytes": 0,
+        "node": 15,
+        "peak_bytes": 6480,
+        "port": 1
+      },
+      {
+        "area_byte_ns": 13209116,
+        "changes": 1794,
+        "final_bytes": 0,
+        "node": 15,
+        "peak_bytes": 4444,
+        "port": 2
+      },
+      {
+        "area_byte_ns": 107876668,
+        "changes": 1376,
+        "final_bytes": 0,
+        "node": 15,
+        "peak_bytes": 23140,
+        "port": 3
+      },
+      {
+        "area_byte_ns": 4083996,
+        "changes": 2624,
+        "final_bytes": 0,
+        "node": 16,
+        "peak_bytes": 2036,
+        "port": 1
+      },
+      {
+        "area_byte_ns": 2964456,
+        "changes": 1874,
+        "final_bytes": 0,
+        "node": 16,
+        "peak_bytes": 2036,
+        "port": 2
+      },
+      {
+        "area_byte_ns": 1781496,
+        "changes": 1376,
+        "final_bytes": 0,
+        "node": 17,
+        "peak_bytes": 2036,
+        "port": 1
+      },
+      {
+        "area_byte_ns": 3398664,
+        "changes": 2130,
+        "final_bytes": 0,
+        "node": 17,
+        "peak_bytes": 2036,
+        "port": 2
+      }
+    ],
+    "rounds": [
+      {
+        "begin_ns": 0,
+        "data_ready_ns": 32876,
+        "dispatch_acked_ns": 21020,
+        "duration_ns": 38900,
+        "expert_completed_ns": 22020,
+        "resources_released_ns": 38900,
+        "step": 0
+      },
+      {
+        "begin_ns": 38900,
+        "data_ready_ns": 72122,
+        "dispatch_acked_ns": 57504,
+        "duration_ns": 39246,
+        "expert_completed_ns": 58504,
+        "resources_released_ns": 78146,
+        "step": 1
+      },
+      {
+        "begin_ns": 78146,
+        "data_ready_ns": 110589,
+        "dispatch_acked_ns": 98122,
+        "duration_ns": 38467,
+        "expert_completed_ns": 99122,
+        "resources_released_ns": 116613,
+        "step": 2
+      },
+      {
+        "begin_ns": 116613,
+        "data_ready_ns": 147793,
+        "dispatch_acked_ns": 135311,
+        "duration_ns": 37204,
+        "expert_completed_ns": 136311,
+        "resources_released_ns": 153817,
+        "step": 3
+      },
+      {
+        "begin_ns": 153817,
+        "data_ready_ns": 187747,
+        "dispatch_acked_ns": 172519,
+        "duration_ns": 39954,
+        "expert_completed_ns": 173519,
+        "resources_released_ns": 193771,
+        "step": 4
+      },
+      {
+        "begin_ns": 193771,
+        "data_ready_ns": 224126,
+        "dispatch_acked_ns": 212465,
+        "duration_ns": 36379,
+        "expert_completed_ns": 213465,
+        "resources_released_ns": 230150,
+        "step": 5
+      },
+      {
+        "begin_ns": 230150,
+        "data_ready_ns": 264253,
+        "dispatch_acked_ns": 249929,
+        "duration_ns": 40127,
+        "expert_completed_ns": 250929,
+        "resources_released_ns": 270277,
+        "step": 6
+      },
+      {
+        "begin_ns": 270277,
+        "data_ready_ns": 304209,
+        "dispatch_acked_ns": 290116,
+        "duration_ns": 39956,
+        "expert_completed_ns": 291116,
+        "resources_released_ns": 310233,
+        "step": 7
+      }
+    ],
+    "source_data_packets": 3472
+  },
+  "native_first_condition_passed": true,
+  "network_conditions_run": 1,
+  "new_innovation_established": false,
+  "offline_first_condition_verified": true,
+  "original_analysis_commit": "7cb45b2",
+  "original_auditor_failure_preserved": true,
+  "packet_id_association": "actual IP/ports; message_id may be -1 without recovery recording",
+  "planned_network_conditions": 32,
+  "predictions": [
+    {
+      "alignment": "aligned",
+      "marginal_link_ns": 301890.56000000006,
+      "network": "core100",
+      "network_conditions_run": 1,
+      "predicted_offset_minus_aligned_fraction": -0.00367694387229655,
+      "temporal_link_ns": 318177.28
+    },
+    {
+      "alignment": "offset",
+      "marginal_link_ns": 301890.56000000006,
+      "network": "core100",
+      "network_conditions_run": 0,
+      "predicted_offset_minus_aligned_fraction": -0.00367694387229655,
+      "temporal_link_ns": 317007.36000000004
+    },
+    {
+      "alignment": "aligned",
+      "marginal_link_ns": 595366.3999999999,
+      "network": "core25",
+      "network_conditions_run": 0,
+      "predicted_offset_minus_aligned_fraction": -0.006927196445212421,
+      "temporal_link_ns": 640074.24
+    },
+    {
+      "alignment": "offset",
+      "marginal_link_ns": 595366.3999999999,
+      "network": "core25",
+      "network_conditions_run": 0,
+      "predicted_offset_minus_aligned_fraction": -0.006927196445212421,
+      "temporal_link_ns": 635640.32
+    }
+  ],
+  "remaining_unexecuted": 31,
+  "source_hashes": {
+    "failures/failure.json": "36bc4d7293447d3963f098d883739eda27b4dec5abb841674ea7e476084ebee8",
+    "failures/original-evaluate.py": "b81edfb26054449336e3dbf02a6b989509e519b2781b3f1c05b736ff5120bdbf",
+    "frozen.json": "27a8c1926c854230f37d46731d5fe5885942e758a3147c5e11f8360bddd58ae8"
+  },
+  "status": "stopped_after_first_auditor_failure",
+  "tamper_rejected": [
+    "callback",
+    "capture_omission",
+    "port_bytes",
+    "source_sequence",
+    "packet_header",
+    "raw_source_hash"
+  ]
+}

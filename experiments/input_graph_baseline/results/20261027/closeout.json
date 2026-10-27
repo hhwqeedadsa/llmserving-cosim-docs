@@ -1,0 +1,52 @@
+{
+  "GPU": 0,
+  "HTTP": 0,
+  "administrative_artifact_reserve_bytes": 2097152,
+  "administrative_wall_reserve_seconds": 10,
+  "archive_sha256": "14b49fbfe4d26de9eafd680e62b0257c474f0ab92194f326f910963dc804d4ed",
+  "artifact_usage": {
+    "allocated_bytes": 51249152,
+    "apparent_bytes": 50405252
+  },
+  "builds": 0,
+  "complete_collective_or_Hybrid_verified": false,
+  "completed_conditions": 6,
+  "copied_source_empty_cwd_recovery_passed": true,
+  "dependencies_checked_this_turn": 13,
+  "dependency_changes": 0,
+  "dependency_check_recorded_in_tool_output": true,
+  "initial_implementation": "646b742",
+  "limits": {
+    "address_bytes": 2147483648,
+    "artifact_bytes": 268435456,
+    "min_free_bytes": 8589934592,
+    "monitored_seconds": 600,
+    "per_command_seconds": 60,
+    "rss_bytes": 1073741824
+  },
+  "monitored_seconds_conservatively_including_recovered_receipt_copies": 12.486855958981323,
+  "native_network_runs": 0,
+  "new_innovations_established": 0,
+  "overall_research_goal_complete": false,
+  "protocol_commit": "1c2fa7f",
+  "push": false,
+  "resource_receipts": [
+    "runs/input_graph_baseline_20261027/execute-monitor/probe.json",
+    "runs/input_graph_baseline_20261027/verify-monitor/probe.json",
+    "runs/input_graph_baseline_20261027/verify-source-selection-monitor/probe.json",
+    "runs/input_graph_baseline_20261027/recompute-monitor/probe.json",
+    "runs/input_graph_baseline_20261027/report-monitor/probe.json",
+    "runs/input_graph_baseline_20261027/prepare-monitor/probe.json",
+    "runs/input_graph_baseline_20261027/recovered/execute-monitor/probe.json",
+    "runs/input_graph_baseline_20261027/recovered/prepare-monitor/probe.json",
+    "runs/input_graph_baseline_20261027/recovered/recompute-monitor/probe.json",
+    "runs/input_graph_baseline_20261027/recovered/report-monitor/probe.json",
+    "runs/input_graph_baseline_20261027/recovered/verify-monitor/probe.json",
+    "runs/input_graph_baseline_20261027/recovered/verify-source-selection-monitor/probe.json",
+    "runs/input_graph_baseline_20261027-prepare-monitor/probe.json",
+    "runs/input_graph_baseline_20261027-recovery-monitor/probe.json"
+  ],
+  "run_root": "runs/input_graph_baseline_20261027",
+  "runtime_fire_calls": 0,
+  "status": "closed_all_six_offline_conditions_passed"
+}

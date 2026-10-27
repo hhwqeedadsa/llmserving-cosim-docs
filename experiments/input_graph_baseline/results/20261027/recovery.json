@@ -1,0 +1,48 @@
+{
+  "GPU": 0,
+  "HTTP": 0,
+  "archive_members": 204,
+  "archive_sha256": "14b49fbfe4d26de9eafd680e62b0257c474f0ab92194f326f910963dc804d4ed",
+  "builds": 0,
+  "commands": [
+    [
+      "/usr/bin/python3",
+      "-B",
+      "-m",
+      "experiments.input_graph_baseline.analysis.report",
+      "recompute",
+      "--stage",
+      "/home/lry/moe-ub-cosim/runs/input_graph_baseline_20261027/recovered",
+      "--output",
+      "/home/lry/moe-ub-cosim/runs/input_graph_baseline_20261027/recovered/recomputed.json"
+    ],
+    [
+      "/usr/bin/python3",
+      "-B",
+      "-m",
+      "experiments.input_graph_baseline.analysis.verify",
+      "--stage",
+      "/home/lry/moe-ub-cosim/runs/input_graph_baseline_20261027/recovered",
+      "--output",
+      "/home/lry/moe-ub-cosim/runs/input_graph_baseline_20261027/recovered/reverification.json"
+    ],
+    [
+      "/usr/bin/python3",
+      "-B",
+      "-m",
+      "experiments.input_graph_baseline.analysis.report",
+      "report",
+      "--stage",
+      "/home/lry/moe-ub-cosim/runs/input_graph_baseline_20261027/recovered",
+      "--output",
+      "/home/lry/moe-ub-cosim/runs/input_graph_baseline_20261027/recovered/reanalysis"
+    ]
+  ],
+  "copied_source_empty_cwd": true,
+  "derived_graphs_byte_equal": true,
+  "member_hashes_verified": true,
+  "network_runs": 0,
+  "passed": true,
+  "source_selection_and_verification_byte_equal": true,
+  "summary_report_byte_equal": true
+}

@@ -1,0 +1,190 @@
+{
+  "GPU": 0,
+  "HTTP": 0,
+  "builds": 0,
+  "cases": [
+    {
+      "control_operations": 96,
+      "data_operations": 50,
+      "dependency_bytes": {
+        "factored": {
+          "canonical_json_bytes": 5698,
+          "gzip_bytes": 1927
+        },
+        "original": {
+          "canonical_json_bytes": 6971,
+          "gzip_bytes": 2164
+        },
+        "reduced": {
+          "canonical_json_bytes": 5899,
+          "gzip_bytes": 1890
+        }
+      },
+      "dependency_canonical_bytes_saved": 1273,
+      "edge_reduction_percent": 23.071528751753156,
+      "factored_edges": 1097,
+      "immutable_guards_canonical_bytes": 98119,
+      "join_nodes": 12,
+      "name": "ep4-b8",
+      "nodes": 714,
+      "operations": 146,
+      "original_edges": 1426,
+      "reduced_edges": 1158,
+      "whole_serialized_fraction_upper_percent": 1.2113426586735179
+    },
+    {
+      "control_operations": 96,
+      "data_operations": 96,
+      "dependency_bytes": {
+        "factored": {
+          "canonical_json_bytes": 7794,
+          "gzip_bytes": 2596
+        },
+        "original": {
+          "canonical_json_bytes": 9551,
+          "gzip_bytes": 2859
+        },
+        "reduced": {
+          "canonical_json_bytes": 8075,
+          "gzip_bytes": 2555
+        }
+      },
+      "dependency_canonical_bytes_saved": 1757,
+      "edge_reduction_percent": 23.254620123203285,
+      "factored_edges": 1495,
+      "immutable_guards_canonical_bytes": 134007,
+      "join_nodes": 18,
+      "name": "ep4-b16",
+      "nodes": 960,
+      "operations": 192,
+      "original_edges": 1948,
+      "reduced_edges": 1579,
+      "whole_serialized_fraction_upper_percent": 1.2238955683417156
+    },
+    {
+      "control_operations": 384,
+      "data_operations": 62,
+      "dependency_bytes": {
+        "factored": {
+          "canonical_json_bytes": 17959,
+          "gzip_bytes": 5717
+        },
+        "original": {
+          "canonical_json_bytes": 23516,
+          "gzip_bytes": 6729
+        },
+        "reduced": {
+          "canonical_json_bytes": 20123,
+          "gzip_bytes": 5778
+        }
+      },
+      "dependency_canonical_bytes_saved": 5557,
+      "edge_reduction_percent": 27.387051700046573,
+      "factored_edges": 3118,
+      "immutable_guards_canonical_bytes": 277490,
+      "join_nodes": 16,
+      "name": "ep8-b8",
+      "nodes": 1990,
+      "operations": 446,
+      "original_edges": 4294,
+      "reduced_edges": 3561,
+      "whole_serialized_fraction_upper_percent": 1.8461426018086018
+    },
+    {
+      "control_operations": 384,
+      "data_operations": 124,
+      "dependency_bytes": {
+        "factored": {
+          "canonical_json_bytes": 21323,
+          "gzip_bytes": 6628
+        },
+        "original": {
+          "canonical_json_bytes": 27978,
+          "gzip_bytes": 7671
+        },
+        "reduced": {
+          "canonical_json_bytes": 23766,
+          "gzip_bytes": 6711
+        }
+      },
+      "dependency_canonical_bytes_saved": 6655,
+      "edge_reduction_percent": 27.23107569721116,
+      "factored_edges": 3653,
+      "immutable_guards_canonical_bytes": 325827,
+      "join_nodes": 24,
+      "name": "ep8-b16",
+      "nodes": 2316,
+      "operations": 508,
+      "original_edges": 5020,
+      "reduced_edges": 4155,
+      "whole_serialized_fraction_upper_percent": 1.8809796356750188
+    },
+    {
+      "control_operations": 1536,
+      "data_operations": 84,
+      "dependency_bytes": {
+        "factored": {
+          "canonical_json_bytes": 66392,
+          "gzip_bytes": 20240
+        },
+        "original": {
+          "canonical_json_bytes": 97709,
+          "gzip_bytes": 24400
+        },
+        "reduced": {
+          "canonical_json_bytes": 84955,
+          "gzip_bytes": 20726
+        }
+      },
+      "dependency_canonical_bytes_saved": 31317,
+      "edge_reduction_percent": 36.6425571628558,
+      "factored_edges": 10862,
+      "immutable_guards_canonical_bytes": 976226,
+      "join_nodes": 24,
+      "name": "ep16-b8",
+      "nodes": 6836,
+      "operations": 1620,
+      "original_edges": 17144,
+      "reduced_edges": 14588,
+      "whole_serialized_fraction_upper_percent": 2.9160982741041126
+    },
+    {
+      "control_operations": 1536,
+      "data_operations": 174,
+      "dependency_bytes": {
+        "factored": {
+          "canonical_json_bytes": 71375,
+          "gzip_bytes": 21981
+        },
+        "original": {
+          "canonical_json_bytes": 104206,
+          "gzip_bytes": 27926
+        },
+        "reduced": {
+          "canonical_json_bytes": 90767,
+          "gzip_bytes": 22464
+        }
+      },
+      "dependency_canonical_bytes_saved": 32831,
+      "edge_reduction_percent": 36.0670097448812,
+      "factored_edges": 11678,
+      "immutable_guards_canonical_bytes": 1047086,
+      "join_nodes": 32,
+      "name": "ep16-b16",
+      "nodes": 7302,
+      "operations": 1710,
+      "original_edges": 18266,
+      "reduced_edges": 15573,
+      "whole_serialized_fraction_upper_percent": 2.851665780705503
+    }
+  ],
+  "complete_collective_or_Hybrid_verified": false,
+  "decision": "ordinary graph optimizations belong to the strong baseline; dependency serialization is not demonstrated as a valuable mainline",
+  "limits": "direct single-layer declared model; dynamic guards retained; no network or runtime.fire",
+  "main_innovations_established": 0,
+  "network_runs": 0,
+  "original_compilation_cases": 6,
+  "overall_goal_complete": false,
+  "passed": true,
+  "wall_clock_or_CPU_speedup_measured": false
+}

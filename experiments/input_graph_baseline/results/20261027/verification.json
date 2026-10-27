@@ -1,0 +1,65 @@
+{
+  "cases": [
+    {
+      "guard_equal": true,
+      "name": "ep4-b8",
+      "nodes": 714,
+      "operations_independently_counted": 146,
+      "original_ancestor_pairs": 143216,
+      "reachable_relations_equal": true
+    },
+    {
+      "guard_equal": true,
+      "name": "ep4-b16",
+      "nodes": 960,
+      "operations_independently_counted": 192,
+      "original_ancestor_pairs": 255568,
+      "reachable_relations_equal": true
+    },
+    {
+      "guard_equal": true,
+      "name": "ep8-b8",
+      "nodes": 1990,
+      "operations_independently_counted": 446,
+      "original_ancestor_pairs": 1006296,
+      "reachable_relations_equal": true
+    },
+    {
+      "guard_equal": true,
+      "name": "ep8-b16",
+      "nodes": 2316,
+      "operations_independently_counted": 508,
+      "original_ancestor_pairs": 1364652,
+      "reachable_relations_equal": true
+    },
+    {
+      "guard_equal": true,
+      "name": "ep16-b8",
+      "nodes": 6836,
+      "operations_independently_counted": 1620,
+      "original_ancestor_pairs": 11049446,
+      "reachable_relations_equal": true
+    },
+    {
+      "guard_equal": true,
+      "name": "ep16-b16",
+      "nodes": 7302,
+      "operations_independently_counted": 1710,
+      "original_ancestor_pairs": 12633120,
+      "reachable_relations_equal": true
+    }
+  ],
+  "complete_collective_equivalence_proven": false,
+  "input_only_static_graph": true,
+  "network_runs": 0,
+  "new_innovations_established": 0,
+  "passed": true,
+  "performance_speedup_measured": false,
+  "source_selection_checked": true,
+  "tamper_rejected": [
+    "necessary_edge_removed",
+    "back_edge",
+    "shared_join_changed",
+    "dynamic_constraints_removed"
+  ]
+}

@@ -44,6 +44,14 @@ def expand(value):
 
 def checked_case(stage,name,mutate=None):
     config=load(stage/'observed'/(name+'.json'));base=stage/'computed'/name
+    ranks=config['execution']['ranks'];batch=int(name.rsplit('-b',1)[1]);selected=[]
+    for source in load(stage/'observed/sources.json')['files']:
+        document=load(stage/'observed/routes'/source['name'])
+        for i in range(1,batch//8+1):
+            choices,=document[i]['3'];selected.append(choices)
+    assert len(selected)==batch
+    assert config['calls']==[dict(name='real-layer3',tokens=[selected[r::ranks] for r in range(ranks)])]
+    assert config['model']==dict(experts=256,top_k=8,hidden_size=7168,precision='bf16')
     original=load(base/'original.json');reduced=load(base/'reduced.json');factored=load(base/'factored.json')
     guards=load(base/'guards.json');names=load(base/'names.json');m=load(base/'metrics.json')
     if mutate:mutate(original,reduced,factored,guards)
@@ -58,7 +66,7 @@ def checked_case(stage,name,mutate=None):
     mask=(1<<len(names))-1
     assert [v&mask for v in full[:len(names)]]==before
     # Independently enumerate demand rather than trusting the plan's counts.
-    ranks=config['execution']['ranks'];epr=256//ranks
+    epr=256//ranks
     destinations=sum(len({e//epr for e in token}) for call in config['calls'] for row in call['tokens'] for token in row)
     assert m['operations']==6*ranks*ranks+2*destinations
     assert m['slots']==destinations
@@ -89,7 +97,7 @@ def execute(stage,output):
         except (AssertionError,ValueError):rejected.append(label)
         else:raise AssertionError('tamper accepted: '+label)
     save(output,dict(passed=True,cases=records,tamper_rejected=rejected,network_runs=0,
-        input_only_static_graph=True,complete_collective_equivalence_proven=False,
+        input_only_static_graph=True,source_selection_checked=True,complete_collective_equivalence_proven=False,
         performance_speedup_measured=False,new_innovations_established=0))
 
 

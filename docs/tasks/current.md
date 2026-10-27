@@ -13,7 +13,11 @@
 
 ## 当前范围和预算
 
-当前研究 `in_progress`：[事务载体与网络评价边界](../../experiments/transport_semantics_audit/protocol.md)，起点`120a07c`。先用已封存single/quad原件核对不跨work分包、32B功能头的计数影响，以及远端fetch-add的Reply/ACK形态与RXE具体Atomic ACK分支；不重开网络或把模型差异称收益。360受监控秒/128MiB、单命令60秒/RSS1GiB/地址2GiB、留8GiB；零新网络/构建/GPU/下载/平台依赖修改/push，先规范后离线核查。
+当前研究 `completed`：[事务载体与网络评价边界](../../experiments/transport_semantics_audit/README.md)、[事前协议](../../experiments/transport_semantics_audit/protocol.md)与[报告网页](../../experiments/transport_semantics_audit/results/20261027/report.html)，起点`120a07c`、协议`0095de3`。封存single/quad两原件各140帧/280源包，不跨work分包；4480B功能头占帧字节1.493%，按实际2000B载荷MTU去头后包数仍280，不新增去头加速功能。48次远端fetch-add的请求/独立Reply及各自ACK共192个源数据/ACK包，占560个同口径包34.286%，不含CNP或逐跳复制。两条件全部操作完成后，最后Reply确认仍晚6024/6048ns；这是功能载体关系，不是可消除推理收益。缓存RXE成功原子分支用Atomic ACK携带旧值，不能将MRT1的两个可靠字节流直接当目标RC协议。
+
+旧归档SHA及12个成员hash通过，当前三后端/锁定原生源码核Git blob，RXE三原文只核旧tag/SHA256、不冒充固定tree；另核旧平台`9a8ce2c`与当前五处codec/分包/Request/Response/Retire边界未变。逐字节独立重组280帧/560源数据包，核目标body、原子旧值、work边界、ACK反向IP和完成时刻，五类篡改拒绝及13依赖通过。最终77成员/13,934,258B内容包逐hash恢复，复制源码/空cwd重算详细分析、精简摘要、Markdown/HTML和核验逐字节一致；SHA256 `1f3ecd438bb7b685649ae5ee4bac50589e6536e15fb43f3e69824ea91997b8eb`。Git仅保存精简摘要，逐帧详情保留归档；报告末尾空行检查失败、更正前报告及首版归档/恢复均保留。原件`runs/transport_semantics_audit_20261027/`，见[核验](../../experiments/transport_semantics_audit/results/20261027/verification.json)、[恢复](../../experiments/transport_semantics_audit/results/20261027/recovery.json)及[关闭](../../experiments/transport_semantics_audit/results/20261027/closeout.json)。26份含复制收据保守计14.343受监控秒、约41.52MiB分配产物，另留2MiB/10秒管理额度，保持360秒/128MiB及原单命令限额；零新网络/构建/GPU/下载/平台依赖修改/push，仅本地保存，旧四核心严格比较失败不变。
+
+本轮为progress且额度关闭：下一优先级应是独立规范可信的操作级RC参考，区分WRITE确认、Atomic ACK、同QP序号/重放及信用、目标应用与源完成；模拟器关联信息不能增加假定线上字节。先补该平台基线，再接输入驱动完整Hybrid和评估紧凑表示/网络执行缩减；不要把删除MRT1特有事件、修正协议或更多接口当两个创新。没有新的真实MoE收益、宿主加速、硬件校准或千卡执行证据，整体目标继续`in_progress`，不重开旧条件。
 
 当前研究 `completed`：[CLEM与现代GPU发起MoE边界核查](../../experiments/clem_boundary_audit/README.md)、[事前协议](../../experiments/clem_boundary_audit/protocol.md)和[报告网页](../../experiments/clem_boundary_audit/results/20261027/report.html)，起点`5a6bc45`、协议`9ebbb6e`。固定CLEM及阿里`dev/clem`各一个提交，核查16份材料/29处引用；host verbs→持久QP→ACK→CQ及必要FIFO反馈已有完整源码链，须列为强基线。旧READ按NCCL flush直接完成，不能推定通用远端读/原子或现代GPU直接发布已适配；buffer复用还改设备访问偏移，需区分数值payload与会驱动未来通信的控制值。上游96倍规模声明不等于网络事件或宿主加速，入口已有MTP/MPI钩子，未实跑不能写叉。
 

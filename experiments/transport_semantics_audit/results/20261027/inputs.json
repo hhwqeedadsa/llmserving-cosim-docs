@@ -1,0 +1,123 @@
+{
+  "downloads": 0,
+  "files": [
+    {
+      "bytes": 3901,
+      "mode": 420,
+      "path": "observed/batch4/input.json",
+      "sha256": "73559213ab3263035e1a9ae23081fc08085195dc799e94f0b5f673c668294dc0"
+    },
+    {
+      "bytes": 195313,
+      "mode": 420,
+      "path": "observed/batch4/plan.json",
+      "sha256": "fc6ffea45b8c6e03d1d2e7412da2a9ed7ebb6419c053f6e1598b9b7ae3fad643"
+    },
+    {
+      "bytes": 5685152,
+      "mode": 420,
+      "path": "truth/batch4/single/modern/result.json",
+      "sha256": "cdba6b844afbc39568245dcf2b94ee47fe4c8852551e7df478c10e63bfa73ee2"
+    },
+    {
+      "bytes": 32288,
+      "mode": 420,
+      "path": "truth/batch4/single/modern/initial.json",
+      "sha256": "38c57043a92b6f9c24835e3cc8f9a131b49c01ece4a6175284780a3411d6c4ba"
+    },
+    {
+      "bytes": 622923,
+      "mode": 420,
+      "path": "truth/batch4/single/modern/modern-execution.json",
+      "sha256": "b2780ef44973c6f8bd96af93c09052d69937dab81bf2621c967b5e3a4787861b"
+    },
+    {
+      "bytes": 1041,
+      "mode": 420,
+      "path": "truth/batch4/single/modern/protocol.json",
+      "sha256": "e0aa4ec1b03a6bac4ca5e66f1c0c6a6ded95683e877eb90a816e7fa738c8d61c"
+    },
+    {
+      "bytes": 10910,
+      "mode": 420,
+      "path": "truth/batch4/single/modern/topology.json",
+      "sha256": "762386e1a17f12b4c55809b0e168561d3454b3d211895dee433e7bfbda3fa73b"
+    },
+    {
+      "bytes": 5693104,
+      "mode": 420,
+      "path": "truth/batch4/quad/modern/result.json",
+      "sha256": "056c1366cd1a1330c21d35ac561a5d144a90ef99a9f66ab81ea0097ffe128e05"
+    },
+    {
+      "bytes": 32288,
+      "mode": 420,
+      "path": "truth/batch4/quad/modern/initial.json",
+      "sha256": "38c57043a92b6f9c24835e3cc8f9a131b49c01ece4a6175284780a3411d6c4ba"
+    },
+    {
+      "bytes": 622923,
+      "mode": 420,
+      "path": "truth/batch4/quad/modern/modern-execution.json",
+      "sha256": "3a76b79690d96b945ce1ee8d74e6fbf856d5b5649da7c096c5e2af7e5276674f"
+    },
+    {
+      "bytes": 1041,
+      "mode": 420,
+      "path": "truth/batch4/quad/modern/protocol.json",
+      "sha256": "e0aa4ec1b03a6bac4ca5e66f1c0c6a6ded95683e877eb90a816e7fa738c8d61c"
+    },
+    {
+      "bytes": 12330,
+      "mode": 420,
+      "path": "truth/batch4/quad/modern/topology.json",
+      "sha256": "f74f7e0dcf7b66c8e74cb383fb4d8f17829c90e9af994de2b5de11afb5c1965c"
+    }
+  ],
+  "new_networks": 0,
+  "source_archive_sha256": "25ce43a9dc4d72c402df935529d1083dd2801d236b85131ad5646762fc758e40",
+  "sources": [
+    {
+      "git_blob": "d4cf9bc54ec49b9089679a39376e08dd731ef294",
+      "path": "observed/sources/backend/rdma/remote_memory.hh",
+      "revision": "0095de32bf80a22a3b2d89c9639d4e76af39d4f3",
+      "sha256": "2bfe997bf9151ef1aee7d7c45c6b79e8d3465f3d6dca6c7ec4b73436028dda33"
+    },
+    {
+      "git_blob": "0ac3ca4ed6b15ee12f751ce9f78f347ef8a6f106",
+      "path": "observed/sources/backend/rdma/remote_transactions.cc",
+      "revision": "0095de32bf80a22a3b2d89c9639d4e76af39d4f3",
+      "sha256": "fab7d142e2cb7d20b2aab1acec9e5e7afe597389b6c11ae6dfd599c448a1a1ac"
+    },
+    {
+      "git_blob": "9ba24d4e489a3a4fd8a39ab9927e53908c338421",
+      "path": "observed/sources/backend/rdma/persistent_streams.cc",
+      "revision": "0095de32bf80a22a3b2d89c9639d4e76af39d4f3",
+      "sha256": "0ea6918392f6b65e4a5e135f01a0810cb7fa8e446a28b086d5ec00e85efe903c"
+    },
+    {
+      "git_blob": "39db360554c295b26253958543c2daf0f615ec13",
+      "path": "observed/sources/third_party/LLMServingSim/astra-sim/extern/network_backend/ns-3/src/point-to-point/model/rdma-hw.cc",
+      "revision": "47f8faddf14036da27b004411701e9729de7479c",
+      "sha256": "378100572c4518f7d72135beba713885006187e72d1a8d94c1bf1d8355315a57"
+    },
+    {
+      "path": "observed/rxe/rxe_req.c",
+      "ref": "Linux v6.12; saved SHA256 only, no independently pinned tree",
+      "sha256": "c829196711751667ba37226cb55d9f0e2d41aa4ae7e68be25693924d6559b359",
+      "url": "https://raw.githubusercontent.com/torvalds/linux/v6.12/drivers/infiniband/sw/rxe/rxe_req.c"
+    },
+    {
+      "path": "observed/rxe/rxe_resp.c",
+      "ref": "Linux v6.12; saved SHA256 only, no independently pinned tree",
+      "sha256": "b5cdbf37a48ecaa6f9d5f397e5f064317a48d93573b23546cf2fd2c602322e59",
+      "url": "https://raw.githubusercontent.com/torvalds/linux/v6.12/drivers/infiniband/sw/rxe/rxe_resp.c"
+    },
+    {
+      "path": "observed/rxe/rxe_hdr.h",
+      "ref": "Linux v6.12; saved SHA256 only, no independently pinned tree",
+      "sha256": "51794cf32a71c7db7e5bcea72fb372dd5149999b19ed67e473130e56e8081e02",
+      "url": "https://raw.githubusercontent.com/torvalds/linux/v6.12/drivers/infiniband/sw/rxe/rxe_hdr.h"
+    }
+  ]
+}

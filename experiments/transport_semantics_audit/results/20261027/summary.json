@@ -1,0 +1,149 @@
+{
+  "RoCE_performance_predicted": false,
+  "conditions": {
+    "quad": {
+      "CNP_physical_TX": 6,
+      "active_network_GPU_ids": [
+        0,
+        1,
+        4,
+        5
+      ],
+      "actual_payload_MTU": 2000,
+      "all_operations_complete_ns": 81969,
+      "all_origin_data_and_ACK_packets": 560,
+      "application_stage_complete_ns": 75879,
+      "atomic_origin_data_and_ACK_packets": 192,
+      "body_bytes": 295648,
+      "body_only_packet_count": 280,
+      "categories": {
+        "atomic_reply": {
+          "body_bytes": 384,
+          "framed_bytes": 1920,
+          "frames": 48,
+          "physical_ACK_TX": 224,
+          "physical_ACK_TX_bytes": 11200,
+          "physical_data_TX": 224,
+          "physical_data_TX_bytes": 17024,
+          "source_packets": 48
+        },
+        "atomic_request": {
+          "body_bytes": 384,
+          "framed_bytes": 1920,
+          "frames": 48,
+          "physical_ACK_TX": 224,
+          "physical_ACK_TX_bytes": 11200,
+          "physical_data_TX": 224,
+          "physical_data_TX_bytes": 17024,
+          "source_packets": 48
+        },
+        "put_control": {
+          "body_bytes": 6240,
+          "framed_bytes": 7008,
+          "frames": 24,
+          "physical_ACK_TX": 112,
+          "physical_ACK_TX_bytes": 5600,
+          "physical_data_TX": 112,
+          "physical_data_TX_bytes": 36736,
+          "source_packets": 24
+        },
+        "token_data": {
+          "body_bytes": 288640,
+          "framed_bytes": 289280,
+          "frames": 20,
+          "physical_ACK_TX": 704,
+          "physical_ACK_TX_bytes": 35200,
+          "physical_data_TX": 704,
+          "physical_data_TX_bytes": 1298176,
+          "source_packets": 160
+        }
+      },
+      "framed_bytes": 300128,
+      "frames": 140,
+      "framing_only_source_packet_reduction": 0,
+      "function_header_bytes": 4480,
+      "function_header_fraction_of_framed_bytes": 0.014926964495148737,
+      "latest_reply_ACK_ns": 88017,
+      "packets_crossing_work_boundaries": 0,
+      "physical_drained_ns": 88017,
+      "physical_gpu_count": 8,
+      "reply_ACK_after_application": 8,
+      "reply_ACK_after_own_operation": 48,
+      "source_packets": 280
+    },
+    "single": {
+      "CNP_physical_TX": 0,
+      "active_network_GPU_ids": [
+        0,
+        1,
+        4,
+        5
+      ],
+      "actual_payload_MTU": 2000,
+      "all_operations_complete_ns": 64612,
+      "all_origin_data_and_ACK_packets": 560,
+      "application_stage_complete_ns": 58568,
+      "atomic_origin_data_and_ACK_packets": 192,
+      "body_bytes": 295648,
+      "body_only_packet_count": 280,
+      "categories": {
+        "atomic_reply": {
+          "body_bytes": 384,
+          "framed_bytes": 1920,
+          "frames": 48,
+          "physical_ACK_TX": 224,
+          "physical_ACK_TX_bytes": 11200,
+          "physical_data_TX": 224,
+          "physical_data_TX_bytes": 17024,
+          "source_packets": 48
+        },
+        "atomic_request": {
+          "body_bytes": 384,
+          "framed_bytes": 1920,
+          "frames": 48,
+          "physical_ACK_TX": 224,
+          "physical_ACK_TX_bytes": 11200,
+          "physical_data_TX": 224,
+          "physical_data_TX_bytes": 17024,
+          "source_packets": 48
+        },
+        "put_control": {
+          "body_bytes": 6240,
+          "framed_bytes": 7008,
+          "frames": 24,
+          "physical_ACK_TX": 112,
+          "physical_ACK_TX_bytes": 5600,
+          "physical_data_TX": 112,
+          "physical_data_TX_bytes": 36736,
+          "source_packets": 24
+        },
+        "token_data": {
+          "body_bytes": 288640,
+          "framed_bytes": 289280,
+          "frames": 20,
+          "physical_ACK_TX": 704,
+          "physical_ACK_TX_bytes": 35200,
+          "physical_data_TX": 704,
+          "physical_data_TX_bytes": 1298176,
+          "source_packets": 160
+        }
+      },
+      "framed_bytes": 300128,
+      "frames": 140,
+      "framing_only_source_packet_reduction": 0,
+      "function_header_bytes": 4480,
+      "function_header_fraction_of_framed_bytes": 0.014926964495148737,
+      "latest_reply_ACK_ns": 70636,
+      "packets_crossing_work_boundaries": 0,
+      "physical_drained_ns": 70636,
+      "physical_gpu_count": 8,
+      "reply_ACK_after_application": 8,
+      "reply_ACK_after_own_operation": 48,
+      "source_packets": 280
+    }
+  },
+  "detailed_frames": "Archived analysis/analysis.json; not included in this summary",
+  "new_networks": 0,
+  "new_research_benefit_established": false,
+  "schema": "transport-semantics-audit-summary/1"
+}

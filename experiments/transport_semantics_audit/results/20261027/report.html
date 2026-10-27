@@ -1,0 +1,20 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>事务载体边界</title><style>body{max-width:1050px;margin:40px auto;padding:20px;font:17px/1.8 system-ui;color:#203044}p{white-space:pre-wrap;overflow-wrap:anywhere}.table{overflow:auto}table{border-collapse:collapse;font-size:14px}td,th{border:1px solid #bac8d4;padding:10px}th{background:#edf2f6}</style><main><h1>功能事务载体对网络结论的影响</h1>
+<p>本轮仅分析已封存的两个条件，不重新执行网络。MRT1不是RoCE，以下数字不作为真实网卡收益。</p>
+<div class="table"><table><tr><th>条件</th><th>功能帧</th><th>源数据包</th><th>功能帧头B</th><th>仅删帧头少几包</th><th>Reply确认晚于应用完成</th><th>应用/全部操作/排空ns</th></tr><tr><td>single</td><td>140</td><td>280</td><td>4480</td><td>0</td><td>8</td><td>58568 / 64612 / 70636</td></tr><tr><td>quad</td><td>140</td><td>280</td><td>4480</td><td>0</td><td>8</td><td>75879 / 81969 / 88017</td></tr></table></div>
+<div class="table"><table><tr><th>条件</th><th>原子请求/Reply帧</th><th>原子相关源数据包与ACK</th><th>全部源数据包与ACK</th><th>功能帧头占帧字节</th><th>全操作完成后的Reply确认尾部ns</th></tr><tr><td>single</td><td>48 / 48</td><td>192</td><td>560</td><td>1.493%</td><td>6024</td></tr><tr><td>quad</td><td>48 / 48</td><td>192</td><td>560</td><td>1.493%</td><td>6048</td></tr></table></div>
+<p>逐帧/源包边界、实际ACK和类别字节见analysis.json。</p>
+<h2>这些结果应怎样理解</h2>
+<p>源包不跨work的检查用实际TX payload和已发布字节区间逐项核对，不能把连续字节流等同于允许跨WQE合包。`persistent_streams.cc`的Next明确按当前work末尾缩小MTU；这一项属于已经正确的模型行为。</p>
+<p>每个MRT1帧含32B功能头，用于传递操作码、序号、地址、key和body长度。表中的“只删帧头”保留每work边界和原MTU，仅重新计数所需包数；它不是RoCE替代模型。真实RDMA同样需要传输头和地址/权限字段，还可能有分包、ACK策略及NIC开销。因此功能头字节比例既不是全部误差，也不是软件可省收益；不能按该比例缩短旧时延。</p>
+<p>更实质的边界在原子操作。`remote_transactions.cc::Request`在目标完成fetch-add后，将旧值编码为MRT1 Reply，通过反向PersistentStreams发送；接收端将它当普通可靠数据确认。源操作的Retire要求请求ACK与Reply收到，而Reply自己的ACK继续影响回复流信用和网络排空。回复确认晚于本操作完成是这个功能协议允许的状态，不是内存安全漏洞。</p>
+<p>缓存Linux v6.12的`rxe_resp.c::atomic_reply`执行或回放原子，`acknowledge`在成功atomic分支选择`send_atomic_ack`，`send_common_ack`用ATMACK字段携带原值。它展示了一个具体RC实现中“确认与旧值回复合在同一类响应”的路径，不能把当前两条普通字节流及各自ACK当成该路径。RXE并非NVIDIA GDAKI或生产NIC，本轮没有核完整完成器、异常状态、重试/拥塞全栈或实际RoCE帧成本，也不据此声称所有系统必然只有固定两包。</p>
+<p>当前物理图中，普通字节流的数据包、独立ACK、CNP分别竞争不同优先级，且回复流有自己的QP/确认资源。因此区别不止是32B头部；包类型、反馈作用对象和完成条件都可能改变排队及后继释放。表中晚到的Reply ACK属于当前协议，不能直接全部删除后宣称同样的应用结果，更不能把最后ACK时间差当可优化推理收益。</p>
+<h2>对现有结果和两个候选的影响</h2>
+<p>既有single/quad应用时间、路径与包记录仍是各自MRT1条件的有效事实；四核心原严格回调排列比较失败继续保留。本轮没有重跑、修改该条件或将它改判通过。它们可以验证适配器和模型内拓扑敏感性，不能升级成现代MoE或真实RoCE的精度基准。</p>
+<p>第一候选“更小表示但保留网络决策”必须与同一目标协议的完整表示比较。不能只让两个前端调用同一MRT1载体，就声称已证明现代GIN的语义充分；也不能把修正功能协议的额外ACK包装为新网络优化。CLEM提供真实旧CCL执行这一更强参照，其现代原子路径接入仍需核实。</p>
+<p>第二候选“更少网络事件但保持可靠结果”也须先确定哪些事件属于目标协议。压缩或删去MRT1特有回复ACK，只能改变当前模型成本，不能在没有参考等价的情况下算仿真加速贡献。先前约3%的简单FIFO上界只适用于原功能载体，不推广为实际RoCE的一般界。</p>
+<p>下一项应优先限定原生操作级RC参考：按实际WQE边界分包，区分WRITE确认与Atomic ACK、同一QP的序号/重放和信用、目标副作用、源完成及真正需要的回复状态；模拟器关联数据不能偷偷增加线上字节。先用固定源码的小型独立参考核对，再接输入驱动的完整Hybrid控制/转发/Combine。这个可信基线是平台工作，不是两个创新本身。若暂不能完成，不继续用功能模型微秒数字支持现代网络收益。</p>
+<h2>可复核的证据等级</h2>
+<p>原件来自已校验SHA256的旧归档及逐成员manifest；当前后端源码核本地Git blob，RXE三份原文核旧sources.json的SHA256。RXE来源记录只有Linux v6.12 tag，未在本轮独立取得固定Git tree；不得将它称为已锁定上游commit。新增13份路由的来源确认沿用既有记录，本轮未补数据或制造真实到达时间。</p>
+<p>本轮零新网络、GPU、构建和下载，不提供竞品速度排名、硬件误差、故障发生率、同成本算法收益或千卡结论。研究目标仍未完成；本次收敛的是可信评价之前必须处理的协议边界。
+</p></main></html>

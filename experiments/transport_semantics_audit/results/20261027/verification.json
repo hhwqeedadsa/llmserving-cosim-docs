@@ -1,0 +1,24 @@
+{
+  "conditions": {
+    "quad": {
+      "feedback_directions_checked": true,
+      "frames": 140,
+      "source_packets": 280
+    },
+    "single": {
+      "feedback_directions_checked": true,
+      "frames": 140,
+      "source_packets": 280
+    }
+  },
+  "hardware_or_RoCE_equivalence_proven": false,
+  "new_networks": 0,
+  "passed": true,
+  "rejected_corruption_categories": [
+    "body",
+    "work_boundary",
+    "stream",
+    "time",
+    "actual_payload"
+  ]
+}

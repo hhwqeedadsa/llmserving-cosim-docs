@@ -1,0 +1,187 @@
+{
+  "GPU_runs": 0,
+  "artifact_allocated_bytes": 43528192,
+  "artifact_apparent_bytes": 43014611,
+  "budget_bytes": 134217728,
+  "budget_seconds": 360,
+  "builds": 0,
+  "conservative_monitored_seconds_including_copied_receipts": 14.342134409947903,
+  "dependency_changes": 0,
+  "downloads": 0,
+  "final_archive_sha256": "1f3ecd438bb7b685649ae5ee4bac50589e6536e15fb43f3e69824ea91997b8eb",
+  "final_content_members": 77,
+  "final_uncompressed_content_bytes": 13934258,
+  "formatting_correction_preserved": true,
+  "hardware_RoCE_equivalence_proven": false,
+  "management_reserve_seconds": 10,
+  "new_innovations_established": false,
+  "new_networks": 0,
+  "original_closed_networks_unchanged": true,
+  "original_quad_comparison_failure_preserved": true,
+  "overall_goal_complete": false,
+  "passed": true,
+  "platform_changes": 0,
+  "pushes": 0,
+  "receipt_reserve_bytes": 2097152,
+  "receipts": [
+    {
+      "exit_code": 0,
+      "path": "analysis-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.32619616598822176
+    },
+    {
+      "exit_code": 0,
+      "path": "checkpoint-formatted-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.44792546299868263
+    },
+    {
+      "exit_code": 0,
+      "path": "checkpoint-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.4354276829981245
+    },
+    {
+      "exit_code": 0,
+      "path": "dependencies-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.43638557101076003
+    },
+    {
+      "exit_code": 0,
+      "path": "final-report-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.3310956060013268
+    },
+    {
+      "exit_code": 0,
+      "path": "format-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.3459615890023997
+    },
+    {
+      "exit_code": 0,
+      "path": "prepare-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.6274728209973546
+    },
+    {
+      "exit_code": 0,
+      "path": "recovered/evidence/analysis-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.32619616598822176
+    },
+    {
+      "exit_code": 0,
+      "path": "recovered/evidence/dependencies-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.43638557101076003
+    },
+    {
+      "exit_code": 0,
+      "path": "recovered/evidence/final-report-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.3310956060013268
+    },
+    {
+      "exit_code": 0,
+      "path": "recovered/evidence/prepare-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.6274728209973546
+    },
+    {
+      "exit_code": 0,
+      "path": "recovered/evidence/report-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.3314326109975809
+    },
+    {
+      "exit_code": 0,
+      "path": "recovered/evidence/verification-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.863720392997493
+    },
+    {
+      "exit_code": 0,
+      "path": "recovered-formatted/evidence/analysis-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.32619616598822176
+    },
+    {
+      "exit_code": 0,
+      "path": "recovered-formatted/evidence/checkpoint-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.4354276829981245
+    },
+    {
+      "exit_code": 0,
+      "path": "recovered-formatted/evidence/dependencies-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.43638557101076003
+    },
+    {
+      "exit_code": 0,
+      "path": "recovered-formatted/evidence/final-report-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.3310956060013268
+    },
+    {
+      "exit_code": 0,
+      "path": "recovered-formatted/evidence/format-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.3459615890023997
+    },
+    {
+      "exit_code": 0,
+      "path": "recovered-formatted/evidence/prepare-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.6274728209973546
+    },
+    {
+      "exit_code": 0,
+      "path": "recovered-formatted/evidence/recovery-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 1.1903727359895129
+    },
+    {
+      "exit_code": 0,
+      "path": "recovered-formatted/evidence/report-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.3314326109975809
+    },
+    {
+      "exit_code": 0,
+      "path": "recovered-formatted/evidence/verification-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.863720392997493
+    },
+    {
+      "exit_code": 0,
+      "path": "recovery-formatted-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 1.2017754269909346
+    },
+    {
+      "exit_code": 0,
+      "path": "recovery-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 1.1903727359895129
+    },
+    {
+      "exit_code": 0,
+      "path": "report-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.3314326109975809
+    },
+    {
+      "exit_code": 0,
+      "path": "verification-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.863720392997493
+    }
+  ],
+  "scope": "Offline research audit only; original networks remain closed",
+  "stage_closed": true,
+  "summary_byte_identical_in_offline_recovery": true
+}

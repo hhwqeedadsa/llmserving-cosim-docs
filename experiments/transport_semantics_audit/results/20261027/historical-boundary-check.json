@@ -1,0 +1,45 @@
+{
+  "passed": true,
+  "old_platform": "9a8ce2c44ee9aea59a969c10157b29463d418d36",
+  "checks": [
+    {
+      "path": "backend/rdma/remote_memory.hh",
+      "old_revision": "9a8ce2c44ee9aea59a969c10157b29463d418d36",
+      "compared_regions": [
+        {
+          "scope": "entire file",
+          "sha256": "2bfe997bf9151ef1aee7d7c45c6b79e8d3465f3d6dca6c7ec4b73436028dda33"
+        }
+      ]
+    },
+    {
+      "path": "backend/rdma/persistent_streams.cc",
+      "old_revision": "9a8ce2c44ee9aea59a969c10157b29463d418d36",
+      "compared_regions": [
+        {
+          "scope": "Ptr<Packet> PersistentStreams::Next(",
+          "sha256": "acc39d994d9c516c6e748a4c920aed583a2a21e16eef0407def6a410bb6199d6"
+        }
+      ]
+    },
+    {
+      "path": "backend/rdma/remote_transactions.cc",
+      "old_revision": "9a8ce2c44ee9aea59a969c10157b29463d418d36",
+      "compared_regions": [
+        {
+          "scope": "void RemoteTransactions::Request(",
+          "sha256": "b3180862f18ab4d4ada44d962a1c7356fe67ea0064f0b5c11f6c9a0444da4bc6"
+        },
+        {
+          "scope": "void RemoteTransactions::Response(",
+          "sha256": "b2975c58225943d6077bd2178b8fa7f9bcd8d061771aad498b70d0efa32356f7"
+        },
+        {
+          "scope": "void RemoteTransactions::Retire(",
+          "sha256": "57321b17ac1d423d1ddebd4e592fa328b8f079cd6aac1f8a6744f5d90ec85e6f"
+        }
+      ]
+    }
+  ],
+  "scope": "same frame codec, packet boundary, target request, response and retirement functions; not whole-program equivalence"
+}

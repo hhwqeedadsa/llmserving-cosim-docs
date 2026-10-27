@@ -1,0 +1,43 @@
+{
+  "GPU": 0,
+  "HTTP": 0,
+  "analysis_verification_reports_byte_equal": true,
+  "archive_members": 45,
+  "archive_sha256": "6be7f99d31ddb2158fa72156efb726d81794a98faeed083b8a19bfd2a181900b",
+  "builds": 0,
+  "commands": [
+    [
+      "/usr/bin/python3",
+      "-B",
+      "-m",
+      "experiments.gin_flush_scope.analysis.study",
+      "execute",
+      "--stage",
+      "/home/lry/moe-ub-cosim/runs/gin_flush_scope_20261027/recovered/recomputed"
+    ],
+    [
+      "/usr/bin/python3",
+      "-B",
+      "-m",
+      "experiments.gin_flush_scope.analysis.verify",
+      "--stage",
+      "/home/lry/moe-ub-cosim/runs/gin_flush_scope_20261027/recovered/recomputed",
+      "--output",
+      "/home/lry/moe-ub-cosim/runs/gin_flush_scope_20261027/recovered/recomputed/verification.json"
+    ],
+    [
+      "/usr/bin/python3",
+      "-B",
+      "-m",
+      "experiments.gin_flush_scope.analysis.report",
+      "--stage",
+      "/home/lry/moe-ub-cosim/runs/gin_flush_scope_20261027/recovered/recomputed",
+      "--output",
+      "/home/lry/moe-ub-cosim/runs/gin_flush_scope_20261027/recovered/recomputed/report"
+    ]
+  ],
+  "copied_source_empty_cwd": true,
+  "member_hashes_verified": true,
+  "network_runs": 0,
+  "passed": true
+}

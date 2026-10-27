@@ -1,0 +1,158 @@
+{
+  "GPU_runs": 0,
+  "HTTP_elapsed_seconds": 64.58627297997009,
+  "HTTP_requests": 20,
+  "all_original_requests_met_deadline": false,
+  "artifact_allocated_bytes": 7413760,
+  "artifact_apparent_bytes": 7009664,
+  "budget_bytes": 134217728,
+  "budget_seconds": 600,
+  "builds": 0,
+  "conservative_monitored_seconds_including_copied_receipts": 133.69055370506248,
+  "dependency_changes": 0,
+  "innovation_candidates_established": false,
+  "management_reserve_seconds": 10,
+  "network_simulations": 0,
+  "original_request_deadline_violations_preserved": 2,
+  "overall_goal_complete": false,
+  "platform_changes": 0,
+  "pushes": 0,
+  "receipt_reserve_bytes": 2097152,
+  "receipts": [
+    {
+      "exit_code": 0,
+      "path": "analysis-continuation-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.12472824100404978
+    },
+    {
+      "exit_code": 1,
+      "path": "analysis-monitor/probe.json",
+      "status": "child_failed",
+      "wall_seconds": 0.1201198870112421
+    },
+    {
+      "exit_code": 0,
+      "path": "checkpoint-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.22641505600768141
+    },
+    {
+      "exit_code": 1,
+      "path": "clem-files-monitor/probe.json",
+      "status": "child_failed",
+      "wall_seconds": 20.5439900450001
+    },
+    {
+      "exit_code": 0,
+      "path": "clem-unattempted-files-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 6.408151990995975
+    },
+    {
+      "exit_code": 0,
+      "path": "dependencies-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.4426445400022203
+    },
+    {
+      "exit_code": 0,
+      "path": "metadata-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 6.881874822996906
+    },
+    {
+      "exit_code": 0,
+      "path": "network-completion-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 3.9306475689954823
+    },
+    {
+      "exit_code": 1,
+      "path": "network-core-monitor/probe.json",
+      "status": "child_failed",
+      "wall_seconds": 22.023877498009824
+    },
+    {
+      "exit_code": 0,
+      "path": "network-unattempted-core-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 5.803210163008771
+    },
+    {
+      "exit_code": 0,
+      "path": "recovered/evidence/analysis-continuation-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.12472824100404978
+    },
+    {
+      "exit_code": 1,
+      "path": "recovered/evidence/analysis-monitor/probe.json",
+      "status": "child_failed",
+      "wall_seconds": 0.1201198870112421
+    },
+    {
+      "exit_code": 1,
+      "path": "recovered/evidence/clem-files-monitor/probe.json",
+      "status": "child_failed",
+      "wall_seconds": 20.5439900450001
+    },
+    {
+      "exit_code": 0,
+      "path": "recovered/evidence/clem-unattempted-files-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 6.408151990995975
+    },
+    {
+      "exit_code": 0,
+      "path": "recovered/evidence/dependencies-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.4426445400022203
+    },
+    {
+      "exit_code": 0,
+      "path": "recovered/evidence/metadata-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 6.881874822996906
+    },
+    {
+      "exit_code": 0,
+      "path": "recovered/evidence/network-completion-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 3.9306475689954823
+    },
+    {
+      "exit_code": 1,
+      "path": "recovered/evidence/network-core-monitor/probe.json",
+      "status": "child_failed",
+      "wall_seconds": 22.023877498009824
+    },
+    {
+      "exit_code": 0,
+      "path": "recovered/evidence/network-unattempted-core-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 5.803210163008771
+    },
+    {
+      "exit_code": 0,
+      "path": "recovered/evidence/verification-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.22681256900250446
+    },
+    {
+      "exit_code": 0,
+      "path": "recovery-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.45202399700065143
+    },
+    {
+      "exit_code": 0,
+      "path": "verification-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.22681256900250446
+    }
+  ],
+  "response_bytes": 2365161,
+  "source_audit_closed": true,
+  "status": "completed_with_preserved_retrieval_and_analysis_failures"
+}

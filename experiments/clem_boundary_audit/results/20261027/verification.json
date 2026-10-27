@@ -1,0 +1,20 @@
+{
+  "HTTP_requests": 20,
+  "passed": true,
+  "preserved_deadline_violations": 2,
+  "reconstructed_git_trees": 394,
+  "references": 29,
+  "rejected_corruption_categories": [
+    "source_digest",
+    "source_coverage",
+    "source_line",
+    "patch_coordinate",
+    "hidden_deadline_failure",
+    "tree_tamper",
+    "response_body"
+  ],
+  "response_bytes": 2365161,
+  "runtime_performance_validated": false,
+  "source_semantics_manually_reviewed": true,
+  "sources": 16
+}

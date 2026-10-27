@@ -1,0 +1,552 @@
+{
+  "deadline_violations": [
+    {
+      "elapsed_seconds": 20.409601225997903,
+      "error": "TimeoutError: The read operation timed out",
+      "path": "clem/sources/README.md",
+      "status": null
+    },
+    {
+      "elapsed_seconds": 20.885894520994043,
+      "error": null,
+      "path": "network/sources/simulation/src/applications/model/ibv-interface.cc",
+      "status": 200
+    }
+  ],
+  "http_elapsed_seconds": 64.58627297997009,
+  "identities": {
+    "clem": {
+      "commit": "4a91f8b655224c0b1d1c300aa09c7058f4da2707",
+      "repo": "aliyun/SimAI-CLEM",
+      "requested_ref": "HEAD",
+      "tree": "500ccffe7df23034b9b58e15365c91567ed1120a"
+    },
+    "network": {
+      "commit": "434e4f2fe4bc2fb803a1dcda690869f66802f8b8",
+      "repo": "aliyun/ns-3-alibabacloud",
+      "requested_ref": "dev%2Fclem",
+      "tree": "40becc99c1c7a20364e5340f127909cc87d521d6"
+    }
+  },
+  "references": [
+    {
+      "excerpt": "+  ibv_context *context = (ibv_context*)malloc(sizeof(ibv_context));\n+  memset(context, 0, sizeof(ibv_context));\n+  context->ops.post_send = shm_ibv_post_send;\n+  context->ops.post_recv = shm_ibv_post_recv;\n+  context->ops.poll_cq = shm_ibv_poll_cq;\n+  context->device = (struct ibv_device*)malloc(sizeof(struct ibv_device));\n+  memcpy(context->device, device, sizeof(struct ibv_device));\n+  context->cmd_fd = extract_device_id(device->name, \"ns3_qbbdev_\");\n+  printf(\"%s:%d return\\n\", __func__, __LINE__);\n+  return context;\n+}",
+      "excerpt_end": 5053,
+      "excerpt_start": 5043,
+      "id": "host_hook",
+      "label": "clem",
+      "line": 5045,
+      "needle": "context->ops.post_send = shm_ibv_post_send;",
+      "path": "nccl_patch",
+      "target_line": 126,
+      "target_path": "src/nsibverbs/device.cc",
+      "url": "https://github.com/aliyun/SimAI-CLEM/blob/4a91f8b655224c0b1d1c300aa09c7058f4da2707/nccl_patch#L5045"
+    },
+    {
+      "excerpt": "+\t\t\t\tstruct ibv_send_wr **bad_wr)\n+{\n+\treturn qp->context->ops.post_send(qp, wr, bad_wr);\n+}\n+\n+/**\n+ * ibv_post_recv - Post a list of work requests to a receive queue.\n+ */\n+static inline int ibv_post_recv(struct ibv_qp *qp, struct ibv_recv_wr *wr,\n+\t\t\t\tstruct ibv_recv_wr **bad_wr)\n+{",
+      "excerpt_end": 4298,
+      "excerpt_start": 4288,
+      "id": "verbs_dispatch",
+      "label": "clem",
+      "line": 4290,
+      "needle": "return qp->context->ops.post_send(qp, wr, bad_wr);",
+      "path": "nccl_patch",
+      "target_line": 3418,
+      "target_path": "src/include/verbs.h",
+      "url": "https://github.com/aliyun/SimAI-CLEM/blob/4a91f8b655224c0b1d1c300aa09c7058f4da2707/nccl_patch#L4290"
+    },
+    {
+      "excerpt": "+}\n+\n+int shm_ibv_post_send(ibv_qp *qp, ibv_send_wr *wr, ibv_send_wr **bad_wr)\n+{\n+  if((!qp) || (!wr)) {\n+    WARN(\"shm_ibv_post_send: qp or wr is NULL\");\n+    return -1;\n+  }\n+  for(ibv_send_wr *cur_wr = wr;cur_wr;cur_wr=cur_wr->next) {\n+    // if(cur_wr->opcode == IBV_WR_RDMA_READ) {\n+    //   post_send_data_transport(qp, cur_wr);",
+      "excerpt_end": 5419,
+      "excerpt_start": 5409,
+      "id": "post_send",
+      "label": "clem",
+      "line": 5411,
+      "needle": "int shm_ibv_post_send(",
+      "path": "nccl_patch",
+      "target_line": 145,
+      "target_path": "src/nsibverbs/qp.cc",
+      "url": "https://github.com/aliyun/SimAI-CLEM/blob/4a91f8b655224c0b1d1c300aa09c7058f4da2707/nccl_patch#L5411"
+    },
+    {
+      "excerpt": "+    cmd.cmd_args.post_send_input_args.wr.send_flags = cur_wr->send_flags;\n+    cmd.cmd_args.post_send_input_args.wr.imm_data = cur_wr->imm_data;\n+    cmd.cmd_args.post_send_input_args.wr.total_length = cal_sge_total_len(cur_wr->sg_list,cur_wr->num_sge);\n+    cmd.cmd_args.post_send_input_args.wr.remote_addr = cur_wr->wr.rdma.remote_addr;\n+    if(is_postfifo) {\n+      cmd.cmd_args.post_send_input_args.wr.is_post_fifo = 1;\n+      struct ibv_send_fifo *post_fifo = (struct ibv_send_fifo *)cur_wr->sg_list[0].addr;\n+      \n+      cmd.cmd_args.post_send_input_args.wr.post_fifo_addr     = post_fifo->addr;\n+      cmd.cmd_args.post_send_input_args.wr.post_fifo_size     = post_fifo->size;\n+      cmd.cmd_args.post_send_input_args.wr.post_fifo_rkeys[0] = post_fifo->rkeys[0];",
+      "excerpt_end": 5458,
+      "excerpt_start": 5448,
+      "id": "command_fields",
+      "label": "clem",
+      "line": 5450,
+      "needle": "cmd.cmd_args.post_send_input_args.wr.total_length =",
+      "path": "nccl_patch",
+      "target_line": 184,
+      "target_path": "src/nsibverbs/qp.cc",
+      "url": "https://github.com/aliyun/SimAI-CLEM/blob/4a91f8b655224c0b1d1c300aa09c7058f4da2707/nccl_patch#L5450"
+    },
+    {
+      "excerpt": "+    bool is_postfifo = cur_wr->opcode == IBV_WR_RDMA_WRITE && cur_wr->imm_data == POST_FIFO_IMM && cal_sge_total_len(cur_wr->sg_list,cur_wr->num_sge) == 64;\n+    bool is_src_dst_in_same_server = get_node_id() / get_gpus_per_server() == qp->handle / get_gpus_per_server();\n+    if(enable_p2p && is_postfifo && is_src_dst_in_same_server) {\n+      // printf(\"Post Fifo in same server\\n\");\n+      post_send_data_transport(qp, cur_wr);\n+      if((cur_wr->send_flags & IBV_SEND_SIGNALED) == IBV_SEND_SIGNALED) {\t\n+        shm_ibv_send_wr shm_wr;\t\n+        shm_wr.wr_id = cur_wr->wr_id;\t\n+        shm_wr.opcode = cur_wr->opcode;\n+        shm_wr.imm_data = cur_wr->imm_data;\t\n+        shm_wr.total_length = cal_sge_total_len(cur_wr->sg_list,cur_wr->num_sge);\t",
+      "excerpt_end": 5433,
+      "excerpt_start": 5423,
+      "id": "p2p_fifo",
+      "label": "clem",
+      "line": 5425,
+      "needle": "if(enable_p2p && is_postfifo && is_src_dst_in_same_server)",
+      "path": "nccl_patch",
+      "target_line": 159,
+      "target_path": "src/nsibverbs/qp.cc",
+      "url": "https://github.com/aliyun/SimAI-CLEM/blob/4a91f8b655224c0b1d1c300aa09c7058f4da2707/nccl_patch#L5425"
+    },
+    {
+      "excerpt": "+}\n+\n+int shm_ibv_poll_cq(struct ibv_cq *cq, int num_entries, struct ibv_wc *wc)\n+{\n+  // 根据CQ的cq_name拼接得到其在共享内存区域存放CQE的vector的名字\n+  // 打开它\n+  std::string cq_name((char *)cq->cq_context);\n+  std::string cq_container_name = cq_name + \"_container\";\n+  std::string cq_container_mutex_name = cq_name + \"_container_mutex\";\n+  CQEQueue * cq_container = pSegment->find<CQEQueue>(cq_container_name.c_str()).first;\n+  boost::interprocess::interprocess_mutex* cq_container_mutex = pSegment->find<boost::interprocess::interprocess_mutex>(cq_container_mutex_name.c_str()).first; ",
+      "excerpt_end": 4862,
+      "excerpt_start": 4852,
+      "id": "poll_cq",
+      "label": "clem",
+      "line": 4854,
+      "needle": "int shm_ibv_poll_cq(",
+      "path": "nccl_patch",
+      "target_line": 81,
+      "target_path": "src/nsibverbs/cq.cc",
+      "url": "https://github.com/aliyun/SimAI-CLEM/blob/4a91f8b655224c0b1d1c300aa09c7058f4da2707/nccl_patch#L4854"
+    },
+    {
+      "excerpt": "       if (inputBuf + dataOffset == outputBuf + offset) { // In place\n-        prims.directSend(dataOffset, offset, nelem);\n+        prims.directSend(0, 0, nelem);\n       } else {\n-        prims.directCopySend(dataOffset, offset, nelem);\n+        prims.directCopySend(0, 0, nelem);\n       }\n \n       // k-2 steps: copy to next GPU\n       for (int j=1; j<nranks-1; ++j) {\n         rankDest = ringRanks[nranks-j];",
+      "excerpt_end": 110,
+      "excerpt_start": 100,
+      "id": "gather_address",
+      "label": "clem",
+      "line": 102,
+      "needle": "prims.directSend(0, 0, nelem);",
+      "path": "nccl_patch",
+      "target_line": 44,
+      "target_path": "src/device/all_gather.h",
+      "url": "https://github.com/aliyun/SimAI-CLEM/blob/4a91f8b655224c0b1d1c300aa09c7058f4da2707/nccl_patch#L102"
+    },
+    {
+      "excerpt": "         nelem = (int)min(chunkCount, remCount - chunkOffset);\n-        prims.directRecvReduceDirectSend(offset, offset, nelem);\n+        prims.directRecvReduceDirectSend(0, 0, nelem);\n       }\n \n       // step k-1: reduce this buffer and data, which will produce the final\n@@ -60,25 +63,28 @@ namespace {\n       chunk = ringIx + 0;\n       chunkOffset = chunk * chunkCount;\n       offset = gridOffset + elemOffset + chunkOffset;\n+      offset = offset % SIM_ALLOC_MEM_SIZE;",
+      "excerpt_end": 166,
+      "excerpt_start": 156,
+      "id": "reduce_address",
+      "label": "clem",
+      "line": 158,
+      "needle": "prims.directRecvReduceDirectSend(0, 0, nelem);",
+      "path": "nccl_patch",
+      "target_line": 58,
+      "target_path": "src/device/all_reduce.h",
+      "url": "https://github.com/aliyun/SimAI-CLEM/blob/4a91f8b655224c0b1d1c300aa09c7058f4da2707/nccl_patch#L158"
+    },
+    {
+      "excerpt": "+      dataOffset = dataOffset % SIM_ALLOC_MEM_SIZE;\n+      offset = offset % SIM_ALLOC_MEM_SIZE;\n+      prims.recvReduceCopy(0, 0, nelem, /*postOp=*/true);\n     }\n   }\n }\ndiff --git a/src/graph/connect.cc b/src/graph/connect.cc\nindex 3f639a02..644ee0ec 100644\n--- a/src/graph/connect.cc\n+++ b/src/graph/connect.cc\n@@ -11,6 +11,9 @@",
+      "excerpt_end": 237,
+      "excerpt_start": 227,
+      "id": "scatter_address",
+      "label": "clem",
+      "line": 229,
+      "needle": "prims.recvReduceCopy(0, 0, nelem,",
+      "path": "nccl_patch",
+      "target_line": 58,
+      "target_path": "src/device/reduce_scatter.h",
+      "url": "https://github.com/aliyun/SimAI-CLEM/blob/4a91f8b655224c0b1d1c300aa09c7058f4da2707/nccl_patch#L229"
+    },
+    {
+      "excerpt": "-    NCCLCHECK(ncclMemAlloc(sendbuff, nbytes));\n-    NCCLCHECK(ncclMemAlloc(recvbuff, nbytes));\n+    NCCLCHECK(ncclMemAlloc(sendbuff, SIM_ALLOC_MEM_SIZE));\n+    *recvbuff = *sendbuff;\n     if (datacheck) NCCLCHECK(ncclMemAlloc(expected, recvBytes));\n #else\n-    CUDACHECK(cudaMalloc(sendbuff, nbytes));\n-    CUDACHECK(cudaMalloc(recvbuff, nbytes));\n+    CUDACHECK(cudaMalloc(sendbuff, SIM_ALLOC_MEM_SIZE));\n+    *recvbuff = *sendbuff;\n     if (datacheck) CUDACHECK(cudaMalloc(expected, recvBytes));",
+      "excerpt_end": 140,
+      "excerpt_start": 130,
+      "id": "allocation",
+      "label": "clem",
+      "line": 132,
+      "needle": "NCCLCHECK(ncclMemAlloc(sendbuff, SIM_ALLOC_MEM_SIZE));",
+      "path": "nccl_tests_patch",
+      "target_line": 683,
+      "target_path": "src/common.cu",
+      "url": "https://github.com/aliyun/SimAI-CLEM/blob/4a91f8b655224c0b1d1c300aa09c7058f4da2707/nccl_tests_patch#L132"
+    },
+    {
+      "excerpt": " extern \"C\" char const* ncclGetLastError(ncclComm_t comm);\n \n+#define SIM_ALLOC_MEM_SIZE 8388608 \n+\n #define CUDACHECK(cmd) do {                         \\\n   cudaError_t err = cmd;                            \\\n   if( err != cudaSuccess ) {                        \\\ndiff --git a/src/timer.cc b/src/timer.cc\nindex f65be4d..b0de980 100644\n--- a/src/timer.cc\n+++ b/src/timer.cc",
+      "excerpt_end": 263,
+      "excerpt_start": 253,
+      "id": "allocation_size",
+      "label": "clem",
+      "line": 255,
+      "needle": "#define SIM_ALLOC_MEM_SIZE 8388608",
+      "path": "nccl_tests_patch",
+      "target_line": 23,
+      "target_path": "src/common.h",
+      "url": "https://github.com/aliyun/SimAI-CLEM/blob/4a91f8b655224c0b1d1c300aa09c7058f4da2707/nccl_tests_patch#L255"
+    },
+    {
+      "excerpt": "   uint64_t hostHashs[totalProcs];\n-  hostHashs[proc] = getHostHash(hostname);\n+  hostHashs[proc] = proc / NUM_GPUS_PER_SERVER;\n   MPI_Allgather(MPI_IN_PLACE, 0, MPI_DATATYPE_NULL, hostHashs, sizeof(uint64_t), MPI_BYTE, MPI_COMM_WORLD);\n   for (int p=0; p<totalProcs; p++) {\n     if (p == proc) break;\n@@ -959,7 +993,7 @@ testResult_t run() {\n #endif\n \n   // We need sendbuff, recvbuff, expected (when datacheck enabled), plus 1G for the rest.\n-  size_t memMaxBytes = (maxMem - (1<<30)) / (datacheck ? 3 : 2);",
+      "excerpt_end": 211,
+      "excerpt_start": 201,
+      "id": "host_identity",
+      "label": "clem",
+      "line": 203,
+      "needle": "hostHashs[proc] = proc / NUM_GPUS_PER_SERVER;",
+      "path": "nccl_tests_patch",
+      "target_line": 939,
+      "target_path": "src/common.cu",
+      "url": "https://github.com/aliyun/SimAI-CLEM/blob/4a91f8b655224c0b1d1c300aa09c7058f4da2707/nccl_tests_patch#L203"
+    },
+    {
+      "excerpt": "        -x SIM_AVOID_CROSS_RAIL=1 -x START_NODE_ID=0 \\\n        -x LD_PRELOAD=./nccl_hack_rdma/build/lib/libnccl.so.2 \\\n        ./nccl-tests-modify/build/all_reduce_perf       -A ${NS3_PROCESS_IP} -b 64MB -e 64MB -f 2 -g 1 -w 0 -n 1 -c 0 | tee ./demo_${NUM_PROC}A100_allreduce_64MB.log",
+      "excerpt_end": 84,
+      "excerpt_start": 82,
+      "id": "launch",
+      "label": "clem",
+      "line": 84,
+      "needle": "-A ${NS3_PROCESS_IP} -b 64MB",
+      "path": "run_nccl_16A100.sh",
+      "target_line": null,
+      "target_path": null,
+      "url": "https://github.com/aliyun/SimAI-CLEM/blob/4a91f8b655224c0b1d1c300aa09c7058f4da2707/run_nccl_16A100.sh#L84"
+    },
+    {
+      "excerpt": "                  MakeUintegerAccessor(&IbvInterface::m_poll_interval),\n                  MakeUintegerChecker<uint64_t>())\n    .AddAttribute(\"SendLatency\",\"Send latency of ibv_post_send\",\n                  UintegerValue(4000),\n                  MakeUintegerAccessor(&IbvInterface::m_send_latency),\n                  MakeUintegerChecker<uint64_t>());\n  return tid;\n}\n\nIbvCommandResponse IbvInterface::UpdateCurTime(IbvCommand &cmd)\n{",
+      "excerpt_end": 50,
+      "excerpt_start": 40,
+      "id": "interface_defaults",
+      "label": "network",
+      "line": 42,
+      "needle": ".AddAttribute(\"SendLatency\"",
+      "path": "simulation/src/applications/model/ibv-interface.cc",
+      "target_line": null,
+      "target_path": null,
+      "url": "https://github.com/aliyun/ns-3-alibabacloud/blob/434e4f2fe4bc2fb803a1dcda690869f66802f8b8/simulation/src/applications/model/ibv-interface.cc#L42"
+    },
+    {
+      "excerpt": "    NS_ASSERT_MSG(qp->GetQPState()==IBV_QPS_RTS, \"PostSend: qp state is not RTS\");\n    shm_ibv_send_wr send_wr = cmd.cmd_args.post_send_input_args.wr;\n    Simulator::Schedule(NanoSeconds(m_send_latency), &IbvQP::EnqueueSendRequest, qp, send_wr);\n    // qp->EnqueueSendRequest(send_wr);\n    // if((send_wr.send_flags & IBV_SEND_SIGNALED) == IBV_SEND_SIGNALED) {\n    //   NS_LOG_LOGIC(\"WrEnqueue Counter \" << GetPollCounter() << \" \" << qp->GetDebugName() << \" wr_id=\" << send_wr.wr_id << \", opcode=\" << send_wr.opcode << \", bytes=\" << send_wr.total_length);\n    // }\n    IbvCommandResponse resp;\n    resp.cmd_type = IBV_POST_SEND;\n    resp.cmd_id = cmd.cmd_id;\n    resp.cmd_reponse.post_send_output_args.retval = 0;",
+      "excerpt_end": 627,
+      "excerpt_start": 617,
+      "id": "submit_latency",
+      "label": "network",
+      "line": 619,
+      "needle": "Simulator::Schedule(NanoSeconds(m_send_latency), &IbvQP::EnqueueSendRequest",
+      "path": "simulation/src/applications/model/ibv-interface.cc",
+      "target_line": null,
+      "target_path": null,
+      "url": "https://github.com/aliyun/ns-3-alibabacloud/blob/434e4f2fe4bc2fb803a1dcda690869f66802f8b8/simulation/src/applications/model/ibv-interface.cc#L619"
+    },
+    {
+      "excerpt": "}\n\nvoid IbvQP::EnqueueSendRequest(shm_ibv_send_wr send_wr)\n{\n  // 确定QP用途类型\n  if(!is_type_confirmed) {\n    \n    if(send_wr.is_post_fifo) {\n      is_type_confirmed = true;\n      qp_use_propose = QpPostFifo;\n    } else if(send_wr.opcode==IBV_WR_RDMA_WRITE_WITH_IMM) {",
+      "excerpt_end": 76,
+      "excerpt_start": 66,
+      "id": "request_opcodes",
+      "label": "network",
+      "line": 68,
+      "needle": "void IbvQP::EnqueueSendRequest(",
+      "path": "simulation/src/applications/model/ibv-qp.cc",
+      "target_line": null,
+      "target_path": null,
+      "url": "https://github.com/aliyun/ns-3-alibabacloud/blob/434e4f2fe4bc2fb803a1dcda690869f66802f8b8/simulation/src/applications/model/ibv-qp.cc#L68"
+    },
+    {
+      "excerpt": "    }\n\n  } else if (send_wr.opcode==IBV_WR_RDMA_READ) {\n    // 在NCCL中的READ请求 只有在ncclIbIflush中调用 是自己读自己 所以直接生成CQE\n    m_send_cq->GenerateSendCQE(send_wr,m_qp_num,m_dst_qp_num);\n  }\n\n}\n\nvoid IbvQP::EnqueueRecvRequest(shm_ibv_recv_wr recv_wr)\n{",
+      "excerpt_end": 116,
+      "excerpt_start": 106,
+      "id": "flush_read",
+      "label": "network",
+      "line": 108,
+      "needle": "} else if (send_wr.opcode==IBV_WR_RDMA_READ)",
+      "path": "simulation/src/applications/model/ibv-qp.cc",
+      "target_line": null,
+      "target_path": null,
+      "url": "https://github.com/aliyun/ns-3-alibabacloud/blob/434e4f2fe4bc2fb803a1dcda690869f66802f8b8/simulation/src/applications/model/ibv-qp.cc#L108"
+    },
+    {
+      "excerpt": "    return;\n  }\n  m_qp = rdma->AddQueuePair(m_node->GetId(),m_remote_node->GetId(),tmpTag,0, m_pg, m_src_ip, m_dst_ip, m_src_port,\n                        m_dst_port, this->CalculateWindow(m_pair_bdp), m_pair_rtt,\n                        MakeCallback(&IbvQP::WrCompleted, this),\n                        MakeCallback(&IbvQP::WrSent, this));\n  m_qp->SetSrcQpNum(m_qp_num);\n  m_qp->SetDstQpNum(m_dst_qp_num);\n  NS_LOG_LOGIC(\"qp(addr=\" << GetPointer(m_qp) << \") (\" << m_node->GetId() \n                            << \",\" << m_qp_num << \")\" << \" set src_port=\" << m_src_port << \", dst_port=\" << m_dst_port \n                            << \" for srcIP=\" << m_src_ip.Get() << \", dstIP=\" << m_dst_ip.Get());",
+      "excerpt_end": 433,
+      "excerpt_start": 423,
+      "id": "persistent_qp",
+      "label": "network",
+      "line": 425,
+      "needle": "m_qp = rdma->AddQueuePair(",
+      "path": "simulation/src/applications/model/ibv-qp.cc",
+      "target_line": null,
+      "target_path": null,
+      "url": "https://github.com/aliyun/ns-3-alibabacloud/blob/434e4f2fe4bc2fb803a1dcda690869f66802f8b8/simulation/src/applications/model/ibv-qp.cc#L425"
+    },
+    {
+      "excerpt": "}\n\nvoid IbvQP::WrCompleted(Ptr<RdmaQueuePair> qp, shm_ibv_send_wr wr)\n{\n  // NS_LOG_LOGIC(GetDebugName() << \" WrCompleted \" << wr.total_length << \" with WrId = \" << wr.wr_id);\n  // 如果是PostFifo的数据 需要把真数据Write到对方的进程空间\n  if(wr.is_post_fifo) {\n    struct ncclIbSendFifo send_fifo;\n    send_fifo.addr = wr.post_fifo_addr;\n    send_fifo.size = wr.post_fifo_size;\n    send_fifo.rkeys[0] = wr.post_fifo_rkeys[0];",
+      "excerpt_end": 155,
+      "excerpt_start": 145,
+      "id": "wr_completed",
+      "label": "network",
+      "line": 147,
+      "needle": "void IbvQP::WrCompleted(",
+      "path": "simulation/src/applications/model/ibv-qp.cc",
+      "target_line": null,
+      "target_path": null,
+      "url": "https://github.com/aliyun/ns-3-alibabacloud/blob/434e4f2fe4bc2fb803a1dcda690869f66802f8b8/simulation/src/applications/model/ibv-qp.cc#L147"
+    },
+    {
+      "excerpt": "}\n\nvoid IbvInterface::ExecPostFifo(ncclIbSendFifo sendFifo, int remote_node_id, uintptr_t remote_addr) {\n  // int send_sockfd = node2daemonsockfd_map[remote_node_id];\n  // NS_LOG_LOGIC(\"11111\");\n  pid_t remote_pid = GetPidOfNode(remote_node_id);\n  if(remote_pid==-1) {\n    NS_FATAL_ERROR(\"failed to find remote pid of node \" << remote_node_id);\n  }\n  // NS_LOG_LOGIC(\"22222\");\n  PostFifoCtrlMsg msg;",
+      "excerpt_end": 104,
+      "excerpt_start": 94,
+      "id": "fifo_visibility",
+      "label": "network",
+      "line": 96,
+      "needle": "void IbvInterface::ExecPostFifo(",
+      "path": "simulation/src/applications/model/ibv-interface.cc",
+      "target_line": null,
+      "target_path": null,
+      "url": "https://github.com/aliyun/ns-3-alibabacloud/blob/434e4f2fe4bc2fb803a1dcda690869f66802f8b8/simulation/src/applications/model/ibv-interface.cc#L96"
+    },
+    {
+      "excerpt": "  }\n}\nvoid IbvCQ::GenerateSendCQE(shm_ibv_send_wr wr,uint32_t local_qpn,uint32_t remote_qpn)\n{\n  NS_LOG_FUNCTION(this);\n  m_cqe_count ++;\n  struct shm_ibv_wc wc;\n  memset(&wc, 0, sizeof(wc));\n  wc.wr_id = wr.wr_id;\n  wc.status = IBV_WC_SUCCESS;\n  wc.qp_num = local_qpn;",
+      "excerpt_end": 88,
+      "excerpt_start": 78,
+      "id": "completion_opcodes",
+      "label": "network",
+      "line": 80,
+      "needle": "void IbvCQ::GenerateSendCQE(",
+      "path": "simulation/src/applications/model/ibv-cq.cc",
+      "target_line": null,
+      "target_path": null,
+      "url": "https://github.com/aliyun/ns-3-alibabacloud/blob/434e4f2fe4bc2fb803a1dcda690869f66802f8b8/simulation/src/applications/model/ibv-cq.cc#L80"
+    },
+    {
+      "excerpt": "}\n\nvoid RdmaQueuePair::PushMessage(\n    shm_ibv_send_wr wr,\n    Callback<void,Ptr<RdmaQueuePair>,shm_ibv_send_wr> notifyAppFinish,\n    Callback<void,Ptr<RdmaQueuePair>,shm_ibv_send_wr> notifyAppSent) {\n  RdmaMessage msg;\n  msg.send_wr = wr;\n  if(m_messages.empty()) {\n    msg.m_startSeq = snd_nxt;\n  } else {",
+      "excerpt_end": 182,
+      "excerpt_start": 172,
+      "id": "message_enqueue",
+      "label": "network",
+      "line": 174,
+      "needle": "void RdmaQueuePair::PushMessage(",
+      "path": "simulation/src/point-to-point/model/rdma-queue-pair.cc",
+      "target_line": null,
+      "target_path": null,
+      "url": "https://github.com/aliyun/ns-3-alibabacloud/blob/434e4f2fe4bc2fb803a1dcda690869f66802f8b8/simulation/src/point-to-point/model/rdma-queue-pair.cc#L174"
+    },
+    {
+      "excerpt": "}\n\nuint64_t RdmaQueuePair::GetBytesLeft() {\n  if(m_messages.empty()){\n    return 0;\n  }\n  uint64_t size = m_messages.front().send_wr.total_length + m_messages.front().m_startSeq;\n  uint64_t bytes_left = size >= snd_nxt ? size - snd_nxt : 0;\n  return bytes_left;\n}\n",
+      "excerpt_end": 115,
+      "excerpt_start": 105,
+      "id": "message_front",
+      "label": "network",
+      "line": 107,
+      "needle": "uint64_t RdmaQueuePair::GetBytesLeft()",
+      "path": "simulation/src/point-to-point/model/rdma-queue-pair.cc",
+      "target_line": null,
+      "target_path": null,
+      "url": "https://github.com/aliyun/ns-3-alibabacloud/blob/434e4f2fe4bc2fb803a1dcda690869f66802f8b8/simulation/src/point-to-point/model/rdma-queue-pair.cc#L107"
+    },
+    {
+      "excerpt": "}\n\nvoid RdmaQueuePair::FinishMessage() {\n  if (!m_messages.empty()) {\n    RdmaMessage msg = m_messages.front();\n    m_messages.pop();\n    msg.m_notifyAppFinish(this,msg.send_wr);\n    while(!m_messages.empty() && m_messages.front().send_wr.total_length == 0) {\n      msg = m_messages.front();\n      m_messages.pop();\n      msg.m_notifyAppFinish(this,msg.send_wr);",
+      "excerpt_end": 206,
+      "excerpt_start": 196,
+      "id": "message_finish",
+      "label": "network",
+      "line": 198,
+      "needle": "void RdmaQueuePair::FinishMessage()",
+      "path": "simulation/src/point-to-point/model/rdma-queue-pair.cc",
+      "target_line": null,
+      "target_path": null,
+      "url": "https://github.com/aliyun/ns-3-alibabacloud/blob/434e4f2fe4bc2fb803a1dcda690869f66802f8b8/simulation/src/point-to-point/model/rdma-queue-pair.cc#L198"
+    },
+    {
+      "excerpt": "    return true;\n  }\n  return snd_una >= m_messages.front().send_wr.total_length + m_messages.front().m_startSeq;\n}\n\n/*********************\n * RdmaRxQueuePair\n ********************/\nNS_OBJECT_ENSURE_REGISTERED(RdmaRxQueuePair);\n\nTypeId RdmaRxQueuePair::GetTypeId(void) {",
+      "excerpt_end": 226,
+      "excerpt_start": 216,
+      "id": "ack_condition",
+      "label": "network",
+      "line": 218,
+      "needle": "return snd_una >= m_messages.front().send_wr.total_length",
+      "path": "simulation/src/point-to-point/model/rdma-queue-pair.cc",
+      "target_line": null,
+      "target_path": null,
+      "url": "https://github.com/aliyun/ns-3-alibabacloud/blob/434e4f2fe4bc2fb803a1dcda690869f66802f8b8/simulation/src/point-to-point/model/rdma-queue-pair.cc#L218"
+    },
+    {
+      "excerpt": "}\n\nint RdmaHw::ReceiveAck(Ptr<Packet> p, CustomHeader& ch) {\n  uint16_t qIndex = ch.ack.pg;\n  uint16_t port = ch.ack.dport;\n  uint64_t seq = ch.ack.seq;\n  uint8_t cnp = (ch.ack.flags >> qbbHeader::FLAG_CNP) & 1;\n\n  int i;\n  Ptr<RdmaQueuePair> qp = GetQp(ch.sip, port, qIndex);\n  if (qp == NULL) {",
+      "excerpt_end": 568,
+      "excerpt_start": 558,
+      "id": "ack_handling",
+      "label": "network",
+      "line": 560,
+      "needle": "int RdmaHw::ReceiveAck(",
+      "path": "simulation/src/point-to-point/model/rdma-hw.cc",
+      "target_line": null,
+      "target_path": null,
+      "url": "https://github.com/aliyun/ns-3-alibabacloud/blob/434e4f2fe4bc2fb803a1dcda690869f66802f8b8/simulation/src/point-to-point/model/rdma-hw.cc#L560"
+    },
+    {
+      "excerpt": "}\n\nvoid RdmaHw::QpCompleteMessage(Ptr<RdmaQueuePair> qp) {\n  // qp->m_messages.front().m_notifyAppFinish();\n  // callback\n  RdmaQueuePair::RdmaMessage msg = qp->m_messages.front();\n  qp->FinishMessage();\n  m_messageCompleteCallback(qp, msg.send_wr.total_length);\n  if(!qp->m_messages.empty()){\n    // Have more messages to send\n    // std::cout<<\"at \"<<Simulator::Now().GetTimeStep()<<\"ns, qp src:\"<<qp->m_src<<\" dst:\"<<qp->m_dest<<\" port:\"<<qp->sport<<\" dport:\"<<qp->dport<<\" has more messages to send\\n\";",
+      "excerpt_end": 730,
+      "excerpt_start": 720,
+      "id": "completion_callback",
+      "label": "network",
+      "line": 722,
+      "needle": "void RdmaHw::QpCompleteMessage(",
+      "path": "simulation/src/point-to-point/model/rdma-hw.cc",
+      "target_line": null,
+      "target_path": null,
+      "url": "https://github.com/aliyun/ns-3-alibabacloud/blob/434e4f2fe4bc2fb803a1dcda690869f66802f8b8/simulation/src/point-to-point/model/rdma-hw.cc#L722"
+    },
+    {
+      "excerpt": "int main(int argc, char* argv[]) {\n#ifdef NS3_MTP\n  MtpInterface::Enable(16);\n#endif\n\n#ifdef NS3_MPI\n  ns3::MpiInterface::Enable(&argc, &argv);\n// GlobalValue::Bind (\"SimulatorImplementationType\",\n//                    StringValue (\"ns3::DistributedSimulatorImpl\"));\n#endif\n",
+      "excerpt_end": 129,
+      "excerpt_start": 119,
+      "id": "parallel_hook",
+      "label": "network",
+      "line": 121,
+      "needle": "MtpInterface::Enable(16);",
+      "path": "simulation/scratch/QpReuseSimInfra.cc",
+      "target_line": null,
+      "target_path": null,
+      "url": "https://github.com/aliyun/ns-3-alibabacloud/blob/434e4f2fe4bc2fb803a1dcda690869f66802f8b8/simulation/scratch/QpReuseSimInfra.cc#L121"
+    },
+    {
+      "excerpt": "  std::cout << \"Start to install IbvInterface applications.\" << std::endl;\n\n  apps = InstallRdmaApps(n, num_nodes);\n\n  for(uint32_t i = 0; i < apps.GetN(); i++) {\n    Ptr<IbvInterface> ibvIf = DynamicCast<IbvInterface>(apps.Get(i));\n    int node_id = ibvIf->GetNode()->GetId();\n    ibvIf->SetRoutingTableIpv4Address(serverAddress[node_id]);\n    ibvIf->SetRoutingTableMaskAddress(Ipv4Mask(0xff000000));\n    ibvIf->SetGpusPerServer(gpus_per_server);\n    if(enable_p2p) {",
+      "excerpt_end": 180,
+      "excerpt_start": 170,
+      "id": "install_interfaces",
+      "label": "network",
+      "line": 172,
+      "needle": "apps = InstallRdmaApps(n, num_nodes);",
+      "path": "simulation/scratch/QpReuseSimInfra.cc",
+      "target_line": null,
+      "target_path": null,
+      "url": "https://github.com/aliyun/ns-3-alibabacloud/blob/434e4f2fe4bc2fb803a1dcda690869f66802f8b8/simulation/scratch/QpReuseSimInfra.cc#L172"
+    }
+  ],
+  "requests": 20,
+  "response_bytes": 2365161,
+  "schema": "clem-boundary-source-audit/1",
+  "scope": {
+    "GPU_runs": 0,
+    "builds": 0,
+    "network_simulations": 0,
+    "platform_changes": 0,
+    "research_innovations_established": false,
+    "runtime_equivalence_proven": false,
+    "source_audit": true
+  },
+  "sources": [
+    {
+      "bytes": 11357,
+      "cache_path": "cache/clem/sources/LICENSE",
+      "git_blob": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+      "label": "clem",
+      "path": "LICENSE",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+    },
+    {
+      "bytes": 4326,
+      "cache_path": "cache/clem/sources/NOTICE",
+      "git_blob": "9aed9f515d77f10a9a7c4e901d5d90920ee1b902",
+      "label": "clem",
+      "path": "NOTICE",
+      "sha256": "5172f31432ca80dc715fdb944283931e51ec65928833c0583c4eaacc83f52c3c"
+    },
+    {
+      "bytes": 11242,
+      "cache_path": "cache/clem/fallback/README.md",
+      "git_blob": "33b9fb962463789a9f483e93ccfba8576eaa3e44",
+      "label": "clem",
+      "path": "README.md",
+      "sha256": "b285917e8af5703f22b146d5337468068da8e2ce61e711aff925907062fa42f8"
+    },
+    {
+      "bytes": 180014,
+      "cache_path": "cache/clem/sources/nccl_patch",
+      "git_blob": "a481cbc96e6e5fa12bc8777e7e7857252a5633f1",
+      "label": "clem",
+      "path": "nccl_patch",
+      "sha256": "1bf2e47e8c0def6f16c1ee513d54a2fa13b6cd5b544d5bb7e56ef52c6e77f764"
+    },
+    {
+      "bytes": 30716,
+      "cache_path": "cache/clem/sources/nccl_tests_patch",
+      "git_blob": "e07783cb89eeb6667bbd2a12c36f958adcfd52b5",
+      "label": "clem",
+      "path": "nccl_tests_patch",
+      "sha256": "b878a77301922a03b6b654c9d45fb2c173b47718ad8b55ee0746eb8e3d7d0ee4"
+    },
+    {
+      "bytes": 4009,
+      "cache_path": "cache/clem/sources/run_nccl_16A100.sh",
+      "git_blob": "3bb257f57c578dfda0182f8fbcffb6ac9809f756",
+      "label": "clem",
+      "path": "run_nccl_16A100.sh",
+      "sha256": "e854e61d9f051bb02fd6dbced28c0684a70227b256481e51900502e3ac2220d5"
+    },
+    {
+      "bytes": 17987,
+      "cache_path": "cache/network/sources/simulation/LICENSE",
+      "git_blob": "d511905c1647a1e311e8b20d5930a37a9c2531cd",
+      "label": "network",
+      "path": "simulation/LICENSE",
+      "sha256": "ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6"
+    },
+    {
+      "bytes": 6483,
+      "cache_path": "cache/network/sources/simulation/scratch/QpReuseSimInfra.cc",
+      "git_blob": "94b8731a8514869f26a16d809c5548567af89e05",
+      "label": "network",
+      "path": "simulation/scratch/QpReuseSimInfra.cc",
+      "sha256": "fb04a8f8b67cc17b0604543920ed621648ab0b351ef91f071c9dd4b30db052ec"
+    },
+    {
+      "bytes": 3739,
+      "cache_path": "cache/network/sources/simulation/src/applications/model/ibv-cq.cc",
+      "git_blob": "4158ca186183853f6aa5980df277a63fda2c77c9",
+      "label": "network",
+      "path": "simulation/src/applications/model/ibv-cq.cc",
+      "sha256": "989114202b7f7edd8dad018431ca8d3a372d27e1e441b0f7cb8c07594831bc01"
+    },
+    {
+      "bytes": 29859,
+      "cache_path": "cache/network/sources/simulation/src/applications/model/ibv-interface.cc",
+      "git_blob": "6c13ae7bcc946423fefd6ddb4395f2c053c3cc9a",
+      "label": "network",
+      "path": "simulation/src/applications/model/ibv-interface.cc",
+      "sha256": "731b653093c75129aaa2bc4d1d4f06b13dd9ace4c1a137def1146940d2b157e4"
+    },
+    {
+      "bytes": 8083,
+      "cache_path": "cache/network/sources/simulation/src/applications/model/ibv-interface.h",
+      "git_blob": "d07c11dfe266e5e84d4a5dba772fe414c0b1d8ab",
+      "label": "network",
+      "path": "simulation/src/applications/model/ibv-interface.h",
+      "sha256": "2e0ccfc9292f211bda5155e3cf6ab41cc72d77d8e3053ea5dff70c1b6338e269"
+    },
+    {
+      "bytes": 14296,
+      "cache_path": "cache/network/sources/simulation/src/applications/model/ibv-qp.cc",
+      "git_blob": "42374673af23532bca3c507cfe3c2f2af86f94f2",
+      "label": "network",
+      "path": "simulation/src/applications/model/ibv-qp.cc",
+      "sha256": "145919e122009567769b205f3e5596da1b057b861777e34cc74fcfbdbfd439a9"
+    },
+    {
+      "bytes": 5312,
+      "cache_path": "cache/network/sources/simulation/src/applications/model/ibv-qp.h",
+      "git_blob": "8202c335bf3b5201b1ca9faf9eae26049ea8e0f3",
+      "label": "network",
+      "path": "simulation/src/applications/model/ibv-qp.h",
+      "sha256": "0e1f72b2d94f0670414532686ddcd9971fc5a5b7f4bc4a05778da1d33068656d"
+    },
+    {
+      "bytes": 27991,
+      "cache_path": "cache/network/sources/simulation/src/applications/model/ibvcore.h",
+      "git_blob": "299f1846b5fc749ffcf340c409c9c1554972edb9",
+      "label": "network",
+      "path": "simulation/src/applications/model/ibvcore.h",
+      "sha256": "bcb01cf17304b8e027da709cbb41c339663d1fa171b66d7123dd78dfca1c9703"
+    },
+    {
+      "bytes": 29885,
+      "cache_path": "cache/network/sources/simulation/src/point-to-point/model/rdma-hw.cc",
+      "git_blob": "30c044deb8cd6a763bd751942a64afa648903788",
+      "label": "network",
+      "path": "simulation/src/point-to-point/model/rdma-hw.cc",
+      "sha256": "a73c26c95fe51d72224bcc526c078d7c36d82fa2426c8a2cd0a215c5de618207"
+    },
+    {
+      "bytes": 7817,
+      "cache_path": "cache/network/sources/simulation/src/point-to-point/model/rdma-queue-pair.cc",
+      "git_blob": "3380ab0bedc18621e3f05479316b21a10efbd1ec",
+      "label": "network",
+      "path": "simulation/src/point-to-point/model/rdma-queue-pair.cc",
+      "sha256": "0ebf4e0460c6054b46f57353725b34680ef917fa15fe3dd183d96814d5d811b1"
+    }
+  ]
+}

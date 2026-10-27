@@ -13,7 +13,11 @@
 
 ## 当前范围和预算
 
-当前研究 `in_progress`：[CLEM与现代GPU发起MoE边界核查](../../experiments/clem_boundary_audit/protocol.md)，起点`5a6bc45`。仅核固定公开源码的发起路径、资源/内存完成和扩规模方法，重新明确两候选的强基线；600受监控秒/128MiB、最多24HTTP/8MiB且无重试，不执行网络仿真、构建或GPU。不重开旧条件，功能差异不作为创新成立依据。
+当前研究 `completed`：[CLEM与现代GPU发起MoE边界核查](../../experiments/clem_boundary_audit/README.md)、[事前协议](../../experiments/clem_boundary_audit/protocol.md)和[报告网页](../../experiments/clem_boundary_audit/results/20261027/report.html)，起点`5a6bc45`、协议`9ebbb6e`。固定CLEM及阿里`dev/clem`各一个提交，核查16份材料/29处引用；host verbs→持久QP→ACK→CQ及必要FIFO反馈已有完整源码链，须列为强基线。旧READ按NCCL flush直接完成，不能推定通用远端读/原子或现代GPU直接发布已适配；buffer复用还改设备访问偏移，需区分数值payload与会驱动未来通信的控制值。上游96倍规模声明不等于网络事件或宿主加速，入口已有MTP/MPI钩子，未实跑不能写叉。
+
+独立重建394个Git tree、核对blob/响应/补丁目标行，七类篡改拒绝及13固定依赖通过。92成员/3,068,282B内容归档逐hash恢复，从复制源码/空cwd重算证据、Markdown/HTML及核验逐字节一致，恢复零HTTP；SHA256 `f06d423af7cd8aea5bdbc0541ba8010a87c76ddf23da643c3e66524f13ba083a`。原件`runs/clem_boundary_audit_20261027/`。保留初版socket超时不能保证总截止造成的20.410/20.886秒请求违规、原空README及首次锚点匹配注释的离线分析失败；README另用已存在的固定blob一致副本，修获取器后只取尚未尝试文件、无旧URL重试。见[核验](../../experiments/clem_boundary_audit/results/20261027/verification.json)、[恢复](../../experiments/clem_boundary_audit/results/20261027/recovery.json)与[资源关闭](../../experiments/clem_boundary_audit/results/20261027/closeout.json)。保守含复制收据133.691受监控秒、约7.07MiB分配产物和2MiB/10秒管理预留；20HTTP/2,365,161B响应，阶段600秒/128MiB/24HTTP/8MiB未扩大，但两次原单请求截止违规如实保留。零网络仿真/构建/GPU/平台依赖修改/push，仅本地保存。
+
+本源码核查额度关闭，本轮为progress。两候选仍未成立：下一选择须比较保留控制值/发布/寿命的紧凑表示与普通符号buffer/完整DAG，以及跨队列反馈执行缩减与既有批次/并行强基线。若先补Hybrid完整参考，须另行限定输入驱动控制/转发/Combine及同一次网络执行，不能继续把接入、地址复用或更多事件当贡献，也不自动重开已被解释的健康EP4条件。未获得新决策收益、宿主提速、硬件校准或千卡完整执行证据，整体目标保持`in_progress`。
 
 当前平台增量 `completed`：[分阶段前缀发布规范](staged_publication_spec.md)、[公开小例](../../examples/scaleout_staged_publication/README.md)和[验收](../../fixtures/staged_publication/README.md)，起点`bdb7392`、规范`bd29285`。session-only staged_prefix/1保留预约、描述符就绪、顺序ready与显式发布；实际ACK/原子回复决定信用及源保护释放，晚ring取max不重复发包，不占GPU串行lane。普通静态probe/依赖前端在输出前拒绝；未补完整Hybrid控制、转发或Combine。
 

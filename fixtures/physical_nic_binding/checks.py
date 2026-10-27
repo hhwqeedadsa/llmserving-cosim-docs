@@ -110,7 +110,6 @@ def audit(topology, protocol, result):
             else:
                 need(switch_resident[node, key] > 0, 'switch TX without a preceding arrival')
                 switch_resident[node, key] -= 1
-                check_switch_route(node, port, wire[2], time)
         elif kind in (1, 2):
             need(flying[endpoint, key], 'arrival without link transmission')
             sent = flying[endpoint, key].popleft()
@@ -129,6 +128,9 @@ def audit(topology, protocol, result):
             if nodes[node]['kind'] == 'gpu': continue
             queue_area[endpoint] += queue_bytes[endpoint]*(time-queue_time[endpoint]); queue_time[endpoint] = time
             if kind == 3:
+                # SwitchNode selects its egress in SendToDev before enqueue.
+                # A later route update does not re-route queued packets.
+                check_switch_route(node, port, wire[2], time)
                 queue_bytes[endpoint] += size; queue_fifo[endpoint, proto == 17].append((key, sid))
                 occupants = {streams[s]['source_ipv4'] for _, s in queue_fifo[endpoint, True]}
                 if len(occupants) > 1: mixed_queues.add(endpoint)

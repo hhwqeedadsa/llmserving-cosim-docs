@@ -40,6 +40,7 @@ def prepare(repo, output):
     save(output/'failure-work.json',failed_work)
     large=load('examples/scaleout_rdma/small-clos-100g.json')
     large['deployment'].update(pods=8,servers_per_segment=16,gpus_per_server=8,gpu_type='NONE')
+    large['fabric']['tors_per_segment_per_rail']=4
     large['nic'].update(rails_by_gpu_slot=[[0] for _ in range(8)],total_rate_bps=200000000000)
     for link in large['links'].values():link.update(rate_bps=200000000000,delay_ns=2000)
     save(output/'large-topology.json',large)

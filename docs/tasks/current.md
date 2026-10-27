@@ -13,6 +13,8 @@
 
 ## 当前范围和预算
 
+当前平台增量 `in_progress`：[分阶段前缀发布规范](staged_publication_spec.md)，起点 `bdb7392`。新增 session-only 的预约/描述符就绪/顺序准备/显式发布边界，为 Hybrid 多生产者执行补齐前置能力。规范冻结一次全新公开构建、八次小型网络及2400受监控秒/2GiB；失败保留，不重开旧预算。完整 Hybrid 和两项创新仍未成立，本阶段没有论文收益实验。
+
 当前平台增量`completed`：[Hybrid Dispatch持久资源绑定规范](hybrid_binding_spec.md)、[用户小例](../../examples/hybrid_bindings/README.md)与[验收](../../fixtures/hybrid_bindings/README.md)，起点`cdd52b3`、规范`811b2da`。新增公开`hybrid-deepep-bind`及四文件重编译加载入口，保留多call/通道持久共享、GIN self计数与本地copy/atomic的区别；显式DB/NO_DBR、world/rail/provider peer分别转换。新绑定按固定host拒绝SM1，旧logical抽象输入保持可用；不自动发现NIC或确定预约/门铃时序，也未绑定Combine。
 
 23项相关单元（15 Hybrid/8 direct plan）、新cwd公开命令/11类证据与输入拒绝、11份上游tree/blob/SHA和13固定依赖通过；人工两调用111绑定/16活跃资源/4分配context核对通过。重复、复制源码/空cwd及独立搬迁四文件结果一致，不依赖旧运行或GPU。原始命令/收据`runs/hybrid_binding_20261027/`，资源和源码身份见[收尾](../../fixtures/hybrid_bindings/closeout.json)；保持600受监控秒/128MiB含管理预留及全部单命令限额。零新网络、构建、GPU、下载、依赖修改或push，仅本地提交。

@@ -1,0 +1,33 @@
+{
+  "passed": true,
+  "small": {
+    "hand_cases": 7,
+    "independently_enumerated_capacity_cases": 873
+  },
+  "independent": {
+    "baseline": {
+      "raw_TX_count": 2464,
+      "raw_switch_TX_count": 1936,
+      "conservative_selected_packets": 1936,
+      "callbacks_saved_candidate": 20
+    },
+    "bandwidth": {
+      "raw_TX_count": 2464,
+      "raw_switch_TX_count": 1936,
+      "conservative_selected_packets": 1936,
+      "callbacks_saved_candidate": 36
+    }
+  },
+  "future_truth_unavailable_byte_identical": {
+    "baseline.jsonl": true,
+    "bandwidth.jsonl": true,
+    "baseline-snapshots.jsonl": true,
+    "bandwidth-snapshots.jsonl": true
+  },
+  "rejected_corruptions": [
+    "forged_deadline",
+    "changed_TX_time",
+    "repeated_packet",
+    "omitted_queued_capacity"
+  ]
+}

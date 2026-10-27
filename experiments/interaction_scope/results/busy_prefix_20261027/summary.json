@@ -1,0 +1,1071 @@
+{
+  "baseline": {
+    "switch_transmissions": 1936,
+    "all_physical_transmissions": 2464,
+    "captured_events": 8800,
+    "modes": {
+      "conservative": {
+        "groups": 1916,
+        "multi_packet_groups": 15,
+        "largest_group": 3,
+        "packets_in_multi_groups": 35,
+        "candidate_TransmitComplete_callbacks_saved": 20,
+        "fraction_of_switch_TX_callbacks": 0.010330578512396695,
+        "fraction_of_all_physical_TX_callbacks": 0.008116883116883116,
+        "plans_disagreeing_with_actual_TX": 0,
+        "first_invalid_plan": null,
+        "first_invalid_witness": null,
+        "example_largest_plan": {
+          "mode": "conservative",
+          "ordinal": 51,
+          "node": 8,
+          "port": 3,
+          "priority": 3,
+          "now_ns": 1018,
+          "deadline_ns": 2018,
+          "topology_cut_ns": 2018,
+          "earliest_observed_inflight_RX_ns": null,
+          "below_mark_threshold": true,
+          "selected": [
+            [
+              [
+                10,
+                17,
+                0,
+                76,
+                40
+              ],
+              1018,
+              76
+            ],
+            [
+              [
+                16,
+                17,
+                0,
+                76,
+                40
+              ],
+              1024,
+              76
+            ],
+            [
+              [
+                18,
+                17,
+                0,
+                76,
+                40
+              ],
+              1030,
+              76
+            ]
+          ],
+          "finish_ns": 1036
+        }
+      },
+      "topology_only": {
+        "groups": 1861,
+        "multi_packet_groups": 43,
+        "largest_group": 8,
+        "packets_in_multi_groups": 118,
+        "candidate_TransmitComplete_callbacks_saved": 75,
+        "fraction_of_switch_TX_callbacks": 0.038739669421487606,
+        "fraction_of_all_physical_TX_callbacks": 0.030438311688311688,
+        "plans_disagreeing_with_actual_TX": 2,
+        "first_invalid_plan": {
+          "mode": "topology_only",
+          "ordinal": 367,
+          "node": 8,
+          "port": 3,
+          "priority": 3,
+          "now_ns": 7060,
+          "deadline_ns": 8060,
+          "topology_cut_ns": 8060,
+          "earliest_observed_inflight_RX_ns": 7062,
+          "below_mark_threshold": true,
+          "selected": [
+            [
+              [
+                49,
+                17,
+                0,
+                76,
+                40
+              ],
+              7060,
+              76
+            ],
+            [
+              [
+                51,
+                17,
+                0,
+                76,
+                40
+              ],
+              7066,
+              76
+            ]
+          ],
+          "finish_ns": 7072
+        },
+        "first_invalid_witness": {
+          "node": 8,
+          "port": 3,
+          "start_ns": 7060,
+          "known_inflight_RX_ns": 7062,
+          "predicted": [
+            {
+              "packet": [
+                49,
+                17,
+                0,
+                76,
+                40
+              ],
+              "time_ns": 7060
+            },
+            {
+              "packet": [
+                51,
+                17,
+                0,
+                76,
+                40
+              ],
+              "time_ns": 7066
+            }
+          ],
+          "actual_TX": [
+            {
+              "packet": [
+                49,
+                17,
+                0,
+                76,
+                40
+              ],
+              "time_ns": 7060
+            },
+            {
+              "packet": [
+                53,
+                252,
+                40,
+                50,
+                0
+              ],
+              "time_ns": 7066
+            },
+            {
+              "packet": [
+                51,
+                17,
+                0,
+                76,
+                40
+              ],
+              "time_ns": 7070
+            }
+          ]
+        },
+        "example_largest_plan": {
+          "mode": "topology_only",
+          "ordinal": 1201,
+          "node": 18,
+          "port": 3,
+          "priority": 3,
+          "now_ns": 10019,
+          "deadline_ns": 11019,
+          "topology_cut_ns": 11019,
+          "earliest_observed_inflight_RX_ns": 10079,
+          "below_mark_threshold": true,
+          "selected": [
+            [
+              [
+                198,
+                17,
+                10000,
+                2036,
+                2000
+              ],
+              10019,
+              2036
+            ],
+            [
+              [
+                202,
+                17,
+                10000,
+                2036,
+                2000
+              ],
+              10182,
+              2036
+            ],
+            [
+              [
+                210,
+                17,
+                12000,
+                2036,
+                2000
+              ],
+              10345,
+              2036
+            ],
+            [
+              [
+                214,
+                17,
+                12000,
+                2036,
+                2000
+              ],
+              10508,
+              2036
+            ],
+            [
+              [
+                224,
+                17,
+                12000,
+                2036,
+                2000
+              ],
+              10671,
+              2036
+            ],
+            [
+              [
+                234,
+                17,
+                14000,
+                532,
+                496
+              ],
+              10834,
+              532
+            ],
+            [
+              [
+                238,
+                17,
+                14000,
+                532,
+                496
+              ],
+              10877,
+              532
+            ],
+            [
+              [
+                241,
+                17,
+                14000,
+                532,
+                496
+              ],
+              10920,
+              532
+            ]
+          ],
+          "finish_ns": 10963
+        }
+      },
+      "queued_upper": {
+        "groups": 1861,
+        "multi_packet_groups": 43,
+        "largest_group": 8,
+        "packets_in_multi_groups": 118,
+        "candidate_TransmitComplete_callbacks_saved": 75,
+        "fraction_of_switch_TX_callbacks": 0.038739669421487606,
+        "fraction_of_all_physical_TX_callbacks": 0.030438311688311688,
+        "plans_disagreeing_with_actual_TX": 2,
+        "first_invalid_plan": {
+          "mode": "queued_upper",
+          "ordinal": 367,
+          "node": 8,
+          "port": 3,
+          "priority": 3,
+          "now_ns": 7060,
+          "deadline_ns": null,
+          "topology_cut_ns": 8060,
+          "earliest_observed_inflight_RX_ns": 7062,
+          "below_mark_threshold": true,
+          "selected": [
+            [
+              [
+                49,
+                17,
+                0,
+                76,
+                40
+              ],
+              7060,
+              76
+            ],
+            [
+              [
+                51,
+                17,
+                0,
+                76,
+                40
+              ],
+              7066,
+              76
+            ]
+          ],
+          "finish_ns": 7072
+        },
+        "first_invalid_witness": {
+          "node": 8,
+          "port": 3,
+          "start_ns": 7060,
+          "known_inflight_RX_ns": 7062,
+          "predicted": [
+            {
+              "packet": [
+                49,
+                17,
+                0,
+                76,
+                40
+              ],
+              "time_ns": 7060
+            },
+            {
+              "packet": [
+                51,
+                17,
+                0,
+                76,
+                40
+              ],
+              "time_ns": 7066
+            }
+          ],
+          "actual_TX": [
+            {
+              "packet": [
+                49,
+                17,
+                0,
+                76,
+                40
+              ],
+              "time_ns": 7060
+            },
+            {
+              "packet": [
+                53,
+                252,
+                40,
+                50,
+                0
+              ],
+              "time_ns": 7066
+            },
+            {
+              "packet": [
+                51,
+                17,
+                0,
+                76,
+                40
+              ],
+              "time_ns": 7070
+            }
+          ]
+        },
+        "example_largest_plan": {
+          "mode": "queued_upper",
+          "ordinal": 1201,
+          "node": 18,
+          "port": 3,
+          "priority": 3,
+          "now_ns": 10019,
+          "deadline_ns": null,
+          "topology_cut_ns": 11019,
+          "earliest_observed_inflight_RX_ns": 10079,
+          "below_mark_threshold": true,
+          "selected": [
+            [
+              [
+                198,
+                17,
+                10000,
+                2036,
+                2000
+              ],
+              10019,
+              2036
+            ],
+            [
+              [
+                202,
+                17,
+                10000,
+                2036,
+                2000
+              ],
+              10182,
+              2036
+            ],
+            [
+              [
+                210,
+                17,
+                12000,
+                2036,
+                2000
+              ],
+              10345,
+              2036
+            ],
+            [
+              [
+                214,
+                17,
+                12000,
+                2036,
+                2000
+              ],
+              10508,
+              2036
+            ],
+            [
+              [
+                224,
+                17,
+                12000,
+                2036,
+                2000
+              ],
+              10671,
+              2036
+            ],
+            [
+              [
+                234,
+                17,
+                14000,
+                532,
+                496
+              ],
+              10834,
+              532
+            ],
+            [
+              [
+                238,
+                17,
+                14000,
+                532,
+                496
+              ],
+              10877,
+              532
+            ],
+            [
+              [
+                241,
+                17,
+                14000,
+                532,
+                496
+              ],
+              10920,
+              532
+            ]
+          ],
+          "finish_ns": 10963
+        }
+      }
+    },
+    "evaluation_only_fixed_FIFO_prefix_upper": {
+      "callbacks_saved_upper": 75,
+      "fraction_of_all_physical_TX_callbacks": 0.030438311688311688,
+      "rule_class": "fixed actual TX times; same-priority already-queued prefix only; ignore cut/feedback",
+      "online_algorithm": false
+    },
+    "native_events_changed": 0,
+    "native_speedup_measured": false,
+    "all_side_effects_equivalent_proven": false
+  },
+  "bandwidth": {
+    "switch_transmissions": 1936,
+    "all_physical_transmissions": 2464,
+    "captured_events": 8800,
+    "modes": {
+      "conservative": {
+        "groups": 1900,
+        "multi_packet_groups": 19,
+        "largest_group": 10,
+        "packets_in_multi_groups": 55,
+        "candidate_TransmitComplete_callbacks_saved": 36,
+        "fraction_of_switch_TX_callbacks": 0.01859504132231405,
+        "fraction_of_all_physical_TX_callbacks": 0.01461038961038961,
+        "plans_disagreeing_with_actual_TX": 0,
+        "first_invalid_plan": null,
+        "first_invalid_witness": null,
+        "example_largest_plan": {
+          "mode": "conservative",
+          "ordinal": 919,
+          "node": 18,
+          "port": 3,
+          "priority": 3,
+          "now_ns": 8439,
+          "deadline_ns": 9439,
+          "topology_cut_ns": 9439,
+          "earliest_observed_inflight_RX_ns": null,
+          "below_mark_threshold": true,
+          "selected": [
+            [
+              [
+                186,
+                17,
+                8000,
+                2036,
+                2000
+              ],
+              8439,
+              2036
+            ],
+            [
+              [
+                194,
+                17,
+                10000,
+                2036,
+                2000
+              ],
+              8520,
+              2036
+            ],
+            [
+              [
+                198,
+                17,
+                10000,
+                2036,
+                2000
+              ],
+              8601,
+              2036
+            ],
+            [
+              [
+                202,
+                17,
+                10000,
+                2036,
+                2000
+              ],
+              8682,
+              2036
+            ],
+            [
+              [
+                210,
+                17,
+                12000,
+                2036,
+                2000
+              ],
+              8763,
+              2036
+            ],
+            [
+              [
+                214,
+                17,
+                12000,
+                2036,
+                2000
+              ],
+              8844,
+              2036
+            ],
+            [
+              [
+                218,
+                17,
+                12000,
+                2036,
+                2000
+              ],
+              8925,
+              2036
+            ],
+            [
+              [
+                226,
+                17,
+                14000,
+                532,
+                496
+              ],
+              9006,
+              532
+            ],
+            [
+              [
+                230,
+                17,
+                14000,
+                532,
+                496
+              ],
+              9027,
+              532
+            ],
+            [
+              [
+                232,
+                17,
+                14000,
+                532,
+                496
+              ],
+              9048,
+              532
+            ]
+          ],
+          "finish_ns": 9069
+        }
+      },
+      "topology_only": {
+        "groups": 1860,
+        "multi_packet_groups": 43,
+        "largest_group": 8,
+        "packets_in_multi_groups": 119,
+        "candidate_TransmitComplete_callbacks_saved": 76,
+        "fraction_of_switch_TX_callbacks": 0.03925619834710744,
+        "fraction_of_all_physical_TX_callbacks": 0.030844155844155844,
+        "plans_disagreeing_with_actual_TX": 2,
+        "first_invalid_plan": {
+          "mode": "topology_only",
+          "ordinal": 387,
+          "node": 8,
+          "port": 3,
+          "priority": 3,
+          "now_ns": 7030,
+          "deadline_ns": 8030,
+          "topology_cut_ns": 8030,
+          "earliest_observed_inflight_RX_ns": 7031,
+          "below_mark_threshold": true,
+          "selected": [
+            [
+              [
+                49,
+                17,
+                0,
+                76,
+                40
+              ],
+              7030,
+              76
+            ],
+            [
+              [
+                51,
+                17,
+                0,
+                76,
+                40
+              ],
+              7033,
+              76
+            ]
+          ],
+          "finish_ns": 7036
+        },
+        "first_invalid_witness": {
+          "node": 8,
+          "port": 3,
+          "start_ns": 7030,
+          "known_inflight_RX_ns": 7031,
+          "predicted": [
+            {
+              "packet": [
+                49,
+                17,
+                0,
+                76,
+                40
+              ],
+              "time_ns": 7030
+            },
+            {
+              "packet": [
+                51,
+                17,
+                0,
+                76,
+                40
+              ],
+              "time_ns": 7033
+            }
+          ],
+          "actual_TX": [
+            {
+              "packet": [
+                49,
+                17,
+                0,
+                76,
+                40
+              ],
+              "time_ns": 7030
+            },
+            {
+              "packet": [
+                53,
+                252,
+                40,
+                50,
+                0
+              ],
+              "time_ns": 7033
+            },
+            {
+              "packet": [
+                51,
+                17,
+                0,
+                76,
+                40
+              ],
+              "time_ns": 7035
+            }
+          ]
+        },
+        "example_largest_plan": {
+          "mode": "topology_only",
+          "ordinal": 955,
+          "node": 18,
+          "port": 3,
+          "priority": 3,
+          "now_ns": 8601,
+          "deadline_ns": 9601,
+          "topology_cut_ns": 9601,
+          "earliest_observed_inflight_RX_ns": 9475,
+          "below_mark_threshold": true,
+          "selected": [
+            [
+              [
+                198,
+                17,
+                10000,
+                2036,
+                2000
+              ],
+              8601,
+              2036
+            ],
+            [
+              [
+                202,
+                17,
+                10000,
+                2036,
+                2000
+              ],
+              8682,
+              2036
+            ],
+            [
+              [
+                210,
+                17,
+                12000,
+                2036,
+                2000
+              ],
+              8763,
+              2036
+            ],
+            [
+              [
+                214,
+                17,
+                12000,
+                2036,
+                2000
+              ],
+              8844,
+              2036
+            ],
+            [
+              [
+                218,
+                17,
+                12000,
+                2036,
+                2000
+              ],
+              8925,
+              2036
+            ],
+            [
+              [
+                226,
+                17,
+                14000,
+                532,
+                496
+              ],
+              9006,
+              532
+            ],
+            [
+              [
+                230,
+                17,
+                14000,
+                532,
+                496
+              ],
+              9027,
+              532
+            ],
+            [
+              [
+                232,
+                17,
+                14000,
+                532,
+                496
+              ],
+              9048,
+              532
+            ]
+          ],
+          "finish_ns": 9069
+        }
+      },
+      "queued_upper": {
+        "groups": 1860,
+        "multi_packet_groups": 43,
+        "largest_group": 8,
+        "packets_in_multi_groups": 119,
+        "candidate_TransmitComplete_callbacks_saved": 76,
+        "fraction_of_switch_TX_callbacks": 0.03925619834710744,
+        "fraction_of_all_physical_TX_callbacks": 0.030844155844155844,
+        "plans_disagreeing_with_actual_TX": 2,
+        "first_invalid_plan": {
+          "mode": "queued_upper",
+          "ordinal": 387,
+          "node": 8,
+          "port": 3,
+          "priority": 3,
+          "now_ns": 7030,
+          "deadline_ns": null,
+          "topology_cut_ns": 8030,
+          "earliest_observed_inflight_RX_ns": 7031,
+          "below_mark_threshold": true,
+          "selected": [
+            [
+              [
+                49,
+                17,
+                0,
+                76,
+                40
+              ],
+              7030,
+              76
+            ],
+            [
+              [
+                51,
+                17,
+                0,
+                76,
+                40
+              ],
+              7033,
+              76
+            ]
+          ],
+          "finish_ns": 7036
+        },
+        "first_invalid_witness": {
+          "node": 8,
+          "port": 3,
+          "start_ns": 7030,
+          "known_inflight_RX_ns": 7031,
+          "predicted": [
+            {
+              "packet": [
+                49,
+                17,
+                0,
+                76,
+                40
+              ],
+              "time_ns": 7030
+            },
+            {
+              "packet": [
+                51,
+                17,
+                0,
+                76,
+                40
+              ],
+              "time_ns": 7033
+            }
+          ],
+          "actual_TX": [
+            {
+              "packet": [
+                49,
+                17,
+                0,
+                76,
+                40
+              ],
+              "time_ns": 7030
+            },
+            {
+              "packet": [
+                53,
+                252,
+                40,
+                50,
+                0
+              ],
+              "time_ns": 7033
+            },
+            {
+              "packet": [
+                51,
+                17,
+                0,
+                76,
+                40
+              ],
+              "time_ns": 7035
+            }
+          ]
+        },
+        "example_largest_plan": {
+          "mode": "queued_upper",
+          "ordinal": 955,
+          "node": 18,
+          "port": 3,
+          "priority": 3,
+          "now_ns": 8601,
+          "deadline_ns": null,
+          "topology_cut_ns": 9601,
+          "earliest_observed_inflight_RX_ns": 9475,
+          "below_mark_threshold": true,
+          "selected": [
+            [
+              [
+                198,
+                17,
+                10000,
+                2036,
+                2000
+              ],
+              8601,
+              2036
+            ],
+            [
+              [
+                202,
+                17,
+                10000,
+                2036,
+                2000
+              ],
+              8682,
+              2036
+            ],
+            [
+              [
+                210,
+                17,
+                12000,
+                2036,
+                2000
+              ],
+              8763,
+              2036
+            ],
+            [
+              [
+                214,
+                17,
+                12000,
+                2036,
+                2000
+              ],
+              8844,
+              2036
+            ],
+            [
+              [
+                218,
+                17,
+                12000,
+                2036,
+                2000
+              ],
+              8925,
+              2036
+            ],
+            [
+              [
+                226,
+                17,
+                14000,
+                532,
+                496
+              ],
+              9006,
+              532
+            ],
+            [
+              [
+                230,
+                17,
+                14000,
+                532,
+                496
+              ],
+              9027,
+              532
+            ],
+            [
+              [
+                232,
+                17,
+                14000,
+                532,
+                496
+              ],
+              9048,
+              532
+            ]
+          ],
+          "finish_ns": 9069
+        }
+      }
+    },
+    "evaluation_only_fixed_FIFO_prefix_upper": {
+      "callbacks_saved_upper": 76,
+      "fraction_of_all_physical_TX_callbacks": 0.030844155844155844,
+      "rule_class": "fixed actual TX times; same-priority already-queued prefix only; ignore cut/feedback",
+      "online_algorithm": false
+    },
+    "native_events_changed": 0,
+    "native_speedup_measured": false,
+    "all_side_effects_equivalent_proven": false
+  }
+}

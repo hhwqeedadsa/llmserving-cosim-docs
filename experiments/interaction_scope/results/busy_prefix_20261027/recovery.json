@@ -1,0 +1,18 @@
+{
+  "passed": true,
+  "archive_sha256": "db03360395623483597be6839783fb49fbb726550bab7d9b137f6e6be734a195",
+  "hash_verified_members": 60,
+  "copied_source": true,
+  "empty_cwd": true,
+  "byte_identical": {
+    "summary.json": true,
+    "report.md": true
+  },
+  "prediction_byte_identical": {
+    "baseline.jsonl": true,
+    "bandwidth.jsonl": true,
+    "baseline-snapshots.jsonl": true,
+    "bandwidth-snapshots.jsonl": true
+  },
+  "new_networks": 0
+}

@@ -13,7 +13,11 @@
 
 ## 当前范围和预算
 
-当前研究`in_progress`：[Hybrid跨通道slot与逆映射核查](../../experiments/hybrid_slot_audit/protocol.md)。起点`0e04667`，平台固定`19670ba`。先纠正资源身份：入口GPU本地按目标分计数器、同入口跨通道共享，目标缓冲按入口分区；再检验声明交错是否只改变slot/epilogue行号，普通符号buffer/DAG保留逆映射是否足够。固定8公开plan、150人工/6真实前缀声明交错，七份固定库源码（执行前补齐对齐常量来源）；600秒/256MiB、单命令60秒/RSS1GiB/地址2GiB，零新网络/构建/GPU/下载/平台依赖修改/push。不从地址改号推断网络等价/加速，不重开旧研究，两创新仍未成立。
+当前研究`completed`：[Hybrid跨通道slot与逆映射核查](../../experiments/hybrid_slot_audit/README.md)、[事前协议](../../experiments/hybrid_slot_audit/protocol.md)、[中文网页](../../experiments/hybrid_slot_audit/results/20261027/report.html)及[研究决定](../../experiments/hybrid_slot_audit/decision.md)。起点`0e04667`，平台`19670ba`、协议`40343b4`，执行前`453ddb3`补齐对齐常量来源。实际资源是入口GPU本地的按目标计数器、同入口跨通道共享，目标缓冲按入口分区，不是全部入口共用目标全局计数器。8公开plan和150人工/6真实前缀声明交错完成：六人工条件6/90/24/6/20/4种具体布局、各一种原token/贡献关联；真实2/4通道各3布局、各一种关联，每次634目标GPU逻辑副本。不能将动态slot本身当独有语义或用布局数换算加速。
+
+七份固定源码tree/blob/SHA、原选择独立副本/通道顺序、连续slot/分区地址/去重/元数据/list/结束核对及六类篡改拒绝通过；错误全目标计数器和旧逆映射负控制均拒绝。410成员/2,863,770B包逐成员hash恢复，复制源码/空cwd重算参考、156轨迹及index、核验和中文报告逐字节一致；不重跑公开plan或启动网络。SHA256 `26bb71f914af1800c77ac92ac6d64fc4fb9d0bc31479fa9676f6bb31e83899ef`，原件`runs/hybrid_slot_audit_20261027/`。含恢复共10主monitor结束、约8.317受监控秒、约77.5MiB分配产物，另留2MiB/10秒管理额度；保持600秒/256MiB、单命令60秒/RSS1GiB/地址2GiB及128MiB空闲。零新网络/构建/GPU/下载/平台依赖修改/push。
+
+本阶段额度关闭，整体progress；只检查目标域0和声明token步交错的分配/逆关联，没有全部跨入口时间/指令交错、实际atomic/GPU内存序、数值归约、完整Combine或网络时延等价证据。普通符号buffer/动态绑定DAG仍是强基线，两创新均未成立。后续先另行限定共享QP、请求聚合的实际资源与发布边界，比较已有完整图/真实CCL，再判断实际网络决策或完整宿主成本差距；不再增加slot排列制造正例，不自动重开已关闭实验或完整Hybrid/千卡功能。
 
 当前研究`completed`：[Hybrid转发的静态因果充分性核查](../../experiments/hybrid_causality_audit/README.md)、[事前协议](../../experiments/hybrid_causality_audit/protocol.md)、[中文网页](../../experiments/hybrid_causality_audit/results/20261027/report.html)与[研究取舍](../../experiments/hybrid_causality_audit/decision.md)。平台固定`19670ba`、协议`f32dba9`。1527根条件、1,049,283联合状态和2,711,060非平凡转换中，源码转录的单转发器与事前固定tail/finish门槛DAG一致；14次公开plan/42次逻辑replay完成，包含15份完整R1-AWQ/MMLU的声明EP16有限前缀，仅检查ingress0/channel0。不能再用默认6/6条件下的动态轮询支持普通任务图无法表达的主张。5/6粒度抽象控制确有不同块边界，不是部署或性能正例。
 

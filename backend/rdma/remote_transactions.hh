@@ -11,6 +11,9 @@ class RemoteTransactions {
  public:
   explicit RemoteTransactions(Fabric&,const Json& input);
   void Submit(const Json& operation);
+  // Session controller stages, validated as a complete command before mutation.
+  void ValidateStages(const Json& prepare,const Json& publish) const;
+  void ApplyStages(const Json& prepare,const Json& publish);
   Json LocalWaits(const Json& operation) const;
   bool LocalReady(const Json& operation) const;
   // Consume only an admitted local node's already-satisfied local predicates.
@@ -36,7 +39,8 @@ class RemoteTransactions {
   struct Operation {
     uint64_t id=0,connection=0,ticket=0;
     MemoryFrame request;
-    int64_t prepared=-1,ready=-1,published=-1,applied=-1,request_ack=-1,response=-1,completed=-1;
+    int64_t descriptor_ready=-1,prepared=-1,ready=-1,published=-1,applied=-1,request_ack=-1,response=-1,completed=-1;
+    bool prepare_requested=false,publish_requested=false;
     uint64_t returned_value=0;
     bool aggregate=false,has_source=false;
     int64_t self_started=-1,self_finished=-1;
@@ -58,6 +62,7 @@ class RemoteTransactions {
 #endif
   void Pump(uint64_t connection);
   void PumpExplicit(uint64_t connection);
+  void PumpStaged(uint64_t connection);
   void Send(Operation& op);
   void EnqueueSelf(Operation& op);
   void Retire(uint64_t connection);
@@ -91,6 +96,7 @@ class RemoteTransactions {
   Json target_events_=Json::array(),local_events_=Json::array();
   Json queue_fences_=Json::object();
   bool explicit_submission_=false;
+  bool staged_submission_=false;
   Json publications_=Json::array();
   bool source_mode_=false;
   Json source_model_,source_events_=Json::array();

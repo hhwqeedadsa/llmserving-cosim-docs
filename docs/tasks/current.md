@@ -13,7 +13,13 @@
 
 ## 当前范围和预算
 
-当前平台增量 `in_progress`：[分阶段前缀发布规范](staged_publication_spec.md)，起点 `bdb7392`。新增 session-only 的预约/描述符就绪/顺序准备/显式发布边界，为 Hybrid 多生产者执行补齐前置能力。规范冻结一次全新公开构建、八次小型网络及2400受监控秒/2GiB；失败保留，不重开旧预算。完整 Hybrid 和两项创新仍未成立，本阶段没有论文收益实验。
+当前平台增量 `completed`：[分阶段前缀发布规范](staged_publication_spec.md)、[公开小例](../../examples/scaleout_staged_publication/README.md)和[验收](../../fixtures/staged_publication/README.md)，起点`bdb7392`、规范`bd29285`。session-only staged_prefix/1保留预约、描述符就绪、顺序ready与显式发布；实际ACK/原子回复决定信用及源保护释放，晚ring取max不重复发包，不占GPU串行lane。普通静态probe/依赖前端在输出前拒绝；未补完整Hybrid控制、转发或Combine。
+
+59项Python、原生唤醒49断言/22类拒绝、三单元语法及13固定依赖通过；一次全新公开Release构建446项任务/437编译单元通过。八个事前功能网络全部完成，主例5事务/456B MRT1/10源包/120次物理TX及对应RX独立核对；两次晚发布未推进，深度1在首事务完成后才准备后继。旧默认/explicit去原新增字段后完整一致；复制Python源码/空cwd/搬迁运行时完整结果仅差逐hash证明的库路径及枚举顺序。
+
+381成员/28,108,067B包逐成员hash恢复后，复制核验器离线重算逐字节一致；归档SHA256 `9998ad61c99642dc2131dedb57343f6b3a829c795ec4837b00c5c8f2b550909e`。原件`runs/staged_publication_20261027/`，见[资源关闭](../../fixtures/staged_publication/closeout.json)。保留旧Mock、零网络拓扑字段及独立检查器舍入错误；后者查锁定ns-3源码后仅离线修正，主例未重跑，未改输入、包或预期。累计保持2400受监控秒/2GiB与各单项限额，八网络和本轮额度关闭；零下载/GPU/依赖修改/push，仅本地提交。
+
+该增量是Hybrid可信执行的前置平台步骤，没有新的网络决策或宿主净成本收益实验；两个创新及整体目标继续in_progress。后续须另行限定完整输入驱动的控制、转发、资源生命周期及Combine，仍对照正确资源DAG和完整成本，不能将分阶段发布或晚ring的已有机制当论文创新。
 
 当前平台增量`completed`：[Hybrid Dispatch持久资源绑定规范](hybrid_binding_spec.md)、[用户小例](../../examples/hybrid_bindings/README.md)与[验收](../../fixtures/hybrid_bindings/README.md)，起点`cdd52b3`、规范`811b2da`。新增公开`hybrid-deepep-bind`及四文件重编译加载入口，保留多call/通道持久共享、GIN self计数与本地copy/atomic的区别；显式DB/NO_DBR、world/rail/provider peer分别转换。新绑定按固定host拒绝SM1，旧logical抽象输入保持可用；不自动发现NIC或确定预约/门铃时序，也未绑定Combine。
 

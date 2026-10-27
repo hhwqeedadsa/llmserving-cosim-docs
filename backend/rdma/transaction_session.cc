@@ -102,7 +102,7 @@ class TransactionSession {
     {auto phase=timing_.Span("operation_progress_snapshot");progress=transactions_.TakeOperationProgressUpdates();}
     for(const auto& op:progress) {
       const auto id=op.at("id").get<uint64_t>();
-      for(const auto& pair:std::vector<std::pair<std::string,std::string>>{{"submitted","ready_ns"},{"prepared","prepared_ns"},{"published","published_ns"},{"applied","applied_ns"},
+      for(const auto& pair:std::vector<std::pair<std::string,std::string>>{{"submitted","ready_ns"},{"descriptor_ready","descriptor_ready_ns"},{"prepared","prepared_ns"},{"published","published_ns"},{"applied","applied_ns"},
           {"request_acked","request_acked_ns"},{"response","response_ns"},{"completed","completed_ns"}}) {
         if(!op.contains(pair.second))continue;
         const auto t=op.at(pair.second).get<int64_t>();
@@ -145,7 +145,7 @@ class TransactionSession {
     }
     const auto command=Json::parse(buffer.data());
     std::vector<std::string> keys={"type","decision_id","now_ns","submissions","finish"};
-    for(const auto* name:{"alarms","cancel_alarms","wake_on","wake_groups"})if(command.contains(name))keys.push_back(name);
+    for(const auto* name:{"alarms","cancel_alarms","wake_on","wake_groups","prepare_operations","publish_operations"})if(command.contains(name))keys.push_back(name);
     SessionKeys(command,keys);
     Require(command.at("type")=="COMMIT" && SessionInteger(command.at("decision_id"))==decision_ &&
       SessionInteger(command.at("now_ns"))==static_cast<uint64_t>(Now()) && command.at("finish").is_boolean(),"session command identity/time/type mismatch");
@@ -157,6 +157,12 @@ class TransactionSession {
     {auto phase=timing_.Span("session_candidate_copy");candidate=input_;
       for(const auto& op:submissions)candidate["operations"].push_back(op);}
     {auto phase=timing_.Span("session_candidate_validate");ValidateSessionProgram(candidate,topology_,fabric_.MaxSimNs());}
+    const auto prepare=command.value("prepare_operations",Json::array()),publish=command.value("publish_operations",Json::array());
+    if(command.contains("prepare_operations") || command.contains("publish_operations"))
+      Require(input_.value("submission_model",Json())==Json{{"mode","staged_prefix/1"}},"provider stages require staged_prefix/1");
+    transactions_.ValidateStages(prepare,publish);
+    for(const auto& id:prepare)Require(delivered_.count({id.get<uint64_t>(),"submitted"}),"prepare requires delivered submitted callback");
+    for(const auto& id:publish)Require(delivered_.count({id.get<uint64_t>(),"prepared"}),"publish requires delivered prepared callback");
     const auto next_filter=[&](){auto phase=timing_.Span("session_wakeup_validate");
       return SessionWakeups::Parse(command,candidate,delivered_,ReadTransactionLimits(candidate).Nodes());}();
     Require(!command.contains("wake_groups") || batch_mode_,"wake_groups requires callback batch mode");
@@ -187,7 +193,7 @@ class TransactionSession {
     const auto pending=PendingAlarms()-cancel.size()+arm.size();
     const bool finish=command.at("finish").get<bool>();
     Require(!finish || (submissions.empty() && (!input_.at("operations").empty() || !alarms_.empty()) &&
-      drained && pending==0 && arm.empty()),"premature session finish or pending control alarm");
+      drained && pending==0 && arm.empty() && prepare.empty() && publish.empty()),"premature session finish or pending control alarm");
     Require(finish || !submissions.empty() || !drained || pending>0,"empty idle session command cannot advance execution");
     // Nothing above mutates the live network, operation table or alarm state.
     auto apply=timing_.Span("session_apply_commit");
@@ -211,6 +217,7 @@ class TransactionSession {
       registrations_.push_back({{"operation",id},{"time_ns",Now()},{"decision_id",decision_-1}});
       if(op.at("kind")=="local")local_times_[id]={-1,-1,-1};
     }
+    transactions_.ApplyStages(prepare,publish);
     if(!submissions.empty() || !arm.empty() || !cancel.empty())Notify();
   }
   void Progress() {

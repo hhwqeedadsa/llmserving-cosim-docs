@@ -47,5 +47,13 @@ int main() {
     try {W::Parse(J{{"wake_on",J::array({reference(0,event)})}},self,{},48);}
     catch(const std::invalid_argument&){failed=true;}check(failed);++rejections;
   }
+  auto staged=program;staged["submission_model"]["mode"]="staged_prefix/1";
+  const J descriptor=J::array({reference(0,"descriptor_ready")});
+  check(W::Parse(J{{"wake_on",descriptor}},staged,{},48)->size()==1);
+  check(W::ParseGroups(J{{"wake_groups",J::array({descriptor})}},staged,{},48)->size()==1);
+  reject(descriptor);
+  failed=false;
+  try {W::Parse(J{{"wake_on",descriptor}},staged,{{0,"descriptor_ready"}},48);}
+  catch(const std::invalid_argument&){failed=true;}check(failed);++rejections;
   std::cout<<J{{"passed",true},{"checks",checks},{"rejected_cases",rejections},{"network_executed",false}}.dump()<<'\n';
 }

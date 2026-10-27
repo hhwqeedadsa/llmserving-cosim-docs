@@ -27,6 +27,8 @@ int main(int argc,char** argv) {
     const auto execution_limits=ReadTransactionLimits(input);
     const bool sparse_mode=input.at("schema_version")=="moe-rdma-transactions/5";
     const bool explicit_submission=input.contains("submission_model");
+    Require(input.value("submission_model",Json())!=Json{{"mode","staged_prefix/1"}},
+            "staged_prefix/1 requires an interactive transaction session controller");
     Require(!explicit_submission || sparse_mode,"submission model requires v5");
     const bool local_memory_mode=sparse_mode || input.at("schema_version")=="moe-rdma-transactions/4";
     const bool source_mode=local_memory_mode || input.at("schema_version")=="moe-rdma-transactions/3";

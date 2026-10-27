@@ -50,7 +50,8 @@ RemoteTransactions::RemoteTransactions(Fabric& fabric,const Json& input):
   if(peer_copy_mode_)Require(static_cast<uint64_t>(std::count_if(input.at("operations").begin(),input.at("operations").end(),
     [](const auto& op){return op.value("kind",std::string())=="local" && op.contains("copy") && op.at("copy").at("target").contains("owner");}))<=fabric_.MaxMessages(),"peer flow count exceeds protocol budget");
   explicit_submission_=input.contains("submission_model");
-  if(explicit_submission_)Require(sparse && input.at("submission_model")==Json{{"mode","explicit_prefix/1"}},"unsupported submission model");
+  staged_submission_=input.value("submission_model",Json())==Json{{"mode","staged_prefix/1"}};
+  if(explicit_submission_)Require(sparse && (staged_submission_ || input.at("submission_model")==Json{{"mode","explicit_prefix/1"}}),"unsupported submission model");
   if(!explicit_submission_)for(const auto& op:input.at("operations"))
     Require(!op.contains("aggregate_requests"),"aggregate_requests requires explicit submission");
   local_memory_mode_=sparse || input.at("schema_version")=="moe-rdma-transactions/4";
@@ -359,6 +360,7 @@ void RemoteTransactions::Submit(const Json& input) {
   c.operations.push_back(id);operations_.emplace(id,std::move(op));dirty_progress_.insert(id);Pump(connection);
 }
 void RemoteTransactions::Pump(uint64_t connection) {
+  if(staged_submission_) {PumpStaged(connection);return;}
   if(explicit_submission_) {PumpExplicit(connection);return;}
   auto& c=connections_.at(connection);
   for(const auto id:c.operations) {
@@ -399,6 +401,55 @@ void RemoteTransactions::PumpExplicit(uint64_t connection) {
     }
   }
   if(prepared && changed)ns3::Simulator::ScheduleNow(changed);
+}
+void RemoteTransactions::ValidateStages(const Json& prepare,const Json& publish) const {
+  Require(staged_submission_ || (prepare.empty() && publish.empty()),"provider stages require staged_prefix/1");
+  for(unsigned k=0;k<2;++k) {
+    const auto& rows=k?publish:prepare;std::set<uint64_t> seen;
+    Require(rows.is_array() && rows.size()<=execution_limits_.remote,"invalid provider stage control count");
+    for(const auto& row:rows) {
+      Require(row.is_number_integer() && (row.is_number_unsigned() || row.get<int64_t>()>=0),"invalid provider stage identity");
+      const auto id=row.get<uint64_t>();
+      Require(operations_.count(id) && seen.insert(id).second,"unknown or duplicate provider stage identity");
+      const auto& op=operations_.at(id);
+      Require(k?(!op.aggregate && op.prepared>=0 && !op.publish_requested):!op.prepare_requested,
+              "provider stage repeated, early or aggregated publication");
+    }
+  }
+}
+void RemoteTransactions::ApplyStages(const Json& prepare,const Json& publish) {
+  // The session has already validated the whole command and all callbacks.
+  std::set<uint64_t> connections;
+  for(const auto& row:prepare) {
+    auto& op=operations_.at(row.get<uint64_t>());op.prepare_requested=true;connections.insert(op.connection);
+  }
+  for(const auto connection:connections)PumpStaged(connection);
+  for(const auto& row:publish) {
+    auto& op=operations_.at(row.get<uint64_t>());op.publish_requested=true;
+    auto& c=connections_.at(op.connection);const auto previous=c.queue.Snapshot().published;
+    const auto exclusive=std::max(previous,op.ticket+1);
+    c.queue.PublishThrough(exclusive);
+    publications_.push_back({{"connection",op.connection},{"operation",op.id},{"requested",op.ticket+1},
+      {"previous",previous},{"exclusive",exclusive},{"time_ns",MemoryNow()}});
+    while(const auto work=c.queue.ConsumePublished())Send(operations_.at(work->work_id));
+  }
+  if((!prepare.empty() || !publish.empty()) && changed)ns3::Simulator::ScheduleNow(changed);
+}
+void RemoteTransactions::PumpStaged(uint64_t connection) {
+  auto& c=connections_.at(connection);bool changed_state=false;
+  for(const auto id:c.operations) {
+    auto& op=operations_.at(id);
+    if(!op.prepare_requested || op.descriptor_ready>=0 || !c.queue.CanPrepare(op.ticket))continue;
+    c.queue.Prepare(op.ticket);op.descriptor_ready=MemoryNow();dirty_progress_.insert(id);changed_state=true;
+  }
+  const auto prefix=c.queue.Snapshot().prepared_prefix;
+  for(const auto id:c.operations) {
+    auto& op=operations_.at(id);
+    // Ordered ready CAS cannot finish beyond an earlier unready producer.
+    if(op.descriptor_ready<0 || op.prepared>=0 || op.ticket>=prefix)continue;
+    op.prepared=MemoryNow();dirty_progress_.insert(id);changed_state=true;
+  }
+  if(changed_state && changed)ns3::Simulator::ScheduleNow(changed);
 }
 void RemoteTransactions::Send(Operation& op) {
   Require(op.prepared>=0 && op.published<0,"invalid transaction publication");
@@ -500,6 +551,7 @@ Json RemoteTransactions::ProgressRow(const Operation& op) const {
     }
     if(op.request.verb==MemoryFrame::FetchAdd && (op.response>=0 || op.self_finished>=0))value["returned_value"]=op.returned_value;
     if(explicit_submission_)value["prepared_ns"]=op.prepared;
+    if(staged_submission_)value["descriptor_ready_ns"]=op.descriptor_ready;
     return value;
 }
 Json RemoteTransactions::OperationProgress() const {
@@ -577,7 +629,7 @@ Json RemoteTransactions::Report() const {
       {"physical_packets",0},{"hardware_qps_modeled",false},{"resource_creations",1},
       {"scope","per-connection functional service; no modeled NIC contention, loopback path, network ACK or GIN CQ"}};
   }
-  if(explicit_submission_)out["submission"]={{"mode","explicit_prefix/1"},{"publications",publications_}};
+  if(explicit_submission_)out["submission"]={{"mode",staged_submission_?"staged_prefix/1":"explicit_prefix/1"},{"publications",publications_}};
   out["target_events"]=target_events_;out["local_events"]=local_events_;
   out["local_wait_scope"]="functional local LE64 eq/ge, optional consume; no GPU coherence or polling cost";
   out["queue_fences"]=Json::array();

@@ -21,6 +21,7 @@ from .scaleout_topology import fields, require
 from .scaleout_transactions import validate
 from .host_timing import HostTiming
 from .static_stream_validation import StaticStreamValidationCache
+from .staged_publication import staged, stage_plan
 
 
 def _control_plan(current, alarms, cancel_alarms, now_ns, max_ns):
@@ -58,7 +59,7 @@ def _wake_plan(program, wake_on, delivered):
         return {}
     from .scaleout_transactions import execution_limits
     counts = execution_limits(program)
-    require(isinstance(wake_on, list) and len(wake_on) <= 7*(counts['max_remote_operations']+counts['max_local_operations']),
+    require(isinstance(wake_on, list) and len(wake_on) <= (8 if staged(program) else 7)*(counts['max_remote_operations']+counts['max_local_operations']),
             'invalid session wakeup reference count')
     known = {node['id']: node for node in program['operations']}
     seen = set()
@@ -71,6 +72,7 @@ def _wake_plan(program, wake_on, delivered):
             'submitted', 'published', 'applied', 'request_acked', 'response', 'completed')
         if 'submission_model' in program and known[identity]['kind'] == 'remote':
             allowed += ('prepared',)
+            if staged(program): allowed += ('descriptor_ready',)
         require(event in allowed, 'invalid session wakeup transition kind')
         if known[identity]['kind'] == 'remote' and event in ('request_acked', 'response'):
             connections = {connection['id']: connection for connection in program['connections']}
@@ -89,7 +91,7 @@ def _group_plan(program, groups, delivered):
     maximum = counts['max_remote_operations']+counts['max_local_operations']
     require(isinstance(groups, list) and len(groups) <= maximum, 'invalid session wakeup group count')
     require(all(isinstance(group, list) and group for group in groups), 'empty session wakeup conjunction')
-    require(sum(map(len, groups)) <= 7*maximum, 'invalid session wakeup total reference count')
+    require(sum(map(len, groups)) <= (8 if staged(program) else 7)*maximum, 'invalid session wakeup total reference count')
     unique = set()
     for group in groups:
         _wake_plan(program, group, delivered)
@@ -160,6 +162,7 @@ class NativeTransactionSession:
         self.sequence = 0
         self.last_ns = 0
         self._delivered = set()
+        self._stage_requested = dict(prepare=set(), publish=set())
         self._alarms = {}
         self.child = None
         self._buffer = b''
@@ -273,6 +276,7 @@ class NativeTransactionSession:
                 allowed = ('local_admitted', 'local_started', 'completed') if known[row['operation']]['kind'] == 'local' else (
                     'submitted', 'published', 'applied', 'request_acked', 'response', 'completed')
                 if 'submission_model' in self.config and known[row['operation']]['kind'] == 'remote': allowed += ('prepared',)
+                if staged(self.config) and known[row['operation']]['kind'] == 'remote': allowed += ('descriptor_ready',)
                 require(row['event'] in allowed, 'unknown session transition kind')
                 key = row['operation'], row['event']
                 require(key not in self._delivered and key not in incoming, 'duplicate session callback')
@@ -288,7 +292,8 @@ class NativeTransactionSession:
             self.transcript.write(json.dumps(dict(direction='native', message=event))+'\n')
             return deepcopy(event)
 
-    def commit(self, submissions, *, finish=False, alarms=None, cancel_alarms=None, wake_on=None, wake_groups=None):
+    def commit(self, submissions, *, finish=False, alarms=None, cancel_alarms=None, wake_on=None, wake_groups=None,
+               prepare_operations=None, publish_operations=None):
         """Submit work or native-clock control wakeups, never device completion.
 
         Alarms do not consume a GPU slot. IDs are lifetime-unique in a separate
@@ -297,6 +302,9 @@ class NativeTransactionSession:
         Omission delivers every callback batch; [] waits for drain or alarms.
         Every commit replaces the policy. All callbacks retain their original
         order and timestamps and are delivered together at the next wakeup.
+        staged_prefix/1 controls require previously delivered submitted/prepared
+        callbacks. Preparation waits real queue credit; publication rings once
+        per nonaggregated producer and may be a no-op on an advanced prefix.
         """
         require(self.pending is not None and type(finish) is bool and isinstance(submissions, list), 'invalid session commit')
         require(wake_groups is None or getattr(self,'callback_batches',False), 'wake_groups requires callback batch mode')
@@ -309,13 +317,19 @@ class NativeTransactionSession:
                      stream_cache=getattr(self, '_stream_cache', None))
             control, extra = _control_plan(self._alarms, alarms, cancel_alarms,
                                           self.pending['now_ns'], limits(self.p)['max_sim_ns'])
+            stage_requested = getattr(self, '_stage_requested', dict(prepare=set(), publish=set()))
+            if prepare_operations is not None or publish_operations is not None:
+                stage_requested, stage_extra = stage_plan(candidate, self._delivered, stage_requested,
+                    prepare_operations, publish_operations)
+                extra.update(stage_extra)
             if wake_on is not None:
                 extra.update(_wake_plan(candidate, wake_on, self._delivered))
             if wake_groups is not None:
                 extra.update(_group_plan(candidate, wake_groups, self._delivered))
         pending_alarms = any(a['status'] == 'pending' for a in control.values())
         require(not finish or (self.pending['drained'] and not submissions and
-                (self.config['operations'] or self._alarms) and not pending_alarms and not alarms),
+                (self.config['operations'] or self._alarms) and not pending_alarms and not alarms and
+                not prepare_operations and not publish_operations),
                 'premature session finish or pending control alarm')
         require(finish or submissions or not self.pending['drained'] or pending_alarms,
                 'empty idle session command cannot advance execution')
@@ -333,6 +347,7 @@ class NativeTransactionSession:
             self.transcript.write(json.dumps(dict(direction='frontend', message=message))+'\n')
         self.config = candidate
         self._alarms = control
+        self._stage_requested = stage_requested
         self.pending = None
         self.sequence += 1
 
@@ -340,6 +355,7 @@ class NativeTransactionSession:
 def dependency_frontend(topology, protocol, config, backend, output, *, reuse_static_validation=False):
     """Known program stays in the frontend; submit only after actual events."""
     config = checked_json(Path(config), 4*2**20)
+    require(not staged(config), 'staged_prefix/1 requires a controller using NativeTransactionSession')
     initial = dict(config, operations=[])
     seen, submitted = set(), set()
     with NativeTransactionSession(topology, protocol, initial, backend, output,
@@ -367,6 +383,7 @@ def run(topology, protocol, config, backend, output, *, reuse_static_validation=
                ((topology/'topology.json', 8388608), (protocol, 65536), (config, 4*2**20)))
     require(w.get('schema_version') in ('moe-rdma-transactions/4', 'moe-rdma-transactions/5'), 'session frontend requires transactions/4 or /5')
     validate(t, p, w)
+    require(not staged(w), 'staged_prefix/1 requires a controller using NativeTransactionSession')
     require(backend.is_file() and os.access(backend, os.X_OK), 'missing transaction-session executable')
     native_commit = locked_native_commit(ROOT)
     output.mkdir(exist_ok=False)

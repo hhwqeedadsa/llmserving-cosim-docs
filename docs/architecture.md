@@ -37,6 +37,8 @@ transactions/5可选`submission_model.mode=explicit_prefix/1`将准备与发布�
 
 transactions/5沿用v4事务/本地copy/在线反馈，只把显式零初始化的主窗口存储改为有界稀疏页。访问先按owner/key/逻辑范围和活跃使用记录检查，实际写先验证整段页容量，再修改字节；不引入额外仿真事件、页面时延或GPU行为。范围见[稀疏窗口](../examples/scaleout_rdma_transactions/README.md#使用大地址范围与稀疏初值)。
 
+仅交互会话支持的 `staged_prefix/1` 将预约、描述符就绪与顺序ready更新进一步分开：Submit只预约；前端在已收到submitted后请求prepare，信用允许时产生descriptor_ready；连续就绪前缀才产生prepared。前端让已prepared的非聚合生产者发布，前缀使用max保持单调，较早生产者晚发布可以不增加网络工作。控制不占用serial_per_gpu lane，也不制造GPU准备成本；仍以原生网络ACK/回复释放资源。见[阶段示例](../examples/scaleout_staged_publication/README.md)。
+
 原生`rdma-transaction-session`与Python`NativeTransactionSession`连接实际事务回调和动态前端提交：只在当前ns-3时刻交换命令，工作注册、应用依赖满足、发布、目标应用、请求ACK、原子回复和本地完成分别记录。物理空闲期间保留QP，显式结束才关闭资源。默认因果前端把完整程序留在Python侧，未来节点不预载后端；现代事件核心尚未接上此接口，self-peer和GPU可见性仍不支持。见[在线会话](../examples/scaleout_rdma_transactions/README.md#在线追加工作与实际回调)。
 
 在线控制timer通过COMMIT的可选`alarms/cancel_alarms`在同一个原生Simulator安排或取消事件，真实到期后才给前端`alarm/fired`回调；不使用GPU FIFO、内存lease或另一个时钟，不等于网络/计算完成。工作与控制状态整批准入，显式结束还需控制timer已触发或取消。旧无timer路径不增加结果字段，见[控制定时器](../examples/scaleout_rdma_transactions/README.md#不占用gpu队列的控制定时器)。

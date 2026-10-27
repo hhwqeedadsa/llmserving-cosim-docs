@@ -1,0 +1,67 @@
+{
+  "passed": true,
+  "network_conditions": 8,
+  "checks": {
+    "main": {
+      "passed": true,
+      "operations": 5,
+      "publications": 4,
+      "no_op_rings": 2,
+      "source_packets": 10,
+      "mrt1_bytes": 456,
+      "physical_tx": 120,
+      "finish_ns": 30214,
+      "atomic_old_values": {
+        "2": 7,
+        "3": 10
+      }
+    },
+    "credit": {
+      "passed": true,
+      "operations": 2,
+      "publications": 2,
+      "no_op_rings": 0,
+      "source_packets": 5,
+      "mrt1_bytes": 256,
+      "physical_tx": 60,
+      "finish_ns": 24162,
+      "atomic_old_values": {}
+    },
+    "tail": {
+      "passed": true,
+      "expected_failure": true
+    },
+    "source-conflict": {
+      "passed": true,
+      "expected_failure": true
+    },
+    "native-invalid": {
+      "passed": true,
+      "expected_failure": true
+    },
+    "moved": {
+      "passed": true,
+      "operations": 5,
+      "publications": 4,
+      "no_op_rings": 2,
+      "source_packets": 10,
+      "mrt1_bytes": 456,
+      "physical_tx": 120,
+      "finish_ns": 30214,
+      "atomic_old_values": {
+        "2": 7,
+        "3": 10
+      }
+    }
+  },
+  "legacy_equal": true,
+  "moved_full_result_equal_except_verified_library_paths": true,
+  "corruptions_rejected": [
+    "descriptor-time",
+    "publication-prefix",
+    "source-payload",
+    "target-memory",
+    "wire-time"
+  ],
+  "static_frontends_rejected": 2
+}

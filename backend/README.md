@@ -335,3 +335,7 @@ transactions/5在两事务入口上支持RemoteMemory稀疏窗口：逻辑范围
 持久字节与MRT1事务可选工作根`transport_recovery`，通过`PersistentStreams`在本次原生回调中组合`SourceRecovery`：发布只Extend合法前缀，PktSent记录真实TX高水位，ACK/NACK约束实际发出范围，超时仅回退游标。重复包补发真实累计ACK且不重复交付payload，drop钩子回收在途计数，逐work仍只释放一次。Fabric的`stream_packet_ids_`仅供包捕获和显式故障关联，分开于旧Flow映射，不驱动源端协议。旧回调默认不变；前缀确认不代表Close。配置、故障stream命名、状态输出和失败保存见[持久恢复](../examples/scaleout_rdma_streams/README.md#可选的持久连接丢包恢复)与[规范](../docs/tasks/persistent_recovery_spec.md)。这不是现代GIN/GPU可见性或硬件校准证据。
 
 可选`transport_recovery.reordering.mode=nack_grace/1`为选择重传增加固定源端NACK等待，RTO独立保留，同一前缀重复NACK不续期。native在Fabric之前拒绝非法新字段，定时动作独立记录，不伪装线上反馈。真实确认推进取消、RTO抢占、耗尽隔离和v5事务probe已通过包级核验；输入、已测边界及未覆盖的同ns/session组合见[用户示例](../examples/scaleout_nack_grace/README.md)与[功能验收](../fixtures/nack_grace_edges/README.md)。它是未经硬件校准的经典强基线，不是论文创新。
+
+## 分阶段发送队列
+
+transactions/5会话可声明staged_prefix/1，以独立COMMIT控制prepare_operations和publish_operations。先纯校验完整命令，再准备、更新连续ready前缀并发布；原生ACK/回复仍决定资源释放。descriptor_ready与prepared分别回调，晚发布用max保持单调，不占GPU串行lane、不自动flush。静态probe拒绝该模式；见[用户示例](../examples/scaleout_staged_publication/README.md)及[规范](../docs/tasks/staged_publication_spec.md)。

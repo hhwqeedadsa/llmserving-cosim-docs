@@ -1,0 +1,187 @@
+{
+  "schema_version": "staged-publication-closeout/1",
+  "status": "completed",
+  "platform_start": "bdb7392",
+  "protocol": "bd29285",
+  "passed_python_checks": 59,
+  "native_wakeup_assertions": 49,
+  "native_wakeup_rejection_categories": 22,
+  "syntax_translation_units": 3,
+  "public_native_builds": 1,
+  "native_build_tasks": 446,
+  "compiler_translation_units": 437,
+  "optimization": "-O3",
+  "native_network_conditions": 8,
+  "fixed_dependencies": 13,
+  "independent_corruption_categories": 5,
+  "static_frontend_rejections": 2,
+  "python_live_rejections": 4,
+  "archive": {
+    "passed": true,
+    "archive_sha256": "9998ad61c99642dc2131dedb57343f6b3a829c795ec4837b00c5c8f2b550909e",
+    "archive_bytes": 6891159,
+    "members": 381,
+    "member_bytes": 28108067,
+    "all_member_hashes_equal": true,
+    "offline_verification_byte_equal": true,
+    "recovery_networks": 0,
+    "recovery_builds": 0
+  },
+  "corrections": {
+    "passed": true,
+    "network_reruns": 0,
+    "backend_rebuilds": 0,
+    "initial_api_test": "Old alarm test uses minimal mock; omitted stage controls now retain old validation branch",
+    "initial_topology": "Invalid v2 without intra_host rejected before network; corrected v1 in validated/inputs, original preserved",
+    "checker": "Ceil serialization replaced by native-source-supported nearest-nanosecond rounding; offline only, original result unchanged",
+    "original_checker_sha256": "36340bb6db5916f707bb991ce970698f7cc58b9856ae1e785d35c1f3bc647940",
+    "corrected_checker_sha256": "f98655ae962c082edcd62847c34229adb6290a253aa9326808ce30496e4d0c39"
+  },
+  "resource_probes": {
+    "unit/probe.json": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.22502676899603102,
+      "peak_sampled_group_rss_bytes": 26517504
+    },
+    "syntax/probe.json": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 13.65424223500304,
+      "peak_sampled_group_rss_bytes": 658255872
+    },
+    "build-monitor/probe.json": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 399.09744662100275,
+      "peak_sampled_group_rss_bytes": 1663156224
+    },
+    "regression/probe.json": {
+      "status": "child_failed",
+      "child_exit_code": 1,
+      "wall_seconds": 0.27811796400055755,
+      "peak_sampled_group_rss_bytes": 26497024
+    },
+    "regression-after-api-guard/probe.json": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.28255616199749056,
+      "peak_sampled_group_rss_bytes": 26533888
+    },
+    "dependencies/probe.json": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.52871636999771,
+      "peak_sampled_group_rss_bytes": 20168704
+    },
+    "prepare-monitor/probe.json": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.31775109500449616,
+      "peak_sampled_group_rss_bytes": 20914176
+    },
+    "accept-monitor/probe.json": {
+      "status": "child_failed",
+      "child_exit_code": 1,
+      "wall_seconds": 0.21475308999652043,
+      "peak_sampled_group_rss_bytes": 5390336
+    },
+    "prepare-corrected-monitor/probe.json": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.3336147619993426,
+      "peak_sampled_group_rss_bytes": 20901888
+    },
+    "input-check/probe.json": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.2250425130041549,
+      "peak_sampled_group_rss_bytes": 5304320
+    },
+    "accept-corrected-monitor/probe.json": {
+      "status": "child_failed",
+      "child_exit_code": 1,
+      "wall_seconds": 0.6545182849949924,
+      "peak_sampled_group_rss_bytes": 219033600
+    },
+    "main-offline-rounding-check/probe.json": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.22885770900757052,
+      "peak_sampled_group_rss_bytes": 5308416
+    },
+    "remaining-conditions-monitor/probe.json": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 2.6405359330092324,
+      "peak_sampled_group_rss_bytes": 232763392
+    },
+    "final-unit/probe.json": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.3366547509940574,
+      "peak_sampled_group_rss_bytes": 26427392
+    },
+    "native-wakeup-unit/probe.json": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 4.741917652005213,
+      "peak_sampled_group_rss_bytes": 361664512
+    },
+    "seal-monitor/probe.json": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 4.476657555002021,
+      "peak_sampled_group_rss_bytes": 48951296
+    },
+    "build/logs/configure/probe.json": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 1.9617465089977486,
+      "peak_sampled_group_rss_bytes": 49037312
+    },
+    "build/logs/compile/probe.json": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 396.52782160398783,
+      "peak_sampled_group_rss_bytes": 1625972736
+    },
+    "validated/legacy/execution/probe.json": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.21820680900418665,
+      "peak_sampled_group_rss_bytes": 165171200
+    },
+    "validated/explicit/execution/probe.json": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.21895010898879264,
+      "peak_sampled_group_rss_bytes": 158740480
+    }
+  },
+  "monitored_seconds": 827.1631344969937,
+  "artifact_usage_before_final_receipt": {
+    "apparent_bytes": 242563287,
+    "allocated_bytes": 247971840
+  },
+  "administrative_reserve_bytes": 2097152,
+  "administrative_reserve_seconds": 10,
+  "budget": {
+    "monitored_seconds": 2400,
+    "artifact_bytes": 2147483648
+  },
+  "source_sha256": {
+    "backend/rdma/remote_transactions.cc": "fab7d142e2cb7d20b2aab1acec9e5e7afe597389b6c11ae6dfd599c448a1a1ac",
+    "backend/rdma/transaction_session.cc": "aff47a42c9599c6c62c4b6466fbcd4b31ae99224d7e817604ceef43d092165f5",
+    "python/moe_ub_cosim/transaction_session.py": "6de45cd7416ee0d519837ce79e9c52220a01c6063f4b8101f1b8ea0150120ce5",
+    "python/moe_ub_cosim/staged_publication.py": "0df04c748e1f8c8ce8328b24ac83e18de9d3cb66e7c7f0df7638a121f3990c01",
+    "fixtures/staged_publication/verify.py": "f98655ae962c082edcd62847c34229adb6290a253aa9326808ce30496e4d0c39"
+  },
+  "research_experiments": 0,
+  "full_hybrid": false,
+  "innovation_established": false,
+  "gpu_execution": false,
+  "dependency_changes": false,
+  "downloads": false,
+  "pushed": false
+}

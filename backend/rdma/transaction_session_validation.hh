@@ -47,7 +47,8 @@ inline void ValidateSessionProgram(const Json& input,const Json& topology,int64_
   for(const auto* name:{"registration_model","registrations","application_window_model","application_windows"})if(input.contains(name))root_keys.push_back(name);
   SessionKeys(input,root_keys);
   const bool sparse=input.at("schema_version")=="moe-rdma-transactions/5";
-  if(explicit_submission)Require(sparse && input.at("submission_model")==Json{{"mode","explicit_prefix/1"}},"unsupported submission model");
+  if(explicit_submission)Require(sparse && (input.at("submission_model")==Json{{"mode","explicit_prefix/1"}} ||
+    input.at("submission_model")==Json{{"mode","staged_prefix/1"}}),"unsupported submission model");
   Require(sparse || input.at("schema_version")=="moe-rdma-transactions/4","session requires transactions/4 or /5");
   Require(input.at("local_model")==Json{{"mode","serial_per_gpu/1"},{"duration_source","declared_ns"}},"unsupported session local model");
   Require(input.at("source_model")==Json{{"capture","registered_window_at_publish/1"},{"release","transaction_completed/1"}},"unsupported session source model");

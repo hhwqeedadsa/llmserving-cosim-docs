@@ -258,6 +258,8 @@ CM384 与 DeepSeek-R1 的参数来源、当前可用数据和未校准部分见[
 
 ## 逐事件追加原生事务
 
+多个生产者先预约同一队列、随后按不同顺序准备时，可用公开会话类的 `staged_prefix/1` 模式，通过 `prepare_operations`、`publish_operations` 控制准备和发布，分别观察descriptor_ready、prepared和实际网络完成。普通静态probe和依赖自动前端在创建输出前拒绝此模式；完整操作见[多生产者小例](../examples/scaleout_staged_publication/README.md)。
+
 需要前端根据本次真实网络完成继续递交工作时，使用`scaleout rdma-transaction-session`或公开`NativeTransactionSession`类。它沿用v4实际字节/本地copy模型，不是现代GIN端到端仿真；示例、资源预算及动态返回值驱动见[在线事务会话](../examples/scaleout_rdma_transactions/README.md#在线追加工作与实际回调)。两个会话入口均可显式增加`--reuse-static-validation`复用完全相同的固定传输声明检查，动态任务与原生准入保持；默认关闭，详见[选项及宿主计数](../examples/modern_deepep_native/README.md#可选的固定校验复用)。
 
 大地址范围可选transactions/5稀疏窗口：显式零初值加局部hex，保留绝对地址和访问保护；probe/session均可执行。逻辑长度与本机页存储分开，不能作为GPU显存模型。输入、输出及可复制配置见[稀疏窗口](../examples/scaleout_rdma_transactions/README.md#使用大地址范围与稀疏初值)。

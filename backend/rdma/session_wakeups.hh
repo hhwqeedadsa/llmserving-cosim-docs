@@ -21,7 +21,8 @@ struct SessionWakeups {
                       const std::set<Key>& delivered,unsigned maximum_nodes) {
     if(!command.contains("wake_on"))return std::nullopt;
     const auto& rows=command.at("wake_on");
-    Check(rows.is_array() && rows.size()<=7u*maximum_nodes,"invalid session wakeup reference count");
+    const unsigned stages=candidate.value("submission_model",Value())==Value{{"mode","staged_prefix/1"}}?8u:7u;
+    Check(rows.is_array() && rows.size()<=stages*maximum_nodes,"invalid session wakeup reference count");
     std::map<uint64_t,const Value*> known;
     std::map<uint64_t,bool> self;
     for(const auto& op:candidate.at("operations"))known.emplace(op.at("id").get<uint64_t>(),&op);
@@ -36,6 +37,7 @@ struct SessionWakeups {
       const std::set<std::string> local={"local_admitted","local_started","completed"};
       std::set<std::string> remote={"submitted","published","applied","request_acked","response","completed"};
       if(candidate.contains("submission_model"))remote.insert("prepared");
+      if(stages==8)remote.insert("descriptor_ready");
       const auto& op=*known.at(identity);
       const bool is_local=op.at("kind")=="local";
       Check((is_local?local:remote).count(event),"invalid session wakeup transition kind");
@@ -65,7 +67,8 @@ struct SessionWakeups {
     std::vector<std::set<Key>> result;std::set<std::set<Key>> unique;std::size_t references=0;
     for(const auto& group:groups) {
       Check(group.is_array() && !group.empty(),"empty session wakeup conjunction");
-      references+=group.size();Check(references<=7u*maximum_nodes,"invalid session wakeup total reference count");
+      const unsigned stages=candidate.value("submission_model",Value())==Value{{"mode","staged_prefix/1"}}?8u:7u;
+      references+=group.size();Check(references<=stages*maximum_nodes,"invalid session wakeup total reference count");
       const auto parsed=Parse(Value{{"wake_on",group}},candidate,delivered,maximum_nodes);
       Check(unique.insert(*parsed).second,"duplicate session wakeup group");result.push_back(*parsed);
     }

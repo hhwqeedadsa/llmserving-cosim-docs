@@ -103,7 +103,7 @@ def validate(topology, protocol, config, *, allow_no_remote=False, stream_cache=
            (' peer_copy_model' if peer_copy else ''), 'transaction root')
     require(config['schema_version'] in ('moe-rdma-transactions/1', 'moe-rdma-transactions/2', 'moe-rdma-transactions/3', 'moe-rdma-transactions/4', 'moe-rdma-transactions/5'), 'unsupported transaction schema')
     if explicit:
-        require(config['submission_model'] == dict(mode='explicit_prefix/1'), 'unsupported submission model')
+        require(config['submission_model'] in (dict(mode='explicit_prefix/1'), dict(mode='staged_prefix/1')), 'unsupported submission model')
     if local_mode:
         require(config['local_model'] == dict(mode='serial_per_gpu/1', duration_source='declared_ns'),
                 'unsupported transaction local model')
@@ -359,6 +359,8 @@ def probe(topology, protocol, config, backend, output):
     topology, protocol, config, backend, output = (Path(p).resolve() for p in (topology, protocol, config, backend, output))
     t, c, w = (checked_json(p, n) for p, n in ((topology/'topology.json', 8388608), (protocol, 65536), (config, 4*2**20)))
     validate(t, c, w)
+    require(w.get('submission_model') != dict(mode='staged_prefix/1'),
+            'staged_prefix/1 requires a controller using NativeTransactionSession')
     require(backend.is_file() and os.access(backend, os.X_OK), 'pass the native transaction-probe executable')
     budget = limits(c)
     budget.update(wall_seconds=min(60, budget['wall_seconds']), rss_bytes=min(2**30, budget['rss_bytes']),

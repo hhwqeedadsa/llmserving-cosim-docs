@@ -13,6 +13,8 @@
 
 ## 当前范围和预算
 
+当前研究 `in_progress`：[通用事件图强基线](../../experiments/static_dag_transfer/event_graph_protocol.md)，起点`671a0cc`。修正前阶段研究转换缺项，保留开始/提交门槛、共享准备和slot/channel顺序；解释器只经公开NativeTransactionSession使用现有有界回调批次，不调用现代控制器或测试驱动。只从原网络提取并冻结；先离线提交/事件等价，再最多3次新网络，原网络不等价或任何执行失败即停止，不加上限或重跑。累计900秒/512MiB及单命令60秒/RSS1GiB/地址2GiB、网络1ms/result16MiB/capture20000；无平台/依赖修改、安装下载/GPU或push。该强基线用于检验候选而非预设创新有收益。
+
 
 当前新增数据接收与离线分析 `completed`，新增文件远端固定版本内容身份仍待核验：[协议](../../experiments/route_coverage/local_additions_protocol.md)、[报告](../../experiments/route_coverage/results/local_additions_20261027/report.md)。用户确认新增13份均来自DeepSeek-R1-AWQ/MMLU；11份完整，899.json末入口缺18层、1479.json末入口缺23层，原件保留并整份排除。合并旧4份后共15份完整且内容不重复的请求，覆盖6学科、693个Prefill token、1,811个Decode步骤、145,232条token-layer路由行及1,161,856次专家选择；不称随机抽样、严格留出或独立采集运行。
 

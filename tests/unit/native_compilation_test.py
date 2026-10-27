@@ -55,6 +55,7 @@ class NativeCompilationTests(unittest.TestCase):
         rows = deepcopy(self.rows); rows[0]['arguments'].append('-DMOE_VERIFY_PROGRESS_UPDATES')
         with self.assertRaisesRegex(ValueError, 'development'): self.check(rows)
         rows = deepcopy(self.rows); rows[0]['file'] = '/unified-bus/fabric.cc'
+        rows[0]['arguments'][-1] = rows[0]['file']
         with self.assertRaisesRegex(ValueError, 'UB source'): self.check(rows)
 
     def test_missing_critical_unit_or_empty_database(self):

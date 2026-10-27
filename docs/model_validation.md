@@ -1,5 +1,7 @@
 # 模型依据与适用范围
 
+新增[独立RC操作状态参考](../examples/rc_operation_reference/README.md)支持有限WRITE/fetch-add、目标逐包副作用、携旧值Atomic ACK、有限重放与源完成。它未接入ns-3或MoE入口，没有时钟和NIC成本；`atomic_return_required/1`在普通ACK恰好覆盖待完成原子时显式拒绝推定，和所提取Linux v6.12 RXE分支存在已记录差异。原函数只在明确替代环境中执行，不等于完整RXE或硬件复现，见[验收边界](../fixtures/rc_operation_reference/README.md)。旧MRT1仍是功能载体，不能因新增独立参考而升级旧结果的精度。
+
 现代原生v2输入支持按调用/rank显式声明专家阶段耗时，v1固定成本继续保留。该接口检验的是实际Dispatch完成→专家本地工作→真实完成回调→Combine的因果关系；不会从专家token数或GPU名称自动预测计算成本，`source`说明也不构成实机校准。使用与限制见[专家成本矩阵](../examples/modern_deepep_native/README.md#按调用和rank修改专家计算耗时)。
 
 持久流/事务/现代MoE入口支持基于GPU/NIC地址的实际物理绑定，覆盖同plane独立rail及共享Agg。原生本地地址注册验证接口归属，QP/ACK/CNP/事务回复保持指定NIC，别名目的路由仅从对应NIC进入GPU；路由重建不自动迁移网卡。单NIC完整结果保持，普通SEND/RECV继续使用原地址域。小型验收及故障边界见[使用说明](../examples/scaleout_rdma_streams/README.md#nic绑定和多rail边界)和[逐包证据](../fixtures/physical_nic_binding/README.md)。这是功能模型，未新增硬件校准或千卡现代应用证据；历史唯一首跳准入不再是当前多NIC限制。

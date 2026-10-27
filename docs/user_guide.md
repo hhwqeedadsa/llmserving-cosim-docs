@@ -31,6 +31,8 @@ Scale-Out[准入示例](../examples/scaleout_rdma_admission/README.md)新增`byt
 
 生成两层/三层 Clos、multi-rail 或 HPN 参考双平面的非UB物理拓扑，使用 `moe-ub scaleout topology --config examples/scaleout_topology/1024-hpn-inspired.json --output runs/topology-hpn-new`。各层数量、NIC映射、带宽与端口均在JSON中显式配置；完整参数、四套千卡配置与输出说明见[拓扑示例](../examples/scaleout_topology/README.md)。这一步只生成输入及连通性审计，不能直接交给当前UB的 `run`。
 
+独立的[RC操作状态小例](../examples/rc_operation_reference/README.md)用于核查WRITE、Atomic ACK和完成/重放规则；不连接网络仿真，不输出硬件时延，与下列UB和原生在线入口分别使用。
+
 ## 安装
 
 仅检查固定DeepEP低延迟操作依赖时，可用基础Python执行`scaleout deepep-plan`与`deepep-check`；不需要前端包、原生构建或GPU。新目录流程和零token通知反例见[操作计划示例](../examples/deepep_partial_order/README.md)，其输出不预测网络性能。

@@ -1,0 +1,111 @@
+{
+  "commit": "adc218676eef25575469234709c2d87185ca223a",
+  "branches": [
+    {
+      "file": "rxe_resp.c",
+      "function": "check_psn",
+      "first": 70,
+      "last": 112,
+      "sha256": "ea8203f0f38d50dd76bc51acc918a4efcfc45203d6618ed7083033935580d3ee"
+    },
+    {
+      "file": "rxe_resp.c",
+      "function": "find_resource",
+      "first": 1256,
+      "last": 1273,
+      "sha256": "a83d885fe1120dfc58c35ff48ecb6381be3a3084717d7d8dd3b205185008f6d5"
+    },
+    {
+      "file": "rxe_resp.c",
+      "function": "atomic_reply",
+      "first": 690,
+      "last": 723,
+      "sha256": "8d1900ddb73489f3aeed06f948562775b47c37b0380e1212e95f3874bd8bbbb4"
+    },
+    {
+      "file": "rxe_resp.c",
+      "function": "send_ack",
+      "first": 1187,
+      "last": 1191,
+      "sha256": "22165e77333c9c712774c220d239940505d852dbfc3d3910f8088497074cde3f"
+    },
+    {
+      "file": "rxe_resp.c",
+      "function": "send_atomic_ack",
+      "first": 1193,
+      "last": 1203,
+      "sha256": "5fec089f778c6d1299c2cf249f77518bba5955081acb765328eac32b04a7598a"
+    },
+    {
+      "file": "rxe_resp.c",
+      "function": "acknowledge",
+      "first": 1218,
+      "last": 1234,
+      "sha256": "9c7eecc713ca07d92d20436c1e80108a04bf6997a42cdb3a956508a033d970c0"
+    },
+    {
+      "file": "rxe_resp.c",
+      "function": "duplicate_request",
+      "first": 1275,
+      "last": 1369,
+      "sha256": "a026ce72717e02cec0373b1c1794953726c1e3798903c1efe08d0cf5e0040154"
+    },
+    {
+      "file": "rxe_comp.c",
+      "function": "reset_retry_counters",
+      "first": 165,
+      "last": 170,
+      "sha256": "392fde0aacb5b9a353463f17be843f5310ad2f84768f7e8e25004f78a8c0d0f3"
+    },
+    {
+      "file": "rxe_comp.c",
+      "function": "check_psn",
+      "first": 172,
+      "last": 213,
+      "sha256": "5a3633cd9c79d75f216d84de7277182fb79eb7b620ae60dbff91e17ba0f2eb42"
+    },
+    {
+      "file": "rxe_comp.c",
+      "function": "check_ack",
+      "first": 215,
+      "last": 352,
+      "sha256": "ad5fef734e00ecce829e4b90a74194b9aeeefb00278c077639bf426df9b0cf73"
+    },
+    {
+      "file": "rxe_comp.c",
+      "function": "do_atomic",
+      "first": 374,
+      "last": 391,
+      "sha256": "2535b07f3a632d2dcd53e520161db015cd6c9b39e3de51b02446b78b90c5ea19"
+    },
+    {
+      "file": "rxe_comp.c",
+      "function": "complete_ack",
+      "first": 499,
+      "last": 521,
+      "sha256": "1fa3f4ebab0ef07c02629403f26aee80ec17e5a811535b283e5c220ec8bc1ee2"
+    },
+    {
+      "file": "rxe_comp.c",
+      "function": "complete_wqe",
+      "first": 523,
+      "last": 542,
+      "sha256": "358988f914ecb6a1863a4846a8194297b0ed838ac831137e3fbb98df16ef9129"
+    },
+    {
+      "file": "rxe_comp.c",
+      "function": "case COMPST_WRITE_SEND:",
+      "first": 706,
+      "last": 714,
+      "sha256": "205f69e1aaf98a271c95e87564836c3d25f4b1aa75036fa9a2b95962c3a76d16"
+    },
+    {
+      "file": "rxe_comp.c",
+      "function": "case COMPST_UPDATE_COMP:",
+      "first": 722,
+      "last": 739,
+      "sha256": "bd54ce23782bb5456a1ea7cdee42a5e67efb9180f8aeeb29bc90a5fd0f42e1b0"
+    }
+  ],
+  "scope": "unchanged selected functions/cases; memory/queue/network/scheduling stubs; not full RXE"
+}

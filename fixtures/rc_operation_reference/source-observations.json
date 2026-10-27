@@ -1,0 +1,57 @@
+[
+  {
+    "atomic_copies": 1,
+    "case": "healthy",
+    "completed": 1,
+    "credit": 1,
+    "reply_opcode": 18,
+    "reply_psn": 1,
+    "returned_value": 41,
+    "state": 14,
+    "target_value": 46
+  },
+  {
+    "atomic_copies": 1,
+    "case": "lost_reply_replay",
+    "completed": 1,
+    "credit": 1,
+    "reply_opcode": 18,
+    "reply_psn": 1,
+    "returned_value": 41,
+    "state": 14,
+    "target_value": 46
+  },
+  {
+    "atomic_copies": 0,
+    "case": "duplicate_write_after_lost_atomic_ack",
+    "completed": 2,
+    "credit": 1,
+    "reply_opcode": 17,
+    "reply_psn": 1,
+    "returned_value": 3735928559,
+    "state": 14,
+    "target_value": 46
+  },
+  {
+    "atomic_copies": 0,
+    "case": "later_psn_ordinary_ack",
+    "completed": 0,
+    "credit": 0,
+    "reply_opcode": 17,
+    "reply_psn": 2,
+    "returned_value": 3735928559,
+    "state": 10,
+    "target_value": 46
+  },
+  {
+    "atomic_copies": 0,
+    "case": "evicted_atomic_replay",
+    "completed": 0,
+    "credit": 0,
+    "reply_opcode": 0,
+    "reply_psn": 0,
+    "returned_value": 3735928559,
+    "state": -1,
+    "target_value": 53
+  }
+]

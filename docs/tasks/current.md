@@ -13,7 +13,13 @@
 
 ## 当前范围和预算
 
-当前平台增量 `in_progress`：[操作级RC参考范围](rc_operation_reference_spec.md)，起点`62da06f`。先固定Linux v6.12请求/响应/完成语义及路径，再交付独立WRITE/fetch-add状态参考，区分普通ACK与携旧值Atomic ACK、有限重放与源完成。累计1200受监控秒/256MiB，最多20HTTP/2MiB响应、单请求10秒；零新网络/原生构建/GPU/依赖更改/push，旧实验保持关闭。该参考不与ns-3联动，不作为两个创新或性能收益。
+当前平台增量 `completed`：[操作级RC参考范围](rc_operation_reference_spec.md)、[公开小例](../../examples/rc_operation_reference/README.md)及[验收](../../fixtures/rc_operation_reference/README.md)，起点`62da06f`、规范`f817980`。交付独立、无时钟的WRITE/fetch-add状态参考，保留分段可见、Atomic ACK旧值、有限重放、原子信用和源完成。`atomic_return_required/1`拒绝普通ACK推定缺失返回值，与所提取RXE完成分支的已知差异明确保留；未接ns-3，不改变MRT1或旧结果。
+
+Linux v6.12固定`adc218676eef25575469234709c2d87185ca223a`，5层tree与9份源码blob核对通过。13个未修改函数/2段switch在显式替代环境下完成五项对照；“丢WRITE确认和原子回复→重复WRITE累计ACK恰好覆盖原子PSN”可完成却不写回旧值，尚未证明完整内核/当前版本/NIC可达性，不称生产漏洞。11项参考单元、空cwd公开小例、四类证据篡改拒绝及13依赖通过。两次枚举定位生成失败保留；两次小型C构建均成功且分支输出一致。
+
+118成员/593,583B内容包逐hash恢复，复制源码/空cwd重跑参考单元、小例、来源核对、原函数重新提取及既有二进制，结果/源码/核验一致；SHA256 `85865306f019f08473770718a2c9b8091e8f1b73332635df1b5b8b1e3a89cdbd`。见[核验](../../fixtures/rc_operation_reference/verification.json)、[恢复](../../fixtures/rc_operation_reference/recovery.json)及[资源关闭](../../fixtures/rc_operation_reference/closeout.json)，原件`runs/rc_operation_reference_20261027/`。保持1200受监控秒/256MiB、20HTTP/2MiB响应和全部单命令/两构建上限；零新网络/原生构建/GPU/依赖修改/push，旧实验保持关闭。
+
+本阶段为progress：下一平台范围仍须独立限定同一ns-3实例中的操作包、同QP序号/重放/反馈和完成接入，不能直接删功能Reply/ACK后算收益。此独立正确性基线未证明两项仿真候选的决策价值或净成本收益，整体目标继续`in_progress`。
 
 当前研究 `completed`：[事务载体与网络评价边界](../../experiments/transport_semantics_audit/README.md)、[事前协议](../../experiments/transport_semantics_audit/protocol.md)与[报告网页](../../experiments/transport_semantics_audit/results/20261027/report.html)，起点`120a07c`、协议`0095de3`。封存single/quad两原件各140帧/280源包，不跨work分包；4480B功能头占帧字节1.493%，按实际2000B载荷MTU去头后包数仍280，不新增去头加速功能。48次远端fetch-add的请求/独立Reply及各自ACK共192个源数据/ACK包，占560个同口径包34.286%，不含CNP或逐跳复制。两条件全部操作完成后，最后Reply确认仍晚6024/6048ns；这是功能载体关系，不是可消除推理收益。缓存RXE成功原子分支用Atomic ACK携带旧值，不能将MRT1的两个可靠字节流直接当目标RC协议。
 

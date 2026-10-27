@@ -1,0 +1,244 @@
+{
+  "GPU_runs": 0,
+  "artifact_allocated_bytes": 2379776,
+  "artifact_apparent_bytes": 1834332,
+  "budget_bytes": 268435456,
+  "budget_seconds": 1200,
+  "conservative_monitored_seconds_including_copied_receipts": 40.46556190606498,
+  "dependency_changes": 0,
+  "exact_RXE_reference_equivalence": false,
+  "full_RXE_executed": false,
+  "git_trees_reconstructed": 5,
+  "hardware_calibrated": false,
+  "http_attempts": 12,
+  "http_failures": 0,
+  "http_response_bytes": 156003,
+  "http_retries": 0,
+  "large_downloads": 0,
+  "management_reserve_seconds": 10,
+  "native_RC_integration_complete": false,
+  "native_backend_builds": 0,
+  "network_runs": 0,
+  "new_innovations_established": false,
+  "overall_goal_complete": false,
+  "passed": true,
+  "pinned_sources": 9,
+  "preserved_prepare_failures": [
+    "oracle-prepare-monitor/probe.json",
+    "oracle-prepare-v2-monitor/probe.json",
+    "recovered/evidence/oracle-prepare-monitor/probe.json",
+    "recovered/evidence/oracle-prepare-v2-monitor/probe.json"
+  ],
+  "pushes": 0,
+  "receipt_reserve_bytes": 2097152,
+  "receipts": [
+    {
+      "exit_code": 0,
+      "path": "checkpoint-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.22395848800078966
+    },
+    {
+      "exit_code": 0,
+      "path": "constants-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 1.3655811869975878
+    },
+    {
+      "exit_code": 0,
+      "path": "core-header-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 1.2797664800018538
+    },
+    {
+      "exit_code": 0,
+      "path": "deps-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.43762540200259537
+    },
+    {
+      "exit_code": 0,
+      "path": "oracle-build-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.22103971299657132
+    },
+    {
+      "exit_code": 0,
+      "path": "oracle-build-v2-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.2273695320036495
+    },
+    {
+      "exit_code": 1,
+      "path": "oracle-prepare-monitor/probe.json",
+      "status": "child_failed",
+      "wall_seconds": 0.11251031699066516
+    },
+    {
+      "exit_code": 1,
+      "path": "oracle-prepare-v2-monitor/probe.json",
+      "status": "child_failed",
+      "wall_seconds": 0.11616520599636715
+    },
+    {
+      "exit_code": 0,
+      "path": "oracle-prepare-v3-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.12479554100718815
+    },
+    {
+      "exit_code": 0,
+      "path": "oracle-prepare-v4-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.11921796300157439
+    },
+    {
+      "exit_code": 0,
+      "path": "oracle-run-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.013958699011709541
+    },
+    {
+      "exit_code": 0,
+      "path": "oracle-run-v2-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.01546800701180473
+    },
+    {
+      "exit_code": 0,
+      "path": "public-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.1265981810138328
+    },
+    {
+      "exit_code": 0,
+      "path": "recovered/evidence/constants-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 1.3655811869975878
+    },
+    {
+      "exit_code": 0,
+      "path": "recovered/evidence/core-header-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 1.2797664800018538
+    },
+    {
+      "exit_code": 0,
+      "path": "recovered/evidence/deps-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.43762540200259537
+    },
+    {
+      "exit_code": 0,
+      "path": "recovered/evidence/oracle-build-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.22103971299657132
+    },
+    {
+      "exit_code": 0,
+      "path": "recovered/evidence/oracle-build-v2-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.2273695320036495
+    },
+    {
+      "exit_code": 1,
+      "path": "recovered/evidence/oracle-prepare-monitor/probe.json",
+      "status": "child_failed",
+      "wall_seconds": 0.11251031699066516
+    },
+    {
+      "exit_code": 1,
+      "path": "recovered/evidence/oracle-prepare-v2-monitor/probe.json",
+      "status": "child_failed",
+      "wall_seconds": 0.11616520599636715
+    },
+    {
+      "exit_code": 0,
+      "path": "recovered/evidence/oracle-prepare-v3-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.12479554100718815
+    },
+    {
+      "exit_code": 0,
+      "path": "recovered/evidence/oracle-prepare-v4-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.11921796300157439
+    },
+    {
+      "exit_code": 0,
+      "path": "recovered/evidence/oracle-run-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.013958699011709541
+    },
+    {
+      "exit_code": 0,
+      "path": "recovered/evidence/oracle-run-v2-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.01546800701180473
+    },
+    {
+      "exit_code": 0,
+      "path": "recovered/evidence/public-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.1265981810138328
+    },
+    {
+      "exit_code": 0,
+      "path": "recovered/evidence/source-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 13.940981200998067
+    },
+    {
+      "exit_code": 0,
+      "path": "recovered/evidence/unit-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.1196950809971895
+    },
+    {
+      "exit_code": 0,
+      "path": "recovered/evidence/verbs-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 1.5541904590063496
+    },
+    {
+      "exit_code": 0,
+      "path": "recovered/evidence/verify-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.12155846999667119
+    },
+    {
+      "exit_code": 0,
+      "path": "recovery-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.44856053999683354
+    },
+    {
+      "exit_code": 0,
+      "path": "source-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 13.940981200998067
+    },
+    {
+      "exit_code": 0,
+      "path": "unit-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.1196950809971895
+    },
+    {
+      "exit_code": 0,
+      "path": "verbs-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 1.5541904590063496
+    },
+    {
+      "exit_code": 0,
+      "path": "verify-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.12155846999667119
+    }
+  ],
+  "reference_unit_tests": 11,
+  "small_C_builds": 2,
+  "source_branch_cases": 5,
+  "stage_closed": true
+}

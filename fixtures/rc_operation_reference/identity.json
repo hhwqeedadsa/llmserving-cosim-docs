@@ -1,0 +1,107 @@
+{
+  "commit": "adc218676eef25575469234709c2d87185ca223a",
+  "repository": "torvalds/linux",
+  "requested_ref": "v6.12",
+  "root_tree": "ac4266ccaf1cf79e8fb22ad3e0d86deac358ffb9",
+  "sources": [
+    {
+      "bytes": 20319,
+      "git_blob": "479c07e6e4ed3eab4646400455897cd20e3316a2",
+      "local": "sources/rxe_req.c",
+      "origin": "existing source; newly verified against fixed tree",
+      "path": "drivers/infiniband/sw/rxe/rxe_req.c",
+      "sha256": "c829196711751667ba37226cb55d9f0e2d41aa4ae7e68be25693924d6559b359"
+    },
+    {
+      "bytes": 40930,
+      "git_blob": "c11ab280551a8638e1d9c8fa33f8bc9fc743c020",
+      "local": "sources/rxe_resp.c",
+      "origin": "existing source; newly verified against fixed tree",
+      "path": "drivers/infiniband/sw/rxe/rxe_resp.c",
+      "sha256": "b5cdbf37a48ecaa6f9d5f397e5f064317a48d93573b23546cf2fd2c602322e59"
+    },
+    {
+      "bytes": 21784,
+      "git_blob": "1f0322491d8c1d2d28958f545c982eb5f8a655a2",
+      "local": "sources/rxe_hdr.h",
+      "origin": "existing source; newly verified against fixed tree",
+      "path": "drivers/infiniband/sw/rxe/rxe_hdr.h",
+      "sha256": "51794cf32a71c7db7e5bcea72fb372dd5149999b19ed67e473130e56e8081e02"
+    },
+    {
+      "bytes": 20772,
+      "git_blob": "d48af218074588cfb7c16594d162e62b4174f7d1",
+      "local": "sources/rxe_comp.c",
+      "origin": "fixed Git blob response",
+      "path": "drivers/infiniband/sw/rxe/rxe_comp.c",
+      "sha256": "c2c59b186cbeef632b5b03f82d78df7492abd0b6139748363f813a7e6133aeee"
+    },
+    {
+      "bytes": 28124,
+      "git_blob": "5c0d5c6ffda4f05949891058cf42eef1acfb15bf",
+      "local": "sources/rxe_opcode.c",
+      "origin": "fixed Git blob response",
+      "path": "drivers/infiniband/sw/rxe/rxe_opcode.c",
+      "sha256": "cb13368f787b455c2fc1f16f11c27e25ffd8ae961c56734f61d092b510adac74"
+    },
+    {
+      "bytes": 4246,
+      "git_blob": "d2f57ead78ad12d9328520c38289a21b7fe9906e",
+      "local": "sources/rxe_param.h",
+      "origin": "fixed Git blob response",
+      "path": "drivers/infiniband/sw/rxe/rxe_param.h",
+      "sha256": "caf35d85f99d400e10537c90e2b4e55e618c0b941623cc58de3ec7727de3d596"
+    },
+    {
+      "bytes": 6804,
+      "git_blob": "ded46119151bbfda959c46784650396604fd4e30",
+      "local": "sources/rxe_loc.h",
+      "origin": "fixed Git blob response",
+      "path": "drivers/infiniband/sw/rxe/rxe_loc.h",
+      "sha256": "78edaa8256b9b847ea546cb9df99a3da1e9195ab8dc54db5c40203e4bb4df35f"
+    },
+    {
+      "bytes": 9032,
+      "git_blob": "3c1354f82283e6c68d6bfa64286f33478598357f",
+      "local": "sources/rxe_verbs.h",
+      "origin": "fixed Git blob response",
+      "path": "drivers/infiniband/sw/rxe/rxe_verbs.h",
+      "sha256": "a3489b6f36e0993c5b9ba596bd0400e33997ea0cb0a03403d638dbb585ec2be1"
+    },
+    {
+      "bytes": 6204,
+      "git_blob": "d8fb2c7af30a7ed3a709f045ca2a7cfbc716e202",
+      "local": "sources/rxe.h",
+      "origin": "fixed Git blob response",
+      "path": "drivers/infiniband/sw/rxe/rxe.h",
+      "sha256": "119d395f19ee3eeaa085550efbd8ac6d82a73086f2264f14646781eda0ff5490"
+    }
+  ],
+  "trees": [
+    {
+      "next": "drivers",
+      "path": "tree-0.json",
+      "sha": "ac4266ccaf1cf79e8fb22ad3e0d86deac358ffb9"
+    },
+    {
+      "next": "infiniband",
+      "path": "tree-1.json",
+      "sha": "c7d31ab926d775f2034c92a143d31d0d2e33ad1a"
+    },
+    {
+      "next": "sw",
+      "path": "tree-2.json",
+      "sha": "f39bfd9ba6f9befe3b9c2ef3bb59fbe4c395ce92"
+    },
+    {
+      "next": "rxe",
+      "path": "tree-3.json",
+      "sha": "b643384fb739b58384cdbb9111b4caab48ecfad5"
+    },
+    {
+      "next": null,
+      "path": "tree-4.json",
+      "sha": "f26a5466e54ba42929d05fec51c74aa92e618e41"
+    }
+  ]
+}

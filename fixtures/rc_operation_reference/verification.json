@@ -1,0 +1,19 @@
+{
+  "exact_RXE_reference_equivalence": false,
+  "full_RXE_executed": false,
+  "hardware_calibrated": false,
+  "known_branch_difference_retained": true,
+  "network_runs": 0,
+  "passed": true,
+  "pinned_sources": 9,
+  "reference_unit_tests": 11,
+  "rejected_mutations": [
+    "invented_return",
+    "second_add",
+    "missing_copy",
+    "early_source_release"
+  ],
+  "source_branch_cases": 5,
+  "unchanged_completer_cases": 2,
+  "unchanged_upstream_functions": 13
+}

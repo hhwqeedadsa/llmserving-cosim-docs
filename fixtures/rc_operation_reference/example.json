@@ -1,0 +1,88 @@
+{
+  "exact_RXE_equivalence": false,
+  "hardware_calibrated": false,
+  "healthy": {
+    "ambiguous_plain_ack_rejected": null,
+    "atomic_applications": 1,
+    "requester": {
+      "atomic_credit": 1,
+      "hardware_calibrated": false,
+      "network_executed": false,
+      "next_psn": 4,
+      "operations": [
+        {
+          "addend": null,
+          "address": 8,
+          "completed": true,
+          "fence": false,
+          "first_psn": 0,
+          "key": 1,
+          "kind": "write",
+          "last_psn": 2,
+          "old_value": null,
+          "started": true
+        },
+        {
+          "addend": 5,
+          "address": 0,
+          "completed": true,
+          "fence": false,
+          "first_psn": 3,
+          "key": 1,
+          "kind": "fetch_add",
+          "last_psn": 3,
+          "old_value": 41,
+          "started": true
+        }
+      ],
+      "policy": "atomic_return_required/1",
+      "source_held": []
+    },
+    "source_held_before_atomic_reply": [],
+    "target_value": 46
+  },
+  "lost_feedback": {
+    "ambiguous_plain_ack_rejected": "ordinary ACK cannot supply the pending atomic return value",
+    "atomic_applications": 1,
+    "requester": {
+      "atomic_credit": 1,
+      "hardware_calibrated": false,
+      "network_executed": false,
+      "next_psn": 4,
+      "operations": [
+        {
+          "addend": null,
+          "address": 8,
+          "completed": true,
+          "fence": false,
+          "first_psn": 0,
+          "key": 1,
+          "kind": "write",
+          "last_psn": 2,
+          "old_value": null,
+          "started": true
+        },
+        {
+          "addend": 5,
+          "address": 0,
+          "completed": true,
+          "fence": false,
+          "first_psn": 3,
+          "key": 1,
+          "kind": "fetch_add",
+          "last_psn": 3,
+          "old_value": 41,
+          "started": true
+        }
+      ],
+      "policy": "atomic_return_required/1",
+      "source_held": []
+    },
+    "source_held_before_atomic_reply": [
+      1
+    ],
+    "target_value": 46
+  },
+  "network_executed": false,
+  "schema_version": "moe-rc-reference-example/1"
+}

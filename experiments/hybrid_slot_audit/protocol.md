@@ -31,7 +31,7 @@
 
 共150个人工完整逻辑交错、6个真实输入声明交错；人工全枚举累计上限10,000，不能扩展。不同入口独立枚举并作笛卡尔积，不把未枚举的全局时间顺序当成相同。所有输入保留原选择与多专家同GPU去重。只分析目标域0；其他域计划生成但不计为完成。地址大小只按源码TokenLayout/BufferLayout公式，不冒充GPU或RDMA指针。
 
-真实原件复用`runs/hybrid_path_audit_20261027/observed/routes/`的15个固定hash，899/1479缺层排除；来源已由用户确认`cognitivecomputations/DeepSeek-R1-AWQ/mmlu`，远端修订和真实到达时刻未知。六份源码：Hybrid Dispatch、Hybrid Combine、TokenLayout、WorkspaceLayout、Dispatch copy epilogue和host `ep.hpp`；固定tree/blob/SHA准入，只读本地缓存，不下载/执行库。
+真实原件复用`runs/hybrid_path_audit_20261027/observed/routes/`的15个固定hash，899/1479缺层排除；来源已由用户确认`cognitivecomputations/DeepSeek-R1-AWQ/mmlu`，远端修订和真实到达时刻未知。七份源码：Hybrid Dispatch、Hybrid Combine、TokenLayout、WorkspaceLayout、Dispatch copy epilogue、host `ep.hpp`和定义32/64B对齐的`compiled.cuh`；固定tree/blob/SHA准入，只读本地缓存，不下载/执行库。对齐来源在执行前补入，不改变8输入、交错集合或预算。
 
 ## 方法和判据
 

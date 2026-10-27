@@ -13,7 +13,7 @@
 
 ## 当前范围和预算
 
-当前研究`in_progress`：[Hybrid跨通道slot与逆映射核查](../../experiments/hybrid_slot_audit/protocol.md)。起点`0e04667`，平台固定`19670ba`。先纠正资源身份：入口GPU本地按目标分计数器、同入口跨通道共享，目标缓冲按入口分区；再检验声明交错是否只改变slot/epilogue行号，普通符号buffer/DAG保留逆映射是否足够。固定8公开plan、150人工/6真实前缀声明交错，六份固定库源码；600秒/256MiB、单命令60秒/RSS1GiB/地址2GiB，零新网络/构建/GPU/下载/平台依赖修改/push。不从地址改号推断网络等价/加速，不重开旧研究，两创新仍未成立。
+当前研究`in_progress`：[Hybrid跨通道slot与逆映射核查](../../experiments/hybrid_slot_audit/protocol.md)。起点`0e04667`，平台固定`19670ba`。先纠正资源身份：入口GPU本地按目标分计数器、同入口跨通道共享，目标缓冲按入口分区；再检验声明交错是否只改变slot/epilogue行号，普通符号buffer/DAG保留逆映射是否足够。固定8公开plan、150人工/6真实前缀声明交错，七份固定库源码（执行前补齐对齐常量来源）；600秒/256MiB、单命令60秒/RSS1GiB/地址2GiB，零新网络/构建/GPU/下载/平台依赖修改/push。不从地址改号推断网络等价/加速，不重开旧研究，两创新仍未成立。
 
 当前研究`completed`：[Hybrid转发的静态因果充分性核查](../../experiments/hybrid_causality_audit/README.md)、[事前协议](../../experiments/hybrid_causality_audit/protocol.md)、[中文网页](../../experiments/hybrid_causality_audit/results/20261027/report.html)与[研究取舍](../../experiments/hybrid_causality_audit/decision.md)。平台固定`19670ba`、协议`f32dba9`。1527根条件、1,049,283联合状态和2,711,060非平凡转换中，源码转录的单转发器与事前固定tail/finish门槛DAG一致；14次公开plan/42次逻辑replay完成，包含15份完整R1-AWQ/MMLU的声明EP16有限前缀，仅检查ingress0/channel0。不能再用默认6/6条件下的动态轮询支持普通任务图无法表达的主张。5/6粒度抽象控制确有不同块边界，不是部署或性能正例。
 

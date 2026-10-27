@@ -13,6 +13,8 @@
 
 ## 当前范围和预算
 
+当前平台增量`in_progress`：[Hybrid Dispatch持久资源绑定规范](hybrid_binding_spec.md)，起点`cdd52b3`。完整Hybrid联合执行的前置步骤，明确provider/handler、context/设备/peer转换和自域copy/atomic与GIN self的不同；不把绑定当论文创新。新增公开绑定/加载入口与便携示例，覆盖两调用共享与通道通知，不推断发布时刻或绑定未解析Combine。600受监控秒/128MiB含2MiB/10秒管理，单命令60秒/RSS1GiB/地址2GiB/保留128MiB；零网络、构建、GPU、下载、依赖修改/push。与研究分开验收，不重开旧条件，两个创新及整体目标仍进行中。
+
 当前源码核查`completed`：[Hybrid共享QP与请求发布边界](../reviews/Hybrid共享QP与请求发布边界_20261027.md)，起点`2be34d4`、事前范围`58815b1`。跨通道同QP发布、DB/CPU proxy/free-flow的不同分支，以及现有Submit后立即Pump不能表达预约后晚准备的边界已明确。不能将AggregateRequests全局解释成延迟发布，也不能把这些已有机制当新创新。未重复原37条QP统计或新增条件执行；下一平台增量须另行规范Hybrid/provider持久绑定、明确handler及生产者事件，后续研究以正确资源DAG为强基线。
 
 八份上游tree/blob/SHA、五份未变平台源码及文档链接通过，见[身份清单](../reviews/evidence/hybrid_publication_20261027.json)；只核来源与文档，不是网络/GPU等价证明。命令和原始收据`runs/hybrid_publication_source_audit_20261027/`，源核验monitor退出0，保持单命令60秒/RSS1GiB/地址2GiB/新产物16MiB；文档差异与子模块状态另作只读检查。没有新增平台接口或研究执行预算；零网络、构建、GPU、下载、依赖修改或push。两创新均未成立，整体目标继续`in_progress`。

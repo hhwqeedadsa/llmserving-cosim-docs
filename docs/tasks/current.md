@@ -13,6 +13,8 @@
 
 ## 当前范围和预算
 
+当前研究 `in_progress`：[事务载体与网络评价边界](../../experiments/transport_semantics_audit/protocol.md)，起点`120a07c`。先用已封存single/quad原件核对不跨work分包、32B功能头的计数影响，以及远端fetch-add的Reply/ACK形态与RXE具体Atomic ACK分支；不重开网络或把模型差异称收益。360受监控秒/128MiB、单命令60秒/RSS1GiB/地址2GiB、留8GiB；零新网络/构建/GPU/下载/平台依赖修改/push，先规范后离线核查。
+
 当前研究 `completed`：[CLEM与现代GPU发起MoE边界核查](../../experiments/clem_boundary_audit/README.md)、[事前协议](../../experiments/clem_boundary_audit/protocol.md)和[报告网页](../../experiments/clem_boundary_audit/results/20261027/report.html)，起点`5a6bc45`、协议`9ebbb6e`。固定CLEM及阿里`dev/clem`各一个提交，核查16份材料/29处引用；host verbs→持久QP→ACK→CQ及必要FIFO反馈已有完整源码链，须列为强基线。旧READ按NCCL flush直接完成，不能推定通用远端读/原子或现代GPU直接发布已适配；buffer复用还改设备访问偏移，需区分数值payload与会驱动未来通信的控制值。上游96倍规模声明不等于网络事件或宿主加速，入口已有MTP/MPI钩子，未实跑不能写叉。
 
 独立重建394个Git tree、核对blob/响应/补丁目标行，七类篡改拒绝及13固定依赖通过。92成员/3,068,282B内容归档逐hash恢复，从复制源码/空cwd重算证据、Markdown/HTML及核验逐字节一致，恢复零HTTP；SHA256 `f06d423af7cd8aea5bdbc0541ba8010a87c76ddf23da643c3e66524f13ba083a`。原件`runs/clem_boundary_audit_20261027/`。保留初版socket超时不能保证总截止造成的20.410/20.886秒请求违规、原空README及首次锚点匹配注释的离线分析失败；README另用已存在的固定blob一致副本，修获取器后只取尚未尝试文件、无旧URL重试。见[核验](../../experiments/clem_boundary_audit/results/20261027/verification.json)、[恢复](../../experiments/clem_boundary_audit/results/20261027/recovery.json)与[资源关闭](../../experiments/clem_boundary_audit/results/20261027/closeout.json)。保守含复制收据133.691受监控秒、约7.07MiB分配产物和2MiB/10秒管理预留；20HTTP/2,365,161B响应，阶段600秒/128MiB/24HTTP/8MiB未扩大，但两次原单请求截止违规如实保留。零网络仿真/构建/GPU/平台依赖修改/push，仅本地保存。

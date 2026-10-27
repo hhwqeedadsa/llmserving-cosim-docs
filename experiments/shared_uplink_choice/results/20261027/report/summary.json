@@ -1,0 +1,928 @@
+{
+  "execution": {
+    "state": "completed",
+    "closed": true,
+    "records": [
+      {
+        "label": "predict",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "experiments.shared_uplink_choice.predict",
+          "--observed",
+          "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/stage/observed",
+          "--output",
+          "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/stage/predictions"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/stage/empty-cwd",
+        "network": false,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "batch4-baseline-modern",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "modern-deepep-native",
+          "--topology",
+          "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/stage/observed/baseline-topology",
+          "--protocol",
+          "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/stage/observed/baseline-protocol.json",
+          "--config",
+          "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/stage/observed/batch4/input.json",
+          "--backend",
+          "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/stage/runtime/run-transaction-session",
+          "--output",
+          "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/stage/truth/batch4/baseline/modern",
+          "--callback-batches"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/stage/empty-cwd",
+        "network": true,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "batch4-compile",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "experiments.shared_uplink_choice.generic",
+          "compile",
+          "--stage",
+          "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/stage",
+          "--batch",
+          "4"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/stage/empty-cwd",
+        "network": false,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "batch4-baseline-generic",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "experiments.shared_uplink_choice.generic",
+          "run",
+          "--stage",
+          "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/stage",
+          "--batch",
+          "4",
+          "--name",
+          "baseline"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/stage/empty-cwd",
+        "network": true,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "batch4-baseline-compare",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "experiments.shared_uplink_choice.evaluate",
+          "compare",
+          "--stage",
+          "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/stage",
+          "--batch",
+          "4",
+          "--name",
+          "baseline"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/stage/empty-cwd",
+        "network": false,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "batch4-access-modern",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "modern-deepep-native",
+          "--topology",
+          "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/stage/observed/access-topology",
+          "--protocol",
+          "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/stage/observed/access-protocol.json",
+          "--config",
+          "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/stage/observed/batch4/input.json",
+          "--backend",
+          "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/stage/runtime/run-transaction-session",
+          "--output",
+          "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/stage/truth/batch4/access/modern",
+          "--callback-batches"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/stage/empty-cwd",
+        "network": true,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "batch4-access-generic",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "experiments.shared_uplink_choice.generic",
+          "run",
+          "--stage",
+          "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/stage",
+          "--batch",
+          "4",
+          "--name",
+          "access"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/stage/empty-cwd",
+        "network": true,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "batch4-access-compare",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "experiments.shared_uplink_choice.evaluate",
+          "compare",
+          "--stage",
+          "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/stage",
+          "--batch",
+          "4",
+          "--name",
+          "access"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/stage/empty-cwd",
+        "network": false,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "batch4-core-modern",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "modern-deepep-native",
+          "--topology",
+          "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/stage/observed/core-topology",
+          "--protocol",
+          "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/stage/observed/core-protocol.json",
+          "--config",
+          "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/stage/observed/batch4/input.json",
+          "--backend",
+          "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/stage/runtime/run-transaction-session",
+          "--output",
+          "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/stage/truth/batch4/core/modern",
+          "--callback-batches"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/stage/empty-cwd",
+        "network": true,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "batch4-core-generic",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "experiments.shared_uplink_choice.generic",
+          "run",
+          "--stage",
+          "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/stage",
+          "--batch",
+          "4",
+          "--name",
+          "core"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/stage/empty-cwd",
+        "network": true,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "batch4-core-compare",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "experiments.shared_uplink_choice.evaluate",
+          "compare",
+          "--stage",
+          "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/stage",
+          "--batch",
+          "4",
+          "--name",
+          "core"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/stage/empty-cwd",
+        "network": false,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "batch8-baseline-modern",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "modern-deepep-native",
+          "--topology",
+          "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/stage/observed/baseline-topology",
+          "--protocol",
+          "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/stage/observed/baseline-protocol.json",
+          "--config",
+          "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/stage/observed/batch8/input.json",
+          "--backend",
+          "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/stage/runtime/run-transaction-session",
+          "--output",
+          "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/stage/truth/batch8/baseline/modern",
+          "--callback-batches"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/stage/empty-cwd",
+        "network": true,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "batch8-compile",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "experiments.shared_uplink_choice.generic",
+          "compile",
+          "--stage",
+          "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/stage",
+          "--batch",
+          "8"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/stage/empty-cwd",
+        "network": false,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "batch8-baseline-generic",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "experiments.shared_uplink_choice.generic",
+          "run",
+          "--stage",
+          "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/stage",
+          "--batch",
+          "8",
+          "--name",
+          "baseline"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/stage/empty-cwd",
+        "network": true,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "batch8-baseline-compare",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "experiments.shared_uplink_choice.evaluate",
+          "compare",
+          "--stage",
+          "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/stage",
+          "--batch",
+          "8",
+          "--name",
+          "baseline"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/stage/empty-cwd",
+        "network": false,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "batch8-access-modern",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "modern-deepep-native",
+          "--topology",
+          "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/stage/observed/access-topology",
+          "--protocol",
+          "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/stage/observed/access-protocol.json",
+          "--config",
+          "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/stage/observed/batch8/input.json",
+          "--backend",
+          "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/stage/runtime/run-transaction-session",
+          "--output",
+          "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/stage/truth/batch8/access/modern",
+          "--callback-batches"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/stage/empty-cwd",
+        "network": true,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "batch8-access-generic",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "experiments.shared_uplink_choice.generic",
+          "run",
+          "--stage",
+          "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/stage",
+          "--batch",
+          "8",
+          "--name",
+          "access"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/stage/empty-cwd",
+        "network": true,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "batch8-access-compare",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "experiments.shared_uplink_choice.evaluate",
+          "compare",
+          "--stage",
+          "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/stage",
+          "--batch",
+          "8",
+          "--name",
+          "access"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/stage/empty-cwd",
+        "network": false,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "batch8-core-modern",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "modern-deepep-native",
+          "--topology",
+          "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/stage/observed/core-topology",
+          "--protocol",
+          "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/stage/observed/core-protocol.json",
+          "--config",
+          "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/stage/observed/batch8/input.json",
+          "--backend",
+          "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/stage/runtime/run-transaction-session",
+          "--output",
+          "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/stage/truth/batch8/core/modern",
+          "--callback-batches"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/stage/empty-cwd",
+        "network": true,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "batch8-core-generic",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "experiments.shared_uplink_choice.generic",
+          "run",
+          "--stage",
+          "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/stage",
+          "--batch",
+          "8",
+          "--name",
+          "core"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/stage/empty-cwd",
+        "network": true,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "batch8-core-compare",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "experiments.shared_uplink_choice.evaluate",
+          "compare",
+          "--stage",
+          "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/stage",
+          "--batch",
+          "8",
+          "--name",
+          "core"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/stage/empty-cwd",
+        "network": false,
+        "state": "terminal",
+        "exit_code": 0
+      }
+    ],
+    "network_attempt_limit": 12,
+    "reruns": 0
+  },
+  "batches": {
+    "4": {
+      "metrics": {
+        "baseline": {
+          "application_ns": 81777,
+          "all_events_ns": 87877,
+          "drain_ns": 93925,
+          "source_packets": 280,
+          "capture_events": 8992,
+          "decisions": 67,
+          "operations": 167,
+          "events": 586,
+          "connections": 31
+        },
+        "access": {
+          "application_ns": 81316,
+          "all_events_ns": 87406,
+          "drain_ns": 93446,
+          "source_packets": 280,
+          "capture_events": 9014,
+          "decisions": 67,
+          "operations": 167,
+          "events": 586,
+          "connections": 31
+        },
+        "core": {
+          "application_ns": 66121,
+          "all_events_ns": 72181,
+          "drain_ns": 78213,
+          "source_packets": 280,
+          "capture_events": 8992,
+          "decisions": 67,
+          "operations": 167,
+          "events": 586,
+          "connections": 31
+        }
+      },
+      "comparisons": {
+        "baseline": {
+          "equivalent": true,
+          "checks": {
+            "graph_work_and_after": true,
+            "transactions_and_final_memory": true,
+            "local_work": true,
+            "application_event_times_and_order": true,
+            "callbacks": true,
+            "registrations": true,
+            "productive_commits": true,
+            "packet_capture": true,
+            "queue_events": true,
+            "queue_observations": true,
+            "ports": true,
+            "finish_ns": true
+          },
+          "renamed_task_ids": 0,
+          "metrics": {
+            "application_ns": 81777,
+            "all_events_ns": 87877,
+            "drain_ns": 93925,
+            "source_packets": 280,
+            "capture_events": 8992,
+            "decisions": 67,
+            "operations": 167,
+            "events": 586,
+            "connections": 31
+          },
+          "strict_checks": {
+            "graph_work_and_after": true,
+            "transactions_and_final_memory": true,
+            "local_work": true,
+            "application_event_times_and_order": true,
+            "callbacks": true,
+            "registrations": true,
+            "productive_commits": true,
+            "packet_capture": true,
+            "queue_events": true,
+            "queue_observations": true,
+            "ports": true,
+            "finish_ns": true
+          }
+        },
+        "access": {
+          "equivalent": true,
+          "checks": {
+            "graph_work_and_after": true,
+            "transactions_and_final_memory": true,
+            "local_work": true,
+            "application_event_times_and_order": true,
+            "callbacks": true,
+            "registrations": true,
+            "productive_commits": true,
+            "packet_capture": true,
+            "queue_events": true,
+            "queue_observations": true,
+            "ports": true,
+            "finish_ns": true
+          },
+          "renamed_task_ids": 53,
+          "metrics": {
+            "application_ns": 81316,
+            "all_events_ns": 87406,
+            "drain_ns": 93446,
+            "source_packets": 280,
+            "capture_events": 9014,
+            "decisions": 67,
+            "operations": 167,
+            "events": 586,
+            "connections": 31
+          },
+          "strict_checks": {
+            "graph_work_and_after": false,
+            "transactions_and_final_memory": true,
+            "local_work": true,
+            "application_event_times_and_order": true,
+            "callbacks": true,
+            "registrations": true,
+            "productive_commits": false,
+            "packet_capture": true,
+            "queue_events": true,
+            "queue_observations": true,
+            "ports": true,
+            "finish_ns": true
+          }
+        },
+        "core": {
+          "equivalent": true,
+          "checks": {
+            "graph_work_and_after": true,
+            "transactions_and_final_memory": true,
+            "local_work": true,
+            "application_event_times_and_order": true,
+            "callbacks": true,
+            "registrations": true,
+            "productive_commits": true,
+            "packet_capture": true,
+            "queue_events": true,
+            "queue_observations": true,
+            "ports": true,
+            "finish_ns": true
+          },
+          "renamed_task_ids": 8,
+          "metrics": {
+            "application_ns": 66121,
+            "all_events_ns": 72181,
+            "drain_ns": 78213,
+            "source_packets": 280,
+            "capture_events": 8992,
+            "decisions": 67,
+            "operations": 167,
+            "events": 586,
+            "connections": 31
+          },
+          "strict_checks": {
+            "graph_work_and_after": false,
+            "transactions_and_final_memory": true,
+            "local_work": true,
+            "application_event_times_and_order": true,
+            "callbacks": true,
+            "registrations": true,
+            "productive_commits": false,
+            "packet_capture": true,
+            "queue_events": true,
+            "queue_observations": true,
+            "ports": true,
+            "finish_ns": true
+          }
+        }
+      },
+      "evaluations": {
+        "volume": {
+          "selected": "access",
+          "tied_best": [
+            "access"
+          ],
+          "actual_best": [
+            "core"
+          ],
+          "regret_fraction": 0.229805961797311,
+          "errors": {
+            "baseline": -0.9576448145566603,
+            "access": -0.9787023464016922,
+            "core": -0.9476160372650141
+          }
+        },
+        "endpoint_phase": {
+          "selected": "access",
+          "tied_best": [
+            "access"
+          ],
+          "actual_best": [
+            "core"
+          ],
+          "regret_fraction": 0.229805961797311,
+          "errors": {
+            "baseline": -0.4304041478655367,
+            "access": -0.44918687589158346,
+            "core": -0.2955363651487424
+          }
+        },
+        "nic_phase": {
+          "selected": "access",
+          "tied_best": [
+            "access"
+          ],
+          "actual_best": [
+            "core"
+          ],
+          "regret_fraction": 0.229805961797311,
+          "errors": {
+            "baseline": -0.3866285141298898,
+            "access": -0.4271749717152835,
+            "core": -0.24139562317569305
+          }
+        },
+        "link_phase": {
+          "selected": "core",
+          "tied_best": [
+            "core"
+          ],
+          "actual_best": [
+            "core"
+          ],
+          "regret_fraction": 0.0,
+          "errors": {
+            "baseline": -0.12043728676767307,
+            "access": -0.1154508337842491,
+            "core": -0.1309266345034104
+          }
+        }
+      },
+      "plan_bytes": 195312,
+      "message_representation_bytes": 14071
+    },
+    "8": {
+      "metrics": {
+        "baseline": {
+          "application_ns": 111394,
+          "all_events_ns": 117494,
+          "drain_ns": 133377,
+          "source_packets": 408,
+          "capture_events": 14304,
+          "decisions": 92,
+          "operations": 207,
+          "events": 714,
+          "connections": 36
+        },
+        "access": {
+          "application_ns": 110856,
+          "all_events_ns": 116946,
+          "drain_ns": 131123,
+          "source_packets": 408,
+          "capture_events": 14370,
+          "decisions": 92,
+          "operations": 207,
+          "events": 714,
+          "connections": 36
+        },
+        "core": {
+          "application_ns": 81007,
+          "all_events_ns": 87067,
+          "drain_ns": 116902,
+          "source_packets": 408,
+          "capture_events": 14062,
+          "decisions": 92,
+          "operations": 207,
+          "events": 714,
+          "connections": 36
+        }
+      },
+      "comparisons": {
+        "baseline": {
+          "equivalent": true,
+          "checks": {
+            "graph_work_and_after": true,
+            "transactions_and_final_memory": true,
+            "local_work": true,
+            "application_event_times_and_order": true,
+            "callbacks": true,
+            "registrations": true,
+            "productive_commits": true,
+            "packet_capture": true,
+            "queue_events": true,
+            "queue_observations": true,
+            "ports": true,
+            "finish_ns": true
+          },
+          "renamed_task_ids": 0,
+          "metrics": {
+            "application_ns": 111394,
+            "all_events_ns": 117494,
+            "drain_ns": 133377,
+            "source_packets": 408,
+            "capture_events": 14304,
+            "decisions": 92,
+            "operations": 207,
+            "events": 714,
+            "connections": 36
+          },
+          "strict_checks": {
+            "graph_work_and_after": true,
+            "transactions_and_final_memory": true,
+            "local_work": true,
+            "application_event_times_and_order": true,
+            "callbacks": true,
+            "registrations": true,
+            "productive_commits": true,
+            "packet_capture": true,
+            "queue_events": true,
+            "queue_observations": true,
+            "ports": true,
+            "finish_ns": true
+          }
+        },
+        "access": {
+          "equivalent": true,
+          "checks": {
+            "graph_work_and_after": true,
+            "transactions_and_final_memory": true,
+            "local_work": true,
+            "application_event_times_and_order": true,
+            "callbacks": true,
+            "registrations": true,
+            "productive_commits": true,
+            "packet_capture": true,
+            "queue_events": true,
+            "queue_observations": true,
+            "ports": true,
+            "finish_ns": true
+          },
+          "renamed_task_ids": 30,
+          "metrics": {
+            "application_ns": 110856,
+            "all_events_ns": 116946,
+            "drain_ns": 131123,
+            "source_packets": 408,
+            "capture_events": 14370,
+            "decisions": 92,
+            "operations": 207,
+            "events": 714,
+            "connections": 36
+          },
+          "strict_checks": {
+            "graph_work_and_after": false,
+            "transactions_and_final_memory": true,
+            "local_work": true,
+            "application_event_times_and_order": true,
+            "callbacks": true,
+            "registrations": true,
+            "productive_commits": false,
+            "packet_capture": true,
+            "queue_events": true,
+            "queue_observations": true,
+            "ports": true,
+            "finish_ns": true
+          }
+        },
+        "core": {
+          "equivalent": true,
+          "checks": {
+            "graph_work_and_after": true,
+            "transactions_and_final_memory": true,
+            "local_work": true,
+            "application_event_times_and_order": true,
+            "callbacks": true,
+            "registrations": true,
+            "productive_commits": true,
+            "packet_capture": true,
+            "queue_events": true,
+            "queue_observations": true,
+            "ports": true,
+            "finish_ns": true
+          },
+          "renamed_task_ids": 43,
+          "metrics": {
+            "application_ns": 81007,
+            "all_events_ns": 87067,
+            "drain_ns": 116902,
+            "source_packets": 408,
+            "capture_events": 14062,
+            "decisions": 92,
+            "operations": 207,
+            "events": 714,
+            "connections": 36
+          },
+          "strict_checks": {
+            "graph_work_and_after": false,
+            "transactions_and_final_memory": true,
+            "local_work": true,
+            "application_event_times_and_order": true,
+            "callbacks": true,
+            "registrations": true,
+            "productive_commits": false,
+            "packet_capture": true,
+            "queue_events": true,
+            "queue_observations": true,
+            "ports": true,
+            "finish_ns": true
+          }
+        }
+      },
+      "evaluations": {
+        "volume": {
+          "selected": "access",
+          "tied_best": [
+            "access"
+          ],
+          "actual_best": [
+            "core"
+          ],
+          "regret_fraction": 0.36847432937894253,
+          "errors": {
+            "baseline": -0.9378120904177963,
+            "access": -0.9687551418055856,
+            "core": -0.9144844272717173
+          }
+        },
+        "endpoint_phase": {
+          "selected": "access",
+          "tied_best": [
+            "access"
+          ],
+          "actual_best": [
+            "core"
+          ],
+          "regret_fraction": 0.36847432937894253,
+          "errors": {
+            "baseline": -0.5506831606729267,
+            "access": -0.5803059825359025,
+            "core": -0.38213734615527045
+          }
+        },
+        "nic_phase": {
+          "selected": "access",
+          "tied_best": [
+            "access"
+          ],
+          "actual_best": [
+            "core"
+          ],
+          "regret_fraction": 0.36847432937894253,
+          "errors": {
+            "baseline": -0.528980016877031,
+            "access": -0.5694017464097568,
+            "core": -0.35229301171503696
+          }
+        },
+        "link_phase": {
+          "selected": "core",
+          "tied_best": [
+            "core"
+          ],
+          "actual_best": [
+            "core"
+          ],
+          "regret_fraction": 0.0,
+          "errors": {
+            "baseline": -0.10498877856976134,
+            "access": -0.10064516129032254,
+            "core": -0.11921883294036315
+          }
+        }
+      },
+      "plan_bytes": 238218,
+      "message_representation_bytes": 15087
+    }
+  },
+  "hardware_calibrated": false,
+  "new_MoE_semantic_benefit_proven": false,
+  "simulator_speedup_proven": false
+}

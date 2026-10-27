@@ -1,0 +1,63 @@
+{
+  "passed": true,
+  "sha256": "147c7ae9352b7761964b47cb18653a4a1bf314ec22410b900da3668d8a9c38f7",
+  "members": 622,
+  "copied_source": true,
+  "empty_cwd": true,
+  "identical_verification": true,
+  "identical_reports": true,
+  "identical_predictions_without_truth": true,
+  "new_networks": 0,
+  "new_builds": 0,
+  "commands": [
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "experiments.shared_uplink_choice.verify",
+        "--stage",
+        "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/restored/run/stage",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/restored/run/stage/recovery-verification.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/restored/empty-cwd",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "experiments.shared_uplink_choice.evaluate",
+        "report",
+        "--stage",
+        "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/restored/run/stage",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/restored/run/stage/recovered-report"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/restored/empty-cwd",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "experiments.shared_uplink_choice.explain",
+        "--stage",
+        "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/restored/run/stage",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/restored/run/stage/recovered-explanation"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim/runs/shared_uplink_choice_20261027_r2/restored/empty-cwd",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ]
+}

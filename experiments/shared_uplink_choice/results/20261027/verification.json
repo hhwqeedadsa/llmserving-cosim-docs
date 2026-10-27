@@ -1,0 +1,1009 @@
+{
+  "passed": true,
+  "input": {
+    "raw_requests": 8,
+    "selected_tokens_by_batch": [
+      4,
+      8
+    ],
+    "slot_permutations_checked": 28
+  },
+  "audits": {
+    "batch4-baseline": {
+      "passed": true,
+      "framed_request_reply_bytes": 300128,
+      "load_cells": 128,
+      "packet_lineages": 560,
+      "fixed_NIC_paths": 560,
+      "physical_TX": 2528,
+      "physical_RX": 2528,
+      "switch_enqueues": 1968,
+      "queue_wait_ns": {
+        "total_ns": 705471,
+        "data_ns": 627296,
+        "control_ns": 78175
+      },
+      "maximum_packet_wait_ns": 12039,
+      "maximum_queue_bytes": 36016,
+      "cnp_transmissions": 0,
+      "UDP_payload_link_bytes": 1323456,
+      "all_model_link_bytes": 1432160,
+      "per_link_load": [
+        {
+          "node": 0,
+          "port": 1,
+          "framed_bytes": 17144
+        },
+        {
+          "node": 0,
+          "port": 2,
+          "framed_bytes": 72352
+        },
+        {
+          "node": 1,
+          "port": 1,
+          "framed_bytes": 31576
+        },
+        {
+          "node": 1,
+          "port": 2,
+          "framed_bytes": 28992
+        },
+        {
+          "node": 4,
+          "port": 1,
+          "framed_bytes": 31576
+        },
+        {
+          "node": 4,
+          "port": 2,
+          "framed_bytes": 28992
+        },
+        {
+          "node": 5,
+          "port": 1,
+          "framed_bytes": 31576
+        },
+        {
+          "node": 5,
+          "port": 2,
+          "framed_bytes": 57920
+        },
+        {
+          "node": 8,
+          "port": 1,
+          "framed_bytes": 46008
+        },
+        {
+          "node": 8,
+          "port": 2,
+          "framed_bytes": 2712
+        },
+        {
+          "node": 8,
+          "port": 3,
+          "framed_bytes": 32480
+        },
+        {
+          "node": 10,
+          "port": 1,
+          "framed_bytes": 43488
+        },
+        {
+          "node": 10,
+          "port": 2,
+          "framed_bytes": 57856
+        },
+        {
+          "node": 10,
+          "port": 3,
+          "framed_bytes": 57920
+        },
+        {
+          "node": 12,
+          "port": 1,
+          "framed_bytes": 32480
+        },
+        {
+          "node": 12,
+          "port": 3,
+          "framed_bytes": 57920
+        },
+        {
+          "node": 12,
+          "port": 5,
+          "framed_bytes": 90400
+        },
+        {
+          "node": 13,
+          "port": 1,
+          "framed_bytes": 31576
+        },
+        {
+          "node": 13,
+          "port": 2,
+          "framed_bytes": 31576
+        },
+        {
+          "node": 13,
+          "port": 3,
+          "framed_bytes": 32480
+        },
+        {
+          "node": 15,
+          "port": 1,
+          "framed_bytes": 28992
+        },
+        {
+          "node": 15,
+          "port": 2,
+          "framed_bytes": 57920
+        },
+        {
+          "node": 15,
+          "port": 3,
+          "framed_bytes": 57920
+        },
+        {
+          "node": 17,
+          "port": 1,
+          "framed_bytes": 32480
+        },
+        {
+          "node": 17,
+          "port": 3,
+          "framed_bytes": 57920
+        },
+        {
+          "node": 17,
+          "port": 5,
+          "framed_bytes": 90400
+        },
+        {
+          "node": 18,
+          "port": 1,
+          "framed_bytes": 90400
+        },
+        {
+          "node": 18,
+          "port": 2,
+          "framed_bytes": 90400
+        }
+      ],
+      "cumulative_wait_is_not_application_loss": true,
+      "FIFO_scope": "within each captured IP protocol; no inferred cross-priority order"
+    },
+    "batch4-access": {
+      "passed": true,
+      "framed_request_reply_bytes": 300128,
+      "load_cells": 128,
+      "packet_lineages": 561,
+      "fixed_NIC_paths": 560,
+      "physical_TX": 2534,
+      "physical_RX": 2534,
+      "switch_enqueues": 1973,
+      "queue_wait_ns": {
+        "total_ns": 774541,
+        "data_ns": 698010,
+        "control_ns": 76531
+      },
+      "maximum_packet_wait_ns": 13402,
+      "maximum_queue_bytes": 40280,
+      "cnp_transmissions": 6,
+      "UDP_payload_link_bytes": 1323456,
+      "all_model_link_bytes": 1432448,
+      "per_link_load": [
+        {
+          "node": 0,
+          "port": 1,
+          "framed_bytes": 17144
+        },
+        {
+          "node": 0,
+          "port": 2,
+          "framed_bytes": 72352
+        },
+        {
+          "node": 1,
+          "port": 1,
+          "framed_bytes": 31576
+        },
+        {
+          "node": 1,
+          "port": 2,
+          "framed_bytes": 28992
+        },
+        {
+          "node": 4,
+          "port": 1,
+          "framed_bytes": 31576
+        },
+        {
+          "node": 4,
+          "port": 2,
+          "framed_bytes": 28992
+        },
+        {
+          "node": 5,
+          "port": 1,
+          "framed_bytes": 31576
+        },
+        {
+          "node": 5,
+          "port": 2,
+          "framed_bytes": 57920
+        },
+        {
+          "node": 8,
+          "port": 1,
+          "framed_bytes": 46008
+        },
+        {
+          "node": 8,
+          "port": 2,
+          "framed_bytes": 2712
+        },
+        {
+          "node": 8,
+          "port": 3,
+          "framed_bytes": 32480
+        },
+        {
+          "node": 10,
+          "port": 1,
+          "framed_bytes": 43488
+        },
+        {
+          "node": 10,
+          "port": 2,
+          "framed_bytes": 57856
+        },
+        {
+          "node": 10,
+          "port": 3,
+          "framed_bytes": 57920
+        },
+        {
+          "node": 12,
+          "port": 1,
+          "framed_bytes": 32480
+        },
+        {
+          "node": 12,
+          "port": 3,
+          "framed_bytes": 57920
+        },
+        {
+          "node": 12,
+          "port": 5,
+          "framed_bytes": 90400
+        },
+        {
+          "node": 13,
+          "port": 1,
+          "framed_bytes": 31576
+        },
+        {
+          "node": 13,
+          "port": 2,
+          "framed_bytes": 31576
+        },
+        {
+          "node": 13,
+          "port": 3,
+          "framed_bytes": 32480
+        },
+        {
+          "node": 15,
+          "port": 1,
+          "framed_bytes": 28992
+        },
+        {
+          "node": 15,
+          "port": 2,
+          "framed_bytes": 57920
+        },
+        {
+          "node": 15,
+          "port": 3,
+          "framed_bytes": 57920
+        },
+        {
+          "node": 17,
+          "port": 1,
+          "framed_bytes": 32480
+        },
+        {
+          "node": 17,
+          "port": 3,
+          "framed_bytes": 57920
+        },
+        {
+          "node": 17,
+          "port": 5,
+          "framed_bytes": 90400
+        },
+        {
+          "node": 18,
+          "port": 1,
+          "framed_bytes": 90400
+        },
+        {
+          "node": 18,
+          "port": 2,
+          "framed_bytes": 90400
+        }
+      ],
+      "cumulative_wait_is_not_application_loss": true,
+      "FIFO_scope": "within each captured IP protocol; no inferred cross-priority order"
+    },
+    "batch4-core": {
+      "passed": true,
+      "framed_request_reply_bytes": 300128,
+      "load_cells": 128,
+      "packet_lineages": 560,
+      "fixed_NIC_paths": 560,
+      "physical_TX": 2528,
+      "physical_RX": 2528,
+      "switch_enqueues": 1968,
+      "queue_wait_ns": {
+        "total_ns": 266621,
+        "data_ns": 244607,
+        "control_ns": 22014
+      },
+      "maximum_packet_wait_ns": 4843,
+      "maximum_queue_bytes": 29908,
+      "cnp_transmissions": 0,
+      "UDP_payload_link_bytes": 1323456,
+      "all_model_link_bytes": 1432160,
+      "per_link_load": [
+        {
+          "node": 0,
+          "port": 1,
+          "framed_bytes": 17144
+        },
+        {
+          "node": 0,
+          "port": 2,
+          "framed_bytes": 72352
+        },
+        {
+          "node": 1,
+          "port": 1,
+          "framed_bytes": 31576
+        },
+        {
+          "node": 1,
+          "port": 2,
+          "framed_bytes": 28992
+        },
+        {
+          "node": 4,
+          "port": 1,
+          "framed_bytes": 31576
+        },
+        {
+          "node": 4,
+          "port": 2,
+          "framed_bytes": 28992
+        },
+        {
+          "node": 5,
+          "port": 1,
+          "framed_bytes": 31576
+        },
+        {
+          "node": 5,
+          "port": 2,
+          "framed_bytes": 57920
+        },
+        {
+          "node": 8,
+          "port": 1,
+          "framed_bytes": 46008
+        },
+        {
+          "node": 8,
+          "port": 2,
+          "framed_bytes": 2712
+        },
+        {
+          "node": 8,
+          "port": 3,
+          "framed_bytes": 32480
+        },
+        {
+          "node": 10,
+          "port": 1,
+          "framed_bytes": 43488
+        },
+        {
+          "node": 10,
+          "port": 2,
+          "framed_bytes": 57856
+        },
+        {
+          "node": 10,
+          "port": 3,
+          "framed_bytes": 57920
+        },
+        {
+          "node": 12,
+          "port": 1,
+          "framed_bytes": 32480
+        },
+        {
+          "node": 12,
+          "port": 3,
+          "framed_bytes": 57920
+        },
+        {
+          "node": 12,
+          "port": 5,
+          "framed_bytes": 90400
+        },
+        {
+          "node": 13,
+          "port": 1,
+          "framed_bytes": 31576
+        },
+        {
+          "node": 13,
+          "port": 2,
+          "framed_bytes": 31576
+        },
+        {
+          "node": 13,
+          "port": 3,
+          "framed_bytes": 32480
+        },
+        {
+          "node": 15,
+          "port": 1,
+          "framed_bytes": 28992
+        },
+        {
+          "node": 15,
+          "port": 2,
+          "framed_bytes": 57920
+        },
+        {
+          "node": 15,
+          "port": 3,
+          "framed_bytes": 57920
+        },
+        {
+          "node": 17,
+          "port": 1,
+          "framed_bytes": 32480
+        },
+        {
+          "node": 17,
+          "port": 3,
+          "framed_bytes": 57920
+        },
+        {
+          "node": 17,
+          "port": 5,
+          "framed_bytes": 90400
+        },
+        {
+          "node": 18,
+          "port": 1,
+          "framed_bytes": 90400
+        },
+        {
+          "node": 18,
+          "port": 2,
+          "framed_bytes": 90400
+        }
+      ],
+      "cumulative_wait_is_not_application_loss": true,
+      "FIFO_scope": "within each captured IP protocol; no inferred cross-priority order"
+    },
+    "batch8-baseline": {
+      "passed": true,
+      "framed_request_reply_bytes": 531552,
+      "load_cells": 137,
+      "packet_lineages": 848,
+      "fixed_NIC_paths": 816,
+      "physical_TX": 4000,
+      "physical_RX": 4000,
+      "switch_enqueues": 3152,
+      "queue_wait_ns": {
+        "total_ns": 2902604,
+        "data_ns": 2693923,
+        "control_ns": 208681
+      },
+      "maximum_packet_wait_ns": 26317,
+      "maximum_queue_bytes": 78808,
+      "cnp_transmissions": 192,
+      "UDP_payload_link_bytes": 2480576,
+      "all_model_link_bytes": 2653536,
+      "per_link_load": [
+        {
+          "node": 0,
+          "port": 1,
+          "framed_bytes": 60568
+        },
+        {
+          "node": 0,
+          "port": 2,
+          "framed_bytes": 101216
+        },
+        {
+          "node": 1,
+          "port": 1,
+          "framed_bytes": 60568
+        },
+        {
+          "node": 1,
+          "port": 2,
+          "framed_bytes": 43424
+        },
+        {
+          "node": 4,
+          "port": 1,
+          "framed_bytes": 75000
+        },
+        {
+          "node": 4,
+          "port": 2,
+          "framed_bytes": 28992
+        },
+        {
+          "node": 5,
+          "port": 1,
+          "framed_bytes": 89432
+        },
+        {
+          "node": 5,
+          "port": 2,
+          "framed_bytes": 72352
+        },
+        {
+          "node": 8,
+          "port": 1,
+          "framed_bytes": 118360
+        },
+        {
+          "node": 8,
+          "port": 2,
+          "framed_bytes": 17208
+        },
+        {
+          "node": 8,
+          "port": 3,
+          "framed_bytes": 90400
+        },
+        {
+          "node": 10,
+          "port": 1,
+          "framed_bytes": 43488
+        },
+        {
+          "node": 10,
+          "port": 2,
+          "framed_bytes": 86720
+        },
+        {
+          "node": 10,
+          "port": 3,
+          "framed_bytes": 86784
+        },
+        {
+          "node": 12,
+          "port": 1,
+          "framed_bytes": 104832
+        },
+        {
+          "node": 12,
+          "port": 3,
+          "framed_bytes": 72352
+        },
+        {
+          "node": 12,
+          "port": 5,
+          "framed_bytes": 177184
+        },
+        {
+          "node": 13,
+          "port": 1,
+          "framed_bytes": 74936
+        },
+        {
+          "node": 13,
+          "port": 2,
+          "framed_bytes": 75064
+        },
+        {
+          "node": 13,
+          "port": 3,
+          "framed_bytes": 104832
+        },
+        {
+          "node": 15,
+          "port": 1,
+          "framed_bytes": 28992
+        },
+        {
+          "node": 15,
+          "port": 2,
+          "framed_bytes": 86784
+        },
+        {
+          "node": 15,
+          "port": 3,
+          "framed_bytes": 72352
+        },
+        {
+          "node": 17,
+          "port": 1,
+          "framed_bytes": 90400
+        },
+        {
+          "node": 17,
+          "port": 3,
+          "framed_bytes": 86784
+        },
+        {
+          "node": 17,
+          "port": 5,
+          "framed_bytes": 177184
+        },
+        {
+          "node": 18,
+          "port": 1,
+          "framed_bytes": 177184
+        },
+        {
+          "node": 18,
+          "port": 2,
+          "framed_bytes": 177184
+        }
+      ],
+      "cumulative_wait_is_not_application_loss": true,
+      "FIFO_scope": "within each captured IP protocol; no inferred cross-priority order"
+    },
+    "batch8-access": {
+      "passed": true,
+      "framed_request_reply_bytes": 531552,
+      "load_cells": 137,
+      "packet_lineages": 851,
+      "fixed_NIC_paths": 816,
+      "physical_TX": 4018,
+      "physical_RX": 4018,
+      "switch_enqueues": 3167,
+      "queue_wait_ns": {
+        "total_ns": 3085246,
+        "data_ns": 2878859,
+        "control_ns": 206387
+      },
+      "maximum_packet_wait_ns": 28121,
+      "maximum_queue_bytes": 85220,
+      "cnp_transmissions": 210,
+      "UDP_payload_link_bytes": 2480576,
+      "all_model_link_bytes": 2654400,
+      "per_link_load": [
+        {
+          "node": 0,
+          "port": 1,
+          "framed_bytes": 60568
+        },
+        {
+          "node": 0,
+          "port": 2,
+          "framed_bytes": 101216
+        },
+        {
+          "node": 1,
+          "port": 1,
+          "framed_bytes": 60568
+        },
+        {
+          "node": 1,
+          "port": 2,
+          "framed_bytes": 43424
+        },
+        {
+          "node": 4,
+          "port": 1,
+          "framed_bytes": 75000
+        },
+        {
+          "node": 4,
+          "port": 2,
+          "framed_bytes": 28992
+        },
+        {
+          "node": 5,
+          "port": 1,
+          "framed_bytes": 89432
+        },
+        {
+          "node": 5,
+          "port": 2,
+          "framed_bytes": 72352
+        },
+        {
+          "node": 8,
+          "port": 1,
+          "framed_bytes": 118360
+        },
+        {
+          "node": 8,
+          "port": 2,
+          "framed_bytes": 17208
+        },
+        {
+          "node": 8,
+          "port": 3,
+          "framed_bytes": 90400
+        },
+        {
+          "node": 10,
+          "port": 1,
+          "framed_bytes": 43488
+        },
+        {
+          "node": 10,
+          "port": 2,
+          "framed_bytes": 86720
+        },
+        {
+          "node": 10,
+          "port": 3,
+          "framed_bytes": 86784
+        },
+        {
+          "node": 12,
+          "port": 1,
+          "framed_bytes": 104832
+        },
+        {
+          "node": 12,
+          "port": 3,
+          "framed_bytes": 72352
+        },
+        {
+          "node": 12,
+          "port": 5,
+          "framed_bytes": 177184
+        },
+        {
+          "node": 13,
+          "port": 1,
+          "framed_bytes": 74936
+        },
+        {
+          "node": 13,
+          "port": 2,
+          "framed_bytes": 75064
+        },
+        {
+          "node": 13,
+          "port": 3,
+          "framed_bytes": 104832
+        },
+        {
+          "node": 15,
+          "port": 1,
+          "framed_bytes": 28992
+        },
+        {
+          "node": 15,
+          "port": 2,
+          "framed_bytes": 86784
+        },
+        {
+          "node": 15,
+          "port": 3,
+          "framed_bytes": 72352
+        },
+        {
+          "node": 17,
+          "port": 1,
+          "framed_bytes": 90400
+        },
+        {
+          "node": 17,
+          "port": 3,
+          "framed_bytes": 86784
+        },
+        {
+          "node": 17,
+          "port": 5,
+          "framed_bytes": 177184
+        },
+        {
+          "node": 18,
+          "port": 1,
+          "framed_bytes": 177184
+        },
+        {
+          "node": 18,
+          "port": 2,
+          "framed_bytes": 177184
+        }
+      ],
+      "cumulative_wait_is_not_application_loss": true,
+      "FIFO_scope": "within each captured IP protocol; no inferred cross-priority order"
+    },
+    "batch8-core": {
+      "passed": true,
+      "framed_request_reply_bytes": 531552,
+      "load_cells": 137,
+      "packet_lineages": 837,
+      "fixed_NIC_paths": 816,
+      "physical_TX": 3934,
+      "physical_RX": 3934,
+      "switch_enqueues": 3097,
+      "queue_wait_ns": {
+        "total_ns": 1268498,
+        "data_ns": 1182640,
+        "control_ns": 85858
+      },
+      "maximum_packet_wait_ns": 11284,
+      "maximum_queue_bytes": 68628,
+      "cnp_transmissions": 126,
+      "UDP_payload_link_bytes": 2480576,
+      "all_model_link_bytes": 2650368,
+      "per_link_load": [
+        {
+          "node": 0,
+          "port": 1,
+          "framed_bytes": 60568
+        },
+        {
+          "node": 0,
+          "port": 2,
+          "framed_bytes": 101216
+        },
+        {
+          "node": 1,
+          "port": 1,
+          "framed_bytes": 60568
+        },
+        {
+          "node": 1,
+          "port": 2,
+          "framed_bytes": 43424
+        },
+        {
+          "node": 4,
+          "port": 1,
+          "framed_bytes": 75000
+        },
+        {
+          "node": 4,
+          "port": 2,
+          "framed_bytes": 28992
+        },
+        {
+          "node": 5,
+          "port": 1,
+          "framed_bytes": 89432
+        },
+        {
+          "node": 5,
+          "port": 2,
+          "framed_bytes": 72352
+        },
+        {
+          "node": 8,
+          "port": 1,
+          "framed_bytes": 118360
+        },
+        {
+          "node": 8,
+          "port": 2,
+          "framed_bytes": 17208
+        },
+        {
+          "node": 8,
+          "port": 3,
+          "framed_bytes": 90400
+        },
+        {
+          "node": 10,
+          "port": 1,
+          "framed_bytes": 43488
+        },
+        {
+          "node": 10,
+          "port": 2,
+          "framed_bytes": 86720
+        },
+        {
+          "node": 10,
+          "port": 3,
+          "framed_bytes": 86784
+        },
+        {
+          "node": 12,
+          "port": 1,
+          "framed_bytes": 104832
+        },
+        {
+          "node": 12,
+          "port": 3,
+          "framed_bytes": 72352
+        },
+        {
+          "node": 12,
+          "port": 5,
+          "framed_bytes": 177184
+        },
+        {
+          "node": 13,
+          "port": 1,
+          "framed_bytes": 74936
+        },
+        {
+          "node": 13,
+          "port": 2,
+          "framed_bytes": 75064
+        },
+        {
+          "node": 13,
+          "port": 3,
+          "framed_bytes": 104832
+        },
+        {
+          "node": 15,
+          "port": 1,
+          "framed_bytes": 28992
+        },
+        {
+          "node": 15,
+          "port": 2,
+          "framed_bytes": 86784
+        },
+        {
+          "node": 15,
+          "port": 3,
+          "framed_bytes": 72352
+        },
+        {
+          "node": 17,
+          "port": 1,
+          "framed_bytes": 90400
+        },
+        {
+          "node": 17,
+          "port": 3,
+          "framed_bytes": 86784
+        },
+        {
+          "node": 17,
+          "port": 5,
+          "framed_bytes": 177184
+        },
+        {
+          "node": 18,
+          "port": 1,
+          "framed_bytes": 177184
+        },
+        {
+          "node": 18,
+          "port": 2,
+          "framed_bytes": 177184
+        }
+      ],
+      "cumulative_wait_is_not_application_loss": true,
+      "FIFO_scope": "within each captured IP protocol; no inferred cross-priority order"
+    }
+  },
+  "rejected_corruptions": [
+    "capture omission",
+    "physical receive time",
+    "port accounting",
+    "incomplete execution",
+    "per-link demand",
+    "NIC/slot multiset demand",
+    "source hash"
+  ],
+  "predictions_identical_without_truth": true,
+  "new_networks": 0,
+  "hardware_calibrated": false
+}

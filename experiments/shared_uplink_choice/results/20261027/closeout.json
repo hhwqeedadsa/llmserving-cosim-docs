@@ -1,0 +1,104 @@
+{
+  "state": "completed_research_stage_overall_goal_active",
+  "platform": "5e7f7924f0453c87a9fc6767cff4ac8f1080c337",
+  "protocol": "c723804",
+  "predictor_implementation": "143d0c9",
+  "audit_implementation": "1e4b406",
+  "new_networks": 12,
+  "network_reruns": 0,
+  "new_builds": 0,
+  "downloads": 0,
+  "GPU_executions": 0,
+  "pushes": 0,
+  "full_graph_equivalent_conditions": 6,
+  "input_source": "User confirmed all 13 additions from cognitivecomputations/DeepSeek-R1-AWQ/mmlu; 11 complete additions, 15 complete distinct requests total",
+  "raw_run": "runs/shared_uplink_choice_20261027_r2",
+  "retained_preparation": "runs/shared_uplink_choice_20261027",
+  "archive": {
+    "sha256": "147c7ae9352b7761964b47cb18653a4a1bf314ec22410b900da3668d8a9c38f7",
+    "members": 622,
+    "compressed_bytes": 25977471,
+    "uncompressed_bytes": 239054909
+  },
+  "archive_path": "runs/shared_uplink_choice_20261027_r2/checkpoint-v2.tar.gz",
+  "verification": {
+    "passed": true,
+    "raw_requests": 8,
+    "slot_permutations": 28,
+    "rejected_corruptions": 7,
+    "physical_TX": 19542,
+    "physical_RX": 19542,
+    "source_and_runtime_hashes_checked": true,
+    "HTML_links": 4,
+    "README_links": 6,
+    "source_recovery_identical": true,
+    "dependency_check_exit_code": 0
+  },
+  "budgets": {
+    "cumulative_wall_limit_s": 1200,
+    "cumulative_artifact_limit_bytes": 1073741824,
+    "conservative_monitored_seconds_including_copied_records": 278.4957056328276,
+    "logical_bytes": 548153641,
+    "allocated_bytes": 550612992,
+    "reserved_receipt_bytes": 2097152,
+    "host_seconds_per_command": 60,
+    "RSS_limit_bytes": 1073741824,
+    "address_limit_bytes": 2147483648,
+    "simulation_limit_ns": 1000000,
+    "capture_limit": 20000,
+    "result_json_limit_bytes": 16777216,
+    "physical_decision_limit": 256,
+    "logical_step_limit": 16384,
+    "supplemental_versioned_artifact_bytes": 399394
+  },
+  "dependency_versions": {
+    "third_party/LLMServingSim": "94f3b005f7174575780bfe29d68e015df9719951",
+    "third_party/LLMServingSim/astra-sim": "0c51d089094d2a39aa91ac8ba32e4ca28f3e1714",
+    "third_party/LLMServingSim/astra-sim/extern/network_backend/ns-3": "47f8faddf14036da27b004411701e9729de7479c"
+  },
+  "experiment_source_sha256": {
+    "experiments/shared_uplink_choice/prepare.py": "44e32ab08a199e448b37dd3ee6f197586e784190d2c091c0bdc7b6c40fabef00",
+    "experiments/shared_uplink_choice/predict.py": "9a36971132e677e9da80804b9f65d9a8bb4afa6b6496b241a973d5d66fd7fa56",
+    "experiments/shared_uplink_choice/generic.py": "57664543b04acaef3dd22d41cf2baf58f631837e9d0278e4257b620dc877448f",
+    "experiments/shared_uplink_choice/evaluate.py": "47f5cb125d1d6d81c1235ad5c0b60424ee366aaf2abbd2f042feccceafb50609",
+    "experiments/shared_uplink_choice/run.py": "04d8fee1b65abe8cc27258c8ef3d1eb61e510918fa798069fd74108c7ce8e275",
+    "experiments/shared_uplink_choice/audit.py": "60b9e037f6734d6a9913a447ed5dd9bbc35b21fb6f700dd1d2a82a9ec13ab346",
+    "experiments/shared_uplink_choice/verify.py": "22c60c6974e5c23513b1a91b7026ca1a5a1ae31e0846a413f8931c2aafa4202c",
+    "experiments/shared_uplink_choice/explain.py": "a3bfd23a004e21cd851aaad134e06812cc310a4859b7addee9a4c4380682c6f1",
+    "experiments/shared_uplink_choice/checkpoint.py": "e54ef28bb17466ea3bcc47903245824f1a7e1b99a496fe00492cbcd5b45b05d7"
+  },
+  "retained_failures": [
+    {
+      "kind": "slot variable incorrectly compared as group parameter",
+      "evidence": "runs/shared_uplink_choice_20261027/monitor/predict-monitor/stderr.log",
+      "networks": 0
+    },
+    {
+      "kind": "audit omitted null dense layers",
+      "evidence": "runs/shared_uplink_choice_20261027_r2/monitor/verification-monitor/stderr.log",
+      "networks": 0
+    },
+    {
+      "kind": "audit confused null with empty dense layer array",
+      "evidence": "runs/shared_uplink_choice_20261027_r2/monitor/verification-layers-corrected-monitor/stderr.log",
+      "networks": 0
+    },
+    {
+      "kind": "archive tried to hash active monitor samples",
+      "evidence": "runs/shared_uplink_choice_20261027_r2/monitor/checkpoint-monitor/stderr.log",
+      "partial_archive": "runs/shared_uplink_choice_20261027_r2/checkpoint.tar.gz",
+      "networks": 0
+    },
+    {
+      "kind": "recovery attempted before checking archive creation failure",
+      "evidence": "runs/shared_uplink_choice_20261027_r2/monitor/recovery-monitor/stderr.log",
+      "recovered_files": 0,
+      "networks": 0
+    }
+  ],
+  "novel_MoE_semantic_decision_benefit_proven": false,
+  "new_simulator_speedup_proven": false,
+  "hardware_calibrated": false,
+  "thousand_GPU_execution_proven": false,
+  "research_decision": "Shared-link input is essential here; ordinary link-phase and complete generic DAG baselines remain sufficient for tested choices. Keep both innovation candidates unproven."
+}

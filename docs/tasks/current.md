@@ -15,7 +15,11 @@
 
 已完成条目记录各阶段当时的能力和限制；后续状态以上方最新增量及现行使用文档为准，旧阶段的“尚未实现”不表示该限制仍然有效。
 
-当前共享上联配置选择研究 `in_progress`：[事前协议](../../experiments/shared_uplink_choice/protocol.md)。平台固定`5e7f792`，研究与平台分别提交；沿已确认八份真实新增请求，batch4/8、同plane双NIC/共享Agg，对比接入与核心带宽升级。预测先冻结，加入七阶段端点、每NIC及每有向链路负载和原网络冻结通用图强基线；Combine仅利用slot双射多重集合，不偷看未来动态绑定。独立1200秒/1GiB、12次网络与逐步失败停止，无构建/下载/GPU/依赖修改/push；未见强基线有代价误判前不把精细语义当创新，两项候选及整体目标仍进行中。
+当前共享上联配置选择研究 `completed`：[事前协议](../../experiments/shared_uplink_choice/protocol.md)、[网页与完整结果](../../experiments/shared_uplink_choice/README.md)。平台固定`5e7f792`、协议`c723804`、预测/执行实现`143d0c9`；八份已确认新增原件、batch4/8、同plane双NIC/共享Agg，12次现代/冻结通用图网络均完成。应用阶段baseline/access/core分别81.777/81.316/66.121us与111.394/110.856/81.007us。接入升级改善0.56%/0.48%，核心升级19.14%/27.28%；资源不同，不是同成本或商业ROI。端点/每NIC基线错选接入，后悔值22.98%/36.85%；普通逐链路阶段模型已选对，最高绝对相对时延误差仍13.09%/11.92%，尚无新增MoE语义决策收益。
+
+六组完整图的包/队列/回调/应用/源释放和内存等价；Combine按slot双射多重集合事前计负载，28次组内排列独立核查通过。八原件hash、19,542次物理TX及同数RX/指定NIC/最短路径/串行传播、全部端口字节与队列积分核对一致，7类篡改拒绝，移除truth后预测逐字节一致。排队主要位于Agg–Core；接入升级增加队列/CNP但应用略快，累计等待不能当业务损失；剩余ACK/CNP尾部独立展示。准备时误比较slot变量名，零网络即关闭原账目；修正后新目录核hash复用输入、不重复成功准备，两个目录共享原预算。审计dense层null检查和活动监控文件归档失败均保留，仅重算离线检查、不重跑网络。
+
+622成员含manifest的包逐hash恢复到复制源码/空cwd，预测/核验/报告/网页逐字节一致，恢复零网络/构建；归档SHA256 `147c7ae9352b7761964b47cb18653a4a1bf314ec22410b900da3668d8a9c38f7`。保守重复计复制监控共278.496秒、约522.76MiB逻辑文件/525.11MiB分配产物，另计版本化摘要及收据预留，保持1200秒/1GiB和全部单命令上限；13依赖检查通过，无构建/下载/GPU/push。原件、恢复和最终资源见实验[收尾](../../experiments/shared_uplink_choice/results/20261027/closeout.json)。两项主创新与整体目标仍`in_progress`；不自动扩本轮条件，后续应收紧可靠决策/误差边界及多跳反馈下实际可省处理，不能再用缺少共享链路的弱基线证明MoE语义创新。
 
 当前物理NIC绑定`completed`：[独立规范](physical_nic_binding_spec.md)、[公开示例](../../examples/scaleout_multirail_native/README.md)、[验收与恢复](../../fixtures/physical_nic_binding/README.md)，起点`b78aa59`、实现`364fd7c`。同plane多rail使用GPU/NIC物理地址及原生本地接口注册，QP、ACK/CNP和MRT1回复保持指定NIC，别名最短跳/ECMP路由参与故障重建，共享Agg/MMU只建一次。原生补丁`47f8fad`、ASTRA指针`0c51d08`、LLMServingSim指针`94f3b00`均仅本地保存；没有上游升级或push。
 

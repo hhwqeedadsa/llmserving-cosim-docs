@@ -1,0 +1,227 @@
+{
+  "batch4-baseline": {
+    "queue_wait_by_tier_ns": {
+      "access": 5176,
+      "agg_core": 673175,
+      "tor_agg": 27120
+    },
+    "dominant_queue_ports": [
+      {
+        "node": 17,
+        "port": 5,
+        "tier": "agg_core",
+        "wait_ns": 313132
+      },
+      {
+        "node": 12,
+        "port": 5,
+        "tier": "agg_core",
+        "wait_ns": 306245
+      },
+      {
+        "node": 18,
+        "port": 2,
+        "tier": "agg_core",
+        "wait_ns": 27118
+      }
+    ],
+    "distinct_CNP_lineages": 0,
+    "CNP_link_transmissions": 0,
+    "TX_after_all_application_events_by_ip_protocol": {
+      "252": 40
+    },
+    "application_ns": 81777,
+    "all_events_ns": 87877,
+    "drain_ns": 93925,
+    "last_data_RX_ns": 87877,
+    "drain_is_last_physical_RX": true
+  },
+  "batch4-access": {
+    "queue_wait_by_tier_ns": {
+      "access": 2329,
+      "agg_core": 758605,
+      "tor_agg": 13607
+    },
+    "dominant_queue_ports": [
+      {
+        "node": 17,
+        "port": 5,
+        "tier": "agg_core",
+        "wait_ns": 352642
+      },
+      {
+        "node": 12,
+        "port": 5,
+        "tier": "agg_core",
+        "wait_ns": 350383
+      },
+      {
+        "node": 18,
+        "port": 2,
+        "tier": "agg_core",
+        "wait_ns": 28300
+      }
+    ],
+    "distinct_CNP_lineages": 1,
+    "CNP_link_transmissions": 6,
+    "TX_after_all_application_events_by_ip_protocol": {
+      "252": 40
+    },
+    "application_ns": 81316,
+    "all_events_ns": 87406,
+    "drain_ns": 93446,
+    "last_data_RX_ns": 87406,
+    "drain_is_last_physical_RX": true
+  },
+  "batch4-core": {
+    "queue_wait_by_tier_ns": {
+      "access": 3471,
+      "agg_core": 238049,
+      "tor_agg": 25101
+    },
+    "dominant_queue_ports": [
+      {
+        "node": 17,
+        "port": 5,
+        "tier": "agg_core",
+        "wait_ns": 115197
+      },
+      {
+        "node": 12,
+        "port": 5,
+        "tier": "agg_core",
+        "wait_ns": 108452
+      },
+      {
+        "node": 18,
+        "port": 2,
+        "tier": "agg_core",
+        "wait_ns": 7635
+      }
+    ],
+    "distinct_CNP_lineages": 0,
+    "CNP_link_transmissions": 0,
+    "TX_after_all_application_events_by_ip_protocol": {
+      "252": 40
+    },
+    "application_ns": 66121,
+    "all_events_ns": 72181,
+    "drain_ns": 78213,
+    "last_data_RX_ns": 72181,
+    "drain_is_last_physical_RX": true
+  },
+  "batch8-baseline": {
+    "queue_wait_by_tier_ns": {
+      "access": 12773,
+      "agg_core": 2818375,
+      "tor_agg": 71456
+    },
+    "dominant_queue_ports": [
+      {
+        "node": 12,
+        "port": 5,
+        "tier": "agg_core",
+        "wait_ns": 1357171
+      },
+      {
+        "node": 17,
+        "port": 5,
+        "tier": "agg_core",
+        "wait_ns": 1319413
+      },
+      {
+        "node": 18,
+        "port": 2,
+        "tier": "agg_core",
+        "wait_ns": 71344
+      }
+    ],
+    "distinct_CNP_lineages": 32,
+    "CNP_link_transmissions": 192,
+    "TX_after_all_application_events_by_ip_protocol": {
+      "252": 28,
+      "255": 35
+    },
+    "application_ns": 111394,
+    "all_events_ns": 117494,
+    "drain_ns": 133377,
+    "last_data_RX_ns": 117494,
+    "drain_is_last_physical_RX": true
+  },
+  "batch8-access": {
+    "queue_wait_by_tier_ns": {
+      "access": 4185,
+      "agg_core": 3044024,
+      "tor_agg": 37037
+    },
+    "dominant_queue_ports": [
+      {
+        "node": 12,
+        "port": 5,
+        "tier": "agg_core",
+        "wait_ns": 1466973
+      },
+      {
+        "node": 17,
+        "port": 5,
+        "tier": "agg_core",
+        "wait_ns": 1434031
+      },
+      {
+        "node": 18,
+        "port": 2,
+        "tier": "agg_core",
+        "wait_ns": 73416
+      }
+    ],
+    "distinct_CNP_lineages": 35,
+    "CNP_link_transmissions": 210,
+    "TX_after_all_application_events_by_ip_protocol": {
+      "252": 34,
+      "255": 28
+    },
+    "application_ns": 110856,
+    "all_events_ns": 116946,
+    "drain_ns": 131123,
+    "last_data_RX_ns": 116946,
+    "drain_is_last_physical_RX": true
+  },
+  "batch8-core": {
+    "queue_wait_by_tier_ns": {
+      "access": 11919,
+      "agg_core": 1169854,
+      "tor_agg": 86725
+    },
+    "dominant_queue_ports": [
+      {
+        "node": 12,
+        "port": 5,
+        "tier": "agg_core",
+        "wait_ns": 575122
+      },
+      {
+        "node": 17,
+        "port": 5,
+        "tier": "agg_core",
+        "wait_ns": 540759
+      },
+      {
+        "node": 8,
+        "port": 3,
+        "tier": "tor_agg",
+        "wait_ns": 33490
+      }
+    ],
+    "distinct_CNP_lineages": 21,
+    "CNP_link_transmissions": 126,
+    "TX_after_all_application_events_by_ip_protocol": {
+      "252": 38,
+      "255": 12
+    },
+    "application_ns": 81007,
+    "all_events_ns": 87067,
+    "drain_ns": 116902,
+    "last_data_RX_ns": 87067,
+    "drain_is_last_physical_RX": true
+  }
+}

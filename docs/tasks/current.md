@@ -13,6 +13,8 @@
 
 ## 当前范围和预算
 
+当前研究`in_progress`：[RC完成/返回值的版本与可达性筛选](../../experiments/rc_completion_reachability/protocol.md)，起点`95e5752`。先核已有固定RXE9文件，再有界固定当次上游master/tree并对比，不升级依赖；最多20HTTP/3MiB、单请求10秒，无重试；900受监控秒/256MiB，零新网络/GPU，最多一次必要小型CPU编译。目标是排除旧替代环境假阳性或已修复问题，不继续给健康四卡链路选择堆语义，也不把源码异常直接称漏洞或两项创新。
+
 当前研究条件已停止并收尾（`comparison_complete=false`）：[真实路由的请求间对齐协议](../../experiments/route_alignment/protocol.md)、[报告/网页](../../experiments/route_alignment/README.md)，起点`e3ab387`、协议`59b8ae7`、执行实现`7cb45b2`。八份完整原件entry1..8/layer3、EP8/八台单卡服务器；16个程序各434次WRITE/136本地节点/6,221,824B，逐连接总字节不变，32个逐链路预测在网络前冻结。
 
 只执行core100/aligned/phase0一次，原生完成570节点、310.233us应用及排空，3472源数据包/33,484物理TX/2CNP。首检查器误认为可缺省message_id存在而KeyError(-1)，按事前规则立即停止其余31网络；旧检查器/失败保留，不重跑或重开条件。源码确认无恢复记录时不登记包关联；修正评价器用实际包头IP/端口离线辨认，工作依赖、序号/长度、端点收发及ECMP对应全部端口字节一致，六类篡改拒绝。队列summary不是逐跳捕获的独立重建。

@@ -30,24 +30,40 @@ def save(path, value):
     path.write_text(json.dumps(value, ensure_ascii=False, indent=2)+'\n')
 
 
-def prepare(repo, run):
+def prepare(repo, run, continue_partial=False):
     from experiments.ecmp_network_choice.checkpoint import admit
     archive = repo/'runs/ecmp_network_choice_20261027/checkpoint.tar.gz'
     manifest = admit(archive, ARCHIVE_SHA)
     observed = run/'observed'
-    observed.mkdir()
+    if continue_partial:
+        ledger=load(run/'execution.json')
+        assert ledger['closed'] and ledger['state']=='failure_preserved'
+        assert len(ledger['records'])==1 and ledger['records'][0]['label']=='prepare' and ledger['records'][0]['exit_code']==1
+        assert observed.exists() and (run/'failed-source/study.py').is_file()
+    else:
+        observed.mkdir()
     with tarfile.open(archive, 'r:gz') as stream:
         intake = json.loads(stream.extractfile('run/stage/observed/intake.json').read())
         selected = sorted((r for r in intake['files'] if r['eligible_offline']), key=lambda r:int(r['name'][:-5]))
         assert len(selected) == 15 and intake['rejected_files'] == ['899.json', '1479.json']
-        files = []
+        files, origins = [], {}
         for row in selected:
             member = 'run/stage/truth/routes/'+row['name']
-            raw = stream.extractfile(member).read()
-            assert hashlib.sha256(raw).hexdigest() == row['sha256'] == manifest['files'][member]['sha256']
+            if member in manifest['files']:
+                raw = stream.extractfile(member).read()
+                assert hashlib.sha256(raw).hexdigest() == row['sha256'] == manifest['files'][member]['sha256']
+                origins[row['name']]='admitted_archive'
+            else:
+                # The fixed intake identifies 15 files, but this network archive contains only eight.
+                # Retrieve the unchanged missing contents locally; never substitute or select another input.
+                assert continue_partial
+                raw=(repo/'data/moe-trace-small'/row['name']).read_bytes()
+                assert hashlib.sha256(raw).hexdigest()==row['sha256']
+                origins[row['name']]='local_content_matching_fixed_archive_intake_sha256'
             path = observed/'routes'/row['name']
             path.parent.mkdir(exist_ok=True)
-            path.write_bytes(raw)
+            if path.exists():assert path.read_bytes()==raw
+            else:path.write_bytes(raw)
             files.append(dict(name=row['name'], sha256=row['sha256'], bytes=len(raw)))
     save(observed/'routes.json', dict(files=files, source=intake['source'], excluded=['899.json', '1479.json'],
         input_archive_sha256=ARCHIVE_SHA, inferred_eos=False, authentic_request_timestamps=False))
@@ -71,7 +87,8 @@ def prepare(repo, run):
     save(observed/'library.json', dict(commit=COMMIT, files=sources))
     save(run/'input-identity.json', {str(p.relative_to(run)):sha(p) for p in sorted(observed.rglob('*')) if p.is_file()})
     save(run/'preparation.json', dict(passed=True, files=15, fixed_library_sources=6,
-        source_archive_sha256=ARCHIVE_SHA, new_networks=0, new_downloads=0))
+        source_archive_sha256=ARCHIVE_SHA,route_contents=origins,
+        original_partial_preparation_failure_preserved=continue_partial,new_networks=0,new_downloads=0))
 
 
 def validate_inputs(run):
@@ -219,6 +236,6 @@ def analyze(run, output):
 if __name__ == '__main__':
     p=argparse.ArgumentParser();p.add_argument('action',choices=('prepare','analyze'))
     p.add_argument('--repository',type=Path);p.add_argument('--run',type=Path,required=True)
-    p.add_argument('--output',type=Path);a=p.parse_args()
-    if a.action == 'prepare':prepare(a.repository.resolve(),a.run.resolve())
+    p.add_argument('--output',type=Path);p.add_argument('--continue-partial',action='store_true');a=p.parse_args()
+    if a.action == 'prepare':prepare(a.repository.resolve(),a.run.resolve(),a.continue_partial)
     else:analyze(a.run.resolve(),a.output.resolve())

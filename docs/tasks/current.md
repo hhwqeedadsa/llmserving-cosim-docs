@@ -13,7 +13,9 @@
 
 ## 当前范围和预算
 
-当前平台`in_progress`：[分层逻辑输入与转发门槛规范](hybrid_logical_spec.md)。起点`859f0ac`，新增输入驱动的服务器域/rail/逐token数据、计数与进度来源，以及受轮询约束的Dispatch门槛回放；Combine仅表示贡献分组，不称完整Hybrid执行。独立300受监控秒/128MiB、单命令60秒/RSS1GiB/地址2GiB；零新网络/构建/下载/GPU/依赖修改/push。不扩大原生四卡或事务上限，不重开下方已关闭实验。功能和来源独立验收后本地保存，两项创新及整体目标仍进行中。
+当前平台`completed`：[分层逻辑输入与转发门槛规范](hybrid_logical_spec.md)、[用户小例](../../examples/hybrid_logical/README.md)、[验收和网页](../../fixtures/hybrid_logical/README.md)。起点`859f0ac`、规范`43f21ba`。两个公开命令从显式域/rail/专家选择生成逐token数据、域内GPU转发、三个Combine贡献分区、计数块及tail/finish；Dispatch回放保留选中来源等待、缓存tail刷新和每批≤6，不解析最终GPU slot或执行Combine/完整Hybrid。8项新单元与8项direct回归通过；新cwd18条CLI含10类预期拒绝、另15条旧流程回归、13固定依赖和四源码tree/blob/SHA核对通过。完整检查最初多排空来源消费，原检查器/动作/失败monitor保留，只修检查脚本并继续未完成步骤，未改平台规则。
+
+人工4卡输入独立核对10跨域/自域Dispatch、20域内转发、10域归约返回、16计数块（8 self GIN）和8通道；不是本轮真实请求或包级测量。重复与复制源码结果逐字节一致，397成员包逐hash/空cwd恢复后3条公开命令的plan与两次回放逐字节相同，SHA256 `d4b1a318b30124fea24adf891802dce19f34b3327802375ce2d4a3ce75687467`。原件`runs/hybrid_logical_20261027/`，11主monitor全结束，累计5.977受监控秒/约9.29MiB分配产物，保留300秒/128MiB及原单命令上限、2MiB管理预留。见[收尾](../../fixtures/hybrid_logical/closeout.json)。零新网络/构建/下载/GPU/依赖修改/push；未扩大原生四卡/事务上限或重开下方实验。本轮为progress：补齐输入驱动分层表示和一个容易被错误放行的真实源码等待规则；没有新的论文收益证据，两项创新与整体目标仍`in_progress`。
 
 当前研究`completed`：[分层EP通信路径离线核查](../../experiments/hybrid_path_audit/README.md)、[事前协议](../../experiments/hybrid_path_audit/protocol.md)、[报告网页](../../experiments/hybrid_path_audit/results/20261027/report.html)及[方向取舍](../../experiments/hybrid_path_audit/decision.md)。平台`83a9d7d`、协议`7d96d19`、初实现`1ef9062`。固定15完整真实请求、58层全部145232条token×层行、EP64/128/256、每服务器8GPU与两种事前源绑定。Hybrid跨机隐藏向量份数相对逐目标GPU发送减少46.7%～46.9%/27.5%～27.6%/14.9%～15.0%；另计域内转发及Combine三种归约分支，不能当全网字节、时延或本项目新算法收益。零数据通道仍需finish；六组真实prefill前缀支持无时间的单通道必要偏序，不是完整可执行流程或GPU重叠观测。
 

@@ -1,0 +1,102 @@
+{
+  "schema_version": "moe-hybrid-logical-closeout/1",
+  "platform_start": "859f0ac",
+  "scope_spec": "43f21ba",
+  "functional_status": "completed_with_preserved_checker_failure",
+  "primary_monitor_count": 11,
+  "monitored_seconds": 5.976754727977095,
+  "peak_sampled_group_rss_bytes": 42229760,
+  "run_usage": {
+    "apparent_bytes": 8297738,
+    "allocated_bytes": 9732096
+  },
+  "fixture_usage_before_closeout": {
+    "apparent_bytes": 23683,
+    "allocated_bytes": 45056
+  },
+  "administration_reserve_bytes": 2097152,
+  "administration_reserve_seconds": 10,
+  "budget_seconds": 300,
+  "budget_bytes": 134217728,
+  "all_monitors_terminal": true,
+  "preserved_failure": "monitor/workflow/stderr.log",
+  "failure_cause": "checker scheduled redundant step after cached empty peer was already finished",
+  "failed_checker_sha256": "5239a6c75f24b19122f717c5e9aa87047553c26d2269f4f9e120c358f3b54f29",
+  "continuation": "monitor/workflow-continuation",
+  "new_networks": 0,
+  "builds": 0,
+  "downloads": 0,
+  "gpu_runs": 0,
+  "dependency_changes": 0,
+  "pushed": false,
+  "overall_research_status": "in_progress",
+  "monitors": [
+    {
+      "name": "checkpoint",
+      "status": "completed",
+      "exitcode": 0,
+      "seconds": 0.7835009950067615
+    },
+    {
+      "name": "deps",
+      "status": "completed",
+      "exitcode": 0,
+      "seconds": 0.45656520999909844
+    },
+    {
+      "name": "final-docs",
+      "status": "completed",
+      "exitcode": 0,
+      "seconds": 0.26472437199845444
+    },
+    {
+      "name": "old-unit",
+      "status": "completed",
+      "exitcode": 0,
+      "seconds": 0.22602248800103553
+    },
+    {
+      "name": "old-workflow",
+      "status": "completed",
+      "exitcode": 0,
+      "seconds": 1.727527362992987
+    },
+    {
+      "name": "source",
+      "status": "completed",
+      "exitcode": 0,
+      "seconds": 0.12586023699259385
+    },
+    {
+      "name": "three-domain-unit",
+      "status": "completed",
+      "exitcode": 0,
+      "seconds": 0.23512335399573203
+    },
+    {
+      "name": "unit",
+      "status": "completed",
+      "exitcode": 0,
+      "seconds": 0.2204313020047266
+    },
+    {
+      "name": "unit-final",
+      "status": "completed",
+      "exitcode": 0,
+      "seconds": 0.2179215460055275
+    },
+    {
+      "name": "workflow",
+      "status": "child_failed",
+      "exitcode": 1,
+      "seconds": 0.32469343999400735
+    },
+    {
+      "name": "workflow-continuation",
+      "status": "completed",
+      "exitcode": 0,
+      "seconds": 1.3943844209861709
+    }
+  ],
+  "documentation_and_public_help_passed": true
+}

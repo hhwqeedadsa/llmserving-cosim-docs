@@ -1,0 +1,37 @@
+{
+  "passed": true,
+  "revision": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+  "source_count": 4,
+  "sources": [
+    {
+      "path": "deep_ep/include/deep_ep/impls/ep/hybrid_dispatch.cuh",
+      "sha256": "d7e6e98aeb605392c668bf46de3520072f02b61f145cfc5779dd9c32f0e73db9",
+      "git_blob_sha": "0cb8e7da20940881c945720b45dd0eeea8feffc1",
+      "bytes": 36817,
+      "url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/impls/ep/hybrid_dispatch.cuh"
+    },
+    {
+      "path": "deep_ep/include/deep_ep/impls/ep/hybrid_combine.cuh",
+      "sha256": "7a5091f7acd501fe0500564d1ef775e10150d880512e178e6c6bb40285eb1248",
+      "git_blob_sha": "631dd01710c7c2cd07502327ac099b2a86438ef9",
+      "bytes": 33159,
+      "url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/impls/ep/hybrid_combine.cuh"
+    },
+    {
+      "path": "deep_ep/include/deep_ep/layout/ep/token.cuh",
+      "sha256": "3510d2832b3aeaa99746cb2c3423bf68c6719e0ca56cd4eb408e9b533dbd58e6",
+      "git_blob_sha": "ee1a9b91d6313c3e417d2ff800587fe27e2e9836",
+      "bytes": 5653,
+      "url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/layout/ep/token.cuh"
+    },
+    {
+      "path": "csrc/kernels/comm/context.cpp",
+      "sha256": "c420b55314b9525dcb7e9f6c9d23a11cfe62a20268887493b76fc52881bb5e6a",
+      "git_blob_sha": "d26fdac9a7b280617653f1b6775587d056e85a28",
+      "bytes": 12061,
+      "url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/csrc/kernels/comm/context.cpp"
+    }
+  ],
+  "network_access": false,
+  "upstream_code_executed": false
+}

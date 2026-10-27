@@ -1,0 +1,17 @@
+{
+  "schema_version": "moe-hybrid-progress-actions/1",
+  "actions": [
+    {"kind": "forward_step", "call": 0, "ingress": 2, "channel": 0},
+    {"kind": "data_visible", "transfer": "h0.s0.t0.d1"},
+    {"kind": "data_visible", "transfer": "h0.s0.t1.d1"},
+    {"kind": "data_visible", "transfer": "h0.s0.t2.d1"},
+    {"kind": "data_visible", "transfer": "h0.s0.t3.d1"},
+    {"kind": "data_visible", "transfer": "h0.s0.t4.d1"},
+    {"kind": "data_visible", "transfer": "h0.s0.t5.d1"},
+    {"kind": "tail_visible", "channel": "h0.s0.d1.c0", "publication": 0},
+    {"kind": "forward_step", "call": 0, "ingress": 2, "channel": 0},
+    {"kind": "tail_visible", "channel": "h0.s2.d1.c0", "publication": 0},
+    {"kind": "forward_step", "call": 0, "ingress": 2, "channel": 0},
+    {"kind": "forward_step", "call": 0, "ingress": 2, "channel": 0}
+  ]
+}

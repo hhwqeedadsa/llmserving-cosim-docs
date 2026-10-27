@@ -42,6 +42,13 @@ def parser():
     dc.add_argument('--plan', type=Path, required=True, help='Directory from deepep-plan')
     dc.add_argument('--output', type=Path, required=True, help='New JSON file with dependency closure and blocked device kernel completions')
     dc.add_argument('--withhold', action='append', default=[], help='Exact event ID to withhold from closure; repeatable')
+    hp = sc.add_parser('hybrid-deepep-plan', help='Compile bounded server/rail routing, counts and Dispatch tail obligations; not a complete Hybrid DAG or network execution')
+    hp.add_argument('--config', type=Path, required=True, help='Hybrid logical input/1 with explicit domains/rails, BF16 model and choices')
+    hp.add_argument('--output', type=Path, required=True, help='New directory for input, logical plan and hash manifest')
+    hr = sc.add_parser('hybrid-deepep-replay', help='Check caller-declared Dispatch visibility and round-robin admission; no transport, final GPU slots or Combine execution')
+    hr.add_argument('--plan', type=Path, required=True, help='Directory from hybrid-deepep-plan; integrity and input semantics checked')
+    hr.add_argument('--actions', type=Path, required=True, help='Explicit data_visible, tail_visible and forward_step declarations; prefixes allowed')
+    hr.add_argument('--output', type=Path, required=True, help='New replay JSON; admission completion is not collective completion')
     mp = sc.add_parser('modern-deepep-plan', help='Compile pinned modern direct BF16 operations with symbolic Dispatch slots; no network/GPU execution')
     mp.add_argument('--config', type=Path, required=True, help='Fresh direct RDMA-only, expanded/local reduction and explicit launch/context declarations')
     mp.add_argument('--output', type=Path, required=True, help='New directory for input, symbolic operation/event plan and hash manifest')
@@ -221,6 +228,12 @@ def main(argv=None):
             elif args.scaleout_command == 'modern-deepep-window-replay':
                 from .modern_deepep_windows import replay
                 value = replay(args.config, args.actions, args.output)
+            elif args.scaleout_command == 'hybrid-deepep-plan':
+                from .hybrid_deepep_plan import execute
+                value = execute(args.config, args.output)
+            elif args.scaleout_command == 'hybrid-deepep-replay':
+                from .hybrid_deepep_progress import replay
+                value = replay(args.plan, args.actions, args.output)
             elif args.scaleout_command == 'modern-deepep-plan':
                 from .modern_deepep_plan import execute
                 value = execute(args.config, args.output)

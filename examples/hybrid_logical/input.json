@@ -1,0 +1,18 @@
+{
+  "schema_version": "moe-hybrid-logical-input/1",
+  "model": {"experts": 16, "top_k": 4, "hidden_size": 256, "precision": "bf16"},
+  "deployment": {
+    "domains": [{"name": "server-a", "ranks": [0, 1]}, {"name": "server-b", "ranks": [2, 3]}],
+    "rails": [{"name": "rail-0", "ranks": [0, 2]}, {"name": "rail-1", "ranks": [1, 3]}]
+  },
+  "execution": {
+    "mode": "hybrid_fresh", "num_sms": 1, "scaleout_warps": 1,
+    "max_tokens_per_rank": 16, "expanded_layout": true, "allow_multiple_reduction": true
+  },
+  "calls": [{"name": "small-layer", "tokens": [
+    [[8, 9, 10, 12], [8, 9, 10, 12], [8, 9, 10, 12], [8, 9, 10, 12],
+     [8, 9, 10, 12], [8, 9, 10, 12], [8, 9, 10, 12]],
+    [[0, 4, 8, 12]], [], [[0, 1, 4, 5]]
+  ]}],
+  "limits": {"max_rows": 16384, "max_input_bytes": 1048576, "max_output_bytes": 16777216}
+}

@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>分层通信：本轮交付与边界</title>
+<style>
+body{font:16px/1.8 system-ui,sans-serif;color:#1d2939;background:#f4f6f9;margin:0}main{max-width:1000px;margin:auto;padding:32px 22px 70px}h1{font-size:29px;line-height:1.4}h2{font-size:21px;margin-top:34px}.box{background:white;border:1px solid #dce3eb;border-radius:10px;padding:18px 22px;margin:16px 0}.label{font-size:14px;color:#526275}code{font-family:monospace;background:#edf1f6;padding:2px 5px;overflow-wrap:anywhere}table{border-collapse:collapse;width:100%;background:white}td,th{padding:11px;border:1px solid #dce3eb;text-align:left}th{background:#eaf0f7}.warn{border-left:5px solid #b67a13}.good{border-left:5px solid #207a63}a{color:#195aac}.scroll{overflow-x:auto}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#172338;color:#e8eef8;padding:18px;border-radius:8px}
+</style>
+<main>
+<p class="label">2026-10-27 · 独立平台增量 · 本地保存</p>
+<h1>先准确表达跨机通信，再研究怎样加速仿真</h1>
+<p>本轮交付两个公开命令：从专家选择生成服务器域/rail通信表示；按显式数据与进度声明，检查转发器何时能继续。功能用例是人工4卡小例，没有执行新的包级网络或真实GPU。</p>
+<div class="box good"><strong>一份token如何走？</strong><p>rank0选择专家8、9、10、12，专家位于另一台服务器的rank2、rank3。先跨机发一份到同位置入口rank2，再在服务器内交给两张卡。Combine回传的份数还由归约分支决定。</p><p>plan同时保留计数块、空通道结束通知和原始Top-K贡献。最终GPU接收slot仍为空，不能按token顺序伪造。</p></div>
+<h2>为什么数据已到，还不能转发？</h2>
+<p>固定源码中的转发器会轮询来源服务器，选中后等待它的进度或结束通知。它不会自动跳到另一条已就绪来源。示例回放保留了这个门槛：</p>
+<div class="scroll"><table><tr><th>逻辑动作</th><th>入口rank2的状态</th></tr>
+<tr><td>开始轮询，选中来源服务器1的空输入</td><td>等待该来源的finish</td></tr>
+<tr><td>rank0前6条数据及tail可见</td><td>仍等原来选中的空来源，不能跳过</td></tr>
+<tr><td>空来源finish可见，再消费一次</td><td>确认该来源结束</td></tr>
+<tr><td>轮到rank0</td><td>允许消费前6条；第7条仍等待后续进度</td></tr></table></div>
+<p class="label">这是逻辑动作顺序，没有时间轴。消费允许不等于TMA、GPU kernel或collective完成。</p>
+<h2>本轮实际核验了什么</h2>
+<div class="scroll"><table><tr><th>检查</th><th>结果</th></tr>
+<tr><td>8项新单元检查 + 8项原direct单元</td><td>通过；含二/三域轮询、0/5/6/7/12/13条数据、贡献分区与非法输入</td></tr>
+<tr><td>独立人工输入核算</td><td>10条Dispatch、20条域内转发、10条域归约返回、16个计数块、8个通道</td></tr>
+<tr><td>新公开流程</td><td>18条CLI，含10类预期拒绝及1次保留的检查脚本失败；仅继续未完成检查</td></tr>
+<tr><td>旧流程与依赖</td><td>15条direct CLI回归、13项固定依赖通过；无构建</td></tr>
+<tr><td>重复、复制源码和恢复包</td><td>逐字节一致；397成员逐hash核对，恢复执行3条公开命令</td></tr>
+<tr><td>资源</td><td>主monitor累计约5.977秒；采样组RSS峰值40.3MiB；原件分配约9.29MiB</td></tr></table></div>
+<p>首次完整检查中，检查脚本为已缓存finish的空来源多安排了一步。修正了动作数，原脚本、原输入、失败日志和原monitor均保留，模型规则未改。</p>
+<h2>如何运行</h2>
+<pre>PYTHONPATH=python python3 -m moe_ub_cosim scaleout hybrid-deepep-plan \
+  --config examples/hybrid_logical/input.json --output /tmp/hybrid-plan
+PYTHONPATH=python python3 -m moe_ub_cosim scaleout hybrid-deepep-replay \
+  --plan /tmp/hybrid-plan --actions examples/hybrid_logical/prefix.json \
+  --output /tmp/hybrid-prefix.json</pre>
+<p>在仓库根目录执行，输出路径必须不存在。当前支持2～4台服务器、每台2～8卡，总rank≤32；每rank≤16 token，BF16/H为256倍数。每rank的token数与服务请求batch不是同一概念。</p>
+<div class="box warn"><strong>这一步的价值与尚缺的证据</strong><p>它避免用逐目标GPU直发或任意就绪即转发的简化规则，代替已有分层通信语义。但分层通信本身属于现有DeepEP算法，ASTRA-sim等也能接入正确的用户算法。本轮不提供时延、吞吐、千卡执行或新算法收益。</p><p>下一步应比较正确分层模型与完整DAG：紧凑表示是否降低完整流程成本，按进度门槛展开包细节是否安全且有净收益。两个创新候选仍待验证。</p><p>完整Hybrid DAG、最终slot/linked-list、Combine进度与数值、barrier、源buffer寿命、GPU/NVLink/GIN成本和网络接入仍未完成。</p></div>
+<p><a href="../../examples/hybrid_logical/README.md">输入和使用说明</a> · <a href="README.md">完整验收记录</a> · <a href="verification.json">功能核验</a> · <a href="source-basis.json">固定源码身份</a> · <a href="recovery.json">恢复核验</a> · <a href="closeout.json">资源与失败记录</a></p>
+</main></html>

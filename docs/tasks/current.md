@@ -13,6 +13,8 @@
 
 ## 当前范围和预算
 
+当前研究`in_progress`：[多路径预测边界与连接需求核查](../../experiments/ecmp_baseline_audit/protocol.md)，平台`1c94423`。以新增完整真实请求的batch4/8公开计划，离线比较1/2/4核心图中的固定ECMP连接需求与最短路径等分参考；分离后端能力、快速预测适用范围和实际网络收益。600受监控秒/256MiB、单命令60秒/RSS1GiB/地址2GiB，最多三次公开拓扑生成，零新网络/构建/下载/GPU/依赖修改/push。先保存协议再执行；普通哈希/多路径功能不作创新，两主候选继续进行中。
+
 当前研究`completed`：[固定校验复用完整成本](../../experiments/static_validation_cost/README.md)、[事前协议](../../experiments/static_validation_cost/protocol.md)、[去留决定](../../experiments/static_validation_cost/decision.md)，平台`0ab7b50`、协议`6ab49f6`。四个真实路由batch/执行器条件各三对无细粒度日志测量共24次，另四次带记录诊断，全部保持旧完整result/control/应用。CPU倍率中位数batch4-modern/generic与batch8-modern/generic依次0.985/1.009/1.050/1.010，墙钟1.003/1.004/1.054/0.983；四条件均未达事前工程阈值，三对不足以声称统计显著，不能将命中次数当提速。缓存继续默认关闭，不作为论文加速正例或追加有利条件。
 
 独立wait4原数/12配对/8时钟扫描、五类篡改拒绝与13依赖通过。811成员/343,249,853B归档逐hash恢复，从复制源码/空cwd重算摘要、Markdown、HTML和核验逐字节相同，零恢复网络；SHA256 `69a27112c02930f6aeab86a4d1146d3b28828da0d681771a3c43ebdf974beb50`。原件`runs/static_validation_cost_20261027/`，保守含复制收据230.959监控秒、673.04MiB分配产物及另计2MiB/10秒管理预留，保持1800秒/2GiB及全部单命令上限。零失败网络/重跑/扩限、平台/依赖更改、构建安装下载、GPU或push；仅本地保存。四次诊断native占根CPU约56%—62%，Run exclusive约3.7%—4.6%仍非纯包CPU；动态历史/复制及会话准入/推进明显，不能以native占比承诺包聚合收益。本阶段额度关闭，两项主创新与整体目标仍`in_progress`，下一选择须回到强基线的实际决策缺口或跨队列/反馈的可省处理，不再追逐静态缓存正收益。

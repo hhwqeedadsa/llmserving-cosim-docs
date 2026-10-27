@@ -1,0 +1,387 @@
+{
+  "passed": true,
+  "strict_failure_preserved": true,
+  "remaining_networks_closed": true,
+  "callbacks_per_execution": 865,
+  "mismatched_list_positions": 20,
+  "changed_timestamp_buckets": 6,
+  "changes": [
+    {
+      "time_ns": 8308,
+      "modern": [
+        {
+          "event": "applied",
+          "operation": 35,
+          "time_ns": 8308
+        },
+        {
+          "event": "applied",
+          "operation": 29,
+          "time_ns": 8308
+        }
+      ],
+      "generic": [
+        {
+          "event": "applied",
+          "operation": 29,
+          "time_ns": 8308
+        },
+        {
+          "event": "applied",
+          "operation": 35,
+          "time_ns": 8308
+        }
+      ]
+    },
+    {
+      "time_ns": 10316,
+      "modern": [
+        {
+          "event": "request_acked",
+          "operation": 35,
+          "time_ns": 10316
+        },
+        {
+          "event": "completed",
+          "operation": 35,
+          "time_ns": 10316
+        },
+        {
+          "event": "request_acked",
+          "operation": 29,
+          "time_ns": 10316
+        },
+        {
+          "event": "completed",
+          "operation": 29,
+          "time_ns": 10316
+        }
+      ],
+      "generic": [
+        {
+          "event": "request_acked",
+          "operation": 29,
+          "time_ns": 10316
+        },
+        {
+          "event": "completed",
+          "operation": 29,
+          "time_ns": 10316
+        },
+        {
+          "event": "request_acked",
+          "operation": 35,
+          "time_ns": 10316
+        },
+        {
+          "event": "completed",
+          "operation": 35,
+          "time_ns": 10316
+        }
+      ]
+    },
+    {
+      "time_ns": 12386,
+      "modern": [
+        {
+          "event": "applied",
+          "operation": 41,
+          "time_ns": 12386
+        },
+        {
+          "event": "applied",
+          "operation": 38,
+          "time_ns": 12386
+        }
+      ],
+      "generic": [
+        {
+          "event": "applied",
+          "operation": 38,
+          "time_ns": 12386
+        },
+        {
+          "event": "applied",
+          "operation": 41,
+          "time_ns": 12386
+        }
+      ]
+    },
+    {
+      "time_ns": 18444,
+      "modern": [
+        {
+          "event": "request_acked",
+          "operation": 41,
+          "time_ns": 18444
+        },
+        {
+          "event": "completed",
+          "operation": 41,
+          "time_ns": 18444
+        },
+        {
+          "event": "request_acked",
+          "operation": 38,
+          "time_ns": 18444
+        },
+        {
+          "event": "completed",
+          "operation": 38,
+          "time_ns": 18444
+        }
+      ],
+      "generic": [
+        {
+          "event": "request_acked",
+          "operation": 38,
+          "time_ns": 18444
+        },
+        {
+          "event": "completed",
+          "operation": 38,
+          "time_ns": 18444
+        },
+        {
+          "event": "request_acked",
+          "operation": 41,
+          "time_ns": 18444
+        },
+        {
+          "event": "completed",
+          "operation": 41,
+          "time_ns": 18444
+        }
+      ]
+    },
+    {
+      "time_ns": 42501,
+      "modern": [
+        {
+          "event": "completed",
+          "operation": 119,
+          "time_ns": 42501
+        },
+        {
+          "event": "local_started",
+          "operation": 120,
+          "time_ns": 42501
+        },
+        {
+          "event": "completed",
+          "operation": 128,
+          "time_ns": 42501
+        },
+        {
+          "event": "local_started",
+          "operation": 129,
+          "time_ns": 42501
+        },
+        {
+          "event": "local_admitted",
+          "operation": 138,
+          "time_ns": 42501
+        },
+        {
+          "event": "local_admitted",
+          "operation": 136,
+          "time_ns": 42501
+        }
+      ],
+      "generic": [
+        {
+          "event": "completed",
+          "operation": 119,
+          "time_ns": 42501
+        },
+        {
+          "event": "local_started",
+          "operation": 120,
+          "time_ns": 42501
+        },
+        {
+          "event": "completed",
+          "operation": 128,
+          "time_ns": 42501
+        },
+        {
+          "event": "local_started",
+          "operation": 129,
+          "time_ns": 42501
+        },
+        {
+          "event": "local_admitted",
+          "operation": 136,
+          "time_ns": 42501
+        },
+        {
+          "event": "local_admitted",
+          "operation": 138,
+          "time_ns": 42501
+        }
+      ]
+    },
+    {
+      "time_ns": 42601,
+      "modern": [
+        {
+          "event": "completed",
+          "operation": 120,
+          "time_ns": 42601
+        },
+        {
+          "event": "completed",
+          "operation": 129,
+          "time_ns": 42601
+        },
+        {
+          "event": "local_started",
+          "operation": 130,
+          "time_ns": 42601
+        },
+        {
+          "event": "local_started",
+          "operation": 136,
+          "time_ns": 42601
+        },
+        {
+          "event": "submitted",
+          "operation": 142,
+          "time_ns": 42601
+        },
+        {
+          "event": "prepared",
+          "operation": 142,
+          "time_ns": 42601
+        },
+        {
+          "event": "published",
+          "operation": 142,
+          "time_ns": 42601
+        },
+        {
+          "event": "submitted",
+          "operation": 140,
+          "time_ns": 42601
+        },
+        {
+          "event": "prepared",
+          "operation": 140,
+          "time_ns": 42601
+        },
+        {
+          "event": "published",
+          "operation": 140,
+          "time_ns": 42601
+        }
+      ],
+      "generic": [
+        {
+          "event": "completed",
+          "operation": 120,
+          "time_ns": 42601
+        },
+        {
+          "event": "completed",
+          "operation": 129,
+          "time_ns": 42601
+        },
+        {
+          "event": "local_started",
+          "operation": 130,
+          "time_ns": 42601
+        },
+        {
+          "event": "local_started",
+          "operation": 136,
+          "time_ns": 42601
+        },
+        {
+          "event": "submitted",
+          "operation": 140,
+          "time_ns": 42601
+        },
+        {
+          "event": "prepared",
+          "operation": 140,
+          "time_ns": 42601
+        },
+        {
+          "event": "published",
+          "operation": 140,
+          "time_ns": 42601
+        },
+        {
+          "event": "submitted",
+          "operation": 142,
+          "time_ns": 42601
+        },
+        {
+          "event": "prepared",
+          "operation": 142,
+          "time_ns": 42601
+        },
+        {
+          "event": "published",
+          "operation": 142,
+          "time_ns": 42601
+        }
+      ]
+    }
+  ],
+  "same_callback_multiset_at_every_timestamp": true,
+  "identical_per_operation_callback_history": true,
+  "all_native_envelopes_equal_after_within_batch_callback_ordering": true,
+  "native_envelopes_per_execution": 64,
+  "controller_sources_cache_whole_batch_before_advancing": {
+    "python/moe_ub_cosim/modern_native.py": {
+      "sha256": "b82999972b15b0c660cba2816603fba6e516add27be149987b73c38365fbc2bf",
+      "anchor_lines": {
+        "for row in decision['events']:": [
+          165
+        ],
+        "self.callbacks[key]=row['time_ns']": [
+          183
+        ],
+        "changed=True": [
+          184,
+          202,
+          206,
+          207,
+          208
+        ]
+      }
+    },
+    "experiments/static_dag_transfer/event_graph.py": {
+      "sha256": "d45f494c4a383618aac88b1d6c9f5ff320d298dc16e39c725dfc1aad3ce7e21c",
+      "anchor_lines": {
+        "for callback in row['events']:": [
+          57
+        ],
+        "self.seen[key] = callback['time_ns']": [
+          62
+        ],
+        "output = []": [
+          63
+        ]
+      }
+    }
+  },
+  "packets_queues_transactions_memory_and_application_already_exactly_equal": true,
+  "no_claim_of_original_strict_pass": true,
+  "new_networks": 0,
+  "configuration_increment_comparison": {
+    "dual": {
+      "actual_delta_ns": 5100,
+      "ordinary_predicted_delta_ns": 4793.600000000006,
+      "increment_residual_ns": 306.3999999999942,
+      "residual_is_not_independently_recoverable_loss": true
+    },
+    "quad": {
+      "actual_delta_ns": 17311,
+      "ordinary_predicted_delta_ns": 16478.72,
+      "increment_residual_ns": 832.2799999999988,
+      "residual_is_not_independently_recoverable_loss": true
+    }
+  }
+}

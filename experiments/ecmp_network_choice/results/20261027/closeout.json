@@ -1,0 +1,52 @@
+{
+  "passed": true,
+  "phase": "completed_partial_with_preserved_strict_failure",
+  "original_execution_sha256": "32d68bf62cbb511044827199c0ac5e33bddf75fd23fceb750310d4a077f4ebb0",
+  "original_execution_unchanged": true,
+  "executed_networks": 6,
+  "unexecuted_networks": 6,
+  "successful_network_reruns": 0,
+  "strict_comparisons_passed": 2,
+  "strict_comparisons_failed": 1,
+  "original_strict_failure_preserved": true,
+  "records": [
+    {
+      "label": "report-final",
+      "status": "completed",
+      "exit_code": 0
+    },
+    {
+      "label": "dependencies",
+      "status": "completed",
+      "exit_code": 0
+    },
+    {
+      "label": "checkpoint",
+      "status": "completed",
+      "exit_code": 0
+    },
+    {
+      "label": "recovery",
+      "status": "completed",
+      "exit_code": 0
+    }
+  ],
+  "conservative_monitored_seconds": 53.6410056669265,
+  "artifact_usage": {
+    "apparent_bytes": 173342933,
+    "allocated_bytes": 175165440
+  },
+  "receipt_reserve_bytes": 2097152,
+  "management_reserve_seconds": 10,
+  "time_budget_seconds": 1800,
+  "artifact_budget_bytes": 1073741824,
+  "offline_closeout_networks": 0,
+  "recovery_networks": 0,
+  "builds": 0,
+  "downloads": 0,
+  "gpu_runs": 0,
+  "dependency_changes": 0,
+  "pushes": 0,
+  "research_innovations_established": false,
+  "overall_research_complete": false
+}

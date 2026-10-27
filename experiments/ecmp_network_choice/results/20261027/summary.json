@@ -1,0 +1,1192 @@
+{
+  "schema_version": "ecmp-network-choice/1",
+  "execution": {
+    "state": "failure_preserved_no_remaining_networks",
+    "closed": true,
+    "records": [
+      {
+        "label": "prepare",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "experiments.ecmp_network_choice.data",
+          "--repository",
+          "/home/lry/moe-ub-cosim",
+          "--stage",
+          "/home/lry/moe-ub-cosim/runs/ecmp_network_choice_20261027/stage"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim/runs/ecmp_network_choice_20261027/stage/empty-cwd",
+        "network": false,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "single-topology",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "topology",
+          "--config",
+          "/home/lry/moe-ub-cosim/runs/ecmp_network_choice_20261027/stage/observed/single-topology-config.json",
+          "--output",
+          "/home/lry/moe-ub-cosim/runs/ecmp_network_choice_20261027/stage/observed/single-topology"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim/runs/ecmp_network_choice_20261027/stage/empty-cwd",
+        "network": false,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "dual-topology",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "topology",
+          "--config",
+          "/home/lry/moe-ub-cosim/runs/ecmp_network_choice_20261027/stage/observed/dual-topology-config.json",
+          "--output",
+          "/home/lry/moe-ub-cosim/runs/ecmp_network_choice_20261027/stage/observed/dual-topology"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim/runs/ecmp_network_choice_20261027/stage/empty-cwd",
+        "network": false,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "quad-topology",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "topology",
+          "--config",
+          "/home/lry/moe-ub-cosim/runs/ecmp_network_choice_20261027/stage/observed/quad-topology-config.json",
+          "--output",
+          "/home/lry/moe-ub-cosim/runs/ecmp_network_choice_20261027/stage/observed/quad-topology"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim/runs/ecmp_network_choice_20261027/stage/empty-cwd",
+        "network": false,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "predict",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "experiments.ecmp_network_choice.predict",
+          "--observed",
+          "/home/lry/moe-ub-cosim/runs/ecmp_network_choice_20261027/stage/observed",
+          "--output",
+          "/home/lry/moe-ub-cosim/runs/ecmp_network_choice_20261027/stage/predictions"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim/runs/ecmp_network_choice_20261027/stage/empty-cwd",
+        "network": false,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "batch4-single-modern",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "modern-deepep-native",
+          "--topology",
+          "/home/lry/moe-ub-cosim/runs/ecmp_network_choice_20261027/stage/observed/single-topology",
+          "--protocol",
+          "/home/lry/moe-ub-cosim/runs/ecmp_network_choice_20261027/stage/observed/single-protocol.json",
+          "--config",
+          "/home/lry/moe-ub-cosim/runs/ecmp_network_choice_20261027/stage/observed/batch4/input.json",
+          "--backend",
+          "/home/lry/moe-ub-cosim/runs/ecmp_network_choice_20261027/stage/runtime/run-transaction-session",
+          "--output",
+          "/home/lry/moe-ub-cosim/runs/ecmp_network_choice_20261027/stage/truth/batch4/single/modern",
+          "--callback-batches"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim/runs/ecmp_network_choice_20261027/stage/empty-cwd",
+        "network": true,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "batch4-single-check",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "experiments.ecmp_network_choice.evaluate",
+          "check",
+          "--stage",
+          "/home/lry/moe-ub-cosim/runs/ecmp_network_choice_20261027/stage",
+          "--batch",
+          "4",
+          "--name",
+          "single"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim/runs/ecmp_network_choice_20261027/stage/empty-cwd",
+        "network": false,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "batch4-compile",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "experiments.ecmp_network_choice.generic",
+          "compile",
+          "--stage",
+          "/home/lry/moe-ub-cosim/runs/ecmp_network_choice_20261027/stage",
+          "--batch",
+          "4",
+          "--name",
+          "single"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim/runs/ecmp_network_choice_20261027/stage/empty-cwd",
+        "network": false,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "batch4-single-generic",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "experiments.ecmp_network_choice.generic",
+          "run",
+          "--stage",
+          "/home/lry/moe-ub-cosim/runs/ecmp_network_choice_20261027/stage",
+          "--batch",
+          "4",
+          "--name",
+          "single"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim/runs/ecmp_network_choice_20261027/stage/empty-cwd",
+        "network": true,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "batch4-single-compare",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "experiments.ecmp_network_choice.evaluate",
+          "compare",
+          "--stage",
+          "/home/lry/moe-ub-cosim/runs/ecmp_network_choice_20261027/stage",
+          "--batch",
+          "4",
+          "--name",
+          "single"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim/runs/ecmp_network_choice_20261027/stage/empty-cwd",
+        "network": false,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "batch4-dual-modern",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "modern-deepep-native",
+          "--topology",
+          "/home/lry/moe-ub-cosim/runs/ecmp_network_choice_20261027/stage/observed/dual-topology",
+          "--protocol",
+          "/home/lry/moe-ub-cosim/runs/ecmp_network_choice_20261027/stage/observed/dual-protocol.json",
+          "--config",
+          "/home/lry/moe-ub-cosim/runs/ecmp_network_choice_20261027/stage/observed/batch4/input.json",
+          "--backend",
+          "/home/lry/moe-ub-cosim/runs/ecmp_network_choice_20261027/stage/runtime/run-transaction-session",
+          "--output",
+          "/home/lry/moe-ub-cosim/runs/ecmp_network_choice_20261027/stage/truth/batch4/dual/modern",
+          "--callback-batches"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim/runs/ecmp_network_choice_20261027/stage/empty-cwd",
+        "network": true,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "batch4-dual-check",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "experiments.ecmp_network_choice.evaluate",
+          "check",
+          "--stage",
+          "/home/lry/moe-ub-cosim/runs/ecmp_network_choice_20261027/stage",
+          "--batch",
+          "4",
+          "--name",
+          "dual"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim/runs/ecmp_network_choice_20261027/stage/empty-cwd",
+        "network": false,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "batch4-dual-generic",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "experiments.ecmp_network_choice.generic",
+          "run",
+          "--stage",
+          "/home/lry/moe-ub-cosim/runs/ecmp_network_choice_20261027/stage",
+          "--batch",
+          "4",
+          "--name",
+          "dual"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim/runs/ecmp_network_choice_20261027/stage/empty-cwd",
+        "network": true,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "batch4-dual-compare",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "experiments.ecmp_network_choice.evaluate",
+          "compare",
+          "--stage",
+          "/home/lry/moe-ub-cosim/runs/ecmp_network_choice_20261027/stage",
+          "--batch",
+          "4",
+          "--name",
+          "dual"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim/runs/ecmp_network_choice_20261027/stage/empty-cwd",
+        "network": false,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "batch4-quad-modern",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "modern-deepep-native",
+          "--topology",
+          "/home/lry/moe-ub-cosim/runs/ecmp_network_choice_20261027/stage/observed/quad-topology",
+          "--protocol",
+          "/home/lry/moe-ub-cosim/runs/ecmp_network_choice_20261027/stage/observed/quad-protocol.json",
+          "--config",
+          "/home/lry/moe-ub-cosim/runs/ecmp_network_choice_20261027/stage/observed/batch4/input.json",
+          "--backend",
+          "/home/lry/moe-ub-cosim/runs/ecmp_network_choice_20261027/stage/runtime/run-transaction-session",
+          "--output",
+          "/home/lry/moe-ub-cosim/runs/ecmp_network_choice_20261027/stage/truth/batch4/quad/modern",
+          "--callback-batches"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim/runs/ecmp_network_choice_20261027/stage/empty-cwd",
+        "network": true,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "batch4-quad-check",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "experiments.ecmp_network_choice.evaluate",
+          "check",
+          "--stage",
+          "/home/lry/moe-ub-cosim/runs/ecmp_network_choice_20261027/stage",
+          "--batch",
+          "4",
+          "--name",
+          "quad"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim/runs/ecmp_network_choice_20261027/stage/empty-cwd",
+        "network": false,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "batch4-quad-generic",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "experiments.ecmp_network_choice.generic",
+          "run",
+          "--stage",
+          "/home/lry/moe-ub-cosim/runs/ecmp_network_choice_20261027/stage",
+          "--batch",
+          "4",
+          "--name",
+          "quad"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim/runs/ecmp_network_choice_20261027/stage/empty-cwd",
+        "network": true,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "batch4-quad-compare",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "experiments.ecmp_network_choice.evaluate",
+          "compare",
+          "--stage",
+          "/home/lry/moe-ub-cosim/runs/ecmp_network_choice_20261027/stage",
+          "--batch",
+          "4",
+          "--name",
+          "quad"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim/runs/ecmp_network_choice_20261027/stage/empty-cwd",
+        "network": false,
+        "state": "terminal",
+        "exit_code": 1
+      }
+    ],
+    "network_attempt_limit": 12,
+    "reruns": 0,
+    "error": "AssertionError('preserve failure and close remaining networks')"
+  },
+  "batches": {
+    "4": {
+      "metrics": {
+        "single": {
+          "application_ns": 58568,
+          "all_events_ns": 64612,
+          "drain_ns": 70636,
+          "source_packets": 280,
+          "capture_events": 8992,
+          "decisions": 67,
+          "operations": 167,
+          "events": 586,
+          "connections": 31
+        },
+        "dual": {
+          "application_ns": 63668,
+          "all_events_ns": 69726,
+          "drain_ns": 75758,
+          "source_packets": 280,
+          "capture_events": 8992,
+          "decisions": 67,
+          "operations": 167,
+          "events": 586,
+          "connections": 31
+        },
+        "quad": {
+          "application_ns": 75879,
+          "all_events_ns": 81969,
+          "drain_ns": 88017,
+          "source_packets": 280,
+          "capture_events": 9014,
+          "decisions": 64,
+          "operations": 167,
+          "events": 586,
+          "connections": 31
+        }
+      },
+      "comparisons": {
+        "single": {
+          "equivalent": true,
+          "checks": {
+            "graph_work_and_after": true,
+            "transactions_and_final_memory": true,
+            "local_work": true,
+            "application_event_times_and_order": true,
+            "callbacks": true,
+            "registrations": true,
+            "productive_commits": true,
+            "packet_capture": true,
+            "queue_events": true,
+            "queue_observations": true,
+            "ports": true,
+            "finish_ns": true
+          },
+          "renamed_task_ids": 0,
+          "metrics": {
+            "application_ns": 58568,
+            "all_events_ns": 64612,
+            "drain_ns": 70636,
+            "source_packets": 280,
+            "capture_events": 8992,
+            "decisions": 67,
+            "operations": 167,
+            "events": 586,
+            "connections": 31
+          },
+          "strict_checks": {
+            "graph_work_and_after": true,
+            "transactions_and_final_memory": true,
+            "local_work": true,
+            "application_event_times_and_order": true,
+            "callbacks": true,
+            "registrations": true,
+            "productive_commits": true,
+            "packet_capture": true,
+            "queue_events": true,
+            "queue_observations": true,
+            "ports": true,
+            "finish_ns": true
+          }
+        },
+        "dual": {
+          "equivalent": true,
+          "checks": {
+            "graph_work_and_after": true,
+            "transactions_and_final_memory": true,
+            "local_work": true,
+            "application_event_times_and_order": true,
+            "callbacks": true,
+            "registrations": true,
+            "productive_commits": true,
+            "packet_capture": true,
+            "queue_events": true,
+            "queue_observations": true,
+            "ports": true,
+            "finish_ns": true
+          },
+          "renamed_task_ids": 62,
+          "metrics": {
+            "application_ns": 63668,
+            "all_events_ns": 69726,
+            "drain_ns": 75758,
+            "source_packets": 280,
+            "capture_events": 8992,
+            "decisions": 67,
+            "operations": 167,
+            "events": 586,
+            "connections": 31
+          },
+          "strict_checks": {
+            "graph_work_and_after": false,
+            "transactions_and_final_memory": true,
+            "local_work": true,
+            "application_event_times_and_order": true,
+            "callbacks": true,
+            "registrations": true,
+            "productive_commits": false,
+            "packet_capture": true,
+            "queue_events": true,
+            "queue_observations": true,
+            "ports": true,
+            "finish_ns": true
+          }
+        },
+        "quad": {
+          "equivalent": false,
+          "checks": {
+            "graph_work_and_after": true,
+            "transactions_and_final_memory": true,
+            "local_work": true,
+            "application_event_times_and_order": true,
+            "callbacks": false,
+            "registrations": true,
+            "productive_commits": true,
+            "packet_capture": true,
+            "queue_events": true,
+            "queue_observations": true,
+            "ports": true,
+            "finish_ns": true
+          },
+          "renamed_task_ids": 99,
+          "metrics": {
+            "application_ns": 75879,
+            "all_events_ns": 81969,
+            "drain_ns": 88017,
+            "source_packets": 280,
+            "capture_events": 9014,
+            "decisions": 64,
+            "operations": 167,
+            "events": 586,
+            "connections": 31
+          },
+          "strict_checks": {
+            "graph_work_and_after": false,
+            "transactions_and_final_memory": true,
+            "local_work": true,
+            "application_event_times_and_order": true,
+            "callbacks": false,
+            "registrations": true,
+            "productive_commits": false,
+            "packet_capture": true,
+            "queue_events": true,
+            "queue_observations": true,
+            "ports": true,
+            "finish_ns": true
+          }
+        }
+      },
+      "audits": {
+        "single": {
+          "passed": true,
+          "framed_request_reply_bytes": 300128,
+          "load_cells": 128,
+          "packet_lineages": 560,
+          "fixed_NIC_paths": 560,
+          "physical_TX": 2528,
+          "physical_RX": 2528,
+          "switch_enqueues": 1968,
+          "queue_wait_ns": {
+            "total_ns": 62641,
+            "data_ns": 61675,
+            "control_ns": 966
+          },
+          "maximum_packet_wait_ns": 1304,
+          "maximum_queue_bytes": 16756,
+          "cnp_transmissions": 0,
+          "UDP_payload_link_bytes": 1323456,
+          "all_model_link_bytes": 1432160,
+          "per_link_load": [
+            {
+              "node": 0,
+              "port": 1,
+              "framed_bytes": 17144
+            },
+            {
+              "node": 0,
+              "port": 2,
+              "framed_bytes": 72352
+            },
+            {
+              "node": 1,
+              "port": 1,
+              "framed_bytes": 31576
+            },
+            {
+              "node": 1,
+              "port": 2,
+              "framed_bytes": 28992
+            },
+            {
+              "node": 4,
+              "port": 1,
+              "framed_bytes": 31576
+            },
+            {
+              "node": 4,
+              "port": 2,
+              "framed_bytes": 28992
+            },
+            {
+              "node": 5,
+              "port": 1,
+              "framed_bytes": 31576
+            },
+            {
+              "node": 5,
+              "port": 2,
+              "framed_bytes": 57920
+            },
+            {
+              "node": 8,
+              "port": 1,
+              "framed_bytes": 46008
+            },
+            {
+              "node": 8,
+              "port": 2,
+              "framed_bytes": 2712
+            },
+            {
+              "node": 8,
+              "port": 3,
+              "framed_bytes": 32480
+            },
+            {
+              "node": 10,
+              "port": 1,
+              "framed_bytes": 43488
+            },
+            {
+              "node": 10,
+              "port": 2,
+              "framed_bytes": 57856
+            },
+            {
+              "node": 10,
+              "port": 3,
+              "framed_bytes": 57920
+            },
+            {
+              "node": 12,
+              "port": 1,
+              "framed_bytes": 32480
+            },
+            {
+              "node": 12,
+              "port": 3,
+              "framed_bytes": 57920
+            },
+            {
+              "node": 12,
+              "port": 5,
+              "framed_bytes": 90400
+            },
+            {
+              "node": 13,
+              "port": 1,
+              "framed_bytes": 31576
+            },
+            {
+              "node": 13,
+              "port": 2,
+              "framed_bytes": 31576
+            },
+            {
+              "node": 13,
+              "port": 3,
+              "framed_bytes": 32480
+            },
+            {
+              "node": 15,
+              "port": 1,
+              "framed_bytes": 28992
+            },
+            {
+              "node": 15,
+              "port": 2,
+              "framed_bytes": 57920
+            },
+            {
+              "node": 15,
+              "port": 3,
+              "framed_bytes": 57920
+            },
+            {
+              "node": 17,
+              "port": 1,
+              "framed_bytes": 32480
+            },
+            {
+              "node": 17,
+              "port": 3,
+              "framed_bytes": 57920
+            },
+            {
+              "node": 17,
+              "port": 5,
+              "framed_bytes": 90400
+            },
+            {
+              "node": 18,
+              "port": 1,
+              "framed_bytes": 90400
+            },
+            {
+              "node": 18,
+              "port": 2,
+              "framed_bytes": 90400
+            }
+          ],
+          "cnp_scope": "actual IP/UID plus generated stream/fid projection; fid not serialized by capture",
+          "cumulative_wait_is_not_application_loss": true,
+          "FIFO_scope": "within each captured IP protocol; no inferred cross-priority order"
+        },
+        "dual": {
+          "passed": true,
+          "framed_request_reply_bytes": 300128,
+          "load_cells": 128,
+          "packet_lineages": 560,
+          "fixed_NIC_paths": 560,
+          "physical_TX": 2528,
+          "physical_RX": 2528,
+          "switch_enqueues": 1968,
+          "queue_wait_ns": {
+            "total_ns": 177553,
+            "data_ns": 171892,
+            "control_ns": 5661
+          },
+          "maximum_packet_wait_ns": 4819,
+          "maximum_queue_bytes": 29908,
+          "cnp_transmissions": 0,
+          "UDP_payload_link_bytes": 1323456,
+          "all_model_link_bytes": 1432160,
+          "per_link_load": [
+            {
+              "node": 0,
+              "port": 1,
+              "framed_bytes": 17144
+            },
+            {
+              "node": 0,
+              "port": 2,
+              "framed_bytes": 72352
+            },
+            {
+              "node": 1,
+              "port": 1,
+              "framed_bytes": 31576
+            },
+            {
+              "node": 1,
+              "port": 2,
+              "framed_bytes": 28992
+            },
+            {
+              "node": 4,
+              "port": 1,
+              "framed_bytes": 31576
+            },
+            {
+              "node": 4,
+              "port": 2,
+              "framed_bytes": 28992
+            },
+            {
+              "node": 5,
+              "port": 1,
+              "framed_bytes": 31576
+            },
+            {
+              "node": 5,
+              "port": 2,
+              "framed_bytes": 57920
+            },
+            {
+              "node": 8,
+              "port": 1,
+              "framed_bytes": 46008
+            },
+            {
+              "node": 8,
+              "port": 2,
+              "framed_bytes": 2712
+            },
+            {
+              "node": 8,
+              "port": 3,
+              "framed_bytes": 32480
+            },
+            {
+              "node": 10,
+              "port": 1,
+              "framed_bytes": 43488
+            },
+            {
+              "node": 10,
+              "port": 2,
+              "framed_bytes": 57856
+            },
+            {
+              "node": 10,
+              "port": 3,
+              "framed_bytes": 57920
+            },
+            {
+              "node": 12,
+              "port": 1,
+              "framed_bytes": 32480
+            },
+            {
+              "node": 12,
+              "port": 3,
+              "framed_bytes": 57920
+            },
+            {
+              "node": 12,
+              "port": 5,
+              "framed_bytes": 58536
+            },
+            {
+              "node": 12,
+              "port": 6,
+              "framed_bytes": 31864
+            },
+            {
+              "node": 13,
+              "port": 1,
+              "framed_bytes": 31576
+            },
+            {
+              "node": 13,
+              "port": 2,
+              "framed_bytes": 31576
+            },
+            {
+              "node": 13,
+              "port": 3,
+              "framed_bytes": 32480
+            },
+            {
+              "node": 15,
+              "port": 1,
+              "framed_bytes": 28992
+            },
+            {
+              "node": 15,
+              "port": 2,
+              "framed_bytes": 57920
+            },
+            {
+              "node": 15,
+              "port": 3,
+              "framed_bytes": 57920
+            },
+            {
+              "node": 17,
+              "port": 1,
+              "framed_bytes": 32480
+            },
+            {
+              "node": 17,
+              "port": 3,
+              "framed_bytes": 57920
+            },
+            {
+              "node": 17,
+              "port": 5,
+              "framed_bytes": 74256
+            },
+            {
+              "node": 17,
+              "port": 6,
+              "framed_bytes": 16144
+            },
+            {
+              "node": 18,
+              "port": 1,
+              "framed_bytes": 74256
+            },
+            {
+              "node": 18,
+              "port": 2,
+              "framed_bytes": 58536
+            },
+            {
+              "node": 19,
+              "port": 1,
+              "framed_bytes": 16144
+            },
+            {
+              "node": 19,
+              "port": 2,
+              "framed_bytes": 31864
+            }
+          ],
+          "cnp_scope": "actual IP/UID plus generated stream/fid projection; fid not serialized by capture",
+          "cumulative_wait_is_not_application_loss": true,
+          "FIFO_scope": "within each captured IP protocol; no inferred cross-priority order"
+        },
+        "quad": {
+          "passed": true,
+          "framed_request_reply_bytes": 300128,
+          "load_cells": 128,
+          "packet_lineages": 561,
+          "fixed_NIC_paths": 561,
+          "physical_TX": 2534,
+          "physical_RX": 2534,
+          "switch_enqueues": 1973,
+          "queue_wait_ns": {
+            "total_ns": 380999,
+            "data_ns": 358869,
+            "control_ns": 22130
+          },
+          "maximum_packet_wait_ns": 11943,
+          "maximum_queue_bytes": 36016,
+          "cnp_transmissions": 6,
+          "UDP_payload_link_bytes": 1323456,
+          "all_model_link_bytes": 1432448,
+          "per_link_load": [
+            {
+              "node": 0,
+              "port": 1,
+              "framed_bytes": 17144
+            },
+            {
+              "node": 0,
+              "port": 2,
+              "framed_bytes": 72352
+            },
+            {
+              "node": 1,
+              "port": 1,
+              "framed_bytes": 31576
+            },
+            {
+              "node": 1,
+              "port": 2,
+              "framed_bytes": 28992
+            },
+            {
+              "node": 4,
+              "port": 1,
+              "framed_bytes": 31576
+            },
+            {
+              "node": 4,
+              "port": 2,
+              "framed_bytes": 28992
+            },
+            {
+              "node": 5,
+              "port": 1,
+              "framed_bytes": 31576
+            },
+            {
+              "node": 5,
+              "port": 2,
+              "framed_bytes": 57920
+            },
+            {
+              "node": 8,
+              "port": 1,
+              "framed_bytes": 46008
+            },
+            {
+              "node": 8,
+              "port": 2,
+              "framed_bytes": 2712
+            },
+            {
+              "node": 8,
+              "port": 3,
+              "framed_bytes": 32480
+            },
+            {
+              "node": 10,
+              "port": 1,
+              "framed_bytes": 43488
+            },
+            {
+              "node": 10,
+              "port": 2,
+              "framed_bytes": 57856
+            },
+            {
+              "node": 10,
+              "port": 3,
+              "framed_bytes": 57920
+            },
+            {
+              "node": 12,
+              "port": 1,
+              "framed_bytes": 32480
+            },
+            {
+              "node": 12,
+              "port": 3,
+              "framed_bytes": 57920
+            },
+            {
+              "node": 12,
+              "port": 5,
+              "framed_bytes": 14432
+            },
+            {
+              "node": 12,
+              "port": 6,
+              "framed_bytes": 1064
+            },
+            {
+              "node": 12,
+              "port": 7,
+              "framed_bytes": 44104
+            },
+            {
+              "node": 12,
+              "port": 8,
+              "framed_bytes": 30800
+            },
+            {
+              "node": 13,
+              "port": 1,
+              "framed_bytes": 31576
+            },
+            {
+              "node": 13,
+              "port": 2,
+              "framed_bytes": 31576
+            },
+            {
+              "node": 13,
+              "port": 3,
+              "framed_bytes": 32480
+            },
+            {
+              "node": 15,
+              "port": 1,
+              "framed_bytes": 28992
+            },
+            {
+              "node": 15,
+              "port": 2,
+              "framed_bytes": 57920
+            },
+            {
+              "node": 15,
+              "port": 3,
+              "framed_bytes": 57920
+            },
+            {
+              "node": 17,
+              "port": 1,
+              "framed_bytes": 32480
+            },
+            {
+              "node": 17,
+              "port": 3,
+              "framed_bytes": 57920
+            },
+            {
+              "node": 17,
+              "port": 5,
+              "framed_bytes": 74096
+            },
+            {
+              "node": 17,
+              "port": 6,
+              "framed_bytes": 1648
+            },
+            {
+              "node": 17,
+              "port": 7,
+              "framed_bytes": 160
+            },
+            {
+              "node": 17,
+              "port": 8,
+              "framed_bytes": 14496
+            },
+            {
+              "node": 18,
+              "port": 1,
+              "framed_bytes": 74096
+            },
+            {
+              "node": 18,
+              "port": 2,
+              "framed_bytes": 14432
+            },
+            {
+              "node": 19,
+              "port": 1,
+              "framed_bytes": 1648
+            },
+            {
+              "node": 19,
+              "port": 2,
+              "framed_bytes": 1064
+            },
+            {
+              "node": 20,
+              "port": 1,
+              "framed_bytes": 160
+            },
+            {
+              "node": 20,
+              "port": 2,
+              "framed_bytes": 44104
+            },
+            {
+              "node": 21,
+              "port": 1,
+              "framed_bytes": 14496
+            },
+            {
+              "node": 21,
+              "port": 2,
+              "framed_bytes": 30800
+            }
+          ],
+          "cnp_scope": "actual IP/UID plus generated stream/fid projection; fid not serialized by capture",
+          "cumulative_wait_is_not_application_loss": true,
+          "FIFO_scope": "within each captured IP protocol; no inferred cross-priority order"
+        }
+      },
+      "evaluations": {
+        "equal_path_phase": {
+          "selected": "single",
+          "tied_best": [
+            "single",
+            "dual",
+            "quad"
+          ],
+          "actual_best": [
+            "single"
+          ],
+          "regret_ns": 0,
+          "regret_fraction": 0.0,
+          "meaningful_gap": false,
+          "errors": {
+            "single": -0.14233028274825843,
+            "dual": -0.2110322296915248,
+            "quad": -0.3379986557545566
+          }
+        },
+        "hashed_link_phase": {
+          "selected": "single",
+          "tied_best": [
+            "single"
+          ],
+          "actual_best": [
+            "single"
+          ],
+          "regret_ns": 0,
+          "regret_fraction": 0.0,
+          "meaningful_gap": false,
+          "errors": {
+            "single": -0.14233028274825843,
+            "dual": -0.1357416598605264,
+            "quad": -0.12082763346907575
+          }
+        },
+        "hashed_rtt_phase": {
+          "selected": "single",
+          "tied_best": [
+            "single"
+          ],
+          "actual_best": [
+            "single"
+          ],
+          "regret_ns": 0,
+          "regret_fraction": 0.0,
+          "meaningful_gap": false,
+          "errors": {
+            "single": 0.26744980193962575,
+            "dual": 0.24121379656970543,
+            "quad": 0.19546541203758616
+          }
+        }
+      }
+    },
+    "8": {
+      "metrics": {},
+      "comparisons": {},
+      "audits": {},
+      "evaluations": {}
+    }
+  },
+  "hardware_calibrated": false,
+  "new_MoE_semantic_benefit_proven": false,
+  "simulator_speedup_proven": false
+}

@@ -1,0 +1,55 @@
+{
+  "completed": true,
+  "phase": "offline_network_abstraction_and_model_boundary_audit",
+  "total_goal_completed": false,
+  "monitored_seconds_before_publish": 10.606021921965294,
+  "publish_reserved_seconds": 60,
+  "task_seconds_limit": 600,
+  "task_artifact_limit_bytes": 134217728,
+  "usage_before_publish": {
+    "apparent_bytes": 46407229,
+    "allocated_bytes": 47116288
+  },
+  "post_publish_receipts_reserved_bytes": 2097152,
+  "command_limits": {
+    "wall_seconds": 60,
+    "rss_bytes": 1073741824,
+    "address_bytes": 2147483648
+  },
+  "http_requests": 8,
+  "http_failures": 1,
+  "failed_http": "MimicNet publisher PDF HTTP 403; no retry",
+  "new_network_executions": 0,
+  "new_builds": 0,
+  "gpu_executions": 0,
+  "dependency_modifications": 0,
+  "source_confirmation": "All 13 added files are from cognitivecomputations/DeepSeek-R1-AWQ/mmlu",
+  "original_files_modified": false,
+  "remote_new_file_revision_verified": false,
+  "offline_cases": 6,
+  "independent_corruption_classes": 4,
+  "dependency_checkouts_checked": 13,
+  "recovery_byte_identical": true,
+  "preserved_failure": "Initial preparation used a checkpoint reader requiring mode fields absent in the older archive; failed before creating observed inputs; corrected to the archive-specific verified reader, same budget.",
+  "archive_sha256": "228ae327c098edcc7107ce73bee677b320c4ca2ad5345f8f8bb64d5e24c5424a",
+  "report_sha256": {
+    "sources.json": "98d1a7d51adcb9963bd143e95e041b8d6f650d73bdc815334884c480fa07f874",
+    "summary.json": "a96a0e81389f09c7cf3cefe42c7acf9b2b3f05cc335016c8fd075cff2c85c0c4",
+    "verification.json": "b90a96fb11ce78d5a3a44e25224c472560bd5567b0b977dee65cf927edff8271",
+    "report.md": "ad261358a46230f01e71eb2989331f008bb4f1daadab1db30b0ed0456f295e72",
+    "report.html": "9d6fc26e0d4cfa4d47c64a592e0db8dd420f2c68830cad54e339c46fd2305343",
+    "recovery.json": "d099601bc7c4210cf4a130487d689fd5bf5dcbb5eec0bc80e50d229c40c20554",
+    "checkpoint.json": "9be76376c1a8f6015da3b70f7541a1328f4c499ffb1338fc84c2b196e397bf4d"
+  },
+  "pushes": 0,
+  "final_monitored_seconds": 10.765688712956035,
+  "final_artifact_usage": {
+    "apparent_bytes": 46411032,
+    "allocated_bytes": 47128576
+  },
+  "versioned_experiment_artifact_usage": {
+    "apparent_bytes": 99404,
+    "allocated_bytes": 135168
+  },
+  "bookkeeping_correction": "First final receipt command omitted PYTHONPATH and failed on import before mutation; repeated with the repository environment, no simulation."
+}

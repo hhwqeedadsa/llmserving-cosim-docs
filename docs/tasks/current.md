@@ -15,7 +15,9 @@
 
 已完成条目记录各阶段当时的能力和限制；后续状态以上方最新增量及现行使用文档为准，旧阶段的“尚未实现”不表示该限制仍然有效。
 
-当前网络抽象近邻与MoE表示边界核查`in_progress`：[事前范围](../../experiments/network_abstraction_audit/protocol.md)。补核直接网络分解/学习替代近邻及现有路由/本地成本的作用范围，避免把已知加速方法或模型便利假设当创新。只读来源和既有产物，零新网络/构建/GPU/依赖更改；最多8次有界HTTP、600受监控秒/128MiB、每命令60秒/1GiB RSS/2GiB地址，失败保留不重试。两候选与整体目标仍`in_progress`。
+网络抽象近邻与MoE表示边界核查`completed`：[事前范围](../../experiments/network_abstraction_audit/protocol.md)、[报告与网页](../../experiments/network_abstraction_audit/README.md)。用户再次确认新增13份全部来自R1-AWQ/MMLU，沿用11份完整/2份缺层的接收记录，远端修订身份不变。固定八原件的entry1/layer3、EP4/batch4与8，六份离线计划证明：保持每个Top-K位置的目的rank，卡内人工集中/分散可使batch8最热专家从1到8个token，而仅排除专家计数数值后通信形状/依赖/符号布局相同。无时间的同一调用者顺序也保持动态slot；不是包级时延等价。独立核算与四类篡改拒绝通过。当前专家阶段每rank固定1000ns，不能用该模型直接推断卡内热点造成的计算排队或网络收益。
+
+取得Parsimon arXiv v2全文并定位作者源码，核对其独立链路分解/分布合成及短时瞬态、相关跨跳与丢包验证边界；MimicNet只核作者README与论文元数据，出版方PDF403保留未重试。八次HTTP额度关闭，无竞品执行。211成员包逐hash恢复，从复制源码/空cwd重算六计划、汇总、独立核验、来源索引及报告逐字节一致；归档SHA256 `228ae327c098edcc7107ce73bee677b320c4ca2ad5345f8f8bb64d5e24c5424a`，原件`runs/network_abstraction_audit_20261027/`。首轮准备误用要求mode字段的较新归档读取器，未创建输入即失败；按旧包原读取器修复，失败日志保留。资源与13依赖核查见实验收尾，保持600受监控秒/128MiB及单命令上限，零新网络/构建/GPU/平台依赖更改/push。已知分解或模型中的等价不作新贡献；下一阶段须独立设计计算就绪依据、同资源网络误判及有实质成本空间的判别，不自动扩本轮条件。两候选及整体目标仍`in_progress`。
 
 优化后宿主成本研究`completed`：[独立协议](../../experiments/optimized_host_cost/protocol.md)、[报告与网页](../../experiments/optimized_host_cost/README.md)。固定已验收O3运行时，旧batch4/8现代/冻结图四次计时完成，原完整网络/事务result、control和应用均保持，仅事前允许的加载元数据位置/枚举多重集合对应；实际原生库逐hash核对。三种阶段计算一致，四类时钟/实包/应用篡改拒绝。原生占已观测总CPU52.68%—57.08%，Run exclusive占3.67%—4.15%，仍非纯包CPU或全部包相关处理上界。Python候选校验/复制/推进与原生会话/校验明显；保持Python不变且全部native免费也只有2.113—2.330倍的宽松CPU工作量上限，不是墙钟/GPU速度。
 

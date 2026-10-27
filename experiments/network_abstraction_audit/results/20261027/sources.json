@@ -1,0 +1,117 @@
+{
+  "accessed_date": "2026-10-27",
+  "acquisition": [
+    {
+      "name": "github-parsimon",
+      "url": "https://api.github.com/search/repositories?q=parsimon+network&per_page=3",
+      "state": "completed",
+      "status": 200,
+      "final_url": "https://api.github.com/search/repositories?q=parsimon+network&per_page=3",
+      "content_type": "application/json; charset=utf-8",
+      "bytes": 19367,
+      "sha256": "1cac32ed169e43333469d05f51f07d08747f7b772fcfe9de10c32640b842f8c6",
+      "wall_seconds": 1.6816016670054523
+    },
+    {
+      "name": "github-mimicnet",
+      "url": "https://api.github.com/search/repositories?q=mimicnet&per_page=3",
+      "state": "completed",
+      "status": 200,
+      "final_url": "https://api.github.com/search/repositories?q=mimicnet&per_page=3",
+      "content_type": "application/json; charset=utf-8",
+      "bytes": 15416,
+      "sha256": "d0464ec3db3ff5130248ff55c1d4a8be2a10c7fe9caf3101e934932883f8c2ff",
+      "wall_seconds": 1.7412671969941584
+    },
+    {
+      "name": "openalex-parsimon",
+      "url": "https://api.openalex.org/works?search=Parsimon%20network&per-page=3",
+      "state": "completed",
+      "status": 200,
+      "final_url": "https://api.openalex.org/works?search=Parsimon%20network&per-page=3",
+      "content_type": "application/json",
+      "bytes": 57224,
+      "sha256": "4287e8c80323f3bb885decf26055e8fcbee37d98a80a3cb2ba60003fa7f5fa3f",
+      "wall_seconds": 1.0513505449926015
+    },
+    {
+      "name": "openalex-mimicnet",
+      "url": "https://api.openalex.org/works?search=MimicNet&per-page=3",
+      "state": "completed",
+      "status": 200,
+      "final_url": "https://api.openalex.org/works?search=MimicNet&per-page=3",
+      "content_type": "application/json",
+      "bytes": 62087,
+      "sha256": "06408ff9d632a5e6c938138138b019d6ce86134f06e26800383fb41d63f5f813",
+      "wall_seconds": 1.2510888490069192
+    },
+    {
+      "name": "mimicnet-readme",
+      "url": "https://api.github.com/repos/eniac/MimicNet/readme",
+      "state": "completed",
+      "status": 200,
+      "final_url": "https://api.github.com/repos/eniac/MimicNet/readme",
+      "content_type": "application/json; charset=utf-8",
+      "bytes": 6298,
+      "sha256": "c35013c5703b84fa2642d639c507ce168ac2c091c50950382ca014d991395178",
+      "wall_seconds": 1.1901809300034074
+    },
+    {
+      "name": "parsimon-paper",
+      "url": "https://arxiv.org/pdf/2205.01234",
+      "state": "completed",
+      "status": 200,
+      "final_url": "https://arxiv.org/pdf/2205.01234",
+      "content_type": "application/pdf",
+      "bytes": 1238552,
+      "sha256": "f3ca3183783d7814b8402b135379d4d8e9e45961373a5037e8a59c1cc965ca36",
+      "wall_seconds": 0.9935647800011793
+    },
+    {
+      "name": "mimicnet-paper",
+      "url": "https://dl.acm.org/doi/pdf/10.1145/3452296.3472926",
+      "state": "failed",
+      "error_type": "HTTPError",
+      "status": 403,
+      "bytes": 0,
+      "wall_seconds": 0.20264168300491292
+    },
+    {
+      "name": "parsimon-author-repositories",
+      "url": "https://api.github.com/orgs/netiken/repos?per_page=30",
+      "state": "completed",
+      "status": 200,
+      "final_url": "https://api.github.com/orgs/netiken/repos?per_page=30",
+      "content_type": "application/json; charset=utf-8",
+      "bytes": 34764,
+      "sha256": "5da37f0b63e5369194d45034082d9ba792b2ad9fdb45c05ad401e23c898c12ed",
+      "wall_seconds": 1.4160222549980972
+    }
+  ],
+  "parsimon": {
+    "title": "Scalable Tail Latency Estimation for Data Center Networks",
+    "version": "arXiv:2205.01234v2, 2022-09-30",
+    "paper": "https://arxiv.org/abs/2205.01234v2",
+    "repository": "https://github.com/netiken/parsimon",
+    "paper_text_sha256": "2021d0efd08e5e4d00f2c5123cf68b53d3437e9be4a7153b1acff88911846078",
+    "relevant_text_anchors": [
+      "Scalable Tail Latency Estimation for Data Center Networks",
+      "arXiv:2205.01234v2",
+      "Validation of other transport protocols",
+      "studies of short term transient behavior should not use our approach",
+      "cross traffic is correlated across multiple hops",
+      "https://github.com/netiken"
+    ],
+    "repository_code_inspected": false
+  },
+  "mimicnet": {
+    "repository": "https://github.com/eniac/MimicNet",
+    "readme_blob_sha": "016a77bd0919000531068383dc004749bf27aef3",
+    "readme_sha256": "a008cbdcb63291e6f76695add455e2d1df5b5ac9dba74d8c75c188ab1cd10982",
+    "paper": "https://doi.org/10.1145/3452296.3472926",
+    "paper_full_text_obtained": false,
+    "scope": "author_repository_README_and_bibliographic_metadata_only"
+  },
+  "new_competitor_executions": 0,
+  "new_networks": 0
+}

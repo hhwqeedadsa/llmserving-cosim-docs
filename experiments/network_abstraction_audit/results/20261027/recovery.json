@@ -1,0 +1,66 @@
+{
+  "passed": true,
+  "archive_sha256": "228ae327c098edcc7107ce73bee677b320c4ca2ad5345f8f8bb64d5e24c5424a",
+  "copied_source": true,
+  "empty_cwd": true,
+  "analysis_byte_identical": true,
+  "verification_byte_identical": true,
+  "reports_byte_identical": true,
+  "old_network_runtime_required": false,
+  "new_networks": 0,
+  "new_http": 0,
+  "new_builds": 0,
+  "commands": [
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "experiments.network_abstraction_audit.study",
+        "analyze",
+        "--run",
+        "/home/lry/moe-ub-cosim/runs/network_abstraction_audit_20261027/restored/run",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/network_abstraction_audit_20261027/restored/run/recomputed-analysis"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim/runs/network_abstraction_audit_20261027/restored/empty-cwd",
+      "exit_code": 0,
+      "stdout": "Audited 8 raw files, two batches and 6 offline plans; no network execution.\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "experiments.network_abstraction_audit.verify",
+        "--run",
+        "/home/lry/moe-ub-cosim/runs/network_abstraction_audit_20261027/restored/run",
+        "--analysis",
+        "/home/lry/moe-ub-cosim/runs/network_abstraction_audit_20261027/restored/run/recomputed-analysis",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/network_abstraction_audit_20261027/restored/run/reverification.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim/runs/network_abstraction_audit_20261027/restored/empty-cwd",
+      "exit_code": 0,
+      "stdout": "Independent offline representation checks passed.\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "experiments.network_abstraction_audit.report",
+        "--run",
+        "/home/lry/moe-ub-cosim/runs/network_abstraction_audit_20261027/restored/run",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/network_abstraction_audit_20261027/restored/run/recomputed-report"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim/runs/network_abstraction_audit_20261027/restored/empty-cwd",
+      "exit_code": 0,
+      "stdout": "Wrote source-audited report and standalone HTML; no network execution.\n",
+      "stderr": ""
+    }
+  ]
+}

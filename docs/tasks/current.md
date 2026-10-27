@@ -13,6 +13,8 @@
 
 ## 当前范围和预算
 
+当前持久连接NIC准入修复 `in_progress`：[独立范围](stream_nic_preflight_spec.md)，起点`2180762`。继续研究共享上联/多rail前，源码发现Python只验端口/plane，而原生Open要求正反向唯一NIC；同plane多rail会被前端接受、原生分配后拒绝。先保存最小反例并将现有限制提前为纯准入，独立路径枚举和公共CLI假后端证明未启动网络；不把它称为多rail实现或创新。300秒/128MiB、单命令60秒/RSS1GiB/地址2GiB，零新网络/构建/下载/GPU/依赖修改/push。网络性能对照另行预注册，两个主创新和整体目标继续进行。
+
 当前新请求/batch通信表示研究 `completed`：[事前协议](../../experiments/compact_network_choice/protocol.md)、[报告](../../experiments/compact_network_choice/results/20261027/report.md)，起点`6aa55ff`、规范`90e188e`。固定8份完整新请求entry1/layer3，EP4下batch4/8，三网络各现代/完整通用图共12次执行全部完成。应用阶段100G/200G/传播减半分别57.390/53.422/33.402us与59.797/54.620/35.857us。仅字节基线选择200G，配置选择后悔值59.94%/52.33%；普通七阶段operand/帧基线已均选对，最大绝对相对时延误差仍23.57%/19.14%，不能将排序正确当预测精确或新增语义收益。
 
 完整图仅由各batch原网络提取，五组稳定身份比较直接通过；最后一组batch8/传播减半原检查失败，保留原件和停止账目。离线证明只是4个工作after列表在编号双射后排列不同，原生代码按AND检查，集合/其余工作/提交及包/队列/回调/应用/内存均一致；无重跑或改图。独立核对八原件、160个聚合单元、24条最短路径、2,064个现代参考源包/3,900事件；4类篡改拒绝、移除truth后两预测逐字节一致、13依赖核验通过。385项含manifest的持久包逐成员hash恢复后，复制源码/空cwd重算两预测和报告/摘要逐字节一致，详见[核验](../../experiments/compact_network_choice/results/20261027/verification.json)、[恢复](../../experiments/compact_network_choice/results/20261027/recovery.json)及[收尾](../../experiments/compact_network_choice/results/20261027/closeout.json)。

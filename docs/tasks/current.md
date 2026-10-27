@@ -13,6 +13,8 @@
 
 ## 当前范围和预算
 
+当前平台`in_progress`：[分层逻辑输入与转发门槛规范](hybrid_logical_spec.md)。起点`859f0ac`，新增输入驱动的服务器域/rail/逐token数据、计数与进度来源，以及受轮询约束的Dispatch门槛回放；Combine仅表示贡献分组，不称完整Hybrid执行。独立300受监控秒/128MiB、单命令60秒/RSS1GiB/地址2GiB；零新网络/构建/下载/GPU/依赖修改/push。不扩大原生四卡或事务上限，不重开下方已关闭实验。功能和来源独立验收后本地保存，两项创新及整体目标仍进行中。
+
 当前研究`completed`：[分层EP通信路径离线核查](../../experiments/hybrid_path_audit/README.md)、[事前协议](../../experiments/hybrid_path_audit/protocol.md)、[报告网页](../../experiments/hybrid_path_audit/results/20261027/report.html)及[方向取舍](../../experiments/hybrid_path_audit/decision.md)。平台`83a9d7d`、协议`7d96d19`、初实现`1ef9062`。固定15完整真实请求、58层全部145232条token×层行、EP64/128/256、每服务器8GPU与两种事前源绑定。Hybrid跨机隐藏向量份数相对逐目标GPU发送减少46.7%～46.9%/27.5%～27.6%/14.9%～15.0%；另计域内转发及Combine三种归约分支，不能当全网字节、时延或本项目新算法收益。零数据通道仍需finish；六组真实prefill前缀支持无时间的单通道必要偏序，不是完整可执行流程或GPU重叠观测。
 
 六份固定DeepEP源码经缓存tree/blob/SHA256准入，独立位图/逐expert展开复核六条件及五类篡改拒绝，13固定依赖通过。首次准备发现旧ECMP包只含8份原文而非15份，失败/原源码/部分复制和原failed execution保留；其余7份从本地读取、逐hash匹配原清单，所有输入/参数/预算不变，后续另存continuation（修正`1aacbbf`）。68成员/31,231,768B包逐hash复制源码/空cwd重算分析、核验及JSON/Markdown/HTML字节一致，恢复零网络；SHA256 `e4a91fb1dab3fc4c44f6c2ed3081d58fd56847a168b94766154811939da8ab87`，原件`runs/hybrid_path_audit_20261027/`。全部已闭合外层/嵌套/复制收据保守172.028秒，原件约62.43MiB分配产物及版本化材料/2MiB收据预留，保持600秒/384MiB及单命令60秒/RSS1GiB/地址2GiB。见[最终资源核查](../../experiments/hybrid_path_audit/results/20261027/final-resources.json)。零网络/构建/下载/GPU/平台依赖修改/push。

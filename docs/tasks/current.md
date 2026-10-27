@@ -13,6 +13,8 @@
 
 ## 当前范围和预算
 
+EP粒度与真实路由网络投影`in_progress`：[事前范围](../../experiments/ep_network_projection/protocol.md)。在固定15份完整原件、相同B4/B8与四个源rank下，离线比较EP4～256的目的rank去重与配对碰撞，并和无放回Top8均匀解析参考比较；另核直接控制模板的规模增长。零新网络/构建/GPU/下载/平台依赖修改，600受监控秒/128MiB及每命令60秒/RSS1GiB/地址2GiB。仅投影需求，不称大EP执行或创新收益；两候选与整体目标仍in_progress。
+
 已完成条目记录各阶段当时的能力和限制；后续状态以上方最新增量及现行使用文档为准，旧阶段的“尚未实现”不表示该限制仍然有效。
 
 网络抽象近邻与MoE表示边界核查`completed`：[事前范围](../../experiments/network_abstraction_audit/protocol.md)、[报告与网页](../../experiments/network_abstraction_audit/README.md)。用户再次确认新增13份全部来自R1-AWQ/MMLU，沿用11份完整/2份缺层的接收记录，远端修订身份不变。固定八原件的entry1/layer3、EP4/batch4与8，六份离线计划证明：保持每个Top-K位置的目的rank，卡内人工集中/分散可使batch8最热专家从1到8个token，而仅排除专家计数数值后通信形状/依赖/符号布局相同。无时间的同一调用者顺序也保持动态slot；不是包级时延等价。独立核算与四类篡改拒绝通过。当前专家阶段每rank固定1000ns，不能用该模型直接推断卡内热点造成的计算排队或网络收益。

@@ -13,6 +13,8 @@
 
 ## 当前范围和预算
 
+当前研究 `in_progress`：[CLEM与现代GPU发起MoE边界核查](../../experiments/clem_boundary_audit/protocol.md)，起点`5a6bc45`。仅核固定公开源码的发起路径、资源/内存完成和扩规模方法，重新明确两候选的强基线；600受监控秒/128MiB、最多24HTTP/8MiB且无重试，不执行网络仿真、构建或GPU。不重开旧条件，功能差异不作为创新成立依据。
+
 当前平台增量 `completed`：[分阶段前缀发布规范](staged_publication_spec.md)、[公开小例](../../examples/scaleout_staged_publication/README.md)和[验收](../../fixtures/staged_publication/README.md)，起点`bdb7392`、规范`bd29285`。session-only staged_prefix/1保留预约、描述符就绪、顺序ready与显式发布；实际ACK/原子回复决定信用及源保护释放，晚ring取max不重复发包，不占GPU串行lane。普通静态probe/依赖前端在输出前拒绝；未补完整Hybrid控制、转发或Combine。
 
 59项Python、原生唤醒49断言/22类拒绝、三单元语法及13固定依赖通过；一次全新公开Release构建446项任务/437编译单元通过。八个事前功能网络全部完成，主例5事务/456B MRT1/10源包/120次物理TX及对应RX独立核对；两次晚发布未推进，深度1在首事务完成后才准备后继。旧默认/explicit去原新增字段后完整一致；复制Python源码/空cwd/搬迁运行时完整结果仅差逐hash证明的库路径及枚举顺序。

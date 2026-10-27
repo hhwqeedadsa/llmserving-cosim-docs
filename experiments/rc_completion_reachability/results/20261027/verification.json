@@ -1,0 +1,29 @@
+{
+  "GPU": 0,
+  "HTTP": {
+    "attempts": 1,
+    "bytes": 524289,
+    "outcome": "oversized response cap sentinel; all further HTTP stopped",
+    "status": 200
+  },
+  "complete_kernel_reachability_proven": false,
+  "current_upstream_checked": false,
+  "direct_MoE_old_value_impact_proven": false,
+  "executed_prefixes": 5,
+  "network_runs": 0,
+  "new_innovation_established": false,
+  "old_branch_gate_depends_on_retry_timing": true,
+  "passed": true,
+  "pinned_linux": "adc218676eef25575469234709c2d87185ca223a",
+  "self_held_credit_fences_retry_in_substitute": true,
+  "source_files": 9,
+  "source_trees": 5,
+  "tamper_rejected": [
+    "atomic_posted_as_pending",
+    "self_credit_cleared",
+    "fence_ignored",
+    "source_fragment"
+  ],
+  "unchanged_enums": 2,
+  "unchanged_functions": 10
+}

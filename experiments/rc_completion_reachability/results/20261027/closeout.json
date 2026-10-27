@@ -1,0 +1,61 @@
+{
+  "CPU_compiles": 1,
+  "GPU": 0,
+  "HTTP": 1,
+  "HTTP_bytes": 524289,
+  "HTTP_failure": "512KiB oversize sentinel; full source intake stopped, no retry or alternative API",
+  "HTTP_status": 200,
+  "administrative_artifact_reserve_bytes": 2097152,
+  "administrative_wall_reserve_seconds": 10,
+  "artifact_usage": {
+    "allocated_bytes": 2510848,
+    "apparent_bytes": 2192060
+  },
+  "complete_kernel_reachability_proven": false,
+  "copied_source_empty_cwd_recovery_passed": true,
+  "current_upstream_checked": false,
+  "dependencies_checked": 13,
+  "dependency_changes": 0,
+  "direct_MoE_old_value_impact_proven": false,
+  "limits": {
+    "address_bytes": 2147483648,
+    "artifact_bytes": 268435456,
+    "min_free_bytes": 8589934592,
+    "monitored_seconds": 900,
+    "rss_bytes": 1073741824
+  },
+  "monitored_seconds_conservatively_including_recovered_receipt_copies": 8.105905711010564,
+  "native_network_runs": 0,
+  "new_innovations_established": 0,
+  "overall_goal_complete": false,
+  "pinned_linux": "adc218676eef25575469234709c2d87185ca223a",
+  "prefixes": 5,
+  "protocol_commits": [
+    "2a07086",
+    "8edfdee"
+  ],
+  "push": false,
+  "receipts": [
+    "runs/rc_completion_reachability_20261027/prepare-monitor/probe.json",
+    "runs/rc_completion_reachability_20261027/compile-run-monitor/probe.json",
+    "runs/rc_completion_reachability_20261027/relevance-monitor/probe.json",
+    "runs/rc_completion_reachability_20261027/verify-monitor/probe.json",
+    "runs/rc_completion_reachability_20261027/report-monitor/probe.json",
+    "runs/rc_completion_reachability_20261027/intake-monitor/probe.json",
+    "runs/rc_completion_reachability_20261027/recovered/compile-run-monitor/probe.json",
+    "runs/rc_completion_reachability_20261027/recovered/intake-monitor/probe.json",
+    "runs/rc_completion_reachability_20261027/recovered/prepare-monitor/probe.json",
+    "runs/rc_completion_reachability_20261027/recovered/relevance-monitor/probe.json",
+    "runs/rc_completion_reachability_20261027/recovered/report-monitor/probe.json",
+    "runs/rc_completion_reachability_20261027/recovered/verify-monitor/probe.json",
+    "runs/rc_completion_reachability_20261027-fetch0-monitor/probe.json",
+    "runs/rc_completion_reachability_20261027-recovery-monitor/probe.json"
+  ],
+  "run_root": "runs/rc_completion_reachability_20261027",
+  "source_base": "8edfdee",
+  "source_enums": 2,
+  "source_files": 9,
+  "source_functions": 10,
+  "source_trees": 5,
+  "status": "closed_with_limited_version_and_MoE_applicability"
+}

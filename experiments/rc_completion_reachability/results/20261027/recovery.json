@@ -1,0 +1,77 @@
+{
+  "GPU": 0,
+  "HTTP": 0,
+  "archive_members": 67,
+  "archive_sha256": "8f20c43bc07ed3b567a75283bb99a0bfb48f07939b6ff96bc0fadc977ddedcd7",
+  "builds": 0,
+  "commands": [
+    [
+      "/usr/bin/python3",
+      "-B",
+      "-m",
+      "experiments.rc_completion_reachability.analysis.prefix",
+      "prepare",
+      "--stage",
+      "/home/lry/moe-ub-cosim/runs/rc_completion_reachability_20261027/recovered",
+      "--output",
+      "/home/lry/moe-ub-cosim/runs/rc_completion_reachability_20261027/recovered/regenerated"
+    ],
+    [
+      "/home/lry/moe-ub-cosim/runs/rc_completion_reachability_20261027/recovered/prefix/prefix"
+    ],
+    [
+      "/usr/bin/python3",
+      "-B",
+      "-m",
+      "experiments.rc_completion_reachability.analysis.verify",
+      "--stage",
+      "/home/lry/moe-ub-cosim/runs/rc_completion_reachability_20261027/recovered",
+      "--output",
+      "/home/lry/moe-ub-cosim/runs/rc_completion_reachability_20261027/recovered/reverification.json"
+    ],
+    [
+      "/usr/bin/python3",
+      "-B",
+      "-m",
+      "experiments.rc_completion_reachability.analysis.report",
+      "--stage",
+      "/home/lry/moe-ub-cosim/runs/rc_completion_reachability_20261027/recovered",
+      "--output",
+      "/home/lry/moe-ub-cosim/runs/rc_completion_reachability_20261027/recovered/reanalysis"
+    ]
+  ],
+  "copied_source_empty_cwd": true,
+  "existing_binary_records_byte_equal": true,
+  "member_hashes_verified": true,
+  "network_runs": 0,
+  "passed": true,
+  "scope": "same Linux host CPU binary and source recovery, not arbitrary ISA/libc portability",
+  "source_regeneration_byte_equal": true,
+  "terminal_monitors_in_archive": [
+    {
+      "path": "prepare-monitor/probe.json",
+      "status": "completed"
+    },
+    {
+      "path": "compile-run-monitor/probe.json",
+      "status": "completed"
+    },
+    {
+      "path": "relevance-monitor/probe.json",
+      "status": "completed"
+    },
+    {
+      "path": "verify-monitor/probe.json",
+      "status": "completed"
+    },
+    {
+      "path": "report-monitor/probe.json",
+      "status": "completed"
+    },
+    {
+      "path": "intake-monitor/probe.json",
+      "status": "child_failed"
+    }
+  ],
+  "verification_report_summary_byte_equal": true
+}

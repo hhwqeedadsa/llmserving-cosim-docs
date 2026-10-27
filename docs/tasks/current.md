@@ -13,7 +13,11 @@
 
 ## 当前范围和预算
 
-当前研究`in_progress`：[RC完成/返回值的版本与可达性筛选](../../experiments/rc_completion_reachability/protocol.md)，起点`95e5752`。先核已有固定RXE9文件，再有界固定当次上游master/tree并对比，不升级依赖；最多20HTTP/3MiB、单请求10秒，无重试；900受监控秒/256MiB，零新网络/GPU，最多一次必要小型CPU编译。目标是排除旧替代环境假阳性或已修复问题，不继续给健康四卡链路选择堆语义，也不把源码异常直接称漏洞或两项创新。
+当前筛选已关闭：[RC完成/返回值的版本与可达性筛选](../../experiments/rc_completion_reachability/protocol.md)、[报告与网页](../../experiments/rc_completion_reachability/README.md)，起点`95e5752`、协议`2a07086`/`8edfdee`。固定Linux v6.12核对9blob/5tree，一次小型CPU编译执行10个未修改函数/2个枚举的五种顺序前缀。累计ACK先于原子重发到达时，posted状态挡住旧分支；重发后pending时可通过一个后续门槛。带FENCE的自身额度阻塞只在显式替代环境成立；未执行完整内核/包校验/定时器，未证明漏洞或死锁。
+
+首次GitHub提交详情HTTP200达到524289B检测哨兵，超过512KiB单响应上限，全部HTTP立即关闭；保留失败、未重试或换API，当前版本未核验。缓存DeepEP所核跨机tail接口不返回旧值，消费slot旧值的原子位于本地；不能把该RXE分支提升为MoE跨机主创新，也不能据此删Atomic ACK。四类篡改拒绝及13固定依赖检查通过，67成员包逐hash恢复，复制源码/空cwd重生成原函数、既有二进制五记录、核验及报告逐字节一致，无恢复编译/网络。
+
+实际用量、来源失败和hash见[关闭](../../experiments/rc_completion_reachability/results/20261027/closeout.json)与[恢复](../../experiments/rc_completion_reachability/results/20261027/recovery.json)，原件`runs/rc_completion_reachability_20261027/`。保持900受监控秒/256MiB与单命令上限，零新网络/GPU/依赖修改/push；来源及编译额度均关闭。此轮为progress，两项创新及整体目标继续`in_progress`。下一研究应回到输入生成的通信/控制表示与普通完整DAG、符号缓冲区的强基线，先冻结可证伪的成本/决策判据，不再扩条件维持该返回值候选。
 
 当前研究条件已停止并收尾（`comparison_complete=false`）：[真实路由的请求间对齐协议](../../experiments/route_alignment/protocol.md)、[报告/网页](../../experiments/route_alignment/README.md)，起点`e3ab387`、协议`59b8ae7`、执行实现`7cb45b2`。八份完整原件entry1..8/layer3、EP8/八台单卡服务器；16个程序各434次WRITE/136本地节点/6,221,824B，逐连接总字节不变，32个逐链路预测在网络前冻结。
 

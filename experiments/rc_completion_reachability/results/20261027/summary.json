@@ -1,0 +1,186 @@
+{
+  "MoE_relevance": {
+    "controller_callback_row_fields": [
+      "event",
+      "operation",
+      "time_ns"
+    ],
+    "direct_MoE_impact_from_missing_atomic_old_value_proven": false,
+    "excerpts": [
+      {
+        "file": "handle.cuh",
+        "line": 98,
+        "name": "tail_signal_void_api",
+        "text": "    template <typename team_t, typename dtype_t>\n    __device__ __forceinline__\n    void red_add_rel(dtype_t* sym_ptr, const dtype_t& value, const int& dst_rank_idx,\n                     const int& extra_options = 0) const {\n        const auto dst_ptr = get_sym_ptr<team_t>(sym_ptr, dst_rank_idx);\n        // Use symmetric pointers as much as possible, RDMA otherwise"
+      },
+      {
+        "file": "handle.cuh",
+        "line": 113,
+        "name": "remote_tail_uses_gin_signal",
+        "text": "            // TODO(NCCL): support all dtypes\n            gin.signal(TEAM_WORLD_RAIL(), dst_rank_idx,\n                       ncclGin_VASignalAdd(nccl_window, reinterpret_cast<int64_t>(sym_ptr) - lsa_base_ptr, static_cast<uint64_t>(value)),\n                       ncclCoopThread(),\n                       ncclGin_None(),\n                       cuda::thread_scope_thread,"
+      },
+      {
+        "file": "hybrid_dispatch.cuh",
+        "line": 347,
+        "name": "actual_hybrid_tail_call",
+        "text": "                // NOTES: the \"release\" scope will be `sys` for the local rank (we may involve NVLink so not `gpu`)\n                // For RDMA requests, \"release\" is ensured by \"atomic\"\n                gin.red_add_rel<ncclTeamTagRail>(ptr, signaled_tail - old_signaled_tail, lane_idx);\n                stored_old_scaleout_tail = stored_scaleout_tail;\n            }\n            __syncwarp();"
+      },
+      {
+        "file": "hybrid_dispatch.cuh",
+        "line": 585,
+        "name": "returned_slot_is_local_scaleup_atomic",
+        "text": "                    // Deduplicate for NVLink ranks\n                    if (ptx::deduplicate(stored_dst_scaleup_rank_idx, lane_idx) and stored_dst_scaleup_rank_idx >= 0)\n                        stored_dst_slot_idx = atomicAdd(workspace_layout.get_scaleup_atomic_sender_counter() + stored_dst_scaleup_rank_idx, 1);\n                }\n                __syncwarp();\n"
+      },
+      {
+        "file": "hybrid_dispatch.cuh",
+        "line": 517,
+        "name": "tail_consumer_reads_target_memory",
+        "text": "                // Read new signaled tails\n                if (lane_idx < kNumScaleoutRanks) {\n                    const auto signaled_tail = ptx::ld_acquire_sys<int64_t>(\n                        workspace_layout.get_scaleout_channel_signaled_tail_ptr(channel_idx, lane_idx));\n                    math::unpack2<int, int64_t>(signaled_tail, stored_finish_flag, stored_scaleout_tail_idx);\n                }"
+      }
+    ],
+    "passed": true,
+    "platform_source_sha256": "b82999972b15b0c660cba2816603fba6e516add27be149987b73c38365fbc2bf",
+    "scope": "specific Hybrid tail notification and local slot call sites; not all MoE kernels/providers",
+    "source_files": [
+      {
+        "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+        "git_blob": "b459a34a7d9012a95ca9821b947a60e5819fa736",
+        "path": "deep_ep/include/deep_ep/comm/handle.cuh",
+        "sha256": "24c321c8bc35a09620b7c842c9333f64d7e208faa45b832241deab430f65f068",
+        "source_identity": "existing cached pinned-ref/tree-entry and blob; no new remote revision verification"
+      },
+      {
+        "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+        "git_blob": "0cb8e7da20940881c945720b45dd0eeea8feffc1",
+        "path": "deep_ep/include/deep_ep/impls/ep/hybrid_dispatch.cuh",
+        "sha256": "d7e6e98aeb605392c668bf46de3520072f02b61f145cfc5779dd9c32f0e73db9",
+        "source_identity": "existing cached pinned-ref/tree-entry and blob; no new remote revision verification"
+      }
+    ],
+    "warning": "void API still needs correct atomic execution/ordering and transport completion; never delete Atomic ACK or infer wire format from this API"
+  },
+  "build_count": 1,
+  "current_upstream_status": "unverified: HTTP200 response exceeded 512KiB cap, no retry",
+  "decision": "do not promote the atomic-old-value branch to the MoE Scale-Out paper mainline",
+  "finding": "earlier stub state is not automatically reachable; retry timing controls posted/pending gate",
+  "full_stack_or_hardware_vulnerability_confirmed": false,
+  "main_innovations_established": 0,
+  "network_runs": 0,
+  "overall_goal_complete": false,
+  "records": [
+    {
+      "atomic_credit": 0,
+      "atomic_fenced_now": 0,
+      "atomic_holds_credit": 1,
+      "atomic_state": 2,
+      "case": "initial_two_pending",
+      "comp_psn": 0,
+      "consumer": 0,
+      "fence_before_retry_atomic": 0,
+      "get_wqe_check_psn": 1,
+      "get_wqe_done": 0,
+      "req_index": 2,
+      "req_psn": 2,
+      "retry_sent": 0,
+      "selected_atomic": 0,
+      "write_state": 2
+    },
+    {
+      "atomic_credit": 0,
+      "atomic_fenced_now": 0,
+      "atomic_holds_credit": 1,
+      "atomic_state": 0,
+      "case": "ack_before_atomic_retry",
+      "comp_psn": 1,
+      "consumer": 1,
+      "fence_before_retry_atomic": 0,
+      "get_wqe_check_psn": 0,
+      "get_wqe_done": 1,
+      "req_index": 1,
+      "req_psn": 1,
+      "retry_sent": 1,
+      "selected_atomic": 1,
+      "write_state": 2
+    },
+    {
+      "atomic_credit": 0,
+      "atomic_fenced_now": 0,
+      "atomic_holds_credit": 1,
+      "atomic_state": 2,
+      "case": "ack_after_atomic_retry",
+      "comp_psn": 1,
+      "consumer": 1,
+      "fence_before_retry_atomic": 0,
+      "get_wqe_check_psn": 1,
+      "get_wqe_done": 0,
+      "req_index": 2,
+      "req_psn": 2,
+      "retry_sent": 2,
+      "selected_atomic": 1,
+      "write_state": 2
+    },
+    {
+      "atomic_credit": 0,
+      "atomic_fenced_now": 1,
+      "atomic_holds_credit": 1,
+      "atomic_state": 0,
+      "case": "fenced_atomic_retry",
+      "comp_psn": 1,
+      "consumer": 1,
+      "fence_before_retry_atomic": 1,
+      "get_wqe_check_psn": 0,
+      "get_wqe_done": 1,
+      "req_index": 1,
+      "req_psn": 1,
+      "retry_sent": 1,
+      "selected_atomic": 1,
+      "write_state": 2
+    },
+    {
+      "atomic_credit": 0,
+      "atomic_fenced_now": 0,
+      "atomic_holds_credit": 1,
+      "atomic_state": 2,
+      "case": "write_ack_precedes_retry",
+      "comp_psn": 1,
+      "consumer": 1,
+      "fence_before_retry_atomic": 0,
+      "get_wqe_check_psn": 1,
+      "get_wqe_done": 0,
+      "req_index": 2,
+      "req_psn": 2,
+      "retry_sent": 1,
+      "selected_atomic": 1,
+      "write_state": 2
+    }
+  ],
+  "verification": {
+    "GPU": 0,
+    "HTTP": {
+      "attempts": 1,
+      "bytes": 524289,
+      "outcome": "oversized response cap sentinel; all further HTTP stopped",
+      "status": 200
+    },
+    "complete_kernel_reachability_proven": false,
+    "current_upstream_checked": false,
+    "direct_MoE_old_value_impact_proven": false,
+    "executed_prefixes": 5,
+    "network_runs": 0,
+    "new_innovation_established": false,
+    "old_branch_gate_depends_on_retry_timing": true,
+    "passed": true,
+    "pinned_linux": "adc218676eef25575469234709c2d87185ca223a",
+    "self_held_credit_fences_retry_in_substitute": true,
+    "source_files": 9,
+    "source_trees": 5,
+    "tamper_rejected": [
+      "atomic_posted_as_pending",
+      "self_credit_cleared",
+      "fence_ignored",
+      "source_fragment"
+    ],
+    "unchanged_enums": 2,
+    "unchanged_functions": 10
+  }
+}

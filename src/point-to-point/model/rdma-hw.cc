@@ -2,6 +2,7 @@
 #include <ns3/seq-ts-header.h>
 #include <ns3/udp-header.h>
 #include <ns3/ipv4-header.h>
+#include <ns3/ipv4.h>
 #include "ns3/ppp-header.h"
 #include "ns3/boolean.h"
 #include "ns3/uinteger.h"
@@ -209,7 +210,28 @@ void RdmaHw::Setup(QpCompleteCallback cb){
 	m_qpCompleteCallback = cb;
 }
 
+bool RdmaHw::BindLocalAddress(Ipv4Address address, uint32_t nic){
+	if (!m_node || nic >= m_nic.size() || !m_nic[nic].dev ||
+		m_qpsCreated) return false;
+	auto ipv4 = m_node->GetObject<Ipv4>();
+	if (!ipv4) return false;
+	const int32_t target = ipv4->GetInterfaceForDevice(m_nic[nic].dev);
+	uint32_t owners = 0;
+	bool matches = false;
+	for (uint32_t i = 0; i < ipv4->GetNInterfaces(); ++i)
+		for (uint32_t j = 0; j < ipv4->GetNAddresses(i); ++j)
+			if (ipv4->GetAddress(i, j).GetLocal() == address){
+				++owners;
+				matches = matches || int32_t(i) == target;
+			}
+	if (owners != 1 || !matches) return false;
+	auto result = m_localAddressNic.emplace(address.Get(), nic);
+	return result.second || result.first->second == nic;
+}
+
 uint32_t RdmaHw::GetNicIdxOfQp(Ptr<RdmaQueuePair> qp){
+	auto local = m_localAddressNic.find(qp->sip.Get());
+	if (local != m_localAddressNic.end()) return local->second;
 	auto &v = m_rtTable[qp->dip.Get()];
 	if (v.size() > 0){
 		return v[qp->GetHash() % v.size()];
@@ -228,6 +250,7 @@ Ptr<RdmaQueuePair> RdmaHw::GetQp(uint32_t dip, uint16_t sport, uint16_t pg){
 	return NULL;
 }
 void RdmaHw::AddQueuePair(uint32_t src, uint32_t dest, uint64_t tag, uint64_t size, uint16_t pg, Ipv4Address sip, Ipv4Address dip, uint16_t sport, uint16_t dport, uint32_t win, uint64_t baseRtt, Callback<void> notifyAppFinish, Callback<void> notifyAppSent){
+	m_qpsCreated = true;
 	// create qp
 	Ptr<RdmaQueuePair> qp = CreateObject<RdmaQueuePair>(pg, sip, dip, sport, dport);
 	qp->SetSrc(src);
@@ -280,6 +303,7 @@ Ptr<RdmaRxQueuePair> RdmaHw::GetRxQp(uint32_t sip, uint32_t dip, uint16_t sport,
 	if (it != m_rxQpMap.end())
 		return it->second;
 	if (create){
+		m_qpsCreated = true;
 		// create new rx qp
 		Ptr<RdmaRxQueuePair> q = CreateObject<RdmaRxQueuePair>();
 		// init the qp
@@ -295,6 +319,9 @@ Ptr<RdmaRxQueuePair> RdmaHw::GetRxQp(uint32_t sip, uint32_t dip, uint16_t sport,
 	return NULL;
 }
 uint32_t RdmaHw::GetNicIdxOfRxQp(Ptr<RdmaRxQueuePair> q){
+	// ReceiveUdp constructs q with the local destination as q->sip.
+	auto local = m_localAddressNic.find(q->sip);
+	if (local != m_localAddressNic.end()) return local->second;
 	auto &v = m_rtTable[q->dip];
 	if (v.size() > 0){
 		return v[q->GetHash() % v.size()];

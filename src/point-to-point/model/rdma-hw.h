@@ -50,6 +50,9 @@ public:
 
 	void SetNode(Ptr<Node> node);
 	void Setup(QpCompleteCallback cb); // setup shared data and callbacks with the QbbNetDevice
+	// Register a physical local address before creating QPs. Routing changes do
+	// not migrate an address-bound QP to another NIC. Unregistered IPs keep ECMP.
+	bool BindLocalAddress(Ipv4Address address, uint32_t nic);
 	static uint64_t GetQpKey(uint32_t dip, uint16_t sport, uint16_t pg); // get the lookup key for m_qpMap
 	Ptr<RdmaQueuePair> GetQp(uint32_t dip, uint16_t sport, uint16_t pg); // get the qp
 	uint32_t GetNicIdxOfQp(Ptr<RdmaQueuePair> qp); // get the NIC index of the qp
@@ -157,6 +160,9 @@ public:
 	void SetPintSmplThresh(double p);
 	void HandleAckHpPint(Ptr<RdmaQueuePair> qp, Ptr<Packet> p, CustomHeader &ch);
 	void UpdateRateHpPint(Ptr<RdmaQueuePair> qp, Ptr<Packet> p, CustomHeader &ch, bool fast_react);
+private:
+	std::unordered_map<uint32_t, uint32_t> m_localAddressNic;
+	bool m_qpsCreated = false;
 };
 
 } /* namespace ns3 */

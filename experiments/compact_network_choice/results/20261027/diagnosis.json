@@ -1,0 +1,196 @@
+{
+  "passed": true,
+  "outcome": "only_order_of_conjunctive_after_list_changed_under_identity_renaming",
+  "original_comparison_failure_preserved": true,
+  "changed_work": 4,
+  "mismatches": [
+    {
+      "work": 109,
+      "task": {
+        "role": "event",
+        "event": "m0.dispatch.exit.r0.ready"
+      },
+      "baseline_after": [
+        {
+          "operation": 93,
+          "event": "applied"
+        },
+        {
+          "operation": 97,
+          "event": "applied"
+        },
+        {
+          "operation": 101,
+          "event": "applied"
+        },
+        {
+          "operation": 105,
+          "event": "applied"
+        }
+      ],
+      "renamed_after": [
+        {
+          "operation": 93,
+          "event": "applied"
+        },
+        {
+          "operation": 97,
+          "event": "applied"
+        },
+        {
+          "operation": 105,
+          "event": "applied"
+        },
+        {
+          "operation": 101,
+          "event": "applied"
+        }
+      ]
+    },
+    {
+      "work": 111,
+      "task": {
+        "role": "event",
+        "event": "m0.dispatch.exit.r1.ready"
+      },
+      "baseline_after": [
+        {
+          "operation": 94,
+          "event": "applied"
+        },
+        {
+          "operation": 98,
+          "event": "applied"
+        },
+        {
+          "operation": 102,
+          "event": "applied"
+        },
+        {
+          "operation": 106,
+          "event": "applied"
+        }
+      ],
+      "renamed_after": [
+        {
+          "operation": 94,
+          "event": "applied"
+        },
+        {
+          "operation": 98,
+          "event": "applied"
+        },
+        {
+          "operation": 106,
+          "event": "applied"
+        },
+        {
+          "operation": 102,
+          "event": "applied"
+        }
+      ]
+    },
+    {
+      "work": 113,
+      "task": {
+        "role": "event",
+        "event": "m0.dispatch.exit.r2.ready"
+      },
+      "baseline_after": [
+        {
+          "operation": 95,
+          "event": "applied"
+        },
+        {
+          "operation": 99,
+          "event": "applied"
+        },
+        {
+          "operation": 103,
+          "event": "applied"
+        },
+        {
+          "operation": 107,
+          "event": "applied"
+        }
+      ],
+      "renamed_after": [
+        {
+          "operation": 95,
+          "event": "applied"
+        },
+        {
+          "operation": 99,
+          "event": "applied"
+        },
+        {
+          "operation": 107,
+          "event": "applied"
+        },
+        {
+          "operation": 103,
+          "event": "applied"
+        }
+      ]
+    },
+    {
+      "work": 115,
+      "task": {
+        "role": "event",
+        "event": "m0.dispatch.exit.r3.ready"
+      },
+      "baseline_after": [
+        {
+          "operation": 96,
+          "event": "applied"
+        },
+        {
+          "operation": 100,
+          "event": "applied"
+        },
+        {
+          "operation": 104,
+          "event": "applied"
+        },
+        {
+          "operation": 108,
+          "event": "applied"
+        }
+      ],
+      "renamed_after": [
+        {
+          "operation": 96,
+          "event": "applied"
+        },
+        {
+          "operation": 100,
+          "event": "applied"
+        },
+        {
+          "operation": 108,
+          "event": "applied"
+        },
+        {
+          "operation": 104,
+          "event": "applied"
+        }
+      ]
+    }
+  ],
+  "equal_after_set_and_all_other_fields": true,
+  "equal_productive_commits_after_set_normalization": true,
+  "native_gate_source": {
+    "path": "backend/rdma/transaction_session.cc",
+    "sha256": "87c5b498d8bbb6610bf767717f3082793b09e93d2c8821a8470c92218b4f774b",
+    "excerpt": [
+      {
+        "line": 221,
+        "text": "for(const auto& d:op.at(\"after\"))ready=ready && Occurred(d.at(\"operation\"),d.at(\"event\"));"
+      }
+    ]
+  },
+  "application_packets_queues_callbacks_and_memory_already_equal": true,
+  "new_networks": 0,
+  "new_graph_or_predictor_changes": 0,
+  "strict_gate_not_reopened": true
+}

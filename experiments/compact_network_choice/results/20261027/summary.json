@@ -1,0 +1,1179 @@
+{
+  "execution": {
+    "state": "failure_preserved_no_remaining_networks",
+    "closed": true,
+    "records": [
+      {
+        "label": "prepare",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "experiments.compact_network_choice.prepare",
+          "--repository",
+          "/home/lry/moe-ub-cosim",
+          "--stage",
+          "/dev/shm/moe-compact-choice-20261027"
+        ],
+        "cwd": "/dev/shm/moe-compact-choice-20261027/empty-cwd",
+        "network": false,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "batch4-plan",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "modern-deepep-plan",
+          "--config",
+          "/dev/shm/moe-compact-choice-20261027/observed/batch4/modern-input.json",
+          "--output",
+          "/dev/shm/moe-compact-choice-20261027/observed/batch4/plan"
+        ],
+        "cwd": "/dev/shm/moe-compact-choice-20261027/empty-cwd",
+        "network": false,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "batch8-plan",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "modern-deepep-plan",
+          "--config",
+          "/dev/shm/moe-compact-choice-20261027/observed/batch8/modern-input.json",
+          "--output",
+          "/dev/shm/moe-compact-choice-20261027/observed/batch8/plan"
+        ],
+        "cwd": "/dev/shm/moe-compact-choice-20261027/empty-cwd",
+        "network": false,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "baseline-topology",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "topology",
+          "--config",
+          "/dev/shm/moe-compact-choice-20261027/observed/baseline-topology-config.json",
+          "--output",
+          "/dev/shm/moe-compact-choice-20261027/observed/baseline-topology"
+        ],
+        "cwd": "/dev/shm/moe-compact-choice-20261027/empty-cwd",
+        "network": false,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "bandwidth-topology",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "topology",
+          "--config",
+          "/dev/shm/moe-compact-choice-20261027/observed/bandwidth-topology-config.json",
+          "--output",
+          "/dev/shm/moe-compact-choice-20261027/observed/bandwidth-topology"
+        ],
+        "cwd": "/dev/shm/moe-compact-choice-20261027/empty-cwd",
+        "network": false,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "propagation-topology",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "topology",
+          "--config",
+          "/dev/shm/moe-compact-choice-20261027/observed/propagation-topology-config.json",
+          "--output",
+          "/dev/shm/moe-compact-choice-20261027/observed/propagation-topology"
+        ],
+        "cwd": "/dev/shm/moe-compact-choice-20261027/empty-cwd",
+        "network": false,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "predict",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "experiments.compact_network_choice.compact",
+          "--observed",
+          "/dev/shm/moe-compact-choice-20261027/observed",
+          "--output",
+          "/dev/shm/moe-compact-choice-20261027/predictions"
+        ],
+        "cwd": "/dev/shm/moe-compact-choice-20261027/empty-cwd",
+        "network": false,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "batch4-baseline-modern",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "modern-deepep-native",
+          "--topology",
+          "/dev/shm/moe-compact-choice-20261027/observed/baseline-topology",
+          "--protocol",
+          "/dev/shm/moe-compact-choice-20261027/observed/baseline-protocol.json",
+          "--config",
+          "/dev/shm/moe-compact-choice-20261027/observed/batch4/input.json",
+          "--backend",
+          "/dev/shm/moe-compact-choice-20261027/runtime/run-transaction-session",
+          "--output",
+          "/dev/shm/moe-compact-choice-20261027/truth/batch4/baseline/modern",
+          "--callback-batches"
+        ],
+        "cwd": "/dev/shm/moe-compact-choice-20261027/empty-cwd",
+        "network": true,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "batch4-compile",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "experiments.compact_network_choice.generic",
+          "compile",
+          "--stage",
+          "/dev/shm/moe-compact-choice-20261027",
+          "--batch",
+          "4"
+        ],
+        "cwd": "/dev/shm/moe-compact-choice-20261027/empty-cwd",
+        "network": false,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "batch4-baseline-generic",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "experiments.compact_network_choice.generic",
+          "run",
+          "--stage",
+          "/dev/shm/moe-compact-choice-20261027",
+          "--batch",
+          "4",
+          "--name",
+          "baseline"
+        ],
+        "cwd": "/dev/shm/moe-compact-choice-20261027/empty-cwd",
+        "network": true,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "batch4-baseline-compare",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "experiments.compact_network_choice.evaluate",
+          "compare",
+          "--stage",
+          "/dev/shm/moe-compact-choice-20261027",
+          "--batch",
+          "4",
+          "--name",
+          "baseline"
+        ],
+        "cwd": "/dev/shm/moe-compact-choice-20261027/empty-cwd",
+        "network": false,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "batch4-bandwidth-modern",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "modern-deepep-native",
+          "--topology",
+          "/dev/shm/moe-compact-choice-20261027/observed/bandwidth-topology",
+          "--protocol",
+          "/dev/shm/moe-compact-choice-20261027/observed/bandwidth-protocol.json",
+          "--config",
+          "/dev/shm/moe-compact-choice-20261027/observed/batch4/input.json",
+          "--backend",
+          "/dev/shm/moe-compact-choice-20261027/runtime/run-transaction-session",
+          "--output",
+          "/dev/shm/moe-compact-choice-20261027/truth/batch4/bandwidth/modern",
+          "--callback-batches"
+        ],
+        "cwd": "/dev/shm/moe-compact-choice-20261027/empty-cwd",
+        "network": true,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "batch4-bandwidth-generic",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "experiments.compact_network_choice.generic",
+          "run",
+          "--stage",
+          "/dev/shm/moe-compact-choice-20261027",
+          "--batch",
+          "4",
+          "--name",
+          "bandwidth"
+        ],
+        "cwd": "/dev/shm/moe-compact-choice-20261027/empty-cwd",
+        "network": true,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "batch4-bandwidth-compare",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "experiments.compact_network_choice.evaluate",
+          "compare",
+          "--stage",
+          "/dev/shm/moe-compact-choice-20261027",
+          "--batch",
+          "4",
+          "--name",
+          "bandwidth"
+        ],
+        "cwd": "/dev/shm/moe-compact-choice-20261027/empty-cwd",
+        "network": false,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "batch4-propagation-modern",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "modern-deepep-native",
+          "--topology",
+          "/dev/shm/moe-compact-choice-20261027/observed/propagation-topology",
+          "--protocol",
+          "/dev/shm/moe-compact-choice-20261027/observed/propagation-protocol.json",
+          "--config",
+          "/dev/shm/moe-compact-choice-20261027/observed/batch4/input.json",
+          "--backend",
+          "/dev/shm/moe-compact-choice-20261027/runtime/run-transaction-session",
+          "--output",
+          "/dev/shm/moe-compact-choice-20261027/truth/batch4/propagation/modern",
+          "--callback-batches"
+        ],
+        "cwd": "/dev/shm/moe-compact-choice-20261027/empty-cwd",
+        "network": true,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "batch4-propagation-generic",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "experiments.compact_network_choice.generic",
+          "run",
+          "--stage",
+          "/dev/shm/moe-compact-choice-20261027",
+          "--batch",
+          "4",
+          "--name",
+          "propagation"
+        ],
+        "cwd": "/dev/shm/moe-compact-choice-20261027/empty-cwd",
+        "network": true,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "batch4-propagation-compare",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "experiments.compact_network_choice.evaluate",
+          "compare",
+          "--stage",
+          "/dev/shm/moe-compact-choice-20261027",
+          "--batch",
+          "4",
+          "--name",
+          "propagation"
+        ],
+        "cwd": "/dev/shm/moe-compact-choice-20261027/empty-cwd",
+        "network": false,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "batch8-baseline-modern",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "modern-deepep-native",
+          "--topology",
+          "/dev/shm/moe-compact-choice-20261027/observed/baseline-topology",
+          "--protocol",
+          "/dev/shm/moe-compact-choice-20261027/observed/baseline-protocol.json",
+          "--config",
+          "/dev/shm/moe-compact-choice-20261027/observed/batch8/input.json",
+          "--backend",
+          "/dev/shm/moe-compact-choice-20261027/runtime/run-transaction-session",
+          "--output",
+          "/dev/shm/moe-compact-choice-20261027/truth/batch8/baseline/modern",
+          "--callback-batches"
+        ],
+        "cwd": "/dev/shm/moe-compact-choice-20261027/empty-cwd",
+        "network": true,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "batch8-compile",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "experiments.compact_network_choice.generic",
+          "compile",
+          "--stage",
+          "/dev/shm/moe-compact-choice-20261027",
+          "--batch",
+          "8"
+        ],
+        "cwd": "/dev/shm/moe-compact-choice-20261027/empty-cwd",
+        "network": false,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "batch8-baseline-generic",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "experiments.compact_network_choice.generic",
+          "run",
+          "--stage",
+          "/dev/shm/moe-compact-choice-20261027",
+          "--batch",
+          "8",
+          "--name",
+          "baseline"
+        ],
+        "cwd": "/dev/shm/moe-compact-choice-20261027/empty-cwd",
+        "network": true,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "batch8-baseline-compare",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "experiments.compact_network_choice.evaluate",
+          "compare",
+          "--stage",
+          "/dev/shm/moe-compact-choice-20261027",
+          "--batch",
+          "8",
+          "--name",
+          "baseline"
+        ],
+        "cwd": "/dev/shm/moe-compact-choice-20261027/empty-cwd",
+        "network": false,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "batch8-bandwidth-modern",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "modern-deepep-native",
+          "--topology",
+          "/dev/shm/moe-compact-choice-20261027/observed/bandwidth-topology",
+          "--protocol",
+          "/dev/shm/moe-compact-choice-20261027/observed/bandwidth-protocol.json",
+          "--config",
+          "/dev/shm/moe-compact-choice-20261027/observed/batch8/input.json",
+          "--backend",
+          "/dev/shm/moe-compact-choice-20261027/runtime/run-transaction-session",
+          "--output",
+          "/dev/shm/moe-compact-choice-20261027/truth/batch8/bandwidth/modern",
+          "--callback-batches"
+        ],
+        "cwd": "/dev/shm/moe-compact-choice-20261027/empty-cwd",
+        "network": true,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "batch8-bandwidth-generic",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "experiments.compact_network_choice.generic",
+          "run",
+          "--stage",
+          "/dev/shm/moe-compact-choice-20261027",
+          "--batch",
+          "8",
+          "--name",
+          "bandwidth"
+        ],
+        "cwd": "/dev/shm/moe-compact-choice-20261027/empty-cwd",
+        "network": true,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "batch8-bandwidth-compare",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "experiments.compact_network_choice.evaluate",
+          "compare",
+          "--stage",
+          "/dev/shm/moe-compact-choice-20261027",
+          "--batch",
+          "8",
+          "--name",
+          "bandwidth"
+        ],
+        "cwd": "/dev/shm/moe-compact-choice-20261027/empty-cwd",
+        "network": false,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "batch8-propagation-modern",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "modern-deepep-native",
+          "--topology",
+          "/dev/shm/moe-compact-choice-20261027/observed/propagation-topology",
+          "--protocol",
+          "/dev/shm/moe-compact-choice-20261027/observed/propagation-protocol.json",
+          "--config",
+          "/dev/shm/moe-compact-choice-20261027/observed/batch8/input.json",
+          "--backend",
+          "/dev/shm/moe-compact-choice-20261027/runtime/run-transaction-session",
+          "--output",
+          "/dev/shm/moe-compact-choice-20261027/truth/batch8/propagation/modern",
+          "--callback-batches"
+        ],
+        "cwd": "/dev/shm/moe-compact-choice-20261027/empty-cwd",
+        "network": true,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "batch8-propagation-generic",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "experiments.compact_network_choice.generic",
+          "run",
+          "--stage",
+          "/dev/shm/moe-compact-choice-20261027",
+          "--batch",
+          "8",
+          "--name",
+          "propagation"
+        ],
+        "cwd": "/dev/shm/moe-compact-choice-20261027/empty-cwd",
+        "network": true,
+        "state": "terminal",
+        "exit_code": 0
+      },
+      {
+        "label": "batch8-propagation-compare",
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "experiments.compact_network_choice.evaluate",
+          "compare",
+          "--stage",
+          "/dev/shm/moe-compact-choice-20261027",
+          "--batch",
+          "8",
+          "--name",
+          "propagation"
+        ],
+        "cwd": "/dev/shm/moe-compact-choice-20261027/empty-cwd",
+        "network": false,
+        "state": "terminal",
+        "exit_code": 1
+      }
+    ],
+    "network_attempt_limit": 12,
+    "reruns": 0,
+    "error": "preserve failure and stop; do not expand budgets or rerun"
+  },
+  "batches": {
+    "4": {
+      "metrics": {
+        "baseline": {
+          "application_ns": 57390,
+          "all_events_ns": 63434,
+          "drain_ns": 69458,
+          "source_packets": 280,
+          "capture_events": 8992,
+          "decisions": 67,
+          "operations": 167,
+          "events": 586,
+          "connections": 31
+        },
+        "bandwidth": {
+          "application_ns": 53422,
+          "all_events_ns": 59444,
+          "drain_ns": 65456,
+          "source_packets": 280,
+          "capture_events": 8992,
+          "decisions": 67,
+          "operations": 167,
+          "events": 586,
+          "connections": 31
+        },
+        "propagation": {
+          "application_ns": 33402,
+          "all_events_ns": 36446,
+          "drain_ns": 39470,
+          "source_packets": 280,
+          "capture_events": 8992,
+          "decisions": 67,
+          "operations": 167,
+          "events": 586,
+          "connections": 31
+        }
+      },
+      "comparisons": {
+        "baseline": {
+          "equivalent": true,
+          "checks": {
+            "graph_work_and_after": true,
+            "transactions_and_final_memory": true,
+            "local_work": true,
+            "application_event_times_and_order": true,
+            "callbacks": true,
+            "registrations": true,
+            "productive_commits": true,
+            "packet_capture": true,
+            "queue_events": true,
+            "queue_observations": true,
+            "ports": true,
+            "finish_ns": true
+          },
+          "renamed_task_ids": 0,
+          "metrics": {
+            "application_ns": 57390,
+            "all_events_ns": 63434,
+            "drain_ns": 69458,
+            "source_packets": 280,
+            "capture_events": 8992,
+            "decisions": 67,
+            "operations": 167,
+            "events": 586,
+            "connections": 31
+          }
+        },
+        "bandwidth": {
+          "equivalent": true,
+          "checks": {
+            "graph_work_and_after": true,
+            "transactions_and_final_memory": true,
+            "local_work": true,
+            "application_event_times_and_order": true,
+            "callbacks": true,
+            "registrations": true,
+            "productive_commits": true,
+            "packet_capture": true,
+            "queue_events": true,
+            "queue_observations": true,
+            "ports": true,
+            "finish_ns": true
+          },
+          "renamed_task_ids": 19,
+          "metrics": {
+            "application_ns": 53422,
+            "all_events_ns": 59444,
+            "drain_ns": 65456,
+            "source_packets": 280,
+            "capture_events": 8992,
+            "decisions": 67,
+            "operations": 167,
+            "events": 586,
+            "connections": 31
+          }
+        },
+        "propagation": {
+          "equivalent": true,
+          "checks": {
+            "graph_work_and_after": true,
+            "transactions_and_final_memory": true,
+            "local_work": true,
+            "application_event_times_and_order": true,
+            "callbacks": true,
+            "registrations": true,
+            "productive_commits": true,
+            "packet_capture": true,
+            "queue_events": true,
+            "queue_observations": true,
+            "ports": true,
+            "finish_ns": true
+          },
+          "renamed_task_ids": 0,
+          "metrics": {
+            "application_ns": 33402,
+            "all_events_ns": 36446,
+            "drain_ns": 39470,
+            "source_packets": 280,
+            "capture_events": 8992,
+            "decisions": 67,
+            "operations": 167,
+            "events": 586,
+            "connections": 31
+          }
+        }
+      },
+      "evaluations": {
+        "volume": {
+          "selected": "bandwidth",
+          "tied_best": [
+            "bandwidth"
+          ],
+          "actual_best": [
+            "propagation"
+          ],
+          "choice_regret_fraction": 0.5993653074666188,
+          "correct": false,
+          "relative_errors": {
+            "baseline": -0.939646628332462,
+            "bandwidth": -0.9675818950993973,
+            "propagation": -0.8963032153763247
+          }
+        },
+        "phase_payload": {
+          "selected": "propagation",
+          "tied_best": [
+            "propagation"
+          ],
+          "actual_best": [
+            "propagation"
+          ],
+          "choice_regret_fraction": 0.0,
+          "correct": true,
+          "relative_errors": {
+            "baseline": -0.18923296741592616,
+            "bandwidth": -0.16205009172251134,
+            "propagation": -0.23567690557451643
+          }
+        },
+        "phase_framed": {
+          "selected": "propagation",
+          "tied_best": [
+            "propagation"
+          ],
+          "actual_best": [
+            "propagation"
+          ],
+          "choice_regret_fraction": 0.0,
+          "correct": true,
+          "relative_errors": {
+            "baseline": -0.18836312946506353,
+            "bandwidth": -0.1615828684811501,
+            "propagation": -0.23418238428836596
+          }
+        }
+      },
+      "representation_compact_bytes": 11711,
+      "plan_compact_bytes": 195312
+    },
+    "8": {
+      "metrics": {
+        "baseline": {
+          "application_ns": 59797,
+          "all_events_ns": 65841,
+          "drain_ns": 71865,
+          "source_packets": 408,
+          "capture_events": 13600,
+          "decisions": 91,
+          "operations": 207,
+          "events": 714,
+          "connections": 36
+        },
+        "bandwidth": {
+          "application_ns": 54620,
+          "all_events_ns": 60642,
+          "drain_ns": 66654,
+          "source_packets": 408,
+          "capture_events": 13600,
+          "decisions": 92,
+          "operations": 207,
+          "events": 714,
+          "connections": 36
+        },
+        "propagation": {
+          "application_ns": 35857,
+          "all_events_ns": 38901,
+          "drain_ns": 41925,
+          "source_packets": 408,
+          "capture_events": 13600,
+          "decisions": 91,
+          "operations": 207,
+          "events": 714,
+          "connections": 36
+        }
+      },
+      "comparisons": {
+        "baseline": {
+          "equivalent": true,
+          "checks": {
+            "graph_work_and_after": true,
+            "transactions_and_final_memory": true,
+            "local_work": true,
+            "application_event_times_and_order": true,
+            "callbacks": true,
+            "registrations": true,
+            "productive_commits": true,
+            "packet_capture": true,
+            "queue_events": true,
+            "queue_observations": true,
+            "ports": true,
+            "finish_ns": true
+          },
+          "renamed_task_ids": 0,
+          "metrics": {
+            "application_ns": 59797,
+            "all_events_ns": 65841,
+            "drain_ns": 71865,
+            "source_packets": 408,
+            "capture_events": 13600,
+            "decisions": 91,
+            "operations": 207,
+            "events": 714,
+            "connections": 36
+          }
+        },
+        "bandwidth": {
+          "equivalent": true,
+          "checks": {
+            "graph_work_and_after": true,
+            "transactions_and_final_memory": true,
+            "local_work": true,
+            "application_event_times_and_order": true,
+            "callbacks": true,
+            "registrations": true,
+            "productive_commits": true,
+            "packet_capture": true,
+            "queue_events": true,
+            "queue_observations": true,
+            "ports": true,
+            "finish_ns": true
+          },
+          "renamed_task_ids": 0,
+          "metrics": {
+            "application_ns": 54620,
+            "all_events_ns": 60642,
+            "drain_ns": 66654,
+            "source_packets": 408,
+            "capture_events": 13600,
+            "decisions": 92,
+            "operations": 207,
+            "events": 714,
+            "connections": 36
+          }
+        },
+        "propagation": {
+          "equivalent": false,
+          "checks": {
+            "graph_work_and_after": false,
+            "transactions_and_final_memory": true,
+            "local_work": true,
+            "application_event_times_and_order": true,
+            "callbacks": true,
+            "registrations": true,
+            "productive_commits": false,
+            "packet_capture": true,
+            "queue_events": true,
+            "queue_observations": true,
+            "ports": true,
+            "finish_ns": true
+          },
+          "renamed_task_ids": 8,
+          "metrics": {
+            "application_ns": 35857,
+            "all_events_ns": 38901,
+            "drain_ns": 41925,
+            "source_packets": 408,
+            "capture_events": 13600,
+            "decisions": 91,
+            "operations": 207,
+            "events": 714,
+            "connections": 36
+          }
+        }
+      },
+      "evaluations": {
+        "volume": {
+          "selected": "bandwidth",
+          "tied_best": [
+            "bandwidth"
+          ],
+          "actual_best": [
+            "propagation"
+          ],
+          "choice_regret_fraction": 0.5232730010876537,
+          "correct": false,
+          "relative_errors": {
+            "baseline": -0.8841520477615934,
+            "bandwidth": -0.9365858659831563,
+            "propagation": -0.8068059235295758
+          }
+        },
+        "phase_payload": {
+          "selected": "propagation",
+          "tied_best": [
+            "propagation"
+          ],
+          "actual_best": [
+            "propagation"
+          ],
+          "choice_regret_fraction": 0.0,
+          "correct": true,
+          "relative_errors": {
+            "baseline": -0.16394467949897154,
+            "bandwidth": -0.1487220798242403,
+            "propagation": -0.19141032434392163
+          }
+        },
+        "phase_framed": {
+          "selected": "propagation",
+          "tied_best": [
+            "propagation"
+          ],
+          "actual_best": [
+            "propagation"
+          ],
+          "choice_regret_fraction": 0.0,
+          "correct": true,
+          "relative_errors": {
+            "baseline": -0.1629814204725989,
+            "bandwidth": -0.1481948004393995,
+            "propagation": -0.1898039434420057
+          }
+        }
+      },
+      "representation_compact_bytes": 11713,
+      "plan_compact_bytes": 238218
+    }
+  },
+  "diagnosis": {
+    "passed": true,
+    "outcome": "only_order_of_conjunctive_after_list_changed_under_identity_renaming",
+    "original_comparison_failure_preserved": true,
+    "changed_work": 4,
+    "mismatches": [
+      {
+        "work": 109,
+        "task": {
+          "role": "event",
+          "event": "m0.dispatch.exit.r0.ready"
+        },
+        "baseline_after": [
+          {
+            "operation": 93,
+            "event": "applied"
+          },
+          {
+            "operation": 97,
+            "event": "applied"
+          },
+          {
+            "operation": 101,
+            "event": "applied"
+          },
+          {
+            "operation": 105,
+            "event": "applied"
+          }
+        ],
+        "renamed_after": [
+          {
+            "operation": 93,
+            "event": "applied"
+          },
+          {
+            "operation": 97,
+            "event": "applied"
+          },
+          {
+            "operation": 105,
+            "event": "applied"
+          },
+          {
+            "operation": 101,
+            "event": "applied"
+          }
+        ]
+      },
+      {
+        "work": 111,
+        "task": {
+          "role": "event",
+          "event": "m0.dispatch.exit.r1.ready"
+        },
+        "baseline_after": [
+          {
+            "operation": 94,
+            "event": "applied"
+          },
+          {
+            "operation": 98,
+            "event": "applied"
+          },
+          {
+            "operation": 102,
+            "event": "applied"
+          },
+          {
+            "operation": 106,
+            "event": "applied"
+          }
+        ],
+        "renamed_after": [
+          {
+            "operation": 94,
+            "event": "applied"
+          },
+          {
+            "operation": 98,
+            "event": "applied"
+          },
+          {
+            "operation": 106,
+            "event": "applied"
+          },
+          {
+            "operation": 102,
+            "event": "applied"
+          }
+        ]
+      },
+      {
+        "work": 113,
+        "task": {
+          "role": "event",
+          "event": "m0.dispatch.exit.r2.ready"
+        },
+        "baseline_after": [
+          {
+            "operation": 95,
+            "event": "applied"
+          },
+          {
+            "operation": 99,
+            "event": "applied"
+          },
+          {
+            "operation": 103,
+            "event": "applied"
+          },
+          {
+            "operation": 107,
+            "event": "applied"
+          }
+        ],
+        "renamed_after": [
+          {
+            "operation": 95,
+            "event": "applied"
+          },
+          {
+            "operation": 99,
+            "event": "applied"
+          },
+          {
+            "operation": 107,
+            "event": "applied"
+          },
+          {
+            "operation": 103,
+            "event": "applied"
+          }
+        ]
+      },
+      {
+        "work": 115,
+        "task": {
+          "role": "event",
+          "event": "m0.dispatch.exit.r3.ready"
+        },
+        "baseline_after": [
+          {
+            "operation": 96,
+            "event": "applied"
+          },
+          {
+            "operation": 100,
+            "event": "applied"
+          },
+          {
+            "operation": 104,
+            "event": "applied"
+          },
+          {
+            "operation": 108,
+            "event": "applied"
+          }
+        ],
+        "renamed_after": [
+          {
+            "operation": 96,
+            "event": "applied"
+          },
+          {
+            "operation": 100,
+            "event": "applied"
+          },
+          {
+            "operation": 108,
+            "event": "applied"
+          },
+          {
+            "operation": 104,
+            "event": "applied"
+          }
+        ]
+      }
+    ],
+    "equal_after_set_and_all_other_fields": true,
+    "equal_productive_commits_after_set_normalization": true,
+    "native_gate_source": {
+      "path": "backend/rdma/transaction_session.cc",
+      "sha256": "87c5b498d8bbb6610bf767717f3082793b09e93d2c8821a8470c92218b4f774b",
+      "excerpt": [
+        {
+          "line": 221,
+          "text": "for(const auto& d:op.at(\"after\"))ready=ready && Occurred(d.at(\"operation\"),d.at(\"event\"));"
+        }
+      ]
+    },
+    "application_packets_queues_callbacks_and_memory_already_equal": true,
+    "new_networks": 0,
+    "new_graph_or_predictor_changes": 0,
+    "strict_gate_not_reopened": true
+  },
+  "verification": {
+    "passed": true,
+    "independent_demand": {
+      "4": {
+        "token_owner_pairs": 13,
+        "remote_token_copies_each_phase": 10,
+        "remote_operand_bytes": 288640,
+        "independently_checked_cells": 80,
+        "shortest_rank_pairs": 12,
+        "operations": 122
+      },
+      "8": {
+        "token_owner_pairs": 25,
+        "remote_token_copies_each_phase": 18,
+        "remote_operand_bytes": 519552,
+        "independently_checked_cells": 80,
+        "shortest_rank_pairs": 12,
+        "operations": 146
+      }
+    },
+    "independently_checked_source_packets": 2064,
+    "application_events": 3900,
+    "source_MRT1_frame_bytes": 2495040,
+    "all_networks_completed": 12,
+    "strict_comparison_failures": [
+      [
+        8,
+        "propagation"
+      ]
+    ],
+    "after_permutation_explained_without_new_network": true,
+    "future_truth_removed_prediction_byte_identical": {
+      "batch8.json": true,
+      "batch4.json": true
+    },
+    "corruption_classes": [
+      "source_hash",
+      "stage",
+      "capture_omission",
+      "false_completion"
+    ],
+    "manual_checks": [
+      "seven_phase_classification",
+      "stable_tie_rule",
+      "unique_best_rule",
+      "24_shortest_rank_paths"
+    ],
+    "new_networks": 0
+  },
+  "hardware_calibrated": false,
+  "novel_semantic_decision_benefit_proven": false,
+  "end_to_end_simulator_speedup_proven": false,
+  "source_remote_revision_verified": false
+}

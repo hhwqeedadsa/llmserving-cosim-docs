@@ -1,0 +1,37 @@
+{
+  "passed": true,
+  "original_terminal_monitor_count": 41,
+  "conservative_nested_wall_seconds": 132.8866413969663,
+  "wall_reserve_seconds": 10,
+  "wall_budget_seconds": 1200,
+  "peak_sampled_group_rss_bytes": 620269568,
+  "charged_artifact_bytes": 376094720,
+  "artifact_receipt_reserve_bytes": 2097152,
+  "artifact_budget_bytes": 1073741824,
+  "original_stage_roots": [
+    "/dev/shm/moe-compact-choice-20261027",
+    "/home/lry/moe-ub-cosim/runs/compact_choice_20261027",
+    "/dev/shm/moe-compact-choice-recovery-20261027"
+  ],
+  "archive": {
+    "sha256": "d4a1ace33a5a5fdfa8ea73c71fb5bbee0e7755ee0b505abeff0e7c5a816e3e4e",
+    "members": 385,
+    "compressed_bytes": 14094193,
+    "uncompressed_bytes": 171864584
+  },
+  "network_executions_completed": 12,
+  "network_execution_failures": 0,
+  "strict_comparison_failures": 1,
+  "strict_failure_reason": "four conjunctive after-lists permuted by stable task identity renaming; offline behavior equality verified",
+  "future_networks_after_failure": 0,
+  "reruns": 0,
+  "dependencies_checked": 13,
+  "platform_modified": false,
+  "dependencies_modified": false,
+  "downloaded": false,
+  "gpu_executed": false,
+  "hardware_calibrated": false,
+  "pushed": false,
+  "network_limit_unchanged": true,
+  "overall_research_goal_complete": false
+}

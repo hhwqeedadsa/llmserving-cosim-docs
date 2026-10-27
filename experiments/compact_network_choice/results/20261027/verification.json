@@ -1,0 +1,49 @@
+{
+  "passed": true,
+  "independent_demand": {
+    "4": {
+      "token_owner_pairs": 13,
+      "remote_token_copies_each_phase": 10,
+      "remote_operand_bytes": 288640,
+      "independently_checked_cells": 80,
+      "shortest_rank_pairs": 12,
+      "operations": 122
+    },
+    "8": {
+      "token_owner_pairs": 25,
+      "remote_token_copies_each_phase": 18,
+      "remote_operand_bytes": 519552,
+      "independently_checked_cells": 80,
+      "shortest_rank_pairs": 12,
+      "operations": 146
+    }
+  },
+  "independently_checked_source_packets": 2064,
+  "application_events": 3900,
+  "source_MRT1_frame_bytes": 2495040,
+  "all_networks_completed": 12,
+  "strict_comparison_failures": [
+    [
+      8,
+      "propagation"
+    ]
+  ],
+  "after_permutation_explained_without_new_network": true,
+  "future_truth_removed_prediction_byte_identical": {
+    "batch8.json": true,
+    "batch4.json": true
+  },
+  "corruption_classes": [
+    "source_hash",
+    "stage",
+    "capture_omission",
+    "false_completion"
+  ],
+  "manual_checks": [
+    "seven_phase_classification",
+    "stable_tie_rule",
+    "unique_best_rule",
+    "24_shortest_rank_paths"
+  ],
+  "new_networks": 0
+}

@@ -13,6 +13,8 @@
 
 ## 当前范围和预算
 
+当前研究`in_progress`：[Hybrid转发的静态因果充分性核查](../../experiments/hybrid_causality_audit/protocol.md)。平台固定`19670ba`。先检验到达次序是否会改变有效消费顺序，避免无依据把动态轮询当创新；比较源码缓存状态机与事前固定tail/finish门槛DAG，保留反例和未覆盖。固定1527有限状态根、14输入/56条公开逻辑CLI及5/6粒度假设失效见证；600秒/256MiB、单命令60秒/RSS1GiB/地址2GiB，零新网络/构建/GPU/下载/平台或依赖改动/push。不重开旧研究，两项创新仍未成立。
+
 当前平台`completed`：[共享机内peer字节转发](peer_copy_spec.md)、[用户小例](../../examples/scaleout_peer_copy/README.md)、[验收与网页](../../fixtures/peer_copy/README.md)。起点`28637a0`、规范`695f44e`。transactions/5显式peer模式接入已有共享crossbar，保留源lane、开始捕获实际字节、交付提交/释放保护；纯stream入口仍拒绝机内旁路，静态校验键区分混合权限。同一ns-3时钟和持续NIC完成实际远端接收→机内peer→后继远端发送，不生成peer RDMA包或假ACK。
 
 一次新公开O3构建通过（437编译单元，约405秒，峰值进程组RSS1,664,798,720B），48项单元、5个编译单元语法及13固定依赖检查通过。15条新cwd公开CLI含7类预期拒绝与4次固定网络全部通过；人工2服务器×4GPU主例3个peer共512B、2个远端源MRT1包共576B、20内存事件及24物理逐跳发送/接收独立核对。共享GPU2目的端口完成276/340ns、繁忙256ns/maxwait128ns；首远端在6496ns交付、下一peer在6836ns完成并发出后继数据，首发送ACK在12520ns，全网19016ns排空。仅属声明参数功能关系，不是MoE/GPU/生产时延。

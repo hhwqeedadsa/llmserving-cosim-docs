@@ -1,0 +1,85 @@
+{
+  "schema_version": "moe-rdma-stream-work/1",
+  "streams": [
+    {
+      "id": 0,
+      "src": 0,
+      "dst": 4,
+      "plane": 0,
+      "wire_port": 21000,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 2
+    },
+    {
+      "id": 1,
+      "src": 1,
+      "dst": 5,
+      "plane": 0,
+      "wire_port": 21001,
+      "source_nic": 2,
+      "destination_nic": 2,
+      "queue_depth": 2
+    },
+    {
+      "id": 2,
+      "src": 0,
+      "dst": 4,
+      "plane": 0,
+      "wire_port": 21002,
+      "source_nic": 2,
+      "destination_nic": 1,
+      "queue_depth": 2
+    },
+    {
+      "id": 3,
+      "src": 4,
+      "dst": 0,
+      "plane": 0,
+      "wire_port": 21003,
+      "source_nic": 1,
+      "destination_nic": 2,
+      "queue_depth": 2
+    }
+  ],
+  "work": [
+    {
+      "id": 0,
+      "stream": 0,
+      "bytes": 32768,
+      "after": []
+    },
+    {
+      "id": 1,
+      "stream": 1,
+      "bytes": 32768,
+      "after": []
+    },
+    {
+      "id": 2,
+      "stream": 2,
+      "bytes": 32768,
+      "after": []
+    },
+    {
+      "id": 3,
+      "stream": 3,
+      "bytes": 32768,
+      "after": []
+    }
+  ],
+  "dcqcn_reference": {
+    "mode": "figure7_reference/1",
+    "np_interval_ns": 5000,
+    "alpha_interval_ns": 55000,
+    "recovery_interval_ns": 55000,
+    "recovery_bytes": 10000000,
+    "min_rate_bps": 100000000,
+    "additive_bps": 5000000,
+    "hyper_bps": 50000000,
+    "fast_recovery_rounds": 5,
+    "gain": 0.00390625,
+    "cnp_model_bytes": 48,
+    "max_events": 10000
+  }
+}

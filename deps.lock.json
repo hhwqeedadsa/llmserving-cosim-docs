@@ -37,7 +37,7 @@
       "clone_url": "https://github.com/baoy21/LLMServingSim.git",
       "upstream_url": "https://github.com/casys-kaist/LLMServingSim.git",
       "baseline_commit": "a4053bc1161872420e1e0607cb3409ef659b828e",
-      "checkout_commit": "e96d8391d9ad4768bfd7c4a1206abcfb8e34e9a1",
+      "checkout_commit": "94f3b005f7174575780bfe29d68e015df9719951",
       "project_patch_commits": [
         "47b3a219da6151207f6c21256a6dc63a9e6c4830",
         "0038df80f1a46cd7b1cd73616f739e374c11c3e4",
@@ -45,7 +45,8 @@
         "1e8bb54df71b9ea17f705d8c582d8e20ba53d6eb",
         "dfd0d0594e8f19bd783ab6851af47c6cf1380b30",
         "f5558a2c2662761d8fa67ce4393db18b9c854fc2",
-        "e96d8391d9ad4768bfd7c4a1206abcfb8e34e9a1"
+        "e96d8391d9ad4768bfd7c4a1206abcfb8e34e9a1",
+        "94f3b005f7174575780bfe29d68e015df9719951"
       ]
     },
     {
@@ -76,14 +77,15 @@
       "clone_url": "https://github.com/baoy21/astra-sim.git",
       "upstream_url": "https://github.com/casys-kaist/astra-sim.git",
       "baseline_commit": "d3469945c50410cac2e727c9ab627670c965db2a",
-      "checkout_commit": "8ecf388a667de9d45866da1ee9829938d6218686",
+      "checkout_commit": "0c51d089094d2a39aa91ac8ba32e4ca28f3e1714",
       "project_patch_commits": [
         "3f72d0af113f468ec8031a1037685464b47e9535",
         "e2a14f55d9a45db8f3831bda7035af3e191e4bb7",
         "93fe5a466c795129f00bef761d41a83ce56077e6",
         "0210e24bf76f49b4111a73d1e419f6fee4f3f0b6",
         "85fe17e5f58add32f00d3e06ac74c36a274b9b59",
-        "8ecf388a667de9d45866da1ee9829938d6218686"
+        "8ecf388a667de9d45866da1ee9829938d6218686",
+        "0c51d089094d2a39aa91ac8ba32e4ca28f3e1714"
       ]
     },
     {
@@ -127,12 +129,13 @@
       "clone_url": "https://github.com/casys-kaist/astra-network-ns3.git",
       "upstream_url": "https://github.com/casys-kaist/astra-network-ns3.git",
       "baseline_commit": "3964b1d41cb5f7b51004c316b0eae1a3713c2498",
-      "checkout_commit": "68a07f7d5e53bbe97d275af41d4964ad01b864f3",
+      "checkout_commit": "47f8faddf14036da27b004411701e9729de7479c",
       "project_patch_commits": [
         "6088174ad6928557482a968d45b9952c85e13112",
-        "68a07f7d5e53bbe97d275af41d4964ad01b864f3"
+        "68a07f7d5e53bbe97d275af41d4964ad01b864f3",
+        "47f8faddf14036da27b004411701e9729de7479c"
       ],
-      "usage": "isolated_scaleout_rdma_backend_with_local_switch_shutdown_and_eligible_nic_wakeup_patches_no_UB_linking"
+      "usage": "isolated_scaleout_rdma_backend_with_local_switch_shutdown_eligible_nic_wakeup_and_physical_nic_binding_patches_no_UB_linking"
     },
     {
       "name": "csg-htsim",

@@ -16,17 +16,19 @@ def stream(src_nic=1, dst_nic=1, plane=0):
     return dict(id=7,src=0,dst=1,plane=plane,source_nic=src_nic,destination_nic=dst_nic)
 
 
-def enumerate_paths(t, source, destination, plane):
+def enumerate_paths(t, source, destination, plane, source_nic=None, destination_nic=None):
     nodes={n['id']:n for n in t['nodes']};paths=[];edges=t['links']
     def visit(path, first):
         current=path[-1]
         if current==destination:
             paths.append((len(path)-1,first));return
         for e in edges:
-            if e['src']==current:peer,port=e['dst'],e['src_port']
-            elif e['dst']==current:peer,port=e['src'],e['dst_port']
+            if e['src']==current:peer,port,peer_port=e['dst'],e['src_port'],e['dst_port']
+            elif e['dst']==current:peer,port,peer_port=e['src'],e['dst_port'],e['src_port']
             else:continue
             if peer in path:continue
+            if current==source and source_nic is not None and port!=source_nic:continue
+            if peer==destination and destination_nic is not None and peer_port!=destination_nic:continue
             n=nodes[peer]
             if peer!=destination and (n['kind']=='gpu' or n['plane']!=plane):continue
             visit(path+[peer],port if current==source else first)
@@ -48,24 +50,28 @@ class NicRouteTests(unittest.TestCase):
                 with self.subTest(mask=mask,source=a):
                     self.assertEqual(routes.candidates(a,b,0),enumerate_paths(t,a,b,0))
                     self.assertEqual(routes.candidates(a,b,0),InitialNicRoutes(dict(t,links=list(reversed(t['links'])))).candidates(a,b,0))
+                    for sn in (1,2):
+                        for dn in (1,2):
+                            expected=bool(enumerate_paths(t,a,b,0,sn,dn))
+                            self.assertEqual(routes.reachable(a,sn,b,dn,0),expected)
+                            self.assertEqual(InitialNicRoutes(dict(t,links=list(reversed(t['links'])))).reachable(a,sn,b,dn,0),expected)
 
-    def test_same_plane_dual_rail_is_rejected(self):
+    def test_same_plane_dual_rail_physical_pairs_and_cross_rail_rejection(self):
         t=topology(2,[(2,0),(3,0)],[(0,2,1,1),(1,2,1,2),(0,3,2,1),(1,3,2,2)])
-        with self.assertRaisesRegex(ValueError,r'source 0->1.*candidates \[1, 2\]'):
-            validate_nic_routes(t,[stream()])
+        validate_nic_routes(t,[stream(),stream(2,2)])
+        with self.assertRaisesRegex(ValueError,r'0:1->1:2.*no switch path'):
+            validate_nic_routes(t,[stream(1,2)])
 
-    def test_reverse_ambiguity_is_not_hidden_by_single_source_port(self):
+    def test_reverse_endpoint_nic_is_explicit(self):
         t=topology(2,[(i,0) for i in range(2,5)],
             [(0,2,1,1),(2,3,2,2),(2,4,3,2),(1,3,1,1),(1,4,2,1)])
-        with self.assertRaisesRegex(ValueError,r'reverse 1->0.*candidates \[1, 2\]'):
-            validate_nic_routes(t,[stream()])
+        validate_nic_routes(t,[stream(),stream(1,2)])
 
     def test_multiple_physical_nics_with_only_one_shortest_route(self):
         t=topology(2,[(i,0) for i in range(2,6)],
             [(0,2,1,1),(0,3,2,1),(2,4,2,2),(3,5,2,2),(5,4,3,3),(1,4,1,1)])
         validate_nic_routes(t,[stream()])
-        with self.assertRaisesRegex(ValueError,r'unique shortest NIC 2; candidates \[1\]'):
-            validate_nic_routes(t,[stream(src_nic=2)])
+        validate_nic_routes(t,[stream(src_nic=2)])
 
     def test_switch_ecmp_with_unique_endpoint_nic_still_allowed(self):
         t=topology(2,[(i,0) for i in range(2,6)],
@@ -86,8 +92,18 @@ class NicRouteTests(unittest.TestCase):
 
     def test_no_route_is_rejected(self):
         t=topology(2,[(2,0),(3,0)],[(0,2,1,1),(1,3,1,1)])
-        with self.assertRaisesRegex(ValueError,r'candidates \[\]'):
+        with self.assertRaisesRegex(ValueError,r'no switch path'):
             validate_nic_routes(t,[stream()])
+
+    def test_destination_cannot_be_reached_via_its_other_nic(self):
+        t=topology(2,[(2,0),(3,0)],[(0,2,1,1),(1,2,1,2),(1,3,2,1)])
+        self.assertTrue(InitialNicRoutes(t).reachable(0,1,1,1,0))
+        self.assertFalse(InitialNicRoutes(t).reachable(0,1,1,2,0))
+
+    def test_wrong_plane_and_nonexistent_endpoint_port(self):
+        t=topology(2,[(2,0),(3,1)],[(0,2,1,1),(1,2,1,2),(0,3,2,1),(1,3,2,2)])
+        for sn,dn,plane in ((1,2,0),(2,2,0),(3,1,0),(1,3,0)):
+            self.assertFalse(InitialNicRoutes(t).reachable(0,sn,1,dn,plane))
 
 
 if __name__=='__main__':unittest.main()

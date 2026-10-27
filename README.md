@@ -20,7 +20,9 @@ MoE 模型为每个词元（Token）选择部分专家执行计算。当专家�
 
 [Scale-Out 核算命令](examples/scaleout_capacity/README.md)可修改模型通信维度、batch、EP 和两层 Clos 带宽，输出参考通信量及固定交换机数组开销；它不执行网络或验证 GPU 容量。千卡路线、训练/推理区别和热点研究见[规模与热点报告](docs/reviews/scaleout_scaling_hotspots_20261015.md)。
 
-[参数化电交换拓扑](examples/scaleout_topology/README.md)支持两层 leaf-spine、三层 ToR—Agg—Core、multi-rail 和 HPN 参考双平面，分别设置各层数量、上联、端口与带宽。提供四套1024 GPU静态配置；拓扑命令只生成输入，小图可通过独立 RDMA 入口真实执行。千卡逐包执行未验证。
+[参数化电交换拓扑](examples/scaleout_topology/README.md)支持两层 leaf-spine、三层 ToR—Agg—Core、multi-rail 和 HPN 参考双平面，分别设置各层数量、上联、端口与带宽。提供四套1024 GPU静态配置；拓扑命令只生成输入，小图可通过独立 RDMA 入口真实执行。完整千卡MoE逐包执行尚未通过。
+
+[同plane多rail示例](examples/scaleout_multirail_native/README.md)使用实际NIC地址绑定与共享Agg，持久流、ACK/CNP及事务回复保持物理端口，链路故障后不自动迁移网卡。当前多rail验收是8端点的小型功能网络与2rank现代两调用；较大的[1024端点短合成字节检查](examples/scaleout_rdma_streams/README.md#较大集群的显式容量)另有范围，完整千卡MoE执行仍未完成。
 
 CM384/R1 已有 128 端点完整 61 块首轮的历史参考结果；修正后的 A3 局部资源模板另有有限连续层段验收，不能把两者混成同一模型的全量验证。A3 层段保留完整部署容量和原始层编号，明确声明初态，操作见[A3 层段示例](examples/a3_segment/README.md)。具体参数与范围见[CM384/R1 场景](docs/scenarios/cm384_r1.md)和[模型依据](docs/model_validation.md)。
 

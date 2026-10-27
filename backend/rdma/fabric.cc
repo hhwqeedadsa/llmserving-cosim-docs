@@ -177,7 +177,7 @@ Fabric::Fabric(const Json& topology, const Json& config): topology_(topology), c
       auto dev=DynamicCast<QbbNetDevice>(d.Get(side)); const unsigned port=dev->GetIfIndex();
       Require(port == l.at(side ? "dst_port" : "src_port"), "native port differs from exported logical port");
       devices_[{host,port}] = dev;
-      adjacency_[host].push_back({peer,port});
+      adjacency_[host].push_back({peer,port,l.at(side ? "src_port" : "dst_port").get<unsigned>()});
       ports_[host].resize(port+1);
       ports_[host][port].device=dev;
       ports_[host][port].metadata = {{"node",host},{"port",port},{"peer",peer},{"tier",l.at("tier")},
@@ -279,42 +279,95 @@ Fabric::Fabric(const Json& topology, const Json& config): topology_(topology), c
   }
 }
 
-void Fabric::RebuildRoutes() {
+void Fabric::EnableNicBindings() {
+  Require(nic_endpoints_.empty() && flows_.empty(),"late or repeated physical NIC registration");
   const auto& ns=topology_.at("nodes");
+  for(unsigned gpu=0;gpu<gpus_;++gpu) {
+    std::map<unsigned,unsigned> counts;
+    for(auto edge:adjacency_[gpu]) {
+      Require(edge.peer>=gpus_,"physical NIC must attach to a switch");
+      ++counts[ns.at(edge.peer).at("plane").get<unsigned>()];
+    }
+    auto ip=nodes_.Get(gpu)->GetObject<Ipv4>();
+    for(auto edge:adjacency_[gpu]) {
+      const unsigned plane=ns.at(edge.peer).at("plane"),nic=edge.port;
+      Require(nic>=1 && nic<=1024,"physical NIC exceeds address bounds");
+      const bool alias=counts.at(plane)>1;
+      auto address=alias?Ipv4Address(0x0c000000u+(gpu<<11)+nic):Address(gpu,plane);
+      if(alias) {
+        const auto interface=ip->GetInterfaceForDevice(devices_.at({gpu,nic}));
+        Require(interface>=0 && ip->AddAddress(interface,Ipv4InterfaceAddress(address,Ipv4Mask("255.0.0.0"))),
+                "physical NIC address assignment failed");
+      }
+      Require(drivers_[gpu]->m_rdma->BindLocalAddress(address,nic),"native physical NIC registration failed");
+      nic_endpoints_.emplace(std::make_pair(gpu,nic),NicEndpoint{gpu,nic,plane,address,alias});
+      multi_nic_addresses_=multi_nic_addresses_ || alias;
+    }
+  }
+  // No reordering of legacy route vectors or ns-3 events in single-NIC cases.
+  if(multi_nic_addresses_)RebuildRoutes();
+}
+Ipv4Address Fabric::NicAddress(unsigned gpu,unsigned plane,unsigned nic) const {
+  const auto it=nic_endpoints_.find({gpu,nic});
+  Require(it!=nic_endpoints_.end() && it->second.plane==plane,"physical NIC absent or in another plane");
+  return it->second.address;
+}
+std::vector<int> Fabric::RouteDistances(unsigned dst,unsigned plane,unsigned destination_nic) const {
+  const auto& ns=topology_.at("nodes");
+  std::vector<int> distance(nodes_.GetN(),-1);std::queue<unsigned> queue;
+  distance[dst]=0;queue.push(dst);
+  while(!queue.empty()) {
+    const auto now=queue.front();queue.pop();
+    for(auto peer:adjacency_[now]) {
+      if(routing_down_.count({now,peer.port}))continue;
+      if(destination_nic && ((now==dst && peer.port!=destination_nic) ||
+                            (peer.peer==dst && peer.peer_port!=destination_nic)))continue;
+      if(peer.peer>=gpus_ && ns.at(peer.peer).at("plane")!=plane)continue;
+      if(distance[peer.peer]<0) {
+        distance[peer.peer]=distance[now]+1;
+        if(peer.peer>=gpus_)queue.push(peer.peer);
+      }
+    }
+  }
+  return distance;
+}
+bool Fabric::NicConnectionReachable(unsigned src,unsigned source_nic,unsigned dst,unsigned destination_nic,unsigned plane) const {
+  const auto distance=RouteDistances(dst,plane,destination_nic);
+  for(auto edge:adjacency_.at(src))if(edge.port==source_nic)
+    return !routing_down_.count({src,source_nic}) && distance[edge.peer]>=0;
+  return false;
+}
+void Fabric::InstallDestinationRoutes(unsigned dst,unsigned plane,Ipv4Address ip,unsigned destination_nic) {
+  const auto& ns=topology_.at("nodes");
+  const auto distance=RouteDistances(dst,plane,destination_nic);
+  for(unsigned src=0;src<nodes_.GetN();++src) {
+    if(src==dst || distance[src]<0)continue;
+    if(src>=gpus_ && ns.at(src).at("plane")!=plane)continue;
+    for(auto peer:adjacency_[src]) if(distance[peer.peer]==distance[src]-1) {
+      if(routing_down_.count({src,peer.port}))continue;
+      if(destination_nic && peer.peer==dst && peer.peer_port!=destination_nic)continue;
+      if(peer.peer>=gpus_ && ns.at(peer.peer).at("plane")!=plane)continue;
+      if(src<gpus_) {
+        drivers_[src]->m_rdma->AddTableEntry(ip,peer.port);
+        if(!destination_nic)reachable_[(src*gpus_+dst)*planes_+plane]=true;
+      } else if(local_failover_)route_candidates_[src][ip.Get()].push_back(peer.port);
+      else DynamicCast<SwitchNode>(nodes_.Get(src))->AddTableEntry(ip,peer.port);
+    }
+  }
+}
+void Fabric::RebuildRoutes() {
   if(local_failover_)route_candidates_.clear();
   for(unsigned node=0;node<nodes_.GetN();++node) {
     if(node<gpus_)drivers_.at(node)->m_rdma->ClearTable();
     else DynamicCast<SwitchNode>(nodes_.Get(node))->ClearTable();
   }
   std::fill(reachable_.begin(),reachable_.end(),0);
-  // Reverse BFS per destination address/plane; GPUs are terminal endpoints.
-  for(unsigned dst=0;dst<gpus_;++dst) for(unsigned plane=0;plane<planes_;++plane) {
-    std::vector<int> distance(nodes_.GetN(),-1); std::queue<unsigned> queue;
-    distance[dst]=0;queue.push(dst);
-    while(!queue.empty()) {
-      auto now=queue.front();queue.pop();
-      for(auto peer:adjacency_[now]) {
-        if(routing_down_.count({now,peer.port}))continue;
-        if(peer.peer>=gpus_ && ns.at(peer.peer).at("plane")!=plane)continue;
-        if(distance[peer.peer]<0) {
-          distance[peer.peer]=distance[now]+1;
-          if(peer.peer>=gpus_)queue.push(peer.peer);
-        }
-      }
-    }
-    for(unsigned src=0;src<nodes_.GetN();++src) {
-      if(src==dst || distance[src]<0)continue;
-      if(src>=gpus_ && ns.at(src).at("plane")!=plane)continue;
-      for(auto peer:adjacency_[src]) if(distance[peer.peer]==distance[src]-1) {
-        if(routing_down_.count({src,peer.port}))continue;
-        if(peer.peer>=gpus_ && ns.at(peer.peer).at("plane")!=plane)continue;
-        auto ip=Address(dst,plane);
-        if(src<gpus_) {
-          drivers_[src]->m_rdma->AddTableEntry(ip,peer.port); reachable_[(src*gpus_+dst)*planes_+plane]=true;
-        } else if(local_failover_)route_candidates_[src][ip.Get()].push_back(peer.port);
-        else DynamicCast<SwitchNode>(nodes_.Get(src))->AddTableEntry(ip,peer.port);
-      }
-    }
+  // Preserve the ordinary SEND/RECV address domain and its ECMP ordering.
+  for(unsigned dst=0;dst<gpus_;++dst)for(unsigned plane=0;plane<planes_;++plane)
+    InstallDestinationRoutes(dst,plane,Address(dst,plane));
+  for(const auto& entry:nic_endpoints_) {
+    const auto& endpoint=entry.second;
+    if(endpoint.alias)InstallDestinationRoutes(endpoint.gpu,endpoint.plane,endpoint.address,endpoint.nic);
   }
   if(local_failover_)for(unsigned node=gpus_;node<nodes_.GetN();++node)InstallLocalRoutes(node);
 }
@@ -632,6 +685,16 @@ Json Fabric::Report() {
     {"wire_byte_scope","Native model packet sizes; excludes unmodelled Ethernet preamble/FCS/IFG"},
     {"queue_scope","BEgressQueue native hooks: enqueue after byte addition; dequeue before byte subtraction; excludes bytes already being serialized"},
     {"rx_qp_scope","Accepted receive state retained until Fabric teardown; no waiting receives at service completion"}};
+  if(multi_nic_addresses_) {
+    Json bindings=Json::array();
+    for(const auto& entry:nic_endpoints_) {
+      const auto& endpoint=entry.second;
+      bindings.push_back({{"gpu",endpoint.gpu},{"nic",endpoint.nic},{"plane",endpoint.plane},
+                          {"ipv4",endpoint.address.Get()},{"physical_alias",endpoint.alias}});
+    }
+    r["physical_nic_addressing"]={{"mode","gpu_nic/1"},{"bindings",bindings},
+      {"scope","persistent local-address NIC binding; destination routes terminate only at declared NIC; no automatic NIC migration"}};
+  }
   r["rdma_parameters"]={{"object_type","ns3::RdmaHw"},{"sample_phase","after_driver_init_before_QPs"},
     {"hosts",rdma_parameters_},{"hardware_calibrated",false},
     {"fabric_overrides",{"CcMode","Mtu","L2ChunkSize","L2AckInterval","L2BackToZero","TotalPauseTimes"}},

@@ -472,3 +472,7 @@ v5事务启用同一模式时记录位于`transactions.transport.selective_repea
 `rdma-stream-probe`的`moe-rdma-stream-work/4`输入在`persistent_transport`额外保存`execution_limits`和`link_transmissions`。前者是明确声明的连接/工作/全网链路发送上限，后者累计每个物理设备的实际Tx（包括数据、ACK和其他控制包）；同一个端到端包过多跳计多次。它不是源包数、采样记录数或GPU操作数。旧v1—v3不增加字段，原`source_packets`仍保存每个实际源数据包。未开启持久恢复时捕获的内部message_id可能为−1，可从实际包头及端点独立关联；不要给−1捏造工作身份。范围见[容量输入](../examples/scaleout_rdma_streams/README.md#较大集群的显式容量)及[独立核验](../fixtures/persistent_scale/README.md)。
 
 显式`transport_recovery.reordering.mode=nack_grace/1`仅在启用时增加`persistent_transport.nack_grace`，事务对应`transactions.transport.nack_grace`。`states`每连接保存源累计`prefix`、`deadline_ns`（-1无等待）、`serviced`（当前前缀已由等待/RTO恢复）、`trigger_feedback_uid`（-1无pending）。`events`含ns时间、stream、kind、before/after状态、源`snd_una/highest_sent_bytes/rto_deadline_ns`；空闲未发布连接的high=0、RTO deadline=-1。`feedback`行的UID/累计ACK/NACK绑定实际收到的反馈；`retry/rto/rto_due/close/stop_simulation`为源定时或生命周期动作，反馈UID/累计ACK=-1，不代表发出包或重传到达。timer行before中的触发UID仍指向原NACK。事件上限独立且严格，不能静默截断。真实进度取消和超时/隔离、probe事务的证据与边界见[功能验收](../fixtures/nack_grace_edges/README.md)。
+
+## 物理NIC地址输出
+
+持久网络在同GPU/plane有多个NIC时，`result.json`增加`physical_nic_addressing`，`mode=gpu_nic/1`，`bindings`逐GPU/NIC/plane保存数值IPv4和`physical_alias`。地址按`0x0c000000 + GPU*2048 + NIC`定位物理网卡，不包含任务、stream或专家标签。相应`persistent_transport.streams`（事务为`transactions.transport.streams`）增加`source_ipv4/destination_ipv4`。单NIC输入没有这些新增字段；原包捕获的`wire_headers`保存实际线上IP，ACK/CNP为反向地址。说明和范围见[共享rail示例](../examples/scaleout_multirail_native/README.md)。

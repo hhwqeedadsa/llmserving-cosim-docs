@@ -1,6 +1,6 @@
 # 模型依据与适用范围
 
-持久流/事务/现代MoE入口的端点多NIC支持须与拓扑生成功能分开：初始正反向最短路均须只有声明NIC，同plane多候选在启动前拒绝。它验证固定原生Open已有要求，不改变路由，也未实现同plane多rail绑定。交换机内部ECMP、双plane和普通SEND/RECV服务的范围分别说明，见[使用约束](../examples/scaleout_rdma_streams/README.md#nic绑定和多rail边界)与[准入验收](../fixtures/stream_nic_preflight/README.md)。
+持久流/事务/现代MoE入口支持基于GPU/NIC地址的实际物理绑定，覆盖同plane独立rail及共享Agg。原生本地地址注册验证接口归属，QP/ACK/CNP/事务回复保持指定NIC，别名目的路由仅从对应NIC进入GPU；路由重建不自动迁移网卡。单NIC完整结果保持，普通SEND/RECV继续使用原地址域。小型验收及故障边界见[使用说明](../examples/scaleout_rdma_streams/README.md#nic绑定和多rail边界)和[逐包证据](../fixtures/physical_nic_binding/README.md)。这是功能模型，未新增硬件校准或千卡现代应用证据；历史唯一首跳准入不再是当前多NIC限制。
 
 现代native入口的默认逐批交付曾在四原始请求的四rank调用达到256次同步上限而失败，见[历史记录](../fixtures/modern_native/README.md)。显式callback-batches后，该单层调用及[新增请求batch4/8](../experiments/compact_network_choice/results/20261027/report.md)已完整执行，不等于完整模型、千卡或现代provider性能验收。数据为完整布局长度的合成标记；本地串行声明成本、功能信号地址和native-apply可见性均非实测GPU/provider。交付规则见[批次验收](../fixtures/native_callback_batches/README.md)。
 

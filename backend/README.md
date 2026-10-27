@@ -46,7 +46,7 @@ transactions/3的put可从注册源窗口读取实际字节。`RemoteMemory`按o
 
 持久字节入口可选`dcqcn_reference`，由[纯状态核心](rdma/dcqcn_reference.hh)和`PersistentStreams`实际接入NP周期、独立CNP、RP timer/实际发送字节恢复。`CnpSwitch`用局部元数据投影补足固定上游CNP的未初始化哈希字，不改线上报文和固定依赖。默认控制模式保持原有行为；参考模式不是校准的RoCE或现代通信库成本模型。配置、取整、同纳秒和排空规则见[独立反馈小例](../examples/scaleout_rdma_streams/README.md#可选的独立拥塞反馈参考模式)。
 
-新增独立`PersistentStreams`与`moe-rdma-stream-probe`使用同一原生Fabric的设备回调，实现空闲可追加的持久字节连接、真实接收/ACK前缀和ACK释放的GinWorkQueue信用。连接显式绑定唯一源/反向NIC；实际收发决定后继就绪。它独占Fabric传输入口并拒绝旧Send混用，没有接入现代计划、原子事务或GPU可见性，不改变下面在线服务的语义。见[持久字节小例](../examples/scaleout_rdma_streams/README.md)。
+`PersistentStreams`与`moe-rdma-stream-probe`使用同一原生Fabric的设备回调，实现空闲可追加的持久字节连接、真实接收/ACK前缀和ACK释放的GinWorkQueue信用。连接绑定实际源/目的NIC；原生本地地址注册优先于主机目标路由hash，交换机在物理目的NIC约束下继续最短跳/ECMP转发。同plane多rail和共享Agg不复制网络，ACK/CNP和事务回复保持绑定；实际收发决定后继就绪。它独占Fabric并拒绝旧Send混用；字节入口不执行原子事务或GPU可见性，事务与现代功能层分别使用这个载体。见[持久字节小例](../examples/scaleout_rdma_streams/README.md)与[共享rail](../examples/scaleout_multirail_native/README.md)。
 
 持久载体可选`selective_repeat/1`；`rdma/selective_repeat.hh`提供有限范围状态，`PersistentStreams`保留实际乱序Packet并生成/解析实际MSR1反馈。源只使用到达的反馈，累计ACK才释放信用；固定窗口允许最多MTU−1字节越界，容量须覆盖它。配置、50B反馈帧及边界见[选择重传](../examples/scaleout_rdma_streams/README.md#可选的有界选择重传)。v5事务和在线入口可显式配置相同独立DCQCN参考与选择模式；连续前缀从实际收到及缓存的Packet提取字节，在同一时钟按序交给MRT1解码器，选择确认不执行目标事务。详见[事务选择重传](../examples/scaleout_rdma_transactions/README.md#选择重传下执行实际事务)。载体层仍不执行原子操作；事务层解码后执行，不能解释为原生RoCE原子或GIN。默认go-back-N路径保持。
 

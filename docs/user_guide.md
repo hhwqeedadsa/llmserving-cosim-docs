@@ -1,5 +1,7 @@
 # 用户指南
 
+持久流、事务和现代功能入口可在同plane中绑定多张物理NIC，并让不同rail共用实际Agg/MMU。[共享rail示例](../examples/scaleout_multirail_native/README.md)提供可直接运行的配置和逐包输出说明；需使用按当前锁文件构建的原生后端，故障改路不会自动更换网卡。
+
 可用`scaleout modern-deepep-native`让实际原生网络回调驱动现代功能图。两rank示例可运行；原四rank路由的一次调用通过显式 `--callback-batches` 在256次同步上限内完成。输入、声明成本和限制见[现代功能接入](../examples/modern_deepep_native/README.md)，不等于完整模型或千卡应用。
 
 使用同一节点作为通信对端时，可在transactions/5显式声明功能self服务，并与真实远端通信共享内存和时钟。输入及公开probe/session命令见[混合服务示例](../examples/scaleout_self_peer/README.md)；context规划器仍拒绝self。

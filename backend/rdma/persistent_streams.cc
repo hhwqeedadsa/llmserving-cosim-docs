@@ -60,6 +60,7 @@ PersistentStreams::PersistentStreams(Fabric& fabric,Limits limits,const Json& re
   Require(!fabric_.topology_.contains("intra_host") || !fabric_.topology_.at("intra_host").at("enabled").get<bool>(),
           "stream probe requires physical RDMA paths; intra-host bypass unsupported");
   fabric_.persistent_stream_mode_=true;
+  fabric_.EnableNicBindings();
   fabric_.network_state_changed_=[this](){Notify();};
   for(unsigned node=0;node<fabric_.drivers_.size();++node) {
     auto hw=fabric_.drivers_[node]->m_rdma;
@@ -422,12 +423,11 @@ void PersistentStreams::Open(uint64_t id,unsigned src,unsigned dst,unsigned plan
                             unsigned source_nic,unsigned destination_nic,unsigned depth) {
   Require(!closed_ && streams_.size()<limits_.streams && !streams_.count(id) && src<fabric_.gpus_ && dst<fabric_.gpus_ &&
           src!=dst && plane<fabric_.planes_ && wire_port>=10000 && !wire_streams_.count(wire_port),"invalid stream identity/binding");
-  auto sip=fabric_.Address(src,plane),dip=fabric_.Address(dst,plane);
+  auto sip=fabric_.NicAddress(src,plane,source_nic),dip=fabric_.NicAddress(dst,plane,destination_nic);
   auto shw=fabric_.drivers_[src]->m_rdma,dhw=fabric_.drivers_[dst]->m_rdma;
-  // This scope needs explicit one-NIC reachability per address/plane. Do not
-  // substitute an ECMP hash for application connection-to-NIC binding.
-  Require(shw->m_rtTable[dip.Get()]==std::vector<int>{static_cast<int>(source_nic)} &&
-          dhw->m_rtTable[sip.Get()]==std::vector<int>{static_cast<int>(destination_nic)},"stream requires unique declared source and reverse NIC routes");
+  Require(fabric_.NicConnectionReachable(src,source_nic,dst,destination_nic,plane) &&
+          fabric_.NicConnectionReachable(dst,destination_nic,src,source_nic,plane),
+          "stream has no switch path between declared physical NICs");
   Require(source_nic<shw->m_nic.size() && destination_nic<dhw->m_nic.size(),"stream NIC missing");
   GinWorkQueue validate_depth(depth,limits_.work);(void)validate_depth;
   Require(!selective_mode_ || reference_limit_,"selective reference requires independent DCQCN reference");
@@ -439,7 +439,8 @@ void PersistentStreams::Open(uint64_t id,unsigned src,unsigned dst,unsigned plan
   shw->AddQueuePair(src,dst,id,0,3,sip,dip,wire_port,wire_port,0,fabric_.config_.at("base_rtt_ns"),
                     MakeCallback(&Fabric::Noop),MakeCallback(&Fabric::Noop));
   it->second.qp=shw->GetQp(dip.Get(),wire_port,3);
-  Require(bool(it->second.qp),"stream QP creation failed");
+  Require(bool(it->second.qp) && shw->GetNicIdxOfQp(it->second.qp)==source_nic,
+          "stream QP creation or physical NIC binding failed");
   if(selective_mode_) {
     auto& s=it->second;
     s.selective_sender=std::make_unique<moe_cosim::SelectiveSender>();
@@ -685,6 +686,9 @@ void PersistentStreams::Tx(PersistentStreams* self,unsigned node,unsigned port,P
     Require(s && node==s->dst && port==s->destination_nic,"CNP transmitted on wrong bound NIC");
     self->ReferenceLog(*s,"cnp_tx",packet);
   }
+  if(h.l3Prot==0xfc || h.l3Prot==0xfd)if(auto s=self->ByPort(h.ack.sport);s && node==s->dst &&
+      h.sip==s->qp->dip.Get() && h.dip==s->qp->sip.Get())
+    Require(port==s->destination_nic,"ACK/NACK transmitted on wrong bound NIC");
   if(h.l3Prot==0x11)if(auto stream=self->ByPort(h.udp.sport)) {
     auto& s=*stream;
     if(node==s.src && h.sip==s.qp->sip.Get() && h.dip==s.qp->dip.Get() && h.udp.sport==s.wire_port) {
@@ -708,6 +712,13 @@ void PersistentStreams::Rx(PersistentStreams* self,unsigned node,unsigned port,P
   Require(self->inflight_>0,"stream receive without in-flight packet");--self->inflight_;self->Notify();
   auto h=StreamHeader(packet);
   if(h.l3Prot==0x11)if(auto s=self->Match(node,h,false))Require(port==s->destination_nic,"stream received on wrong bound NIC");
+  if(h.l3Prot==0xfc || h.l3Prot==0xfd)if(auto s=self->Match(node,h,true))
+    Require(port==s->source_nic,"ACK/NACK received on wrong bound NIC");
+  if(h.l3Prot==0xff && self->reference_limit_ && node<self->fabric_.gpus_) {
+    auto s=self->ByPort(h.cnp.fid);
+    Require(s && node==s->src && port==s->source_nic && h.sip==s->qp->dip.Get() && h.dip==s->qp->sip.Get(),
+            "CNP received on wrong bound NIC");
+  }
 }
 void PersistentStreams::Drop(PersistentStreams* self,unsigned,unsigned,Ptr<const Packet>) {
   Require(self->inflight_>0,"stream drop without in-flight packet");--self->inflight_;self->Notify();
@@ -868,6 +879,10 @@ Json PersistentStreams::Report() const {
       {"scheduler_reinsertions",s.scheduler_insertions},{"submitted_bytes",s.submitted_bytes},{"published_bytes",s.qp->m_size},
       {"snd_nxt",s.qp->snd_nxt},{"snd_una",s.qp->snd_una},{"source_data_packets",s.packets},{"source_payload_bytes",s.tx_payload},
       {"ack_completed_work",s.acked_prefix},{"accepted_work",s.accepted_prefix},{"queue_depth",s.queue.Depth()}});
+    if(fabric_.multi_nic_addresses_) {
+      result["streams"].back()["source_ipv4"]=s.qp->sip.Get();
+      result["streams"].back()["destination_ipv4"]=s.qp->dip.Get();
+    }
     for(const auto& w:s.work)result["work"].push_back({{"id",w.id},{"stream",item.first},{"bytes",w.bytes},{"ticket",w.ticket},
       {"begin",w.begin},{"end",w.end},{"ready_ns",w.ready},{"published_ns",w.published},{"accepted_ns",w.received},{"acked_ns",w.acked}});
   }

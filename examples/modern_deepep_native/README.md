@@ -53,7 +53,7 @@ Python阶段区分 `controller_advance/wake_conditions/python_candidate_copy/pyt
 
 `deployment`逐逻辑rank声明物理GPU节点和设备到NIC/plane的对应；设备编号须覆盖`modern.execution.local_devices`。相同communicator/source/context/peer身份跨阶段和调用复用连接。Combine槽位在实际运行时分配；只为所有可能绑定预留连接，不提前选择slot顺序。预留集合上限64，未使用连接也会占用原生对象，不可称作活跃GIN QP数量。
 
-现代入口复用持久事务传输，正反向初始最短路都必须只有声明的NIC；不支持同一plane内同一目标地址有多个候选端点NIC。Python在创建运行输出和启动后端前拒绝，交换机内部ECMP不受此限制。拓扑能生成多rail不等于本入口已能执行它；具体规则、共享Agg不能简单改成独立plane的原因及后续所需绑定见[持久流NIC边界](../scaleout_rdma_streams/README.md#nic绑定和多rail边界)。
+现代入口复用持久事务的物理NIC绑定，支持同plane的多rail和共享Agg。每个设备明确对应NIC/plane，目标地址定位到实际目的NIC；QP、ACK/CNP及事务回复均走声明端口。Python在创建运行输出和启动后端前拒绝不连通的物理NIC配对。共享交换机/MMU不复制，路由更新不自动换网卡；具体规则和新构建要求见[持久流NIC说明](../scaleout_rdma_streams/README.md#nic绑定和多rail边界)。当前共享Agg验收仍是两rank、两调用、合成操作数的功能证据，不能外推千卡或实机GIN性能。
 
 `provider.mode=functional_mrt1/1`及`target_visibility=native_apply_functional/1`必须显式填写。功能模型的accepted/visible来自目标实际applied，local_complete来自事务实际completed；前者不释放源保护。这个声明不证明真实GPU可见性、GIN CQ或RoCE报文等价。`self_service`给出开始后apply/complete的相对纳秒时长，`queue_depth`为2—32内2的幂；`transport_recovery`沿用现有明确的恢复输入。
 

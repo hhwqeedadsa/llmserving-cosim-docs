@@ -1,5 +1,7 @@
 # 系统架构与执行过程
 
+持久传输在创建QP前为本地地址注册实际NIC归属；同GPU/plane多NIC使用物理别名，目的路由只从指定NIC进入GPU。发送、ACK/CNP与事务回复共享同一Fabric的实际端口、交换机和MMU；重建路由保留绑定与持久状态。普通SEND/RECV仍使用原路由域，范围见[多rail示例](../examples/scaleout_multirail_native/README.md)。
+
 原生事务会话每次网络通知仍正常推进依赖、本地条件和排空检查。操作状态收集通过`RemoteTransactions::TakeOperationProgressUpdates()`消费实际变化的id，按原id/阶段顺序交付回调，再与本地事件和控制闹钟稳定按时间排序；最终`Report/OperationProgress`仍读取全量状态。增量索引不是前端可见的调度信息，也不改变网络或GPU模型。
 
 现代事务入口可选复用HostTiming，分别记录Python控制推进和原生session/Simulator宿主阶段。观测不参与就绪、时钟或选路；同进程嵌套和跨进程等待不能相加，失败只解释已闭合阶段与最近快照。见[现代入口](../examples/modern_deepep_native/README.md#可选的宿主开销观测)。

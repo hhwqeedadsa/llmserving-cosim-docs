@@ -35,7 +35,12 @@ class Fabric {
   int64_t MaxSimNs() const { return config_.contains("limits") ? config_.at("limits").at("max_sim_ns").get<int64_t>() : 5000000; }
   bool NetworkEventsPending() const {return pending_link_events_!=0;}
  private:
-  struct Neighbor { unsigned peer, port; };
+  struct Neighbor { unsigned peer, port, peer_port; };
+  struct NicEndpoint {
+    unsigned gpu, nic, plane;
+    ns3::Ipv4Address address;
+    bool alias;
+  };
   struct Hop { unsigned node,port;int64_t time; };
   struct Port {
     Json metadata;
@@ -88,6 +93,11 @@ class Fabric {
   void Lifecycle(unsigned event,uint64_t id,unsigned source);
   void CheckDrain();
   void RebuildRoutes();
+  std::vector<int> RouteDistances(unsigned dst,unsigned plane,unsigned destination_nic=0) const;
+  void InstallDestinationRoutes(unsigned dst,unsigned plane,ns3::Ipv4Address,unsigned destination_nic=0);
+  void EnableNicBindings();
+  ns3::Ipv4Address NicAddress(unsigned gpu,unsigned plane,unsigned nic) const;
+  bool NicConnectionReachable(unsigned src,unsigned source_nic,unsigned dst,unsigned destination_nic,unsigned plane) const;
   void InstallLocalRoutes(unsigned node,bool record=false,unsigned event_index=0);
   void FailLink(Json event,unsigned index);
   void UpdateRoutes(Json event,unsigned index);
@@ -100,6 +110,8 @@ class Fabric {
   ns3::NodeContainer nodes_;
   std::vector<ns3::Ptr<ns3::RdmaDriver>> drivers_;
   std::vector<std::vector<Neighbor>> adjacency_;
+  std::map<std::pair<unsigned,unsigned>,NicEndpoint> nic_endpoints_;
+  bool multi_nic_addresses_=false;
   std::map<std::pair<unsigned,unsigned>, ns3::Ptr<ns3::QbbNetDevice>> devices_;
   std::vector<std::vector<Port>> ports_;
   std::vector<std::array<uint64_t,4>> queue_events_;

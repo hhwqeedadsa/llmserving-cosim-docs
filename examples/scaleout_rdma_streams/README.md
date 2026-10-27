@@ -27,11 +27,11 @@ v4使用协议`limits`已经验证的RSS/地址预算，仍限每命令60秒和6
 
 ### NIC绑定和多rail边界
 
-本持久传输入口要求：对每条stream的目标GPU/plane，源端最短跳路由只含声明的source_nic；反向路由也只含destination_nic。Python在创建运行输出和启动原生后端前检查，原生Open保留同一断言。错误会列出stream、方向、声明端口及实际候选，例如`requires unique shortest NIC 1; candidates [1, 2]`。这是初始最短跳路由，不按带宽/时延加权，也不代替故障后的路由检查。
+每条stream用`source_nic/destination_nic`绑定实际物理网卡，支持同plane的独立rail和共享Agg多rail。Python在创建运行输出和启动后端前检查两个方向能否经交换机连接指定网卡；端口不存在、plane不符或独立rail间无路径均拒绝。源网卡可以不是整个GPU的最短首跳，只要它能到达指定目的网卡。交换机内部按目的NIC约束的最短跳/ECMP转发，不按带宽或时延加权。
 
-拓扑生成器支持画出同plane多rail，但这个持久入口没有实现同一目标地址的显式多NIC绑定；此类输入不能直接用于持久流、事务或现代MoE实验。双plane中每端点/plane唯一NIC，以及端点NIC唯一而交换机内部存在ECMP的拓扑仍可用。多个物理NIC不必然不支持，判定针对实际端点对的最短路。
+持久入口为同GPU/plane的多个NIC分配物理`12.x`地址，在原生`RdmaHw`创建QP前验证并注册本地地址的实际接口归属。发送QP、接收端ACK/CNP及事务回复保持该物理绑定；重建路由不改绑，失败也不会自动换到健康NIC。同GPU/plane只有一个NIC时保留原`11.x`地址，普通SEND/RECV的地址域不变。需使用当前锁文件的原生后端重新构建，旧二进制不具有此能力。
 
-不要用ECMP端口hash凑声明NIC，或简单把rail改成plane来绕过检查：共享Agg/MMU的两rail改成独立plane可能删除真实竞争。完整多NIC支持需要独立实现连接/端点地址/NIC及正反向ACK、CNP和重传绑定。此限制不改变普通SEND/RECV的Scale-Out服务能力；它也不是新增拥塞机制或优化收益。最小反例和准入验收见[NIC边界检查](../../fixtures/stream_nic_preflight/README.md)。
+共享Agg/MMU只创建一次，多个rail使用同一时钟和持续网络状态；不要把共享rail改成独立plane来删除竞争。[共享拥塞小例](../scaleout_multirail_native/README.md)可直接执行，[物理绑定验收](../../fixtures/physical_nic_binding/README.md)覆盖单NIC兼容、正反向包、事务、现代两调用和链路故障。早期唯一首跳限制的[NIC准入记录](../../fixtures/stream_nic_preflight/README.md)保留为历史证据。这些是功能正确性，不代表新拥塞算法或收益。
 
 生成一个可直接执行的合成小例（输出须不存在）：
 
@@ -62,7 +62,7 @@ python3 -B examples/scaleout_rdma_streams/ep_groups.py \
 |---|---|
 | streams | v1为1—16条；v2不超过`limits.max_streams`。id唯一，src/dst为不同GPU，plane明确；初始提供给NIC的字节为0 |
 | wire_port | 10000—65535、全局唯一的线端端口，整个连接不变；影响常规ECMP，不由工作ID更换 |
-| source_nic/destination_nic | GPU物理设备端口，必须与地址/plane唯一可达的正向及反向NIC一致；多候选时拒绝，不能用哈希替代绑定 |
+| source_nic/destination_nic | GPU物理设备端口，须属于声明plane且指定网卡之间双向连通；实际QP与反馈绑定这些端口，不能用哈希替代 |
 | queue_depth | 1—4096内的2的幂；按ACK释放的功能额度，不是实测NIC/CQ或GPU缓冲深度 |
 | work | v1共1—64条；v2不超过`limits.max_work`。id唯一、引用已有stream，bytes为1—1MiB，每连接累计≤64MiB |
 | after | 最多64项不重复依赖，引用输入中较早工作的accepted或acked；空列表在0ns就绪，无预设后续时刻 |

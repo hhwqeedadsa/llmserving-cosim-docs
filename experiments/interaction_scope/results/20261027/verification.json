@@ -1,0 +1,34 @@
+{
+  "passed": true,
+  "independent_counts": {
+    "baseline": {
+      "source_udp_packets": 264,
+      "packet_paths": 528,
+      "physical_transmissions": 2464,
+      "queue_wait_ns": 38991,
+      "queue_residences": 1936,
+      "full_direction_pairs": 142,
+      "request_only_pairs": 66
+    },
+    "bandwidth": {
+      "source_udp_packets": 264,
+      "packet_paths": 528,
+      "physical_transmissions": 2464,
+      "queue_wait_ns": 20244,
+      "queue_residences": 1936,
+      "full_direction_pairs": 142,
+      "request_only_pairs": 66
+    }
+  },
+  "rejected": [
+    "incomplete_capture",
+    "unmapped_wire_tuple",
+    "physical_receive_time_changed",
+    "queue_occupancy_changed",
+    "ambiguous_duplicate_transmission",
+    "all_ACKs_silently_omitted"
+  ],
+  "source_hashes_verified": true,
+  "deterministic_reanalysis": true,
+  "new_networks": 0
+}

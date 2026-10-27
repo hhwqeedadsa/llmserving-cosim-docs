@@ -1,0 +1,142 @@
+{
+  "state": "offline_physical_interaction_audit_completed",
+  "overall_innovation_goal": "in_progress",
+  "monitored_seconds": 3.847673777003365,
+  "stage_limit_seconds": 300,
+  "artifact_bytes_before_closeout": 32913112,
+  "reserved_receipt_bytes": 1048576,
+  "stage_limit_bytes": 134217728,
+  "new_networks": 0,
+  "source_byte_ranges_nonoverlapping": true,
+  "independent_archive_reanalysis": true,
+  "checkpoint": {
+    "sha256": "f83752dd954031d2f0016ddfc9ae57820ff946bce22a8594511fd32e2bd41a22",
+    "members": 52,
+    "compressed_bytes": 534419,
+    "uncompressed_bytes": 16133699
+  },
+  "limits_increased": false,
+  "platform_modified": false,
+  "dependencies_modified": false,
+  "downloaded": false,
+  "GPU_executed": false,
+  "pushed": false,
+  "commands": [
+    {
+      "command": [
+        "python3",
+        "-B",
+        "experiments/interaction_scope/analyze.py",
+        "--stage",
+        "/dev/shm/moe-interaction-scope-20261027",
+        "--output-dir",
+        "/dev/shm/moe-interaction-scope-20261027/analysis"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.43739770100364694,
+      "peak_sampled_group_rss_bytes": 37437440
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "experiments/interaction_scope/checkpoint.py",
+        "create",
+        "--repository",
+        ".",
+        "--stage",
+        "/dev/shm/moe-interaction-scope-20261027",
+        "--output",
+        "runs/interaction_scope_20261027/checkpoint.tar.gz"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.3333237110055052,
+      "peak_sampled_group_rss_bytes": 24297472
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "experiments/interaction_scope/analyze.py",
+        "--stage",
+        "/dev/shm/moe-interaction-scope-20261027",
+        "--output-dir",
+        "/dev/shm/moe-interaction-scope-20261027/full-analysis"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.5422787909992621,
+      "peak_sampled_group_rss_bytes": 32595968
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "experiments/interaction_scope/prepare.py",
+        "--repository",
+        ".",
+        "--stage",
+        "/dev/shm/moe-interaction-scope-20261027"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.4518008020022535,
+      "peak_sampled_group_rss_bytes": 98754560
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "experiments/interaction_scope/checkpoint.py",
+        "restore",
+        "--archive",
+        "runs/interaction_scope_20261027/checkpoint.tar.gz",
+        "--output",
+        "runs/interaction_scope_20261027/restored"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.5585356429946842,
+      "peak_sampled_group_rss_bytes": 64950272
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "experiments/interaction_scope/summarize.py",
+        "--stage",
+        "/dev/shm/moe-interaction-scope-20261027",
+        "--output-dir",
+        "experiments/interaction_scope/results/20261027"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.4425348919976386,
+      "peak_sampled_group_rss_bytes": 38682624
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "experiments/interaction_scope/verify.py",
+        "--repository",
+        ".",
+        "--stage",
+        "/dev/shm/moe-interaction-scope-20261027"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 1.0818022370003746,
+      "peak_sampled_group_rss_bytes": 48480256
+    }
+  ]
+}

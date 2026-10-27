@@ -1,0 +1,51 @@
+{
+  "GPU": 0,
+  "HTTP": 0,
+  "acceptance_complete": false,
+  "all_terminal_receipts_report_no_live_owned_children": true,
+  "archive": {
+    "binary_included": false,
+    "compressed_bytes": 2946836,
+    "content_bytes": 30340332,
+    "dependency_bundles_require_prior_commits": true,
+    "members": 413,
+    "sha256": "8d991d230a22929622c43312e18da4fb20ce0cc627359261929bdca29d27ad4b"
+  },
+  "disk_budget_bytes": 2147483648,
+  "final_administration_reserve_bytes": 16777216,
+  "final_administration_reserve_seconds": 10,
+  "full_native_builds_passed": 1,
+  "functional_result_verification_passed": true,
+  "monitor_receipts_including_copies": 78,
+  "monitored_seconds_conservative_including_copied_nested_receipts": 1698.4995604880241,
+  "native_object_cases_executed": 0,
+  "native_object_cases_pending": 8,
+  "network_reruns": 0,
+  "network_runs": 8,
+  "offline_recovery": {
+    "GPU": 0,
+    "HTTP": 0,
+    "builds": 0,
+    "byte_equal_html": true,
+    "byte_equal_input_files": 12,
+    "byte_equal_verification": true,
+    "copied_source": true,
+    "empty_cwd": true,
+    "full_offline_build_reproduction_claimed": false,
+    "input_tests": 4,
+    "members_verified": 413,
+    "network_runs": 0,
+    "passed": true
+  },
+  "overall_research_goal_complete": false,
+  "push": false,
+  "python_input_methods_passed": 4,
+  "scaleout_regression_methods_passed": 153,
+  "stage": "closed_with_incomplete_native_object_acceptance",
+  "stage_artifact_usage": {
+    "allocated_bytes": 158851072,
+    "apparent_bytes": 154711248
+  },
+  "standalone_checker_builds_failed": 1,
+  "wall_budget_seconds": 2100
+}

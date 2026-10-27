@@ -1,0 +1,111 @@
+{
+  "acceptance_complete": false,
+  "default_backward_compatible": true,
+  "failure": {
+    "arrival_drops": 6,
+    "cnp_packets": 9,
+    "finish_ns": 1500000,
+    "independent_control_counters": {
+      "attributed_bytes": 1632,
+      "nonzero_cells": 10
+    },
+    "local_drops": 1318,
+    "network_passed": false,
+    "passed": true,
+    "physical_rx": 1767,
+    "physical_tx": 1773,
+    "shared_queue_ports": [
+      [
+        10,
+        3
+      ],
+      [
+        12,
+        5
+      ]
+    ],
+    "source_packets": 1316,
+    "streams": 4,
+    "work": 4
+  },
+  "hardware_calibrated": false,
+  "healthy": {
+    "arrival_drops": 0,
+    "cnp_packets": 101,
+    "finish_ns": 179172,
+    "independent_control_counters": {
+      "attributed_bytes": 87600,
+      "nonzero_cells": 15
+    },
+    "local_drops": 0,
+    "network_passed": true,
+    "passed": true,
+    "physical_rx": 3774,
+    "physical_tx": 3774,
+    "shared_queue_ports": [
+      [
+        10,
+        3
+      ],
+      [
+        12,
+        5
+      ]
+    ],
+    "source_packets": 264,
+    "streams": 4,
+    "work": 4
+  },
+  "large": {
+    "all_endpoint_packets_and_actual_prefix_callbacks_checked": true,
+    "finish_ns": 54718,
+    "full_MoE_inference": false,
+    "gpus": 1024,
+    "hardware_calibrated": false,
+    "intermediate_path_check": "shortest-hop byte conservation, not full intermediate packet capture",
+    "local_nodes": 2048,
+    "passed": true,
+    "physical_link_transmissions": 73728,
+    "source_packets": 6144,
+    "source_payload_bytes": 2359296,
+    "streams": 3072,
+    "work": 8192,
+    "writes": 6144
+  },
+  "native_object_checks": {
+    "compile_passed": false,
+    "corrected_command_executed": false,
+    "executed_object_cases": 0,
+    "network_executed": false,
+    "passed": false,
+    "planned_object_cases": 8,
+    "reason": "standalone checker link omitted libns3.42-applications; compile budget closed"
+  },
+  "network_optimization_benefit_claimed": false,
+  "passed": true,
+  "platform_engineering_only": true,
+  "storage": {
+    "legacy_payload_bytes": 1681000000,
+    "observed_resources": {
+      "legacy_dense": {
+        "sampled_process_tree_peak_rss_bytes": 2261610496,
+        "wall_seconds": 3.971774085002835
+      },
+      "port_dense": {
+        "sampled_process_tree_peak_rss_bytes": 591900672,
+        "wall_seconds": 2.7472233869921183
+      }
+    },
+    "payload_reduction_fraction": 0.9992397287328971,
+    "port_payload_bytes": 1278016,
+    "resource_scope": "one invocation per mode, external public-CLI process tree; not a stable speedup estimate or whole-model inference"
+  },
+  "tampering_rejected": {
+    "callback": "fabricated ACK time",
+    "capture": "incomplete capture",
+    "counter_value": "counter snapshots differ",
+    "packet_time": "source packet report mismatch",
+    "queue_area": "independent queue integral mismatch",
+    "storage_bytes": "independent matrix size"
+  }
+}

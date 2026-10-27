@@ -1,0 +1,25 @@
+{
+  "GPU": 0,
+  "HTTP": 0,
+  "aggregate_storage_acceptance_complete": true,
+  "artifact_usage": {
+    "allocated_bytes": 17022976,
+    "apparent_bytes": 16952753
+  },
+  "budgets": {
+    "artifact_bytes": 67108864,
+    "min_free_bytes": 8589934592,
+    "wall_seconds": 180
+  },
+  "commands_and_logs": "runs/switch_counter_bounds_20261027",
+  "initial_closure_failure": "ModuleNotFoundError before any mutations; corrected PYTHONPATH for offline closure only",
+  "monitored_wall_seconds_conservatively_nested": 4.620176134994836,
+  "network_runs": 0,
+  "ns3_builds": 0,
+  "object_conditions": 8,
+  "object_executions": 16,
+  "overall_research_goal_complete": false,
+  "passed": true,
+  "prior_incomplete_acceptance_preserved": true,
+  "standalone_compiles": 1
+}

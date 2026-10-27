@@ -1,0 +1,47 @@
+{
+  "passed": true,
+  "cases": {
+    "batch4-modern": {
+      "commands": 67,
+      "nodes": 167,
+      "cumulative_node_visits": 6769,
+      "per_history_loop_pairs_enumerated": 187819,
+      "original_cpu_ns": 1734229062,
+      "passed": true
+    },
+    "batch4-generic": {
+      "commands": 67,
+      "nodes": 167,
+      "cumulative_node_visits": 6769,
+      "per_history_loop_pairs_enumerated": 187819,
+      "original_cpu_ns": 1364087405,
+      "passed": true
+    },
+    "batch8-modern": {
+      "commands": 92,
+      "nodes": 207,
+      "cumulative_node_visits": 11719,
+      "per_history_loop_pairs_enumerated": 346900,
+      "original_cpu_ns": 2471731465,
+      "passed": true
+    },
+    "batch8-generic": {
+      "commands": 92,
+      "nodes": 207,
+      "cumulative_node_visits": 11719,
+      "per_history_loop_pairs_enumerated": 346900,
+      "original_cpu_ns": 2205084818,
+      "passed": true
+    }
+  },
+  "rejected_corruption_classes": [
+    "prefix node count",
+    "profile call count",
+    "old CPU arithmetic",
+    "source hash"
+  ],
+  "independent_prefix_scan": true,
+  "independent_original_CPU_roots": true,
+  "new_profiles": 0,
+  "new_networks": 0
+}

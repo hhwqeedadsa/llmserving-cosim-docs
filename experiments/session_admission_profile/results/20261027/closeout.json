@@ -1,0 +1,59 @@
+{
+  "state": "completed",
+  "overall_goal": "in_progress",
+  "protocol_commit": "fd51ac1",
+  "implementation_commit": "1df7c1d",
+  "analysis_recovery_commit": "e3516ec",
+  "platform_commit": "bfec519",
+  "profile_sweeps": 4,
+  "new_networks": 0,
+  "new_profiles_during_recovery": 0,
+  "new_builds": 0,
+  "downloads": 0,
+  "gpu_executions": 0,
+  "dependency_changes": 0,
+  "pushes": 0,
+  "source_files": {
+    "experiments/session_admission_profile/study.py": "57b95584f161a1b3e96e710686625756a46d27904dc5b9b47967dfcebc9a0de8",
+    "experiments/session_admission_profile/verify.py": "cc090b03780ae303f693682fdd9a590e63a2aecf81ec0990f04ec64bee680027",
+    "experiments/session_admission_profile/checkpoint.py": "51a1fa278f8af1402977015ea260ce8fdec39ba0cb6eb826c5d49fd67ccff5ed"
+  },
+  "archive": {
+    "sha256": "666001bdd162d59ca2b96a2680941fa1e463adc1186a49e456c46d103ca91a9f",
+    "members": 187,
+    "compressed_bytes": 3220386,
+    "uncompressed_bytes": 24795630
+  },
+  "recovery": {
+    "passed": true,
+    "archive_sha256": "666001bdd162d59ca2b96a2680941fa1e463adc1186a49e456c46d103ca91a9f",
+    "members": 187,
+    "copied_source": true,
+    "empty_cwd": true,
+    "reports_and_verification_byte_identical": true,
+    "new_profiles": 0,
+    "new_networks": 0,
+    "new_builds": 0,
+    "historical_runtime_required": false
+  },
+  "independent_checks": "four real prefixes, exact source hashes, original CPU roots, candidate counts, profile calls; four corruption classes rejected",
+  "dependencies_checked": 13,
+  "live_monitored_seconds": 13.900927335009328,
+  "conservative_monitored_seconds_including_copied_receipts": 22.962028167006793,
+  "logical_run_bytes": 51711614,
+  "allocated_run_bytes": 52219904,
+  "summary_bytes": 25685,
+  "closeout_and_summary_reserve_bytes": 2097152,
+  "peak_sampled_group_rss_bytes": 113565696,
+  "limits": {
+    "seconds": 600,
+    "artifact_bytes": 268435456,
+    "per_command_seconds": 60,
+    "rss_bytes": 1073741824,
+    "address_bytes": 2147483648
+  },
+  "optimization_implemented": false,
+  "measured_speedup": false,
+  "raw_directory": "/home/lry/moe-ub-cosim/runs/session_admission_profile_20261027",
+  "conclusion": "Static streams validation passes the preregistered engineering-priority threshold. Compare type-safe reuse first; caching/incremental checks are stronger baseline work, not established novelty."
+}

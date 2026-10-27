@@ -1,0 +1,555 @@
+{
+  "passed": true,
+  "cases": {
+    "batch4-modern": {
+      "counts": {
+        "commands": 67,
+        "final_nodes": 167,
+        "candidate_nodes": 6769,
+        "new_nodes": 167,
+        "candidate_dependencies": 20021,
+        "candidate_remote_nodes": 4622,
+        "per_history_loop_visits": 187819,
+        "full_candidate_json_bytes": 3574653,
+        "appended_operations_json_bytes": 49478,
+        "empty_commands": 1,
+        "prefix_node_revisit_factor": 40.532934131736525,
+        "final_candidate_sha256": "a4075cef6e27d6efe7c0c98c3382ea118df69855c438ae4e132ff1ad7701dbdb",
+        "static_configuration_unchanged": true
+      },
+      "profiled_validation_wall_seconds": 0.657855034,
+      "static_streams_validation_fraction": 0.3541539837179387,
+      "prioritize_static_candidate": true,
+      "copy_cpu_ns": 115233016,
+      "profiled_validation_cpu_ns": 661529074,
+      "original_total_cpu_ns": 1734229062,
+      "original_candidate_cpu_ns": 610723801,
+      "original_candidate_cpu_fraction": 0.3521586706058787,
+      "optimistic_all_candidate_free_cpu_factor": 1.543587842620703,
+      "top_exclusive_functions": [
+        {
+          "path": "python/moe_ub_cosim/scaleout_transactions.py",
+          "line": 72,
+          "function": "validate",
+          "primitive_calls": 67,
+          "calls": 67,
+          "exclusive_wall_seconds": 0.168186779,
+          "cumulative_wall_seconds": 0.657855034
+        },
+        {
+          "path": "python/moe_ub_cosim/scaleout_topology.py",
+          "line": 18,
+          "function": "fields",
+          "primitive_calls": 48736,
+          "calls": 48736,
+          "exclusive_wall_seconds": 0.078556106,
+          "cumulative_wall_seconds": 0.10114521200000001
+        },
+        {
+          "path": "python/moe_ub_cosim/scaleout_topology.py",
+          "line": 22,
+          "function": "integer",
+          "primitive_calls": 153995,
+          "calls": 153995,
+          "exclusive_wall_seconds": 0.06689365900000001,
+          "cumulative_wall_seconds": 0.077272898
+        },
+        {
+          "path": "python/moe_ub_cosim/scaleout_rdma.py",
+          "line": 206,
+          "function": "validate_probe",
+          "primitive_calls": 67,
+          "calls": 67,
+          "exclusive_wall_seconds": 0.057871203,
+          "cumulative_wall_seconds": 0.139321326
+        },
+        {
+          "path": "python/moe_ub_cosim/scaleout_topology.py",
+          "line": 13,
+          "function": "require",
+          "primitive_calls": 446012,
+          "calls": 446012,
+          "exclusive_wall_seconds": 0.030918052,
+          "cumulative_wall_seconds": 0.030918052
+        },
+        {
+          "path": "~",
+          "line": 0,
+          "function": "<method 'get' of 'dict' objects>",
+          "primitive_calls": 185821,
+          "calls": 185821,
+          "exclusive_wall_seconds": 0.028952354000000003,
+          "cumulative_wall_seconds": 0.028952354000000003
+        },
+        {
+          "path": "python/moe_ub_cosim/scaleout_streams.py",
+          "line": 29,
+          "function": "validate",
+          "primitive_calls": 67,
+          "calls": 67,
+          "exclusive_wall_seconds": 0.025268231000000002,
+          "cumulative_wall_seconds": 0.232981981
+        },
+        {
+          "path": "python/moe_ub_cosim/self_peer_service.py",
+          "line": 5,
+          "function": "validate",
+          "primitive_calls": 67,
+          "calls": 67,
+          "exclusive_wall_seconds": 0.024088582,
+          "cumulative_wall_seconds": 0.042936443000000005
+        },
+        {
+          "path": "~",
+          "line": 0,
+          "function": "<method 'update' of 'set' objects>",
+          "primitive_calls": 58988,
+          "calls": 58988,
+          "exclusive_wall_seconds": 0.020308784,
+          "cumulative_wall_seconds": 0.020308784
+        },
+        {
+          "path": "~",
+          "line": 0,
+          "function": "<method 'add' of 'set' objects>",
+          "primitive_calls": 97504,
+          "calls": 97504,
+          "exclusive_wall_seconds": 0.016946459,
+          "cumulative_wall_seconds": 0.016946459
+        },
+        {
+          "path": "python/moe_ub_cosim/scaleout_fabric_buffers.py",
+          "line": 9,
+          "function": "buffer_report",
+          "primitive_calls": 67,
+          "calls": 67,
+          "exclusive_wall_seconds": 0.015815169,
+          "cumulative_wall_seconds": 0.027418696000000003
+        },
+        {
+          "path": "~",
+          "line": 0,
+          "function": "<method 'split' of 'str' objects>",
+          "primitive_calls": 48736,
+          "calls": 48736,
+          "exclusive_wall_seconds": 0.013882125,
+          "cumulative_wall_seconds": 0.013882125
+        }
+      ]
+    },
+    "batch4-generic": {
+      "counts": {
+        "commands": 67,
+        "final_nodes": 167,
+        "candidate_nodes": 6769,
+        "new_nodes": 167,
+        "candidate_dependencies": 20021,
+        "candidate_remote_nodes": 4622,
+        "per_history_loop_visits": 187819,
+        "full_candidate_json_bytes": 3574653,
+        "appended_operations_json_bytes": 49478,
+        "empty_commands": 1,
+        "prefix_node_revisit_factor": 40.532934131736525,
+        "final_candidate_sha256": "a4075cef6e27d6efe7c0c98c3382ea118df69855c438ae4e132ff1ad7701dbdb",
+        "static_configuration_unchanged": true
+      },
+      "profiled_validation_wall_seconds": 0.65633617,
+      "static_streams_validation_fraction": 0.35680279360499056,
+      "prioritize_static_candidate": true,
+      "copy_cpu_ns": 112430064,
+      "profiled_validation_cpu_ns": 657705095,
+      "original_total_cpu_ns": 1364087405,
+      "original_candidate_cpu_ns": 514202021,
+      "original_candidate_cpu_fraction": 0.3769567984538352,
+      "optimistic_all_candidate_free_cpu_factor": 1.6050251371307263,
+      "top_exclusive_functions": [
+        {
+          "path": "python/moe_ub_cosim/scaleout_transactions.py",
+          "line": 72,
+          "function": "validate",
+          "primitive_calls": 67,
+          "calls": 67,
+          "exclusive_wall_seconds": 0.165387947,
+          "cumulative_wall_seconds": 0.65633617
+        },
+        {
+          "path": "python/moe_ub_cosim/scaleout_topology.py",
+          "line": 18,
+          "function": "fields",
+          "primitive_calls": 48736,
+          "calls": 48736,
+          "exclusive_wall_seconds": 0.076656443,
+          "cumulative_wall_seconds": 0.099242706
+        },
+        {
+          "path": "python/moe_ub_cosim/scaleout_topology.py",
+          "line": 22,
+          "function": "integer",
+          "primitive_calls": 153995,
+          "calls": 153995,
+          "exclusive_wall_seconds": 0.06639840500000001,
+          "cumulative_wall_seconds": 0.07737268700000001
+        },
+        {
+          "path": "python/moe_ub_cosim/scaleout_rdma.py",
+          "line": 206,
+          "function": "validate_probe",
+          "primitive_calls": 67,
+          "calls": 67,
+          "exclusive_wall_seconds": 0.058603445000000004,
+          "cumulative_wall_seconds": 0.14072873
+        },
+        {
+          "path": "python/moe_ub_cosim/scaleout_topology.py",
+          "line": 13,
+          "function": "require",
+          "primitive_calls": 446012,
+          "calls": 446012,
+          "exclusive_wall_seconds": 0.032740572,
+          "cumulative_wall_seconds": 0.032740572
+        },
+        {
+          "path": "~",
+          "line": 0,
+          "function": "<method 'get' of 'dict' objects>",
+          "primitive_calls": 185821,
+          "calls": 185821,
+          "exclusive_wall_seconds": 0.029376539,
+          "cumulative_wall_seconds": 0.029376539
+        },
+        {
+          "path": "python/moe_ub_cosim/scaleout_streams.py",
+          "line": 29,
+          "function": "validate",
+          "primitive_calls": 67,
+          "calls": 67,
+          "exclusive_wall_seconds": 0.024939494000000003,
+          "cumulative_wall_seconds": 0.234182579
+        },
+        {
+          "path": "python/moe_ub_cosim/self_peer_service.py",
+          "line": 5,
+          "function": "validate",
+          "primitive_calls": 67,
+          "calls": 67,
+          "exclusive_wall_seconds": 0.024508177000000003,
+          "cumulative_wall_seconds": 0.043590298
+        },
+        {
+          "path": "~",
+          "line": 0,
+          "function": "<method 'update' of 'set' objects>",
+          "primitive_calls": 58988,
+          "calls": 58988,
+          "exclusive_wall_seconds": 0.020770955,
+          "cumulative_wall_seconds": 0.020770955
+        },
+        {
+          "path": "~",
+          "line": 0,
+          "function": "<method 'add' of 'set' objects>",
+          "primitive_calls": 97504,
+          "calls": 97504,
+          "exclusive_wall_seconds": 0.017708796000000002,
+          "cumulative_wall_seconds": 0.017708796000000002
+        },
+        {
+          "path": "python/moe_ub_cosim/scaleout_fabric_buffers.py",
+          "line": 9,
+          "function": "buffer_report",
+          "primitive_calls": 67,
+          "calls": 67,
+          "exclusive_wall_seconds": 0.015823738,
+          "cumulative_wall_seconds": 0.027298344000000002
+        },
+        {
+          "path": "~",
+          "line": 0,
+          "function": "<method 'split' of 'str' objects>",
+          "primitive_calls": 48736,
+          "calls": 48736,
+          "exclusive_wall_seconds": 0.013799953,
+          "cumulative_wall_seconds": 0.013799953
+        }
+      ]
+    },
+    "batch8-modern": {
+      "counts": {
+        "commands": 92,
+        "final_nodes": 207,
+        "candidate_nodes": 11719,
+        "new_nodes": 207,
+        "candidate_dependencies": 33876,
+        "candidate_remote_nodes": 7429,
+        "per_history_loop_visits": 346900,
+        "full_candidate_json_bytes": 5731023,
+        "appended_operations_json_bytes": 60915,
+        "empty_commands": 2,
+        "prefix_node_revisit_factor": 56.61352657004831,
+        "final_candidate_sha256": "6421cc23a6582dc40a75d379a131c883318d90587a040522597518b30732f5c7",
+        "static_configuration_unchanged": true
+      },
+      "profiled_validation_wall_seconds": 1.0797617990000001,
+      "static_streams_validation_fraction": 0.33568418269259404,
+      "prioritize_static_candidate": true,
+      "copy_cpu_ns": 190590440,
+      "profiled_validation_cpu_ns": 1086036073,
+      "original_total_cpu_ns": 2471731465,
+      "original_candidate_cpu_ns": 947472294,
+      "original_candidate_cpu_fraction": 0.38332331299589617,
+      "optimistic_all_candidate_free_cpu_factor": 1.6215952720024671,
+      "top_exclusive_functions": [
+        {
+          "path": "python/moe_ub_cosim/scaleout_transactions.py",
+          "line": 72,
+          "function": "validate",
+          "primitive_calls": 92,
+          "calls": 92,
+          "exclusive_wall_seconds": 0.28580077000000004,
+          "cumulative_wall_seconds": 1.0797617990000001
+        },
+        {
+          "path": "python/moe_ub_cosim/scaleout_topology.py",
+          "line": 18,
+          "function": "fields",
+          "primitive_calls": 84113,
+          "calls": 84113,
+          "exclusive_wall_seconds": 0.129769078,
+          "cumulative_wall_seconds": 0.167625453
+        },
+        {
+          "path": "python/moe_ub_cosim/scaleout_topology.py",
+          "line": 22,
+          "function": "integer",
+          "primitive_calls": 251692,
+          "calls": 251692,
+          "exclusive_wall_seconds": 0.10840779900000001,
+          "cumulative_wall_seconds": 0.12494635400000001
+        },
+        {
+          "path": "python/moe_ub_cosim/scaleout_rdma.py",
+          "line": 206,
+          "function": "validate_probe",
+          "primitive_calls": 92,
+          "calls": 92,
+          "exclusive_wall_seconds": 0.093453276,
+          "cumulative_wall_seconds": 0.217874127
+        },
+        {
+          "path": "python/moe_ub_cosim/scaleout_topology.py",
+          "line": 13,
+          "function": "require",
+          "primitive_calls": 738663,
+          "calls": 738663,
+          "exclusive_wall_seconds": 0.050328399,
+          "cumulative_wall_seconds": 0.050328399
+        },
+        {
+          "path": "~",
+          "line": 0,
+          "function": "<method 'get' of 'dict' objects>",
+          "primitive_calls": 313915,
+          "calls": 313915,
+          "exclusive_wall_seconds": 0.047820894,
+          "cumulative_wall_seconds": 0.047820894
+        },
+        {
+          "path": "python/moe_ub_cosim/self_peer_service.py",
+          "line": 5,
+          "function": "validate",
+          "primitive_calls": 92,
+          "calls": 92,
+          "exclusive_wall_seconds": 0.039947269,
+          "cumulative_wall_seconds": 0.070698489
+        },
+        {
+          "path": "python/moe_ub_cosim/scaleout_streams.py",
+          "line": 29,
+          "function": "validate",
+          "primitive_calls": 92,
+          "calls": 92,
+          "exclusive_wall_seconds": 0.03933272,
+          "cumulative_wall_seconds": 0.362458957
+        },
+        {
+          "path": "~",
+          "line": 0,
+          "function": "<method 'update' of 'set' objects>",
+          "primitive_calls": 97412,
+          "calls": 97412,
+          "exclusive_wall_seconds": 0.033782009,
+          "cumulative_wall_seconds": 0.033782009
+        },
+        {
+          "path": "~",
+          "line": 0,
+          "function": "<method 'add' of 'set' objects>",
+          "primitive_calls": 160668,
+          "calls": 160668,
+          "exclusive_wall_seconds": 0.028123153,
+          "cumulative_wall_seconds": 0.028123153
+        },
+        {
+          "path": "~",
+          "line": 0,
+          "function": "<method 'split' of 'str' objects>",
+          "primitive_calls": 84113,
+          "calls": 84113,
+          "exclusive_wall_seconds": 0.023259464,
+          "cumulative_wall_seconds": 0.023259464
+        },
+        {
+          "path": "python/moe_ub_cosim/scaleout_fabric_buffers.py",
+          "line": 9,
+          "function": "buffer_report",
+          "primitive_calls": 92,
+          "calls": 92,
+          "exclusive_wall_seconds": 0.021358321000000003,
+          "cumulative_wall_seconds": 0.039321999
+        }
+      ]
+    },
+    "batch8-generic": {
+      "counts": {
+        "commands": 92,
+        "final_nodes": 207,
+        "candidate_nodes": 11719,
+        "new_nodes": 207,
+        "candidate_dependencies": 33876,
+        "candidate_remote_nodes": 7429,
+        "per_history_loop_visits": 346900,
+        "full_candidate_json_bytes": 5731023,
+        "appended_operations_json_bytes": 60915,
+        "empty_commands": 2,
+        "prefix_node_revisit_factor": 56.61352657004831,
+        "final_candidate_sha256": "6421cc23a6582dc40a75d379a131c883318d90587a040522597518b30732f5c7",
+        "static_configuration_unchanged": true
+      },
+      "profiled_validation_wall_seconds": 1.080043925,
+      "static_streams_validation_fraction": 0.3367951095137172,
+      "prioritize_static_candidate": true,
+      "copy_cpu_ns": 190390657,
+      "profiled_validation_cpu_ns": 1086461983,
+      "original_total_cpu_ns": 2205084818,
+      "original_candidate_cpu_ns": 914360944,
+      "original_candidate_cpu_fraction": 0.41466021467116193,
+      "optimistic_all_candidate_free_cpu_factor": 1.708409414607295,
+      "top_exclusive_functions": [
+        {
+          "path": "python/moe_ub_cosim/scaleout_transactions.py",
+          "line": 72,
+          "function": "validate",
+          "primitive_calls": 92,
+          "calls": 92,
+          "exclusive_wall_seconds": 0.284434356,
+          "cumulative_wall_seconds": 1.080043925
+        },
+        {
+          "path": "python/moe_ub_cosim/scaleout_topology.py",
+          "line": 18,
+          "function": "fields",
+          "primitive_calls": 84113,
+          "calls": 84113,
+          "exclusive_wall_seconds": 0.12895245700000002,
+          "cumulative_wall_seconds": 0.166937205
+        },
+        {
+          "path": "python/moe_ub_cosim/scaleout_topology.py",
+          "line": 22,
+          "function": "integer",
+          "primitive_calls": 251692,
+          "calls": 251692,
+          "exclusive_wall_seconds": 0.10661292600000001,
+          "cumulative_wall_seconds": 0.12327873700000001
+        },
+        {
+          "path": "python/moe_ub_cosim/scaleout_rdma.py",
+          "line": 206,
+          "function": "validate_probe",
+          "primitive_calls": 92,
+          "calls": 92,
+          "exclusive_wall_seconds": 0.09391856100000001,
+          "cumulative_wall_seconds": 0.21902627400000002
+        },
+        {
+          "path": "python/moe_ub_cosim/scaleout_topology.py",
+          "line": 13,
+          "function": "require",
+          "primitive_calls": 738663,
+          "calls": 738663,
+          "exclusive_wall_seconds": 0.050243819,
+          "cumulative_wall_seconds": 0.050243819
+        },
+        {
+          "path": "~",
+          "line": 0,
+          "function": "<method 'get' of 'dict' objects>",
+          "primitive_calls": 313915,
+          "calls": 313915,
+          "exclusive_wall_seconds": 0.049235646,
+          "cumulative_wall_seconds": 0.049235646
+        },
+        {
+          "path": "python/moe_ub_cosim/self_peer_service.py",
+          "line": 5,
+          "function": "validate",
+          "primitive_calls": 92,
+          "calls": 92,
+          "exclusive_wall_seconds": 0.039861314,
+          "cumulative_wall_seconds": 0.070876297
+        },
+        {
+          "path": "python/moe_ub_cosim/scaleout_streams.py",
+          "line": 29,
+          "function": "validate",
+          "primitive_calls": 92,
+          "calls": 92,
+          "exclusive_wall_seconds": 0.039774092000000004,
+          "cumulative_wall_seconds": 0.363753512
+        },
+        {
+          "path": "~",
+          "line": 0,
+          "function": "<method 'update' of 'set' objects>",
+          "primitive_calls": 97412,
+          "calls": 97412,
+          "exclusive_wall_seconds": 0.033709720000000006,
+          "cumulative_wall_seconds": 0.033709720000000006
+        },
+        {
+          "path": "~",
+          "line": 0,
+          "function": "<method 'add' of 'set' objects>",
+          "primitive_calls": 160668,
+          "calls": 160668,
+          "exclusive_wall_seconds": 0.028539624000000003,
+          "cumulative_wall_seconds": 0.028539624000000003
+        },
+        {
+          "path": "~",
+          "line": 0,
+          "function": "<method 'split' of 'str' objects>",
+          "primitive_calls": 84113,
+          "calls": 84113,
+          "exclusive_wall_seconds": 0.023415478,
+          "cumulative_wall_seconds": 0.023415478
+        },
+        {
+          "path": "python/moe_ub_cosim/scaleout_fabric_buffers.py",
+          "line": 9,
+          "function": "buffer_report",
+          "primitive_calls": 92,
+          "calls": 92,
+          "exclusive_wall_seconds": 0.021311933,
+          "cumulative_wall_seconds": 0.039734513
+        }
+      ]
+    }
+  },
+  "new_networks": 0,
+  "profile_sweeps": 4,
+  "measured_speedup": false,
+  "profiling_overhead_included": true,
+  "CPU_free_factor_is_not_achievable_speedup": true,
+  "ordinary_caching_is_not_new_contribution": true
+}

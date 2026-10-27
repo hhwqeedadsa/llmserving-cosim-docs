@@ -13,7 +13,9 @@
 
 ## 当前范围和预算
 
-完整候选准入重复处理`in_progress`：[事前协议](../../experiments/session_admission_profile/protocol.md)。固定O3阶段四份真实完成调用的候选前缀，最多四次离线cProfile，通过公开完整校验入口区分静态拓扑重复、动态历史扫描和复制；不重跑网络、不改平台。原始CPU、剖析时间和循环计数分开，不直接换算收益。累计600受监控秒/256MiB、每命令60秒/RSS1GiB/地址2GiB，失败保留不加限。结果尚未取得，两项创新继续未证实。
+完整候选准入重复处理`completed`：[事前协议](../../experiments/session_admission_profile/protocol.md)、[结果、网页与恢复](../../experiments/session_admission_profile/README.md)。协议`fd51ac1`、执行`1df7c1d`，固定O3四份真实完成调用，四次离线cProfile完成。主校验源码与旧`d3e639f`一致；167/207个最终节点在67/92条实际COMMIT中累计进入主操作循环6769/11719次（40.53/56.61倍），每段远端历史循环累计187819/346900对。固定streams子校验占剖析33.57%～35.68%，超过事前10%工程优先级门槛，下一步有依据的是类型安全的固定校验复用对照；不省略动态历史、写顺序或native检查。旧完整CPU中候选复制/校验占35.22%～41.47%，全部免费仅为1.544～1.708倍宽松CPU工作量界，不是实际提速；剖析比例不能乘旧CPU。
+
+独立前缀/CPU根区间/剖析调用次数及四类篡改拒绝通过，13固定依赖通过。187成员包逐hash复制源码/空cwd恢复，分析/核验/Markdown/HTML逐字节相同，无重测或网络，且不需要旧动态库。归档SHA256 `666001bdd162d59ca2b96a2680941fa1e463adc1186a49e456c46d103ca91a9f`，原件`runs/session_admission_profile_20261027/`。保守含复制收据22.962监控秒、约49.80MiB分配产物及另计摘要/2MiB预留，保持600秒/256MiB和全部单命令上限。零新网络/平台修改/构建/下载/GPU/依赖更改/push；没有实现缓存或测得加速，普通缓存/增量检查仅作强基线，不能当第二主创新。总目标与两项创新仍in_progress。
 
 专家就绪与网络配置选择`completed`：[事前协议](../../experiments/readiness_network_choice/protocol.md)、[报告与网页](../../experiments/readiness_network_choice/README.md)、[两候选取舍](../../experiments/readiness_network_choice/decision.md)。平台`9365a33`、协议`a8b3146`、执行`5756775`；八完整原件entry1/layer3、EP4/batch8，四种声明专家耗时与三网络共24次健康网络完成，12组现代/冻结完整图完整包/队列/回调/应用/内存等价。所有参考获得最长耗时、预测事前冻结；端点/单NIC模型仍误选access，后悔值8.29%～31.03%，普通逐链路模型全部选core、后悔值0，未达到事前5%决策缺口判据。核心升级绝对节省30.344～30.387us，相对改善7.78%～24.02%；不同资源、声明计算，不能称同成本算法/GPU收益。逐链路绝对误差仍11.319～11.711us，长计算稀释相对误差，不是准确性提升。
 

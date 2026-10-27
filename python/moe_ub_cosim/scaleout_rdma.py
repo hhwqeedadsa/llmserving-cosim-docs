@@ -114,8 +114,10 @@ def monitored(command, output, artifacts, *, build=False, runtime=None, wall_sec
         raise RuntimeError('bounded RDMA command failed; inspect ' + str(output)) from error
 
 
-def build(directory, *, cmake='cmake', ninja='ninja', protobuf_prefix=None, resume=False):
+def build(directory, *, cmake='cmake', ninja='ninja', protobuf_prefix=None, resume=False, compile_wall_seconds=300):
     from .native_identity import verify_native_source
+    from .native_compilation import inspect_commands
+    integer(compile_wall_seconds, 'compile_wall_seconds', 60, 1800)
     native_commit = verify_native_source(ROOT)
     directory = Path(directory).resolve()
     previous_build = None
@@ -143,6 +145,9 @@ def build(directory, *, cmake='cmake', ninja='ninja', protobuf_prefix=None, resu
                 'NETANIM', 'CPM', 'VCPKG')
     configure = [cmake, '-S', NS3, '-B', directory / 'cmake', '-G', 'Ninja',
         '-DCMAKE_MAKE_PROGRAM=' + ninja, '-DCMAKE_BUILD_TYPE=Release',
+        # Pinned upstream WARNINGS also appends -O0; preserve warnings explicitly.
+        '-DNS3_WARNINGS=OFF', '-DCMAKE_CXX_FLAGS=-Wall -Wpedantic',
+        '-DCMAKE_EXPORT_COMPILE_COMMANDS=ON',
         '-DCMAKE_PROJECT_NS3_INCLUDE=' + str(ROOT / 'backend/rdma/inject.cmake'),
         '-DNS3_OUTPUT_DIRECTORY=' + str(directory / 'output'),
         '-DNS3_ENABLED_MODULES=core;network;internet;point-to-point;applications;csma',
@@ -156,6 +161,7 @@ def build(directory, *, cmake='cmake', ninja='ninja', protobuf_prefix=None, resu
                           '-DMOE_PROTOBUF_CONFIG=ON',
                           '-DProtobuf_PROTOC_EXECUTABLE=' + str(prefix / 'bin/protoc')])
     provenance = dict(native_commit=native_commit, commands=[], network_executed=False,
+        compile_wall_seconds=compile_wall_seconds,
         platform_head=subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip(),
         sources={str(p.relative_to(ROOT)): digest(p) for p in sorted([*(ROOT/'backend/rdma').glob('*'),
             ROOT/'backend/communication_admission.hh',ROOT/'backend/queue_integral.hh',ROOT/'backend/retransmission_timer.hh',
@@ -169,7 +175,11 @@ def build(directory, *, cmake='cmake', ninja='ninja', protobuf_prefix=None, resu
                   '--target', 'moe-rdma-probe', 'moe-rdma-stream-probe', 'moe-rdma-transaction-probe', 'moe-rdma-transaction-session', 'moe-rdma-service', '--parallel', '2'])]:
             provenance['commands'].append(dict(cwd=str(ROOT), argv=list(map(str, cmd))))
             save(directory / 'provenance.json', provenance)
-            monitored(cmd, logs / name, [directory], build=True, wall_seconds=60 if name == 'configure' else 300)
+            monitored(cmd, logs / name, [directory], build=True, wall_seconds=60 if name == 'configure' else compile_wall_seconds)
+            if name == 'configure':
+                provenance['compiler_options'] = inspect_commands(directory/'cmake/compile_commands.json')
+                save(directory/'compiler-options.json', provenance['compiler_options'])
+                save(directory/'provenance.json', provenance)
     finally:
         if previous is not None:
             lock.write_bytes(previous)
@@ -187,6 +197,7 @@ def build(directory, *, cmake='cmake', ninja='ninja', protobuf_prefix=None, resu
             all(Path(p).resolve().is_relative_to(directory / 'output') for p in native_libraries),
             'binary links another ns-3 build or unresolved libraries')
     result = dict(passed=True, **targets, native_commit=native_commit,
+                  compiler_options=provenance['compiler_options'],
                   linked_ns3_libraries=native_libraries, state='native_rdma_probes_and_service_built_not_executed')
     save(directory / 'backend.json', result)
     return result

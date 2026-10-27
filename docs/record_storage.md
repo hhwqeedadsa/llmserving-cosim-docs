@@ -437,6 +437,12 @@ A3 资源模板的原生 STORE 结果在 `transfers` 行内附加 `local_facts`�
 
 `scaleout sweep`根目录保存原清单、解析配置、来源、全条件命令、总资源采样及`summary.json/csv`；各条件目录保存输入、拓扑、实际运行与诊断。`matches_expectations=true`表示清单中的每个实际结果符合显式预期，不把预期失败改成`passed=true`；前端未完成的时刻为null，网络失败停止与成功排空使用不同语义，CSV空白对应null。条件间为独立运行，共同图hash只核验明确比较组。
 
+## 原生Scale-Out构建选项记录
+
+新`scaleout rdma-build`保存`cmake/compile_commands.json`及`compiler-options.json`，并将后者内容写入`provenance.json/compiler_options`和`backend.json/compiler_options`。格式`moe-native-compilation/1`包含编译数据库SHA256、编译单元数、实际末尾优化选项、保留的告警、关键网络/会话源码覆盖和开发全量progress宏关闭状态；本入口要求有效`-O3`，在编译开始前拒绝无法解释或不合条件的命令。
+
+`provenance.json/compile_wall_seconds`记录显式编译时间预算，默认300秒。这些字段证明本次生成的编译命令及其来源；不能代替二进制/动态库hash、功能验收、硬件校准或性能测量。旧收据没有此字段，不从Release标签补推优化状态。用法见[RDMA构建](../examples/scaleout_rdma/README.md)。
+
 ## 原生RDMA宿主阶段记录
 
 增量操作收集版本的session保留`operation_progress_snapshot`阶段名，内部仅构造实际变化行；旧版本为全量行构造。调用次数仍是收集次数，不代表新回调数。最终事务结果和控制回调字段不变；是否使用增量实现须根据所保存的后端源码hash确定。

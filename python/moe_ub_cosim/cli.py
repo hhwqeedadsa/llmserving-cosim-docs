@@ -70,6 +70,8 @@ def parser():
     rb.add_argument('--ninja', default='ninja')
     rb.add_argument('--protobuf-prefix', type=Path, help='Existing Protobuf installation prefix; never installs dependencies')
     rb.add_argument('--resume', action='store_true', help='Explicitly reconfigure an owned build after a source/configuration correction; keeps prior logs')
+    rb.add_argument('--compile-wall-seconds', type=int, default=300,
+                    help='Explicit compile time budget, 60..1800 seconds (default 300); never increased automatically')
     rp = sc.add_parser('rdma-probe', help='Execute bounded real RDMA messages on a generated small fabric; no frontend service yet')
     rp.add_argument('--topology', type=Path, required=True, help='Directory produced by scaleout topology')
     rp.add_argument('--config', type=Path, required=True, help='Explicit RDMA/ECN protocol JSON; optional switch_links/1 failures with declared route-update delay')
@@ -241,7 +243,8 @@ def main(argv=None):
             elif args.scaleout_command == 'rdma-build':
                 from .scaleout_rdma import build
                 value = build(args.output, cmake=args.cmake, ninja=args.ninja,
-                              protobuf_prefix=args.protobuf_prefix, resume=args.resume)
+                              protobuf_prefix=args.protobuf_prefix, resume=args.resume,
+                              compile_wall_seconds=args.compile_wall_seconds)
             elif args.scaleout_command == 'rdma-probe':
                 from .scaleout_rdma import probe
                 value = probe(args.topology, args.config, args.messages, args.backend, args.output)

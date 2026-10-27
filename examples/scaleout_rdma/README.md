@@ -44,6 +44,10 @@ python -m moe_ub_cosim scaleout rdma-check --run /path/to/service-result
 
 真实可执行路径从构建目录 `backend.json` 的 `probe`、`service` 读取，不猜测文件名。构建失败保留日志；修正源码或工具链配置后，可显式加 `--resume` 复用同一构建，旧日志保留在 `logs/resume-N`。资源预算失败不得靠自动重试或扩大预算绕过。
 
+构建保留`-Wall -Wpedantic`，绕开固定依赖把告警与`-O0`捆绑的配置分支；配置后、编译前检查`cmake/compile_commands.json`中每个单元的有效优化必须是`-O3`，并覆盖原生网络和会话关键源码。摘要保存到`compiler-options.json`、`provenance.json`和`backend.json`。这证明生成的编译命令，不代表硬件校准或加速收益；旧构建仅有Release标签不足以证明启用了优化。
+
+编译默认上限仍为300秒。可在一次新构建开始前显式传入`--compile-wall-seconds 900`等60—1800秒预算；不会自动重试或加限。配置仍为60秒，两并发及内存/磁盘限制保持。旧构建要重新配置并编译后才会得到这份核查摘要。
+
 ## 修改哪些参数
 
 修改拓扑带宽或传播延迟后，可先运行不需要后端程序的检查：

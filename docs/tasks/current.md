@@ -18,7 +18,9 @@
 
 
 
-当前研究 `in_progress`：[完整普通DAG的网络配置迁移判别](../../experiments/static_dag_transfer/protocol.md)，起点`04bb879`。以已归档三组现代调用作参考，只从原网络提取完整native DAG，冻结后通过公开事务会话在三种网络执行，最多3次新网络；原网络等价性不通过则停止，不能删控制消息或把转换错误当语义贡献。内存盘已清空，先按hash从持久归档恢复运行时/八库和原始证据。900秒/512MiB、每命令60秒/RSS1GiB/地址2GiB、网络1ms/result16MiB/capture20000；不改平台/依赖、不构建安装下载/GPU或push。详细边界、竞争解释及去留条件见协议。
+当前普通DAG对照的首次执行与诊断 `completed`，完整强基线仍未建立：[事前协议](../../experiments/static_dag_transfer/protocol.md)、[结果](../../experiments/static_dag_transfer/results/20261027/report.md)。从已核hash归档恢复参考及运行时，复制164项native工作、29条连接；只执行原网络一次，在256次交互上限处以35,853ns未完成退出，剩余两组未执行，不提高限额或重跑。独立诊断发现native after字段没有保留必要的issued→submitted/local_started条件，第25个源包因此提前100ns；这是依赖转换缺项，不能证明通用DAG无法表达MoE，也没有获得网络方案排序或优化收益。
+
+六类证据篡改拒绝、逐成员hash恢复及新源码根/空cwd离线复算通过，摘要与报告逐字节一致，见[核验](../../experiments/static_dag_transfer/results/20261027/verification.json)、[恢复](../../experiments/static_dag_transfer/results/20261027/recovery.json)和[收尾](../../experiments/static_dag_transfer/results/20261027/closeout.json)。持久证据在`runs/static_dag_transfer_20261027/`；受监控累计12.91秒、产物约148.85MiB，保持900秒/512MiB及全部单命令/网络限额。无平台/依赖修改、构建安装下载/GPU或push。下一条强基线须保留通用开始事件门槛并复用已有有界回调批次，保持256次上限，不填固定100ns或参考绝对发送时刻；该实现尚未开始，整体研究目标仍`in_progress`。
 
 
 

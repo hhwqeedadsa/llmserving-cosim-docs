@@ -1,0 +1,65 @@
+{
+  "passed": true,
+  "outcome": "projection_incomplete_and_default_interaction_limit",
+  "actual_new_networks": 1,
+  "planned_remaining_networks_executed": 0,
+  "actual_default_decisions": 256,
+  "failed_snapshot_ns": 35853,
+  "application_finish_ns": null,
+  "first_source_difference_index": 24,
+  "exact_source_prefix_packets": 24,
+  "observed_source_packets": 170,
+  "payload_at_first_difference_identical": true,
+  "first_source_packet_reference_ns": 6246,
+  "first_source_packet_actual_ns": 6146,
+  "missing_semantic_dependency": {
+    "parent_event": "m0.dispatch.rank_count.s0.d0.issued",
+    "native_local": 28,
+    "parent_transition": "local_started",
+    "parent_actual_ns": 6246,
+    "successor_native": 45,
+    "successor_reference_ready_ns": 6246,
+    "successor_projected_ready_ns": 6146,
+    "frozen_after": [
+      {
+        "operation": 17,
+        "event": "completed"
+      }
+    ]
+  },
+  "publication_witness": {
+    "connection": 1,
+    "request_operation": 29,
+    "reference_published_ns": 6246,
+    "actual_published_ns": 6146,
+    "following_nonaggregating_operation": 45
+  },
+  "commit_witness": {
+    "reference/baseline": {
+      "now_ns": 6146,
+      "ids": [
+        28,
+        29,
+        30,
+        31
+      ]
+    },
+    "baseline": {
+      "now_ns": 6146,
+      "ids": [
+        28,
+        29,
+        30,
+        31,
+        44,
+        45,
+        46,
+        47
+      ]
+    }
+  },
+  "network_scheme_ranking_evaluated": false,
+  "generic_DAG_insufficiency_proven": false,
+  "hardware_calibrated": false,
+  "next_required_baseline": "Generic event DAG retaining submitted/local_started gates and existing bounded callback batches; no increase to 256 limit."
+}

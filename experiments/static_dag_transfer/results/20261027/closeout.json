@@ -1,0 +1,138 @@
+{
+  "state": "first_network_failed_and_phase_closed",
+  "overall_innovation_goal": "in_progress",
+  "monitored_seconds": 12.906599535002897,
+  "stage_limit_seconds": 900,
+  "artifact_bytes_before_closeout": 156075966,
+  "reserved_receipt_bytes": 2097152,
+  "stage_limit_bytes": 536870912,
+  "actual_new_networks": 1,
+  "failed_networks": 1,
+  "unexecuted_networks": 2,
+  "failure": "default 256 interactions; independent projection also loses local_started prerequisite",
+  "reruns": 0,
+  "limits_increased": false,
+  "platform_modified": false,
+  "dependencies_modified": false,
+  "downloaded": false,
+  "pushed": false,
+  "checkpoint": {
+    "sha256": "1db858f3f0cf13238db284de65f17aaec9750eee1e80893c0991c7a9e9fdcf98",
+    "members": 184,
+    "compressed_bytes": 10767884,
+    "uncompressed_bytes": 72638488
+  },
+  "complete_generic_DAG_baseline_proven": false,
+  "independent_archive_reanalysis": true,
+  "commands": [
+    {
+      "command": [
+        "python3",
+        "-B",
+        "experiments/static_dag_transfer/prepare.py",
+        "--repository",
+        ".",
+        "--stage",
+        "/dev/shm/moe-static-dag-transfer-20261027"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.665758735005511,
+      "peak_sampled_group_rss_bytes": 92360704
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "experiments/static_dag_transfer/analyze_failure.py",
+        "--stage",
+        "/dev/shm/moe-static-dag-transfer-20261027",
+        "--output-dir",
+        "experiments/static_dag_transfer/results/20261027"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.13700856299692532,
+      "peak_sampled_group_rss_bytes": 7503872
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "experiments/static_dag_transfer/checkpoint.py",
+        "create",
+        "--repository",
+        ".",
+        "--stage",
+        "/dev/shm/moe-static-dag-transfer-20261027",
+        "--output",
+        "runs/static_dag_transfer_20261027/checkpoint.tar.gz"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 2.415759192997939,
+      "peak_sampled_group_rss_bytes": 92909568
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "experiments/static_dag_transfer/check_failure.py",
+        "--stage",
+        "/dev/shm/moe-static-dag-transfer-20261027",
+        "--output",
+        "experiments/static_dag_transfer/results/20261027/verification.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.89955648999603,
+      "peak_sampled_group_rss_bytes": 61669376
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "experiments/static_dag_transfer/checkpoint.py",
+        "restore",
+        "--archive",
+        "runs/static_dag_transfer_20261027/checkpoint.tar.gz",
+        "--output",
+        "runs/static_dag_transfer_20261027/restored"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.5609531800000696,
+      "peak_sampled_group_rss_bytes": 114536448
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-transaction-session",
+        "--topology",
+        "/dev/shm/moe-static-dag-transfer-20261027/reference/baseline",
+        "--protocol",
+        "/dev/shm/moe-static-dag-transfer-20261027/reference/baseline/protocol.json",
+        "--config",
+        "/dev/shm/moe-static-dag-transfer-20261027/program.json",
+        "--backend",
+        "/dev/shm/moe-static-dag-transfer-20261027/runtime/run-transaction-session",
+        "--output",
+        "/dev/shm/moe-static-dag-transfer-20261027/baseline"
+      ],
+      "cwd": "/dev/shm/moe-static-dag-transfer-20261027/empty-cwd",
+      "status": "child_failed",
+      "child_exit_code": 1,
+      "wall_seconds": 8.227563374006422,
+      "peak_sampled_group_rss_bytes": 584376320
+    }
+  ]
+}

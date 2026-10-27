@@ -1,0 +1,13 @@
+{
+  "passed": true,
+  "rejected": [
+    "false_success",
+    "missing_limit",
+    "changed_packet_time",
+    "changed_payload",
+    "missing_semantic_gate",
+    "unrecorded_extra_network"
+  ],
+  "unchanged_input_reanalysis_equal": true,
+  "new_networks": 0
+}

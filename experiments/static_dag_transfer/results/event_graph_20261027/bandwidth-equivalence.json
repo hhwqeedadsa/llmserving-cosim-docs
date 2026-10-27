@@ -1,0 +1,27 @@
+{
+  "equivalent": false,
+  "checks": {
+    "transactions": false,
+    "local_work": false,
+    "packet_capture": true,
+    "queue_events": true,
+    "queue_observations": true,
+    "ports": true,
+    "finish_ns": true,
+    "application_events_and_release": false,
+    "native_callbacks": false,
+    "native_registration_order_and_time": false,
+    "productive_commits": false
+  },
+  "name": "bandwidth",
+  "application_finish_ns": 53446,
+  "all_events_and_source_release_ns": 59468,
+  "drain_ns": 65480,
+  "source_packets": 264,
+  "captured_physical_events": 8800,
+  "physical_decisions": 66,
+  "logical_steps": 369,
+  "reference_physical_decisions": 66,
+  "graph_sha256": "7bd71e61ad38483abeda01143884b7ee4779c561378d33b20a9f475a79fbb0b7",
+  "hardware_calibrated": false
+}

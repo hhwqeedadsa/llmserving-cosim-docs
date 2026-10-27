@@ -1,0 +1,19 @@
+{
+  "passed": true,
+  "independently_counted_source_packets": 528,
+  "independently_counted_callbacks": 1700,
+  "application_events_per_network": 576,
+  "native_work_per_network": 164,
+  "task_ids_renamed_in_transfer": 16,
+  "new_networks_during_verification": 0,
+  "tampering_rejected": [
+    "start_gate_replaced_with_completion",
+    "false_success",
+    "interaction_limit_changed",
+    "extra_network",
+    "source_packet_time_changed",
+    "source_payload_changed"
+  ],
+  "strict_failed_evaluation_preserved": true,
+  "graph_hash_verified": true
+}

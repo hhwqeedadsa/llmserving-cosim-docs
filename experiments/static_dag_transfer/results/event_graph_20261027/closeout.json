@@ -1,0 +1,219 @@
+{
+  "state": "two_networks_closed_with_strict_failure_and_identity_diagnosis",
+  "overall_innovation_goal": "in_progress",
+  "monitored_seconds": 17.591910919996735,
+  "stage_limit_seconds": 900,
+  "artifact_bytes_before_closeout": 172421906,
+  "reserved_receipt_bytes": 2097152,
+  "stage_limit_bytes": 536870912,
+  "actual_new_networks": 2,
+  "failed_networks": 0,
+  "failed_strict_evaluations": 1,
+  "unexecuted_networks": 1,
+  "reruns": 0,
+  "limits_increased": false,
+  "checkpoint": {
+    "sha256": "e964016c2afa07342cb213f55e2b68c96b12eccb1fe1eff9acac9d1383fa5d99",
+    "members": 243,
+    "compressed_bytes": 11025658,
+    "uncompressed_bytes": 80728022
+  },
+  "independent_archive_reanalysis": true,
+  "platform_modified": false,
+  "dependencies_modified": false,
+  "downloaded": false,
+  "hardware_calibrated": false,
+  "pushed": false,
+  "commands": [
+    {
+      "command": [
+        "python3",
+        "-B",
+        "experiments/static_dag_transfer/evaluate_event_graph.py",
+        "--stage",
+        "/dev/shm/moe-generic-event-dag-20261027",
+        "--name",
+        "bandwidth"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "child_failed",
+      "child_exit_code": 1,
+      "wall_seconds": 0.14070581199484877,
+      "peak_sampled_group_rss_bytes": 7483392
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "experiments/static_dag_transfer/run_event_graph.py",
+        "--repository",
+        ".",
+        "--stage",
+        "/dev/shm/moe-generic-event-dag-20261027",
+        "--name",
+        "bandwidth"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 5.041340528994624,
+      "peak_sampled_group_rss_bytes": 563793920
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "experiments/static_dag_transfer/evaluate_event_graph.py",
+        "--stage",
+        "/dev/shm/moe-generic-event-dag-20261027",
+        "--name",
+        "baseline"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.23808322900003986,
+      "peak_sampled_group_rss_bytes": 44204032
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "experiments/static_dag_transfer/run_event_graph.py",
+        "--repository",
+        ".",
+        "--stage",
+        "/dev/shm/moe-generic-event-dag-20261027",
+        "--name",
+        "baseline"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 4.748415112997463,
+      "peak_sampled_group_rss_bytes": 564846592
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "experiments/static_dag_transfer/event_checkpoint.py",
+        "create",
+        "--repository",
+        ".",
+        "--stage",
+        "/dev/shm/moe-generic-event-dag-20261027",
+        "--output",
+        "runs/generic_event_dag_20261027/checkpoint.tar.gz"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 2.6114020840032026,
+      "peak_sampled_group_rss_bytes": 99246080
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "experiments/static_dag_transfer/compile_event_graph.py",
+        "--stage",
+        "/dev/shm/moe-generic-event-dag-20261027"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.24736449900228763,
+      "peak_sampled_group_rss_bytes": 20164608
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "experiments/static_dag_transfer/diagnose_event_graph.py",
+        "--stage",
+        "/dev/shm/moe-generic-event-dag-20261027"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.24147884500416694,
+      "peak_sampled_group_rss_bytes": 42119168
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "experiments/static_dag_transfer/verify_event_graph.py",
+        "--stage",
+        "/dev/shm/moe-generic-event-dag-20261027"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 2.104140991003078,
+      "peak_sampled_group_rss_bytes": 83877888
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "experiments/static_dag_transfer/prepare.py",
+        "--repository",
+        ".",
+        "--stage",
+        "/dev/shm/moe-generic-event-dag-20261027"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.6736620409938041,
+      "peak_sampled_group_rss_bytes": 93691904
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "experiments/static_dag_transfer/event_checkpoint.py",
+        "restore",
+        "--archive",
+        "runs/generic_event_dag_20261027/checkpoint.tar.gz",
+        "--output",
+        "runs/generic_event_dag_20261027/restored"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.9465195310040144,
+      "peak_sampled_group_rss_bytes": 152117248
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "experiments/static_dag_transfer/check_event_graph.py"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.13545318599790335,
+      "peak_sampled_group_rss_bytes": 7499776
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "experiments/static_dag_transfer/summarize_event_graph.py",
+        "--stage",
+        "/dev/shm/moe-generic-event-dag-20261027",
+        "--output-dir",
+        "experiments/static_dag_transfer/results/event_graph_20261027"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.46334506000130204,
+      "peak_sampled_group_rss_bytes": 53469184
+    }
+  ]
+}

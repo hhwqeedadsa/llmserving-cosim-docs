@@ -13,6 +13,8 @@
 
 ## 当前范围和预算
 
+当前下一次通信准入下界与残留传输核查 `in_progress`：[事前协议](../../experiments/admission_bounds/protocol.md)，起点`a28cdca`。只用冻结通用图和当前回调前缀，比较相同通用图的因果、传播及声明本地/self成本下界；未来提交/transport/包记录只用于评价。重点检验应用completed后仍有回复ACK尾部的反例，区分未来准入与分域网络静默。零新网络，累计300秒/128MiB、每命令60秒/RSS1GiB/地址2GiB，平台/依赖不改。普通DAG/lookahead均为强基线，不算MoE新意；两候选仍未成立，整体目标继续进行。
+
 当前包级交互范围前置核算 `completed`：[事前协议](../../experiments/interaction_scope/protocol.md)、[报告](../../experiments/interaction_scope/results/20261027/report.md)，起点`a0367d2`。只从已核hash持久包恢复100G/200G公开参考，逐IP/端口/协议/序号及UID谱系重建共1,056条完整包路径、4,928次物理发送/接收和3,872次交换机包驻留，全部端口字节、FIFO、串行/传播、队列面积/峰值/排空独立一致。576个应用事件形成一个依赖分量，25条有线上流量连接则按端口/共享MMU形成15与10两个物理rail；输入拓扑及显式NIC绑定独立支持此结构分组，仍不证明完整应用可以独立运行。
 
 计入回复/ACK使直接共享出口连接对66→142，但100G的ACK占用串行器所致累计包等待仅152ns。100G/200G累计包等待38.991/20.244us，跨连接25.372/13.077us，最长单包1.304/0.648us；所有交换机正等待由具体前序物理发送解释。累计等待减少18.747us而应用只快4.033us，不能把累计值当可消除业务收益，NIC内部排队仍缺观测。完整路径/驻留重数、6类证据篡改拒绝、确定性复算及来源源码hash通过，见[核验](../../experiments/interaction_scope/results/20261027/verification.json)。持久包逐成员hash恢复后从复制源码/空cwd重算摘要与报告逐字节一致，见[恢复](../../experiments/interaction_scope/results/20261027/recovery.json)与[收尾](../../experiments/interaction_scope/results/20261027/closeout.json)。受监控3.85秒、产物约31.4MiB，保持300秒/128MiB与全部单命令限额，零新网络/构建/GPU/下载/平台依赖修改/push。静态按rail分域作为已有基线；候选二下一步必须证明未来到达、阈值及跨域状态的安全合并条件和实际成本收益，不从本次无反馈反推可省略。两项创新均未成立，整体目标继续`in_progress`。

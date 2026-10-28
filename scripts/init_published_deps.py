@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Initialize pinned submodules from the published same-repository mirrors.
 
-Keep original .gitmodules/lock identities unchanged. URL rewriting is limited
-to this Git command, and each module borrows the main clone's object cache.
+Keep original .gitmodules/lock identities unchanged. Fetch all fixed objects
+once from the public mirror, then initialize modules from that local cache.
 """
 import argparse
 import hashlib
@@ -64,9 +64,12 @@ def initialize(mirror,verify_only):
         for row in rows:
             if git('rev-parse',row['local_ref'])!=row['commit']:
                 raise ValueError('published dependency ref differs: '+row['name'])
-        options=[]
+        # All requested commits have just been verified in ROOT. Clone modules
+        # locally to avoid 13 full remote clones and keep one shared object store.
+        # File transport is enabled for this command only, never globally.
+        options=['-c','protocol.file.allow=always']
         for url in sorted({row['original_url'] for row in rows}):
-            options.extend(('-c',f'url.{mirror}.insteadOf={url}'))
+            options.extend(('-c',f'url.{ROOT}.insteadOf={url}'))
         git(*options,'submodule','update','--init','--recursive','--reference',ROOT,'--jobs','2',capture=False)
     result=dict(passed=True,dependencies=[inspect(row) for row in rows],simai_archive_verified=True,
         global_git_config_changed=False,original_gitmodules_and_lock_unchanged=True,

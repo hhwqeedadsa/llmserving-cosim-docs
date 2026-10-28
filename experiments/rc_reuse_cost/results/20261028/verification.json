@@ -1,0 +1,61 @@
+{
+  "checks": [
+    {
+      "decisions": {
+        "gated0": "direct",
+        "gated1": "direct",
+        "gated2": "direct",
+        "terminal0": "direct",
+        "terminal1": "direct",
+        "terminal2": "direct"
+      },
+      "index": 0,
+      "networks": 6,
+      "passed": true
+    },
+    {
+      "decisions": {
+        "gated0": "fallback",
+        "gated1": "fallback",
+        "gated2": "fallback",
+        "terminal0": "admitted",
+        "terminal1": "admitted",
+        "terminal2": "admitted"
+      },
+      "index": 1,
+      "networks": 5,
+      "passed": true
+    }
+  ],
+  "complete": false,
+  "completed_pairs": 1,
+  "engineering_gate": null,
+  "full_CCL": false,
+  "input_generation_and_existing_build_excluded": true,
+  "median_cpu_ratio": 1.0848073020873241,
+  "median_wall_ratio": 1.113475548109395,
+  "network_runs": 11,
+  "new_innovation_proven": false,
+  "normal_cache_preparation_included": true,
+  "pairs": [
+    {
+      "cpu_ratio": 1.0848073020873241,
+      "direct_cpu_ns": 1223194000,
+      "direct_wall_ns": 1618884843,
+      "pair": 0,
+      "reuse_cpu_ns": 1127568000,
+      "reuse_wall_ns": 1453902464,
+      "wall_ratio": 1.113475548109395
+    }
+  ],
+  "passed": true,
+  "planned_pairs": 3,
+  "stop_reason": "first independent timing check failed; decimal truncation versus nearest-ns serialization",
+  "tamper_classes_rejected": [
+    "CPU",
+    "wall",
+    "order",
+    "completion",
+    "memory"
+  ]
+}

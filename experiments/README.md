@@ -21,6 +21,7 @@
 | [hybrid_completion_space](hybrid_completion_space/README.md) | 分层MoE结束通知扣除普通活动集合后的剩余空间 | 36组/2088层离线需求；decode无额外关联收益，prefill仍须击败通道调参，未测时延 |
 | [rc_counterfactual_reuse](rc_counterfactual_reuse/README.md) | 正常网络缓存到最终原子回复丢失的增量重算原型 | 三新网络；适用分支预测及状态吻合，普通解析同样准确；数据丢失拒绝，未测完整宿主加速 |
 | [rc_overlap_reuse](rc_overlap_reuse/README.md) | 全网尚忙时的普通资源复用与后继故障回退 | 四新网络；终端局部非干扰准确，带后继拒绝，93ns变化由实际排队解释，未证明新模型或宿主收益 |
+| [rc_reuse_cost](rc_reuse_cost/README.md) | 六个不同故障、计入正常缓存准备的完整成本 | 11网络/首对输出一致，CPU比1.085；核验取整错误后停止余两对，仅离线修正，比较未完成，不称稳定收益 |
 
 Scale-Up 的[方案](scaleup_issue_screening/plan.md)覆盖本地竞争与服务不足、下游阻塞与排队传播、多平面推进差异。新增 Scale-Out 的[研究报告](../docs/reviews/scaleout_scaling_hotspots_20261015.md)关注跨机 All-to-All-v、多 EP 组和热点到网络资源的映射；不将旧 UB 结果改称 RDMA 结果。目录和迭代规范见[仓库组织方案](../docs/repository_layout.md)。
 

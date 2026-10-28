@@ -13,7 +13,11 @@
 
 ## 当前范围和预算
 
-当前研究`in_progress`：[RC复用的完整宿主成本](../../experiments/rc_reuse_cost/protocol.md)，起点`5f7adb4`。新6447/MTU4096/RTO25us，两程序共六个不同故障查询，直接执行与包含正常缓存准备的通用证书/回退比较；三对交错，最多42个新网络，900受监控秒/512MiB，零构建/HTTP/GPU/平台依赖修改/push。两方输出相同摘要，direct不承担不需要的正常缓存/额外捕获；旧条件关闭。目标是验证冷启动净成本，不把经典复用或小基准速度当两项论文创新。
+当前研究已停止并关闭（`comparison_complete=false`）：[RC复用的完整宿主成本](../../experiments/rc_reuse_cost/README.md)、[冻结方法](../../experiments/rc_reuse_cost/protocol.md)及[网页](../../experiments/rc_reuse_cost/results/20261028/report.html)，起点`5f7adb4`、协议`a036d33`。新6447/MTU4096/RTO25us、六个不同故障；计划三对，完成direct→reuse首对共11网络。direct六次，reuse两次正常缓存/三次回退/三项终端准入，六项canonical结果全部一致。完整CPU1.223194/1.127568s、墙钟1.618885/1.453902s，首对比1.085/1.113；包含正常缓存准备，不含共同配置生成/旧编译。只少一次网络，不能把50%查询准入当50%完整加速。未清OS页缓存且后两对未执行，不评三对工程门槛，不称稳定收益。
+
+首对后核验器将浮点秒的十进制表示截断，错误产生1ns差；按规则停止后四工作流，仅修离线取整、原始测量/执行源码不变。11网络独立逐包/目标/PSN重放、六项相等及五类篡改通过。第一次归档包含正在追加的监控samples，hash核验拒绝；保留原包，修正为只打包终态监控，另建新包。两次失败与原源码见[记录](../../experiments/rc_reuse_cost/results/20261028/failure.json)，零网络/性能重跑或扩限。输入仍为构造协议功能片段，不是实际现代DeepEP/完整MoE/LLMServingSim或硬件校准；证书为通用强基线，两主创新尚未成立。
+
+239成员修正包逐hash恢复，复制源码/隔离Python/空cwd重算六判断、核验、指标及MD/HTML逐字节一致，恢复零网络/性能测量/编译；SHA256 `92d48cc881200c0b8b806030c168df20a587a971bc8a01a24972cb8e07bea0a0`。见[恢复](../../experiments/rc_reuse_cost/results/20261028/recovery.json)与[关闭](../../experiments/rc_reuse_cost/results/20261028/closeout.json)，原件`runs/rc_reuse_cost_20261028/`。保守含嵌套监控、两失败及管理预留23.463秒、约93.35MiB，保持900秒/512MiB及单项上限；零HTTP/GPU/构建/平台依赖修改/push。本轮额度关闭，整体为progress，两个主创新和目标仍`in_progress`；后续须另定独立输入与实质决策/完整成本证据，不补成本组或用常规缓存替代创新。
 
 当前研究已关闭：[忙碌网络中的RC复用判别](../../experiments/rc_overlap_reuse/README.md)、[冻结方法](../../experiments/rc_overlap_reuse/protocol.md)及[网页](../../experiments/rc_overlap_reuse/results/20261028/report.html)，起点`9c675c1`、协议`6434e30`。新1808单token路由、43,008B数据、三QP；终端/带前置门槛两程序正常/丢回复各一次。终端回复重试28.835us时全网尚忙，普通端口/时间证书仍准入，全部连接/内存/旧值/目标效应及12次新增逐跳TX吻合，故障连接晚14us而片段仍51.093us。带后继条件事前拒绝，正常50.548us、故障51.794us；恢复到正常对照的净差相对故障为2.41%，不是已优化或全网收益上界。普通RTO平移仅52ns整片段误差，不能支持显著新模型价值。
 

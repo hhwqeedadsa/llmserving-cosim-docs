@@ -1,0 +1,28 @@
+{
+  "archive_failure": {
+    "archive": "checkpoint.tar.gz",
+    "archived_bytes": 784,
+    "cause": "a still-running archive monitor appended its samples during packaging",
+    "member": "evidence/monitor/archive/samples.jsonl",
+    "network_or_measurement_reruns": 0,
+    "original_retained": true,
+    "recorded_bytes": 261
+  },
+  "cause": "independent verifier truncated Decimal nanoseconds rather than rounding the serialized wait4 floats",
+  "comparison_complete": false,
+  "completed_pairs": 1,
+  "first_failure": "monitor/check-1",
+  "fixed_verifier_sha256": "b6f631f738e9a6f05ca0b08b8bf9fb4d7a4daf9293d543bdd8e93d0907bef339",
+  "later_workflows_not_started": 4,
+  "measurement_sources_unchanged": true,
+  "network_failures": 0,
+  "networks_executed": 11,
+  "offline_repair_only": true,
+  "original_verifier_sha256": "ce156adfdcba2396576f9aedab43cbe91761a617ed31d377f24596a4f149cbbf",
+  "performance_reruns": 0,
+  "planned_pairs": 3,
+  "raw_system_seconds": 0.22969699999999998,
+  "raw_user_seconds": 0.897871,
+  "stored_cpu_ns": 1127568000,
+  "wrong_truncated_cpu_ns": 1127567999
+}

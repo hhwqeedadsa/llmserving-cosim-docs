@@ -1,0 +1,179 @@
+{
+  "GPU": 0,
+  "HTTP": 0,
+  "artifact_budget_bytes": 536870912,
+  "artifact_reserve_bytes": 2097152,
+  "artifact_total_with_reserve": 97878016,
+  "artifact_usage_before_closeout": {
+    "allocated_bytes": 95772672,
+    "apparent_bytes": 94772853
+  },
+  "checkpoint": {
+    "comparison_complete": false,
+    "compressed_bytes": 5466976,
+    "contains_local_raw_data": true,
+    "content_bytes": 45052585,
+    "members": 239,
+    "published": false,
+    "sha256": "92d48cc881200c0b8b806030c168df20a587a971bc8a01a24972cb8e07bea0a0"
+  },
+  "comparison_complete": false,
+  "completed_pairs": 1,
+  "conservative_monitored_seconds_including_nested": 13.462336578042596,
+  "dependency_changes": 0,
+  "engineering_gate": null,
+  "first_pair_cpu_ratio": 1.0848073020873241,
+  "first_pair_wall_ratio": 1.113475548109395,
+  "future_gate": "independent full-cost evidence and advantage beyond generic reuse; this scope remains closed",
+  "later_workflows_not_started": 4,
+  "management_seconds_reserve": 10,
+  "measured_workflows": 2,
+  "monitors": [
+    {
+      "path": "monitor/analyze/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.2377290400036145
+    },
+    {
+      "path": "monitor/archive/probe.json",
+      "status": "completed",
+      "wall_seconds": 3.3073987079988
+    },
+    {
+      "path": "monitor/archive-repaired/probe.json",
+      "status": "completed",
+      "wall_seconds": 3.358863982008188
+    },
+    {
+      "path": "monitor/check-0/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.12238062499091029
+    },
+    {
+      "path": "monitor/check-1/probe.json",
+      "status": "child_failed",
+      "wall_seconds": 0.13389570200524759
+    },
+    {
+      "path": "monitor/job-0/probe.json",
+      "status": "completed",
+      "wall_seconds": 1.7048451419977937
+    },
+    {
+      "path": "monitor/job-1/probe.json",
+      "status": "completed",
+      "wall_seconds": 1.635895478000748
+    },
+    {
+      "path": "monitor/offline-check-1/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.13325805800559465
+    },
+    {
+      "path": "monitor/recovery/probe.json",
+      "status": "child_failed",
+      "wall_seconds": 0.24238606600556523
+    },
+    {
+      "path": "monitor/recovery-repaired/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.7167729100037832
+    },
+    {
+      "path": "monitor/replay/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.1361861910118023
+    },
+    {
+      "path": "monitor/report/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.1341825389972655
+    },
+    {
+      "path": "monitor/report-final/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.14049904599960428
+    },
+    {
+      "path": "workflows/0-direct/native/gated0/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.11304944500443526
+    },
+    {
+      "path": "workflows/0-direct/native/gated1/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.11312089300190564
+    },
+    {
+      "path": "workflows/0-direct/native/gated2/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.11385310100740753
+    },
+    {
+      "path": "workflows/0-direct/native/terminal0/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.11222467200423125
+    },
+    {
+      "path": "workflows/0-direct/native/terminal1/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.11183971900027245
+    },
+    {
+      "path": "workflows/0-direct/native/terminal2/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.11200514700612985
+    },
+    {
+      "path": "workflows/1-reuse/native/gated0/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.11385983799118549
+    },
+    {
+      "path": "workflows/1-reuse/native/gated1/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.11253795900847763
+    },
+    {
+      "path": "workflows/1-reuse/native/gated2/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.11302382699795999
+    },
+    {
+      "path": "workflows/1-reuse/native/normal-gated/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.11336042599577922
+    },
+    {
+      "path": "workflows/1-reuse/native/normal-terminal/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.11350198299624026
+    },
+    {
+      "path": "../rc_reuse_cost_20261028-prepare-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.2156660809996538
+    }
+  ],
+  "network_run_budget": 42,
+  "network_runs": 11,
+  "new_builds": 0,
+  "new_innovation_proven": false,
+  "normal_cache_preparation_included": true,
+  "passed": true,
+  "performance_reruns": 0,
+  "planned_pairs": 3,
+  "platform_changes": 0,
+  "prepare_monitor_usage": {
+    "allocated_bytes": 8192,
+    "apparent_bytes": 2363
+  },
+  "push": false,
+  "retained_failures": [
+    "monitor/check-1/probe.json",
+    "monitor/recovery/probe.json"
+  ],
+  "state": "progress_overall_goal_not_complete",
+  "total_seconds_with_reserve": 23.462336578042596,
+  "wall_budget_seconds": 900
+}

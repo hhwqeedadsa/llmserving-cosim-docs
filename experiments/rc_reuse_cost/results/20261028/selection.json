@@ -1,0 +1,32 @@
+{
+  "E": 256,
+  "EP": 4,
+  "H": 7168,
+  "activation_dtype": "declared BF16",
+  "destinations": [
+    1,
+    2,
+    3
+  ],
+  "entry": 0,
+  "expert_ids": [
+    50,
+    68,
+    92,
+    132,
+    147,
+    194,
+    218,
+    35
+  ],
+  "file_id": "local-6447",
+  "hidden_bytes": 14336,
+  "layer": 3,
+  "original_path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/international_law/6447.json",
+  "raw_sha256": "265c8e66cfb49da12be0d8037cd7a8be6997f4207bcb0a48ca3c616bbe253b96",
+  "scope": "one real routing choice; constructed segmented/gated RC program, not actual CCL/GPU",
+  "source_rank": 0,
+  "token": 0,
+  "top_k": 8,
+  "write_bytes": 43008
+}

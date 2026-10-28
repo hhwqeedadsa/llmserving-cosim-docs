@@ -142,6 +142,14 @@ def parser():
     diagnose_rdma = sc.add_parser('rdma-diagnose', help='Audit recovery/RTT, conditional timeout bounds, source credits and callbacks; completed or failed runs, evaluation only')
     diagnose_rdma.add_argument('--run', type=Path, required=True, help='Native probe or service directory containing result.json, including failed runs')
     diagnose_rdma.add_argument('--output', type=Path, required=True, help='New diagnosis JSON; input run is preserved')
+    arrivals = sc.add_parser('rdma-arrivals', help='Audit native service endpoints and reconstruct one collective slice accepted-byte curve from complete packet capture')
+    arrivals.add_argument('--run', type=Path, required=True, help='Saved rdma-run directory with result.json and graphs/*/wave.json')
+    arrivals.add_argument('--output', type=Path, required=True, help='New directory: summary.json and endpoint/message/packet/curve CSVs')
+    arrivals.add_argument('--graph', default='g0.w0', help='Exact saved graph ID, e.g. g0.w0')
+    arrivals.add_argument('--layer', type=int, default=0, help='Zero-based layer within graph; original source layer is retained in summary')
+    arrivals.add_argument('--phase', choices=('dispatch','combine'), default='dispatch')
+    arrivals.add_argument('--src', type=int, help='Optional source rank filter within the collective')
+    arrivals.add_argument('--dst', type=int, help='Optional destination rank filter within the collective')
     sweep=sc.add_parser('sweep',help='Run an explicit bounded case list; vary model/batch/topology/protocol, retain failures and compare common graphs')
     sweep.add_argument('--config',type=Path,required=True,help='Sweep JSON; base paths resolve from its directory; object patches merge, null deletes optional keys')
     sweep.add_argument('--backend',type=Path,required=True,help='Native service executable from rdma-build')
@@ -277,6 +285,9 @@ def main(argv=None):
             elif args.scaleout_command == 'rdma-diagnose':
                 from .scaleout_diagnostics import diagnose
                 value = diagnose(args.run, args.output)
+            elif args.scaleout_command == 'rdma-arrivals':
+                from .scaleout_arrivals import execute
+                value = execute(args.run,args.output,args.graph,args.layer,args.phase,args.src,args.dst)
             elif args.scaleout_command == 'rdma-check':
                 from .scaleout_verify import verify
                 value = verify(args.run)

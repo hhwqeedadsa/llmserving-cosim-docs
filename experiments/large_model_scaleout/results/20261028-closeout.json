@@ -1,0 +1,60 @@
+{
+  "passed": true,
+  "monitors": [
+    {
+      "path": "runs/large_model_scaleout_20261028/generation-monitor/probe.json",
+      "status": "completed",
+      "exit_code": 0,
+      "seconds": 0.5582350939803291,
+      "peak_sampled_group_rss_bytes": 29822976
+    },
+    {
+      "path": "runs/large_model_scaleout_20261028/model-monitor/probe.json",
+      "status": "completed",
+      "exit_code": 0,
+      "seconds": 0.138541300984798,
+      "peak_sampled_group_rss_bytes": 7491584
+    },
+    {
+      "path": "runs/large_model_scaleout_20261028/render-monitor/probe.json",
+      "status": "child_failed",
+      "exit_code": 1,
+      "seconds": 0.5728715190198272,
+      "peak_sampled_group_rss_bytes": 60416000
+    },
+    {
+      "path": "runs/large_model_scaleout_20261028/render-final-monitor/probe.json",
+      "status": "completed",
+      "exit_code": 0,
+      "seconds": 4.107974552985979,
+      "peak_sampled_group_rss_bytes": 147427328
+    },
+    {
+      "path": "runs/large_model_scaleout_20261028/verify-monitor/probe.json",
+      "status": "completed",
+      "exit_code": 0,
+      "seconds": 16.676822075998643,
+      "peak_sampled_group_rss_bytes": 38227968
+    }
+  ],
+  "monitored_seconds": 22.054444542969577,
+  "admin_seconds_reserved": 10,
+  "static_seconds_budget": 300,
+  "artifact_bytes_budget": 134217728,
+  "logical_bytes_before_closeout": 13392096,
+  "allocated_file_bytes_before_closeout": 13811712,
+  "artifact_reserved_bytes": 2097152,
+  "peak_sampled_group_rss_bytes": 147427328,
+  "network_executions": 0,
+  "gpu_executions": 0,
+  "dependency_builds": 0,
+  "pushed": false,
+  "independent_verification": "20261028-verification.json",
+  "scope": "Qwen235 shape inputs, six generated fabrics and reused EP4 real-route curves; no large-scale network run",
+  "failures": [
+    {
+      "path": "runs/large_model_scaleout_20261028/render-monitor/stderr.log",
+      "reason": "lambda sort key precedence error; corrected source, new output directory, unchanged limits"
+    }
+  ]
+}

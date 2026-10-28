@@ -1,0 +1,152 @@
+[
+  {
+    "file": "simai-README_CN.md",
+    "repository": "aliyun/SimAI",
+    "revision": "a57d765c5478f319c5f5ab6fdc53f9cc7f461743",
+    "path": "README_CN.md",
+    "url": "https://github.com/aliyun/SimAI/blob/a57d765c5478f319c5f5ab6fdc53f9cc7f461743/README_CN.md",
+    "fetched_via": "https://api.github.com/repos/aliyun/SimAI/git/blobs/a0fed6db0074d938b0b4b0d6c68cbe3ab587d158",
+    "git_blob_sha1": "a0fed6db0074d938b0b4b0d6c68cbe3ab587d158",
+    "bytes": 16361,
+    "sha256": "2dd85f725baf46d6b8df121cd1081afd16ae89e50bb214594bfc2c3bc23fabba"
+  },
+  {
+    "file": "simai-inference-README.md",
+    "repository": "aliyun/SimAI",
+    "revision": "a57d765c5478f319c5f5ab6fdc53f9cc7f461743",
+    "path": "vidur-alibabacloud/README_CN.md",
+    "url": "https://github.com/aliyun/SimAI/blob/a57d765c5478f319c5f5ab6fdc53f9cc7f461743/vidur-alibabacloud/README_CN.md",
+    "fetched_via": "https://api.github.com/repos/aliyun/SimAI/git/blobs/ca57cd51beab7a46666d5d8bf9e505ce38fa3173",
+    "git_blob_sha1": "ca57cd51beab7a46666d5d8bf9e505ce38fa3173",
+    "bytes": 27353,
+    "sha256": "64c02cec2062252d0253734554358c5a4ac822ede47840afcac971b0688eb1cd"
+  },
+  {
+    "file": "qwen235.json",
+    "repository": "aliyun/SimAI",
+    "revision": "a57d765c5478f319c5f5ab6fdc53f9cc7f461743",
+    "path": "vidur-alibabacloud/data/hf_configs/qwen3-235B-A22B_config.json",
+    "url": "https://github.com/aliyun/SimAI/blob/a57d765c5478f319c5f5ab6fdc53f9cc7f461743/vidur-alibabacloud/data/hf_configs/qwen3-235B-A22B_config.json",
+    "fetched_via": "https://api.github.com/repos/aliyun/SimAI/git/blobs/bb4e2521b04c649350a4e86dd83671e0aca3966d",
+    "git_blob_sha1": "bb4e2521b04c649350a4e86dd83671e0aca3966d",
+    "bytes": 965,
+    "sha256": "422d40cc0ceb9eb33c4976da7f12dddda27f6f60e42ffe307e6deb61c1ccdf23"
+  },
+  {
+    "file": "qwen235-fp8.json",
+    "repository": "aliyun/SimAI",
+    "revision": "a57d765c5478f319c5f5ab6fdc53f9cc7f461743",
+    "path": "vidur-alibabacloud/data/hf_configs/qwen3-235B-A22B_FP8_config.json",
+    "url": "https://github.com/aliyun/SimAI/blob/a57d765c5478f319c5f5ab6fdc53f9cc7f461743/vidur-alibabacloud/data/hf_configs/qwen3-235B-A22B_FP8_config.json",
+    "fetched_via": "https://api.github.com/repos/aliyun/SimAI/git/blobs/01e9c6f72fab7db70e2965de3c9caf642ae70c58",
+    "git_blob_sha1": "01e9c6f72fab7db70e2965de3c9caf642ae70c58",
+    "bytes": 1196,
+    "sha256": "2bbcccb94ac157eebf33c513d4cb1fecfbe62f28efa8ca478422248775de2b8f"
+  },
+  {
+    "file": "r1-0528.json",
+    "repository": "aliyun/SimAI",
+    "revision": "a57d765c5478f319c5f5ab6fdc53f9cc7f461743",
+    "path": "vidur-alibabacloud/data/hf_configs/deepseek_R1_0528_config.json",
+    "url": "https://github.com/aliyun/SimAI/blob/a57d765c5478f319c5f5ab6fdc53f9cc7f461743/vidur-alibabacloud/data/hf_configs/deepseek_R1_0528_config.json",
+    "fetched_via": "https://api.github.com/repos/aliyun/SimAI/git/blobs/c482e777cbacba9cb292d0fceba48ef52956583e",
+    "git_blob_sha1": "c482e777cbacba9cb292d0fceba48ef52956583e",
+    "bytes": 1660,
+    "sha256": "79ddea672a62e95d3f0be27be434375538e1988975971cffcf87c96c1de84a65"
+  },
+  {
+    "file": "deepseek-v3.json",
+    "repository": "aliyun/SimAI",
+    "revision": "a57d765c5478f319c5f5ab6fdc53f9cc7f461743",
+    "path": "vidur-alibabacloud/data/hf_configs/deepseek_v3_config.json",
+    "url": "https://github.com/aliyun/SimAI/blob/a57d765c5478f319c5f5ab6fdc53f9cc7f461743/vidur-alibabacloud/data/hf_configs/deepseek_v3_config.json",
+    "fetched_via": "https://api.github.com/repos/aliyun/SimAI/git/blobs/0ef21d653f6910799d31696da2f684ce54cd2a4c",
+    "git_blob_sha1": "0ef21d653f6910799d31696da2f684ce54cd2a4c",
+    "bytes": 1733,
+    "sha256": "b9661c76f4b23d5fb1db1e00a6ec1fa3ffba940c54bbe8df01b8e32fa07fd0d7"
+  },
+  {
+    "file": "aicb-inference.sh",
+    "repository": "aliyun/aicb",
+    "revision": "23eec3c48ca2d2d93dd888a4c7b22ab4421e782f",
+    "path": "scripts/inference_workload_with_aiob.sh",
+    "url": "https://github.com/aliyun/aicb/blob/23eec3c48ca2d2d93dd888a4c7b22ab4421e782f/scripts/inference_workload_with_aiob.sh",
+    "fetched_via": "https://api.github.com/repos/aliyun/aicb/git/blobs/3787c1b752042feaa6495ab856637f7a8498eaaf",
+    "git_blob_sha1": "3787c1b752042feaa6495ab856637f7a8498eaaf",
+    "bytes": 4612,
+    "sha256": "cda4be10736941ebcc10755c9c76746ac1501491b17b0a01f741aa47b5643da9"
+  },
+  {
+    "file": "aicb-deepseek-default.json",
+    "repository": "aliyun/aicb",
+    "revision": "23eec3c48ca2d2d93dd888a4c7b22ab4421e782f",
+    "path": "scripts/inference_configs/deepseek_default.json",
+    "url": "https://github.com/aliyun/aicb/blob/23eec3c48ca2d2d93dd888a4c7b22ab4421e782f/scripts/inference_configs/deepseek_default.json",
+    "fetched_via": "https://api.github.com/repos/aliyun/aicb/git/blobs/2e1e9618430599f5524f17018e24178ccdfed303",
+    "git_blob_sha1": "2e1e9618430599f5524f17018e24178ccdfed303",
+    "bytes": 447,
+    "sha256": "501528a23ee35efbdb0e665904ecc3a0bad273b8b00593475347dabdc1ccc4a9"
+  },
+  {
+    "file": "aicb-inference-generator.py",
+    "url": "https://raw.githubusercontent.com/aliyun/aicb/23eec3c48ca2d2d93dd888a4c7b22ab4421e782f/workload_generator/SimAI_inference_workload_generator.py",
+    "repository": "aliyun/aicb",
+    "revision": "23eec3c48ca2d2d93dd888a4c7b22ab4421e782f",
+    "path": "workload_generator/SimAI_inference_workload_generator.py",
+    "bytes": 16414,
+    "sha256": "725363afb029b5ac9e6e0427e7505e05938f27588a57aadc4f5120ee3b1c5692"
+  },
+  {
+    "file": "aicb-inference-deepseek.py",
+    "url": "https://raw.githubusercontent.com/aliyun/aicb/23eec3c48ca2d2d93dd888a4c7b22ab4421e782f/workload_generator/mocked_model/inference/MockedDeepSeek.py",
+    "repository": "aliyun/aicb",
+    "revision": "23eec3c48ca2d2d93dd888a4c7b22ab4421e782f",
+    "path": "workload_generator/mocked_model/inference/MockedDeepSeek.py",
+    "bytes": 19196,
+    "sha256": "8a8e93e055899d806a4f0e1207dcdf88cffd085338940f89a29d49fe07a57a99"
+  },
+  {
+    "file": "aicb-README.md",
+    "repository": "aliyun/aicb",
+    "revision": "23eec3c48ca2d2d93dd888a4c7b22ab4421e782f",
+    "path": "README.md",
+    "url": "https://github.com/aliyun/aicb/blob/23eec3c48ca2d2d93dd888a4c7b22ab4421e782f/README.md",
+    "fetched_via": "https://api.github.com/repos/aliyun/aicb/git/blobs/22c17c2a95acf28327b5328939e8c362efb893ad",
+    "git_blob_sha1": "22c17c2a95acf28327b5328939e8c362efb893ad",
+    "bytes": 25951,
+    "sha256": "de2250e52b2e9d78a13b5456a2395af7787b8e9ef34f00a89922db4543e97f3a"
+  },
+  {
+    "file": "gpt175-prebuilt.txt",
+    "repository": "aliyun/aicb",
+    "revision": "23eec3c48ca2d2d93dd888a4c7b22ab4421e782f",
+    "path": "workload/simAI/model_workload/G175B-M1-C03_GPT175B_megatron_tp8_pp1_mbs1_A100.txt",
+    "url": "https://github.com/aliyun/aicb/blob/23eec3c48ca2d2d93dd888a4c7b22ab4421e782f/workload/simAI/model_workload/G175B-M1-C03_GPT175B_megatron_tp8_pp1_mbs1_A100.txt",
+    "fetched_via": "https://api.github.com/repos/aliyun/aicb/git/blobs/47947652bcdb634bbc1e110d4d23fb9251a2f203",
+    "git_blob_sha1": "47947652bcdb634bbc1e110d4d23fb9251a2f203",
+    "bytes": 4104,
+    "sha256": "dff8eade21cf4f9252383253a83e213d3447b5329e9ae7dd37e5b6e1d7263eea"
+  },
+  {
+    "file": "SimAI-LICENSE",
+    "repository": "aliyun/SimAI",
+    "revision": "a57d765c5478f319c5f5ab6fdc53f9cc7f461743",
+    "path": "LICENSE",
+    "url": "https://github.com/aliyun/SimAI/blob/a57d765c5478f319c5f5ab6fdc53f9cc7f461743/LICENSE",
+    "fetched_via": "https://api.github.com/repos/aliyun/SimAI/git/blobs/261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+    "git_blob_sha1": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+    "bytes": 11357,
+    "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+  },
+  {
+    "file": "aicb-LICENSE",
+    "repository": "aliyun/aicb",
+    "revision": "23eec3c48ca2d2d93dd888a4c7b22ab4421e782f",
+    "path": "License",
+    "url": "https://github.com/aliyun/aicb/blob/23eec3c48ca2d2d93dd888a4c7b22ab4421e782f/License",
+    "fetched_via": "https://api.github.com/repos/aliyun/aicb/git/blobs/8fe0dbfdfa5fa192335d4e58e046e84d8185fa51",
+    "git_blob_sha1": "8fe0dbfdfa5fa192335d4e58e046e84d8185fa51",
+    "bytes": 574,
+    "sha256": "d5c071af93786b65af393347eb5d6bcb01f30141212feb9bb81cbcdaf30d2b7d"
+  }
+]

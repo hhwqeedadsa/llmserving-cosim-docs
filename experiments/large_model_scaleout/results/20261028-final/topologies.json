@@ -1,0 +1,187 @@
+{
+  "topologies": [
+    {
+      "case": "clos-300",
+      "gpus": 300,
+      "servers": 75,
+      "pods": 5,
+      "gpus_per_server": 4,
+      "tor": 25,
+      "agg": 20,
+      "core": 8,
+      "links": 440,
+      "planes": 1,
+      "rails": 1,
+      "nic": {
+        "ports": 1,
+        "port_rate_bps": 400000000000,
+        "total_port_rate_bps": 400000000000,
+        "declared_total_rate_bps": 400000000000
+      },
+      "capacity_ratios": {
+        "tor": [
+          3.0
+        ],
+        "agg": [
+          2.5
+        ]
+      },
+      "state": "generated_not_executed",
+      "independent_check_passed": true,
+      "config_sha256": "b7f1a885dcbed861fb98d6624936597ab0752a3c4700d04995641154ebaeaff0"
+    },
+    {
+      "case": "clos-500",
+      "gpus": 500,
+      "servers": 125,
+      "pods": 5,
+      "gpus_per_server": 4,
+      "tor": 25,
+      "agg": 20,
+      "core": 8,
+      "links": 640,
+      "planes": 1,
+      "rails": 1,
+      "nic": {
+        "ports": 1,
+        "port_rate_bps": 400000000000,
+        "total_port_rate_bps": 400000000000,
+        "declared_total_rate_bps": 400000000000
+      },
+      "capacity_ratios": {
+        "tor": [
+          5.0
+        ],
+        "agg": [
+          2.5
+        ]
+      },
+      "state": "generated_not_executed",
+      "independent_check_passed": true,
+      "config_sha256": "9e507754959200f5f2480086ba7988ce8d2e71e3eaa1b5396996d0c6072a1648"
+    },
+    {
+      "case": "clos-320",
+      "gpus": 320,
+      "servers": 40,
+      "pods": 5,
+      "gpus_per_server": 8,
+      "tor": 20,
+      "agg": 20,
+      "core": 8,
+      "links": 440,
+      "planes": 1,
+      "rails": 1,
+      "nic": {
+        "ports": 1,
+        "port_rate_bps": 400000000000,
+        "total_port_rate_bps": 400000000000,
+        "declared_total_rate_bps": 400000000000
+      },
+      "capacity_ratios": {
+        "tor": [
+          4.0
+        ],
+        "agg": [
+          2.0
+        ]
+      },
+      "state": "generated_not_executed",
+      "independent_check_passed": true,
+      "config_sha256": "f5eb2939f11b27c2f4e03cd9d0debb7bba7c19b23ddb8ce7d27c48cb086ac298"
+    },
+    {
+      "case": "clos-512",
+      "gpus": 512,
+      "servers": 64,
+      "pods": 8,
+      "gpus_per_server": 8,
+      "tor": 32,
+      "agg": 32,
+      "core": 8,
+      "links": 704,
+      "planes": 1,
+      "rails": 1,
+      "nic": {
+        "ports": 1,
+        "port_rate_bps": 400000000000,
+        "total_port_rate_bps": 400000000000,
+        "declared_total_rate_bps": 400000000000
+      },
+      "capacity_ratios": {
+        "tor": [
+          4.0
+        ],
+        "agg": [
+          2.0
+        ]
+      },
+      "state": "generated_not_executed",
+      "independent_check_passed": true,
+      "config_sha256": "fbe26f5eff61b3511ac67e62fecd46450d15b51af98c9e212f026b8d2a138b82"
+    },
+    {
+      "case": "hpn-inspired-320",
+      "gpus": 320,
+      "servers": 40,
+      "pods": 2,
+      "gpus_per_server": 8,
+      "tor": 64,
+      "agg": 16,
+      "core": 8,
+      "links": 960,
+      "planes": 2,
+      "rails": 8,
+      "nic": {
+        "ports": 2,
+        "port_rate_bps": 200000000000,
+        "total_port_rate_bps": 400000000000,
+        "declared_total_rate_bps": 400000000000
+      },
+      "capacity_ratios": {
+        "tor": [
+          1.25
+        ],
+        "agg": [
+          4.0
+        ]
+      },
+      "state": "generated_not_executed",
+      "independent_check_passed": true,
+      "config_sha256": "b6a5746cfc702f7e82c815953ab828e41c73b21413fdbca27100174aac0a2b5f"
+    },
+    {
+      "case": "hpn-inspired-512",
+      "gpus": 512,
+      "servers": 64,
+      "pods": 2,
+      "gpus_per_server": 8,
+      "tor": 64,
+      "agg": 16,
+      "core": 8,
+      "links": 1344,
+      "planes": 2,
+      "rails": 8,
+      "nic": {
+        "ports": 2,
+        "port_rate_bps": 200000000000,
+        "total_port_rate_bps": 400000000000,
+        "declared_total_rate_bps": 400000000000
+      },
+      "capacity_ratios": {
+        "tor": [
+          2.0
+        ],
+        "agg": [
+          4.0
+        ]
+      },
+      "state": "generated_not_executed",
+      "independent_check_passed": true,
+      "config_sha256": "0d6616d8c98b53cd2d5c81d3659852d42bffd27a0ce40456907f070fcfe4879d"
+    }
+  ],
+  "network_executions": 0,
+  "gpu_runs": 0,
+  "topology_checks_passed": true
+}

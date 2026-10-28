@@ -1,0 +1,59 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>百B模型、Scale-Out结构与有效累计到达</title><style>
+:root{font-family:system-ui,"Noto Sans CJK SC",sans-serif;color:#193047;background:#edf2f7;line-height:1.75}body{margin:0}
+main{max-width:1220px;margin:auto;padding:30px 24px 80px}h1{font-size:32px;line-height:1.35}h2{margin-top:36px}
+nav{display:flex;gap:10px;flex-wrap:wrap}a{color:#1263a1}nav a{background:white;padding:7px 14px;border-radius:8px}
+article,.card{background:white;border:1px solid #d7e0e8;border-radius:12px;padding:20px;margin:18px 0}
+.note{border-left:5px solid #d79125;background:#fff8e9;padding:14px 18px}img{width:100%;height:auto}table{border-collapse:collapse;width:100%;background:white;font-size:14px}
+th,td{border:1px solid #dae2eb;padding:9px 12px;text-align:left}th{background:#e5eef7}.scroll{overflow-x:auto}code{background:#e9eff4;padding:2px 5px}
+summary{cursor:pointer;font-weight:600}pre{overflow:auto;padding:16px;background:#11263a;color:#e5eff7;border-radius:8px}footer{font-size:13px;color:#536579}</style>
+<main><p>2026-10-28 · Asia/Shanghai · 本地静态交付</p><h1>百B模型与跨服务器网络：<br>结构、部署约束与有效数据到达</h1>
+<nav><a href="#models">大模型怎么选</a><a href="#deployment">300/500卡怎么部署</a><a href="#topologies">网络结构图片</a><a href="#arrivals">Collective有效累计到达</a><a href="#reproduce">修改与复现</a></nav>
+<p class="note"><strong>两类证据分开：</strong>本轮六套300/500及320/512卡拓扑已实际生成并静态核对，没有执行百卡包级网络。下面的累计到达曲线来自已完成的4卡/EP4真实专家路由实验，不是大规模模型的性能结果。</p>
+<h2 id="models">1. 有现成的百B以上模型，但不能只改名字</h2><p>SimAI固定版本中已找到Qwen3-235B、DeepSeek-V3及R1-0528配置，AICB也提供训练workload和推理生成器。当前最适合先接入本系统的是Qwen3-235B的GQA全MoE结构。根据上游形状核算为<strong>235,093,634,560参数</strong>，不是先前人为声明的119B模型。</p>
+<table><tr><th>上游内容</th><th>确认的范围</th><th>我们当前的支持</th></tr><tr><td><a href="https://github.com/aliyun/SimAI/blob/a57d765c5478f319c5f5ab6fdc53f9cc7f461743/vidur-alibabacloud/data/hf_configs/qwen3-235B-A22B_config.json">Qwen3-235B-A22B</a></td><td>94层；128专家；Top8；GQA，64个Q头/4个KV头</td><td>已转换形状与容量配置；未运行大规模网络</td></tr><tr><td><a href="https://github.com/aliyun/SimAI/blob/a57d765c5478f319c5f5ab6fdc53f9cc7f461743/vidur-alibabacloud/data/hf_configs/qwen3-235B-A22B_FP8_config.json">Qwen3-235B FP8配置</a></td><td>上游FP8配置；model_type等元数据与BF16文件有差异</td><td>仅记录来源；没有直接切换为FP8性能模型</td></tr><tr><td><a href="https://github.com/aliyun/SimAI/blob/a57d765c5478f319c5f5ab6fdc53f9cc7f461743/vidur-alibabacloud/data/hf_configs/deepseek_R1_0528_config.json">DeepSeek-R1-0528</a></td><td>61层，其中前3层Dense；256路由专家+1共享专家；MLA</td><td>真实R1路由片段可回放；当前Scale-Out前端未完整表达该整模型</td></tr><tr><td><a href="https://github.com/aliyun/SimAI/blob/a57d765c5478f319c5f5ab6fdc53f9cc7f461743/vidur-alibabacloud/data/hf_configs/deepseek_v3_config.json">DeepSeek-V3</a></td><td>671B级MoE的上游配置；支持范围需结合具体后端</td><td>未宣称本系统完整支持</td></tr><tr><td><a href="https://github.com/aliyun/aicb/blob/23eec3c48ca2d2d93dd888a4c7b22ab4421e782f/workload/simAI/model_workload/G175B-M1-C03_GPT175B_megatron_tp8_pp1_mbs1_A100.txt">AICB预制GPT175B workload</a></td><td>训练格式，含反向/梯度操作，模型并行组8</td><td>可参考训练负载格式，不能作为真实MoE推理流量</td></tr><tr><td><a href="https://github.com/aliyun/SimAI/blob/a57d765c5478f319c5f5ab6fdc53f9cc7f461743/vidur-alibabacloud/README_CN.md">SimAI / Vidur 推理说明</a></td><td>说明AICB、SimAI解析和NS-3后端；列出MoE适配中及部分支持</td><td>未安装或执行上游SimAI；文件存在不等于所有后端组合已验证</td></tr></table><p>固定版本：SimAI <code>a57d765c5478</code>；AICB <code>23eec3c48ca2</code>。推理说明中的“部分支持”“适配中”仍然保留，不能把配置文件的存在当作整模型NS-3执行成功。AICB的DeepSeek默认文件还声明32个冗余专家、共288专家，不能直接替代我们真实路由的256个逻辑专家。</p>
+<h2 id="deployment">2. 建议用320/512卡；300/500卡结构也已提供</h2>
+<p>300卡=75台四卡服务器，500卡=125台四卡服务器；320卡=40台八卡服务器，512卡=64台八卡服务器。每卡NIC总带宽400 Gb/s，GPU型号H100只是描述标签，没有硬件计时校准。</p>
+<p>在当前“每个EP组均匀分配全部专家”的约束下，EP大小须整除专家数。若300/500张卡全部划为等大EP组，Qwen的128专家与R1的256专家最多都只能采用EP4。Qwen BF16仅权重即约120.65 GiB/rank，超过声明的80 GiB，因此<strong>精确300/500卡只交付拓扑，不伪造可运行的BF16整模型配置</strong>。可以用296/496张工作卡加4张备用卡、采用不同大小的EP组，或后续引入TP/PP、量化；这些选择要单独建立语义和资源模型。</p>
+<p>本轮为320/512卡提供跨Pod交错分组的EP64模型配置：分别5/8个独立推理副本，每rank每层2个专家。<strong>不是一次320/512-rank All-to-All，也不执行训练DP AllReduce。</strong>当前没有TP/PP拆分，注意力与非专家权重在组内复制。</p>
+<div class="scroll"><table><tr><th>模型输入</th><th>层数</th><th>专家 / Top-K</th><th>EP / 副本组</th><th>每rank每层专家</th><th>BF16权重/rank</th><th>KV预留/rank</th></tr><tr><td>qwen235-320.json</td><td>94</td><td>128 / 8</td><td>64 / 5</td><td>2</td><td>21.51 GiB</td><td>0.370 GiB</td></tr><tr><td>qwen235-512.json</td><td>94</td><td>128 / 8</td><td>64 / 8</td><td>2</td><td>21.51 GiB</td><td>0.370 GiB</td></tr></table></div><p>输入为每rank一个已就绪KV的Decode请求，初始上下文2048 token，继续生成2 token；320/512卡全局并发不同，不能直接比较总时延并称为公平强扩展。专家选择为合成路由，R1真实路由不能改名当Qwen路由。显存核算仅含权重和KV，未含激活、工作区与通信缓冲；声明计算成本不预测真实H100性能。</p>
+<h2 id="topologies">3. 六套网络结构：参数与实际连线</h2><div class="scroll"><table><tr><th>结构</th><th>GPU / 服务器</th><th>Pod</th><th>ToR / Agg / Core</th><th>链路数</th><th>rail / plane</th><th>ToR下行/上行</th><th>Agg下行/上行</th></tr><tr><td>clos-300</td><td>300 / 75</td><td>5</td><td>25 / 20 / 8</td><td>440</td><td>1 / 1</td><td>[3.0]</td><td>[2.5]</td></tr><tr><td>clos-500</td><td>500 / 125</td><td>5</td><td>25 / 20 / 8</td><td>640</td><td>1 / 1</td><td>[5.0]</td><td>[2.5]</td></tr><tr><td>clos-320</td><td>320 / 40</td><td>5</td><td>20 / 20 / 8</td><td>440</td><td>1 / 1</td><td>[4.0]</td><td>[2.0]</td></tr><tr><td>clos-512</td><td>512 / 64</td><td>8</td><td>32 / 32 / 8</td><td>704</td><td>1 / 1</td><td>[4.0]</td><td>[2.0]</td></tr><tr><td>hpn-inspired-320</td><td>320 / 40</td><td>2</td><td>64 / 16 / 8</td><td>960</td><td>8 / 2</td><td>[1.25]</td><td>[4.0]</td></tr><tr><td>hpn-inspired-512</td><td>512 / 64</td><td>2</td><td>64 / 16 / 8</td><td>1344</td><td>8 / 2</td><td>[2.0]</td><td>[4.0]</td></tr></table></div>
+<p>下行/上行比大于1表示存在潜在汇聚瓶颈，不能称为无阻塞网络。Clos的所有层均400G；HPN启发结构为8 rail、2 plane，每GPU两条200G接入共享400G NIC预算，上层均400G。它使用普通电交换机，Agg/Core跨rail共享，不包含OCS重构、生产HPN的完整实现或机内NVLink仿真。链路均声明1µs传播时延。</p>
+<article id="clos-300"><h3>clos-300</h3>
+      <img loading="lazy" src="clos-300.png" alt="clos-300实际生成的全部物理链路">
+      <p>每个方块为一台交换机，底部每个点为GPU端点，线为实际生成的物理链路。双plane视图重复展示同一批GPU；多rail以颜色区分，Agg/Core由rail共享。</p>
+      <p><a href="clos-300.pdf">PDF</a> · <a href="clos-300.svg">SVG</a> · <a href="inputs/clos-300.json">可修改配置</a> ·
+      <a href="inputs/clos-300-topology.astra.txt">ASTRA拓扑</a> · <a href="inputs/clos-300-topology.simai.txt">SimAI拓扑格式</a></p></article><article id="clos-500"><h3>clos-500</h3>
+      <img loading="lazy" src="clos-500.png" alt="clos-500实际生成的全部物理链路">
+      <p>每个方块为一台交换机，底部每个点为GPU端点，线为实际生成的物理链路。双plane视图重复展示同一批GPU；多rail以颜色区分，Agg/Core由rail共享。</p>
+      <p><a href="clos-500.pdf">PDF</a> · <a href="clos-500.svg">SVG</a> · <a href="inputs/clos-500.json">可修改配置</a> ·
+      <a href="inputs/clos-500-topology.astra.txt">ASTRA拓扑</a> · <a href="inputs/clos-500-topology.simai.txt">SimAI拓扑格式</a></p></article><article id="clos-320"><h3>clos-320</h3>
+      <img loading="lazy" src="clos-320.png" alt="clos-320实际生成的全部物理链路">
+      <p>每个方块为一台交换机，底部每个点为GPU端点，线为实际生成的物理链路。双plane视图重复展示同一批GPU；多rail以颜色区分，Agg/Core由rail共享。</p>
+      <p><a href="clos-320.pdf">PDF</a> · <a href="clos-320.svg">SVG</a> · <a href="inputs/clos-320.json">可修改配置</a> ·
+      <a href="inputs/clos-320-topology.astra.txt">ASTRA拓扑</a> · <a href="inputs/clos-320-topology.simai.txt">SimAI拓扑格式</a></p></article><article id="clos-512"><h3>clos-512</h3>
+      <img loading="lazy" src="clos-512.png" alt="clos-512实际生成的全部物理链路">
+      <p>每个方块为一台交换机，底部每个点为GPU端点，线为实际生成的物理链路。双plane视图重复展示同一批GPU；多rail以颜色区分，Agg/Core由rail共享。</p>
+      <p><a href="clos-512.pdf">PDF</a> · <a href="clos-512.svg">SVG</a> · <a href="inputs/clos-512.json">可修改配置</a> ·
+      <a href="inputs/clos-512-topology.astra.txt">ASTRA拓扑</a> · <a href="inputs/clos-512-topology.simai.txt">SimAI拓扑格式</a></p></article><article id="hpn-inspired-320"><h3>hpn-inspired-320</h3>
+      <img loading="lazy" src="hpn-inspired-320.png" alt="hpn-inspired-320实际生成的全部物理链路">
+      <p>每个方块为一台交换机，底部每个点为GPU端点，线为实际生成的物理链路。双plane视图重复展示同一批GPU；多rail以颜色区分，Agg/Core由rail共享。</p>
+      <p><a href="hpn-inspired-320.pdf">PDF</a> · <a href="hpn-inspired-320.svg">SVG</a> · <a href="inputs/hpn-inspired-320.json">可修改配置</a> ·
+      <a href="inputs/hpn-inspired-320-topology.astra.txt">ASTRA拓扑</a> · <a href="inputs/hpn-inspired-320-topology.simai.txt">SimAI拓扑格式</a></p></article><article id="hpn-inspired-512"><h3>hpn-inspired-512</h3>
+      <img loading="lazy" src="hpn-inspired-512.png" alt="hpn-inspired-512实际生成的全部物理链路">
+      <p>每个方块为一台交换机，底部每个点为GPU端点，线为实际生成的物理链路。双plane视图重复展示同一批GPU；多rail以颜色区分，Agg/Core由rail共享。</p>
+      <p><a href="hpn-inspired-512.pdf">PDF</a> · <a href="hpn-inspired-512.svg">SVG</a> · <a href="inputs/hpn-inspired-512.json">可修改配置</a> ·
+      <a href="inputs/hpn-inspired-512-topology.astra.txt">ASTRA拓扑</a> · <a href="inputs/hpn-inspired-512-topology.simai.txt">SimAI拓扑格式</a></p></article><h2 id="arrivals">4. Collective有效累计到达：真实4卡实验</h2>
+<p>四份DeepSeek-R1-AWQ/MMLU请求，EP4，256专家/Top8，每rank每层64专家；实际执行源层3—4、两个Decode步骤。100G接入、25G上层的两Pod Clos，多阶段共享同一ns-3网络。以下选择首轮、源层3的Dispatch和Combine，不是全部76条消息的累加曲线。</p>
+<div class="scroll"><table><tr><th>所选collective</th><th>有效字节</th><th>接收收齐时间：正常→故障（µs）</th><th>源确认时间：正常→故障（µs）</th></tr><tr><td>dispatch</td><td>358400</td><td>53.917 → 134.950</td><td>59.996 → 141.029</td></tr><tr><td>combine</td><td>358400</td><td>101.187 → 196.246</td><td>108.815 → 203.064</td></tr></table></div><p>全任务76条消息，逻辑有效数据2,609,152 B；正常完成333.298µs，构造故障完成417.998µs。故障为一个数据序号丢两次、另一消息最终ACK丢一次；不是50%全网随机丢包。</p>
+<article><h3>Dispatch：把输入发给专家</h3><img src="dispatch-arrival.png" alt="Dispatch有效累计到达曲线"><a href="dispatch-arrival.pdf">下载PDF</a></article>
+<article><h3>Combine：把专家结果发回</h3><img src="combine-arrival.png" alt="Combine有效累计到达曲线"><a href="combine-arrival.pdf">下载PDF</a></article>
+<div class="card"><p><strong>怎么看：</strong>横轴为仿真时间，纵轴为累计payload。左图比较正常和故障下接收端实际接受的有效字节；右图区分源发送、物理接收、协议接受和源确认。</p>
+<p>重传会让发送/物理接收量增加，但不会增加任务所需有效数据。当前锁定的Go-Back-N接收端只接受连续序号，乱序包即使物理到达也可能被丢弃，因此“去重到达”会早于“协议有效到达”。ACK丢失可能使接收端早已收齐、发送端仍未确认。这里的接受是NIC协议语义，不是GPU计算已可见。</p>
+<p>累计数据曲线中的平台只表示有效字节没有增长；要判定由丢包、队列还是前驱依赖造成，应结合逐包与依赖记录，不能只凭曲线归因。</p></div>
+<h2 id="reproduce">5. 怎样改参数和复现</h2>
+<p>网络输入与模型输入分别保存在<code>inputs/</code>。调整Pod、交换机数量、rail/plane、上联数、链路速率后，重新生成拓扑；调整batch、专家部署与计算声明后，重新核算容量。当前配置没有替用户运行新的大规模网络。</p>
+<pre>PYTHONPATH=python python3 experiments/large_model_scaleout/generate.py   --repository "$PWD" --output /path/to/new-topologies
+PYTHONPATH=python python3 experiments/large_model_scaleout/prepare_models.py   --sources experiments/large_model_scaleout/upstream   --base examples/scaleout_arrivals/declared-119b.json --output /path/to/new-models</pre>
+<p>完整绘图命令见实验目录README。每次使用新输出目录，保留失败与原有结果。<a href="verification.json">核验摘要</a> · <a href="models.json">模型核算</a> · <a href="topologies.json">网络规模</a> · <a href="arrivals.json">原曲线摘要</a></p>
+<footer>图片可离线打开；PNG用于观看，PDF/SVG用于报告。拓扑导出文件只是对应格式的输入，不代表已在上游SimAI成功执行。无权重下载、GPU执行、依赖更新或push。</footer></main></html>

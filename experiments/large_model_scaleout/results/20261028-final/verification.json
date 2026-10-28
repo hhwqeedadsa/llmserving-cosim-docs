@@ -1,0 +1,125 @@
+{
+  "passed": true,
+  "topology_checks": true,
+  "drawings": [
+    {
+      "case": "clos-300",
+      "drawn_planes": [
+        {
+          "plane": 0,
+          "nodes": 353,
+          "links": 440
+        }
+      ],
+      "all_physical_links_drawn": true,
+      "plane_views_repeat_gpu_endpoints": false
+    },
+    {
+      "case": "clos-500",
+      "drawn_planes": [
+        {
+          "plane": 0,
+          "nodes": 553,
+          "links": 640
+        }
+      ],
+      "all_physical_links_drawn": true,
+      "plane_views_repeat_gpu_endpoints": false
+    },
+    {
+      "case": "clos-320",
+      "drawn_planes": [
+        {
+          "plane": 0,
+          "nodes": 368,
+          "links": 440
+        }
+      ],
+      "all_physical_links_drawn": true,
+      "plane_views_repeat_gpu_endpoints": false
+    },
+    {
+      "case": "clos-512",
+      "drawn_planes": [
+        {
+          "plane": 0,
+          "nodes": 584,
+          "links": 704
+        }
+      ],
+      "all_physical_links_drawn": true,
+      "plane_views_repeat_gpu_endpoints": false
+    },
+    {
+      "case": "hpn-inspired-320",
+      "drawn_planes": [
+        {
+          "plane": 0,
+          "nodes": 364,
+          "links": 480
+        },
+        {
+          "plane": 1,
+          "nodes": 364,
+          "links": 480
+        }
+      ],
+      "all_physical_links_drawn": true,
+      "plane_views_repeat_gpu_endpoints": true
+    },
+    {
+      "case": "hpn-inspired-512",
+      "drawn_planes": [
+        {
+          "plane": 0,
+          "nodes": 556,
+          "links": 672
+        },
+        {
+          "plane": 1,
+          "nodes": 556,
+          "links": 672
+        }
+      ],
+      "all_physical_links_drawn": true,
+      "plane_views_repeat_gpu_endpoints": true
+    }
+  ],
+  "curve_source_verification": {
+    "passed": true,
+    "cases": {
+      "normal": {
+        "passed": true,
+        "source_token_layer_rows": 16,
+        "messages": 76,
+        "capture_events": 51904,
+        "finish_ns": 333298,
+        "source_payload_bytes": 2609152,
+        "destination_payload_bytes": 2609152
+      },
+      "data-and-ack-loss": {
+        "passed": true,
+        "source_token_layer_rows": 16,
+        "messages": 76,
+        "capture_events": 53862,
+        "finish_ns": 417998,
+        "source_payload_bytes": 2778864,
+        "destination_payload_bytes": 2774864
+      }
+    },
+    "raw_sha256": {
+      "normal/result.json": "c9c9efd8084deb08248a311646dc5464a5e9ae56cda363214bf0d2ae9d476097",
+      "normal/frontend.json": "f2f4f0b46e6cf4907e3683d02a7534d47667ffafea6403348252752d93b7284e",
+      "normal/rdma.json": "c3631e752543951b2df6c6a9348c9a8759ee7c82f4f691b4fd8702636fcbe74e",
+      "normal/input.json": "d2cce3fd4234dfbfe2ae2b162b0d592cc5d6ad28c8fdca1cd8b6e6cd5624b61e",
+      "data-and-ack-loss/result.json": "08dac4e71527274f4d1198943068cb3373c9cc42d5aacfb469fdaa9ea64d6e8f",
+      "data-and-ack-loss/frontend.json": "281a0c4732f84ac8c7f4138620f2efc7d2f3223fabdf492068db627482b206ee",
+      "data-and-ack-loss/rdma.json": "293897b3e1d87b8c13e57e38d4f9aa90e443883b9ee1a30cd03a3e34f7244f27",
+      "data-and-ack-loss/input.json": "d2cce3fd4234dfbfe2ae2b162b0d592cc5d6ad28c8fdca1cd8b6e6cd5624b61e"
+    },
+    "network_replays": 0,
+    "note": "native final states, raw TX/RX, original choices and curve ledger sums checked independently; no GPU calibration"
+  },
+  "large_network_executions": 0,
+  "scope": "static graphs/model capacity and previously audited EP4 arrival figures; no hundreds-GPU timing"
+}

@@ -1,0 +1,205 @@
+{
+  "passed": true,
+  "source_files_verified": 14,
+  "total_model_parameters": 235093634560,
+  "preflights": [
+    {
+      "case": "clos-300",
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-preflight",
+        "--topology",
+        "/home/lry/moe-ub-cosim/runs/large_model_scaleout_20261028/topologies/clos-300",
+        "--protocol",
+        "/home/lry/moe-ub-cosim/examples/scaleout_large_models/rdma-static-preflight.json",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/large_model_scaleout_20261028/independent-check/clos-300-buffers.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "maximum_initial_buffer_reserve": 2465536
+    },
+    {
+      "case": "clos-500",
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-preflight",
+        "--topology",
+        "/home/lry/moe-ub-cosim/runs/large_model_scaleout_20261028/topologies/clos-500",
+        "--protocol",
+        "/home/lry/moe-ub-cosim/examples/scaleout_large_models/rdma-static-preflight.json",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/large_model_scaleout_20261028/independent-check/clos-500-buffers.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "maximum_initial_buffer_reserve": 3698304
+    },
+    {
+      "case": "clos-320",
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-preflight",
+        "--topology",
+        "/home/lry/moe-ub-cosim/runs/large_model_scaleout_20261028/topologies/clos-320",
+        "--protocol",
+        "/home/lry/moe-ub-cosim/examples/scaleout_large_models/rdma-static-preflight.json",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/large_model_scaleout_20261028/independent-check/clos-320-buffers.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "maximum_initial_buffer_reserve": 3081920
+    },
+    {
+      "case": "clos-512",
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-preflight",
+        "--topology",
+        "/home/lry/moe-ub-cosim/runs/large_model_scaleout_20261028/topologies/clos-512",
+        "--protocol",
+        "/home/lry/moe-ub-cosim/examples/scaleout_large_models/rdma-static-preflight.json",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/large_model_scaleout_20261028/independent-check/clos-512-buffers.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "maximum_initial_buffer_reserve": 3081920
+    },
+    {
+      "case": "hpn-inspired-320",
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-preflight",
+        "--topology",
+        "/home/lry/moe-ub-cosim/runs/large_model_scaleout_20261028/topologies/hpn-inspired-320",
+        "--protocol",
+        "/home/lry/moe-ub-cosim/examples/scaleout_large_models/rdma-static-preflight.json",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/large_model_scaleout_20261028/independent-check/hpn-inspired-320-buffers.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "maximum_initial_buffer_reserve": 3081920
+    },
+    {
+      "case": "hpn-inspired-512",
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-preflight",
+        "--topology",
+        "/home/lry/moe-ub-cosim/runs/large_model_scaleout_20261028/topologies/hpn-inspired-512",
+        "--protocol",
+        "/home/lry/moe-ub-cosim/examples/scaleout_large_models/rdma-static-preflight.json",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/large_model_scaleout_20261028/independent-check/hpn-inspired-512-buffers.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "maximum_initial_buffer_reserve": 3081920
+    }
+  ],
+  "full_service_inputs": [
+    {
+      "case": "clos-320",
+      "model": "qwen235-320.json",
+      "full_service_input_validator_passed": true
+    },
+    {
+      "case": "clos-512",
+      "model": "qwen235-512.json",
+      "full_service_input_validator_passed": true
+    },
+    {
+      "case": "hpn-inspired-320",
+      "model": "qwen235-320.json",
+      "full_service_input_validator_passed": true
+    },
+    {
+      "case": "hpn-inspired-512",
+      "model": "qwen235-512.json",
+      "full_service_input_validator_passed": true
+    }
+  ],
+  "rendered_links": [
+    {
+      "case": "clos-300",
+      "svg_physical_paths": 440,
+      "expected_links": 440
+    },
+    {
+      "case": "clos-500",
+      "svg_physical_paths": 640,
+      "expected_links": 640
+    },
+    {
+      "case": "clos-320",
+      "svg_physical_paths": 440,
+      "expected_links": 440
+    },
+    {
+      "case": "clos-512",
+      "svg_physical_paths": 704,
+      "expected_links": 704
+    },
+    {
+      "case": "hpn-inspired-320",
+      "svg_physical_paths": 960,
+      "expected_links": 960
+    },
+    {
+      "case": "hpn-inspired-512",
+      "svg_physical_paths": 1344,
+      "expected_links": 1344
+    }
+  ],
+  "curves": [
+    {
+      "case": "normal",
+      "phase": "dispatch",
+      "logical_bytes": 358400,
+      "source_copy_exact": true
+    },
+    {
+      "case": "data-and-ack-loss",
+      "phase": "dispatch",
+      "logical_bytes": 358400,
+      "source_copy_exact": true
+    },
+    {
+      "case": "normal",
+      "phase": "combine",
+      "logical_bytes": 358400,
+      "source_copy_exact": true
+    },
+    {
+      "case": "data-and-ack-loss",
+      "phase": "combine",
+      "logical_bytes": 358400,
+      "source_copy_exact": true
+    }
+  ],
+  "html_links_checked": 55,
+  "artifact_hashes_checked": 57,
+  "new_network_executions": 0,
+  "large_network_execution_verified": false
+}

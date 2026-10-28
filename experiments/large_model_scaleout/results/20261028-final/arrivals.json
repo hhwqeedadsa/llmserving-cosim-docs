@@ -1,0 +1,211 @@
+{
+  "summary": {
+    "normal-dispatch": {
+      "schema_version": "moe-rdma-arrival-audit/1",
+      "simulation_finished_ns": 333298,
+      "service_passed": true,
+      "capture_complete": true,
+      "gpu_count": 4,
+      "generated_graphs": 2,
+      "generated_graph_message_count": 76,
+      "submitted_message_count": 76,
+      "generated_graph_logical_bytes": 2609152,
+      "submitted_logical_bytes": 2609152,
+      "source_tx_payload_bytes": 2609152,
+      "destination_rx_payload_bytes": 2609152,
+      "accepted_bytes": 2609152,
+      "slice": {
+        "graph_id": "g0.w0",
+        "layer": 0,
+        "source_layer_id": 3,
+        "phase": "dispatch",
+        "src": null,
+        "dst": null,
+        "messages": 8,
+        "logical_bytes": 358400,
+        "tx_payload_bytes": 358400,
+        "rx_payload_bytes": 358400,
+        "unique_arrival_bytes": 358400,
+        "accepted_bytes": 358400,
+        "confirmed_bytes": 358400,
+        "complete": true,
+        "data_ready_ns": 53917,
+        "source_confirmed_ns": 59996
+      },
+      "semantics": {
+        "receiver": "locked GBN exact-next byte sequence; L2BackToZero=false",
+        "accepted": "sum of contiguous protocol-accepted bytes per message; excludes duplicates and discarded out-of-order data",
+        "unique_arrival": "byte-range union of physical destination arrivals; may include discarded out-of-order data",
+        "timestamps": "simulated ns; MacRx before receiver acceptance at the same ns; not GPU-visible timestamps",
+        "model_bytes": "native packet size including modeled headers; excludes unmodeled Ethernet preamble/FCS/IFG",
+        "scope": "generated graphs only if failed; future ungenerated waves are not included; evaluation-only association"
+      }
+    },
+    "normal-combine": {
+      "schema_version": "moe-rdma-arrival-audit/1",
+      "simulation_finished_ns": 333298,
+      "service_passed": true,
+      "capture_complete": true,
+      "gpu_count": 4,
+      "generated_graphs": 2,
+      "generated_graph_message_count": 76,
+      "submitted_message_count": 76,
+      "generated_graph_logical_bytes": 2609152,
+      "submitted_logical_bytes": 2609152,
+      "source_tx_payload_bytes": 2609152,
+      "destination_rx_payload_bytes": 2609152,
+      "accepted_bytes": 2609152,
+      "slice": {
+        "graph_id": "g0.w0",
+        "layer": 0,
+        "source_layer_id": 3,
+        "phase": "combine",
+        "src": null,
+        "dst": null,
+        "messages": 8,
+        "logical_bytes": 358400,
+        "tx_payload_bytes": 358400,
+        "rx_payload_bytes": 358400,
+        "unique_arrival_bytes": 358400,
+        "accepted_bytes": 358400,
+        "confirmed_bytes": 358400,
+        "complete": true,
+        "data_ready_ns": 101187,
+        "source_confirmed_ns": 108815
+      },
+      "semantics": {
+        "receiver": "locked GBN exact-next byte sequence; L2BackToZero=false",
+        "accepted": "sum of contiguous protocol-accepted bytes per message; excludes duplicates and discarded out-of-order data",
+        "unique_arrival": "byte-range union of physical destination arrivals; may include discarded out-of-order data",
+        "timestamps": "simulated ns; MacRx before receiver acceptance at the same ns; not GPU-visible timestamps",
+        "model_bytes": "native packet size including modeled headers; excludes unmodeled Ethernet preamble/FCS/IFG",
+        "scope": "generated graphs only if failed; future ungenerated waves are not included; evaluation-only association"
+      }
+    },
+    "data-and-ack-loss-dispatch": {
+      "schema_version": "moe-rdma-arrival-audit/1",
+      "simulation_finished_ns": 417998,
+      "service_passed": true,
+      "capture_complete": true,
+      "gpu_count": 4,
+      "generated_graphs": 2,
+      "generated_graph_message_count": 76,
+      "submitted_message_count": 76,
+      "generated_graph_logical_bytes": 2609152,
+      "submitted_logical_bytes": 2609152,
+      "source_tx_payload_bytes": 2778864,
+      "destination_rx_payload_bytes": 2774864,
+      "accepted_bytes": 2609152,
+      "slice": {
+        "graph_id": "g0.w0",
+        "layer": 0,
+        "source_layer_id": 3,
+        "phase": "dispatch",
+        "src": null,
+        "dst": null,
+        "messages": 8,
+        "logical_bytes": 358400,
+        "tx_payload_bytes": 528112,
+        "rx_payload_bytes": 524112,
+        "unique_arrival_bytes": 358400,
+        "accepted_bytes": 358400,
+        "confirmed_bytes": 358400,
+        "complete": true,
+        "data_ready_ns": 134950,
+        "source_confirmed_ns": 141029
+      },
+      "semantics": {
+        "receiver": "locked GBN exact-next byte sequence; L2BackToZero=false",
+        "accepted": "sum of contiguous protocol-accepted bytes per message; excludes duplicates and discarded out-of-order data",
+        "unique_arrival": "byte-range union of physical destination arrivals; may include discarded out-of-order data",
+        "timestamps": "simulated ns; MacRx before receiver acceptance at the same ns; not GPU-visible timestamps",
+        "model_bytes": "native packet size including modeled headers; excludes unmodeled Ethernet preamble/FCS/IFG",
+        "scope": "generated graphs only if failed; future ungenerated waves are not included; evaluation-only association"
+      }
+    },
+    "data-and-ack-loss-combine": {
+      "schema_version": "moe-rdma-arrival-audit/1",
+      "simulation_finished_ns": 417998,
+      "service_passed": true,
+      "capture_complete": true,
+      "gpu_count": 4,
+      "generated_graphs": 2,
+      "generated_graph_message_count": 76,
+      "submitted_message_count": 76,
+      "generated_graph_logical_bytes": 2609152,
+      "submitted_logical_bytes": 2609152,
+      "source_tx_payload_bytes": 2778864,
+      "destination_rx_payload_bytes": 2774864,
+      "accepted_bytes": 2609152,
+      "slice": {
+        "graph_id": "g0.w0",
+        "layer": 0,
+        "source_layer_id": 3,
+        "phase": "combine",
+        "src": null,
+        "dst": null,
+        "messages": 8,
+        "logical_bytes": 358400,
+        "tx_payload_bytes": 358400,
+        "rx_payload_bytes": 358400,
+        "unique_arrival_bytes": 358400,
+        "accepted_bytes": 358400,
+        "confirmed_bytes": 358400,
+        "complete": true,
+        "data_ready_ns": 196246,
+        "source_confirmed_ns": 203064
+      },
+      "semantics": {
+        "receiver": "locked GBN exact-next byte sequence; L2BackToZero=false",
+        "accepted": "sum of contiguous protocol-accepted bytes per message; excludes duplicates and discarded out-of-order data",
+        "unique_arrival": "byte-range union of physical destination arrivals; may include discarded out-of-order data",
+        "timestamps": "simulated ns; MacRx before receiver acceptance at the same ns; not GPU-visible timestamps",
+        "model_bytes": "native packet size including modeled headers; excludes unmodeled Ethernet preamble/FCS/IFG",
+        "scope": "generated graphs only if failed; future ungenerated waves are not included; evaluation-only association"
+      }
+    }
+  },
+  "verification": {
+    "passed": true,
+    "cases": {
+      "normal": {
+        "passed": true,
+        "source_token_layer_rows": 16,
+        "messages": 76,
+        "capture_events": 51904,
+        "finish_ns": 333298,
+        "source_payload_bytes": 2609152,
+        "destination_payload_bytes": 2609152
+      },
+      "data-and-ack-loss": {
+        "passed": true,
+        "source_token_layer_rows": 16,
+        "messages": 76,
+        "capture_events": 53862,
+        "finish_ns": 417998,
+        "source_payload_bytes": 2778864,
+        "destination_payload_bytes": 2774864
+      }
+    },
+    "raw_sha256": {
+      "normal/result.json": "c9c9efd8084deb08248a311646dc5464a5e9ae56cda363214bf0d2ae9d476097",
+      "normal/frontend.json": "f2f4f0b46e6cf4907e3683d02a7534d47667ffafea6403348252752d93b7284e",
+      "normal/rdma.json": "c3631e752543951b2df6c6a9348c9a8759ee7c82f4f691b4fd8702636fcbe74e",
+      "normal/input.json": "d2cce3fd4234dfbfe2ae2b162b0d592cc5d6ad28c8fdca1cd8b6e6cd5624b61e",
+      "data-and-ack-loss/result.json": "08dac4e71527274f4d1198943068cb3373c9cc42d5aacfb469fdaa9ea64d6e8f",
+      "data-and-ack-loss/frontend.json": "281a0c4732f84ac8c7f4138620f2efc7d2f3223fabdf492068db627482b206ee",
+      "data-and-ack-loss/rdma.json": "293897b3e1d87b8c13e57e38d4f9aa90e443883b9ee1a30cd03a3e34f7244f27",
+      "data-and-ack-loss/input.json": "d2cce3fd4234dfbfe2ae2b162b0d592cc5d6ad28c8fdca1cd8b6e6cd5624b61e"
+    },
+    "network_replays": 0,
+    "note": "native final states, raw TX/RX, original choices and curve ledger sums checked independently; no GPU calibration"
+  },
+  "model_scope": {
+    "declared_GQA_total_parameters": 119051534336,
+    "declared_GQA_EP8_weight_bytes_per_rank": 35165863936,
+    "R1_source_total_parameters_reference": 671000000000,
+    "R1_executed_routed_expert_segment_parameters": 22548578304,
+    "actual_experts_per_rank_per_layer": 64,
+    "large_model_network_executed": false
+  }
+}

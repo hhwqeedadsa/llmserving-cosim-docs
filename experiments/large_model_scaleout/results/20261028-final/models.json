@@ -1,0 +1,71 @@
+{
+  "models": [
+    {
+      "file": "qwen235-320.json",
+      "gpus": 320,
+      "ep": 64,
+      "replica_groups": 5,
+      "experts_per_rank_per_layer": 2,
+      "batch_per_rank": 1,
+      "global_batch": 320,
+      "expert_parameters": 227096395776,
+      "replicated_parameters": 7997238784,
+      "total_parameters": 235093634560,
+      "weight_bytes_per_rank": 23091239936,
+      "kv_bytes_per_token": 192512,
+      "kv_reserved_bytes_per_rank": 397344768,
+      "device_bytes": 85899345920,
+      "other_workspace_bytes": 0,
+      "scope": "BF16/declared weights + GQA KV; no activation/workspace/allocator overhead calibration",
+      "routing": "synthetic; no R1 route relabeling",
+      "compute": "declared_reference",
+      "network_executed": false,
+      "model_shape_source": "qwen235.json"
+    },
+    {
+      "file": "qwen235-512.json",
+      "gpus": 512,
+      "ep": 64,
+      "replica_groups": 8,
+      "experts_per_rank_per_layer": 2,
+      "batch_per_rank": 1,
+      "global_batch": 512,
+      "expert_parameters": 227096395776,
+      "replicated_parameters": 7997238784,
+      "total_parameters": 235093634560,
+      "weight_bytes_per_rank": 23091239936,
+      "kv_bytes_per_token": 192512,
+      "kv_reserved_bytes_per_rank": 397344768,
+      "device_bytes": 85899345920,
+      "other_workspace_bytes": 0,
+      "scope": "BF16/declared weights + GQA KV; no activation/workspace/allocator overhead calibration",
+      "routing": "synthetic; no R1 route relabeling",
+      "compute": "declared_reference",
+      "network_executed": false,
+      "model_shape_source": "qwen235.json"
+    }
+  ],
+  "exact_size_capacity": [
+    {
+      "gpus": 300,
+      "max_uniform_ep": 4,
+      "experts_per_rank_per_layer": 32,
+      "bf16_weight_bytes_per_rank": 129542675456,
+      "runnable_model_config_provided": false,
+      "reason": "Scale-Out topology: weights plus declared KV exceed GPU device memory"
+    },
+    {
+      "gpus": 500,
+      "max_uniform_ep": 4,
+      "experts_per_rank_per_layer": 32,
+      "bf16_weight_bytes_per_rank": 129542675456,
+      "runnable_model_config_provided": false,
+      "reason": "Scale-Out topology: weights plus declared KV exceed GPU device memory"
+    }
+  ],
+  "sources_verified": 12,
+  "calibration": "shape declaration only; no numerical kernels, routing measurement or GPU timing",
+  "memory_scope": "weights and GQA KV only; excludes activation, workspace, allocator and communication buffers",
+  "full_r1_supported": false,
+  "large_network_executions": 0
+}

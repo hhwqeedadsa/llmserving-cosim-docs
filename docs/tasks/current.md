@@ -1,5 +1,13 @@
 # 当前任务与交接
 
+## 2026-10-28 用户新增：百B模型、300/500卡结构与图片
+
+状态：本次用户新增交付`completed`，总体研究目标继续`in_progress`。固定SimAI `a57d765c`与AICB `23eec3c4`核实百B模型/预制workload，保留14份来源及许可hash。转换Qwen3-235B BF16形状（235,093,634,560参数）为320/512卡EP64的5/8个跨Pod副本，每rank每层2专家；声明权重21.51GiB/rank。300/500卡等大EP组最多EP4，BF16权重120.65GiB/rank超80GiB，明确只交付其拓扑。完整R1的MLA/Dense/共享专家仍非当前Scale-Out完整模型支持。
+
+六套拓扑通过公开生成、端口/连通性/导出头核对及六份公开缓冲预检，四套320/512模型×Clos/HPN组合通过完整服务输入校验；图中4,528条物理边与SVG路径逐一计数一致。六套PNG/PDF/SVG和既有EP4真实路由Dispatch/Combine曲线、CSV汇入[网页](../../experiments/large_model_scaleout/results/20261028-final/report.html)；[独立核验](../../experiments/large_model_scaleout/results/20261028-verification.json)检查55个HTML链接和57项产物hash，图片及曲线复制一致。见[用户输入](../../examples/scaleout_large_models/README.md)与[复现说明](../../experiments/large_model_scaleout/README.md)。
+
+监控累计22.054秒、峰值约140.60MiB，另留10秒管理及2MiB存储预留，保持300受监控秒/128MiB与单项60秒/1GiB RSS/2GiB地址；[收尾](../../experiments/large_model_scaleout/results/20261028-closeout.json)。首绘图排序key错误已保留失败源码/日志，修正后新目录成功，未扩限。零新网络/权重/GPU/依赖构建/push；百卡拓扑不能写成百卡包级执行或硬件校准结果。只做本地提交。
+
 ## 2026-10-28 用户新增：逐包规模统计与collective到达曲线
 
 状态：本次用户新增交付`completed`，总体研究目标继续`in_progress`。公开`scaleout rdma-arrivals`已提供任务/逐rank双端统计、逐消息规模、逐包事件、指定图/层/Dispatch或Combine累计有效到达；区分物理到达、去重到达、GBN接受和源确认。百B声明119.052B，EP8每rank每层16专家，BF16权重32.75GiB/rank，未执行该大模型网络。平台4项新单元检查及8项回放回归通过。

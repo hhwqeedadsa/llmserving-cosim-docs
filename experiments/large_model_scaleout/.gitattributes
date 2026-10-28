@@ -1,0 +1,6 @@
+# Unmodified upstream snapshots must retain the bytes recorded in manifest.json.
+upstream/* -text !eol -whitespace
+# Preserve copied CSV hashes, including the source writer's CRLF line endings.
+results/**/*.csv -text !eol whitespace=cr-at-eol
+# Matplotlib SVG paths contain generated end-of-line spaces.
+results/**/*.svg -whitespace

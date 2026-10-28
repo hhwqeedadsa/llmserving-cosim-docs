@@ -10,6 +10,8 @@
 
 平台联合适配子项`completed`（起点`757b422`）：公开`simai-run/simai-check`完成稀疏来源输入、真实上游调度和共享原生网络。人工EP64正常/数据与ACK丢失各一次通过：64消息、917,504有效字节、640节点，服务47.603→167.013µs，三次超时恢复。两份完整捕获arrival审核、四类篡改拒绝和19项相关单元/回归通过；165份源码及CPU调度复核通过。没有源token的rank计算成本归零，但实际收到的专家工作保留。见[小例](../../examples/simai_service/README.md)、[功能验收](../../fixtures/simai_service/README.md)。原件`runs/simai_native_platform_20261028/`，两次受监控网络合计1.303秒，峰值111,845,376B，保持先登记的600秒/512MiB及单次60秒/2GiB RSS/4GiB地址；未重跑成功网络、无构建/安装/联网/push。整体320卡真实路由及图片目标仍`in_progress`，下一步独立登记研究范围并执行。
 
+目标320GPU研究`in_progress`：平台固定`44b55c1`，按[预定方法](../../experiments/simai_scaleout/protocol.md)执行15个真实请求、EP256+EP64、原层3—4/两步Decode、Clos/HPN启发×正常/指定数据ACK故障四条件各一次。新根`runs/simai_scaleout_real_20261028/`，累计1200受监控秒/1GiB；单网络60秒/RSS2GiB/地址4GiB/仿真5ms/结果64MiB/产物256MiB，完整捕获100000事件、8GiB卷预留。故障仅根据输入矩阵事前选定；不得看结果挑例、扩限、重跑成功条件或复用旧EP4曲线。无构建/下载/安装/push；实际活动rank及声明计算/非完整R1边界保留。
+
 ## 2026-10-28 用户新增：百B模型、300/500卡结构与图片
 
 状态：本次用户新增交付`completed`，总体研究目标继续`in_progress`。固定SimAI `a57d765c`与AICB `23eec3c4`核实百B模型/预制workload，保留14份来源及许可hash。转换Qwen3-235B BF16形状（235,093,634,560参数）为320/512卡EP64的5/8个跨Pod副本，每rank每层2专家；声明权重21.51GiB/rank。300/500卡等大EP组最多EP4，BF16权重120.65GiB/rank超80GiB，明确只交付其拓扑。完整R1的MLA/Dense/共享专家仍非当前Scale-Out完整模型支持。

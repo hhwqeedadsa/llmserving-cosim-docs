@@ -1,0 +1,42 @@
+{
+  "passed": true,
+  "source_requests": 15,
+  "source_token_layer_rows": 60,
+  "physical_gpus": 320,
+  "cases": {
+    "clos-normal": {
+      "messages": 942,
+      "logical_bytes": 13619200,
+      "active_data_ranks": 221,
+      "packet_events": 67216,
+      "finish_ns": 87346
+    },
+    "clos-loss": {
+      "messages": 942,
+      "logical_bytes": 13619200,
+      "active_data_ranks": 221,
+      "packet_events": 67304,
+      "finish_ns": 216239
+    },
+    "hpn-normal": {
+      "messages": 942,
+      "logical_bytes": 13619200,
+      "active_data_ranks": 221,
+      "packet_events": 62736,
+      "finish_ns": 91815
+    },
+    "hpn-loss": {
+      "messages": 942,
+      "logical_bytes": 13619200,
+      "active_data_ranks": 221,
+      "packet_events": 62824,
+      "finish_ns": 221413
+    }
+  },
+  "independently_checked_packet_events": 260080,
+  "independently_checked_curve_rows": 4632,
+  "endpoint_rows": 2560,
+  "method": "independent raw choices to matrices; fixed-packet sequence replay; complete CSV comparison",
+  "network_reruns": 0,
+  "hardware_calibrated": false
+}

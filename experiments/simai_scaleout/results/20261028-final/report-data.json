@@ -1,0 +1,813 @@
+{
+  "summary": {
+    "clos-normal": {
+      "verification": {
+        "passed": true,
+        "frontend": "actual_SimAI_Vidur",
+        "simai_revision": "a57d765c5478f319c5f5ab6fdc53f9cc7f461743",
+        "gpu_count": 320,
+        "planes": 1,
+        "source_requests": 15,
+        "active_source_ranks": 15,
+        "source_token_layer_rows": 60,
+        "waves": 4,
+        "messages": 942,
+        "remote_payload_bytes": 13619200,
+        "verified_nodes": 7004,
+        "finish_ns": 87346,
+        "recovery": {
+          "available": true,
+          "failed": false,
+          "failed_ids": [],
+          "source_states": 942,
+          "timeout_retransmissions": 0,
+          "duplicate_ack_responses": 0,
+          "reconstructed": true,
+          "scope": "offline protocol audit; no source policy access to receiver/global truth",
+          "completed": 942,
+          "exhausted": 0,
+          "silence_bounds": []
+        },
+        "hardware_calibrated": false,
+        "route_source": "user_provided_model_routes",
+        "scope": "finite_ready_KV_MoE_segment; source-checked choices; single native ns3 fabric",
+        "active_data_ranks": 221
+      },
+      "packet_events": 67216,
+      "finish_ns": 87346,
+      "fault_drops": 0,
+      "host": {
+        "schema_version": "moe-ub-host-probe/1",
+        "command": [
+          "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+          "-m",
+          "moe_ub_cosim.simai_service",
+          "--worker",
+          "/home/lry/moe-ub-cosim/runs/simai_scaleout_real_20261028/clos-normal",
+          "/dev/shm/moe-heavy-loss-20261028/build/output/moe-rdma/ns3.42-moe-rdma-service",
+          "/home/lry/tools/protobuf/bin/protoc"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "started_utc": "2026-10-28T14:45:33.456286+00:00",
+        "limits": {
+          "sampled_group_rss_bytes": 2147483648,
+          "per_process_address_bytes": 4294967296,
+          "artifact_bytes": 268435456,
+          "wall_seconds": 60.0
+        },
+        "peak_sampled_group_rss_bytes": 316878848,
+        "peak_sampled_processes": 2,
+        "status": "completed",
+        "workload_semantics_validated": false,
+        "artifact_roots": [
+          "/home/lry/moe-ub-cosim/runs/simai_scaleout_real_20261028/clos-normal"
+        ],
+        "peak_sampled_artifact_bytes": 45678592,
+        "min_free_bytes": 8589934592,
+        "rss_scope": "owned_process_tree_including_detached_descendants",
+        "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+        "disk_sample_interval_seconds": 1.0,
+        "peak_sampled_artifact_apparent_bytes": 41655825,
+        "peak_sampled_artifact_allocated_bytes": 45678592,
+        "process_group": 236587,
+        "child_exit_code": 0,
+        "remaining_live_group_pids": [],
+        "ended_utc": "2026-10-28T14:45:35.508052+00:00",
+        "wall_seconds": 2.0517644610081334,
+        "max_waited_child_rss_kib": 265724,
+        "artifact_bytes_before_report": 5286,
+        "aggregate_artifact_bytes_before_report": 45678592,
+        "aggregate_artifact_usage_before_report": {
+          "apparent_bytes": 41655825,
+          "allocated_bytes": 45678592
+        }
+      },
+      "dispatch": {
+        "schema_version": "moe-rdma-arrival-audit/1",
+        "simulation_finished_ns": 87346,
+        "service_passed": true,
+        "capture_complete": true,
+        "gpu_count": 320,
+        "generated_graphs": 4,
+        "generated_graph_message_count": 942,
+        "submitted_message_count": 942,
+        "generated_graph_logical_bytes": 13619200,
+        "submitted_logical_bytes": 13619200,
+        "source_tx_payload_bytes": 13619200,
+        "destination_rx_payload_bytes": 13619200,
+        "accepted_bytes": 13619200,
+        "slice": {
+          "graph_id": "g0.w0",
+          "layer": 0,
+          "source_layer_id": 3,
+          "phase": "dispatch",
+          "src": null,
+          "dst": null,
+          "messages": 96,
+          "logical_bytes": 1376256,
+          "tx_payload_bytes": 1376256,
+          "rx_payload_bytes": 1376256,
+          "unique_arrival_bytes": 1376256,
+          "accepted_bytes": 1376256,
+          "confirmed_bytes": 1376256,
+          "complete": true,
+          "data_ready_ns": 10420,
+          "source_confirmed_ns": 16735
+        },
+        "semantics": {
+          "receiver": "locked GBN exact-next byte sequence; L2BackToZero=false",
+          "accepted": "sum of contiguous protocol-accepted bytes per message; excludes duplicates and discarded out-of-order data",
+          "unique_arrival": "byte-range union of physical destination arrivals; may include discarded out-of-order data",
+          "timestamps": "simulated ns; MacRx before receiver acceptance at the same ns; not GPU-visible timestamps",
+          "model_bytes": "native packet size including modeled headers; excludes unmodeled Ethernet preamble/FCS/IFG",
+          "scope": "generated graphs only if failed; future ungenerated waves are not included; evaluation-only association"
+        }
+      },
+      "combine": {
+        "schema_version": "moe-rdma-arrival-audit/1",
+        "simulation_finished_ns": 87346,
+        "service_passed": true,
+        "capture_complete": true,
+        "gpu_count": 320,
+        "generated_graphs": 4,
+        "generated_graph_message_count": 942,
+        "submitted_message_count": 942,
+        "generated_graph_logical_bytes": 13619200,
+        "submitted_logical_bytes": 13619200,
+        "source_tx_payload_bytes": 13619200,
+        "destination_rx_payload_bytes": 13619200,
+        "accepted_bytes": 13619200,
+        "slice": {
+          "graph_id": "g0.w0",
+          "layer": 0,
+          "source_layer_id": 3,
+          "phase": "combine",
+          "src": null,
+          "dst": null,
+          "messages": 96,
+          "logical_bytes": 1376256,
+          "tx_payload_bytes": 1376256,
+          "rx_payload_bytes": 1376256,
+          "unique_arrival_bytes": 1376256,
+          "accepted_bytes": 1376256,
+          "confirmed_bytes": 1376256,
+          "complete": true,
+          "data_ready_ns": 19098,
+          "source_confirmed_ns": 25105
+        },
+        "semantics": {
+          "receiver": "locked GBN exact-next byte sequence; L2BackToZero=false",
+          "accepted": "sum of contiguous protocol-accepted bytes per message; excludes duplicates and discarded out-of-order data",
+          "unique_arrival": "byte-range union of physical destination arrivals; may include discarded out-of-order data",
+          "timestamps": "simulated ns; MacRx before receiver acceptance at the same ns; not GPU-visible timestamps",
+          "model_bytes": "native packet size including modeled headers; excludes unmodeled Ethernet preamble/FCS/IFG",
+          "scope": "generated graphs only if failed; future ungenerated waves are not included; evaluation-only association"
+        }
+      }
+    },
+    "clos-loss": {
+      "verification": {
+        "passed": true,
+        "frontend": "actual_SimAI_Vidur",
+        "simai_revision": "a57d765c5478f319c5f5ab6fdc53f9cc7f461743",
+        "gpu_count": 320,
+        "planes": 1,
+        "source_requests": 15,
+        "active_source_ranks": 15,
+        "source_token_layer_rows": 60,
+        "waves": 4,
+        "messages": 942,
+        "remote_payload_bytes": 13619200,
+        "verified_nodes": 7004,
+        "finish_ns": 216239,
+        "recovery": {
+          "available": true,
+          "failed": false,
+          "failed_ids": [],
+          "source_states": 942,
+          "timeout_retransmissions": 3,
+          "duplicate_ack_responses": 1,
+          "reconstructed": true,
+          "scope": "offline protocol audit; no source policy access to receiver/global truth",
+          "completed": 942,
+          "exhausted": 0,
+          "silence_bounds": []
+        },
+        "hardware_calibrated": false,
+        "route_source": "user_provided_model_routes",
+        "scope": "finite_ready_KV_MoE_segment; source-checked choices; single native ns3 fabric",
+        "active_data_ranks": 221
+      },
+      "packet_events": 67304,
+      "finish_ns": 216239,
+      "fault_drops": 3,
+      "host": {
+        "schema_version": "moe-ub-host-probe/1",
+        "command": [
+          "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+          "-m",
+          "moe_ub_cosim.simai_service",
+          "--worker",
+          "/home/lry/moe-ub-cosim/runs/simai_scaleout_real_20261028/clos-loss",
+          "/dev/shm/moe-heavy-loss-20261028/build/output/moe-rdma/ns3.42-moe-rdma-service",
+          "/home/lry/tools/protobuf/bin/protoc"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "started_utc": "2026-10-28T14:45:37.148527+00:00",
+        "limits": {
+          "sampled_group_rss_bytes": 2147483648,
+          "per_process_address_bytes": 4294967296,
+          "artifact_bytes": 268435456,
+          "wall_seconds": 60.0
+        },
+        "peak_sampled_group_rss_bytes": 315412480,
+        "peak_sampled_processes": 2,
+        "status": "completed",
+        "workload_semantics_validated": false,
+        "artifact_roots": [
+          "/home/lry/moe-ub-cosim/runs/simai_scaleout_real_20261028/clos-loss"
+        ],
+        "peak_sampled_artifact_bytes": 45735936,
+        "min_free_bytes": 8589934592,
+        "rss_scope": "owned_process_tree_including_detached_descendants",
+        "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+        "disk_sample_interval_seconds": 1.0,
+        "peak_sampled_artifact_apparent_bytes": 41708268,
+        "peak_sampled_artifact_allocated_bytes": 45735936,
+        "process_group": 236594,
+        "child_exit_code": 0,
+        "remaining_live_group_pids": [],
+        "ended_utc": "2026-10-28T14:45:39.256683+00:00",
+        "wall_seconds": 2.108162339980481,
+        "max_waited_child_rss_kib": 265188,
+        "artifact_bytes_before_report": 5292,
+        "aggregate_artifact_bytes_before_report": 45735936,
+        "aggregate_artifact_usage_before_report": {
+          "apparent_bytes": 41708268,
+          "allocated_bytes": 45735936
+        }
+      },
+      "dispatch": {
+        "schema_version": "moe-rdma-arrival-audit/1",
+        "simulation_finished_ns": 216239,
+        "service_passed": true,
+        "capture_complete": true,
+        "gpu_count": 320,
+        "generated_graphs": 4,
+        "generated_graph_message_count": 942,
+        "submitted_message_count": 942,
+        "generated_graph_logical_bytes": 13619200,
+        "submitted_logical_bytes": 13619200,
+        "source_tx_payload_bytes": 13635208,
+        "destination_rx_payload_bytes": 13624536,
+        "accepted_bytes": 13619200,
+        "slice": {
+          "graph_id": "g0.w0",
+          "layer": 0,
+          "source_layer_id": 3,
+          "phase": "dispatch",
+          "src": null,
+          "dst": null,
+          "messages": 96,
+          "logical_bytes": 1376256,
+          "tx_payload_bytes": 1392264,
+          "rx_payload_bytes": 1381592,
+          "unique_arrival_bytes": 1376256,
+          "accepted_bytes": 1376256,
+          "confirmed_bytes": 1376256,
+          "complete": true,
+          "data_ready_ns": 141126,
+          "source_confirmed_ns": 147132
+        },
+        "semantics": {
+          "receiver": "locked GBN exact-next byte sequence; L2BackToZero=false",
+          "accepted": "sum of contiguous protocol-accepted bytes per message; excludes duplicates and discarded out-of-order data",
+          "unique_arrival": "byte-range union of physical destination arrivals; may include discarded out-of-order data",
+          "timestamps": "simulated ns; MacRx before receiver acceptance at the same ns; not GPU-visible timestamps",
+          "model_bytes": "native packet size including modeled headers; excludes unmodeled Ethernet preamble/FCS/IFG",
+          "scope": "generated graphs only if failed; future ungenerated waves are not included; evaluation-only association"
+        }
+      },
+      "combine": {
+        "schema_version": "moe-rdma-arrival-audit/1",
+        "simulation_finished_ns": 216239,
+        "service_passed": true,
+        "capture_complete": true,
+        "gpu_count": 320,
+        "generated_graphs": 4,
+        "generated_graph_message_count": 942,
+        "submitted_message_count": 942,
+        "generated_graph_logical_bytes": 13619200,
+        "submitted_logical_bytes": 13619200,
+        "source_tx_payload_bytes": 13635208,
+        "destination_rx_payload_bytes": 13624536,
+        "accepted_bytes": 13619200,
+        "slice": {
+          "graph_id": "g0.w0",
+          "layer": 0,
+          "source_layer_id": 3,
+          "phase": "combine",
+          "src": null,
+          "dst": null,
+          "messages": 96,
+          "logical_bytes": 1376256,
+          "tx_payload_bytes": 1376256,
+          "rx_payload_bytes": 1376256,
+          "unique_arrival_bytes": 1376256,
+          "accepted_bytes": 1376256,
+          "confirmed_bytes": 1376256,
+          "complete": true,
+          "data_ready_ns": 148419,
+          "source_confirmed_ns": 154425
+        },
+        "semantics": {
+          "receiver": "locked GBN exact-next byte sequence; L2BackToZero=false",
+          "accepted": "sum of contiguous protocol-accepted bytes per message; excludes duplicates and discarded out-of-order data",
+          "unique_arrival": "byte-range union of physical destination arrivals; may include discarded out-of-order data",
+          "timestamps": "simulated ns; MacRx before receiver acceptance at the same ns; not GPU-visible timestamps",
+          "model_bytes": "native packet size including modeled headers; excludes unmodeled Ethernet preamble/FCS/IFG",
+          "scope": "generated graphs only if failed; future ungenerated waves are not included; evaluation-only association"
+        }
+      }
+    },
+    "hpn-normal": {
+      "verification": {
+        "passed": true,
+        "frontend": "actual_SimAI_Vidur",
+        "simai_revision": "a57d765c5478f319c5f5ab6fdc53f9cc7f461743",
+        "gpu_count": 320,
+        "planes": 2,
+        "source_requests": 15,
+        "active_source_ranks": 15,
+        "source_token_layer_rows": 60,
+        "waves": 4,
+        "messages": 942,
+        "remote_payload_bytes": 13619200,
+        "verified_nodes": 7004,
+        "finish_ns": 91815,
+        "recovery": {
+          "available": true,
+          "failed": false,
+          "failed_ids": [],
+          "source_states": 942,
+          "timeout_retransmissions": 0,
+          "duplicate_ack_responses": 0,
+          "reconstructed": true,
+          "scope": "offline protocol audit; no source policy access to receiver/global truth",
+          "completed": 942,
+          "exhausted": 0,
+          "silence_bounds": []
+        },
+        "hardware_calibrated": false,
+        "route_source": "user_provided_model_routes",
+        "scope": "finite_ready_KV_MoE_segment; source-checked choices; single native ns3 fabric",
+        "active_data_ranks": 221
+      },
+      "packet_events": 62736,
+      "finish_ns": 91815,
+      "fault_drops": 0,
+      "host": {
+        "schema_version": "moe-ub-host-probe/1",
+        "command": [
+          "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+          "-m",
+          "moe_ub_cosim.simai_service",
+          "--worker",
+          "/home/lry/moe-ub-cosim/runs/simai_scaleout_real_20261028/hpn-normal",
+          "/dev/shm/moe-heavy-loss-20261028/build/output/moe-rdma/ns3.42-moe-rdma-service",
+          "/home/lry/tools/protobuf/bin/protoc"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "started_utc": "2026-10-28T14:45:40.893293+00:00",
+        "limits": {
+          "sampled_group_rss_bytes": 2147483648,
+          "per_process_address_bytes": 4294967296,
+          "artifact_bytes": 268435456,
+          "wall_seconds": 60.0
+        },
+        "peak_sampled_group_rss_bytes": 498147328,
+        "peak_sampled_processes": 2,
+        "status": "completed",
+        "workload_semantics_validated": false,
+        "artifact_roots": [
+          "/home/lry/moe-ub-cosim/runs/simai_scaleout_real_20261028/hpn-normal"
+        ],
+        "peak_sampled_artifact_bytes": 46010368,
+        "min_free_bytes": 8589934592,
+        "rss_scope": "owned_process_tree_including_detached_descendants",
+        "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+        "disk_sample_interval_seconds": 1.0,
+        "peak_sampled_artifact_apparent_bytes": 41987955,
+        "peak_sampled_artifact_allocated_bytes": 46010368,
+        "process_group": 236602,
+        "child_exit_code": 0,
+        "remaining_live_group_pids": [],
+        "ended_utc": "2026-10-28T14:45:43.299364+00:00",
+        "wall_seconds": 2.4060711539932527,
+        "max_waited_child_rss_kib": 446432,
+        "artifact_bytes_before_report": 6195,
+        "aggregate_artifact_bytes_before_report": 46010368,
+        "aggregate_artifact_usage_before_report": {
+          "apparent_bytes": 41987955,
+          "allocated_bytes": 46010368
+        }
+      },
+      "dispatch": {
+        "schema_version": "moe-rdma-arrival-audit/1",
+        "simulation_finished_ns": 91815,
+        "service_passed": true,
+        "capture_complete": true,
+        "gpu_count": 320,
+        "generated_graphs": 4,
+        "generated_graph_message_count": 942,
+        "submitted_message_count": 942,
+        "generated_graph_logical_bytes": 13619200,
+        "submitted_logical_bytes": 13619200,
+        "source_tx_payload_bytes": 13619200,
+        "destination_rx_payload_bytes": 13619200,
+        "accepted_bytes": 13619200,
+        "slice": {
+          "graph_id": "g0.w0",
+          "layer": 0,
+          "source_layer_id": 3,
+          "phase": "dispatch",
+          "src": null,
+          "dst": null,
+          "messages": 96,
+          "logical_bytes": 1376256,
+          "tx_payload_bytes": 1376256,
+          "rx_payload_bytes": 1376256,
+          "unique_arrival_bytes": 1376256,
+          "accepted_bytes": 1376256,
+          "confirmed_bytes": 1376256,
+          "complete": true,
+          "data_ready_ns": 12281,
+          "source_confirmed_ns": 18289
+        },
+        "semantics": {
+          "receiver": "locked GBN exact-next byte sequence; L2BackToZero=false",
+          "accepted": "sum of contiguous protocol-accepted bytes per message; excludes duplicates and discarded out-of-order data",
+          "unique_arrival": "byte-range union of physical destination arrivals; may include discarded out-of-order data",
+          "timestamps": "simulated ns; MacRx before receiver acceptance at the same ns; not GPU-visible timestamps",
+          "model_bytes": "native packet size including modeled headers; excludes unmodeled Ethernet preamble/FCS/IFG",
+          "scope": "generated graphs only if failed; future ungenerated waves are not included; evaluation-only association"
+        }
+      },
+      "combine": {
+        "schema_version": "moe-rdma-arrival-audit/1",
+        "simulation_finished_ns": 91815,
+        "service_passed": true,
+        "capture_complete": true,
+        "gpu_count": 320,
+        "generated_graphs": 4,
+        "generated_graph_message_count": 942,
+        "submitted_message_count": 942,
+        "generated_graph_logical_bytes": 13619200,
+        "submitted_logical_bytes": 13619200,
+        "source_tx_payload_bytes": 13619200,
+        "destination_rx_payload_bytes": 13619200,
+        "accepted_bytes": 13619200,
+        "slice": {
+          "graph_id": "g0.w0",
+          "layer": 0,
+          "source_layer_id": 3,
+          "phase": "combine",
+          "src": null,
+          "dst": null,
+          "messages": 96,
+          "logical_bytes": 1376256,
+          "tx_payload_bytes": 1376256,
+          "rx_payload_bytes": 1376256,
+          "unique_arrival_bytes": 1376256,
+          "accepted_bytes": 1376256,
+          "confirmed_bytes": 1376256,
+          "complete": true,
+          "data_ready_ns": 20603,
+          "source_confirmed_ns": 26611
+        },
+        "semantics": {
+          "receiver": "locked GBN exact-next byte sequence; L2BackToZero=false",
+          "accepted": "sum of contiguous protocol-accepted bytes per message; excludes duplicates and discarded out-of-order data",
+          "unique_arrival": "byte-range union of physical destination arrivals; may include discarded out-of-order data",
+          "timestamps": "simulated ns; MacRx before receiver acceptance at the same ns; not GPU-visible timestamps",
+          "model_bytes": "native packet size including modeled headers; excludes unmodeled Ethernet preamble/FCS/IFG",
+          "scope": "generated graphs only if failed; future ungenerated waves are not included; evaluation-only association"
+        }
+      }
+    },
+    "hpn-loss": {
+      "verification": {
+        "passed": true,
+        "frontend": "actual_SimAI_Vidur",
+        "simai_revision": "a57d765c5478f319c5f5ab6fdc53f9cc7f461743",
+        "gpu_count": 320,
+        "planes": 2,
+        "source_requests": 15,
+        "active_source_ranks": 15,
+        "source_token_layer_rows": 60,
+        "waves": 4,
+        "messages": 942,
+        "remote_payload_bytes": 13619200,
+        "verified_nodes": 7004,
+        "finish_ns": 221413,
+        "recovery": {
+          "available": true,
+          "failed": false,
+          "failed_ids": [],
+          "source_states": 942,
+          "timeout_retransmissions": 3,
+          "duplicate_ack_responses": 1,
+          "reconstructed": true,
+          "scope": "offline protocol audit; no source policy access to receiver/global truth",
+          "completed": 942,
+          "exhausted": 0,
+          "silence_bounds": []
+        },
+        "hardware_calibrated": false,
+        "route_source": "user_provided_model_routes",
+        "scope": "finite_ready_KV_MoE_segment; source-checked choices; single native ns3 fabric",
+        "active_data_ranks": 221
+      },
+      "packet_events": 62824,
+      "finish_ns": 221413,
+      "fault_drops": 3,
+      "host": {
+        "schema_version": "moe-ub-host-probe/1",
+        "command": [
+          "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+          "-m",
+          "moe_ub_cosim.simai_service",
+          "--worker",
+          "/home/lry/moe-ub-cosim/runs/simai_scaleout_real_20261028/hpn-loss",
+          "/dev/shm/moe-heavy-loss-20261028/build/output/moe-rdma/ns3.42-moe-rdma-service",
+          "/home/lry/tools/protobuf/bin/protoc"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "started_utc": "2026-10-28T14:45:44.982201+00:00",
+        "limits": {
+          "sampled_group_rss_bytes": 2147483648,
+          "per_process_address_bytes": 4294967296,
+          "artifact_bytes": 268435456,
+          "wall_seconds": 60.0
+        },
+        "peak_sampled_group_rss_bytes": 499494912,
+        "peak_sampled_processes": 2,
+        "status": "completed",
+        "workload_semantics_validated": false,
+        "artifact_roots": [
+          "/home/lry/moe-ub-cosim/runs/simai_scaleout_real_20261028/hpn-loss"
+        ],
+        "peak_sampled_artifact_bytes": 46063616,
+        "min_free_bytes": 8589934592,
+        "rss_scope": "owned_process_tree_including_detached_descendants",
+        "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+        "disk_sample_interval_seconds": 1.0,
+        "peak_sampled_artifact_apparent_bytes": 42038830,
+        "peak_sampled_artifact_allocated_bytes": 46063616,
+        "process_group": 236609,
+        "child_exit_code": 0,
+        "remaining_live_group_pids": [],
+        "ended_utc": "2026-10-28T14:45:47.388283+00:00",
+        "wall_seconds": 2.406084162998013,
+        "max_waited_child_rss_kib": 446004,
+        "artifact_bytes_before_report": 6198,
+        "aggregate_artifact_bytes_before_report": 46063616,
+        "aggregate_artifact_usage_before_report": {
+          "apparent_bytes": 42038830,
+          "allocated_bytes": 46063616
+        }
+      },
+      "dispatch": {
+        "schema_version": "moe-rdma-arrival-audit/1",
+        "simulation_finished_ns": 221413,
+        "service_passed": true,
+        "capture_complete": true,
+        "gpu_count": 320,
+        "generated_graphs": 4,
+        "generated_graph_message_count": 942,
+        "submitted_message_count": 942,
+        "generated_graph_logical_bytes": 13619200,
+        "submitted_logical_bytes": 13619200,
+        "source_tx_payload_bytes": 13635208,
+        "destination_rx_payload_bytes": 13624536,
+        "accepted_bytes": 13619200,
+        "slice": {
+          "graph_id": "g0.w0",
+          "layer": 0,
+          "source_layer_id": 3,
+          "phase": "dispatch",
+          "src": null,
+          "dst": null,
+          "messages": 96,
+          "logical_bytes": 1376256,
+          "tx_payload_bytes": 1392264,
+          "rx_payload_bytes": 1381592,
+          "unique_arrival_bytes": 1376256,
+          "accepted_bytes": 1376256,
+          "confirmed_bytes": 1376256,
+          "complete": true,
+          "data_ready_ns": 142064,
+          "source_confirmed_ns": 148072
+        },
+        "semantics": {
+          "receiver": "locked GBN exact-next byte sequence; L2BackToZero=false",
+          "accepted": "sum of contiguous protocol-accepted bytes per message; excludes duplicates and discarded out-of-order data",
+          "unique_arrival": "byte-range union of physical destination arrivals; may include discarded out-of-order data",
+          "timestamps": "simulated ns; MacRx before receiver acceptance at the same ns; not GPU-visible timestamps",
+          "model_bytes": "native packet size including modeled headers; excludes unmodeled Ethernet preamble/FCS/IFG",
+          "scope": "generated graphs only if failed; future ungenerated waves are not included; evaluation-only association"
+        }
+      },
+      "combine": {
+        "schema_version": "moe-rdma-arrival-audit/1",
+        "simulation_finished_ns": 221413,
+        "service_passed": true,
+        "capture_complete": true,
+        "gpu_count": 320,
+        "generated_graphs": 4,
+        "generated_graph_message_count": 942,
+        "submitted_message_count": 942,
+        "generated_graph_logical_bytes": 13619200,
+        "submitted_logical_bytes": 13619200,
+        "source_tx_payload_bytes": 13635208,
+        "destination_rx_payload_bytes": 13624536,
+        "accepted_bytes": 13619200,
+        "slice": {
+          "graph_id": "g0.w0",
+          "layer": 0,
+          "source_layer_id": 3,
+          "phase": "combine",
+          "src": null,
+          "dst": null,
+          "messages": 96,
+          "logical_bytes": 1376256,
+          "tx_payload_bytes": 1376256,
+          "rx_payload_bytes": 1376256,
+          "unique_arrival_bytes": 1376256,
+          "accepted_bytes": 1376256,
+          "confirmed_bytes": 1376256,
+          "complete": true,
+          "data_ready_ns": 149825,
+          "source_confirmed_ns": 155833
+        },
+        "semantics": {
+          "receiver": "locked GBN exact-next byte sequence; L2BackToZero=false",
+          "accepted": "sum of contiguous protocol-accepted bytes per message; excludes duplicates and discarded out-of-order data",
+          "unique_arrival": "byte-range union of physical destination arrivals; may include discarded out-of-order data",
+          "timestamps": "simulated ns; MacRx before receiver acceptance at the same ns; not GPU-visible timestamps",
+          "model_bytes": "native packet size including modeled headers; excludes unmodeled Ethernet preamble/FCS/IFG",
+          "scope": "generated graphs only if failed; future ungenerated waves are not included; evaluation-only association"
+        }
+      }
+    }
+  },
+  "independent_verification": {
+    "passed": true,
+    "source_requests": 15,
+    "source_token_layer_rows": 60,
+    "physical_gpus": 320,
+    "cases": {
+      "clos-normal": {
+        "messages": 942,
+        "logical_bytes": 13619200,
+        "active_data_ranks": 221,
+        "packet_events": 67216,
+        "finish_ns": 87346
+      },
+      "clos-loss": {
+        "messages": 942,
+        "logical_bytes": 13619200,
+        "active_data_ranks": 221,
+        "packet_events": 67304,
+        "finish_ns": 216239
+      },
+      "hpn-normal": {
+        "messages": 942,
+        "logical_bytes": 13619200,
+        "active_data_ranks": 221,
+        "packet_events": 62736,
+        "finish_ns": 91815
+      },
+      "hpn-loss": {
+        "messages": 942,
+        "logical_bytes": 13619200,
+        "active_data_ranks": 221,
+        "packet_events": 62824,
+        "finish_ns": 221413
+      }
+    },
+    "independently_checked_packet_events": 260080,
+    "independently_checked_curve_rows": 4632,
+    "endpoint_rows": 2560,
+    "method": "independent raw choices to matrices; fixed-packet sequence replay; complete CSV comparison",
+    "network_reruns": 0,
+    "hardware_calibrated": false
+  },
+  "drawings": {
+    "clos": {
+      "physical_links": 440,
+      "drawn_links": 440,
+      "planes": 1
+    },
+    "hpn": {
+      "physical_links": 960,
+      "drawn_links": 960,
+      "planes": 2
+    }
+  },
+  "figure_records": {
+    "clos-topology": {
+      "kind": "all_physical_links",
+      "physical_links": 440,
+      "drawn_links": 440,
+      "planes": 1
+    },
+    "clos-dispatch-arrival": {
+      "kind": "cumulative_arrival",
+      "normal_csv": "data/clos-normal-dispatch-curve.csv",
+      "loss_csv": "data/clos-loss-dispatch-curve.csv",
+      "graph": "g0.w0",
+      "source_layer": 3,
+      "phase": "dispatch"
+    },
+    "clos-combine-arrival": {
+      "kind": "cumulative_arrival",
+      "normal_csv": "data/clos-normal-combine-curve.csv",
+      "loss_csv": "data/clos-loss-combine-curve.csv",
+      "graph": "g0.w0",
+      "source_layer": 3,
+      "phase": "combine"
+    },
+    "hpn-topology": {
+      "kind": "all_physical_links",
+      "physical_links": 960,
+      "drawn_links": 960,
+      "planes": 2
+    },
+    "hpn-dispatch-arrival": {
+      "kind": "cumulative_arrival",
+      "normal_csv": "data/hpn-normal-dispatch-curve.csv",
+      "loss_csv": "data/hpn-loss-dispatch-curve.csv",
+      "graph": "g0.w0",
+      "source_layer": 3,
+      "phase": "dispatch"
+    },
+    "hpn-combine-arrival": {
+      "kind": "cumulative_arrival",
+      "normal_csv": "data/hpn-normal-combine-curve.csv",
+      "loss_csv": "data/hpn-loss-combine-curve.csv",
+      "graph": "g0.w0",
+      "source_layer": 3,
+      "phase": "combine"
+    },
+    "endpoints": {
+      "kind": "whole_segment_endpoint_bytes",
+      "csvs": [
+        "data/clos-loss-endpoints.csv",
+        "data/hpn-loss-endpoints.csv"
+      ]
+    },
+    "feedback-timeline": {
+      "kind": "frontend_native_graph_intervals",
+      "source": "frontend.json history verified against native service waves"
+    },
+    "route-demand": {
+      "kind": "source_destination_matrix",
+      "rows": [
+        0,
+        21,
+        42,
+        64,
+        85,
+        106,
+        128,
+        149,
+        170,
+        192,
+        213,
+        234,
+        256,
+        277,
+        298
+      ],
+      "columns": 320,
+      "total_bytes": 6809600
+    }
+  },
+  "scope": {
+    "physical_gpus": 320,
+    "source_requests": 15,
+    "data_active_gpus": 221,
+    "model_source": "R1-AWQ/MMLU",
+    "layers": [
+      3,
+      4
+    ],
+    "decode_entries": [
+      1,
+      2
+    ],
+    "gpu_capacity_reference": "H100, DeepSeek671B",
+    "hardware_calibrated": false
+  }
+}

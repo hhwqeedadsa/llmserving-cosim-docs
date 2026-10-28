@@ -1,0 +1,32 @@
+{
+  "clos": {
+    "data_message": {
+      "id": 109,
+      "src": 0,
+      "dst": 110,
+      "bytes": 14336
+    },
+    "ack_message": {
+      "id": 119,
+      "src": 0,
+      "dst": 120,
+      "bytes": 14336
+    },
+    "selection": "input_only_before_network_execution"
+  },
+  "hpn": {
+    "data_message": {
+      "id": 233,
+      "src": 0,
+      "dst": 234,
+      "bytes": 14336
+    },
+    "ack_message": {
+      "id": 235,
+      "src": 0,
+      "dst": 236,
+      "bytes": 14336
+    },
+    "selection": "input_only_before_network_execution"
+  }
+}

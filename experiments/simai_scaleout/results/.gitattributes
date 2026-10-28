@@ -1,0 +1,4 @@
+# Captured CSV bytes are hashed against raw run exports; preserve CRLF exactly.
+*.csv -text whitespace=cr-at-eol
+# Matplotlib emits trailing spaces inside multiline SVG path attributes.
+*.svg -text -whitespace

@@ -1,0 +1,88 @@
+{
+  "passed": true,
+  "network_runs": 4,
+  "successful_network_reruns": 0,
+  "network_conditions": [
+    "clos-normal",
+    "clos-loss",
+    "hpn-normal",
+    "hpn-loss"
+  ],
+  "monitors": [
+    {
+      "path": "runs/simai_scaleout_real_20261028/audit-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 8.405017055018106,
+      "peak_rss_bytes": 159514624
+    },
+    {
+      "path": "runs/simai_scaleout_real_20261028/clos-loss/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 2.108162339980481,
+      "peak_rss_bytes": 315412480
+    },
+    {
+      "path": "runs/simai_scaleout_real_20261028/clos-normal/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 2.0517644610081334,
+      "peak_rss_bytes": 316878848
+    },
+    {
+      "path": "runs/simai_scaleout_real_20261028/hpn-loss/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 2.406084162998013,
+      "peak_rss_bytes": 499494912
+    },
+    {
+      "path": "runs/simai_scaleout_real_20261028/hpn-normal/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 2.4060711539932527,
+      "peak_rss_bytes": 498147328
+    },
+    {
+      "path": "runs/simai_scaleout_real_20261028/independent-monitor/probe.json",
+      "status": "child_failed",
+      "wall_seconds": 0.8594196510093752,
+      "peak_rss_bytes": 91062272
+    },
+    {
+      "path": "runs/simai_scaleout_real_20261028/independent-monitor-v2/probe.json",
+      "status": "completed",
+      "wall_seconds": 2.019325900997501,
+      "peak_rss_bytes": 128077824
+    },
+    {
+      "path": "runs/simai_scaleout_real_20261028/render-final-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 11.440765577019192,
+      "peak_rss_bytes": 236576768
+    },
+    {
+      "path": "runs/simai_scaleout_real_20261028/render-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 12.06744007099769,
+      "peak_rss_bytes": 226488320
+    },
+    {
+      "path": "runs/simai_scaleout_real_20261028/run-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 16.13712225999916,
+      "peak_rss_bytes": 565997568
+    }
+  ],
+  "conservative_monitored_wall_seconds_including_nested": 59.901172633020906,
+  "management_wall_reserve_seconds": 20,
+  "cumulative_seconds_limit": 1200,
+  "artifact_apparent_bytes": 219659529,
+  "artifact_budget_bytes": 1073741824,
+  "peak_sampled_rss_bytes": 565997568,
+  "native_per_run_rss_limit": 2147483648,
+  "new_builds": 0,
+  "downloads": 0,
+  "pushes": 0,
+  "failed_offline_checks": [
+    "initial endpoint blank Counter parser",
+    "initial node command argument too long"
+  ],
+  "evidence": "runs/simai_scaleout_real_20261028; all target native runs passed; failures retained without native reruns"
+}

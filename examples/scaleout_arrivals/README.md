@@ -32,4 +32,8 @@ PYTHONPATH=python python3 -m moe_ub_cosim scaleout rdma-arrivals \
 
 `declared-119b.json`为百B级GQA MoE结构声明：48层、H4096、专家FFN1536、E128/Top8、EP8，每rank每层16个专家。它是可修改的结构例子，路由和计算为合成/声明值，没有真实模型权重或GPU profile。运行须匹配8GPU拓扑与协议。
 
+该声明共119,051,534,336参数，EP8的BF16权重为35,165,863,936B/rank（约32.75GiB），默认上下文的KV预留约0.378GiB/rank；容量不含激活、workspace和分配器开销。参数量不会全部变成每次推理通信字节：本入口传输激活，流量主要取决于token数、隐藏维、Top-K、层数及专家放置，不能按模型参数量同比放大。
+
+服务模型当前限制E=2—256、Top-K≤8、每rank batch=1—16；`service/1`为1—4层MoE片段，`service/2`为1—128层全MoE GQA声明。真实回放须保留原模型E/K，不能把R1的256专家改成128再沿用原选择；可调整合法EP及等容量专家放置。E256的EP4/8/16分别对应每rank每层64/32/16个专家。全任务逐包导出还受采集事件上限约束，百B形状通过容量核算不等于已完成百B全模型的逐包执行。
+
 真实路由复杂场景和绘图见[实验说明](../../experiments/collective_arrivals/README.md)。

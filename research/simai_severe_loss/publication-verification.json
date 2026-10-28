@@ -1,0 +1,16 @@
+{
+  "passed": true,
+  "html_build": "Sphinx -W --keep-going",
+  "linkcheck": "Sphinx -W --keep-going; timeout8s; one actual attempt per URI",
+  "local_built_links": 328,
+  "built_report_files": 112,
+  "publication_source_files": 122,
+  "platform_patch_full_tree_equal": true,
+  "push_target": "hhwqeedadsa/llmserving-cosim-docs",
+  "branch": "codex/packet-collective-20261028",
+  "source_receipt_scope": "Copied historical research closeout is unchanged; this receipt supersedes its previous waiting-for-target publication state.",
+  "notes": [
+    "Initial linkcheck configuration used retries=0; inspected installed Sphinx and reran with retries=1. Zero-attempt check not used as evidence.",
+    "No browser layout automation claimed; PNG charts visually inspected and report JavaScript tested with V8 DOM stub."
+  ]
+}

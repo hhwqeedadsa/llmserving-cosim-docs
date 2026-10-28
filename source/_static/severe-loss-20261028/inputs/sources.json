@@ -1,0 +1,120 @@
+{
+  "intake_sha256": "6fb24dd4229bbd42d73900062f769806aecda2b20a78c30c62c564ffe6cda558",
+  "source": {
+    "dataset_id": "core12345/MoE_expert_selection_trace",
+    "collector_model_id": "cognitivecomputations/DeepSeek-R1-AWQ",
+    "confirmed_directory": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/",
+    "reference_catalog_revision": "27febb7b2d24169560a9f6f83d38eb53f94916cf",
+    "newly_supplied_download_revision": null,
+    "newly_supplied_remote_identity_verified": false,
+    "catalog_complete": false,
+    "selection": "user_convenience_sample_not_random_or_heldout"
+  },
+  "files": [
+    {
+      "name": "900.json",
+      "sha256": "cee894cf6401b3b518b8bd8784762fd629528006c660a91383069bc80146163d",
+      "bytes": 1789762,
+      "rank_id": 0,
+      "slot": 0
+    },
+    {
+      "name": "901.json",
+      "sha256": "8a6a2620152ce43255c7243f16a9a05f17a7cc9df993e5da4923e1ae4f1221e5",
+      "bytes": 1549435,
+      "rank_id": 0,
+      "slot": 1
+    },
+    {
+      "name": "905.json",
+      "sha256": "abab099e678cb7fad8d9dbba30d06fa4099410d32d11f766c30c2426daac2851",
+      "bytes": 1844899,
+      "rank_id": 0,
+      "slot": 2
+    },
+    {
+      "name": "1003.json",
+      "sha256": "f57f4047a5813f8f0c02b0a0eea52c914ef4cec3b9bed890791c686ad6995187",
+      "bytes": 2124100,
+      "rank_id": 0,
+      "slot": 3
+    },
+    {
+      "name": "1004.json",
+      "sha256": "b4666178efd2472f056e631728980b37d572e4a74147471d2c3dde66a7642b40",
+      "bytes": 1008882,
+      "rank_id": 0,
+      "slot": 4
+    },
+    {
+      "name": "1007.json",
+      "sha256": "fe6242fe706a21168c1775a2697bf84e4f45357fd34263d5638e2e92789ab179",
+      "bytes": 2113095,
+      "rank_id": 0,
+      "slot": 5
+    },
+    {
+      "name": "1008.json",
+      "sha256": "adca5765840be6c91bc24e6904361a3f8d0207620f6a590bab415e2638b1d75c",
+      "bytes": 3117490,
+      "rank_id": 128,
+      "slot": 0
+    },
+    {
+      "name": "1011.json",
+      "sha256": "e0e7ea297df844c59bb90bdf7806f601d3ddaf99ab18ccd641db2c6e81f933bb",
+      "bytes": 2482170,
+      "rank_id": 128,
+      "slot": 1
+    },
+    {
+      "name": "1472.json",
+      "sha256": "3085c39e9b9950a7e68f30eed8517eaecbfe3d0ad75d813925ff788a1c164255",
+      "bytes": 2804150,
+      "rank_id": 128,
+      "slot": 2
+    },
+    {
+      "name": "1477.json",
+      "sha256": "0dd8cd33c9a2d0175f222e36274cbbf873cc5de9b3abbc024c6a81895d88c048",
+      "bytes": 3061462,
+      "rank_id": 128,
+      "slot": 3
+    },
+    {
+      "name": "1480.json",
+      "sha256": "adef7e2065576fae3a5db8eea07966e819b4428447209253d2cc2861f6d3485f",
+      "bytes": 1866991,
+      "rank_id": 128,
+      "slot": 4
+    },
+    {
+      "name": "1481.json",
+      "sha256": "4035bb389e7e7b0c10325de3df3491bee2c22ac9ff575b5e5d2a8ccf2db3fc84",
+      "bytes": 1687265,
+      "rank_id": 128,
+      "slot": 5
+    },
+    {
+      "name": "1808.json",
+      "sha256": "c8c9cf4917498a2195960dbd9c65e9efe027af6606db098d40b0db8f7c266092",
+      "bytes": 1945385,
+      "rank_id": 256,
+      "slot": 0
+    },
+    {
+      "name": "2675.json",
+      "sha256": "848633cf8afa1c9247d9cdaf5968bb09a5f2e2d409387f4a333ce7a6e35390cd",
+      "bytes": 1744578,
+      "rank_id": 256,
+      "slot": 1
+    },
+    {
+      "name": "6447.json",
+      "sha256": "265c8e66cfb49da12be0d8037cd7a8be6997f4207bcb0a48ca3c616bbe253b96",
+      "bytes": 1699528,
+      "rank_id": 256,
+      "slot": 2
+    }
+  ]
+}

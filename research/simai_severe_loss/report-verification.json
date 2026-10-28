@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "artifact_files": 112,
+  "checked_links": 15,
+  "exported_packet_rows": 118138,
+  "native_runs": 6,
+  "expected_failures": 1,
+  "js": {
+    "passed": true,
+    "conditions": 6,
+    "scope": "V8 DOM stub, not browser rendering"
+  },
+  "no_network_reruns": true
+}

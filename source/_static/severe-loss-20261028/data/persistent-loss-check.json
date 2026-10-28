@@ -1,0 +1,11 @@
+{
+  "available": true,
+  "passed": true,
+  "eligible_data_packets": 1170,
+  "window_data_packets": 1170,
+  "dropped_packets": 1170,
+  "window_loss_fraction": 1.0,
+  "whole_observed_loss_fraction": 1.0,
+  "affected_message_count": 92,
+  "scope": "actual destination data arrivals including retransmissions; deterministic artificial loss; no congestion causality inference"
+}

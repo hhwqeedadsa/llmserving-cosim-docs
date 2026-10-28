@@ -1,0 +1,35 @@
+{
+  "passed": true,
+  "frontend": "actual_SimAI_Vidur",
+  "simai_revision": "a57d765c5478f319c5f5ab6fdc53f9cc7f461743",
+  "gpu_count": 320,
+  "planes": 1,
+  "source_requests": 15,
+  "active_source_ranks": 3,
+  "source_token_layer_rows": 60,
+  "waves": 4,
+  "messages": 790,
+  "remote_payload_bytes": 13533184,
+  "verified_nodes": 6700,
+  "finish_ns": 592996,
+  "recovery": {
+    "available": true,
+    "failed": false,
+    "failed_ids": [],
+    "source_states": 790,
+    "timeout_retransmissions": 126,
+    "duplicate_ack_responses": 281,
+    "reconstructed": true,
+    "scope": "offline protocol audit; no source policy access to receiver/global truth",
+    "completed": 790,
+    "exhausted": 0,
+    "silence_bounds": []
+  },
+  "data_loss": {
+    "available": false
+  },
+  "hardware_calibrated": false,
+  "route_source": "user_provided_model_routes",
+  "scope": "finite_ready_KV_MoE_segment; source-checked choices; single native ns3 fabric",
+  "active_data_ranks": 218
+}

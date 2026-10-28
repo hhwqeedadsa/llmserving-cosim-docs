@@ -13,6 +13,10 @@
 - 三套系统之间的能力增量、减量、粒度、限制与规模上限；
 - 已验证结论与尚未校准部分的证据等级。
 
+新增2026-10-28原生Scale-Out专题：320模拟端点、EP256+EP64、15份真实路由、六组严重丢包对照，
+包含累计有效到达、每轮硬件条件和平台扩展补丁。离线网页为
+`source/_static/severe-loss-20261028/report.html`，复现交付见`research/simai_severe_loss/README.md`。
+
 ## 构建
 
 ```bash

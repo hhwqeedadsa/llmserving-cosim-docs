@@ -5,7 +5,17 @@ LLM Serving、ASTRA-sim 与 MoE-UB 联合仿真
 LLMServingSim 在其上增加 LLM 服务语义，我们的联合框架进一步把非均匀 MoE/P-D
 通信展开到 UB 协议网络，并增加端网观测和独立真值。
 
-.. admonition:: 最新研究进展 · 2026-10-08
+新增Scale-Out路径使用实际SimAI/Vidur调度与ASTRA配套原生RDMA ns-3，独立于UB入口。
+它把真实专家选择映射为并发通信，再由实际网络完成回调推进服务。
+
+.. admonition:: 最新研究进展 · 2026-10-28
+
+   完成320模拟端点、15份真实路由、EP256+EP64的六组严重丢包对照，提供累计有效到达、
+   逐包证据和逐轮硬件摘要。25G无人工丢包已有126次超时，其中86次进度ACK仍在返程，
+   明确下一步核对超时参数与排队的匹配。完整报告及代码增量见
+   :doc:`simai-severe-loss-20261028`、:doc:`daily/2026-10-28`。
+
+.. admonition:: 此前研究进展 · 2026-10-08
 
    新增3组依赖驱动多副本/KV竞争仿真：820 tasks、59600 packets，8400 μs波形、
    500 μs计算/通信切片和6 μs逐包放大；100/200 Gbps对照与8项分析验证完成。
@@ -27,6 +37,9 @@ LLMServingSim 在其上增加 LLM 服务语义，我们的联合框架进一步�
 
 核心结论
 --------
+
+以下条目描述既有LLMServingSim/UB路径；新增原生RDMA的320端点执行范围及真实路由证据，
+以 :doc:`simai-severe-loss-20261028` 为准，两者不能混用规模或协议结论。
 
 * **LLMServingSim 是 ASTRA-sim 的服务系统前端，不是新的网络协议仿真器。**
   它把请求、调度、KV 状态和模型层转换成 Chakra 图，再让 ASTRA-sim 返回本轮耗时。
@@ -67,6 +80,7 @@ LLMServingSim 在其上增加 LLM 服务语义，我们的联合框架进一步�
    :caption: 专题研究与可视化
 
    simai-llmservingsim-study
+   simai-severe-loss-20261028
    goal-evidence-audit
    model-hardware-trace-contention
    long-window-network-contention

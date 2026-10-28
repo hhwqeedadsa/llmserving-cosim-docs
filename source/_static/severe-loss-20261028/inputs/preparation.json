@@ -1,0 +1,37 @@
+{
+  "passed": true,
+  "platform_commit": "08135cd3bc8ef8f55e3c7bad59774c2b22cec21e",
+  "input_hashes": {
+    "inputs/service.json": "168c24f160ab1713acab4eeb1a42ccc4126b93e2b23875a42cf75e7ee282288b",
+    "inputs/sources.json": "1bc5cdda904d695dcdecd93b4b428051a8dfefca1cd3f91c43ab262bcc90b3e8",
+    "inputs/topology400.json": "f5eb2939f11b27c2f4e03cd9d0debb7bba7c19b23ddb8ce7d27c48cb086ac298",
+    "inputs/preflight.json": "d50fe2013ac7d8d5f772c72cb844a973423f42787f186d6c5c2ed127e047a77f",
+    "inputs/topology25.json": "f4f155d4627f9fe2435661116b69f628378990ca4511000adeffc61c8e4f16a7",
+    "inputs/clean400.json": "d50fe2013ac7d8d5f772c72cb844a973423f42787f186d6c5c2ed127e047a77f",
+    "inputs/bottleneck25.json": "d50fe2013ac7d8d5f772c72cb844a973423f42787f186d6c5c2ed127e047a77f",
+    "inputs/loss50.json": "2e39bf677f34576268ffdd68a2325c31aa68d722c942a17e9a60e65f98dc16e3",
+    "inputs/loss75.json": "b3ccd6ee25b3252b89d43c44c1749df559f58dbfcd9f390b3bf066c9e6f34d02",
+    "inputs/blackout.json": "bcbc41c2edf653019d03fd14df8f8ceb122c1445d4816191b32b8bcec62a1a26",
+    "inputs/persistent.json": "811e12189361111801588baf0a1287a04f773dd9fd38db1dbe98dd87005e00e7",
+    "inputs/routes/900.json": "cee894cf6401b3b518b8bd8784762fd629528006c660a91383069bc80146163d",
+    "inputs/routes/901.json": "8a6a2620152ce43255c7243f16a9a05f17a7cc9df993e5da4923e1ae4f1221e5",
+    "inputs/routes/905.json": "abab099e678cb7fad8d9dbba30d06fa4099410d32d11f766c30c2426daac2851",
+    "inputs/routes/1003.json": "f57f4047a5813f8f0c02b0a0eea52c914ef4cec3b9bed890791c686ad6995187",
+    "inputs/routes/1004.json": "b4666178efd2472f056e631728980b37d572e4a74147471d2c3dde66a7642b40",
+    "inputs/routes/1007.json": "fe6242fe706a21168c1775a2697bf84e4f45357fd34263d5638e2e92789ab179",
+    "inputs/routes/1008.json": "adca5765840be6c91bc24e6904361a3f8d0207620f6a590bab415e2638b1d75c",
+    "inputs/routes/1011.json": "e0e7ea297df844c59bb90bdf7806f601d3ddaf99ab18ccd641db2c6e81f933bb",
+    "inputs/routes/1472.json": "3085c39e9b9950a7e68f30eed8517eaecbfe3d0ad75d813925ff788a1c164255",
+    "inputs/routes/1477.json": "0dd8cd33c9a2d0175f222e36274cbbf873cc5de9b3abbc024c6a81895d88c048",
+    "inputs/routes/1480.json": "adef7e2065576fae3a5db8eea07966e819b4428447209253d2cc2861f6d3485f",
+    "inputs/routes/1481.json": "4035bb389e7e7b0c10325de3df3491bee2c22ac9ff575b5e5d2a8ccf2db3fc84",
+    "inputs/routes/1808.json": "c8c9cf4917498a2195960dbd9c65e9efe027af6606db098d40b0db8f7c266092",
+    "inputs/routes/2675.json": "848633cf8afa1c9247d9cdaf5968bb09a5f2e2d409387f4a333ce7a6e35390cd",
+    "inputs/routes/6447.json": "265c8e66cfb49da12be0d8037cd7a8be6997f4207bcb0a48ca3c616bbe253b96"
+  },
+  "source_requests": 15,
+  "groups": [
+    256,
+    64
+  ]
+}

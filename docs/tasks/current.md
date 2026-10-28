@@ -13,6 +13,8 @@
 
 ## 当前范围和预算
 
+当前研究`in_progress`：[RC故障反事实复用判别](../../experiments/rc_counterfactual_reuse/protocol.md)，起点`ec3bc47`。目标从多连接工程转为执行缩减的可证伪原型：真实1472首token/单层Dispatch片段，先正常执行并封存输入可读预测，再执行最终Atomic ACK丢失及数据丢失。对照普通空闲路径解析和完整包级执行，不把缓存或RTO当新意；三新网络各一次，600受监控秒/256MiB，零构建/下载/GPU/依赖修改/push，旧条件保持关闭。
+
 当前平台增量`completed`：[多连接RC共享网络参考](rc_concurrent_fabric_spec.md)、[公开示例](../../examples/rc_concurrent/README.md)及[核验网页](../../fixtures/rc_concurrent_fabric/report.html)，起点`f00cea6`、规范`0ae2957`。同一Fabric/时钟/物理队列中，四QP独立保存序号、重放与定时器，两QP共用源NIC、三QP修改共享目标内存，完成由本连接实际反馈决定。仅一次CPU驱动编译，只读复用固定原生`e929264`八库，零ns-3构建/依赖修改/HTTP/GPU/push，旧入口不改变。
 
 三个事前网络各执行一次，正常排空24.395us，丢QP0中间WRITE/丢QP1 Atomic ACK分别124.373/124.325us；后两组只在指定QP超时一次，其余三QP先完成。共享计数41→47、反向7→11，原子各只应用一次，旧值按实际收包顺序核对；约100us增加由声明RTO主导，不是收益。独立逐包/共享内存/路径/队列核验、7类篡改拒绝、12新增输入/14参考回归/10编译选项检查及13固定依赖通过。

@@ -23,7 +23,7 @@ python3 -B experiments/heavy_loss_inference/analyze.py \
 
 ## 结果（2026-10-28）
 
-批次 B（go_back_n 恢复，初值 40us/上限 160us/3 次重试）数值表见 [report.md](results/20261028/report.md)，批次 A 保留证据见 [batch-a-preserved.json](results/20261028/batch-a-preserved.json)。目标消息均为实际首图的 0→4 Dispatch（id 1，6144B，7 个数据包/7 个 ACK）。
+交互网页（逐包时间线、完成时间与重传放大图）：[report.html](results/20261028/report.html)；文字报告 [report.md](results/20261028/report.md)；批次 B 数值表见 [analysis.json](results/20261028/analysis.json)，批次 A 保留证据见 [batch-a-preserved.json](results/20261028/batch-a-preserved.json)，目标消息逐包事件见 [timelines.json](results/20261028/timelines.json)。目标消息均为实际首图的 0→4 Dispatch（id 1，6144B，7 个数据包/7 个 ACK）。网页由 [render.py](render.py) 仅从本目录已提交摘要生成，不依赖易失运行目录。
 
 | 条件 | 结果 | 关键数字 |
 |---|---|---|

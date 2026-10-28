@@ -1,0 +1,234 @@
+{
+  "target": {
+    "id": 1,
+    "tag": 1,
+    "src": 0,
+    "dst": 4,
+    "bytes": 6144,
+    "plane": 0,
+    "layer": 0,
+    "phase": "dispatch",
+    "contributions": 3
+  },
+  "conditions": [
+    {
+      "label": "baseline",
+      "passed": true,
+      "finish_ns": 54362,
+      "failure": null,
+      "target": {
+        "receive_ready_ns": 11649,
+        "ack_ns": 17673,
+        "receiver_contiguous_bytes": 6144,
+        "source_data_payload_bytes": 6144
+      },
+      "source_transmissions": {
+        "0": 1,
+        "1000": 1,
+        "2000": 1,
+        "3000": 1,
+        "4000": 1,
+        "5000": 1,
+        "6000": 1
+      },
+      "source_payload_bytes_sent": 6144,
+      "duplicate_payload_bytes": 0,
+      "drop_counts": [],
+      "capture_complete": true,
+      "waves_finished_by_group": {
+        "0": {
+          "finished": 2,
+          "total": 2
+        },
+        "1": {
+          "finished": 2,
+          "total": 2
+        }
+      },
+      "requests_finished": 32,
+      "requests_total": 32
+    },
+    {
+      "label": "data-57-transient",
+      "passed": true,
+      "finish_ns": 91297,
+      "failure": null,
+      "target": {
+        "receive_ready_ns": 51130,
+        "ack_ns": 57154,
+        "receiver_contiguous_bytes": 6144,
+        "source_data_payload_bytes": 18432
+      },
+      "source_transmissions": {
+        "0": 3,
+        "1000": 3,
+        "2000": 3,
+        "3000": 3,
+        "4000": 3,
+        "5000": 3,
+        "6000": 3
+      },
+      "source_payload_bytes_sent": 18432,
+      "duplicate_payload_bytes": 12288,
+      "drop_counts": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "capture_complete": true,
+      "waves_finished_by_group": {
+        "0": {
+          "finished": 2,
+          "total": 2
+        },
+        "1": {
+          "finished": 2,
+          "total": 2
+        }
+      },
+      "requests_finished": 32,
+      "requests_total": 32,
+      "finish_delta_ns": 36935,
+      "target_ack_delta_ns": 39481
+    },
+    {
+      "label": "data-57-persistent",
+      "passed": false,
+      "finish_ns": 444203,
+      "failure": {
+        "message_id": 1,
+        "reason": "recovery_retry_exhausted",
+        "scope": "whole shared simulation stopped; no successful callbacks or credits synthesized; live resources retained for diagnosis until teardown",
+        "time_ns": 444203
+      },
+      "target": {
+        "receive_ready_ns": null,
+        "ack_ns": null,
+        "receiver_contiguous_bytes": 0,
+        "source_data_payload_bytes": 30720
+      },
+      "source_transmissions": {
+        "0": 5,
+        "1000": 5,
+        "2000": 5,
+        "3000": 5,
+        "4000": 5,
+        "5000": 5,
+        "6000": 5
+      },
+      "source_payload_bytes_sent": 30720,
+      "duplicate_payload_bytes": 24576,
+      "drop_counts": [
+        5,
+        5,
+        5,
+        5
+      ],
+      "capture_complete": true,
+      "waves_finished_by_group": {
+        "0": {
+          "finished": 0,
+          "total": 1
+        },
+        "1": {
+          "finished": 2,
+          "total": 2
+        }
+      },
+      "requests_finished": 16,
+      "requests_total": 32,
+      "finish_delta_ns": 389841
+    },
+    {
+      "label": "data-86-transient",
+      "passed": true,
+      "finish_ns": 91297,
+      "failure": null,
+      "target": {
+        "receive_ready_ns": 51130,
+        "ack_ns": 57154,
+        "receiver_contiguous_bytes": 6144,
+        "source_data_payload_bytes": 18432
+      },
+      "source_transmissions": {
+        "0": 3,
+        "1000": 3,
+        "2000": 3,
+        "3000": 3,
+        "4000": 3,
+        "5000": 3,
+        "6000": 3
+      },
+      "source_payload_bytes_sent": 18432,
+      "duplicate_payload_bytes": 12288,
+      "drop_counts": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "capture_complete": true,
+      "waves_finished_by_group": {
+        "0": {
+          "finished": 2,
+          "total": 2
+        },
+        "1": {
+          "finished": 2,
+          "total": 2
+        }
+      },
+      "requests_finished": 32,
+      "requests_total": 32,
+      "finish_delta_ns": 36935,
+      "target_ack_delta_ns": 39481
+    },
+    {
+      "label": "ack-57-transient",
+      "passed": true,
+      "finish_ns": 54362,
+      "failure": null,
+      "target": {
+        "receive_ready_ns": 11649,
+        "ack_ns": 17673,
+        "receiver_contiguous_bytes": 6144,
+        "source_data_payload_bytes": 6144
+      },
+      "source_transmissions": {
+        "0": 1,
+        "1000": 1,
+        "2000": 1,
+        "3000": 1,
+        "4000": 1,
+        "5000": 1,
+        "6000": 1
+      },
+      "source_payload_bytes_sent": 6144,
+      "duplicate_payload_bytes": 0,
+      "drop_counts": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "capture_complete": true,
+      "waves_finished_by_group": {
+        "0": {
+          "finished": 2,
+          "total": 2
+        },
+        "1": {
+          "finished": 2,
+          "total": 2
+        }
+      },
+      "requests_finished": 32,
+      "requests_total": 32,
+      "finish_delta_ns": 0,
+      "target_ack_delta_ns": 0
+    }
+  ]
+}

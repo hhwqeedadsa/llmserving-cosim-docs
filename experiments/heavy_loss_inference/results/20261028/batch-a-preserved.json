@@ -1,0 +1,34 @@
+{
+  "note": "批次A（原生恢复语义）在 data-57-transient 处按事前规则停止，其余三条件未执行；证据见 /dev/shm 运行目录",
+  "conditions": {
+    "baseline": {
+      "passed": true,
+      "finish_ns": 54362,
+      "failure": null,
+      "target": {
+        "receive_ready_ns": 11649,
+        "ack_ns": 17673,
+        "receiver_contiguous_bytes": 6144,
+        "source_data_payload_bytes": 6144
+      },
+      "drop_counts": []
+    },
+    "data-57-transient": {
+      "passed": false,
+      "finish_ns": 5000000,
+      "failure": null,
+      "target": {
+        "receive_ready_ns": null,
+        "ack_ns": null,
+        "receiver_contiguous_bytes": 0,
+        "source_data_payload_bytes": 12288
+      },
+      "drop_counts": [
+        2,
+        2,
+        2,
+        2
+      ]
+    }
+  }
+}

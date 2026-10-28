@@ -28,6 +28,44 @@ def read(p):
     return json.loads(p.read_text())
 
 
+# MoE 推理通信面对网络丢包/故障时的恢复方法谱系（背景整理，非本实验证据）。
+# 每行: 层次, 代表方案, 丢包处理机制, 与本实验的对应关系
+LANDSCAPE = [
+    ('链路/网络层：无损化',
+     'InfiniBand credit 链路流控；RoCE 用 PFC（按优先级暂停）+ ECN 阈值',
+     '设计上假设"不丢包"：接收 buffer 满前反向停发，把丢包当硬件错误而非常态',
+     '本实验直接注入丢包，正是检验无损假设失效后的协议行为；PFC 自身有队头阻塞/死锁/风暴问题，是"无损化"路线的已知代价'),
+    ('传输层重传：Go-Back-N',
+     'InfiniBand RC、RoCE RNIC 基线（Mellanox/NVIDIA 传统实现）',
+     '累计 ACK + NAK 指出缺口序号，发送端从缺口起整体重发；超时兜底',
+     '本实验原生模式与 go_back_n 扩展都是此语义；"57% 与 86% 代价相同、3× 重传放大"是它的直接后果'),
+    ('传输层重传：选择性重传',
+     'IRN（SIGCOMM\'18，SACK 式只补丢包）；新型 RNIC 的乱序放置 + 选择性重发',
+     '接收端记录到达位图，只重传真正丢失的包，不要求底层无损',
+     '正是为消除图 2 展示的放大：86% 丢包下选择性重传只需补 6 包而非整体回退两轮'),
+    ('传输层：多路径与乱序容忍',
+     'MP-RDMA（NSDI\'18）；AWS SRD/EFA（NSDI\'20，可靠数据报 + 多路径喷洒 + 乱序交付）',
+     '单包级多路径分散，乱序到达直接放置，丢失只重传单包',
+     'MoE all-to-all 高扇出、短消息，最能从不保序中受益的形态；本平台当前为单路径保序 QP'),
+    ('超时估计',
+     '固定 RTO；Karn/Partridge 采样 + RFC6298 平滑；Swift（SIGCOMM\'20）精确时延测量',
+     'RTO 决定"等多久才认定丢失"；过短放大重复流量，过长拖延恢复',
+     '对应 recovery 扩展的 rtt_estimator=karn；本实验固定初值 40µs，恢复代价≈1 个 RTO，正比关系直接可见'),
+    ('拥塞控制与丢包信号',
+     'DCQCN（SIGCOMM\'15）；Timely、HPCC、PowerTCP 等',
+     'ECN/时延/带内遥测降速，尽量避免丢包发生；丢包仍被视为严重信号',
+     '本实验固定原生 DCQCN 不变，隔离丢包恢复单一变量'),
+    ('集合通信库',
+     'NCCL（通道故障切换、重试）；DeepEP（EP dispatch/combine，RDMA RC QP，低时延/高吞吐双模式）',
+     '库层一般不自带恢复算法：依赖传输层可靠性，失败沿 QP 错误上抛，由框架决定重连或放弃',
+     '本仓库 hybrid/GIN 系列筛选已核过 DeepEP 完成机制；本实验对应"库下层协议"的行为'),
+    ('服务系统层',
+     'PD 分离 KV 传输（Mooncake、NVIDIA Dynamo/NIXL、vLLM 连接器）；请求级重试/重路由；副本冗余；引擎重启',
+     '单请求失败由调度层换实例重算，不要求单条连接必然恢复；用隔离域限制爆炸半径',
+     '本实验中独立 EP 组（组 1）在组 0 停滞时两轮照常完成，正是隔离域价值的微观对照'),
+]
+
+
 def fmt_us(ns):
     return '—' if ns is None else f'{ns / 1000:,.1f}'
 
@@ -183,6 +221,12 @@ def execute(output):
               f'<span><i class="tri" style="background:{C_NACK}"></i>NACK</span>'
               f'<span><i class="sq" style="background:{C_ACK}"></i>ACK</span></div>')
 
+    # ---- landscape table: recovery methods for MoE inference over RDMA networks ----
+    landscape_rows = ''.join('<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>' % tuple(esc(x) for x in row)
+                             for row in LANDSCAPE)
+    landscape_table = ('<table><thead><tr><th>层次</th><th>代表方案</th><th>丢包处理机制</th><th>与本实验的关系</th></tr></thead>'
+                       '<tbody>' + landscape_rows + '</tbody></table>')
+
     page = f'''<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>推理消息 50%+ 持续丢包：原生停滞 vs 有界 Go-Back-N</title>
@@ -242,6 +286,11 @@ footer{{margin-top:28px;font-size:13px;color:{INK2}}}
 <h2>全条件结果表</h2>
 <div class="scroll">{table}</div>
 
+<h2>背景：MoE 推理通信的丢包恢复方法谱系</h2>
+<p>下表整理 MoE 推理（EP all-to-all、PD 分离 KV 传输）所依赖协议栈在面对网络丢包/故障时的主流选择，以及本实验结果对应的层次。这是背景与相关工作整理，不构成新证据；引用年份为公开论文发表场合。</p>
+<div class="scroll">{landscape_table}</div>
+<p><b>谱系对本实验的定位：</b>本仿真器的原生 ns-3 RDMA 是表中第 1+2 行的组合（假设无损 + NACK 触发的 go-back-N，无有界超时兜底）；平台的可选恢复扩展是第 2+5 行（go-back-N + Karn 式自适应 RTO + 有界重试显式失败）。实验的三个观察分别回答了三个工程取舍：整体回退的放大代价是第 3 行（选择性重传）存在的理由；静默停滞说明第 5 行（有界超时）不是可选项而是必要件；ACK 掩盖效应说明累计确认本身已提供确认路径的容错。第 7、8 行（库层与服务层）意味着即使传输层失败，系统仍有请求级重试和隔离域两道防线——本实验中组 1 的独立完成为后者提供了微观证据。</p>
+
 <h2>判读与边界</h2>
 <p><b>1. Go-Back-N 的代价与丢包比例脱钩。</b>消息内任意位置丢包都从首个缺口整体回退：57%（4/7 包）与 86%（6/7 包）瞬态丢包的完成时间（91,297ns）、重传字节（18,432B）完全相同。代价由"连续丢包轮次数 × RTO"决定，而非丢包比例。</p>
 <p><b>2. 原生 NACK 恢复的静默停滞。</b>批次 A 全程只观察到 1 个 NACK（t=11.1µs）；第二轮丢包后接收端无新包可触发 NACK，源端无有界超时兜底，24.1µs 后目标消息再无任何事件。这正是 communication_fragility.md 预言的"尾包/缺包后无新包触发 NACK"脆弱点的实测复现。有界超时把同一故障变成 +39.5µs 的成功恢复，或 444.2µs 的显式 <code>recovery_retry_exhausted</code>（失败时独立 EP 组两轮照常完成，16/32 请求受影响而非全局停摆）。</p>
@@ -270,6 +319,16 @@ footer{{margin-top:28px;font-size:13px;color:{INK2}}}
 1. Go-Back-N 代价与丢包比例脱钩：57% 与 86% 同为 3× 发送、+39.5µs。
 2. 原生 NACK 恢复两轮后静默停滞（全程 1 个 NACK，24.1µs 后零事件）；有界超时将同一故障变为 +1 RTO 恢复或 444.2µs 显式失败。
 3. 57% 非最终 ACK 丢失被累计确认完全掩盖；数据/确认路径敏感性不对称。
+
+## 背景：MoE 推理通信的丢包恢复方法谱系
+
+| 层次 | 代表方案 | 丢包处理机制 | 与本实验的关系 |
+|---|---|---|---|
+'''
+    for row in LANDSCAPE:
+        md += '| ' + ' | '.join(row) + ' |\n'
+    md += '''
+本仿真器原生模式 = 无损假设 + NACK 触发 go-back-N（无有界超时）；可选恢复扩展 = go-back-N + Karn 自适应 RTO + 有界重试显式失败。三个观察分别对应三个工程取舍：整体回退放大是选择性重传（IRN 等）存在的理由；静默停滞说明有界超时是必要件；ACK 掩盖说明累计确认自带确认路径容错。库层与服务层（请求级重试、隔离域）是传输层失败之后的两道防线。
 
 边界：单消息确定性逐序号丢包，非全网随机丢包率；声明计算、合成路由；失败仅指 5ms 窗口内未完成。详见 [protocol.md](../../protocol.md) 与 [README.md](../../README.md)。
 '''

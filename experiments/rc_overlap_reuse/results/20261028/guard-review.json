@@ -1,0 +1,17 @@
+{
+  "initial_source_retained": "source-before-execution",
+  "limitation": "single bounded program; no generic safety proof or novel incremental algorithm",
+  "native_source_hashes": {
+    "network/utils/broadcom-egress-queue.cc": "e298f6a2a904a20d52247974d5177c785b6f401557d121fb4469d013481abda2",
+    "point-to-point/model/qbb-net-device.cc": "d05db77ce5a5386c74064f7436f3f2d1ee35f50829a62999354f2c2eaa4ce23b",
+    "point-to-point/model/switch-mmu.cc": "95243e0f3f2d15e0ea87990e01731fad92984e8ec9a6bb00872ee6bf50070a25",
+    "point-to-point/model/switch-node.cc": "a5583ca67fb1d0575fee867f4f824413655d2b60c1cbb2873f94757b4540a5be"
+  },
+  "network_reruns": 0,
+  "passed": true,
+  "post_initial_evaluation": true,
+  "source_round_robin_future_other_owners": [
+    1
+  ],
+  "unchanged_sealed_prediction": true
+}

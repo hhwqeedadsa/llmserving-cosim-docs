@@ -1,0 +1,124 @@
+{
+  "GPU": 0,
+  "HTTP": 0,
+  "artifact_budget_bytes": 268435456,
+  "artifact_reserve_bytes": 2097152,
+  "artifact_total_with_reserve": 64249856,
+  "artifact_usage_before_closeout": {
+    "allocated_bytes": 62144512,
+    "apparent_bytes": 61599636
+  },
+  "cases_closed": true,
+  "checkpoint": {
+    "compressed_bytes": 5401264,
+    "contains_local_raw_data": true,
+    "content_bytes": 28000864,
+    "members": 141,
+    "published": false,
+    "sha256": "3a87f349526a612eeb02eef489ea47c775dca551b31be491135156556003e4cc"
+  },
+  "conservative_monitored_seconds_including_nested": 7.523040634972858,
+  "dependency_changes": 0,
+  "full_host_speedup_measured": false,
+  "future_gate": "meaningful decision differences and paired complete host cost against generic incremental/resource baselines",
+  "management_seconds_reserve": 10,
+  "monitors": [
+    {
+      "path": "monitor/archive/probe.json",
+      "wall_seconds": 3.2879841119865887
+    },
+    {
+      "path": "monitor/evaluate/probe.json",
+      "wall_seconds": 0.22460804900038056
+    },
+    {
+      "path": "monitor/gated-loss/probe.json",
+      "wall_seconds": 0.4357913220010232
+    },
+    {
+      "path": "monitor/gated-loss-check/probe.json",
+      "wall_seconds": 0.11997394000354689
+    },
+    {
+      "path": "monitor/gated-normal/probe.json",
+      "wall_seconds": 0.3239398130099289
+    },
+    {
+      "path": "monitor/gated-normal-check/probe.json",
+      "wall_seconds": 0.11635785299586132
+    },
+    {
+      "path": "monitor/predict/probe.json",
+      "wall_seconds": 0.11705233699467499
+    },
+    {
+      "path": "monitor/queue-witness/probe.json",
+      "wall_seconds": 0.2250625110027613
+    },
+    {
+      "path": "monitor/recovery/probe.json",
+      "wall_seconds": 0.772675503991195
+    },
+    {
+      "path": "monitor/report/probe.json",
+      "wall_seconds": 0.12294970100629143
+    },
+    {
+      "path": "monitor/review-predict/probe.json",
+      "wall_seconds": 0.12181423600122798
+    },
+    {
+      "path": "monitor/terminal-loss/probe.json",
+      "wall_seconds": 0.3271182059979765
+    },
+    {
+      "path": "monitor/terminal-loss-check/probe.json",
+      "wall_seconds": 0.11857174499891698
+    },
+    {
+      "path": "monitor/terminal-normal/probe.json",
+      "wall_seconds": 0.42699646099936217
+    },
+    {
+      "path": "monitor/terminal-normal-check/probe.json",
+      "wall_seconds": 0.11648148999665864
+    },
+    {
+      "path": "observed/gated/run/execution/probe.json",
+      "wall_seconds": 0.11286443700373638
+    },
+    {
+      "path": "observed/terminal/run/execution/probe.json",
+      "wall_seconds": 0.11144533500191756
+    },
+    {
+      "path": "truth/gated/execution/probe.json",
+      "wall_seconds": 0.11185727900010534
+    },
+    {
+      "path": "truth/terminal/execution/probe.json",
+      "wall_seconds": 0.11405916599323973
+    },
+    {
+      "path": "../rc_overlap_reuse_20261028-prepare-monitor/probe.json",
+      "wall_seconds": 0.21543713798746467
+    }
+  ],
+  "network_runs": 4,
+  "network_runs_per_condition": 1,
+  "new_builds": 0,
+  "new_innovation_proven": false,
+  "passed": true,
+  "prepare_monitor_usage": {
+    "allocated_bytes": 8192,
+    "apparent_bytes": 2377
+  },
+  "push": false,
+  "result": "busy terminal noninterference exact; gated deferred; 93ns peer advance, only 52ns task diagnostic error",
+  "source_guard_review_post_initial_evaluation": true,
+  "state": "progress_overall_goal_not_complete",
+  "tamper_classes_rejected": 5,
+  "total_seconds_with_reserve": 17.52304063497286,
+  "unchanged_sealed_prediction": true,
+  "wall_budget_seconds": 600
+}

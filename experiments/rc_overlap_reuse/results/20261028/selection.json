@@ -1,0 +1,32 @@
+{
+  "E": 256,
+  "EP": 4,
+  "H": 7168,
+  "activation_dtype": "declared BF16",
+  "destinations": [
+    1,
+    2,
+    3
+  ],
+  "entry": 0,
+  "expert_ids": [
+    9,
+    69,
+    75,
+    77,
+    167,
+    197,
+    204,
+    2
+  ],
+  "fault_connection": 2,
+  "hidden_bytes": 14336,
+  "layer": 3,
+  "original_path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/econometrics/1808.json",
+  "raw_sha256": "c8c9cf4917498a2195960dbd9c65e9efe027af6606db098d40b0db8f7c266092",
+  "scope": "constructed segmented/gated RC fragment; not actual DeepEP, full CCL or GPU",
+  "source_rank": 0,
+  "token": 0,
+  "top_k": 8,
+  "write_bytes": 43008
+}

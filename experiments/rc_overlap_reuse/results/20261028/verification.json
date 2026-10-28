@@ -1,0 +1,347 @@
+{
+  "cases": {
+    "gated": {
+      "admitted": false,
+      "completion_changes": [
+        {
+          "connection": 0,
+          "delta_ns": 0,
+          "diagnostic_error_ns": 0,
+          "operation": 0
+        },
+        {
+          "connection": 0,
+          "delta_ns": 0,
+          "diagnostic_error_ns": 0,
+          "operation": 1
+        },
+        {
+          "connection": 0,
+          "delta_ns": 0,
+          "diagnostic_error_ns": 0,
+          "operation": 2
+        },
+        {
+          "connection": 0,
+          "delta_ns": 0,
+          "diagnostic_error_ns": 0,
+          "operation": 3
+        },
+        {
+          "connection": 1,
+          "delta_ns": 0,
+          "diagnostic_error_ns": 0,
+          "operation": 0
+        },
+        {
+          "connection": 1,
+          "delta_ns": -93,
+          "diagnostic_error_ns": 93,
+          "operation": 1
+        },
+        {
+          "connection": 1,
+          "delta_ns": -2,
+          "diagnostic_error_ns": 2,
+          "operation": 2
+        },
+        {
+          "connection": 1,
+          "delta_ns": -2,
+          "diagnostic_error_ns": 2,
+          "operation": 3
+        },
+        {
+          "connection": 2,
+          "delta_ns": 13924,
+          "diagnostic_error_ns": 76,
+          "operation": 0
+        },
+        {
+          "connection": 2,
+          "delta_ns": 14037,
+          "diagnostic_error_ns": -37,
+          "operation": 1
+        },
+        {
+          "connection": 2,
+          "delta_ns": 13948,
+          "diagnostic_error_ns": 52,
+          "operation": 2
+        }
+      ],
+      "diagnostic_finish_error_ns": 52,
+      "global_idle_gate": null,
+      "loss_finish_ns": 51794,
+      "normal_finish_ns": 50548,
+      "physical": {
+        "loss": {
+          "physical_drop": 1,
+          "physical_rx": 873,
+          "physical_tx": 874,
+          "source_packets": {
+            "request": 175,
+            "response": 12
+          }
+        },
+        "normal": {
+          "physical_drop": 0,
+          "physical_rx": 862,
+          "physical_tx": 862,
+          "source_packets": {
+            "request": 174,
+            "response": 11
+          }
+        }
+      },
+      "reason": "nonterminal_source_completion_has_successors"
+    },
+    "terminal": {
+      "admitted": true,
+      "completion_changes": [
+        {
+          "connection": 0,
+          "delta_ns": 0,
+          "diagnostic_error_ns": 0,
+          "operation": 0
+        },
+        {
+          "connection": 0,
+          "delta_ns": 0,
+          "diagnostic_error_ns": 0,
+          "operation": 1
+        },
+        {
+          "connection": 0,
+          "delta_ns": 0,
+          "diagnostic_error_ns": 0,
+          "operation": 2
+        },
+        {
+          "connection": 0,
+          "delta_ns": 0,
+          "diagnostic_error_ns": 0,
+          "operation": 3
+        },
+        {
+          "connection": 1,
+          "delta_ns": 0,
+          "diagnostic_error_ns": 0,
+          "operation": 0
+        },
+        {
+          "connection": 1,
+          "delta_ns": 0,
+          "diagnostic_error_ns": 0,
+          "operation": 1
+        },
+        {
+          "connection": 1,
+          "delta_ns": 0,
+          "diagnostic_error_ns": 0,
+          "operation": 2
+        },
+        {
+          "connection": 1,
+          "delta_ns": 0,
+          "diagnostic_error_ns": 0,
+          "operation": 3
+        },
+        {
+          "connection": 2,
+          "delta_ns": 0,
+          "diagnostic_error_ns": 0,
+          "operation": 0
+        },
+        {
+          "connection": 2,
+          "delta_ns": 14000,
+          "diagnostic_error_ns": 0,
+          "operation": 1
+        }
+      ],
+      "diagnostic_finish_error_ns": 0,
+      "global_idle_gate": false,
+      "loss_finish_ns": 51093,
+      "normal_finish_ns": 51093,
+      "physical": {
+        "loss": {
+          "physical_drop": 1,
+          "physical_rx": 861,
+          "physical_tx": 862,
+          "source_packets": {
+            "request": 174,
+            "response": 11
+          }
+        },
+        "normal": {
+          "physical_drop": 0,
+          "physical_rx": 850,
+          "physical_tx": 850,
+          "source_packets": {
+            "request": 173,
+            "response": 10
+          }
+        }
+      },
+      "reason": "terminal_feedback_and_port_time_noninterference"
+    }
+  },
+  "full_CCL": false,
+  "full_host_speedup_measured": false,
+  "hardware_calibrated": false,
+  "networks": 4,
+  "new_innovation_proven": false,
+  "passed": true,
+  "peer_wait_reduction_ns": 93,
+  "peer_wait_witness": {
+    "loss": [
+      {
+        "blockers": [],
+        "node": 0,
+        "port": 1,
+        "ready_ns": 13496,
+        "start_ns": 13496,
+        "waiting_ns": 0
+      },
+      {
+        "blockers": [],
+        "node": 4,
+        "port": 3,
+        "ready_ns": 14502,
+        "start_ns": 14502,
+        "waiting_ns": 0
+      },
+      {
+        "blockers": [],
+        "node": 5,
+        "port": 2,
+        "ready_ns": 15508,
+        "start_ns": 15508,
+        "waiting_ns": 0
+      },
+      {
+        "blockers": [],
+        "node": 8,
+        "port": 2,
+        "ready_ns": 16514,
+        "start_ns": 16514,
+        "waiting_ns": 0
+      },
+      {
+        "blockers": [],
+        "node": 7,
+        "port": 1,
+        "ready_ns": 17520,
+        "start_ns": 17520,
+        "waiting_ns": 0
+      },
+      {
+        "blockers": [],
+        "node": 6,
+        "port": 1,
+        "ready_ns": 18526,
+        "start_ns": 18526,
+        "waiting_ns": 0
+      }
+    ],
+    "normal": [
+      {
+        "blockers": [
+          {
+            "connection": 2,
+            "end_ns": 13513,
+            "opcode": 7,
+            "psn": 55,
+            "start_ns": 13489
+          }
+        ],
+        "node": 0,
+        "port": 1,
+        "ready_ns": 13496,
+        "start_ns": 13513,
+        "waiting_ns": 17
+      },
+      {
+        "blockers": [
+          {
+            "connection": 2,
+            "end_ns": 14538,
+            "opcode": 7,
+            "psn": 55,
+            "start_ns": 14514
+          }
+        ],
+        "node": 4,
+        "port": 3,
+        "ready_ns": 14519,
+        "start_ns": 14538,
+        "waiting_ns": 19
+      },
+      {
+        "blockers": [
+          {
+            "connection": 2,
+            "end_ns": 15563,
+            "opcode": 7,
+            "psn": 55,
+            "start_ns": 15539
+          }
+        ],
+        "node": 5,
+        "port": 2,
+        "ready_ns": 15544,
+        "start_ns": 15563,
+        "waiting_ns": 19
+      },
+      {
+        "blockers": [
+          {
+            "connection": 2,
+            "end_ns": 16588,
+            "opcode": 7,
+            "psn": 55,
+            "start_ns": 16564
+          }
+        ],
+        "node": 8,
+        "port": 2,
+        "ready_ns": 16569,
+        "start_ns": 16588,
+        "waiting_ns": 19
+      },
+      {
+        "blockers": [
+          {
+            "connection": 2,
+            "end_ns": 17613,
+            "opcode": 7,
+            "psn": 55,
+            "start_ns": 17589
+          }
+        ],
+        "node": 7,
+        "port": 1,
+        "ready_ns": 17594,
+        "start_ns": 17613,
+        "waiting_ns": 19
+      },
+      {
+        "blockers": [],
+        "node": 6,
+        "port": 1,
+        "ready_ns": 18619,
+        "start_ns": 18619,
+        "waiting_ns": 0
+      }
+    ]
+  },
+  "sealed_before_both_faults": true,
+  "tamper_classes_rejected": [
+    "completion",
+    "old_value",
+    "drop_count",
+    "tail_time",
+    "reason"
+  ]
+}

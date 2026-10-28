@@ -13,7 +13,11 @@
 
 ## 当前范围和预算
 
-当前研究`in_progress`：[忙碌网络中的RC复用判别](../../experiments/rc_overlap_reuse/protocol.md)，起点`9c675c1`。新1808单token路由片段，终端/带前置门槛两程序、正常/丢回复各一次，四新网络；先核正常再封存普通资源/时间非干扰预测，检验全网忙碌但局部可复用及后继发送对其他连接的影响。600受监控秒/256MiB，零构建/HTTP/GPU/平台依赖修改/push；旧条件关闭。非干扰证书是通用强基线，微基准不是完整DeepEP，尚无新创新或宿主加速结论。
+当前研究已关闭：[忙碌网络中的RC复用判别](../../experiments/rc_overlap_reuse/README.md)、[冻结方法](../../experiments/rc_overlap_reuse/protocol.md)及[网页](../../experiments/rc_overlap_reuse/results/20261028/report.html)，起点`9c675c1`、协议`6434e30`。新1808单token路由、43,008B数据、三QP；终端/带前置门槛两程序正常/丢回复各一次。终端回复重试28.835us时全网尚忙，普通端口/时间证书仍准入，全部连接/内存/旧值/目标效应及12次新增逐跳TX吻合，故障连接晚14us而片段仍51.093us。带后继条件事前拒绝，正常50.548us、故障51.794us；恢复到正常对照的净差相对故障为2.41%，不是已优化或全网收益上界。普通RTO平移仅52ns整片段误差，不能支持显著新模型价值。
+
+独立逐包/目标重放核对四网络，未丢包连接一次通知提前93ns，实际源NIC17ns和四交换端口各19ns等待减少与占用者逐项吻合，最终仅提前2ns；五类篡改拒绝。评价后补查源NIC轮询游标、加入单其他未来发送者的保守前提，保留原源码，预测与故障前封存逐字节相同，无网络重跑。证书属于通用强基线，不是新的MoE专用算法。输入是显式构造门槛/分段的功能片段，不是实际现代DeepEP、完整CCL或LLMServingSim服务；固定速率RC、无GPU/硬件校准。
+
+141成员包逐hash恢复，复制源码/隔离Python/空cwd重算预测、核验及MD/HTML逐字节一致，恢复零网络/构建；SHA256 `3a87f349526a612eeb02eef489ea47c775dca551b31be491135156556003e4cc`。见[恢复](../../experiments/rc_overlap_reuse/results/20261028/recovery.json)及[关闭](../../experiments/rc_overlap_reuse/results/20261028/closeout.json)，原件`runs/rc_overlap_reuse_20261028/`。保守含嵌套监控及管理预留17.524秒、约61.28MiB，保持600秒/256MiB及单项限制；四条件额度关闭，零HTTP/GPU/构建/平台依赖修改/push。此轮为progress：两主创新与总体目标仍`in_progress`；后续需相对普通资源/增量执行的实质决策或完整配对成本收益，不自动扩本轮条件。
 
 当前研究已关闭：[RC反事实复用原型](../../experiments/rc_counterfactual_reuse/README.md)、[方法](../../experiments/rc_counterfactual_reuse/protocol.md)及[网页](../../experiments/rc_counterfactual_reuse/results/20261028/report.html)，起点`ec3bc47`、协议`c987990`。真实1472首prefill token/层3，EP4/三目的、43,008B有效Dispatch数据及计数片段，未运行完整CCL/Combine/LLMServingSim或GPU。三个新网络各一次：正常28.245us、最终Atomic ACK丢失112.041us、数据中间包丢失113.363us；逐跳TX分别826/830/942。
 

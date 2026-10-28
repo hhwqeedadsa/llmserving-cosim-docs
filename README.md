@@ -1,5 +1,7 @@
 # MoE 推理与 UB 网络联合仿真
 
+完整仿真工程及固定依赖的克隆方法见[完整源码说明](publication/README.md)。
+
 [多连接 RC 网络参考](examples/rc_concurrent/README.md)提供共享网卡、共享目标内存及连接级丢包的小例；[结果网页](fixtures/rc_concurrent_fabric/report.html)说明实际包、原子返回与恢复边界。这是独立功能入口，未接入 MoE 调度或硬件校准。
 
 `moe-ub-cosim` 用于研究混合专家（MoE）模型推理中的计算、通信与交换机流量之间的关系。它根据推理请求生成计算与通信任务，在模拟网络中执行，再输出端侧操作记录和交换机端口流量统计。

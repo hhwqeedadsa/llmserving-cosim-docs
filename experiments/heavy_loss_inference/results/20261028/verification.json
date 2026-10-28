@@ -1,0 +1,426 @@
+{
+  "passed": true,
+  "cases": [
+    {
+      "case": "A:baseline",
+      "passed": true,
+      "finish_ns": 54362,
+      "target_ack_ns": 17673,
+      "source_data_packets": 7,
+      "source_payload_bytes": 6144,
+      "duplicate_payload_bytes": 0,
+      "target_data_drops": 0,
+      "target_ack_drops": 0,
+      "target_data_drop_fraction": [
+        0,
+        7
+      ],
+      "target_data_drop_payload_bytes": 0,
+      "target_data_dropped_payload_fraction": [
+        0,
+        6144
+      ],
+      "target_ack_drop_fraction": [
+        0,
+        7
+      ],
+      "source_attempts": 1,
+      "nack_count": 0,
+      "drop_rule_matches": [],
+      "completed_waves": {
+        "0": 2,
+        "1": 2
+      },
+      "total_waves": {
+        "0": 2,
+        "1": 2
+      },
+      "group1_completion_ns": [
+        27536,
+        54362
+      ],
+      "capture_complete": true,
+      "fault_finish_is_not_completion": false
+    },
+    {
+      "case": "A:data-57-transient",
+      "passed": false,
+      "finish_ns": 5000000,
+      "target_ack_ns": null,
+      "source_data_packets": 14,
+      "source_payload_bytes": 12288,
+      "duplicate_payload_bytes": 6144,
+      "target_data_drops": 8,
+      "target_ack_drops": 0,
+      "target_data_drop_fraction": [
+        8,
+        14
+      ],
+      "target_data_drop_payload_bytes": 6288,
+      "target_data_dropped_payload_fraction": [
+        6288,
+        12288
+      ],
+      "target_ack_drop_fraction": [
+        0,
+        0
+      ],
+      "source_attempts": 2,
+      "nack_count": 1,
+      "drop_rule_matches": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "completed_waves": {
+        "0": 0,
+        "1": 2
+      },
+      "total_waves": {
+        "0": 1,
+        "1": 2
+      },
+      "group1_completion_ns": [
+        27536,
+        54030
+      ],
+      "capture_complete": true,
+      "fault_finish_is_not_completion": true
+    },
+    {
+      "case": "B:baseline",
+      "passed": true,
+      "finish_ns": 54362,
+      "target_ack_ns": 17673,
+      "source_data_packets": 7,
+      "source_payload_bytes": 6144,
+      "duplicate_payload_bytes": 0,
+      "target_data_drops": 0,
+      "target_ack_drops": 0,
+      "target_data_drop_fraction": [
+        0,
+        7
+      ],
+      "target_data_drop_payload_bytes": 0,
+      "target_data_dropped_payload_fraction": [
+        0,
+        6144
+      ],
+      "target_ack_drop_fraction": [
+        0,
+        7
+      ],
+      "source_attempts": 1,
+      "nack_count": 0,
+      "drop_rule_matches": [],
+      "completed_waves": {
+        "0": 2,
+        "1": 2
+      },
+      "total_waves": {
+        "0": 2,
+        "1": 2
+      },
+      "group1_completion_ns": [
+        27536,
+        54362
+      ],
+      "capture_complete": true,
+      "fault_finish_is_not_completion": false
+    },
+    {
+      "case": "B:data-57-transient",
+      "passed": true,
+      "finish_ns": 91297,
+      "target_ack_ns": 57154,
+      "source_data_packets": 21,
+      "source_payload_bytes": 18432,
+      "duplicate_payload_bytes": 12288,
+      "target_data_drops": 8,
+      "target_ack_drops": 0,
+      "target_data_drop_fraction": [
+        8,
+        21
+      ],
+      "target_data_drop_payload_bytes": 6288,
+      "target_data_dropped_payload_fraction": [
+        6288,
+        18432
+      ],
+      "target_ack_drop_fraction": [
+        0,
+        7
+      ],
+      "source_attempts": 3,
+      "nack_count": 1,
+      "drop_rule_matches": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "completed_waves": {
+        "0": 2,
+        "1": 2
+      },
+      "total_waves": {
+        "0": 2,
+        "1": 2
+      },
+      "group1_completion_ns": [
+        27536,
+        54030
+      ],
+      "capture_complete": true,
+      "fault_finish_is_not_completion": false
+    },
+    {
+      "case": "B:data-86-transient",
+      "passed": true,
+      "finish_ns": 91297,
+      "target_ack_ns": 57154,
+      "source_data_packets": 21,
+      "source_payload_bytes": 18432,
+      "duplicate_payload_bytes": 12288,
+      "target_data_drops": 12,
+      "target_ack_drops": 0,
+      "target_data_drop_fraction": [
+        12,
+        21
+      ],
+      "target_data_drop_payload_bytes": 12000,
+      "target_data_dropped_payload_fraction": [
+        12000,
+        18432
+      ],
+      "target_ack_drop_fraction": [
+        0,
+        7
+      ],
+      "source_attempts": 3,
+      "nack_count": 1,
+      "drop_rule_matches": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "completed_waves": {
+        "0": 2,
+        "1": 2
+      },
+      "total_waves": {
+        "0": 2,
+        "1": 2
+      },
+      "group1_completion_ns": [
+        27536,
+        54030
+      ],
+      "capture_complete": true,
+      "fault_finish_is_not_completion": false
+    },
+    {
+      "case": "B:data-57-persistent",
+      "passed": false,
+      "finish_ns": 444203,
+      "target_ack_ns": null,
+      "source_data_packets": 35,
+      "source_payload_bytes": 30720,
+      "duplicate_payload_bytes": 24576,
+      "target_data_drops": 20,
+      "target_ack_drops": 0,
+      "target_data_drop_fraction": [
+        20,
+        35
+      ],
+      "target_data_drop_payload_bytes": 15720,
+      "target_data_dropped_payload_fraction": [
+        15720,
+        30720
+      ],
+      "target_ack_drop_fraction": [
+        0,
+        0
+      ],
+      "source_attempts": 5,
+      "nack_count": 1,
+      "drop_rule_matches": [
+        5,
+        5,
+        5,
+        5
+      ],
+      "completed_waves": {
+        "0": 0,
+        "1": 2
+      },
+      "total_waves": {
+        "0": 1,
+        "1": 2
+      },
+      "group1_completion_ns": [
+        27536,
+        54030
+      ],
+      "capture_complete": true,
+      "fault_finish_is_not_completion": true
+    },
+    {
+      "case": "B:ack-57-transient",
+      "passed": true,
+      "finish_ns": 54362,
+      "target_ack_ns": 17673,
+      "source_data_packets": 7,
+      "source_payload_bytes": 6144,
+      "duplicate_payload_bytes": 0,
+      "target_data_drops": 0,
+      "target_ack_drops": 4,
+      "target_data_drop_fraction": [
+        0,
+        7
+      ],
+      "target_data_drop_payload_bytes": 0,
+      "target_data_dropped_payload_fraction": [
+        0,
+        6144
+      ],
+      "target_ack_drop_fraction": [
+        4,
+        7
+      ],
+      "source_attempts": 1,
+      "nack_count": 0,
+      "drop_rule_matches": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "completed_waves": {
+        "0": 2,
+        "1": 2
+      },
+      "total_waves": {
+        "0": 2,
+        "1": 2
+      },
+      "group1_completion_ns": [
+        27536,
+        54362
+      ],
+      "capture_complete": true,
+      "fault_finish_is_not_completion": false
+    }
+  ],
+  "native_simulations_reexecuted": 0,
+  "committed_batch_b_comparison_passed": true,
+  "evidence": {
+    "runs/baseline/result.json": {
+      "sha256": "b61c814ebaf4ee1d4ba2707a9e43712cc5794e1757cfe316606465ecebcd4305",
+      "bytes": 3507508
+    },
+    "runs/baseline/frontend.json": {
+      "sha256": "2360c812649ddead3d6a1d2b304be705bd557810b1bb0f36c3718161dc9b8fdd",
+      "bytes": 11005
+    },
+    "runs/service.json": {
+      "sha256": "1f1b5e44c640fb9fef6d0fc792524f75e005773a0d8493f217c05157df793d28",
+      "bytes": 769
+    },
+    "runs/baseline.json": {
+      "sha256": "fa4fd978950a9afd398ac377712b4a02868b9219240a295070aa86073218ea90",
+      "bytes": 445
+    },
+    "runs/commands.json": {
+      "sha256": "4cfd59f91c281b3d4212758d8f0e68964c1b5416b3d07af7dd12bda6ab7666ab",
+      "bytes": 1960
+    },
+    "runs/data-57-transient/result.json": {
+      "sha256": "cb169ac5091ceda6e6a29177e5b97cacf131c4fe7836d77a6b5832b444e11285",
+      "bytes": 2541930
+    },
+    "runs/data-57-transient/frontend.json": {
+      "sha256": "319eedd206997a31e8ef65ae00151ea42084cabcf25a5415d1bf7e5ea1bc3918",
+      "bytes": 8707
+    },
+    "runs/data-57-transient.json": {
+      "sha256": "adafa8a5d0db9c52010e42293cc3ac9d454eb5594b4ee16a291ca602cf25d8df",
+      "bytes": 1176
+    },
+    "runs-recovery/baseline/result.json": {
+      "sha256": "9c119be7730aea65410f8feddfcb1f47450fa52903c4fb6409e93589857c3d5e",
+      "bytes": 3643827
+    },
+    "runs-recovery/baseline/frontend.json": {
+      "sha256": "b4efb54b34735d4fc007e11f57765a888e9356f78f9aecc55dc0f557497553b6",
+      "bytes": 11041
+    },
+    "runs-recovery/service.json": {
+      "sha256": "1f1b5e44c640fb9fef6d0fc792524f75e005773a0d8493f217c05157df793d28",
+      "bytes": 769
+    },
+    "runs-recovery/baseline.json": {
+      "sha256": "d0251025fa4bb615665c42985b8bad139bcb1256921d037189ef0cecb14a778d",
+      "bytes": 593
+    },
+    "runs-recovery/commands.json": {
+      "sha256": "35a0a53796d12b7a8b94c9370a63daf49ca72249ca26d0b2ec7c50b529c601cc",
+      "bytes": 6420
+    },
+    "runs-recovery/data-57-transient/result.json": {
+      "sha256": "45d566384e6f6ac643453b576c112cdd2a4f6a4191f27b3d7918e40f050257b9",
+      "bytes": 3708306
+    },
+    "runs-recovery/data-57-transient/frontend.json": {
+      "sha256": "76bea8ebe22624f87e59378957e22d3609bfedc34d12ae5bc5719679e0a14eb1",
+      "bytes": 11129
+    },
+    "runs-recovery/data-57-transient.json": {
+      "sha256": "c5ab9be1b1c30fed429473c9ba249c8a94bbda7be77768d14ee8e1f3194ff5e9",
+      "bytes": 1324
+    },
+    "runs-recovery/data-86-transient/result.json": {
+      "sha256": "0d467ee649e3602188e22019c73fa2dd95800050543230e4538c7ad172c98e40",
+      "bytes": 3709029
+    },
+    "runs-recovery/data-86-transient/frontend.json": {
+      "sha256": "46408feb6e38af15ba196bf03bb1275f2adf02390705b7e7c0cfa3bf500a181a",
+      "bytes": 11129
+    },
+    "runs-recovery/data-86-transient.json": {
+      "sha256": "19bd21b6719c925a7dc0343242da9de82c0379f60f3d29d28f56c6e232dae466",
+      "bytes": 1682
+    },
+    "runs-recovery/data-57-persistent/result.json": {
+      "sha256": "30077a9f956b86ea5c00858b67313090539060b3076e5021d015ff0f6e274080",
+      "bytes": 2729450
+    },
+    "runs-recovery/data-57-persistent/frontend.json": {
+      "sha256": "04cff290914b98de7656262a51cf1a2f093b7411ac4057f28b592013d563c9ba",
+      "bytes": 8737
+    },
+    "runs-recovery/data-57-persistent.json": {
+      "sha256": "f6132736129f153adb98b6de927a3da58110f6f7e5d8927c6cc945b5f00fd4c0",
+      "bytes": 1340
+    },
+    "runs-recovery/ack-57-transient/result.json": {
+      "sha256": "203ab5e86f123f0e7b2a28678d1b6b0b1ff35e95f193cf48ccd0ac6e8d84ed5d",
+      "bytes": 3644741
+    },
+    "runs-recovery/ack-57-transient/frontend.json": {
+      "sha256": "4081b5635ecf48485c3718e0b2a14b34e91457fb21f92208f7c1cdb62af1a67a",
+      "bytes": 11073
+    },
+    "runs-recovery/ack-57-transient.json": {
+      "sha256": "3983d437766b274dbfa454211e31e2f2892c536b665f62ec687bb05f7bc49fd8",
+      "bytes": 1323
+    }
+  },
+  "loss_scope": "target-message packet counts; affected rounds and complete-run denominators differ",
+  "inference_scope": "pinned scheduler methods, project Chakra graphs and ASTRA; synthetic routes and declared GPU compute",
+  "production_RoCE_calibrated": false
+}

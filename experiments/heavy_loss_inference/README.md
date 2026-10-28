@@ -23,15 +23,17 @@ python3 -B experiments/heavy_loss_inference/analyze.py \
 
 ## 结果（2026-10-28）
 
-交互网页（逐包时间线、完成时间与重传放大图）：[report.html](results/20261028/report.html)；文字报告 [report.md](results/20261028/report.md)；批次 B 数值表见 [analysis.json](results/20261028/analysis.json)，批次 A 保留证据见 [batch-a-preserved.json](results/20261028/batch-a-preserved.json)，目标消息逐包事件见 [timelines.json](results/20261028/timelines.json)。目标消息均为实际首图的 0→4 Dispatch（id 1，6144B，7 个数据包/7 个 ACK）。网页由 [render.py](render.py) 仅从本目录已提交摘要生成，不依赖易失运行目录。
+本条件中的57%/86%指前两轮单条6144B Dispatch各丢4/7、6/7包。计入最终成功轮，完整有限故障运行目标消息被丢包比例为38.1%/57.1%；持续57%条件是20/35=57.1%。这些是消息级确定性丢包，不是全网随机率。规则命中、每包字节和两批完成状态见[离线核验摘要](results/20261028/verification.json)。
+
+交互网页（逐包时间线、完成时间与重传放大图）：[report.html](results/20261028/report.html)；文字报告 [report.md](results/20261028/report.md)；批次 B 数值表见 [analysis.json](results/20261028/analysis.json)，批次 A 保留证据见 [batch-a-preserved.json](results/20261028/batch-a-preserved.json)，目标消息逐包事件见 [timelines.json](results/20261028/timelines.json)。目标消息均为实际首图的 0→4 Dispatch（id 1，6144B，7 个数据包/7 个 ACK）。网页由 [render.py](render.py) 仅从本目录已提交摘要生成，不依赖易失运行目录。选择性重传已存在于持久事务/stream参考路径，但本次 `rdma-run` 条件没有使用该模式。
 
 | 条件 | 结果 | 关键数字 |
 |---|---|---|
 | 基线（原生/含恢复配置相同） | 完成 | 服务 54,362ns；目标确认 17,673ns |
-| 57% 数据丢包×2轮，原生语义 | **失败**（批次 A，事前预期被推翻） | 两轮各丢 4 包后接收端不再发 NACK、源端无第三次尝试；接收连续字节停 0；服务空转到 5ms 上限 |
-| 57% 数据丢包×2轮，go_back_n | 完成 | 目标确认 57,154ns（+39,481ns ≈ 1 个初始 RTO）；源端发送恰为 3× 全消息（18,432B）；服务 91,297ns（+68%） |
+| 57% 数据丢包×2轮，原生语义 | **失败**（批次 A，事前预期被推翻） | 前两轮各丢4/7；再次回退后因NACK限频且没有RTO定时器，源端无第三次尝试；接收连续字节停 0；服务空转到 5ms 上限 |
+| 57% 数据丢包×2轮，go_back_n | 完成 | 目标确认 57,154ns（+39,481ns，约1个初始RTO）；源端发送恰为 3× 全消息（18,432B）；服务 91,297ns（+68%） |
 | 86% 数据丢包×2轮，go_back_n | 完成 | 与 57% 完全相同：57,154ns / 18,432B / 91,297ns——Go-Back-N 从首个缺口整体回退，丢 4 包与丢 6 包代价相同 |
-| 57% 数据持续丢包，go_back_n | 显式失败 | `recovery_retry_exhausted` 于 444,203ns（约 40+80+160us 退避），源端发送 5× 全消息后停止；组 0 停滞、组 1 两轮照常完成 |
+| 57% 数据持续丢包，go_back_n | 显式失败 | `recovery_retry_exhausted` 于 444,203ns（约 40+80+160us 退避），源端发送 5× 全消息后停止；组0未完成；组1在全局停止前完成两轮，第二轮比基线提前332ns |
 | 57% 非最终 ACK 丢包 | 完成 | 服务 54,362ns，与基线逐字段相同——累计 ACK 完全掩盖非最终确认丢失 |
 
 主要观察：

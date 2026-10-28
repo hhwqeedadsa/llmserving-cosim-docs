@@ -13,6 +13,8 @@
 
 ## 当前范围和预算
 
+当前研究`in_progress`：[忙碌网络中的RC复用判别](../../experiments/rc_overlap_reuse/protocol.md)，起点`9c675c1`。新1808单token路由片段，终端/带前置门槛两程序、正常/丢回复各一次，四新网络；先核正常再封存普通资源/时间非干扰预测，检验全网忙碌但局部可复用及后继发送对其他连接的影响。600受监控秒/256MiB，零构建/HTTP/GPU/平台依赖修改/push；旧条件关闭。非干扰证书是通用强基线，微基准不是完整DeepEP，尚无新创新或宿主加速结论。
+
 当前研究已关闭：[RC反事实复用原型](../../experiments/rc_counterfactual_reuse/README.md)、[方法](../../experiments/rc_counterfactual_reuse/protocol.md)及[网页](../../experiments/rc_counterfactual_reuse/results/20261028/report.html)，起点`ec3bc47`、协议`c987990`。真实1472首prefill token/层3，EP4/三目的、43,008B有效Dispatch数据及计数片段，未运行完整CCL/Combine/LLMServingSim或GPU。三个新网络各一次：正常28.245us、最终Atomic ACK丢失112.041us、数据中间包丢失113.363us；逐跳TX分别826/830/942。
 
 故障执行前封存的复用原型只对“最后原子回复丢失、该QP无后继、重试晚于全网排空”准入，复用正常过程并计算4次逐跳发送尾部，完成、内存/旧值/副作用及所有尾部时刻吻合。普通原RTT/RTO和空闲路径解析同样误差0，未证明新增预测贡献或完整宿主加速。数据丢失事前拒绝，不能计作已正确预测。初次评价后加固缓存身份、显式ECN阈值及已审阅MMU前提，旧源码保留；离线预测与故障前封存字节一致，无网络重跑。六类篡改及13固定依赖通过。

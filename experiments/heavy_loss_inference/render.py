@@ -28,8 +28,34 @@ def read(p):
     return json.loads(p.read_text())
 
 
-# MoE 推理通信面对网络丢包/故障时的恢复方法谱系（背景整理，非本实验证据）。
-# 每行: 层次, 代表方案, 丢包处理机制, 与本实验的对应关系
+# 由本实验证据驱动的新增能力方向（路线图，非承诺）。
+# 每行: 方向, 解决什么, 依赖与工作量, 证据锚点
+ROADMAP = [
+    ('全网比率型随机丢包',
+     '回答"DCQCN+PFC 在真实丢包率（0.1%→50%）下的表现"，支持丢包率扫描找拐点',
+     'FaultModel 增加 rate 规则 + 一次原生重编译；规则预算从 32 条精确匹配改为比率模型',
+     '本实验 README/protocol 已声明该缺口；当前 57% 是单消息确定性规则'),
+    ('选择性重传参考实现（IRN 式 SACK）',
+     '直接量化图 2 的 3× 整体回退放大能省多少：86% 丢包下只需补 6 包而非两轮全量',
+     '作为第二种可选 recovery.mode；接收端到达位图 + 只补缺口序号',
+     '本实验 57% 与 86% 同代价（91,297ns / 18,432B）即其存在理由'),
+    ('单 QP 错误隔离',
+     '恢复耗尽只终止该 QP 并让服务层重路由，而非整体停止共享仿真',
+     '文档中已列为未实现后续项；需定义错误传播边界与依赖清理',
+     '本实验组 1 在组 0 停滞时两轮照常完成，证明隔离域价值；缺的正是 QP 粒度'),
+    ('Karn 自适应 RTO 的重度丢包对照',
+     '固定 40µs 初值 vs 自适应采样在 50%+ 丢包下的恢复代价与重复流量差异',
+     'estimator 已实现（rtt_estimator=karn），只需在本实验条件族上启用对照',
+     'communication_fragility.md 命题 3 已证明采样无歧义；缺重度丢包场景实测'),
+    ('多路径/乱序交付（MP-RDMA/SRD 语义）',
+     'MoE all-to-all 短消息高扇出，最能从单包级多路径与不保序放置受益',
+     '拓扑生成已支持 multi-rail/多平面；需 QP 乱序放置与逐包路径选择',
+     '谱系表第 4 行；本平台当前为单路径保序 QP'),
+    ('PD 分离 KV handoff 大流量 + 丢包',
+     'KV 传输是长消息，Go-Back-N 放大比 6KB Dispatch 严重得多，是更真实的受害面',
+     'M4 已有 kv_handoff 提交类型与容量账本；复用本实验的故障注入即可',
+     '本实验 3×/5× 放大在小消息上已显著，长消息预期更陡'),
+]
 LANDSCAPE = [
     ('链路/网络层：无损化',
      'InfiniBand credit 链路流控；RoCE 用 PFC（按优先级暂停）+ ECN 阈值',
@@ -186,8 +212,11 @@ def execute(output):
                        tl['A:data-57-transient'], 500, shade_from_us=25,
                        end_label='此后 4,976µs 无任何恢复动作（直至 5ms 上限）'),
         timeline_panel('批次 B · 57% 数据丢包×2轮 · go_back_n（40µs 初始 RTO，3 次重试）',
-                       'RTO 触发两轮整体回退重传，57.2µs 收到最终 ACK，服务 91.3µs 完成',
+                       'RTO 触发两轮整体回退重传（21 次发送 = 3×7 包，8 次丢弃），57.2µs 收到最终 ACK，服务 91.3µs 完成',
                        tl['B:data-57-transient'], 500, end_mark_us=57.154, end_label='最终 ACK 57.2µs'),
+        timeline_panel('批次 B · 86% 数据丢包×2轮 · go_back_n',
+                       '12 次丢弃（比 57% 多 4 次）但发送次数、NACK、完成时刻与 57% 完全相同——Go-Back-N 从首个缺口整体回退，多丢的包不产生额外代价',
+                       tl['B:data-86-transient'], 500, end_mark_us=57.154, end_label='最终 ACK 57.2µs（与 57% 相同）'),
         timeline_panel('批次 B · 57% 数据持续丢包 · go_back_n',
                        '5 轮发送（每轮 4 包被丢）仍无 ACK 进展，444.2µs 以 recovery_retry_exhausted 显式失败',
                        tl['B:data-57-persistent'], 500, end_mark_us=444.203, end_label='显式失败 444.2µs'),
@@ -227,6 +256,12 @@ def execute(output):
     landscape_table = ('<table><thead><tr><th>层次</th><th>代表方案</th><th>丢包处理机制</th><th>与本实验的关系</th></tr></thead>'
                        '<tbody>' + landscape_rows + '</tbody></table>')
 
+    # ---- roadmap table ----
+    roadmap_rows = ''.join('<tr><td><b>%s</b></td><td>%s</td><td>%s</td><td>%s</td></tr>' % tuple(esc(x) for x in row)
+                           for row in ROADMAP)
+    roadmap_table = ('<table><thead><tr><th>新增方向</th><th>解决什么</th><th>依赖与工作量</th><th>证据锚点</th></tr></thead>'
+                     '<tbody>' + roadmap_rows + '</tbody></table>')
+
     page = f'''<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>推理消息 50%+ 持续丢包：原生停滞 vs 有界 Go-Back-N</title>
@@ -252,6 +287,9 @@ th,td{{padding:8px 10px;text-align:left;border-bottom:1px solid #dae3eb;white-sp
 figure{{margin:18px 0;background:#fff;border:1px solid #dae3eb;border-radius:10px;padding:12px}}
 figcaption{{font-size:14px;margin-bottom:6px}} figcaption .sub{{color:{INK2};font-size:12.5px}}
 svg.tl{{width:100%;height:auto;display:block}}
+.toc{{display:flex;gap:14px;flex-wrap:wrap;margin:6px 0 4px;font-size:13.5px}}
+.toc a{{color:#286aa6;text-decoration:none}}
+.toc a:hover{{text-decoration:underline}}
 .legend{{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:{INK2};margin:6px 0 0}}
 .legend span{{display:inline-flex;align-items:center;gap:6px}}
 .dot{{width:9px;height:9px;border-radius:50%;display:inline-block}}
@@ -262,8 +300,9 @@ footer{{margin-top:28px;font-size:13px;color:{INK2}}}
 @media(max-width:700px){{.row{{grid-template-columns:120px 1fr 110px;font-size:12px}}}}
 </style></head><body><main>
 <h1>推理消息 50%+ 持续丢包：原生停滞 vs 有界 Go-Back-N</h1>
+<nav class="toc"><a href="#conclusion">结论</a><a href="#c-finish">完成时间</a><a href="#c-resend">重传放大</a><a href="#c-timeline">逐包时间线</a><a href="#c-table">结果表</a><a href="#landscape">方法谱系</a><a href="#cycle">本周期工作</a><a href="#roadmap">新增方向</a><a href="#limits">边界</a></nav>
 <p>2026-10-28 · 8 GPU 两组交错 EP4 ready-KV Decode（1 层 2 步，声明计算，合成路由）· 目标：实际首图 0→4 Dispatch（id 1，6,144B，7 包）· 原生 ns-3 RDMA（锁定 <code>e929264</code>）· <a href="analysis.json">analysis.json</a> · <a href="timelines.json">timelines.json</a> · <a href="batch-a-preserved.json">批次A保留证据</a></p>
-<p class="note"><b>核心结论：</b>同一 57% 数据丢包（7 包中 4 个序号、每轮各丢 2 次），原生 NACK 恢复在第二轮后<b>不再有任何恢复动作</b>，服务静默空转到 5ms 上限；启用有界 go_back_n（40µs 初始 RTO、3 次重试）后，同一故障以 +39.5µs 恢复。持续丢包下 86% 与 57% 代价完全相同（Go-Back-N 整体回退），57% 非最终 ACK 丢失被累计确认完全掩盖。</p>
+<p class="note" id="conclusion"><b>核心结论：</b>同一 57% 数据丢包（7 包中 4 个序号、每轮各丢 2 次），原生 NACK 恢复在第二轮后<b>不再有任何恢复动作</b>，服务静默空转到 5ms 上限；启用有界 go_back_n（40µs 初始 RTO、3 次重试）后，同一故障以 +39.5µs 恢复。持续丢包下 86% 与 57% 代价完全相同（Go-Back-N 整体回退），57% 非最终 ACK 丢失被累计确认完全掩盖。</p>
 <div class="tiles">
 <div class="tile crit"><b>5,000µs</b><span>✗ 批次A 原生恢复：57%×2轮后静默停滞（仿真上限）</span></div>
 <div class="tile good"><b>+39.5µs</b><span>✓ 批次B 有界恢复：同一故障的目标确认增量（≈1 个 RTO）</span></div>
@@ -272,31 +311,35 @@ footer{{margin-top:28px;font-size:13px;color:{INK2}}}
 <div class="tile good"><b>0µs</b><span>✓ 57% 非最终 ACK 丢失：与基线逐字段相同</span></div>
 </div>
 
-<h2>服务完成/终止时间（µs，共同 0 起点）</h2>
+<h2 id="c-finish">服务完成/终止时间（µs，共同 0 起点）</h2>
 {chart1}
 <p class="sub" style="color:{INK2};font-size:13px">批次 A 原生停滞为 5,000µs，超出本图坐标约 10 倍，不作截断绘制，见上方状态卡。</p>
 
-<h2>目标消息源端发送量（全消息 6,144B 的倍数）</h2>
+<h2 id="c-resend">目标消息源端发送量（全消息 6,144B 的倍数）</h2>
 {chart2}
 
-<h2>目标消息逐包时间线（0–500µs，悬停查看序号与时刻）</h2>
+<h2 id="c-timeline">目标消息逐包时间线（0–500µs，悬停查看序号与时刻）</h2>
 {legend}
 {panels}
 
-<h2>全条件结果表</h2>
+<h2 id="c-table">全条件结果表</h2>
 <div class="scroll">{table}</div>
 
-<h2>背景：MoE 推理通信的丢包恢复方法谱系</h2>
+<h2 id="landscape">背景：MoE 推理通信的丢包恢复方法谱系</h2>
 <p>下表整理 MoE 推理（EP all-to-all、PD 分离 KV 传输）所依赖协议栈在面对网络丢包/故障时的主流选择，以及本实验结果对应的层次。这是背景与相关工作整理，不构成新证据；引用年份为公开论文发表场合。</p>
 <div class="scroll">{landscape_table}</div>
 <p><b>谱系对本实验的定位：</b>本仿真器的原生 ns-3 RDMA 是表中第 1+2 行的组合（假设无损 + NACK 触发的 go-back-N，无有界超时兜底）；平台的可选恢复扩展是第 2+5 行（go-back-N + Karn 式自适应 RTO + 有界重试显式失败）。实验的三个观察分别回答了三个工程取舍：整体回退的放大代价是第 3 行（选择性重传）存在的理由；静默停滞说明第 5 行（有界超时）不是可选项而是必要件；ACK 掩盖效应说明累计确认本身已提供确认路径的容错。第 7、8 行（库层与服务层）意味着即使传输层失败，系统仍有请求级重试和隔离域两道防线——本实验中组 1 的独立完成为后者提供了微观证据。</p>
 
-<h2>本周期工作与丢包处理现状</h2>
+<h2 id="cycle">本周期工作与丢包处理现状</h2>
 <p><b>本周期（2026-10-28）使用的环境能力：</b>Scale-Out 推理全链路 <code>rdma-run</code>（LLMServingSim 真实组批 → ASTRA 依赖图 → 原生 RDMA ns-3 逐包执行，含 DCQCN/PFC/ECN）；<code>rdma-build</code> 按锁定原生提交 <code>e929264</code> 现场构建（本周期修复其构建登记的 str/Path 哈希 bug，编译本身未受影响）；<code>rdma-diagnose</code> 失败诊断与全节点逐包捕获。UB 与 Scale-Out 两条入口保持隔离，本周期未触及 UB 侧。</p>
 <p><b>丢包注入现状：</b>后端 <code>FaultModel</code> 精确规则（节点/端口/消息 ID/包类型/序号/时间窗/次数，≤32 条、每条 ≤10,000 次），另有 <code>drop_once</code> 与永久断链 <code>link_failures</code>。<b>已知缺口：不支持全网随机丢包率</b>（如"随机丢 50%"），需要比率型规则与一次原生重编译；本实验的"57%"是单消息 7 包中 4 个序号的确定性规则，已在边界中声明。</p>
 <p><b>丢包恢复现状（本实验实测）：</b>① 原生模式 = NACK 触发 Go-Back-N，<b>无有界超时兜底</b>——同一序号连续两轮丢失后接收端全程只发 1 个 NACK，源端发送恰 2× 后沉默，服务空转到 5ms 上限。② 可选 <code>recovery.mode=go_back_n</code> = 累计 ACK + Karn 式 RTT 采样自适应 RTO + 指数退避 + 有界重试后显式失败（<code>recovery_retry_exhausted</code>），并有"静默区间证书"保证不误报成功——同一故障下 +39.5µs 恢复或 444.2µs 干净失败。③ 失败语义：恢复耗尽即整体停止，不伪造成功回调、不提前释放额度；独立 EP 组物理上不受影响（组 1 两轮照常完成）；单 QP 级错误隔离为文档中明确的未实现后续项。</p>
 
-<h2>判读与边界</h2>
+<h2 id="roadmap">新增能力方向（由本实验证据驱动）</h2>
+<p>以下每项都对应本实验的一个具体观察或已声明缺口，按"证据锚点"列可追溯；这是方向清单，不是已排期的承诺。</p>
+<div class="scroll">{roadmap_table}</div>
+
+<h2 id="limits">判读与边界</h2>
 <p><b>1. Go-Back-N 的代价与丢包比例脱钩。</b>消息内任意位置丢包都从首个缺口整体回退：57%（4/7 包）与 86%（6/7 包）瞬态丢包的完成时间（91,297ns）、重传字节（18,432B）完全相同。代价由"连续丢包轮次数 × RTO"决定，而非丢包比例。</p>
 <p><b>2. 原生 NACK 恢复的静默停滞。</b>批次 A 全程只观察到 1 个 NACK（t=11.1µs）；第二轮丢包后接收端无新包可触发 NACK，源端无有界超时兜底，24.1µs 后目标消息再无任何事件。这正是 communication_fragility.md 预言的"尾包/缺包后无新包触发 NACK"脆弱点的实测复现。有界超时把同一故障变成 +39.5µs 的成功恢复，或 444.2µs 的显式 <code>recovery_retry_exhausted</code>（失败时独立 EP 组两轮照常完成，16/32 请求受影响而非全局停摆）。</p>
 <p><b>3. 确认路径天然鲁棒。</b>4/7 非最终 ACK 各丢一次（ACK 只发送一次，不重传）被后续累计 ACK 完全掩盖，服务完成时间与基线逐字段相同。数据路径与确认路径的丢包敏感性完全不对称；最终 ACK 持续丢失的停滞已由 scaleout_faults 记录。</p>
@@ -341,6 +384,14 @@ footer{{margin-top:28px;font-size:13px;color:{INK2}}}
 - 丢包注入：`FaultModel` 精确规则（≤32 条、每条 ≤10,000 次）+ `drop_once` + 永久断链；已知缺口：不支持全网随机丢包率，需比率型规则与原生重编译。
 - 丢包恢复（实测）：原生 = NACK go-back-N 无超时兜底（两轮丢包后静默停滞至 5ms）；可选 `go_back_n` = Karn RTO + 有界重试显式失败（+39.5µs 恢复或 444.2µs 干净失败）；恢复耗尽即整体停止、不伪造成功，独立 EP 组不受影响，单 QP 隔离未实现。
 
+## 新增能力方向（由本实验证据驱动）
+
+| 新增方向 | 解决什么 | 依赖与工作量 | 证据锚点 |
+|---|---|---|---|
+'''
+    for row in ROADMAP:
+        md += '| ' + ' | '.join(row) + ' |\n'
+    md += '''
 边界：单消息确定性逐序号丢包，非全网随机丢包率；声明计算、合成路由；失败仅指 5ms 窗口内未完成。详见 [protocol.md](../../protocol.md) 与 [README.md](../../README.md)。
 '''
     (output / 'report.md').write_text(md)

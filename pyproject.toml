@@ -11,6 +11,10 @@ dependencies = []
 
 [project.optional-dependencies]
 frontend = ["protobuf>=4", "numpy>=1.24", "pandas>=2", "rich>=13", "PyYAML>=6"]
+simai = ["networkx>=3", "protobuf>=4"]
+
+[tool.setuptools.package-data]
+moe_ub_cosim = ["simai_source.json"]
 
 [project.scripts]
 moe-ub = "moe_ub_cosim.cli:main"

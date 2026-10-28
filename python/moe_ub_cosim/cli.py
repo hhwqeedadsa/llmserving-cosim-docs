@@ -21,6 +21,9 @@ def parser():
     resolve.add_argument('--output', type=Path, required=True, help='New resolved input directory')
     scaleout = sub.add_parser('scaleout', help='Generate fabrics, estimate capacity, or execute independent native RDMA probes/services')
     sc = scaleout.add_subparsers(dest='scaleout_command', required=True)
+    simai_prepare = sc.add_parser('simai-prepare', help='Verify pinned SimAI sources and prepare its real Vidur scheduler; no network execution')
+    simai_prepare.add_argument('--source-root',type=Path,required=True,help='Extracted aliyun/SimAI a57d765c source root')
+    simai_prepare.add_argument('--output',type=Path,required=True,help='New runtime with hash receipt and two lazy registry initializers')
     sp = sc.add_parser('prepare', help='Generate device/server/rack/spine inputs, explicit placement, paths and bandwidth cuts')
     sp.add_argument('--config', type=Path, required=True, help='Scale-Out JSON; source paths resolve from this file')
     sp.add_argument('--output', type=Path, required=True, help='New portable scenario directory; does not execute a backend')
@@ -215,7 +218,10 @@ def main(argv=None):
             value = dict(passed=True, output=str(args.output.resolve()), state=manifest['state'],
                          scenario_id=manifest['scenario_id'])
         elif args.command == 'scaleout':
-            if args.scaleout_command == 'modern-deepep-native':
+            if args.scaleout_command == 'simai-prepare':
+                from .simai_frontend import prepare
+                value=prepare(args.source_root,args.output)
+            elif args.scaleout_command == 'modern-deepep-native':
                 from .modern_native import run
                 value=run(args.topology,args.protocol,args.config,args.backend,args.output,callback_wakeups=args.callback_wakeups,host_timing=args.host_timing,callback_batches=args.callback_batches,reuse_static_validation=args.reuse_static_validation)
             elif args.scaleout_command == 'rdma-preflight':

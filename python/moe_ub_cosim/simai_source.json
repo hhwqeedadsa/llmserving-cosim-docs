@@ -1,0 +1,831 @@
+{
+  "repository": "https://github.com/aliyun/SimAI",
+  "revision": "a57d765c5478f319c5f5ab6fdc53f9cc7f461743",
+  "files": [
+    {
+      "path": "LICENSE",
+      "bytes": 11357,
+      "git_blob_sha1": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64"
+    },
+    {
+      "path": "vidur-alibabacloud/data/hf_configs/deepseek_R1_0528_config.json",
+      "bytes": 1660,
+      "git_blob_sha1": "c482e777cbacba9cb292d0fceba48ef52956583e"
+    },
+    {
+      "path": "vidur-alibabacloud/data/hf_configs/deepseek_v3_config.json",
+      "bytes": 1733,
+      "git_blob_sha1": "0ef21d653f6910799d31696da2f684ce54cd2a4c"
+    },
+    {
+      "path": "vidur-alibabacloud/data/hf_configs/qwen3-235B-A22B_FP8_config.json",
+      "bytes": 1196,
+      "git_blob_sha1": "01e9c6f72fab7db70e2965de3c9caf642ae70c58"
+    },
+    {
+      "path": "vidur-alibabacloud/data/hf_configs/qwen3-235B-A22B_config.json",
+      "bytes": 965,
+      "git_blob_sha1": "bb4e2521b04c649350a4e86dd83671e0aca3966d"
+    },
+    {
+      "path": "vidur-alibabacloud/data/hf_configs/qwen3-30B-A3B_config.json",
+      "bytes": 964,
+      "git_blob_sha1": "29951baafd234b4b7fb7fce652c73a5e39ee7bfc"
+    },
+    {
+      "path": "vidur-alibabacloud/data/hf_configs/qwen3-8B_config.json",
+      "bytes": 729,
+      "git_blob_sha1": "79c4558e132a11465984825011eb61b91f82a601"
+    },
+    {
+      "path": "vidur-alibabacloud/data/hf_configs/qwen3-next-80B-A3B_Instruct_FP8_config.json",
+      "bytes": 1154,
+      "git_blob_sha1": "b664bd1e89aa8649fdb1016281122da970b5e848"
+    },
+    {
+      "path": "vidur-alibabacloud/data/hf_configs/qwen3-next-80B-A3B_config.json",
+      "bytes": 1154,
+      "git_blob_sha1": "b664bd1e89aa8649fdb1016281122da970b5e848"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/config/__init__.py",
+      "bytes": 22,
+      "git_blob_sha1": "27c9ec622ac08b8d9d1e29fcc1cea3e8afa783b0"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/config/base_fixed_config.py",
+      "bytes": 986,
+      "git_blob_sha1": "2d469b39cb0c1a9338e16eb78293c06108e26e29"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/config/base_poly_config.py",
+      "bytes": 415,
+      "git_blob_sha1": "fbdd0e1fadac7ddb37589a8b2c299c256ce1b8a8"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/config/config.py",
+      "bytes": 30502,
+      "git_blob_sha1": "634faff197205d321939e019d088daf572f1dae7"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/config/device_sku_config.py",
+      "bytes": 1315,
+      "git_blob_sha1": "01971976fcc8e404c06abd16cfc6affd3ac24b72"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/config/flat_dataclass.py",
+      "bytes": 8202,
+      "git_blob_sha1": "73c55acbdc9b5f10382a55e28b098bb2a2c53475"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/config/model_config.py",
+      "bytes": 13291,
+      "git_blob_sha1": "c89babc19a5a88b3820c3739c160283012b1558f"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/config/node_sku_config.py",
+      "bytes": 2588,
+      "git_blob_sha1": "425746a0868e21b6b936c25598bdb904cf0c60ed"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/config/utils.py",
+      "bytes": 2682,
+      "git_blob_sha1": "8627dd34736d0de3c48ded42a8b471f00e71998c"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/config_optimizer/__init__.py",
+      "bytes": 0,
+      "git_blob_sha1": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/config_optimizer/analyzer/__init__.py",
+      "bytes": 0,
+      "git_blob_sha1": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/config_optimizer/analyzer/bottleneck_analyzer.py",
+      "bytes": 3056,
+      "git_blob_sha1": "baa52049eb73182e8cfcefcfd602e4c4335fea43"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/config_optimizer/analyzer/bottleneck_cases.py",
+      "bytes": 7505,
+      "git_blob_sha1": "ab5f72fceb5deeedbd59fa58caaa1b07dc232f72"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/config_optimizer/analyzer/constants.py",
+      "bytes": 1819,
+      "git_blob_sha1": "ff804a2a9a3fb580529ee99aa3fcbee9775149db"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/config_optimizer/analyzer/dashboard/__init__.py",
+      "bytes": 0,
+      "git_blob_sha1": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/config_optimizer/analyzer/dashboard/best_config_page.py",
+      "bytes": 7220,
+      "git_blob_sha1": "874cf2ef46f52e8563b869783e97376faf371c34"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/config_optimizer/analyzer/dashboard/config_compare_page.py",
+      "bytes": 5147,
+      "git_blob_sha1": "4a97abce525a3d928dfd37184260a744f2232bda"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/config_optimizer/analyzer/dashboard/cost_analysis_page.py",
+      "bytes": 4608,
+      "git_blob_sha1": "c54c5b7d17e0eac629280308413c8ec97269f099"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/config_optimizer/analyzer/dashboard/intro_page.py",
+      "bytes": 4704,
+      "git_blob_sha1": "01465185a06c37d8caef86d4114c7616987b55b3"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/config_optimizer/analyzer/dashboard/main.py",
+      "bytes": 6467,
+      "git_blob_sha1": "607d4626271976d85cdac11368e30a69a5e30cf0"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/config_optimizer/analyzer/dashboard/pareto_curve_page.py",
+      "bytes": 6904,
+      "git_blob_sha1": "a18cfabe91ff0bd3460b7817e3ceb02850ba8f76"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/config_optimizer/analyzer/dashboard/search_analysis_page.py",
+      "bytes": 3389,
+      "git_blob_sha1": "4cfd427b0b4578de705031807f784d55e67f0d57"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/config_optimizer/analyzer/dashboard/utils.py",
+      "bytes": 5349,
+      "git_blob_sha1": "900f8ba1c58f15be5bb6529b20dd7e79626c7d13"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/config_optimizer/analyzer/generate_pareto_curves.py",
+      "bytes": 11436,
+      "git_blob_sha1": "09a5da942fab9287a47f1e10e3c6ea33eae888fc"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/config_optimizer/analyzer/stats_extractor.py",
+      "bytes": 8217,
+      "git_blob_sha1": "4f384e6a9038610978bc14e86e2d1103c1af06cb"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/config_optimizer/analyzer/utils.py",
+      "bytes": 1109,
+      "git_blob_sha1": "a389d2f003636903f4183d94dd9bfa083a34a048"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/config_optimizer/config_explorer/__init__.py",
+      "bytes": 0,
+      "git_blob_sha1": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/config_optimizer/config_explorer/capacity_search.py",
+      "bytes": 5921,
+      "git_blob_sha1": "74c7fd517f8d233bc1fa0a86dd6ae42a0be0fbaa"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/config_optimizer/config_explorer/config/__init__.py",
+      "bytes": 306,
+      "git_blob_sha1": "fed3ddd3a14d08a215c0981be9348e6e505ec661"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/config_optimizer/config_explorer/config/config.py",
+      "bytes": 9308,
+      "git_blob_sha1": "4a073fedddafb5230667b05716b1dc759d97c8ba"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/config_optimizer/config_explorer/config_explorer.py",
+      "bytes": 2034,
+      "git_blob_sha1": "e3edf60f0c760111e7ce7092920102887f2c10a7"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/config_optimizer/config_explorer/main.py",
+      "bytes": 2403,
+      "git_blob_sha1": "7821c9a5dda72fa01325d930f223d9e9b7cff1cb"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/config_optimizer/config_explorer/ray_utils.py",
+      "bytes": 2746,
+      "git_blob_sha1": "35a5eb73c3c28ad9c5324962f0ab0dab4f7c18f7"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/entities/__init__.py",
+      "bytes": 601,
+      "git_blob_sha1": "fa1d45f25d1fd86a9c398bf944a95971d22df2f4"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/entities/base_entity.py",
+      "bytes": 415,
+      "git_blob_sha1": "0c6ed76bab43c1e151c2c8a05514a72061f2702a"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/entities/batch.py",
+      "bytes": 4223,
+      "git_blob_sha1": "712f2dd51b71acfb012a02b3d8b05aad23833e26"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/entities/batch_stage.py",
+      "bytes": 3935,
+      "git_blob_sha1": "36657f93facdb871866638f90d155e33e33d0ea3"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/entities/cluster.py",
+      "bytes": 8792,
+      "git_blob_sha1": "e3b5f59b759d051ed83376a2a9526d21f26df268"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/entities/execution_time.py",
+      "bytes": 61313,
+      "git_blob_sha1": "4104c6e8447eb8bd9826475385b0ab1416f33a18"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/entities/flow.py",
+      "bytes": 4067,
+      "git_blob_sha1": "540bf3d45ae87c5cea10e6cad15e7ac7c6f00258"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/entities/interconnect.py",
+      "bytes": 10536,
+      "git_blob_sha1": "5cea3a159c55709ac0c58907800cf7e6704f84a4"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/entities/node.py",
+      "bytes": 5039,
+      "git_blob_sha1": "651dcb6c2559359a8aa44e4f5ad5d3d07c8a5886"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/entities/processor.py",
+      "bytes": 4553,
+      "git_blob_sha1": "dce23d56aa0cd4364fa03bb6810f67d0c844fbaa"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/entities/replica.py",
+      "bytes": 16284,
+      "git_blob_sha1": "412dafb7498b27af95c3cf65bbb2ef483ccfce96"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/entities/request.py",
+      "bytes": 16748,
+      "git_blob_sha1": "46d2e2a0ffb4b2b958ee372c83695eed84b3722a"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/entities/task.py",
+      "bytes": 10170,
+      "git_blob_sha1": "3f13de4a1faaa9cc1919d89b5be673980cfee8ff"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/events/__init__.py",
+      "bytes": 157,
+      "git_blob_sha1": "e72140e699e79f54251d8db4f9ab0ae8e76a50e4"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/events/base_event.py",
+      "bytes": 1858,
+      "git_blob_sha1": "99020256e5e57e08e91f168a57af25f85760c810"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/events/batch_end_event.py",
+      "bytes": 18743,
+      "git_blob_sha1": "f60ced53ae56b902e41e4270a620b18e88830b09"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/events/batch_stage_arrival_event.py",
+      "bytes": 1791,
+      "git_blob_sha1": "e583678f9e50981125e5f331950fe292c88bdab3"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/events/batch_stage_end_event.py",
+      "bytes": 4197,
+      "git_blob_sha1": "ed3954a4171277b3c9023aa14e069e447052dd14"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/events/global_schedule_event.py",
+      "bytes": 1836,
+      "git_blob_sha1": "3cef2b1e87854ae17acdbbb0e8ffeb125db3ffcd"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/events/replica_schedule_event.py",
+      "bytes": 2207,
+      "git_blob_sha1": "bd0ed514daa99fc9b8f1dc06866da554eb49895c"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/events/replica_stage_schedule_event.py",
+      "bytes": 2713,
+      "git_blob_sha1": "724eb78df1b4c2e88f4c319a12c39f21a9de8548"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/events/request_arrival_event.py",
+      "bytes": 1423,
+      "git_blob_sha1": "71a12d99526e147158a2d60f00031cd32b87be33"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/execution_time_predictor/SimAIWorkload.py",
+      "bytes": 2778,
+      "git_blob_sha1": "4cbf98e68efb316fb89aff326c6c469a7bdd8731"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/execution_time_predictor/__init__.py",
+      "bytes": 298,
+      "git_blob_sha1": "14dc4123639e5ed8781844cb1891d419dbb74d2c"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/execution_time_predictor/base_execution_time_predictor.py",
+      "bytes": 15694,
+      "git_blob_sha1": "27bf45f4ff1f142811af2d3a333158ee642cec0d"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/execution_time_predictor/communication_time_predictor.py",
+      "bytes": 16032,
+      "git_blob_sha1": "160148bd3f83f76a626434b14e0560b3585744b4"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/execution_time_predictor/execution_time_predictor_registry.py",
+      "bytes": 830,
+      "git_blob_sha1": "a48c11057acec13d875deb061b91b0438171ee0a"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/execution_time_predictor/linear_regression_execution_time_predictor.py",
+      "bytes": 1517,
+      "git_blob_sha1": "8dd32b76bcd4f190bc820dd0274f1a71c58e997a"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/execution_time_predictor/random_forrest_execution_time_predictor.py",
+      "bytes": 1430,
+      "git_blob_sha1": "e757af40169a1d58c22e8a78dc763c2d4c59ae65"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/execution_time_predictor/sklearn_execution_time_predictor.py",
+      "bytes": 56900,
+      "git_blob_sha1": "d54880bdfceb331c1f5417400cb7b9dfb5657a68"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/logger.py",
+      "bytes": 1619,
+      "git_blob_sha1": "8e981b889fbbb9fc975545245d341e948631f803"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/main.py",
+      "bytes": 353,
+      "git_blob_sha1": "18406fbb813f877b3a795f5ae7b67748a32e7d09"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/metrics/__init__.py",
+      "bytes": 79,
+      "git_blob_sha1": "f4bf1acc10523c2bb1fd4f35c0a2d37f2060bc78"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/metrics/cdf_sketch.py",
+      "bytes": 5343,
+      "git_blob_sha1": "327de59cba5d053d97db981100de0bb593d29bed"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/metrics/constants.py",
+      "bytes": 4173,
+      "git_blob_sha1": "5a160a00223787479311cd81046b4a7c228abc19"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/metrics/data_series.py",
+      "bytes": 13453,
+      "git_blob_sha1": "3e5648e240073c3fe2cf99cf339e242391fb6834"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/metrics/metrics_store.py",
+      "bytes": 34539,
+      "git_blob_sha1": "96e7cf67b98e3cc748a5f3e3feacf4fed00baa3b"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/metrics/series_average_meter.py",
+      "bytes": 3080,
+      "git_blob_sha1": "8f6679e1f44095cad07b7f4e5d6d7d74fd4e8aad"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/profiling/__init__.py",
+      "bytes": 0,
+      "git_blob_sha1": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/profiling/attention/__init__.py",
+      "bytes": 0,
+      "git_blob_sha1": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/profiling/attention/attention_input.py",
+      "bytes": 1300,
+      "git_blob_sha1": "3190023340fe51e261798df980bda8dd62bfe778"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/profiling/attention/attention_wrapper.py",
+      "bytes": 5654,
+      "git_blob_sha1": "b9914207cff98afb7dfb8f8e42304587e90f4a53"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/profiling/attention/main.py",
+      "bytes": 7008,
+      "git_blob_sha1": "336af3a0ce93e95f76424a74ce2a3f55c8828b47"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/profiling/attention/sequence_proxy.py",
+      "bytes": 864,
+      "git_blob_sha1": "bbb5ebc6377f11a6c0b84c18e1a9a07a712314bf"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/profiling/collectives/__init__.py",
+      "bytes": 0,
+      "git_blob_sha1": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/profiling/collectives/benchmark_runner.py",
+      "bytes": 4660,
+      "git_blob_sha1": "354f3a04a4a5c845fee5ec4d658f4b3b449a56ac"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/profiling/collectives/collectives_impl.py",
+      "bytes": 5340,
+      "git_blob_sha1": "477188bf3a41d93897c5bc7e98ca76a0db0083bc"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/profiling/collectives/collectives_input.py",
+      "bytes": 1289,
+      "git_blob_sha1": "3ee03499ef023e0f96877d8c0a4d0fd73ba16122"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/profiling/collectives/collectives_wrapper.py",
+      "bytes": 2127,
+      "git_blob_sha1": "6227ee7a7a1fa1135571e9b1a8cfafc06af0dfc0"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/profiling/collectives/main.py",
+      "bytes": 3661,
+      "git_blob_sha1": "b82beb6c6216be3868cb42c1de678ab2a14f1c19"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/profiling/common/__init__.py",
+      "bytes": 0,
+      "git_blob_sha1": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/profiling/common/cuda_timer.py",
+      "bytes": 4012,
+      "git_blob_sha1": "93c144a25a21a43638a139c0a8c551cfeae9e7b1"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/profiling/common/model_config.py",
+      "bytes": 2628,
+      "git_blob_sha1": "7ee132bbd9aa1c0e543ff33f8c6b3c7a410ec8fe"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/profiling/common/timer_stats_store.py",
+      "bytes": 1161,
+      "git_blob_sha1": "cba1156c010a3d4a8d53f6f27900740dbf2685aa"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/profiling/cpu_overhead/__init__.py",
+      "bytes": 0,
+      "git_blob_sha1": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/profiling/cpu_overhead/benchmark_runner.py",
+      "bytes": 4937,
+      "git_blob_sha1": "de6ad85a85c297ed5cbe15a5dee91d320f4a7ddc"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/profiling/cpu_overhead/main.py",
+      "bytes": 3908,
+      "git_blob_sha1": "859108f8ca16c6a547d399b9902612831416cdfe"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/profiling/mlp/__init__.py",
+      "bytes": 0,
+      "git_blob_sha1": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/profiling/mlp/main.py",
+      "bytes": 4598,
+      "git_blob_sha1": "3ff52767c265c67e16679d73899c638a16866a2d"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/profiling/mlp/mlp_impl.py",
+      "bytes": 8175,
+      "git_blob_sha1": "a4dbd1e0ec7601c559c1bf701dcbee9226120f48"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/profiling/mlp/mlp_wrapper.py",
+      "bytes": 3938,
+      "git_blob_sha1": "3a658646ef0ad49e0f5e2b2e8069f975c0550ead"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/profiling/utils/__init__.py",
+      "bytes": 7762,
+      "git_blob_sha1": "aeb9b1830d0f92a3a5fd377d882d3f8bc68eb5db"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/profiling/utils/record_function_tracer.py",
+      "bytes": 2884,
+      "git_blob_sha1": "0c158bea0c27b5f4f80e67eeb6cda0c3f72132e6"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/profiling/utils/singleton.py",
+      "bytes": 361,
+      "git_blob_sha1": "a8c07f802df5e614b4d74b9be27032f0a51ee75c"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/request_generator/__init__.py",
+      "bytes": 88,
+      "git_blob_sha1": "8c043bbdb55ecc8f47c71ca5a5d25666eb2f5d02"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/request_generator/base_request_generator.py",
+      "bytes": 479,
+      "git_blob_sha1": "912e7a6e867fbea126a5a2aba852431a55614bf1"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/request_generator/base_request_interval_generator.py",
+      "bytes": 324,
+      "git_blob_sha1": "d0370e81393632eef40c725cdcb00f3cac16f344"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/request_generator/base_request_length_generator.py",
+      "bytes": 349,
+      "git_blob_sha1": "7162ffc8fa4b3a0e176aebe2b49ac1148b37b4f1"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/request_generator/fixed_request_length_generator.py",
+      "bytes": 358,
+      "git_blob_sha1": "05eb11e9f3f9fdd9dce8b623f7a102c50eb6e90b"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/request_generator/gamma_request_interval_generator.py",
+      "bytes": 648,
+      "git_blob_sha1": "f85ca1303ea38053d1df9e4f0b20b04c8700f51a"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/request_generator/poisson_request_interval_generator.py",
+      "bytes": 698,
+      "git_blob_sha1": "53a067ce8f95930da48b4c3fabb153ad3a53c1cb"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/request_generator/request_generator_registry.py",
+      "bytes": 561,
+      "git_blob_sha1": "44c920f1449e12e26bedbfd4c3456c9847d9efac"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/request_generator/request_interval_generator_registry.py",
+      "bytes": 1075,
+      "git_blob_sha1": "4296161014e038d24796eb28792a7aab30dabca1"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/request_generator/request_length_generator_registry.py",
+      "bytes": 1023,
+      "git_blob_sha1": "12775cc5acd29eec3a49a5e2879905f65d89d3bd"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/request_generator/static_request_interval_generator.py",
+      "bytes": 246,
+      "git_blob_sha1": "57eae727c8fc3c2b645e2889a243b1dab35f4796"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/request_generator/synthetic_request_generator.py",
+      "bytes": 3740,
+      "git_blob_sha1": "cff6bd71b32a401d8e3f822c20ac3d00135c8078"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/request_generator/trace_replay_request_generator.py",
+      "bytes": 3206,
+      "git_blob_sha1": "b7bcc9b2ad30e94206a364e999bf4cd676bbb3df"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/request_generator/trace_request_interval_generator.py",
+      "bytes": 1973,
+      "git_blob_sha1": "f5ad0ff33f30453b361ee5ceefb2aeb68abc3699"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/request_generator/trace_request_length_generator.py",
+      "bytes": 3546,
+      "git_blob_sha1": "e21c6e9364ed4094d08042134e4b9f76888f7173"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/request_generator/uniform_request_length_generator.py",
+      "bytes": 672,
+      "git_blob_sha1": "4f1e6c6baf8506898a58adb188bfd583e816d365"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/request_generator/zipf_request_length_generator.py",
+      "bytes": 892,
+      "git_blob_sha1": "fc08ccdec3fad9d532de754f05750891b5ef2e5f"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/scheduler/__init__.py",
+      "bytes": 161,
+      "git_blob_sha1": "6903fc275638c4c12a02d4d4b577040d691d6d69"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/scheduler/global_scheduler/__init__.py",
+      "bytes": 249,
+      "git_blob_sha1": "91c0f24ea51fe74d56bf01eeb7abb805c4333ef7"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/scheduler/global_scheduler/base_global_scheduler.py",
+      "bytes": 3219,
+      "git_blob_sha1": "25c9935a08219392ae24bf1dcf1eef2e43aa8236"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/scheduler/global_scheduler/global_scheduler_registry.py",
+      "bytes": 1043,
+      "git_blob_sha1": "bf34b7c341d779eb367ec73618db257b932c9746"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/scheduler/global_scheduler/lor_global_scheduler.py",
+      "bytes": 3863,
+      "git_blob_sha1": "92ce3eefcaf4eaffa4c15cac3948099a32613e2c"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/scheduler/global_scheduler/random_global_scheduler.py",
+      "bytes": 588,
+      "git_blob_sha1": "6d3bfd9ceccebf11d933a0086993ae9f2b356824"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/scheduler/global_scheduler/round_robin_global_scheduler.py",
+      "bytes": 738,
+      "git_blob_sha1": "0933b31b37c7cf01b806d41e3d4288c3f1a11444"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/scheduler/global_scheduler/splitwise_global_scheduler.py",
+      "bytes": 24302,
+      "git_blob_sha1": "12092564c9d86f60803b13be6f046fea2510c02b"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/scheduler/replica_scheduler/__init__.py",
+      "bytes": 0,
+      "git_blob_sha1": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/scheduler/replica_scheduler/base_replica_scheduler.py",
+      "bytes": 4903,
+      "git_blob_sha1": "9262446777324fb01a066810099c0876af376450"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/scheduler/replica_scheduler/faster_transformer_replica_scheduler.py",
+      "bytes": 2098,
+      "git_blob_sha1": "110ebcc4ec721a7526c6067fe94ac524aa7cc181"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/scheduler/replica_scheduler/lightllm_replica_scheduler.py",
+      "bytes": 5059,
+      "git_blob_sha1": "34263bf286f657b46a82c528779305918e646730"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/scheduler/replica_scheduler/orca_replica_scheduler.py",
+      "bytes": 1692,
+      "git_blob_sha1": "20352bcb84459cc2cd7d57389917499192335a31"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/scheduler/replica_scheduler/replica_scheduler_registry.py",
+      "bytes": 1372,
+      "git_blob_sha1": "bf2bf1ec2cb9e8a35611f04a29fab041035b3950"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/scheduler/replica_scheduler/sarathi_replica_scheduler.py",
+      "bytes": 6457,
+      "git_blob_sha1": "c033a188ae8939a6866c0056f6b62ed872adbe50"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/scheduler/replica_scheduler/splitwise_replica_scheduler.py",
+      "bytes": 25790,
+      "git_blob_sha1": "5219f68a6dd1bbd13663caf834f2faeeaabf7d40"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/scheduler/replica_scheduler/vllm_replica_scheduler.py",
+      "bytes": 6238,
+      "git_blob_sha1": "cd06ae7e22fe559bb0d7cb22cfb965841a24453a"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/scheduler/replica_stage_scheduler/__init__.py",
+      "bytes": 141,
+      "git_blob_sha1": "8154889216e704c047a10f62f1e68201dc0d076d"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/scheduler/replica_stage_scheduler/replica_stage_schduler.py",
+      "bytes": 2262,
+      "git_blob_sha1": "4bcafd6b42b18e671f3a88abf20d488bb279b208"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/scheduler/utils/__init__.py",
+      "bytes": 0,
+      "git_blob_sha1": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/scheduler/utils/memory_planner.py",
+      "bytes": 18813,
+      "git_blob_sha1": "e8cd5b7302d2344092b11552965c357a8923b098"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/simulator.py",
+      "bytes": 6495,
+      "git_blob_sha1": "ed3bd963d893eea785e06c5c35a9ff98aa20b821"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/types/__init__.py",
+      "bytes": 1038,
+      "git_blob_sha1": "da67d95287f9bf134962636cdc2f5dbef6948d49"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/types/activation_type.py",
+      "bytes": 145,
+      "git_blob_sha1": "cdbcb47f57efe3e81a76fc3c3e15dd99c9e61446"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/types/base_int_enum.py",
+      "bytes": 195,
+      "git_blob_sha1": "5cd07ac51bb36fe80f21e42c8a8854e870181fb3"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/types/device_sku_type.py",
+      "bytes": 251,
+      "git_blob_sha1": "a7c8446fa8e63430b7f7e931a0be082c09d2992a"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/types/event_type.py",
+      "bytes": 374,
+      "git_blob_sha1": "c04bc219e8a2d797b160471aa0f185bcd1dd6ab6"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/types/execution_time_predictor_type.py",
+      "bytes": 162,
+      "git_blob_sha1": "761418e334175bc1b6bed5d3637ebcdbc236e830"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/types/global_scheduler_type.py",
+      "bytes": 163,
+      "git_blob_sha1": "e3845dc9712acab0bd0811e6bd051c674585c948"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/types/node_sku_type.py",
+      "bytes": 237,
+      "git_blob_sha1": "8e86682b9dfc195f4d16f1d019531d939c6732ba"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/types/norm_type.py",
+      "bytes": 117,
+      "git_blob_sha1": "b5a783d55ddd4b498b0ee8f2e48468e77771ad59"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/types/replica_scheduler_type.py",
+      "bytes": 197,
+      "git_blob_sha1": "ca69c937bc32ae7ea0ce8238361690e4e5c21596"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/types/request_generator_type.py",
+      "bytes": 132,
+      "git_blob_sha1": "4d134edcebf12bcdd63577acdfc0f45d6bfc0b8a"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/types/request_interval_generator_type.py",
+      "bytes": 160,
+      "git_blob_sha1": "7931dedbc322c56005fa68a7ce5fa2d25b206740"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/types/request_length_generator_type.py",
+      "bytes": 156,
+      "git_blob_sha1": "d74b694a7b0d4d6f7c7f8cbf79d96db27cf3df66"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/utils/__init__.py",
+      "bytes": 0,
+      "git_blob_sha1": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/utils/base_registry.py",
+      "bytes": 2141,
+      "git_blob_sha1": "f54bb2a42343d803a5fadd7aa010ecb5b1a90b72"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/utils/event_queue.py",
+      "bytes": 366,
+      "git_blob_sha1": "e0e918963459be08396ba63a7bfc8974fc490de1"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/utils/mfu_calculator.py",
+      "bytes": 7038,
+      "git_blob_sha1": "81c613da7a8173087eb3aff90ffcf2e6a9f86cef"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/utils/param_counter.py",
+      "bytes": 34206,
+      "git_blob_sha1": "af678868b4f092a1cf0e150995cf79ecf815ec24"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/utils/random.py",
+      "bytes": 162,
+      "git_blob_sha1": "c9f14fcddff33e081f7e36568d779f8c5aced2bf"
+    },
+    {
+      "path": "vidur-alibabacloud/vidur/utils/zipf_generator.py",
+      "bytes": 1357,
+      "git_blob_sha1": "79a24a5e7e7576e152db62aa59fa443b6966f9a5"
+    }
+  ]
+}

@@ -1,0 +1,74 @@
+{
+  "passed": true,
+  "command": [
+    "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+    "-m",
+    "moe_ub_cosim",
+    "scaleout",
+    "simai-prepare",
+    "--source-root",
+    "/home/lry/moe-ub-cosim/runs/simai_scaleout_20261028/source/aliyun-SimAI-a57d765",
+    "--output",
+    "/home/lry/moe-ub-cosim/runs/simai_scaleout_20261028/scheduler-check/runtime"
+  ],
+  "exit_code": 0,
+  "simai_revision": "a57d765c5478f319c5f5ab6fdc53f9cc7f461743",
+  "source_files": 165,
+  "patched_initializers": 2,
+  "actual_class_files": {
+    "Request": {
+      "path": "vidur/entities/request.py",
+      "sha256": "9836343b2b7be0adffdbd8870c5f84d1d758ae35cdd784013e1dbf86efe86a3c"
+    },
+    "Batch": {
+      "path": "vidur/entities/batch.py",
+      "sha256": "5efe5ce47d7e52f4e940d5a5d402427f03e77feac7a1459cf8dbbfd6c174b629"
+    },
+    "Replica": {
+      "path": "vidur/entities/replica.py",
+      "sha256": "8522beb3907190e2066d277fa59d6b13280929868df51b5c309cb183d4779276"
+    },
+    "Cluster": {
+      "path": "vidur/entities/cluster.py",
+      "sha256": "eb9ffb0107d573c964399cee24826ea7d087b2d8de0deb14643c4fc12099726e"
+    },
+    "OrcaReplicaScheduler": {
+      "path": "vidur/scheduler/replica_scheduler/orca_replica_scheduler.py",
+      "sha256": "a02a6a66308f3c1c8da6181148d6ec182edf570dfe37077727e525ee4c2da87a"
+    }
+  },
+  "clusters": 1,
+  "ep": 64,
+  "requests": 3,
+  "batches": [
+    [
+      0,
+      1
+    ],
+    [
+      0,
+      1
+    ],
+    [
+      2
+    ],
+    [
+      2
+    ]
+  ],
+  "completed_requests": 3,
+  "allocated_blocks_final": 0,
+  "refused": [
+    {
+      "case": "changed-method",
+      "error": "Scale-Out topology: SimAI original functional source differs vidur/scheduler/replica_scheduler/orca_replica_scheduler.py"
+    },
+    {
+      "case": "extra-module",
+      "error": "Scale-Out topology: unexpected executable file in SimAI runtime"
+    }
+  ],
+  "network_executed": false,
+  "ready_kv_initial_state_declared": true,
+  "scope": "actual SimAI upstream CPU scheduling lifecycle, not native network integration"
+}

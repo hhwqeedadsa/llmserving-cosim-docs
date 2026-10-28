@@ -1,5 +1,13 @@
 # 当前任务与交接
 
+## 2026-10-28 用户新增：SimAI前端、原生ns-3与300卡级真实路由执行
+
+状态：`in_progress`。本次目标要求实际SimAI前端参与、真实专家选择、300卡级共享原生ns-3执行和本次运行的collective累计有效到达图，不能复用前轮四卡曲线当作规模完成证据。先核对固定SimAI `a57d765c`的Vidur/AICB接口与依赖，再建立可验证的前端适配；不把只解析SimAI格式称为SimAI前端执行。规模采用320GPU，专家数256约束与有限15个真实请求保持显式，不复制请求补规模、不冒充真实到达时间或硬件校准。仅本地修改/提交，不push，保留无关heavy_loss改动。
+
+当前先做来源与接口准备：源码归档固定版本，单次响应最多64MiB、HTTP调用60秒，累计源码/准备产物512MiB与受监控300秒，单命令60秒/RSS1GiB/地址2GiB，卷预留8GiB。原件`runs/simai_scaleout_20261028/`。此准备范围不执行目标网络；接口/依赖明确后另登记平台验收和小到大网络预算，不修改旧关闭实验的额度或结果，不使用UB混链。
+
+来源与CPU调度子项`completed`：完整固定归档26,398,121B，SHA256 `79f5b5066428136533c31f3b67172706904e4ae3998608b6013f084d648e3f68`；公开`scaleout simai-prepare`核165份Git blob并产生可复核runtime，只改两处延迟导入。真实上游Cluster/Orca/Batch/Request三请求、四批次完成，EP64属性由原生Cluster建立，终态KV块为0；两个篡改拒绝及重复加载通过。直接未适配导入缺sklearn；改为延迟非所需注册器，没有假模块或依赖安装。首次直接Replica缺Cluster生成的prefill_world_size，已改用原生Cluster生命周期，未绕过断言。[验收](../../fixtures/simai_frontend/README.md)、[公开准备说明](../../examples/simai_frontend/README.md)、[后续联合执行范围](simai_scaleout_spec.md)。整体目标仍`in_progress`，未执行新网络或替换旧四卡曲线。
+
 ## 2026-10-28 用户新增：百B模型、300/500卡结构与图片
 
 状态：本次用户新增交付`completed`，总体研究目标继续`in_progress`。固定SimAI `a57d765c`与AICB `23eec3c4`核实百B模型/预制workload，保留14份来源及许可hash。转换Qwen3-235B BF16形状（235,093,634,560参数）为320/512卡EP64的5/8个跨Pod副本，每rank每层2专家；声明权重21.51GiB/rank。300/500卡等大EP组最多EP4，BF16权重120.65GiB/rank超80GiB，明确只交付其拓扑。完整R1的MLA/Dense/共享专家仍非当前Scale-Out完整模型支持。

@@ -1,5 +1,7 @@
 # 联合后端接口与执行规则
 
+`rc_concurrent_probe.cc` 是独立多 QP 驱动，复用同一 `Fabric` 的物理网络，各连接独立保存请求/目标序号、重放、进度和定时器，按 GPU 共享注册区。反馈按目标 QPN 路由到本连接，丢包规则同时匹配连接，不能仅凭相同 PSN 命中其他 QP。`rc-fabric-build` 只编译此单元并链接版本一致的预编译库，不与单 QP 驱动混链；使用边界见[多连接参考](../examples/rc_concurrent/README.md)。
+
 独立原生`Fabric`支持协议可选`switch_counter_storage=legacy_dense|port_dense`。在物理接口安装后、MMU配置和流量前一次性分配`SwitchNode`计数矩阵；后者只改变入口×出口×优先级的精确存储维数，不修改`SwitchMmu`及事件。缺省结果不新增字段；显式元数据、非零计数和独立资源范围见[存储示例](../examples/scaleout_counter_storage/README.md)。原生类布局已变化，所有消费者须按锁文件重编，不能混用旧库。
 
 `rc_packet_probe.cc`为独立单QP操作包入口，`rc_wire.hh`生成/解码BTH及WRITE、fetch-add、ACK扩展。它独占一个`Fabric`，在实际目标收包时修改注册区，实际反馈到达时完成源操作；Atomic ACK不另起可靠流。请求通过原生NIC调度容器按实际包长发送，容器计数是包票据，独立于RC PSN；当前WQE最后一个请求实际发送后启动固定RTO。原生`CustomHeader`只在本入口显式打开只读RC解析，退出复位；旧入口默认SeqTs语义保持。ICRC仅占位、固定速率、每次一项在途WQE，详见[操作包边界](../examples/rc_packet_probe/README.md)。

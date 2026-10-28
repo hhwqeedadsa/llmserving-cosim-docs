@@ -1,0 +1,125 @@
+{
+  "CPU_driver_builds": 1,
+  "GPU": 0,
+  "HTTP": 0,
+  "artifact_budget_bytes": 536870912,
+  "artifact_reserve_bytes": 2097152,
+  "artifact_total_with_reserve": 52678656,
+  "artifact_usage_before_closeout": {
+    "allocated_bytes": 50581504,
+    "apparent_bytes": 49708378
+  },
+  "checkpoints": {
+    "archive": "runs/rc_concurrent_fabric_20261027/checkpoint.tar.gz",
+    "compressed_bytes": 5837669,
+    "content_bytes": 22262847,
+    "full_build_offline_reproduction_claimed": false,
+    "members": 284,
+    "prebuilt_driver_and_runtime_included": true,
+    "sha256": "fcaf322e0be0a235578d3b2959c7a44dbaa0221044111ebe487555828cf1dc9a"
+  },
+  "closeout_reserve_scope": "includes final receipts and text-only checks; no further runtime or compilation",
+  "compile_option_checks": 10,
+  "conservative_monitored_seconds_including_nested": 30.299905926003703,
+  "dependency_changes": 0,
+  "fixed_dependencies_passed": 13,
+  "input_tests": 12,
+  "management_seconds_reserve": 10,
+  "monitors": [
+    {
+      "path": "archive-monitor/probe.json",
+      "wall_seconds": 3.6007102680014214
+    },
+    {
+      "path": "build/compile/probe.json",
+      "wall_seconds": 10.755604354999377
+    },
+    {
+      "path": "build/link/probe.json",
+      "wall_seconds": 0.21741595199273434
+    },
+    {
+      "path": "build-monitor/probe.json",
+      "wall_seconds": 11.482121898996411
+    },
+    {
+      "path": "combined-final-verify-monitor/probe.json",
+      "wall_seconds": 0.22328956599812955
+    },
+    {
+      "path": "combined-verify-monitor/probe.json",
+      "wall_seconds": 0.22491992100549396
+    },
+    {
+      "path": "deps-monitor/probe.json",
+      "wall_seconds": 0.43460886098910123
+    },
+    {
+      "path": "drop_atomic_ack/execution/probe.json",
+      "wall_seconds": 0.11380063000251539
+    },
+    {
+      "path": "drop_atomic_ack-monitor/probe.json",
+      "wall_seconds": 0.32629994698800147
+    },
+    {
+      "path": "drop_atomic_ack-verify-monitor/probe.json",
+      "wall_seconds": 0.1195923409977695
+    },
+    {
+      "path": "drop_write_middle/execution/probe.json",
+      "wall_seconds": 0.11403478799911682
+    },
+    {
+      "path": "drop_write_middle-monitor/probe.json",
+      "wall_seconds": 0.32513817900326103
+    },
+    {
+      "path": "drop_write_middle-verify-monitor/probe.json",
+      "wall_seconds": 0.11829967000812758
+    },
+    {
+      "path": "healthy/execution/probe.json",
+      "wall_seconds": 0.11347057999228127
+    },
+    {
+      "path": "healthy-monitor/probe.json",
+      "wall_seconds": 0.32134954299544916
+    },
+    {
+      "path": "healthy-verify-monitor/probe.json",
+      "wall_seconds": 0.11551038100151345
+    },
+    {
+      "path": "inputs-monitor/probe.json",
+      "wall_seconds": 0.1120207830099389
+    },
+    {
+      "path": "recovery-monitor/probe.json",
+      "wall_seconds": 1.2227127720107092
+    },
+    {
+      "path": "regression-monitor/probe.json",
+      "wall_seconds": 0.12304599001072347
+    },
+    {
+      "path": "report-monitor/probe.json",
+      "wall_seconds": 0.12337971800297964
+    },
+    {
+      "path": "units-monitor/probe.json",
+      "wall_seconds": 0.11257978199864738
+    }
+  ],
+  "network_runs": 3,
+  "ns3_builds": 0,
+  "passed": true,
+  "push": false,
+  "recovery_passed": true,
+  "reference_input_regressions": 14,
+  "scope": "concurrent RC functional baseline; not a research innovation or performance benefit",
+  "state": "completed_platform_increment_overall_research_in_progress",
+  "tamper_classes_rejected": 7,
+  "total_seconds_with_reserve": 40.2999059260037,
+  "wall_budget_seconds": 1200
+}

@@ -101,6 +101,12 @@ def parser():
     rc = sc.add_parser('rdma-rc-probe', help='One-QP WRITE/fetch-add packets and Atomic ACK on native fabric; fixed rate, zero ICRC placeholder, no MoE/NIC calibration')
     for name in ('topology','protocol','config','backend','output'):
         rc.add_argument('--'+name,type=Path,required=True)
+    rcb = sc.add_parser('rc-fabric-build', help='Compile only the concurrent RC CPU driver against an unchanged pinned native runtime; no ns-3 rebuild')
+    for name in ('runtime','identity','output'):
+        rcb.add_argument('--'+name,type=Path,required=True)
+    rcf = sc.add_parser('rc-fabric-probe', help='Concurrent RC QPs on one shared native network and target memory; one WQE per QP, fixed rate, zero ICRC placeholder')
+    for name in ('topology','protocol','config','backend','output'):
+        rcf.add_argument('--'+name,type=Path,required=True)
     session = sc.add_parser('rdma-transaction-session', help='Submit v4/v5 work after actual native callbacks; optional NIC registrations/local views, v5 sparse/prefix, same-server peer copy and explicit self-peer service; not modern GIN/GPU timing')
     for name in ('topology', 'protocol', 'config', 'backend', 'output'):
         session.add_argument('--'+name, type=Path, required=True)
@@ -215,6 +221,12 @@ def main(argv=None):
                 value = probe(args.topology, args.protocol, args.config, args.backend, args.output)
             elif args.scaleout_command == 'rdma-rc-probe':
                 from .rc_packet import probe
+                value = probe(args.topology,args.protocol,args.config,args.backend,args.output)
+            elif args.scaleout_command == 'rc-fabric-build':
+                from .rc_concurrent import build
+                value = build(args.runtime,args.identity,args.output)
+            elif args.scaleout_command == 'rc-fabric-probe':
+                from .rc_concurrent import probe
                 value = probe(args.topology,args.protocol,args.config,args.backend,args.output)
             elif args.scaleout_command == 'rdma-transaction-session':
                 from .transaction_session import run

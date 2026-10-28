@@ -13,7 +13,11 @@
 
 ## 当前范围和预算
 
-当前平台增量进行中：[多连接RC共享网络参考](rc_concurrent_fabric_spec.md)，起点`f00cea6`。上一GIN筛选为progress；下一缺项是同一网络中独立QP序号、共享NIC/目标内存、真实Atomic ACK和连接级恢复。仅新增CPU驱动并只读复用已hash的当前固定native runtime，不重建ns-3、不改旧入口或依赖；2次有界CPU构建/3个新功能网络，累计1200受监控秒/512MiB，不重开旧条件。已有重传/多连接与构建复用不算创新，两项主创新及整体目标仍进行中。
+当前平台增量`completed`：[多连接RC共享网络参考](rc_concurrent_fabric_spec.md)、[公开示例](../../examples/rc_concurrent/README.md)及[核验网页](../../fixtures/rc_concurrent_fabric/report.html)，起点`f00cea6`、规范`0ae2957`。同一Fabric/时钟/物理队列中，四QP独立保存序号、重放与定时器，两QP共用源NIC、三QP修改共享目标内存，完成由本连接实际反馈决定。仅一次CPU驱动编译，只读复用固定原生`e929264`八库，零ns-3构建/依赖修改/HTTP/GPU/push，旧入口不改变。
+
+三个事前网络各执行一次，正常排空24.395us，丢QP0中间WRITE/丢QP1 Atomic ACK分别124.373/124.325us；后两组只在指定QP超时一次，其余三QP先完成。共享计数41→47、反向7→11，原子各只应用一次，旧值按实际收包顺序核对；约100us增加由声明RTO主导，不是收益。独立逐包/共享内存/路径/队列核验、7类篡改拒绝、12新增输入/14参考回归/10编译选项检查及13固定依赖通过。
+
+284成员包逐hash恢复，复制源码/预编译runtime至新根，在空cwd重生成12输入、核验JSON及HTML逐字节一致，`ldd`证明加载搬迁后的八库；恢复零网络/编译。包SHA256 `fcaf322e0be0a235578d3b2959c7a44dbaa0221044111ebe487555828cf1dc9a`，原件`runs/rc_concurrent_fabric_20261027/`；见[恢复](../../fixtures/rc_concurrent_fabric/recovery.json)及[关闭](../../fixtures/rc_concurrent_fabric/closeout.json)。保守含嵌套监控及管理预留40.300秒、约50.24MiB，保持1200秒/512MiB及单项上限，额度关闭。固定速率/每QP一项在途WQE/ICRC占位，人工功能负载未执行LLMServingSim，不称完整现代MoE、千卡或硬件校准。此轮只补强参考，整体仍为progress，两项主创新的决策价值及宿主净收益仍`in_progress`；后续须另定同目标协议的强基线对照，不自动重开已关闭条件。
 
 当前筛选已关闭：[GIN完成等待范围](../../experiments/gin_flush_scope/protocol.md)、[中文报告与网页](../../experiments/gin_flush_scope/README.md)，起点`1ac7af3`、协议`4e30e85`、定位更正`42967a6`、实现`4c3d381`。7份固定来源/18锚点、六个EP/stride配置及六个有限偏序完成独立核验，四类篡改拒绝、13依赖通过。共享context的完成前缀可包括其他通道；紧凑stride8下EP64/128/256每lane最多扫描一次，不存在本轮检查的同lane前后peer串行采样链。声明stride1下可有，但host正常RAIL或条件CUSTOM_STRIDE及实际gin_min_stride必须核实，不当默认部署。正确动态资源DAG能表达该关系，flushAsync是已有API；没有新的机制或性能收益。
 

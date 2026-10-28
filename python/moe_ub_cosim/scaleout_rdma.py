@@ -201,6 +201,8 @@ def build(directory, *, cmake='cmake', ninja='ninja', protobuf_prefix=None, resu
     result = dict(passed=True, **targets, native_commit=native_commit,
                   compiler_options=provenance['compiler_options'],
                   linked_ns3_libraries=native_libraries, state='native_rdma_probes_and_service_built_not_executed')
+    result['library_hashes']={Path(path).name:digest(path) for path in native_libraries}
+    result['fabric_archive_sha256']=digest(directory/'output/lib/libmoe-rdma-fabric.a')
     save(directory / 'backend.json', result)
     return result
 

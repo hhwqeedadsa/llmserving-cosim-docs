@@ -1,5 +1,7 @@
 # 用户指南
 
+检查多连接竞争及共享目标内存，可用独立 `scaleout rc-fabric-build/rc-fabric-probe`，只编译 CPU 驱动并复用固定原生库。每连接独立保存序号、重放和实际反馈完成状态。四连接及两种丢包的操作、配置与边界见[多连接小例](../examples/rc_concurrent/README.md)，本例不执行 MoE。
+
 检查WRITE与原子旧值是否由真实操作包推进，可用独立的`scaleout rdma-rc-probe`，构建清单入口为`rc_probe`。它只有一个已建立QP、每次一项在途WQE，使用固定速率和ICRC占位，不执行MoE。配置、四个丢包小例及资源限制见[操作包示例](../examples/rc_packet_probe/README.md)。
 
 事务输入 transactions/5 可显式启用同服务器 GPU 之间的 peer copy。实际源窗口字节通过共享机内 crossbar，在交付回调时提交目标；与机外持久 RDMA 共用同一仿真时钟。配置、公开 probe/session 命令及边界见[机内转发小例](../examples/scaleout_peer_copy/README.md)。

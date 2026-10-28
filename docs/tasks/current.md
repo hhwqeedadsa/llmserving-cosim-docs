@@ -2,15 +2,15 @@
 
 ## 2026-10-28 新基线、严重丢包、场景摘要与用户仓库发布
 
-状态：`in_progress`。固定上一轮`0f53b15`为SimAI真实调度+原生ns-3基线；本轮自动保存每次SimAI实验的模拟GPU、卡/服务器数、EP组、专家/rank、实际请求/batch、链路分层速率及校准边界。新增只作用于实际接收数据包的周期性突发丢包，准确记录窗口内分母/丢包数与全任务比例，区分拥塞和人工故障。明确原生DCQCN/ECN/PFC、ACK/NACK与本项目额外RTO/重复ACK的来源。
+状态：`completed`。固定上一轮`0f53b15`为SimAI真实调度+原生ns-3基线；本轮自动保存每次SimAI实验的模拟GPU、卡/服务器数、EP组、专家/rank、实际请求/batch、链路分层速率及校准边界。新增只作用于实际接收数据包的周期性突发丢包，准确记录窗口内分母/丢包数与全任务比例，区分拥塞和人工故障。明确原生DCQCN/ECN/PFC、ACK/NACK与本项目额外RTO/重复ACK的来源。
 
 平台阶段先输入/纯CPU检查，再人工EP64正常、50%/100%丢包窗口和持续黑洞四条件各一次。增量编译既有原生service/probe前保存原output（约34MiB），不混UB、不改依赖。根`runs/simai_loss_platform_20261028/`，累计900受监控秒/1GiB；单次增量编译180秒/RSS2GiB/地址4GiB，单网络60秒/RSS2GiB/地址4GiB/仿真5ms/结果128MiB/产物256MiB/捕获400000事件，预留8GiB；人工小例每条件最多一次，失败保留、不扩限或自动重跑。目标真实320卡六条件另按方法登记后执行。单纯增大观测支持上限不更改默认抓包额度，不以截断曲线作为完整证据。
 
-保留无关heavy_loss脏文件，不纳入本次提交。用户已明确授权本轮完成后push到其自己的GitHub仓库；当前唯一远端为师兄baoy21，已询问用户仓库URL，不擅自推到师兄仓库。gh尚未登录，实际SSH访问待指定目标后核对；不索取令牌、不创建fork或改可见性。
+保留无关heavy_loss脏文件，不纳入本次提交。用户指定自己的公开文档仓库`hhwqeedadsa/llmserving-cosim-docs`后，在已有本地文档工程`/home/lry/llmserving-cosim-sphinx`沿用Sphinx结构交付专题、日报、完整离线报告、逐包证据、研究脚本与平台增量补丁。SSH推送`codex/packet-collective-20261028`成功，远端确认`056e306a0a996644eea96672377bd79b9a940367`；main仍为原`a8eeaac`，无自动Pages部署声明。严格HTML/linkcheck、328条构建后本地链接、112份报告文件哈希通过；平台补丁在隔离Git索引应用后完整树与`0d1939e`相等。发布核验见[publication.json](../../experiments/simai_severe_loss/results/publication.json)。
 
 平台子项`completed`：四个EP64小例各执行一次，正常/50%窗口/100%短黑洞完整恢复，持续黑洞以重试耗尽明确失败；逐包独立核验及摘要通过。关闭新功能与旧二进制正常结果的全部消息、服务事件、端口、恢复和包事件逐项相等。依据见[验收摘要](../../fixtures/simai_severe_loss/README.md)，原件及编译身份`runs/simai_loss_platform_20261028/`。目标规模研究待单独登记，不以小例代替。
 
-目标研究子项`completed`，发布仍待用户自己的仓库URL：方法登记于[严重丢包对照](../../experiments/simai_severe_loss/protocol.md)。320端点/40服务器、EP256+64、15个真实请求分别集中rank0/128/256，实际batch6/6/3。固定六条件各一次：400G正常171.893µs；25G无人工丢包592.996µs；50%/75%/100%短窗663.998/690.414/702.706µs；持续全丢603.090µs重试耗尽，接受字节0，不当作完成。成功条件790消息/13,533,184有效字节/218数据活跃rank。独立核426,742个包事件、8,259行曲线，网页核118,138行切片包记录与全部6个选择项。25G无人工丢包126次超时中86次已有进度ACK在途；这说明需验证RTO适配，不宣称优化收益。
+目标研究子项`completed`，发布远端已核：方法登记于[严重丢包对照](../../experiments/simai_severe_loss/protocol.md)。320端点/40服务器、EP256+64、15个真实请求分别集中rank0/128/256，实际batch6/6/3。固定六条件各一次：400G正常171.893µs；25G无人工丢包592.996µs；50%/75%/100%短窗663.998/690.414/702.706µs；持续全丢603.090µs重试耗尽，接受字节0，不当作完成。成功条件790消息/13,533,184有效字节/218数据活跃rank。独立核426,742个包事件、8,259行曲线，网页核118,138行切片包记录与全部6个选择项。25G无人工丢包126次超时中86次已有进度ACK在途；这说明需验证RTO适配，不宣称优化收益。
 
 根`runs/simai_severe_real_20261028/`，原定累计受监控1200秒/3GiB，单native60秒/RSS2GiB/地址4GiB/5ms模拟/128MiB结果/256MiB产物/400000捕获，开始预留8GiB。实际六个native各约1.7–2.2宿主秒，最大采样组RSS约308MiB，运行根约282MiB；未扩限、未重跑网络。失败消息没有DCQCN终态快照，离线审核修正为显式缺失；首次图与旧审核原件保留。完整[网页](../../experiments/simai_severe_loss/results/20261028/report.html)、[独立审核](../../experiments/simai_severe_loss/results/20261028/verification.json)、[资源与命令](../../experiments/simai_severe_loss/results/closeout.json)。
 

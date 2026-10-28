@@ -1,0 +1,37 @@
+{
+  "passed": true,
+  "repository": "https://github.com/hhwqeedadsa/llmserving-cosim-docs",
+  "branch": "codex/packet-collective-20261028",
+  "commit": "056e306a0a996644eea96672377bd79b9a940367",
+  "remote_refs": {
+    "refs/heads/codex/packet-collective-20261028": "056e306a0a996644eea96672377bd79b9a940367",
+    "refs/heads/main": "a8eeaac705783b532f3872263b3850f1534a724f"
+  },
+  "report_committed_hashes_verified": 112,
+  "documents_worktree_clean": true,
+  "publication_verification": {
+    "passed": true,
+    "html_build": "Sphinx -W --keep-going",
+    "linkcheck": "Sphinx -W --keep-going; timeout8s; one actual attempt per URI",
+    "local_built_links": 328,
+    "built_report_files": 112,
+    "publication_source_files": 122,
+    "platform_patch_full_tree_equal": true,
+    "push_target": "hhwqeedadsa/llmserving-cosim-docs",
+    "branch": "codex/packet-collective-20261028",
+    "source_receipt_scope": "Copied historical research closeout is unchanged; this receipt supersedes its previous waiting-for-target publication state.",
+    "notes": [
+      "Initial linkcheck configuration used retries=0; inspected installed Sphinx and reran with retries=1. Zero-attempt check not used as evidence.",
+      "No browser layout automation claimed; PNG charts visually inspected and report JavaScript tested with V8 DOM stub."
+    ]
+  },
+  "completion_audit": {
+    "new_baseline": "0f53b15 plus verified platform extension 0d1939e",
+    "automatic_hardware_and_EP_summary": "scenario.json/md present for all six, including failed persistent",
+    "concurrent_severe_loss": "shared native Fabric, real batch6/6/3, 50/75/100-percent-window and persistent data faults",
+    "cumulative_effective_arrival": "eleven audited Dispatch/Combine slices, failure plateau retained",
+    "RDMA_mechanism_sources": "native ECN/PFC/DCQCN/ACK/NACK/GBN versus project RTO/duplicate ACK explicitly documented",
+    "user_repository_push": "remote branch equals delivered commit; webpage/evidence/study scripts/platform patch published"
+  },
+  "scope": "Published to requested independent branch; no main merge or Pages deployment inferred"
+}

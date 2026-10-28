@@ -17,6 +17,8 @@ def sha(path):return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
 def run(repo,output,backend,protoc):
+    # Fail before preparing a study if the configured frontend interpreter is absent.
+    import google.protobuf  # noqa: F401 -- generated pinned Chakra schema requires it.
     assert not output.exists();output.mkdir(parents=True)
     start=time.monotonic();commands=[]
     def cli(label,args):

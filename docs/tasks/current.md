@@ -13,6 +13,8 @@
 
 ## 当前范围和预算
 
+当前研究 `in_progress`：[真实路由的容量研究范围](../../experiments/scaleout_capacity_scope/protocol.md)，起点`9f550ba`。沿用用户已确认的15份完整R1-AWQ/MMLU原件，EP64/128/256与两种声明源部署，完整prefill和ragged decode/58层；只核分层数据矩阵的NIC、服务器、双pod逐rail容量下界，比较已有逐资源强参考。600受监控秒/256MiB及单命令60秒/1GiB RSS/2GiB地址，零网络/GPU/HTTP/编译/依赖修改/push。不将容量下界当时延或优化收益，不新增/重开旧网络；先判断数据输入是否足以支撑上层网络研究，两主创新与总体目标仍`in_progress`。
+
 当前研究已停止并关闭（`comparison_complete=false`）：[RC复用的完整宿主成本](../../experiments/rc_reuse_cost/README.md)、[冻结方法](../../experiments/rc_reuse_cost/protocol.md)及[网页](../../experiments/rc_reuse_cost/results/20261028/report.html)，起点`5f7adb4`、协议`a036d33`。新6447/MTU4096/RTO25us、六个不同故障；计划三对，完成direct→reuse首对共11网络。direct六次，reuse两次正常缓存/三次回退/三项终端准入，六项canonical结果全部一致。完整CPU1.223194/1.127568s、墙钟1.618885/1.453902s，首对比1.085/1.113；包含正常缓存准备，不含共同配置生成/旧编译。只少一次网络，不能把50%查询准入当50%完整加速。未清OS页缓存且后两对未执行，不评三对工程门槛，不称稳定收益。
 
 首对后核验器将浮点秒的十进制表示截断，错误产生1ns差；按规则停止后四工作流，仅修离线取整、原始测量/执行源码不变。11网络独立逐包/目标/PSN重放、六项相等及五类篡改通过。第一次归档包含正在追加的监控samples，hash核验拒绝；保留原包，修正为只打包终态监控，另建新包。两次失败与原源码见[记录](../../experiments/rc_reuse_cost/results/20261028/failure.json)，零网络/性能重跑或扩限。输入仍为构造协议功能片段，不是实际现代DeepEP/完整MoE/LLMServingSim或硬件校准；证书为通用强基线，两主创新尚未成立。

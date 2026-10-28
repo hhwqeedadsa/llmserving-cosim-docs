@@ -174,11 +174,15 @@ def execute(run, output, graph='g0.w0', layer=0, phase='dispatch', src=None, dst
     run,output=Path(run).resolve(),Path(output).resolve()
     require(not output.exists(), 'arrival output directory must not exist')
     result_path=run/'result.json'
-    require(result_path.is_file() and result_path.stat().st_size <= 64*2**20, 'missing result or exceeds 64MiB audit limit')
+    from .scaleout_limits import limits
+    from .scaleout_rdma import checked_json
+    protocol=checked_json(run/'rdma.json',65536)
+    maximum=min(limits(protocol)['result_json_bytes'],128*2**20)
+    require(result_path.is_file() and result_path.stat().st_size <= maximum, 'missing result or exceeds declared/128MiB audit limit')
     paths=sorted((run/'graphs').glob('*/wave.json'))
     require(0 < len(paths) <= 1024 and sum(p.stat().st_size for p in paths) <= 64*2**20, 'wave audit budget exceeded')
     result=json.loads(result_path.read_bytes());waves=[json.loads(p.read_bytes()) for p in paths]
-    require(len(result.get('packet_capture',{}).get('events',[])) <= 100000, 'packet audit limit exceeded')
+    require(len(result.get('packet_capture',{}).get('events',[])) <= min(protocol.get('packet_capture',{}).get('max_events',0),1000000), 'packet audit limit exceeded')
     summary,messages,endpoints,packets,curve=reconstruct(result,waves,graph,layer,phase,src,dst)
     output.mkdir(parents=True)
     for name,rows in (('messages',messages),('endpoints',endpoints),('packet_events',packets),('arrival_curve',curve)):

@@ -7,6 +7,7 @@
 #include "../communication_admission.hh"
 #include "../queue_integral.hh"
 #include "recovery.hh"
+#include "../periodic_data_loss.hh"
 #include <functional>
 #include <array>
 #include <map>
@@ -133,6 +134,8 @@ class Fabric {
   std::vector<Json> fault_rules_;
   std::vector<uint64_t> fault_counts_;
   std::vector<std::array<int64_t,5>> fault_events_;
+  std::unique_ptr<moe_cosim::PeriodicDataLoss> data_loss_;
+  std::set<unsigned> data_loss_nodes_;
   std::vector<std::array<int64_t,12>> packet_events_;
   std::vector<std::array<int64_t,7>> wire_headers_;
   std::map<std::array<int64_t,7>,uint64_t> wire_header_indices_;

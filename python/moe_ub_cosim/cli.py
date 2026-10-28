@@ -33,6 +33,10 @@ def parser():
     simai_run.add_argument('--protoc',default='protoc',help='Existing compiler for the pinned Chakra schema')
     simai_check=sc.add_parser('simai-check',help='Audit saved SimAI source choices, graph dependencies and native completion feedback')
     simai_check.add_argument('--run',type=Path,required=True)
+    simai_summary=sc.add_parser('simai-summary',help='Read simulated hardware, EP groups, batch, bandwidth and outcome; no network execution')
+    simai_summary.add_argument('--run',type=Path,required=True)
+    loss_check=sc.add_parser('data-loss-check',help='Replay complete destination packet capture against periodic loss settings, including failed services')
+    loss_check.add_argument('--run',type=Path,required=True)
     sp = sc.add_parser('prepare', help='Generate device/server/rack/spine inputs, explicit placement, paths and bandwidth cuts')
     sp.add_argument('--config', type=Path, required=True, help='Scale-Out JSON; source paths resolve from this file')
     sp.add_argument('--output', type=Path, required=True, help='New portable scenario directory; does not execute a backend')
@@ -309,6 +313,12 @@ def main(argv=None):
             elif args.scaleout_command == 'simai-check':
                 from .simai_verify import verify
                 value=verify(args.run)
+            elif args.scaleout_command == 'simai-summary':
+                from .run_summary import describe
+                value=describe(args.run)
+            elif args.scaleout_command == 'data-loss-check':
+                from .scaleout_data_loss import check
+                value=check(args.run)
             elif args.scaleout_command == 'rdma-check':
                 from .scaleout_verify import verify
                 value = verify(args.run)

@@ -1,5 +1,7 @@
 # 观测记录与存储格式
 
+SimAI运行的`scenario.json`采用`moe-run-summary/1`，中文同义说明保存在`scenario.md`；明确区分物理GPU总数、请求源、数据活动GPU、EP组、每rank专家、batch上限与实际batch，以及模拟硬件和校准边界。协议启用`data_loss`时，原生结果同名对象分别记录`eligible_destination_data_packets/window_packets/dropped_packets`和完整配置，逐包独立审核输出窗口/全观察期两种比例；失败也保留摘要和未完成曲线。字段语义见[严重丢包示例](../examples/simai_severe_loss/README.md)。
+
 SimAI入口的`input.json`采用`moe-simai-service/1`，原件复制到`route_sources/`并保留hash/原entry/原层索引。`frontend.json`记录`scheduler_source/simai_revision/cluster_gpu_counts/active_source_ranks/requests/history/transcript/final_allocated_blocks`，区别请求源和全部物理端点；`initial_state`明确只声明ready-KV。`graphs/*/wave.json`与原生`result.json`沿用已有网络口径，可直接用`rdma-arrivals`读取；字段及命令见[SimAI小例](../examples/simai_service/README.md)。
 
 原生Scale-Out服务支持`scaleout rdma-arrivals`，从完整逐包记录导出逐rank发送/接收、逐消息规模和指定collective阶段的累计有效字节曲线。它区分物理接收、字节范围去重、Go-Back-N协议连续接受和源端确认，逐消息核对原生计数与完成回调；支持范围、CSV字段和命令见[任务两端统计](../examples/scaleout_arrivals/README.md)。

@@ -1,5 +1,7 @@
 # 系统架构与执行过程
 
+可选`periodic_destination_data/1`在目标GPU设备的实际ReceiveErrorModel中按到达顺序和半开时间窗口执行周期性故障。数据包含重传才参与分母，ACK/NACK/PFC不受影响；不依赖专家身份或未来记录，不改时钟/路径/协议。源端仍由真实ACK/NACK/可选RTO推进。自动场景摘要和离线逐包审核不参与控制；定义见[严重丢包示例](../examples/simai_severe_loss/README.md)。
+
 独立`simai_service.py`加载固定SimAI/Vidur真实Cluster/Orca/Batch/Request，按原始专家选择生成有限MoE图并提交既有ASTRA原生RDMA服务。两个或多个EP域共享一个ns-3时钟和网络；仅实际完成回调允许推进Batch及下一轮。上游生命周期使用`1.0 + now_ns/1e9`秒，保存网络绝对纳秒；不叠加上游预测的通信时长。稀疏源rank与实际专家执行rank分别保留，计算为声明参考而非上游性能预测器。输入和边界见[SimAI联合小例](../examples/simai_service/README.md)。
 
 独立多连接 `rc-fabric-probe` 在同一 `Fabric` 中保存各 QP 的序号、WRITE 进度、原子重放和定时器，多个目标 QP 共享同一 GPU 注册区字节。源完成由本连接的实际反馈决定，不添加跨 QP 隐藏顺序；请求共用物理 NIC 调度，回复共用物理反馈队列。有限功能范围见[多连接参考](../examples/rc_concurrent/README.md)，没有接入 LLMServingSim 或改变旧入口。

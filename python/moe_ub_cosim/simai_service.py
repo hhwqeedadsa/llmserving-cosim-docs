@@ -208,8 +208,13 @@ def run(config,topology,protocol,runtime,backend,output,protoc='protoc'):
     save(output/'provenance.json',dict(frontend='actual_SimAI_Vidur',network='single_native_ns3_no_UB',
         compute_source=c['service']['compute']['source'],hardware_calibrated=False,scope='finite_MoE_segment',
         hashes={str(path):digest(path) for path in (config,topology/'topology.json',protocol,backend,Path(__file__))}))
-    monitored([sys.executable,'-m','moe_ub_cosim.simai_service','--worker',str(output),str(backend),str(protoc)],
-              output/'execution',[output],runtime=limits(p))
+    from .run_summary import write as write_summary
+    write_summary(output)
+    try:
+        monitored([sys.executable,'-m','moe_ub_cosim.simai_service','--worker',str(output),str(backend),str(protoc)],
+                  output/'execution',[output],runtime=limits(p))
+    finally:
+        write_summary(output)
     from .simai_verify import verify
     verdict=verify(output);save(output/'verification.json',verdict)
     return verdict

@@ -1,0 +1,86 @@
+{
+  "passed": true,
+  "conditions": {
+    "normal": {
+      "passed": true,
+      "expected_native_success": true,
+      "native_exit": 0,
+      "finish_ns": 47603,
+      "captured_packets": 4480,
+      "data_loss": null,
+      "accepted_slice_bytes": 229376
+    },
+    "half-burst": {
+      "passed": true,
+      "expected_native_success": true,
+      "native_exit": 0,
+      "finish_ns": 167194,
+      "captured_packets": 6158,
+      "data_loss": {
+        "configuration": {
+          "denominator": 2,
+          "end_ns": 100000,
+          "kind": "periodic_destination_data/1",
+          "nodes": [],
+          "numerator": 1,
+          "offset": 0,
+          "start_ns": 0
+        },
+        "dropped_packets": 51,
+        "eligible_destination_data_packets": 210,
+        "scope": "periodic artificial destination data loss; ACK/NACK/PFC unaffected; half-open time window; ordinal counts actual eligible arrivals including retransmissions",
+        "window_packets": 102
+      },
+      "accepted_slice_bytes": 229376
+    },
+    "blackout": {
+      "passed": true,
+      "expected_native_success": true,
+      "native_exit": 0,
+      "finish_ns": 167603,
+      "captured_packets": 5568,
+      "data_loss": {
+        "configuration": {
+          "denominator": 1,
+          "end_ns": 100000,
+          "kind": "periodic_destination_data/1",
+          "nodes": [],
+          "numerator": 1,
+          "offset": 0,
+          "start_ns": 0
+        },
+        "dropped_packets": 64,
+        "eligible_destination_data_packets": 192,
+        "scope": "periodic artificial destination data loss; ACK/NACK/PFC unaffected; half-open time window; ordinal counts actual eligible arrivals including retransmissions",
+        "window_packets": 64
+      },
+      "accepted_slice_bytes": 229376
+    },
+    "persistent": {
+      "passed": true,
+      "expected_native_success": false,
+      "native_exit": 1,
+      "finish_ns": 601030,
+      "captured_packets": 2720,
+      "data_loss": {
+        "configuration": {
+          "denominator": 1,
+          "end_ns": 5000000,
+          "kind": "periodic_destination_data/1",
+          "nodes": [],
+          "numerator": 1,
+          "offset": 0,
+          "start_ns": 0
+        },
+        "dropped_packets": 160,
+        "eligible_destination_data_packets": 160,
+        "scope": "periodic artificial destination data loss; ACK/NACK/PFC unaffected; half-open time window; ordinal counts actual eligible arrivals including retransmissions",
+        "window_packets": 160
+      },
+      "accepted_slice_bytes": 0
+    }
+  },
+  "new_native_runs": 4,
+  "expected_failures": 1,
+  "scope": "artificial EP64 functional gate, not real-route scale-out research"
+}

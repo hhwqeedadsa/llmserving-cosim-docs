@@ -45,6 +45,18 @@ Fabric::Fabric(const Json& topology, const Json& config): topology_(topology), c
   Require(config.at("schema_version") == "moe-scaleout-rdma/1" || config.at("schema_version") == "moe-scaleout-rdma/2", "wrong RDMA schema");
   Require(config.at("cc_mode") == 1, "first native adapter accepts DCQCN=1 only");
   Require(!(config.contains("drop_once") && config.contains("faults")), "choose drop_once or faults");
+  if(config.contains("data_loss")) {
+    Require(!config.contains("drop_once") && !config.contains("faults"),"data_loss cannot mix with message faults");
+    const auto& c=config.at("data_loss");
+    Require(c.at("kind")=="periodic_destination_data/1" && c.size()==7,"invalid data_loss kind/fields");
+    Require(c.at("end_ns").get<int64_t>()<=MaxSimNs(),"data_loss window exceeds simulation");
+    data_loss_=std::make_unique<moe_cosim::PeriodicDataLoss>(c.at("numerator"),c.at("denominator"),c.at("offset"),c.at("start_ns"),c.at("end_ns"));
+    for(const auto& n:c.at("nodes")) {
+      const auto id=n.get<unsigned>();
+      Require(id<topology.at("nodes").size() && topology.at("nodes").at(id).at("kind")=="gpu","data_loss node must be GPU");
+      Require(data_loss_nodes_.insert(id).second,"repeated data_loss GPU");
+    }
+  }
   if(config.contains("recovery")) {
     const auto& c=config.at("recovery");const std::string mode=c.at("mode");
     Require(mode=="native" || mode=="go_back_n","unknown recovery mode");
@@ -79,7 +91,7 @@ Fabric::Fabric(const Json& topology, const Json& config): topology_(topology), c
       capture_wire_headers_=c.at("wire_headers").get<bool>();
     }
     capture_limit_=c.at("max_events");capture_start_=c.at("start_ns");capture_end_=c.at("end_ns");
-    Require(capture_limit_>0 && capture_limit_<=100000 && capture_start_>=0 && capture_end_>capture_start_ &&
+    Require(capture_limit_>0 && capture_limit_<=1000000 && capture_start_>=0 && capture_end_>capture_start_ &&
             capture_end_<=MaxSimNs(),"invalid bounded packet capture");
     for(const auto& n:c.at("nodes"))capture_nodes_.insert(n.get<unsigned>());
   }
@@ -197,7 +209,8 @@ Fabric::Fabric(const Json& topology, const Json& config): topology_(topology), c
         const unsigned plane=ns.at(peer).at("plane"); auto ip=nodes_.Get(host)->GetObject<Ipv4>();
         ip->AddAddress(ip->GetInterfaceForDevice(dev), Ipv4InterfaceAddress(Address(host,plane),Ipv4Mask("255.0.0.0")));
       }
-      if(std::any_of(fault_rules_.begin(),fault_rules_.end(),[host,port](const Json& r){
+      if((data_loss_ && host<gpus_ && (data_loss_nodes_.empty() || data_loss_nodes_.count(host))) ||
+         std::any_of(fault_rules_.begin(),fault_rules_.end(),[host,port](const Json& r){
            return r.at("node")==host && (r.at("port")==0 || r.at("port")==port);})) {
         auto error=CreateObject<FaultModel>();
         error->corrupt=[this,host,port](Ptr<Packet> p){return Corrupt(host,port,p);};
@@ -471,6 +484,10 @@ void Fabric::PacketEvent(unsigned event,unsigned node,unsigned port,Ptr<const Pa
   }
 }
 bool Fabric::Corrupt(unsigned node,unsigned port,Ptr<Packet> p) {
+  if(data_loss_ && node<gpus_ && (data_loss_nodes_.empty() || data_loss_nodes_.count(node))) {
+    const auto h=Header(p);
+    if(h.l3Prot==0x11 && data_loss_->Arrival(Now())) {++fault_drops_;return true;}
+  }
   const auto id=PacketFlow(p);if(id<0)return false;
   const auto h=Header(p);const std::string kind=h.l3Prot==0x11?"data":h.l3Prot==0xfc?"ack":"nack";
   const uint32_t sequence=h.l3Prot==0x11?h.udp.seq:h.ack.seq;
@@ -704,6 +721,10 @@ Json Fabric::Report() {
     {"wire_byte_scope","Native model packet sizes; excludes unmodelled Ethernet preamble/FCS/IFG"},
     {"queue_scope","BEgressQueue native hooks: enqueue after byte addition; dequeue before byte subtraction; excludes bytes already being serialized"},
     {"rx_qp_scope","Accepted receive state retained until Fabric teardown; no waiting receives at service completion"}};
+  if(data_loss_)r["data_loss"]={{"configuration",config_.at("data_loss")},
+    {"eligible_destination_data_packets",data_loss_->Total()},{"window_packets",data_loss_->Window()},
+    {"dropped_packets",data_loss_->Dropped()},
+    {"scope","periodic artificial destination data loss; ACK/NACK/PFC unaffected; half-open time window; ordinal counts actual eligible arrivals including retransmissions"}};
   if(config_.contains("switch_counter_storage")) {
     Json switches=Json::array();uint64_t total=0;
     for(unsigned host=gpus_;host<nodes_.GetN();++host) {

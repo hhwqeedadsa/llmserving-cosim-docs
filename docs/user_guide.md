@@ -1,5 +1,7 @@
 # 用户指南
 
+每次`simai-run`自动保存`scenario.json/scenario.md`，包括模拟卡数、EP、专家/rank、真实batch、分层带宽和成功/失败状态。严重周期性数据丢包与`simai-summary/data-loss-check`用法见[严重丢包小例](../examples/simai_severe_loss/README.md)；原生拥塞控制与本项目额外恢复的分工见[RDMA说明](rdma_congestion_loss.md)。
+
 使用实际Alibaba SimAI调度器驱动原生ns-3，可用`scaleout simai-prepare/simai-run/simai-check`。支持源文件校验的稀疏请求、有限ready-KV MoE层段及网络完成反馈；完整可复制输入、运行命令与边界见[SimAI联合小例](../examples/simai_service/README.md)。
 
 统计Scale-Out服务在发送端和接收端的规模、恢复指定Dispatch/Combine的逐包有效到达曲线，使用`scaleout rdma-arrivals`。它读取完整抓包并核对原生接收状态，支持已完成或失败的服务；命令和文件口径见[两端统计与到达曲线](../examples/scaleout_arrivals/README.md)。

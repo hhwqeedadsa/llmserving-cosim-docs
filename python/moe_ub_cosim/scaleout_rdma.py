@@ -35,10 +35,22 @@ def checked_json(path, maximum):
 def validate_protocol(c):
     fields(c, 'schema_version cc_mode payload_bytes chunk_bytes ack_interval_bytes base_rtt_ns '
            'switch_buffer_bytes ecn_by_rate seed' + (' limits' if c.get('schema_version') == 'moe-scaleout-rdma/2' else '')
-           + ''.join(' '+key for key in ('drop_once','faults','packet_capture','admission','lifecycle_capture','queue_metrics','recovery','mmu_snapshot','link_failures','local_failover','switch_counter_storage') if key in c), 'RDMA protocol')
+           + ''.join(' '+key for key in ('drop_once','faults','data_loss','packet_capture','admission','lifecycle_capture','queue_metrics','recovery','mmu_snapshot','link_failures','local_failover','switch_counter_storage') if key in c), 'RDMA protocol')
     budget=limits(c)
     require(c.get('switch_counter_storage','legacy_dense') in ('legacy_dense','port_dense'),
             'switch_counter_storage must be legacy_dense or port_dense')
+    if 'data_loss' in c:
+        d=c['data_loss'];fields(d,'kind numerator denominator offset start_ns end_ns nodes','data_loss')
+        require(d['kind']=='periodic_destination_data/1' and 'faults' not in c and 'drop_once' not in c,
+                'periodic data_loss cannot mix with message fault rules')
+        integer(d['denominator'],'loss denominator',1,1024)
+        integer(d['numerator'],'loss numerator',1,d['denominator'])
+        integer(d['offset'],'loss offset',0,d['denominator']-1)
+        integer(d['start_ns'],'loss start',0,budget['max_sim_ns']-1)
+        integer(d['end_ns'],'loss end',d['start_ns']+1,budget['max_sim_ns'])
+        require(isinstance(d['nodes'],list) and len(d['nodes'])<=budget['max_gpus'],'invalid loss GPU list')
+        for n in d['nodes']:integer(n,'loss GPU',0,budget['max_gpus']-1)
+        require(len(set(d['nodes']))==len(d['nodes']),'repeated loss GPU')
     from .scaleout_admission import validate_options
     validate_options(c)
     from .scaleout_mmu import validate_options as validate_mmu_options
@@ -95,7 +107,7 @@ def validate_protocol(c):
         require(len(set(capture['nodes']))==len(capture['nodes']), 'duplicate capture node')
         integer(capture['start_ns'], 'capture start_ns', 0, budget['max_sim_ns']-1)
         integer(capture['end_ns'], 'capture end_ns', capture['start_ns']+1, budget['max_sim_ns'])
-        integer(capture['max_events'], 'capture max_events', 1, 100000)
+        integer(capture['max_events'], 'capture max_events', 1, 1000000)
 
 
 def monitored(command, output, artifacts, *, build=False, runtime=None, wall_seconds=None):
@@ -234,6 +246,8 @@ def validate_probe(t, c, batch, *, match_faults=True, max_probe_messages=128):
     require(isinstance(batch, list) and 0 < len(batch) <= max_probe_messages, 'probe message budget exceeded')
     adjacency = {n['id']: [] for n in nodes}
     by_id = {n['id']: n for n in nodes}
+    for node in c.get('data_loss',{}).get('nodes',[]):
+        require(node in gpus,'data_loss node is not a physical GPU')
     if 'drop_once' in c:
         require(c['drop_once']['dst_gpu'] in gpus, 'legacy drop destination is not a GPU')
     for node in c.get('packet_capture',{}).get('nodes',[]):

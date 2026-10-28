@@ -1,0 +1,140 @@
+{
+  "schema_version": "moe-simai-service/1",
+  "service": {
+    "schema_version": "moe-scaleout-service/1",
+    "model": {
+      "name": "deepseek-ai/DeepSeek-R1",
+      "hidden_size": 7168,
+      "ffn_hidden_size": 2048,
+      "experts": 256,
+      "top_k": 8,
+      "activation_bytes": 2,
+      "layers": 1,
+      "gpu_type": "H100"
+    },
+    "workload": {
+      "batch_per_rank": 1,
+      "decode_steps": 2,
+      "context_tokens": 64,
+      "route_seed": 11,
+      "hotspot_fraction": 0
+    },
+    "parallel": {
+      "groups": [
+        [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          48,
+          49,
+          50,
+          51,
+          52,
+          53,
+          54,
+          55,
+          56,
+          57,
+          58,
+          59,
+          60,
+          61,
+          62,
+          63
+        ]
+      ]
+    },
+    "compute": {
+      "source": "declared_reference",
+      "attention_ns_per_token": 1000,
+      "pack_ns_per_token": 30,
+      "expert_ns_per_contribution": 100,
+      "merge_ns_per_token": 30
+    }
+  },
+  "simai": {
+    "model_name": "deepseek-671B",
+    "device": "h100",
+    "max_sequence_tokens": 128
+  },
+  "routes": {
+    "source": {
+      "kind": "synthetic_test",
+      "dataset_id": null,
+      "collector_model_id": null,
+      "directory": null,
+      "download_revision": null,
+      "remote_identity_verified": false
+    },
+    "layer_ids": [
+      3
+    ],
+    "requests": [
+      {
+        "rank_id": 0,
+        "slot": 0,
+        "file_id": "artificial-0",
+        "file": {
+          "path": "../simai_service/routes/0.json",
+          "sha256": "b2eedeb084cab9b51289e6fbd7630609c8e9e9f85c32046947a1f8d0df25592e"
+        },
+        "first_decode_entry": 1
+      },
+      {
+        "rank_id": 32,
+        "slot": 0,
+        "file_id": "artificial-1",
+        "file": {
+          "path": "../simai_service/routes/1.json",
+          "sha256": "b161080637e2abd83cfd198325d1e5dc54cdd854b96c14ed9001295c55fa8ab2"
+        },
+        "first_decode_entry": 1
+      }
+    ]
+  }
+}

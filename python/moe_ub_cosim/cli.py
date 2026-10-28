@@ -24,6 +24,15 @@ def parser():
     simai_prepare = sc.add_parser('simai-prepare', help='Verify pinned SimAI sources and prepare its real Vidur scheduler; no network execution')
     simai_prepare.add_argument('--source-root',type=Path,required=True,help='Extracted aliyun/SimAI a57d765c source root')
     simai_prepare.add_argument('--output',type=Path,required=True,help='New runtime with hash receipt and two lazy registry initializers')
+    simai_run=sc.add_parser('simai-run',help='Run a finite ready-KV MoE segment with real pinned SimAI scheduling and one native ns-3 fabric')
+    for flag,help_text in (
+        ('config','Sparse source-checked SimAI service JSON'),('topology','Generated physical topology directory'),
+        ('protocol','Explicit native RDMA protocol JSON'),('runtime','Verified directory from simai-prepare'),
+        ('backend','Native RDMA service executable; no UB libraries'),('output','New bounded run directory')):
+        simai_run.add_argument('--'+flag,type=Path,required=True,help=help_text)
+    simai_run.add_argument('--protoc',default='protoc',help='Existing compiler for the pinned Chakra schema')
+    simai_check=sc.add_parser('simai-check',help='Audit saved SimAI source choices, graph dependencies and native completion feedback')
+    simai_check.add_argument('--run',type=Path,required=True)
     sp = sc.add_parser('prepare', help='Generate device/server/rack/spine inputs, explicit placement, paths and bandwidth cuts')
     sp.add_argument('--config', type=Path, required=True, help='Scale-Out JSON; source paths resolve from this file')
     sp.add_argument('--output', type=Path, required=True, help='New portable scenario directory; does not execute a backend')
@@ -294,6 +303,12 @@ def main(argv=None):
             elif args.scaleout_command == 'rdma-arrivals':
                 from .scaleout_arrivals import execute
                 value = execute(args.run,args.output,args.graph,args.layer,args.phase,args.src,args.dst)
+            elif args.scaleout_command == 'simai-run':
+                from .simai_service import run
+                value=run(args.config,args.topology,args.protocol,args.runtime,args.backend,args.output,args.protoc)
+            elif args.scaleout_command == 'simai-check':
+                from .simai_verify import verify
+                value=verify(args.run)
             elif args.scaleout_command == 'rdma-check':
                 from .scaleout_verify import verify
                 value = verify(args.run)

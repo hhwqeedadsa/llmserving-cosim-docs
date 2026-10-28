@@ -69,7 +69,7 @@ def prepare(source_root,output):
                 patched_files=sum(r['patched'] for r in records),network_executed=False)
 
 
-def load(runtime):
+def verify_runtime(runtime):
     runtime=Path(runtime).resolve();receipt=json.loads((runtime/'runtime.json').read_bytes())
     spec=json.loads(SPEC.read_bytes())
     require(receipt['spec_sha256']==sha(SPEC.read_bytes()) and receipt['revision']==spec['revision'],
@@ -89,6 +89,11 @@ def load(runtime):
             require(hashlib.sha1(b'blob '+str(len(raw)).encode()+b'\0'+raw).hexdigest()==fixed['git_blob_sha1'],
                     'SimAI original functional source differs '+rel)
         require(sha(raw)==entry['sha256'],'SimAI runtime checksum differs '+rel)
+    return receipt
+
+
+def load(runtime):
+    runtime=Path(runtime).resolve();receipt=verify_runtime(runtime)
     for name,module in list(sys.modules.items()):
         if name=='vidur' or name.startswith('vidur.'):
             path=getattr(module,'__file__',None)

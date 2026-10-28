@@ -8,6 +8,8 @@
 
 来源与CPU调度子项`completed`：完整固定归档26,398,121B，SHA256 `79f5b5066428136533c31f3b67172706904e4ae3998608b6013f084d648e3f68`；公开`scaleout simai-prepare`核165份Git blob并产生可复核runtime，只改两处延迟导入。真实上游Cluster/Orca/Batch/Request三请求、四批次完成，EP64属性由原生Cluster建立，终态KV块为0；两个篡改拒绝及重复加载通过。直接未适配导入缺sklearn；改为延迟非所需注册器，没有假模块或依赖安装。首次直接Replica缺Cluster生成的prefill_world_size，已改用原生Cluster生命周期，未绕过断言。[验收](../../fixtures/simai_frontend/README.md)、[公开准备说明](../../examples/simai_frontend/README.md)、[后续联合执行范围](simai_scaleout_spec.md)。整体目标仍`in_progress`，未执行新网络或替换旧四卡曲线。
 
+平台联合适配子项`completed`（起点`757b422`）：公开`simai-run/simai-check`完成稀疏来源输入、真实上游调度和共享原生网络。人工EP64正常/数据与ACK丢失各一次通过：64消息、917,504有效字节、640节点，服务47.603→167.013µs，三次超时恢复。两份完整捕获arrival审核、四类篡改拒绝和19项相关单元/回归通过；165份源码及CPU调度复核通过。没有源token的rank计算成本归零，但实际收到的专家工作保留。见[小例](../../examples/simai_service/README.md)、[功能验收](../../fixtures/simai_service/README.md)。原件`runs/simai_native_platform_20261028/`，两次受监控网络合计1.303秒，峰值111,845,376B，保持先登记的600秒/512MiB及单次60秒/2GiB RSS/4GiB地址；未重跑成功网络、无构建/安装/联网/push。整体320卡真实路由及图片目标仍`in_progress`，下一步独立登记研究范围并执行。
+
 ## 2026-10-28 用户新增：百B模型、300/500卡结构与图片
 
 状态：本次用户新增交付`completed`，总体研究目标继续`in_progress`。固定SimAI `a57d765c`与AICB `23eec3c4`核实百B模型/预制workload，保留14份来源及许可hash。转换Qwen3-235B BF16形状（235,093,634,560参数）为320/512卡EP64的5/8个跨Pod副本，每rank每层2专家；声明权重21.51GiB/rank。300/500卡等大EP组最多EP4，BF16权重120.65GiB/rank超80GiB，明确只交付其拓扑。完整R1的MLA/Dense/共享专家仍非当前Scale-Out完整模型支持。

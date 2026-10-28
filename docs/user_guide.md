@@ -1,5 +1,7 @@
 # 用户指南
 
+使用实际Alibaba SimAI调度器驱动原生ns-3，可用`scaleout simai-prepare/simai-run/simai-check`。支持源文件校验的稀疏请求、有限ready-KV MoE层段及网络完成反馈；完整可复制输入、运行命令与边界见[SimAI联合小例](../examples/simai_service/README.md)。
+
 统计Scale-Out服务在发送端和接收端的规模、恢复指定Dispatch/Combine的逐包有效到达曲线，使用`scaleout rdma-arrivals`。它读取完整抓包并核对原生接收状态，支持已完成或失败的服务；命令和文件口径见[两端统计与到达曲线](../examples/scaleout_arrivals/README.md)。
 
 检查多连接竞争及共享目标内存，可用独立 `scaleout rc-fabric-build/rc-fabric-probe`，只编译 CPU 驱动并复用固定原生库。每连接独立保存序号、重放和实际反馈完成状态。四连接及两种丢包的操作、配置与边界见[多连接小例](../examples/rc_concurrent/README.md)，本例不执行 MoE。

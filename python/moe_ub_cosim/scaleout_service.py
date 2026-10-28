@@ -69,18 +69,10 @@ def validate(c, topology, rdma, replay=None):
         for group in p['groups']:
             for rank in group if replay else group[:1]:
                 capacity(c,len(group),replay.contexts(rank) if replay else None)
-    # Preflight every directed pair in each plane, without using GPUs as routers.
-    planes = sorted({n['plane'] for n in topology['nodes'] if n['kind'] != 'gpu'})
-    probes=[]
-    for group in p['groups']:
-        for plane in planes:
-            for src in group:
-                for dst in group:
-                    if src != dst:
-                        probes.append(dict(id=len(probes),src=src,dst=dst,bytes=1,plane=plane,ready_ns=0))
-                        if len(probes)==128:
-                            validate_probe(topology,rdma,probes,match_faults=False);probes=[]
-    if probes:validate_probe(topology,rdma,probes,match_faults=False)
+    # Every pair still needs a common switch component; GPUs never bridge
+    # components. Avoid rebuilding the whole graph for each 128-pair batch.
+    from .scaleout_connectivity import validate_groups
+    planes=validate_groups(topology,rdma,p['groups'])
     return len(gpus), len(planes)
 
 
@@ -149,6 +141,7 @@ def make_wave(config, group, group_index, step, planes, replay=None):
         previous={r:[node(r,'COMP','embedding',[],cost['embedding_ns_per_token']*w['batch_per_rank'])] for r in group}
     for layer in range(m['layers']):
         selected = replay.routes(group,step,layer) if replay else routes(config, group, step, layer)
+        source_tokens=Counter(token['rank'] for token in selected)
         matrix, expert_counts, received = Counter(), Counter(), Counter()
         for token in selected:
             for expert in token['experts']:
@@ -164,21 +157,21 @@ def make_wave(config, group, group_index, step, planes, replay=None):
                 deps=[node(r,'COMP',f'L{layer}.attention_norm',deps,cost['norm_ns_per_token']*w['batch_per_rank'])]
             attention_cost=cost['attention_ns_per_token']
             if full and not replay:attention_cost+=cost['attention_context_ns_per_token']*(w['context_tokens']+step)
-            attention_duration=attention_cost*w['batch_per_rank']
+            attention_duration=attention_cost*(w['batch_per_rank'] if full else source_tokens[r])
             if full and replay:attention_duration+=cost['attention_context_ns_per_token']*sum(x+step for x in replay.contexts(r))
             attention = node(r,'COMP',f'L{layer}.attention',deps,attention_duration)
             deps=[attention]
             if full:
                 residual=node(r,'COMP',f'L{layer}.attention_residual',deps,cost['residual_ns_per_token']*w['batch_per_rank'])
                 deps=[node(r,'COMP',f'L{layer}.ffn_norm',[residual],cost['norm_ns_per_token']*w['batch_per_rank'])]
-            packed[r] = node(r,'COMP',f'L{layer}.pack',deps,cost['pack_ns_per_token']*w['batch_per_rank'])
+            packed[r] = node(r,'COMP',f'L{layer}.pack',deps,cost['pack_ns_per_token']*(w['batch_per_rank'] if full else source_tokens[r]))
         incoming = leg(layer,'dispatch',matrix,packed,0)
         experts = {r:node(r,'COMP',f'L{layer}.experts',incoming[r]+[packed[r]],
                          cost['expert_ns_per_contribution']*received[r]) for r in group}
         combine = Counter({(dst,src):n for (src,dst),n in matrix.items()})
         returned = leg(layer,'combine',combine,experts,1)
         previous = {r:[node(r,'COMP',f'L{layer}.merge',returned[r]+[experts[r]],
-                           cost['merge_ns_per_token']*w['batch_per_rank'])] for r in group}
+                           cost['merge_ns_per_token']*(w['batch_per_rank'] if full else source_tokens[r]))] for r in group}
         if full:
             previous={r:[node(r,'COMP',f'L{layer}.ffn_residual',previous[r],cost['residual_ns_per_token']*w['batch_per_rank'])] for r in group}
     if full:

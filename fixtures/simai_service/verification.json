@@ -1,0 +1,87 @@
+{
+  "passed": true,
+  "normal": {
+    "passed": true,
+    "frontend": "actual_SimAI_Vidur",
+    "simai_revision": "a57d765c5478f319c5f5ab6fdc53f9cc7f461743",
+    "gpu_count": 64,
+    "planes": 1,
+    "source_requests": 2,
+    "active_source_ranks": 2,
+    "source_token_layer_rows": 4,
+    "waves": 2,
+    "messages": 64,
+    "remote_payload_bytes": 917504,
+    "verified_nodes": 640,
+    "finish_ns": 47603,
+    "recovery": {
+      "available": true,
+      "failed": false,
+      "failed_ids": [],
+      "source_states": 64,
+      "timeout_retransmissions": 0,
+      "duplicate_ack_responses": 0,
+      "reconstructed": true,
+      "scope": "offline protocol audit; no source policy access to receiver/global truth",
+      "completed": 64,
+      "exhausted": 0,
+      "silence_bounds": []
+    },
+    "hardware_calibrated": false,
+    "route_source": "synthetic_test",
+    "scope": "finite_ready_KV_MoE_segment; source-checked choices; single native ns3 fabric",
+    "active_data_ranks": 32
+  },
+  "loss": {
+    "passed": true,
+    "frontend": "actual_SimAI_Vidur",
+    "simai_revision": "a57d765c5478f319c5f5ab6fdc53f9cc7f461743",
+    "gpu_count": 64,
+    "planes": 1,
+    "source_requests": 2,
+    "active_source_ranks": 2,
+    "source_token_layer_rows": 4,
+    "waves": 2,
+    "messages": 64,
+    "remote_payload_bytes": 917504,
+    "verified_nodes": 640,
+    "finish_ns": 167013,
+    "recovery": {
+      "available": true,
+      "failed": false,
+      "failed_ids": [],
+      "source_states": 64,
+      "timeout_retransmissions": 3,
+      "duplicate_ack_responses": 1,
+      "reconstructed": true,
+      "scope": "offline protocol audit; no source policy access to receiver/global truth",
+      "completed": 64,
+      "exhausted": 0,
+      "silence_bounds": []
+    },
+    "hardware_calibrated": false,
+    "route_source": "synthetic_test",
+    "scope": "finite_ready_KV_MoE_segment; source-checked choices; single native ns3 fabric",
+    "active_data_ranks": 32
+  },
+  "refused": [
+    {
+      "case": "feedback",
+      "error": "Scale-Out topology: frontend/native graph completion differs"
+    },
+    {
+      "case": "choices",
+      "error": "Scale-Out topology: wave choices or source indices differ from raw file"
+    },
+    {
+      "case": "idle-compute",
+      "error": "Scale-Out topology: idle source costs or received-expert compute differ"
+    },
+    {
+      "case": "accepted-bytes",
+      "error": "Scale-Out topology: native source/accepted bytes or release differ"
+    }
+  ],
+  "new_network_runs": 0,
+  "scope": "audit existing native execution and causal/source corruption rejection"
+}

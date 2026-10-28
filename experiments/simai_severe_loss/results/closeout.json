@@ -1,0 +1,699 @@
+{
+  "schema_version": "moe-study-closeout/1",
+  "research_state": "completed_locally",
+  "publication_state": "waiting_for_user_repository_URL",
+  "platform_commit": "0d1939e",
+  "registration_commit": "08135cd",
+  "original_baseline_commit": "0f53b15",
+  "build_identity": {
+    "binary": "/dev/shm/moe-heavy-loss-20261028/build/output/moe-rdma/ns3.42-moe-rdma-service",
+    "sha256": "796928c7446f172d8cb876645cd5416f1eaf60bd4de4bc95dffffd939f07d3ae",
+    "sources": {
+      "backend/periodic_data_loss.hh": "9d9f2d392e7d2d3b99a372aa163d62e257cdd74e05f3ab35ca0f2c34e6696546",
+      "backend/rdma/fabric.cc": "963c70221a180f811160c34a38f39ebc0dc6cc071a7b0cc6e943c9fd913d4262",
+      "backend/rdma/fabric.hh": "7bc5d1e92d2456964834d414009ffdb442e50a196a51d5a4ba7c43424cc336af"
+    },
+    "native_baseline_equivalence": {
+      "passed": true,
+      "fields": [
+        "messages",
+        "service",
+        "ports",
+        "recovery"
+      ],
+      "all_packet_events_identical": true,
+      "scope": "old and new artificial EP64 normal condition; different capture budgets excluded"
+    }
+  },
+  "commands": {
+    "topology400": {
+      "argv": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "topology",
+        "--config",
+        "/home/lry/moe-ub-cosim/runs/simai_severe_real_20261028/inputs/topology400.json",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/simai_severe_real_20261028/topology400"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "elapsed_seconds": 0.11429019100614823
+    },
+    "preflight400": {
+      "argv": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-preflight",
+        "--topology",
+        "/home/lry/moe-ub-cosim/runs/simai_severe_real_20261028/topology400",
+        "--protocol",
+        "/home/lry/moe-ub-cosim/runs/simai_severe_real_20261028/inputs/preflight.json",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/simai_severe_real_20261028/preflight400.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "elapsed_seconds": 0.11422722300630994
+    },
+    "topology25": {
+      "argv": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "topology",
+        "--config",
+        "/home/lry/moe-ub-cosim/runs/simai_severe_real_20261028/inputs/topology25.json",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/simai_severe_real_20261028/topology25"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "elapsed_seconds": 0.0639792000001762
+    },
+    "preflight25": {
+      "argv": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-preflight",
+        "--topology",
+        "/home/lry/moe-ub-cosim/runs/simai_severe_real_20261028/topology25",
+        "--protocol",
+        "/home/lry/moe-ub-cosim/runs/simai_severe_real_20261028/inputs/preflight.json",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/simai_severe_real_20261028/preflight25.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "elapsed_seconds": 0.06401779499719851
+    },
+    "run-clean400": {
+      "argv": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "simai-run",
+        "--config",
+        "/home/lry/moe-ub-cosim/runs/simai_severe_real_20261028/inputs/service.json",
+        "--topology",
+        "/home/lry/moe-ub-cosim/runs/simai_severe_real_20261028/topology400",
+        "--protocol",
+        "/home/lry/moe-ub-cosim/runs/simai_severe_real_20261028/inputs/clean400.json",
+        "--runtime",
+        "/home/lry/moe-ub-cosim/runs/simai_scaleout_20261028/runtime",
+        "--backend",
+        "/dev/shm/moe-heavy-loss-20261028/build/output/moe-rdma/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/simai_severe_real_20261028/clean400"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "elapsed_seconds": 3.670285797008546
+    },
+    "run-bottleneck25": {
+      "argv": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "simai-run",
+        "--config",
+        "/home/lry/moe-ub-cosim/runs/simai_severe_real_20261028/inputs/service.json",
+        "--topology",
+        "/home/lry/moe-ub-cosim/runs/simai_severe_real_20261028/topology25",
+        "--protocol",
+        "/home/lry/moe-ub-cosim/runs/simai_severe_real_20261028/inputs/bottleneck25.json",
+        "--runtime",
+        "/home/lry/moe-ub-cosim/runs/simai_scaleout_20261028/runtime",
+        "--backend",
+        "/dev/shm/moe-heavy-loss-20261028/build/output/moe-rdma/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/simai_severe_real_20261028/bottleneck25"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "elapsed_seconds": 3.922488960000919
+    },
+    "run-loss50": {
+      "argv": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "simai-run",
+        "--config",
+        "/home/lry/moe-ub-cosim/runs/simai_severe_real_20261028/inputs/service.json",
+        "--topology",
+        "/home/lry/moe-ub-cosim/runs/simai_severe_real_20261028/topology25",
+        "--protocol",
+        "/home/lry/moe-ub-cosim/runs/simai_severe_real_20261028/inputs/loss50.json",
+        "--runtime",
+        "/home/lry/moe-ub-cosim/runs/simai_scaleout_20261028/runtime",
+        "--backend",
+        "/dev/shm/moe-heavy-loss-20261028/build/output/moe-rdma/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/simai_severe_real_20261028/loss50"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "elapsed_seconds": 4.02233844899456
+    },
+    "run-loss75": {
+      "argv": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "simai-run",
+        "--config",
+        "/home/lry/moe-ub-cosim/runs/simai_severe_real_20261028/inputs/service.json",
+        "--topology",
+        "/home/lry/moe-ub-cosim/runs/simai_severe_real_20261028/topology25",
+        "--protocol",
+        "/home/lry/moe-ub-cosim/runs/simai_severe_real_20261028/inputs/loss75.json",
+        "--runtime",
+        "/home/lry/moe-ub-cosim/runs/simai_scaleout_20261028/runtime",
+        "--backend",
+        "/dev/shm/moe-heavy-loss-20261028/build/output/moe-rdma/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/simai_severe_real_20261028/loss75"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "elapsed_seconds": 3.9214754489948973
+    },
+    "run-blackout": {
+      "argv": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "simai-run",
+        "--config",
+        "/home/lry/moe-ub-cosim/runs/simai_severe_real_20261028/inputs/service.json",
+        "--topology",
+        "/home/lry/moe-ub-cosim/runs/simai_severe_real_20261028/topology25",
+        "--protocol",
+        "/home/lry/moe-ub-cosim/runs/simai_severe_real_20261028/inputs/blackout.json",
+        "--runtime",
+        "/home/lry/moe-ub-cosim/runs/simai_scaleout_20261028/runtime",
+        "--backend",
+        "/dev/shm/moe-heavy-loss-20261028/build/output/moe-rdma/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/simai_severe_real_20261028/blackout"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "elapsed_seconds": 3.870842951000668
+    },
+    "run-persistent": {
+      "argv": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "simai-run",
+        "--config",
+        "/home/lry/moe-ub-cosim/runs/simai_severe_real_20261028/inputs/service.json",
+        "--topology",
+        "/home/lry/moe-ub-cosim/runs/simai_severe_real_20261028/topology25",
+        "--protocol",
+        "/home/lry/moe-ub-cosim/runs/simai_severe_real_20261028/inputs/persistent.json",
+        "--runtime",
+        "/home/lry/moe-ub-cosim/runs/simai_scaleout_20261028/runtime",
+        "--backend",
+        "/dev/shm/moe-heavy-loss-20261028/build/output/moe-rdma/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/simai_severe_real_20261028/persistent"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 1,
+      "elapsed_seconds": 2.4687439389817882
+    },
+    "check-clean400": {
+      "argv": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "simai-check",
+        "--run",
+        "/home/lry/moe-ub-cosim/runs/simai_severe_real_20261028/clean400"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "elapsed_seconds": 0.9662328800186515
+    },
+    "arrivals-clean400-dispatch": {
+      "argv": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-arrivals",
+        "--run",
+        "/home/lry/moe-ub-cosim/runs/simai_severe_real_20261028/clean400",
+        "--graph",
+        "g0.w0",
+        "--layer",
+        "0",
+        "--phase",
+        "dispatch",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/simai_severe_real_20261028/clean400-dispatch-audit"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "elapsed_seconds": 0.414939106995007
+    },
+    "arrivals-clean400-combine": {
+      "argv": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-arrivals",
+        "--run",
+        "/home/lry/moe-ub-cosim/runs/simai_severe_real_20261028/clean400",
+        "--graph",
+        "g0.w0",
+        "--layer",
+        "0",
+        "--phase",
+        "combine",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/simai_severe_real_20261028/clean400-combine-audit"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "elapsed_seconds": 0.4147027390135918
+    },
+    "check-bottleneck25": {
+      "argv": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "simai-check",
+        "--run",
+        "/home/lry/moe-ub-cosim/runs/simai_severe_real_20261028/bottleneck25"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "elapsed_seconds": 1.0154931989964098
+    },
+    "arrivals-bottleneck25-dispatch": {
+      "argv": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-arrivals",
+        "--run",
+        "/home/lry/moe-ub-cosim/runs/simai_severe_real_20261028/bottleneck25",
+        "--graph",
+        "g0.w0",
+        "--layer",
+        "0",
+        "--phase",
+        "dispatch",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/simai_severe_real_20261028/bottleneck25-dispatch-audit"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "elapsed_seconds": 0.4645864929771051
+    },
+    "arrivals-bottleneck25-combine": {
+      "argv": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-arrivals",
+        "--run",
+        "/home/lry/moe-ub-cosim/runs/simai_severe_real_20261028/bottleneck25",
+        "--graph",
+        "g0.w0",
+        "--layer",
+        "0",
+        "--phase",
+        "combine",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/simai_severe_real_20261028/bottleneck25-combine-audit"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "elapsed_seconds": 0.5149971219943836
+    },
+    "check-loss50": {
+      "argv": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "simai-check",
+        "--run",
+        "/home/lry/moe-ub-cosim/runs/simai_severe_real_20261028/loss50"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "elapsed_seconds": 1.1155995480075944
+    },
+    "loss-check-loss50": {
+      "argv": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "data-loss-check",
+        "--run",
+        "/home/lry/moe-ub-cosim/runs/simai_severe_real_20261028/loss50"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "elapsed_seconds": 0.3144928209949285
+    },
+    "arrivals-loss50-dispatch": {
+      "argv": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-arrivals",
+        "--run",
+        "/home/lry/moe-ub-cosim/runs/simai_severe_real_20261028/loss50",
+        "--graph",
+        "g0.w0",
+        "--layer",
+        "0",
+        "--phase",
+        "dispatch",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/simai_severe_real_20261028/loss50-dispatch-audit"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "elapsed_seconds": 0.5649749799922574
+    },
+    "arrivals-loss50-combine": {
+      "argv": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-arrivals",
+        "--run",
+        "/home/lry/moe-ub-cosim/runs/simai_severe_real_20261028/loss50",
+        "--graph",
+        "g0.w0",
+        "--layer",
+        "0",
+        "--phase",
+        "combine",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/simai_severe_real_20261028/loss50-combine-audit"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "elapsed_seconds": 0.5149322069773916
+    },
+    "check-loss75": {
+      "argv": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "simai-check",
+        "--run",
+        "/home/lry/moe-ub-cosim/runs/simai_severe_real_20261028/loss75"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "elapsed_seconds": 1.0659531229757704
+    },
+    "loss-check-loss75": {
+      "argv": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "data-loss-check",
+        "--run",
+        "/home/lry/moe-ub-cosim/runs/simai_severe_real_20261028/loss75"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "elapsed_seconds": 0.3144256199884694
+    },
+    "arrivals-loss75-dispatch": {
+      "argv": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-arrivals",
+        "--run",
+        "/home/lry/moe-ub-cosim/runs/simai_severe_real_20261028/loss75",
+        "--graph",
+        "g0.w0",
+        "--layer",
+        "0",
+        "--phase",
+        "dispatch",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/simai_severe_real_20261028/loss75-dispatch-audit"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "elapsed_seconds": 0.5652186050137971
+    },
+    "arrivals-loss75-combine": {
+      "argv": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-arrivals",
+        "--run",
+        "/home/lry/moe-ub-cosim/runs/simai_severe_real_20261028/loss75",
+        "--graph",
+        "g0.w0",
+        "--layer",
+        "0",
+        "--phase",
+        "combine",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/simai_severe_real_20261028/loss75-combine-audit"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "elapsed_seconds": 0.5147824149753433
+    },
+    "check-blackout": {
+      "argv": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "simai-check",
+        "--run",
+        "/home/lry/moe-ub-cosim/runs/simai_severe_real_20261028/blackout"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "elapsed_seconds": 1.0660150040057488
+    },
+    "loss-check-blackout": {
+      "argv": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "data-loss-check",
+        "--run",
+        "/home/lry/moe-ub-cosim/runs/simai_severe_real_20261028/blackout"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "elapsed_seconds": 0.3146824270079378
+    },
+    "arrivals-blackout-dispatch": {
+      "argv": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-arrivals",
+        "--run",
+        "/home/lry/moe-ub-cosim/runs/simai_severe_real_20261028/blackout",
+        "--graph",
+        "g0.w0",
+        "--layer",
+        "0",
+        "--phase",
+        "dispatch",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/simai_severe_real_20261028/blackout-dispatch-audit"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "elapsed_seconds": 0.6152525189972948
+    },
+    "arrivals-blackout-combine": {
+      "argv": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-arrivals",
+        "--run",
+        "/home/lry/moe-ub-cosim/runs/simai_severe_real_20261028/blackout",
+        "--graph",
+        "g0.w0",
+        "--layer",
+        "0",
+        "--phase",
+        "combine",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/simai_severe_real_20261028/blackout-combine-audit"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "elapsed_seconds": 0.5148416430165526
+    },
+    "loss-check-persistent": {
+      "argv": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "data-loss-check",
+        "--run",
+        "/home/lry/moe-ub-cosim/runs/simai_severe_real_20261028/persistent"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "elapsed_seconds": 0.11396648100344464
+    },
+    "arrivals-persistent-dispatch": {
+      "argv": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-arrivals",
+        "--run",
+        "/home/lry/moe-ub-cosim/runs/simai_severe_real_20261028/persistent",
+        "--graph",
+        "g0.w0",
+        "--layer",
+        "0",
+        "--phase",
+        "dispatch",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/simai_severe_real_20261028/persistent-dispatch-audit"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "elapsed_seconds": 0.31442492600763217
+    }
+  },
+  "resources": {
+    "clean400": {
+      "wall_seconds": 1.9084903479961213,
+      "peak_group_rss": 311795712,
+      "artifact_bytes": 45273088,
+      "packet_events": 66792
+    },
+    "bottleneck25": {
+      "wall_seconds": 2.122508044994902,
+      "peak_group_rss": 315842560,
+      "artifact_bytes": 46059520,
+      "packet_events": 78932
+    },
+    "loss50": {
+      "wall_seconds": 2.1356991509965155,
+      "peak_group_rss": 322596864,
+      "artifact_bytes": 46538752,
+      "packet_events": 86976
+    },
+    "loss75": {
+      "wall_seconds": 2.023846174008213,
+      "peak_group_rss": 321626112,
+      "artifact_bytes": 46505984,
+      "packet_events": 86418
+    },
+    "blackout": {
+      "wall_seconds": 2.017574225028511,
+      "peak_group_rss": 321728512,
+      "artifact_bytes": 46563328,
+      "packet_events": 87356
+    },
+    "persistent": {
+      "wall_seconds": 1.6831734500010498,
+      "peak_group_rss": 290598912,
+      "artifact_bytes": 38535168,
+      "packet_events": 20268
+    }
+  },
+  "total_command_elapsed_seconds": 33.933203812950524,
+  "artifact_root_bytes": 295157165,
+  "independent_packet_audit": {
+    "events": 426742,
+    "curve_rows": 8259
+  },
+  "report_audit": {
+    "passed": true,
+    "artifact_files": 112,
+    "checked_links": 15,
+    "exported_packet_rows": 118138,
+    "native_runs": 6,
+    "expected_failures": 1,
+    "js": {
+      "passed": true,
+      "conditions": 6,
+      "scope": "V8 DOM stub, not browser rendering"
+    },
+    "no_network_reruns": true
+  },
+  "no_native_reruns": true,
+  "offline_corrections": [
+    "Failed message lacks final ACK/DCQCN snapshot; evaluator now records unavailable count rather than assuming zero.",
+    "Retained first rendering under render-first-review and prior verifier output before adding ACK-inflight evidence."
+  ],
+  "limitations": [
+    "Declared compute costs and ready-KV, finite two layers/two Decode steps; no actual GPU calibration.",
+    "15 distinct real input files, known local hashes; downloaded remote revision unknown.",
+    "320 physical endpoints, 218 data-active ranks in completed conditions.",
+    "Injected periodic loss is separate from natural congestion overflow; current MMU drop observation incomplete.",
+    "Six conditions each once; no statistical confidence or production loss-rate claim.",
+    "No demonstrated new optimization benefit; timeout-vs-ACK evidence motivates a controlled next study."
+  ],
+  "dependency_audit": {
+    "passed": true,
+    "checkouts": 13,
+    "source_sha256": "809716fb04614c756bd2b99dbc2848372ae6ee8a26d28cc300e159befe31b1c7"
+  },
+  "indexed_report_artifact_hashes_verified": 112
+}

@@ -10,7 +10,9 @@
 
 平台子项`completed`：四个EP64小例各执行一次，正常/50%窗口/100%短黑洞完整恢复，持续黑洞以重试耗尽明确失败；逐包独立核验及摘要通过。关闭新功能与旧二进制正常结果的全部消息、服务事件、端口、恢复和包事件逐项相等。依据见[验收摘要](../../fixtures/simai_severe_loss/README.md)，原件及编译身份`runs/simai_loss_platform_20261028/`。目标规模研究待单独登记，不以小例代替。
 
-目标研究子项`in_progress`：方法登记于[严重丢包对照](../../experiments/simai_severe_loss/protocol.md)。320端点/40服务器、EP256+64、15个真实请求分别集中rank0/128/256，实际batch6/6/3。固定六条件clean400、bottleneck25、50%/75%短窗、100%短窗与持续全丢，各一次。根`runs/simai_severe_real_20261028/`，累计受监控1200秒/3GiB，单native60秒/RSS2GiB/地址4GiB/5ms模拟/128MiB结果/256MiB产物/400000捕获，开始预留8GiB。先CPU核上游容量与真实组批，再执行网络；不扩限重跑，持续黑洞须明确失败并保留未完成曲线。
+目标研究子项`completed`，发布仍待用户自己的仓库URL：方法登记于[严重丢包对照](../../experiments/simai_severe_loss/protocol.md)。320端点/40服务器、EP256+64、15个真实请求分别集中rank0/128/256，实际batch6/6/3。固定六条件各一次：400G正常171.893µs；25G无人工丢包592.996µs；50%/75%/100%短窗663.998/690.414/702.706µs；持续全丢603.090µs重试耗尽，接受字节0，不当作完成。成功条件790消息/13,533,184有效字节/218数据活跃rank。独立核426,742个包事件、8,259行曲线，网页核118,138行切片包记录与全部6个选择项。25G无人工丢包126次超时中86次已有进度ACK在途；这说明需验证RTO适配，不宣称优化收益。
+
+根`runs/simai_severe_real_20261028/`，原定累计受监控1200秒/3GiB，单native60秒/RSS2GiB/地址4GiB/5ms模拟/128MiB结果/256MiB产物/400000捕获，开始预留8GiB。实际六个native各约1.7–2.2宿主秒，最大采样组RSS约308MiB，运行根约282MiB；未扩限、未重跑网络。失败消息没有DCQCN终态快照，离线审核修正为显式缺失；首次图与旧审核原件保留。完整[网页](../../experiments/simai_severe_loss/results/20261028/report.html)、[独立审核](../../experiments/simai_severe_loss/results/20261028/verification.json)、[资源与命令](../../experiments/simai_severe_loss/results/closeout.json)。
 
 ## 2026-10-28 用户新增：SimAI前端、原生ns-3与300卡级真实路由执行
 

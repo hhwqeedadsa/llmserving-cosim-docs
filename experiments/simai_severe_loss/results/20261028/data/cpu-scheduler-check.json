@@ -1,0 +1,26 @@
+{
+  "passed": true,
+  "network_executed": false,
+  "simai_revision": "a57d765c5478f319c5f5ab6fdc53f9cc7f461743",
+  "source": "actual upstream Cluster/Orca CPU lifecycle",
+  "rows": [
+    {
+      "rank": 0,
+      "ep": 256,
+      "actual_batch": 6,
+      "memory_max_batch": 6
+    },
+    {
+      "rank": 128,
+      "ep": 256,
+      "actual_batch": 6,
+      "memory_max_batch": 6
+    },
+    {
+      "rank": 256,
+      "ep": 64,
+      "actual_batch": 3,
+      "memory_max_batch": 6
+    }
+  ]
+}

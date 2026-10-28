@@ -1,0 +1,41 @@
+{
+  "schema_version": "moe-rdma-arrival-audit/1",
+  "simulation_finished_ns": 690414,
+  "service_passed": true,
+  "capture_complete": true,
+  "gpu_count": 320,
+  "generated_graphs": 4,
+  "generated_graph_message_count": 790,
+  "submitted_message_count": 790,
+  "generated_graph_logical_bytes": 13533184,
+  "submitted_logical_bytes": 13533184,
+  "source_tx_payload_bytes": 18494864,
+  "destination_rx_payload_bytes": 16249128,
+  "accepted_bytes": 13533184,
+  "slice": {
+    "graph_id": "g0.w0",
+    "layer": 0,
+    "source_layer_id": 3,
+    "phase": "dispatch",
+    "src": null,
+    "dst": null,
+    "messages": 75,
+    "logical_bytes": 1361920,
+    "tx_payload_bytes": 3866096,
+    "rx_payload_bytes": 2346160,
+    "unique_arrival_bytes": 1361920,
+    "accepted_bytes": 1361920,
+    "confirmed_bytes": 1361920,
+    "complete": true,
+    "data_ready_ns": 211530,
+    "source_confirmed_ns": 218530
+  },
+  "semantics": {
+    "receiver": "locked GBN exact-next byte sequence; L2BackToZero=false",
+    "accepted": "sum of contiguous protocol-accepted bytes per message; excludes duplicates and discarded out-of-order data",
+    "unique_arrival": "byte-range union of physical destination arrivals; may include discarded out-of-order data",
+    "timestamps": "simulated ns; MacRx before receiver acceptance at the same ns; not GPU-visible timestamps",
+    "model_bytes": "native packet size including modeled headers; excludes unmodeled Ethernet preamble/FCS/IFG",
+    "scope": "generated graphs only if failed; future ungenerated waves are not included; evaluation-only association"
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "schema_version": "moe-project-review-copy-audit/1",
+  "input_sha256": "0016b4ca07790a50e12c768ccea9f193a5b53c3106efc5472a355e5321be8848",
+  "activation_payload_bytes_per_copy": 14336,
+  "graphs": [
+    {
+      "graph_id": "g0.w0",
+      "ep": 256,
+      "wave_sha256": "1f385ef960ef87862bc326051f09e0094434ef5411ed911afb267e4c9a23bc42",
+      "token_layer_records": 24,
+      "remote_contribution_copies": 190,
+      "remote_token_rank_copies": 190,
+      "recorded_dispatch_payload_bytes": 2723840,
+      "token_rank_dispatch_activation_bytes": 2723840,
+      "activation_copy_difference_bytes": 0
+    },
+    {
+      "graph_id": "g0.w1",
+      "ep": 256,
+      "wave_sha256": "715a1252619bc52abc7f5b8e90f43460b91e9ce9c464a5a34ba82dcc745146e0",
+      "token_layer_records": 24,
+      "remote_contribution_copies": 190,
+      "remote_token_rank_copies": 190,
+      "recorded_dispatch_payload_bytes": 2723840,
+      "token_rank_dispatch_activation_bytes": 2723840,
+      "activation_copy_difference_bytes": 0
+    },
+    {
+      "graph_id": "g1.w0",
+      "ep": 64,
+      "wave_sha256": "8407656806822b5fcb0e62c41caf4ec94d4defc0725c3e39e9f532369c2d4986",
+      "token_layer_records": 6,
+      "remote_contribution_copies": 47,
+      "remote_token_rank_copies": 45,
+      "recorded_dispatch_payload_bytes": 673792,
+      "token_rank_dispatch_activation_bytes": 645120,
+      "activation_copy_difference_bytes": 28672
+    },
+    {
+      "graph_id": "g1.w1",
+      "ep": 64,
+      "wave_sha256": "bb26ac1e5f4319bdbe5083d4cb0c4a18e739db9f43a6e9e74ab52a5cee02b347",
+      "token_layer_records": 6,
+      "remote_contribution_copies": 45,
+      "remote_token_rank_copies": 43,
+      "recorded_dispatch_payload_bytes": 645120,
+      "token_rank_dispatch_activation_bytes": 616448,
+      "activation_copy_difference_bytes": 28672
+    }
+  ],
+  "totals": {
+    "token_layer_records": 60,
+    "remote_contribution_copies": 472,
+    "remote_token_rank_copies": 468,
+    "recorded_dispatch_payload_bytes": 6766592,
+    "token_rank_dispatch_activation_bytes": 6709248,
+    "activation_copy_difference_bytes": 57344
+  },
+  "scope": "offline saved-wave conservation; static contiguous expert ownership; token/rank activation comparison only; excludes modern metadata, controls, Combine changes, packet overhead and timing; no network rerun or measured benefit"
+}

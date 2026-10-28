@@ -13,7 +13,11 @@
 
 ## 当前范围和预算
 
-当前研究`in_progress`：[RC故障反事实复用判别](../../experiments/rc_counterfactual_reuse/protocol.md)，起点`ec3bc47`。目标从多连接工程转为执行缩减的可证伪原型：真实1472首token/单层Dispatch片段，先正常执行并封存输入可读预测，再执行最终Atomic ACK丢失及数据丢失。对照普通空闲路径解析和完整包级执行，不把缓存或RTO当新意；三新网络各一次，600受监控秒/256MiB，零构建/下载/GPU/依赖修改/push，旧条件保持关闭。
+当前研究已关闭：[RC反事实复用原型](../../experiments/rc_counterfactual_reuse/README.md)、[方法](../../experiments/rc_counterfactual_reuse/protocol.md)及[网页](../../experiments/rc_counterfactual_reuse/results/20261028/report.html)，起点`ec3bc47`、协议`c987990`。真实1472首prefill token/层3，EP4/三目的、43,008B有效Dispatch数据及计数片段，未运行完整CCL/Combine/LLMServingSim或GPU。三个新网络各一次：正常28.245us、最终Atomic ACK丢失112.041us、数据中间包丢失113.363us；逐跳TX分别826/830/942。
+
+故障执行前封存的复用原型只对“最后原子回复丢失、该QP无后继、重试晚于全网排空”准入，复用正常过程并计算4次逐跳发送尾部，完成、内存/旧值/副作用及所有尾部时刻吻合。普通原RTT/RTO和空闲路径解析同样误差0，未证明新增预测贡献或完整宿主加速。数据丢失事前拒绝，不能计作已正确预测。初次评价后加固缓存身份、显式ECN阈值及已审阅MMU前提，旧源码保留；离线预测与故障前封存字节一致，无网络重跑。六类篡改及13固定依赖通过。
+
+124成员包逐hash恢复，复制源码/数据/运行时到新根，在空cwd用隔离Python重算预测、核验及MD/HTML逐字节一致，恢复零网络/编译；包SHA256 `0cda0429703257bba2fabc92110690ff673653ecda9cad045ec0d6e610e445b2`，原件`runs/rc_counterfactual_reuse_20261028/`。见[恢复](../../experiments/rc_counterfactual_reuse/results/20261028/recovery.json)及[关闭](../../experiments/rc_counterfactual_reuse/results/20261028/closeout.json)。保守含嵌套监控/管理预留17.341秒、约59.54MiB，保持600秒/256MiB及单项上限，额度关闭。零构建/HTTP/GPU/依赖修改/push；旧条件保持关闭。本轮为progress：两个主创新及总体目标仍`in_progress`，不把小原型或常规增量复用当论文贡献。下一判别需另定重叠反馈/后继依赖、普通增量执行基线与完整配对成本；不自动扩本轮条件。
 
 当前平台增量`completed`：[多连接RC共享网络参考](rc_concurrent_fabric_spec.md)、[公开示例](../../examples/rc_concurrent/README.md)及[核验网页](../../fixtures/rc_concurrent_fabric/report.html)，起点`f00cea6`、规范`0ae2957`。同一Fabric/时钟/物理队列中，四QP独立保存序号、重放与定时器，两QP共用源NIC、三QP修改共享目标内存，完成由本连接实际反馈决定。仅一次CPU驱动编译，只读复用固定原生`e929264`八库，零ns-3构建/依赖修改/HTTP/GPU/push，旧入口不改变。
 

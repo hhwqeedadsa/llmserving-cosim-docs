@@ -1,0 +1,33 @@
+{
+  "E": 256,
+  "EP": 4,
+  "H": 7168,
+  "activation_precision": "declared BF16",
+  "available_decode_steps": 128,
+  "destinations": [
+    1,
+    2,
+    3
+  ],
+  "entry": 0,
+  "expert_ids": [
+    49,
+    61,
+    77,
+    84,
+    167,
+    178,
+    204,
+    52
+  ],
+  "file_id": "local-1472",
+  "hidden_bytes": 14336,
+  "layer": 3,
+  "original_path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/computer_security/1472.json",
+  "prompt_tokens": 105,
+  "raw_sha256": "3085c39e9b9950a7e68f30eed8517eaecbfe3d0ad75d813925ff788a1c164255",
+  "scope": "one token cross-server Dispatch data/notification fragment; no full CCL/LLMServingSim/GPU",
+  "source_rank": 0,
+  "token_row": 0,
+  "top_k": 8
+}

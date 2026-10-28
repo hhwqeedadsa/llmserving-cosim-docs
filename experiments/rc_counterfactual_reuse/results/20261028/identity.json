@@ -1,0 +1,21 @@
+{
+  "backend_sha256": "57901e3886029a65cf55d761fbdb10997f06e5b6fb7a2940dfea2277a8c12602",
+  "library_hashes": {
+    "libns3.42-applications.so": "d66c01c63d693f208f537c112013574893c64424aa99a2a9254b817456e1eed5",
+    "libns3.42-bridge.so": "80857b85fe6f465cc5ebe64f6a43b06685c678a6c6739cef19ce7e0dcbd427b3",
+    "libns3.42-core.so": "b33950d3cb1382fda25025622f4118b1e4550d6a75ad2d7f41c40209893e5ea8",
+    "libns3.42-internet.so": "3fd7927cea29696b87c5b88ab272ceac37d85837fbee1fde05abe3fe1f07f18b",
+    "libns3.42-network.so": "33164812dbde0805cd014bced558185f5da351f1d7330711fa88c6ecd08c88e3",
+    "libns3.42-point-to-point.so": "903add127ede21248ec37fbddbbd60ebbc3e38c8bf6bf71baf09fe0503e42475",
+    "libns3.42-stats.so": "b259637bc0e05ef4e61176593acc292be7acce159aaa3dd29c9fdb3a066190f3",
+    "libns3.42-traffic-control.so": "9233c9a282ed14613b2078993fdf0a4c0650d7b2cc8bcecb1e422972c472dfb0"
+  },
+  "native_commit": "e9292641d56de4781128642bd48da22691d4e430",
+  "native_source_hashes": {
+    "src/core/model/nstime.h": "34ef8dac6348e13e56361bd2198884262c7b02df3892d1a66008d8e1f1e1e153",
+    "src/network/utils/data-rate.cc": "e66109d0d1c8b5a808a1a8e811e84c19e8f4ac08b10e58dcfcc50a1a1b807354",
+    "src/point-to-point/model/point-to-point-net-device.cc": "2d908bb223ead059a81265308fefd841b0673af37d679a3c61acebd49094e8d0",
+    "src/point-to-point/model/qbb-net-device.cc": "d05db77ce5a5386c74064f7436f3f2d1ee35f50829a62999354f2c2eaa4ce23b"
+  },
+  "platform_commit": "c987990f611349e0ac15eadf8e81edb03bd09bd9"
+}

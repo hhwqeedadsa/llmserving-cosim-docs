@@ -1,0 +1,113 @@
+{
+  "GPU": 0,
+  "HTTP": 0,
+  "artifact_budget_bytes": 268435456,
+  "artifact_reserve_bytes": 2097152,
+  "artifact_total_with_reserve": 62435328,
+  "artifact_usage_before_closeout": {
+    "allocated_bytes": 60338176,
+    "apparent_bytes": 59843464
+  },
+  "checkpoint": {
+    "compressed_bytes": 5392296,
+    "contains_local_raw_data": true,
+    "content_bytes": 27133402,
+    "members": 124,
+    "published": false,
+    "sha256": "0cda0429703257bba2fabc92110690ff673653ecda9cad045ec0d6e610e445b2"
+  },
+  "conservative_monitored_seconds_including_nested": 7.340481792984065,
+  "dependency_changes": 0,
+  "fixed_dependencies_passed": 13,
+  "full_host_speedup_measured": false,
+  "future_gate": "overlapping feedback/dependencies, generic incremental baseline, paired complete cost and independent input",
+  "management_seconds_reserve": 10,
+  "monitors": [
+    {
+      "path": "monitor/ack-check/probe.json",
+      "wall_seconds": 0.11792346599395387
+    },
+    {
+      "path": "monitor/ack_loss/probe.json",
+      "wall_seconds": 0.4281142529944191
+    },
+    {
+      "path": "monitor/archive/probe.json",
+      "wall_seconds": 3.2278707520017633
+    },
+    {
+      "path": "monitor/data_loss/probe.json",
+      "wall_seconds": 0.3273450050037354
+    },
+    {
+      "path": "monitor/deps/probe.json",
+      "wall_seconds": 0.4361656909895828
+    },
+    {
+      "path": "monitor/final-verify/probe.json",
+      "wall_seconds": 0.22503729999880306
+    },
+    {
+      "path": "monitor/guard-review/probe.json",
+      "wall_seconds": 0.12035411701072007
+    },
+    {
+      "path": "monitor/healthy/probe.json",
+      "wall_seconds": 0.3193224919959903
+    },
+    {
+      "path": "monitor/predict/probe.json",
+      "wall_seconds": 0.1153577299992321
+    },
+    {
+      "path": "monitor/recovery/probe.json",
+      "wall_seconds": 0.6675378309882944
+    },
+    {
+      "path": "monitor/report/probe.json",
+      "wall_seconds": 0.12952008099819068
+    },
+    {
+      "path": "monitor/sealed-evaluation/probe.json",
+      "wall_seconds": 0.2248573020042386
+    },
+    {
+      "path": "monitor/verify/probe.json",
+      "wall_seconds": 0.2227963240002282
+    },
+    {
+      "path": "monitor/wire-source-verify/probe.json",
+      "wall_seconds": 0.22340922000876162
+    },
+    {
+      "path": "observed/healthy-run/execution/probe.json",
+      "wall_seconds": 0.11359936099324841
+    },
+    {
+      "path": "truth/ack_loss/execution/probe.json",
+      "wall_seconds": 0.1124378819949925
+    },
+    {
+      "path": "truth/data_loss/execution/probe.json",
+      "wall_seconds": 0.11283439199905843
+    },
+    {
+      "path": "../rc_counterfactual_reuse_20261028-prepare-monitor/probe.json",
+      "wall_seconds": 0.2159985940088518
+    }
+  ],
+  "network_runs": 3,
+  "network_runs_per_condition": 1,
+  "new_builds": 0,
+  "new_innovation_proven": false,
+  "ordinary_analytic_equals_incremental": true,
+  "passed": true,
+  "push": false,
+  "results": "normal/terminal ACK loss/data loss each once; data loss deferred before execution",
+  "source_guard_review_post_initial_evaluation": true,
+  "state": "progress_overall_goal_not_complete",
+  "tamper_classes_rejected": 6,
+  "total_seconds_with_reserve": 17.340481792984065,
+  "unchanged_sealed_prediction": true,
+  "wall_budget_seconds": 600
+}

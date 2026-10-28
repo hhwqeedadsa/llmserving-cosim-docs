@@ -1,0 +1,52 @@
+{
+  "blind_old_rtt_error_ns": 0,
+  "cases": {
+    "ack_loss": {
+      "finish_ns": 112041,
+      "physical_drop": 1,
+      "physical_rx": 829,
+      "physical_tx": 830,
+      "source_packets": {
+        "request": 172,
+        "response": 7
+      }
+    },
+    "data_loss": {
+      "finish_ns": 113363,
+      "physical_drop": 1,
+      "physical_rx": 941,
+      "physical_tx": 942,
+      "source_packets": {
+        "request": 227,
+        "response": 8
+      }
+    },
+    "healthy": {
+      "finish_ns": 28245,
+      "physical_drop": 0,
+      "physical_rx": 826,
+      "physical_tx": 826,
+      "source_packets": {
+        "request": 171,
+        "response": 6
+      }
+    }
+  },
+  "data_loss_correctly_deferred": true,
+  "exact_prediction_and_tail": true,
+  "new_innovation_proven": false,
+  "new_tail_tx_records": 4,
+  "observed_only_seal_passed": true,
+  "ordinary_idle_path_error_ns": 0,
+  "passed": true,
+  "real_tensor_or_full_CCL": false,
+  "retained_tx_records": 826,
+  "tamper_classes_rejected": [
+    "completion",
+    "old_value",
+    "drop_count",
+    "retry_time",
+    "admission_reason",
+    "input_identity"
+  ]
+}

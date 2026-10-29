@@ -1,0 +1,76 @@
+{
+  "schema_version": "moe-current-project-review/1",
+  "source_head": "15da084f23add1c727bf5de7007c8635434741ff",
+  "branch": "codex/full-simulator-20261029",
+  "new_network_runs": 0,
+  "inventory": {
+    "tracked_python_modules_parsed": 125,
+    "direct_forbidden_imports": [],
+    "import_check_scope": "AST import statements; dynamic and transitive imports not certified",
+    "backend_source_files": 96,
+    "tracked_unit_sources": 143,
+    "tracked_integration_sources": 113,
+    "github_workflows": []
+  },
+  "saved_summary_audits": [
+    {
+      "run": "bottleneck25",
+      "result_sha256": "1a57c8622a04b7ca0101bf331a651d82f1d029a01a1c6259d4f680a9439379f9",
+      "frontend_sha256": "8877e210bba94d901fe6411175fdda28fc0af352c58a43a36e7d09de3a7e500b",
+      "public_outcome_fields": [
+        "actual_data_ranks",
+        "complete_packet_capture",
+        "data_loss",
+        "failure",
+        "fault_drops",
+        "finish_ns",
+        "logical_submitted_bytes",
+        "native_network_executed",
+        "packet_capture_events",
+        "state",
+        "submitted_messages"
+      ],
+      "public_finish_ns": 592996,
+      "independently_checked_application_finished_ns": 569162,
+      "network_drained_ns": 592996,
+      "post_application_drain_ns": 23834,
+      "public_has_application_finished_ns": false,
+      "public_has_network_drained_ns": false
+    },
+    {
+      "run": "fixed80-normal",
+      "result_sha256": "c891c2354a17f0489f04f8710ebd8c97070df69657a167eeefbd991177b433a2",
+      "frontend_sha256": "748e0387cf8d3b32e5a97d5d0865b5f8dc3a74f4148bd037ce891726ebf1aeaf",
+      "public_outcome_fields": [
+        "actual_data_ranks",
+        "complete_packet_capture",
+        "data_loss",
+        "failure",
+        "fault_drops",
+        "finish_ns",
+        "logical_submitted_bytes",
+        "native_network_executed",
+        "packet_capture_events",
+        "state",
+        "submitted_messages"
+      ],
+      "public_finish_ns": 563347,
+      "independently_checked_application_finished_ns": 563347,
+      "network_drained_ns": 563347,
+      "post_application_drain_ns": 0,
+      "public_has_application_finished_ns": false,
+      "public_has_network_drained_ns": false
+    }
+  ],
+  "source_sha256": {
+    "python/moe_ub_cosim/run_summary.py": "cf97feeec09c36aed416ac4f80449f649d3067ea06c64f9125dedb7001079168",
+    "python/moe_ub_cosim/scaleout_verify.py": "cbed453f69853cbc92c2ee43dbf9382db46c454ba42f9529eaaf2481bb17d46e",
+    "python/moe_ub_cosim/simai_verify.py": "873300364566cd31f35311154c02289930ed06cccf0b1ddd906add95c13b6016",
+    "python/moe_ub_cosim/scaleout_service.py": "d37f220993a9e39f66520f9ddd212888e2e112590753d2f89f02b169dddb5910",
+    "python/moe_ub_cosim/scaleout_messages.py": "d36dd20a49c9bc3ae516ba7999d6c8ea340a5a2039ab5b996ce3beadabe12e7e",
+    "backend/rdma/astra_adapter.cc": "89fcc1c78944b570b4b3f8747b5e04cca4185f56cfdc3cff799945cc30ecf303",
+    "backend/rdma/fabric.cc": "963c70221a180f811160c34a38f39ebc0dc6cc071a7b0cc6e943c9fd913d4262",
+    "backend/rdma/persistent_streams.cc": "0ea6918392f6b65e4a5e135f01a0810cb7fa8e446a28b086d5ec00e85efe903c",
+    "third_party/LLMServingSim/astra-sim/extern/network_backend/ns-3/src/point-to-point/model/switch-node.cc": "a5583ca67fb1d0575fee867f4f824413655d2b60c1cbb2873f94757b4540a5be"
+  }
+}

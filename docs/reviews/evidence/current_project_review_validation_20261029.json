@@ -1,0 +1,81 @@
+{
+  "schema_version": "moe-current-project-review-validation/1",
+  "passed": true,
+  "source_head": "15da084f23add1c727bf5de7007c8635434741ff",
+  "new_network_runs": 0,
+  "builds": 0,
+  "downloads": 0,
+  "checks": {
+    "deps": {
+      "command": [
+        "bash",
+        "scripts/check_deps.sh"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.4520539600052871,
+      "peak_sampled_group_rss_bytes": 18055168
+    },
+    "focused": {
+      "command": [
+        ".venv/frontend/bin/python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/unit",
+        "-p",
+        "scaleout_messages_test.py"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.5549731649807654,
+      "peak_sampled_group_rss_bytes": 75067392,
+      "unit_tests_passed": 9
+    },
+    "remaining-cpu": {
+      "command": [
+        "env",
+        "PYTHONPATH=python:tests/unit",
+        ".venv/frontend/bin/python",
+        "-m",
+        "unittest",
+        "scaleout_arrivals_test",
+        "scaleout_replay_test",
+        "simai_service_test"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.24111872096545994,
+      "peak_sampled_group_rss_bytes": 23392256,
+      "unit_tests_passed": 20
+    },
+    "summary-audit": {
+      "command": [
+        ".venv/frontend/bin/python",
+        "docs/reviews/evidence/current_project_review_20261029.py",
+        "--run",
+        "runs/simai_severe_real_20261028/bottleneck25",
+        "--run",
+        "runs/service_recovery_baselines_20261029/study/fixed80-normal",
+        "--output",
+        "docs/reviews/evidence/current_project_review_20261029.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 1.1338343810057268,
+      "peak_sampled_group_rss_bytes": 108957696
+    }
+  },
+  "unit_tests_passed": 29,
+  "local_report_links_checked": 48,
+  "diff_check_passed": true,
+  "monitored_wall_seconds": 2.381980226957239,
+  "report_sha256": "9e803f25804d64296fabaeab3b8524738aed1e518dadb08639f96b9855b19826",
+  "evidence_sha256": "76a2ba2257f426671bc770f9fbb0fbae943aea7a208f0f46df169ab3ab503e61",
+  "limitation": "targeted CPU checks and saved-record audit; no new C++ build, network execution, full suite, hardware calibration or novel gain validation"
+}

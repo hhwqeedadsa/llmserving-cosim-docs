@@ -1,5 +1,7 @@
 # 观测记录与存储格式
 
+原生ASTRA服务的公共摘要、`rdma-check`、`simai-check`和sweep共用`service_terminal.py`核验业务终态。新增`application_finished_ns`为有限服务观察窗口的最后实际图完成，需与最终`service_finished` COMMIT及原生waves一致；`network_drained_ns`为成功运行排空时刻，`network_stopped_ns`保留成功/失败的原生停止时刻，`post_application_drain_ns`为业务完成之后的排空间隔。既有`finish_ns`继续表示原生停止/排空，不改旧记录含义。`timing_status`为`complete/failed/unavailable`，失败及证据缺失不猜业务完成时间，相关字段为null并附`timing_reason`；成功证据彼此矛盾则拒绝。sweep原有前端/网络别名保留；附加字段沿用既有schema，旧文件不自动重写。这些时间不代表完整模型请求或GPU可见性。
+
 SimAI运行的`scenario.json`采用`moe-run-summary/1`，中文同义说明保存在`scenario.md`；明确区分物理GPU总数、请求源、数据活动GPU、EP组、每rank专家、batch上限与实际batch，以及模拟硬件和校准边界。协议启用`data_loss`时，原生结果同名对象分别记录`eligible_destination_data_packets/window_packets/dropped_packets`和完整配置，逐包独立审核输出窗口/全观察期两种比例；失败也保留摘要和未完成曲线。字段语义见[严重丢包示例](../examples/simai_severe_loss/README.md)。
 
 SimAI入口的`input.json`采用`moe-simai-service/1`，原件复制到`route_sources/`并保留hash/原entry/原层索引。`frontend.json`记录`scheduler_source/simai_revision/cluster_gpu_counts/active_source_ranks/requests/history/transcript/final_allocated_blocks`，区别请求源和全部物理端点；`initial_state`明确只声明ready-KV。`graphs/*/wave.json`与原生`result.json`沿用已有网络口径，可直接用`rdma-arrivals`读取；字段及命令见[SimAI小例](../examples/simai_service/README.md)。

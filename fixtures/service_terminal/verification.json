@@ -1,0 +1,210 @@
+{
+  "schema_version": "moe-service-terminal-audit/1",
+  "new_network_runs": 0,
+  "cases": [
+    {
+      "run": "runs/review_fixes_20261029/native-smoke/llm-service",
+      "passed": true,
+      "original_passed": true,
+      "timing_status": "complete",
+      "timing_reason": null,
+      "application_finished_ns": 68252,
+      "network_drained_ns": 68252,
+      "network_stopped_ns": 68252,
+      "post_application_drain_ns": 0,
+      "public_summary_checked": false,
+      "full_public_verifier_checked": true,
+      "rejected_mutations": [
+        "native_wave",
+        "final_commit",
+        "history"
+      ],
+      "input_sha256": {
+        "input.json": "405aa352afaca86a9d8f3fbdcca128217350337ba3c330e5bfd34f6a3818e627",
+        "result.json": "9e2d9b805ecc2e9529177fadcf0c9f960a37e6eb604ad3d99ffc2280f1d1b51c",
+        "frontend.json": "53b9472af7cd589b6606affd906956601f78d948731b0cb41269562b02f60749"
+      }
+    },
+    {
+      "run": "runs/review_fixes_20261029/native-smoke/simai-service",
+      "passed": true,
+      "original_passed": true,
+      "timing_status": "complete",
+      "timing_reason": null,
+      "application_finished_ns": 47603,
+      "network_drained_ns": 47603,
+      "network_stopped_ns": 47603,
+      "post_application_drain_ns": 0,
+      "public_summary_checked": true,
+      "full_public_verifier_checked": true,
+      "rejected_mutations": [
+        "native_wave",
+        "final_commit",
+        "history"
+      ],
+      "input_sha256": {
+        "input.json": "79f7241647171f9a46e037beedd4b365715107b8b175dbc7e5e50884aa5fff89",
+        "result.json": "2f3febb7c3466e5d15d44324f8167a2b57a652c7749dff78fa15036e596888cd",
+        "frontend.json": "3f739e473c96520a6bbe15d70a5bd840e099b5ce28974bec808a8485be22f44f"
+      }
+    },
+    {
+      "run": "runs/simai_severe_real_20261028/bottleneck25",
+      "passed": true,
+      "original_passed": true,
+      "timing_status": "complete",
+      "timing_reason": null,
+      "application_finished_ns": 569162,
+      "network_drained_ns": 592996,
+      "network_stopped_ns": 592996,
+      "post_application_drain_ns": 23834,
+      "public_summary_checked": true,
+      "full_public_verifier_checked": true,
+      "rejected_mutations": [
+        "native_wave",
+        "final_commit",
+        "history"
+      ],
+      "input_sha256": {
+        "input.json": "0016b4ca07790a50e12c768ccea9f193a5b53c3106efc5472a355e5321be8848",
+        "result.json": "1a57c8622a04b7ca0101bf331a651d82f1d029a01a1c6259d4f680a9439379f9",
+        "frontend.json": "8877e210bba94d901fe6411175fdda28fc0af352c58a43a36e7d09de3a7e500b"
+      }
+    },
+    {
+      "run": "runs/simai_severe_real_20261028/persistent",
+      "passed": true,
+      "original_passed": false,
+      "timing_status": "failed",
+      "timing_reason": "recovery_retry_exhausted",
+      "application_finished_ns": null,
+      "network_drained_ns": null,
+      "network_stopped_ns": 603090,
+      "post_application_drain_ns": null,
+      "public_summary_checked": true,
+      "full_public_verifier_checked": false,
+      "rejected_mutations": [],
+      "input_sha256": {
+        "input.json": "0016b4ca07790a50e12c768ccea9f193a5b53c3106efc5472a355e5321be8848",
+        "result.json": "a3695575f745bfae93baa35a36415e4fef8b1b5932d82c563268cd7ca566af64",
+        "frontend.json": "0c33b03d77e1631d5119d1a45fbb6971d7665cc2abd928a6fb36661e8413fb54"
+      }
+    },
+    {
+      "run": "runs/service_recovery_baselines_20261029/study/fixed80-normal",
+      "passed": true,
+      "original_passed": true,
+      "timing_status": "complete",
+      "timing_reason": null,
+      "application_finished_ns": 563347,
+      "network_drained_ns": 563347,
+      "network_stopped_ns": 563347,
+      "post_application_drain_ns": 0,
+      "public_summary_checked": true,
+      "full_public_verifier_checked": true,
+      "rejected_mutations": [
+        "native_wave",
+        "final_commit",
+        "history"
+      ],
+      "input_sha256": {
+        "input.json": "0016b4ca07790a50e12c768ccea9f193a5b53c3106efc5472a355e5321be8848",
+        "result.json": "c891c2354a17f0489f04f8710ebd8c97070df69657a167eeefbd991177b433a2",
+        "frontend.json": "748e0387cf8d3b32e5a97d5d0865b5f8dc3a74f4148bd037ce891726ebf1aeaf"
+      }
+    },
+    {
+      "run": "runs/service_recovery_baselines_20261029/study/karn80-loss50",
+      "passed": true,
+      "original_passed": true,
+      "timing_status": "complete",
+      "timing_reason": null,
+      "application_finished_ns": 699488,
+      "network_drained_ns": 699488,
+      "network_stopped_ns": 699488,
+      "post_application_drain_ns": 0,
+      "public_summary_checked": true,
+      "full_public_verifier_checked": true,
+      "rejected_mutations": [
+        "native_wave",
+        "final_commit",
+        "history"
+      ],
+      "input_sha256": {
+        "input.json": "0016b4ca07790a50e12c768ccea9f193a5b53c3106efc5472a355e5321be8848",
+        "result.json": "a1c42742345984b336aeda938cadaa4bda905385a60efb391a03c748ea9f2343",
+        "frontend.json": "9ea01b1a72e3456c01349fc107ff1cdc50f2a69371a4f7981b5cfdba90d642d1"
+      }
+    }
+  ],
+  "checks": {
+    "unit-focused": {
+      "command": [
+        "env",
+        "PYTHONPATH=python:tests/unit",
+        ".venv/frontend/bin/python",
+        "-m",
+        "unittest",
+        "service_terminal_test",
+        "severe_loss_test",
+        "scaleout_sweep_test",
+        "scaleout_messages_test"
+      ],
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.6545562309911475,
+      "peak_sampled_group_rss_bytes": 75919360
+    },
+    "unit-all": {
+      "command": [
+        ".venv/frontend/bin/python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/unit",
+        "-p",
+        "*_test.py"
+      ],
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 29.605671795026865,
+      "peak_sampled_group_rss_bytes": 175992832
+    },
+    "saved-audit": {
+      "command": [
+        ".venv/frontend/bin/python",
+        "tests/integration/check_service_terminal.py",
+        "--run",
+        "runs/review_fixes_20261029/native-smoke/llm-service",
+        "--run",
+        "runs/review_fixes_20261029/native-smoke/simai-service",
+        "--run",
+        "runs/simai_severe_real_20261028/bottleneck25",
+        "--run",
+        "runs/simai_severe_real_20261028/persistent",
+        "--run",
+        "runs/service_recovery_baselines_20261029/study/fixed80-normal",
+        "--run",
+        "runs/service_recovery_baselines_20261029/study/karn80-loss50",
+        "--full-check",
+        "--output",
+        "runs/service_terminal_20261029/saved-audit.json"
+      ],
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 7.723126708006021,
+      "peak_sampled_group_rss_bytes": 154198016
+    }
+  },
+  "unit_tests_passed": 653,
+  "hardware_calibrated": false,
+  "novel_algorithm_gain_claimed": false,
+  "source_sha256": {
+    "python/moe_ub_cosim/service_terminal.py": "11eb4df31756cf63d776819d3d93cbf0fc460278bf3bf1f5b609bc95fdc8e69b",
+    "python/moe_ub_cosim/run_summary.py": "7678a3cdc79d1b43d03a064a2424781fe49ab008ddf6349f5275fae976393d79",
+    "python/moe_ub_cosim/scaleout_sweep.py": "21b48b35cd73fac09d334bb96dda2aa4f8481b18afdcc518768d4c71661a9887",
+    "python/moe_ub_cosim/simai_verify.py": "c8ed96e879815fbc671fe858f426b4c638192b56c6992c11f43332abc33567ad",
+    "python/moe_ub_cosim/scaleout_verify.py": "5083d13c54392d5b2ff242075b7c28bcaaa9696f03392c7043ab512caca6342d"
+  }
+}

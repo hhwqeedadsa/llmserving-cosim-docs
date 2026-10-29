@@ -96,7 +96,7 @@ Scale-Out 可选源端超时重传、接收端重复 ACK、有限重试失败和
 
 需要研究超时参数与反馈时延的关系，可在`recovery`内显式配置`rtt_estimator`，见[自适应小例](../examples/scaleout_rdma_adaptive/README.md)。它按每QP实际发送/反馈采样，排除重传歧义；短消息和过低初值仍有冷启动限制。诊断另外给出无新ACK进展下的条件终止界、当前源额度阻塞不等式，不能当作请求时延保证。
 
-短QP可显式启用每源容量与年龄受限的恢复历史，目的端占用可用`per_destination`限制；[恢复与资源保护示例](../examples/scaleout_rdma_resilience/README.md)给出边界和完整JSON。统一条件清单用`scaleout sweep --config <清单> --backend <原生服务> --protoc <编译器> --output <新目录>`，可改模型、batch、拓扑与已实现通信策略；预期失败、前端完成和网络停止分别报告，外层监控全部条件的总预算。
+短QP可显式启用每源容量与年龄受限的恢复历史，目的端占用可用`per_destination`限制；[恢复与资源保护示例](../examples/scaleout_rdma_resilience/README.md)给出边界和完整JSON。统一条件清单用`scaleout sweep --config <清单> --backend <原生服务> --protoc <编译器> --output <新目录>`，可改模型、batch、拓扑与已实现通信策略；预期失败、前端完成和网络停止分别报告，外层监控全部条件的总预算。公共检查和`simai-summary`将`application_finished_ns`（实际业务观察结束）、`network_drained_ns`（成功排空）、`network_stopped_ns`（原生停止）分列；旧`finish_ns`仍为停止/排空。按业务时间评价收益，失败或缺失终态的null不参与成功时延排名，矛盾记录会拒绝；定义见[输出数据](record_storage.md)。
 
 Scale-Out的包级故障与失败诊断见[丢包小例](../examples/scaleout_rdma_faults/README.md)。`scaleout rdma-diagnose --run <完成或失败目录> --output <新JSON>`可读取数据/ACK/NACK丢弃和未完成回调；详细记录默认关闭，按节点、窗口与条数有界开启。需要检查交换机实际队列与缓冲计数时，按[终态缓冲小例](../examples/scaleout_rdma_mmu/README.md)开启`mmu_snapshot`；它不要求详细包采集，也不新增链路故障支持。
 

@@ -71,8 +71,9 @@ def resolve(config, directory):
 def metrics(case, run):
     r=checked_json(run/'result.json',1073741824)
     frontend=checked_json(run/'frontend.json',268435456)
-    history=frontend['history'];done=bool(history) and r['passed'] and all(h.get('finished_ns') is not None for h in history)
-    finish=max(h['finished_ns'] for h in history) if done else None
+    from .service_terminal import service_terminal
+    terminal=service_terminal(r,frontend,require_complete=r['passed'])
+    finish=terminal['application_finished_ns']
     recovery=r.get('recovery',{});states=recovery.get('states',[]);cache=recovery.get('history',{})
     return dict(name=case['name'],expect=case['expect'],comparison_group=case['comparison_group'],
         passed=r['passed'],failure_reason=r.get('failure',{}).get('reason'),
@@ -85,7 +86,7 @@ def metrics(case, run):
         rtt_samples=sum(s.get('rtt',{}).get('samples',0) for s in states),
         history_hits=cache.get('hits'),history_misses=cache.get('misses'),history_evictions=cache.get('evictions'),
         result_sha256=digest(run/'result.json'),
-        graph_hashes={p.parent.name:digest(p) for p in sorted((run/'graphs').glob('*/wave.json'))})
+        graph_hashes={p.parent.name:digest(p) for p in sorted((run/'graphs').glob('*/wave.json'))},**terminal)
 
 
 def worker(output, backend, protoc):

@@ -206,9 +206,12 @@ def verify(directory):
                 len(frontend['requests'])==len(replay.records), 'missing/duplicate replay request')
         require(all(q['initial_context_tokens']==replay.records[q['id']]['context_tokens']
                     for q in frontend['requests']), 'replay initial context mismatch')
+    from .service_terminal import service_terminal
+    terminal=service_terminal(result,frontend,require_complete=True)
     report=dict(passed=True,messages=len(flows),remote_payload_bytes=total_bytes,verified_nodes=node_count,
                 waves=len(frontend['history']),finish_ns=result['finish_ns'],
                 evidence='raw token routes, native messages/MMU thresholds/paths, ASTRA issue/callback log, frontend completion history')
+    report.update(terminal)
     if admission_resources['available']:
         report['admission_resources']=admission_resources
     if network_queues['available']:report['network_queues']=network_queues

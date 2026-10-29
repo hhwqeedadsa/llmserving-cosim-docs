@@ -5,6 +5,7 @@ from pathlib import Path
 
 from .scaleout_rdma import checked_json,save
 from .scaleout_limits import limits
+from .service_terminal import service_terminal
 
 
 def describe(directory):
@@ -31,6 +32,7 @@ def describe(directory):
         complete_packet_capture=result.get('packet_capture',{}).get('complete'),
         packet_capture_events=len(result.get('packet_capture',{}).get('events',[])),
         fault_drops=result['fault_drops'],data_loss=result.get('data_loss'),failure=result.get('failure'))
+    outcome.update(service_terminal(result,f))
     return dict(schema_version='moe-run-summary/1',scope='simulated hardware/deployment; no GPU workload or hardware timing calibration',
         gpu_label=s['model']['gpu_type'],simai_capacity_reference=c['simai'],physical_gpu_count=len(gpus),
         server_count=len({n['server'] for n in gpus}),pod_count=len({n['pod'] for n in gpus}),

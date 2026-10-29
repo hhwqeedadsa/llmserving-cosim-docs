@@ -1,0 +1,116 @@
+{
+  "schema_version": "moe-astra-tail-lifecycle-diagnosis/1",
+  "passed": true,
+  "scope": "synthetic single-layer/single-step platform counterexample; not production performance or achievable gains",
+  "new_network_runs": 0,
+  "completion_definition_changed": false,
+  "ack_loss": {
+    "final_merge_per_rank": {
+      "0": {
+        "node_id": 12,
+        "finish_ns": 13482
+      },
+      "1": {
+        "node_id": 10,
+        "finish_ns": 13628
+      },
+      "2": {
+        "node_id": 8,
+        "finish_ns": 13920
+      },
+      "3": {
+        "node_id": 10,
+        "finish_ns": 13943
+      }
+    },
+    "last_compute_callback_ns": 13943,
+    "graph_finished_ns": 112030,
+    "source_ack_gating_graph": {
+      "rank": 0,
+      "node_id": 10,
+      "message_id": 14,
+      "finish_ns": 112030
+    },
+    "last_message_receive_ns": 13913,
+    "last_message_ack_ns": 112030,
+    "post_compute_graph_retirement_ns": 98087,
+    "terminal": {
+      "timing_status": "complete",
+      "timing_reason": null,
+      "application_finished_ns": 112030,
+      "network_drained_ns": 112030,
+      "network_stopped_ns": 112030,
+      "post_application_drain_ns": 0
+    },
+    "input_sha256": {
+      "input.json": "59249ecec9a396a5659bdd8ecdf54c40c9ef732ae1d3e96ca34c8db52e3e27ce",
+      "topology.json": "e5147bce242508fe3442e75044ad2f74074b55726b9efe73eb365dc3e1c10402",
+      "rdma.json": "7e80d5b61ffa673bab515483ca9ee80fbcd0b51f7263fbdeb581fc08f431b6df",
+      "result.json": "bc74468a54b4e060ab036a51cebe69c7f05aa90cf598706c8029de058bb818ed",
+      "frontend.json": "f97928552bc4631fa29136609a2e657c52f2542e4eb19e3954ba33b7bef264bb",
+      "graphs/g0.w0/wave.json": "604a6655dfdca886f185a8db18a25734bfc937a8947552d210787b3eddedf029",
+      "log/astra_nodes.log": "6a402421a8ad8f8d45172ce80fdf3c7da3f48941348b36e51a5e106c83121141"
+    }
+  },
+  "data_loss": {
+    "final_merge_per_rank": {
+      "0": {
+        "node_id": 12,
+        "finish_ns": 13482
+      },
+      "1": {
+        "node_id": 10,
+        "finish_ns": 13628
+      },
+      "2": {
+        "node_id": 8,
+        "finish_ns": 13920
+      },
+      "3": {
+        "node_id": 10,
+        "finish_ns": 106036
+      }
+    },
+    "last_compute_callback_ns": 106036,
+    "graph_finished_ns": 112030,
+    "source_ack_gating_graph": {
+      "rank": 0,
+      "node_id": 10,
+      "message_id": 14,
+      "finish_ns": 112030
+    },
+    "last_message_receive_ns": 106006,
+    "last_message_ack_ns": 112030,
+    "post_compute_graph_retirement_ns": 5994,
+    "terminal": {
+      "timing_status": "complete",
+      "timing_reason": null,
+      "application_finished_ns": 112030,
+      "network_drained_ns": 112030,
+      "network_stopped_ns": 112030,
+      "post_application_drain_ns": 0
+    },
+    "input_sha256": {
+      "input.json": "59249ecec9a396a5659bdd8ecdf54c40c9ef732ae1d3e96ca34c8db52e3e27ce",
+      "topology.json": "e5147bce242508fe3442e75044ad2f74074b55726b9efe73eb365dc3e1c10402",
+      "rdma.json": "82fa9871dabfae971ce2bacd74a85332fa0d749ca02c6a24777812a55a3dc3cb",
+      "result.json": "e39540ce15f4574989aa23b61e808912038eea8b770f73277247d009086a0da3",
+      "frontend.json": "2b242bae4e1f91d4f4f25ebf0a51997fa1ef34b306d332595437081a08f1f6f9",
+      "graphs/g0.w0/wave.json": "604a6655dfdca886f185a8db18a25734bfc937a8947552d210787b3eddedf029",
+      "log/astra_nodes.log": "83d339c14f318fbea3a8cb2fc054e2081e8e906b4c3e3b54b8cab3e1e894be22"
+    }
+  },
+  "identical_declared_graphs": true,
+  "identical_declared_service": true,
+  "different_final_compute_callback_ns": 92093,
+  "source_sha256": {
+    "backend/rdma/service.cc": "7850d2c9b5345eef2e7e565076f73b6d2135e173132eabf59851c0cd11a8f220",
+    "backend/rdma/astra_adapter.cc": "13de5bb78869cd6301a656b86fc6488ffaedd1a7284d7f7b7cc12b4e95aa62e3",
+    "third_party/LLMServingSim/astra-sim/astra-sim/workload/Workload.cc": "e23be48e3890b456e24b4debf1966f9755960379d1ec6dfd59907a0808ec25ef"
+  },
+  "limitations": [
+    "merge callbacks are declared model computation, not GPU-visible results",
+    "no flag/notification or buffer-reuse semantics of a production library validated here",
+    "removing ACK wait would change resource/lifetime constraints; no optimized run performed"
+  ]
+}

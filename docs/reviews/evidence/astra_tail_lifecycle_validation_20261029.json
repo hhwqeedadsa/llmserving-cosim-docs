@@ -1,0 +1,71 @@
+{
+  "passed": true,
+  "new_network_runs": 0,
+  "builds": 0,
+  "mutations": [
+    {
+      "mutation": "ack_time",
+      "rejected": true,
+      "reason": "graph is not retired by the observed final source ACK"
+    },
+    {
+      "mutation": "compute_duration",
+      "rejected": true,
+      "reason": "declared compute differs"
+    },
+    {
+      "mutation": "graph_completion",
+      "rejected": true,
+      "reason": "Scale-Out topology: frontend/native graph completion differs"
+    }
+  ],
+  "report_sha256": "a2e2cb096199e1dac07bcb28e072817fae7715c838f2d91862628903e1cf06b1",
+  "evidence_sha256": "0bcf073bfe2f1583cf4d6e9ca5b91c420b4f5e4bb9fe336f15851a6bcd3fe92f",
+  "audit_probe": {
+    "schema_version": "moe-ub-host-probe/1",
+    "command": [
+      ".venv/frontend/bin/python",
+      "docs/reviews/evidence/astra_tail_lifecycle_20261029.py",
+      "--ack-run",
+      "runs/service_control_fix_20261029/acceptance/tail-ack",
+      "--data-run",
+      "runs/service_control_fix_20261029/acceptance/tail-data",
+      "--output",
+      "docs/reviews/evidence/astra_tail_lifecycle_20261029.json"
+    ],
+    "cwd": "/home/lry/moe-ub-cosim",
+    "started_utc": "2026-10-29T17:04:37.242395+00:00",
+    "limits": {
+      "sampled_group_rss_bytes": 536870912,
+      "per_process_address_bytes": 1073741824,
+      "artifact_bytes": 16777216,
+      "wall_seconds": 60.0
+    },
+    "peak_sampled_group_rss_bytes": 7442432,
+    "peak_sampled_processes": 1,
+    "status": "completed",
+    "workload_semantics_validated": false,
+    "artifact_roots": [
+      "/home/lry/moe-ub-cosim/runs/astra_tail_lifecycle_20261029"
+    ],
+    "peak_sampled_artifact_bytes": 8192,
+    "min_free_bytes": 8589934592,
+    "rss_scope": "owned_process_tree_including_detached_descendants",
+    "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+    "disk_sample_interval_seconds": 1.0,
+    "peak_sampled_artifact_apparent_bytes": 557,
+    "peak_sampled_artifact_allocated_bytes": 8192,
+    "process_group": 518562,
+    "child_exit_code": 0,
+    "remaining_live_group_pids": [],
+    "ended_utc": "2026-10-29T17:04:37.372939+00:00",
+    "wall_seconds": 0.1305455660331063,
+    "max_waited_child_rss_kib": 18660,
+    "artifact_bytes_before_report": 557,
+    "aggregate_artifact_bytes_before_report": 8192,
+    "aggregate_artifact_usage_before_report": {
+      "apparent_bytes": 557,
+      "allocated_bytes": 8192
+    }
+  }
+}

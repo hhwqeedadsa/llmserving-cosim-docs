@@ -1,0 +1,207 @@
+{
+  "schema_version": "moe-service-recovery-baselines-closeout/1",
+  "status": "completed_study_only",
+  "overall_research_goal": "in_progress; no validated A-class paper contribution",
+  "platform_commit": "c27f06a06c",
+  "frozen_execution_method_commit": "c008538c90",
+  "new_native_runs": 4,
+  "old_network_reruns": 0,
+  "builds": 0,
+  "downloads": 0,
+  "gpu_executions": 0,
+  "monitors": {
+    "analyzer-precheck": {
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 2.4045742379967123,
+      "peak_sampled_group_rss_bytes": 118665216,
+      "peak_sampled_artifact_bytes": 12288,
+      "limits": {
+        "sampled_group_rss_bytes": 2147483648,
+        "per_process_address_bytes": 4294967296,
+        "artifact_bytes": 536870912,
+        "wall_seconds": 120.0
+      },
+      "local_probe_sha256": "15486249200c80308b1ee288d4b8a6396e2a3792f2d8405d550cd91fbf5a4827",
+      "local_stdout_sha256": "d089521edac4e6d6bd6a75bc6f84897db9776e161fdfaabcd8a85a93e5d86eb6"
+    },
+    "host": {
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "experiments/service_recovery_baselines/run.py",
+        "--baseline-root",
+        "runs/simai_severe_real_20261028",
+        "--backend",
+        "/dev/shm/moe-heavy-loss-20261028/build/output/moe-rdma/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "runs/service_recovery_baselines_20261029/study"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 17.43386086099781,
+      "peak_sampled_group_rss_bytes": 437338112,
+      "peak_sampled_artifact_bytes": 181780480,
+      "limits": {
+        "sampled_group_rss_bytes": 2147483648,
+        "per_process_address_bytes": 4294967296,
+        "artifact_bytes": 536870912,
+        "wall_seconds": 600.0
+      },
+      "local_probe_sha256": "acb443ea7423cf875b66b8ffc4f4e95ffaeefac6397f9ec55c6e7de6a7cb0a05",
+      "local_stdout_sha256": "a693be10a861b868f7907ab2f49d5e272d5ccfafeafa3fa14c425e94bc807976"
+    },
+    "analysis-host": {
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "experiments/service_recovery_baselines/analyze.py",
+        "--study",
+        "runs/service_recovery_baselines_20261029/study",
+        "--baseline-root",
+        "runs/simai_severe_real_20261028",
+        "--output",
+        "runs/service_recovery_baselines_20261029/analysis"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 2.0233182159718126,
+      "peak_sampled_group_rss_bytes": 72400896,
+      "peak_sampled_artifact_bytes": 181817344,
+      "limits": {
+        "sampled_group_rss_bytes": 2147483648,
+        "per_process_address_bytes": 4294967296,
+        "artifact_bytes": 536870912,
+        "wall_seconds": 120.0
+      },
+      "local_probe_sha256": "e8943fe7680b945f1e69db46094299215bb325879511a72349e16c54d622dcb0",
+      "local_stdout_sha256": "b66cab389999689c24cc117134bf329f49a3df18d4f157fbee4fbdceb0776325"
+    },
+    "diagnostic-host": {
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "experiments/service_recovery_baselines/diagnose.py",
+        "--study",
+        "runs/service_recovery_baselines_20261029/study",
+        "--baseline-root",
+        "runs/simai_severe_real_20261028",
+        "--output",
+        "runs/service_recovery_baselines_20261029/diagnostic.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 1.6716038819868118,
+      "peak_sampled_group_rss_bytes": 73392128,
+      "peak_sampled_artifact_bytes": 181837824,
+      "limits": {
+        "sampled_group_rss_bytes": 2147483648,
+        "per_process_address_bytes": 4294967296,
+        "artifact_bytes": 536870912,
+        "wall_seconds": 120.0
+      },
+      "local_probe_sha256": "a1866122bf3f5daac83c5147581bf0a3df655b58b6d28cac7836a0786a5123ed",
+      "local_stdout_sha256": "23e672dd30736dfbc78eba1574c91f388ea85479763d9f63033b6209603e52ff"
+    },
+    "application-analysis-host": {
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "experiments/service_recovery_baselines/analyze.py",
+        "--study",
+        "runs/service_recovery_baselines_20261029/study",
+        "--baseline-root",
+        "runs/simai_severe_real_20261028",
+        "--output",
+        "runs/service_recovery_baselines_20261029/application-analysis"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 2.0422660799813457,
+      "peak_sampled_group_rss_bytes": 72232960,
+      "peak_sampled_artifact_bytes": 181886976,
+      "limits": {
+        "sampled_group_rss_bytes": 2147483648,
+        "per_process_address_bytes": 4294967296,
+        "artifact_bytes": 536870912,
+        "wall_seconds": 120.0
+      },
+      "local_probe_sha256": "e583a2afa0725c5ba3c24e9bd77757deb5170ffd3b4710040c2c5d22e41e3557",
+      "local_stdout_sha256": "0bd1aef51d9473eb91245aac43a0f0dd2d5d1c276f404ad449e19af803f25d53"
+    },
+    "application-tamper-check": {
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.629700537014287,
+      "peak_sampled_group_rss_bytes": 70406144,
+      "peak_sampled_artifact_bytes": 181858304,
+      "limits": {
+        "sampled_group_rss_bytes": 2147483648,
+        "per_process_address_bytes": 4294967296,
+        "artifact_bytes": 536870912,
+        "wall_seconds": 120.0
+      },
+      "local_probe_sha256": "4946eda75bdb792e92b3b10f6d5e3d60fe6e937b4a3db665e9edcc6d40aa88a6",
+      "local_stdout_sha256": "07f0edab3cdc8bcaa13d4ad44a6aa9abf6d6fadf83d1cc4962562136c9b81528"
+    }
+  },
+  "monitored_wall_seconds_sum": 26.20532381394878,
+  "max_sampled_group_rss_bytes": 437338112,
+  "max_sampled_root_artifact_bytes": 181886976,
+  "native_library_hashes_match_existing_build_receipt": true,
+  "native_library_sha256": {
+    "/dev/shm/moe-heavy-loss-20261028/build/output/lib/libns3.42-applications.so": "25c9ea0548421f52ebf8191c8b662e1ddb0f63c546fd544c5dc405a4e062ed72",
+    "/dev/shm/moe-heavy-loss-20261028/build/output/lib/libns3.42-point-to-point.so": "3e5b29df2109ec92628dc85a33113c35cf594fcf7ee478893ba055f18eee86c2",
+    "/dev/shm/moe-heavy-loss-20261028/build/output/lib/libns3.42-internet.so": "43339f38fb0502c00c5f19537f6ba6771a168200cd7c83529a12a05b3d2e27f0",
+    "/dev/shm/moe-heavy-loss-20261028/build/output/lib/libns3.42-network.so": "b94272a020f3438347a8bde2b3fa10355d40b09e96792232b3198dac87cd4b94",
+    "/dev/shm/moe-heavy-loss-20261028/build/output/lib/libns3.42-core.so": "4e06c366e439e338d6acaa1f5e802c05dcce8df10b1ba500b83dd945ed2e5f35",
+    "/dev/shm/moe-heavy-loss-20261028/build/output/lib/libns3.42-stats.so": "9f211655e5fe19ade99d1419bdcbcb41618dcaa1fbcba6ab4fa8ee65fb9ace98",
+    "/dev/shm/moe-heavy-loss-20261028/build/output/lib/libns3.42-bridge.so": "28f3b410e4f388e13113dee45b4ade98e90da59e99abb56179994d6f0ee797f5",
+    "/dev/shm/moe-heavy-loss-20261028/build/output/lib/libns3.42-traffic-control.so": "b52a47933b85e2f61f9a94f29a2871aed9e5941e0cec0e9c9f03570ad15ddc99"
+  },
+  "analysis_correction": {
+    "initial_local_analysis": "runs/service_recovery_baselines_20261029/analysis",
+    "initial_verification_sha256": "ea64f5a75e54ef882e45783f8264a64df3e3b41c21d198e068e1571e2407653c",
+    "corrected_local_analysis": "runs/service_recovery_baselines_20261029/application-analysis",
+    "reason": "Initial analyzer used network-drain finish_ns for the intended business-window metric. Corrected by cross-checking final frontend COMMIT, history and native wave completions; no simulation rerun.",
+    "contradictory_final_completion_rejected": true,
+    "original_packet_and_result_files_unchanged": true
+  },
+  "precheck": {
+    "old_126_timeouts_and_2008392_duplicate_bytes_reproduced": true,
+    "packet_counter_confirmation_identity_mutations_rejected": 3
+  },
+  "post_result_diagnostics": "Explicitly descriptive; not preregistered controls or a removable-delay oracle.",
+  "evidence_availability": "Versioned compact reports/configs/hashes are published. User raw routes and full local results are not included.",
+  "versioned_file_sha256": {
+    "report.md": "03afad08afb2922ac46f77c0c5e688a7aef915b577f344ab609a3a247d12226b",
+    "report.html": "2b1786cd4c68b6139b99d6b359ab6195a93afefcf7aea1cd2c0f4befa418ed6b",
+    "verification.json": "61c04a8cf5c86c668251d81d6cb23e39c8a08997889aa4b5a069dc4f34f63c1c",
+    "diagnostic.json": "2f077f8284ac4c55a9eb7c8306a3d27664c31d2a0fdd2819103bdffb8ff59651",
+    "preparation.json": "c0ce661e65179cf57c2458dba7a0ba5f4137cada31334a06a5f636d68df6995f",
+    "interpretation.md": "e780077333a346d444f6af602224147d85222e9872cbe95a3dc30e8143909c75",
+    "inputs/fixed80-normal.json": "41adda94e777282356c7c763e8b584638e07dd03569702f1886b0805795f1006",
+    "inputs/karn80-normal.json": "d8060f254a530822cc8a8dcf721dcac1ebb141c72ecf2e855cdd3741b964261d",
+    "inputs/fixed80-loss50.json": "6c672d005d6b2ea4e541110ecb4a60a6c207948d26f89dc70848208679ec4ec7",
+    "inputs/karn80-loss50.json": "8288ae07418af56ed5619b69c8020ced2209880a795d6ac18b44a0f4581e1f3c",
+    "inputs/service.json": "0016b4ca07790a50e12c768ccea9f193a5b53c3106efc5472a355e5321be8848"
+  }
+}

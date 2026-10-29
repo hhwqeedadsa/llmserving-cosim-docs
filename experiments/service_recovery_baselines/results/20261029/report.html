@@ -1,0 +1,29 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>恢复强基线实验</title><style>body{max-width:1100px;margin:40px auto;padding:0 24px;font:17px/1.8 system-ui;color:#182333;background:#f8fafc}table{width:100%;border-collapse:collapse;background:white}th,td{border-bottom:1px solid #d7dee8;padding:10px;text-align:right}th:first-child,td:first-child{text-align:left}pre{white-space:pre-wrap;background:white;padding:24px}</style><h1>320端点真实路由：恢复强基线</h1><p>4次新网络 · 2项只读旧参考 · 业务完成与网络排空分列 · 未声明创新收益</p><table><tr><th>条件</th><th>业务完成/µs</th><th>网络排空/µs</th><th>超时</th><th>重复载荷/B</th><th>RTT样本</th></tr><tr><td>fixed40-normal</td><td>569.162</td><td>592.996</td><td>126</td><td>2008392</td><td>0</td></tr><tr><td>fixed40-loss50</td><td>640.164</td><td>663.998</td><td>235</td><td>4557320</td><td>0</td></tr><tr><td>fixed80-normal</td><td>563.347</td><td>563.347</td><td>1</td><td>14336</td><td>0</td></tr><tr><td>karn80-normal</td><td>563.347</td><td>563.347</td><td>1</td><td>14336</td><td>811</td></tr><tr><td>fixed80-loss50</td><td>705.271</td><td>705.271</td><td>89</td><td>1888120</td><td>0</td></tr><tr><td>karn80-loss50</td><td>699.488</td><td>699.488</td><td>101</td><td>2322896</td><td>752</td></tr></table><pre>本轮只比较已有固定超时与Karn估计，不是新算法收益。四个新网络各一次，两个旧固定40µs条件只读复用。
+
+| 条件 | 业务完成/µs | 网络排空/µs | 超时次数 | 重复载荷/B | 有效RTT样本 |
+|---|---:|---:|---:|---:|---:|
+| fixed40-normal | 569.162 | 592.996 | 126 | 2,008,392 | 0 |
+| fixed40-loss50 | 640.164 | 663.998 | 235 | 4,557,320 | 0 |
+| fixed80-normal | 563.347 | 563.347 | 1 | 14,336 | 0 |
+| karn80-normal | 563.347 | 563.347 | 1 | 14,336 | 811 |
+| fixed80-loss50 | 705.271 | 705.271 | 89 | 1,888,120 | 0 |
+| karn80-loss50 | 699.488 | 699.488 | 101 | 2,322,896 | 752 |
+
+以下时间变化按业务观察窗口完成计算，为正表示更慢。网络排空另列；重复载荷减少不能替代业务收益。
+
+- fixed40-to-fixed80 / normal：完成变化 -5.815µs（-1.02%），重复载荷变化 -1,994,056B。
+- fixed40-to-fixed80 / loss50：完成变化 +65.107µs（+10.17%），重复载荷变化 -2,669,200B。
+- fixed80-to-karn80 / normal：完成变化 +0.000µs（+0.00%），重复载荷变化 +0B。
+- fixed80-to-karn80 / loss50：完成变化 -5.783µs（-0.82%），重复载荷变化 +434,776B。
+
+每个故障条件相对自身正常条件的额外等待：
+
+- fixed40：71.002µs。
+- fixed80：141.924µs。
+- karn80：136.141µs。
+
+输入、拓扑及四张工作图保持一致；全部消息从数据包独立核对源字节、接收前缀和确认完成时刻。Karn状态由公共核验逐事件重放。
+
+结果只覆盖当前有限Decode窗口和GBN主服务。没有运行完整R1、生产请求p99或GPU校准；主服务选择重传仍未贯通，剩余差距不能直接称新方法可优化空间。
+
+下一步先据本结果选择公平参考，再检查健康任务的实际共享资源与关键依赖；若普通限速/隔离已经消除差距，应关闭候选。</pre></html>

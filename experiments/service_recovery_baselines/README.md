@@ -22,3 +22,5 @@ python experiments/service_recovery_baselines/analyze.py \
 ```
 
 分析不运行网络。它独立核对所有消息的包级字节和首次确认，要求对应输入/拓扑/工作图一致；正常与故障按各自机制成对报告。输出JSON、中文Markdown和可直接打开的HTML，不使用用户原始prompt内容作页面展示。
+
+本轮已关闭，四个新条件各执行一次。[结果与指标解释](results/20261029/interpretation.md)、[数据表](results/20261029/report.md)、[网页](results/20261029/report.html)和[收尾收据](results/20261029/closeout.json)已经保存。业务完成按最终前端提交及实际图完成核验，网络排空单列；初次分析口径更正已记入方法，未重跑网络。`diagnose.py`为结果后的描述性分析，不是预登记干预；原始数据未随源码发布。

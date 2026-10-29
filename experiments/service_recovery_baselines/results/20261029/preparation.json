@@ -1,0 +1,68 @@
+{
+  "schema_version": "moe-service-recovery-baselines-preparation/1",
+  "platform_and_method_commit": "c008538c9076726138441c214e93733150383784",
+  "baseline_root": "/home/lry/moe-ub-cosim/runs/simai_severe_real_20261028",
+  "backend": "/dev/shm/moe-heavy-loss-20261028/build/output/moe-rdma/ns3.42-moe-rdma-service",
+  "backend_sha256": "796928c7446f172d8cb876645cd5416f1eaf60bd4de4bc95dffffd939f07d3ae",
+  "protoc": "/home/lry/tools/protobuf/bin/protoc-33.1.0",
+  "protoc_sha256": "56ea8057c7a5902a1c453bb6e349c4d6fd4b57cd810698a09786c9acc96ff358",
+  "cases": [
+    {
+      "name": "fixed80-normal",
+      "reference": "bottleneck25",
+      "adaptive": false,
+      "source_input_sha256": "0016b4ca07790a50e12c768ccea9f193a5b53c3106efc5472a355e5321be8848",
+      "source_topology_sha256": "7e0ad24d7d07617dd600ec410c211a4dabafcf280a420cb1b1144f3c6bdab4b9",
+      "prepared_hashes": {
+        "rdma.json": "41adda94e777282356c7c763e8b584638e07dd03569702f1886b0805795f1006",
+        "service.json": "a564945f7b569e6524ffa596c632d452995609a8acfe34de01679f2cb63d9f0e",
+        "topology.json": "7e0ad24d7d07617dd600ec410c211a4dabafcf280a420cb1b1144f3c6bdab4b9"
+      }
+    },
+    {
+      "name": "karn80-normal",
+      "reference": "bottleneck25",
+      "adaptive": true,
+      "source_input_sha256": "0016b4ca07790a50e12c768ccea9f193a5b53c3106efc5472a355e5321be8848",
+      "source_topology_sha256": "7e0ad24d7d07617dd600ec410c211a4dabafcf280a420cb1b1144f3c6bdab4b9",
+      "prepared_hashes": {
+        "rdma.json": "d8060f254a530822cc8a8dcf721dcac1ebb141c72ecf2e855cdd3741b964261d",
+        "service.json": "a564945f7b569e6524ffa596c632d452995609a8acfe34de01679f2cb63d9f0e",
+        "topology.json": "7e0ad24d7d07617dd600ec410c211a4dabafcf280a420cb1b1144f3c6bdab4b9"
+      }
+    },
+    {
+      "name": "fixed80-loss50",
+      "reference": "loss50",
+      "adaptive": false,
+      "source_input_sha256": "0016b4ca07790a50e12c768ccea9f193a5b53c3106efc5472a355e5321be8848",
+      "source_topology_sha256": "7e0ad24d7d07617dd600ec410c211a4dabafcf280a420cb1b1144f3c6bdab4b9",
+      "prepared_hashes": {
+        "rdma.json": "6c672d005d6b2ea4e541110ecb4a60a6c207948d26f89dc70848208679ec4ec7",
+        "service.json": "36e1bce05ae1c363bdf98d58632ac684ad1919eb0b0c5137addd66cd36d13fab",
+        "topology.json": "7e0ad24d7d07617dd600ec410c211a4dabafcf280a420cb1b1144f3c6bdab4b9"
+      }
+    },
+    {
+      "name": "karn80-loss50",
+      "reference": "loss50",
+      "adaptive": true,
+      "source_input_sha256": "0016b4ca07790a50e12c768ccea9f193a5b53c3106efc5472a355e5321be8848",
+      "source_topology_sha256": "7e0ad24d7d07617dd600ec410c211a4dabafcf280a420cb1b1144f3c6bdab4b9",
+      "prepared_hashes": {
+        "rdma.json": "8288ae07418af56ed5619b69c8020ced2209880a795d6ac18b44a0f4581e1f3c",
+        "service.json": "36e1bce05ae1c363bdf98d58632ac684ad1919eb0b0c5137addd66cd36d13fab",
+        "topology.json": "7e0ad24d7d07617dd600ec410c211a4dabafcf280a420cb1b1144f3c6bdab4b9"
+      }
+    }
+  ],
+  "script_hashes": {
+    "protocol.md": "c87e5cc14728fd0bfd88a9308884ea866d75625c938ef5cf292b2bf6a8e339b6",
+    "run.py": "c283754208393ec49ef7237ecf75a48284c31312ea5a9a73d444959dc525328f",
+    "analyze.py": "995c99ba9d8327acae882fc7620910e99ff21d52000ab5c1ad227e687c463d7f",
+    "README.md": "60fd6b06648fb2eb2f78719e12f27987b979a17985d532653677cd66db24a663"
+  },
+  "network_runs_planned": 4,
+  "builds": 0,
+  "downloads": 0
+}

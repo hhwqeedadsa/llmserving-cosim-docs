@@ -1,0 +1,57 @@
+{
+  "schema_version": "moe-scaleout-rdma/2",
+  "cc_mode": 1,
+  "payload_bytes": 9000,
+  "chunk_bytes": 36000,
+  "ack_interval_bytes": 1,
+  "base_rtt_ns": 14000,
+  "switch_buffer_bytes": 8388608,
+  "ecn_by_rate": {
+    "400000000000": {
+      "kmin_bytes": 131072,
+      "kmax_bytes": 524288,
+      "pmax": 1.0
+    },
+    "25000000000": {
+      "kmin_bytes": 16384,
+      "kmax_bytes": 65536,
+      "pmax": 1.0
+    }
+  },
+  "seed": 11,
+  "limits": {
+    "max_gpus": 320,
+    "max_switches": 128,
+    "max_links": 2048,
+    "max_messages": 4096,
+    "max_queue_events": 200000,
+    "queue_capture": "summary",
+    "max_sim_ns": 5000000,
+    "wall_seconds": 60,
+    "rss_bytes": 2147483648,
+    "address_bytes": 4294967296,
+    "artifact_bytes": 268435456,
+    "result_json_bytes": 134217728
+  },
+  "packet_capture": {
+    "nodes": [],
+    "start_ns": 0,
+    "end_ns": 5000000,
+    "max_events": 400000,
+    "wire_headers": true
+  },
+  "queue_metrics": true,
+  "recovery": {
+    "mode": "go_back_n",
+    "initial_rto_ns": 80000,
+    "max_rto_ns": 160000,
+    "max_retries": 4,
+    "max_events": 100000,
+    "rtt_estimator": {
+      "kind": "karn",
+      "min_rto_ns": 20000,
+      "granularity_ns": 1
+    }
+  },
+  "switch_counter_storage": "port_dense"
+}

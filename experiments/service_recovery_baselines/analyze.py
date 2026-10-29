@@ -69,9 +69,18 @@ def check(directory,reference,adaptive,initial):
         native=r['data_loss']
         assert (eligible,window,dropped)==tuple(native[k] for k in ('eligible_destination_data_packets','window_packets','dropped_packets'))
     recovery=r['recovery'];codes=recovery['event_codes'];counts=Counter(row[1] for row in recovery['events'])
-    history=read(directory/'frontend.json')['history'];states=recovery['states']
+    frontend=read(directory/'frontend.json');history=frontend['history'];states=recovery['states']
+    application_finished=max(h['finished_ns'] for h in history)
+    assert r['service']['service_finished'] and r['service']['active_graphs']==0
+    assert application_finished==max(w['finished_ns'] for w in r['service']['waves'])
+    finish_decisions=[entry for entry in frontend['transcript'] if entry['reply']['service_finished']]
+    assert len(finish_decisions)==1
+    final=finish_decisions[0]
+    assert final['event']['now_ns']==final['reply']['now_ns']==application_finished<=r['finish_ns']
     logical=sum(m['bytes'] for m in flows.values());assert logical==13533184
     return dict(run=str(directory),passed=True,finish_ns=r['finish_ns'],messages=len(flows),logical_bytes=logical,
+        application_finished_ns=application_finished,network_drained_ns=r['finish_ns'],
+        post_application_drain_ns=r['finish_ns']-application_finished,
         source_tx_payload_bytes=sum(v['payload'] for v in tx.values()),
         duplicate_payload_bytes=sum(v['payload']-v['unique'] for v in tx.values()),
         timeout_retransmissions=counts[codes['timeout_retransmit']],
@@ -95,29 +104,32 @@ def analyze(study,baseline,output):
     pairs={}
     for mechanism in ('fixed40','fixed80','karn80'):
         normal,fault=(cases[mechanism+'-'+s] for s in ('normal','loss50'))
-        pairs[mechanism]=dict(fault_extra_ns=fault['finish_ns']-normal['finish_ns'],
-            fault_relative_to_own_normal_pct=100*(fault['finish_ns']/normal['finish_ns']-1))
+        pairs[mechanism]=dict(fault_extra_ns=fault['application_finished_ns']-normal['application_finished_ns'],
+            fault_relative_to_own_normal_pct=100*(fault['application_finished_ns']/normal['application_finished_ns']-1))
     comparisons={}
     for base,target in [('fixed40','fixed80'),('fixed80','karn80')]:
         comparisons[base+'-to-'+target]={}
         for suffix in ('normal','loss50'):
             a,b=cases[base+'-'+suffix],cases[target+'-'+suffix]
-            comparisons[base+'-to-'+target][suffix]=dict(time_change_ns=b['finish_ns']-a['finish_ns'],
-                time_change_pct=100*(b['finish_ns']/a['finish_ns']-1),
+            comparisons[base+'-to-'+target][suffix]=dict(time_change_ns=b['application_finished_ns']-a['application_finished_ns'],
+                time_change_pct=100*(b['application_finished_ns']/a['application_finished_ns']-1),
+                network_drain_time_change_ns=b['network_drained_ns']-a['network_drained_ns'],
+                network_drain_time_change_pct=100*(b['network_drained_ns']/a['network_drained_ns']-1),
                 duplicate_payload_change_bytes=b['duplicate_payload_bytes']-a['duplicate_payload_bytes'])
-    verdict=dict(schema_version='moe-service-recovery-baselines-evaluation/1',passed=True,
+    verdict=dict(schema_version='moe-service-recovery-baselines-evaluation/2',passed=True,
+        primary_metric='application_finished_ns: final frontend service_finished COMMIT and last actual graph completion',
         new_network_runs=4,reused_reference_runs=2,hardware_calibrated=False,novel_algorithm_gain_claimed=False,
         scope='15 real routing requests, 320 physical endpoints, finite two-layer/two-step ready-KV segment',
         packet_events_checked=sum(c['packet_events_checked'] for c in cases.values()),cases=cases,
         fault_pairs=pairs,mechanism_comparisons=comparisons,
-        source_sha256={p.name:sha(p) for p in Path(__file__).parent.iterdir() if p.suffix in ('.py','.md')})
+        source_sha256={name:sha(Path(__file__).parent/name) for name in ('run.py','analyze.py','protocol.md')})
     lines=['# 320端点真实路由：恢复强基线实验','',
         '本轮只比较已有固定超时与Karn估计，不是新算法收益。四个新网络各一次，两个旧固定40µs条件只读复用。',
-        '', '| 条件 | 完成/µs | 超时次数 | 重复载荷/B | 有效RTT样本 |',
-        '|---|---:|---:|---:|---:|']
+        '', '| 条件 | 业务完成/µs | 网络排空/µs | 超时次数 | 重复载荷/B | 有效RTT样本 |',
+        '|---|---:|---:|---:|---:|---:|']
     for name,c in cases.items():
-        lines.append(f"| {name} | {c['finish_ns']/1000:.3f} | {c['timeout_retransmissions']} | {c['duplicate_payload_bytes']:,} | {c['rtt_samples']} |")
-    lines+=['','时间变化为正表示更慢；重复载荷减少不能替代任务完成收益。','']
+        lines.append(f"| {name} | {c['application_finished_ns']/1000:.3f} | {c['network_drained_ns']/1000:.3f} | {c['timeout_retransmissions']} | {c['duplicate_payload_bytes']:,} | {c['rtt_samples']} |")
+    lines+=['','以下时间变化按业务观察窗口完成计算，为正表示更慢。网络排空另列；重复载荷减少不能替代业务收益。','']
     for name,values in comparisons.items():
         for suffix,c in values.items():
             lines.append(f"- {name} / {suffix}：完成变化 {c['time_change_ns']/1000:+.3f}µs（{c['time_change_pct']:+.2f}%），重复载荷变化 {c['duplicate_payload_change_bytes']:+,}B。")
@@ -130,8 +142,8 @@ def analyze(study,baseline,output):
     (output/'verification.json').write_text(json.dumps(verdict,ensure_ascii=False,indent=2)+'\n')
     (output/'report.md').write_text('\n'.join(lines)+'\n')
     table=''.join('<tr><td>'+html.escape(name)+'</td>'+''.join('<td>'+html.escape(str(value))+'</td>' for value in
-        [f"{c['finish_ns']/1000:.3f}",c['timeout_retransmissions'],c['duplicate_payload_bytes'],c['rtt_samples']])+'</tr>' for name,c in cases.items())
-    page='<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>恢复强基线实验</title><style>body{max-width:1100px;margin:40px auto;padding:0 24px;font:17px/1.8 system-ui;color:#182333;background:#f8fafc}table{width:100%;border-collapse:collapse;background:white}th,td{border-bottom:1px solid #d7dee8;padding:10px;text-align:right}th:first-child,td:first-child{text-align:left}pre{white-space:pre-wrap;background:white;padding:24px}</style><h1>320端点真实路由：恢复强基线</h1><p>4次新网络 · 2项只读旧参考 · 经典方法对照 · 未声明创新收益</p><table><tr><th>条件</th><th>完成/µs</th><th>超时</th><th>重复载荷/B</th><th>RTT样本</th></tr>'+table+'</table><pre>'+html.escape('\n'.join(lines[2:]))+'</pre></html>'
+        [f"{c['application_finished_ns']/1000:.3f}",f"{c['network_drained_ns']/1000:.3f}",c['timeout_retransmissions'],c['duplicate_payload_bytes'],c['rtt_samples']])+'</tr>' for name,c in cases.items())
+    page='<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>恢复强基线实验</title><style>body{max-width:1100px;margin:40px auto;padding:0 24px;font:17px/1.8 system-ui;color:#182333;background:#f8fafc}table{width:100%;border-collapse:collapse;background:white}th,td{border-bottom:1px solid #d7dee8;padding:10px;text-align:right}th:first-child,td:first-child{text-align:left}pre{white-space:pre-wrap;background:white;padding:24px}</style><h1>320端点真实路由：恢复强基线</h1><p>4次新网络 · 2项只读旧参考 · 业务完成与网络排空分列 · 未声明创新收益</p><table><tr><th>条件</th><th>业务完成/µs</th><th>网络排空/µs</th><th>超时</th><th>重复载荷/B</th><th>RTT样本</th></tr>'+table+'</table><pre>'+html.escape('\n'.join(lines[2:]))+'</pre></html>'
     (output/'report.html').write_text(page)
     print(json.dumps(dict(passed=True,packet_events_checked=verdict['packet_events_checked'],comparisons=comparisons),indent=2))
 

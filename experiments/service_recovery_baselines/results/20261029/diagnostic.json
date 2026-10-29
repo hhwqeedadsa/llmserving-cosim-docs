@@ -1,0 +1,203 @@
+{
+  "schema_version": "moe-service-recovery-baselines-postcheck/1",
+  "network_runs": 0,
+  "scope": "post-result descriptive analysis; no counterfactual removable-delay claim",
+  "cases": {
+    "fixed40-normal": {
+      "timeouts": 126,
+      "timeouts_with_advancing_ack_already_inflight": 86,
+      "examples": [
+        {
+          "timeout_ns": 49619,
+          "message_id": 109,
+          "source": 0,
+          "known_ack_bytes": 0,
+          "feedback_tx_ns": 44535,
+          "feedback_rx_ns": 50597,
+          "feedback_sequence": 9000,
+          "message_bytes": 14336
+        },
+        {
+          "timeout_ns": 49800,
+          "message_id": 115,
+          "source": 0,
+          "known_ack_bytes": 0,
+          "feedback_tx_ns": 47427,
+          "feedback_rx_ns": 54810,
+          "feedback_sequence": 9000,
+          "message_bytes": 14336
+        },
+        {
+          "timeout_ns": 50524,
+          "message_id": 141,
+          "source": 0,
+          "known_ack_bytes": 0,
+          "feedback_tx_ns": 50319,
+          "feedback_rx_ns": 57717,
+          "feedback_sequence": 9000,
+          "message_bytes": 14336
+        }
+      ],
+      "rtt_sample_count_histogram": {
+        "0": 790
+      }
+    },
+    "fixed40-loss50": {
+      "timeouts": 235,
+      "timeouts_with_advancing_ack_already_inflight": 81,
+      "examples": [
+        {
+          "timeout_ns": 49619,
+          "message_id": 109,
+          "source": 0,
+          "known_ack_bytes": 0,
+          "feedback_tx_ns": 44535,
+          "feedback_rx_ns": 50695,
+          "feedback_sequence": 9000,
+          "message_bytes": 14336
+        },
+        {
+          "timeout_ns": 49800,
+          "message_id": 115,
+          "source": 0,
+          "known_ack_bytes": 0,
+          "feedback_tx_ns": 47427,
+          "feedback_rx_ns": 54795,
+          "feedback_sequence": 9000,
+          "message_bytes": 14336
+        },
+        {
+          "timeout_ns": 50524,
+          "message_id": 141,
+          "source": 0,
+          "known_ack_bytes": 0,
+          "feedback_tx_ns": 50319,
+          "feedback_rx_ns": 57702,
+          "feedback_sequence": 9000,
+          "message_bytes": 14336
+        }
+      ],
+      "rtt_sample_count_histogram": {
+        "0": 790
+      }
+    },
+    "fixed80-normal": {
+      "timeouts": 1,
+      "timeouts_with_advancing_ack_already_inflight": 1,
+      "examples": [
+        {
+          "timeout_ns": 257761,
+          "message_id": 205912,
+          "source": 39,
+          "known_ack_bytes": 0,
+          "feedback_tx_ns": 252307,
+          "feedback_rx_ns": 260554,
+          "feedback_sequence": 9000,
+          "message_bytes": 14336
+        }
+      ],
+      "rtt_sample_count_histogram": {
+        "0": 790
+      }
+    },
+    "karn80-normal": {
+      "timeouts": 1,
+      "timeouts_with_advancing_ack_already_inflight": 1,
+      "examples": [
+        {
+          "timeout_ns": 257761,
+          "message_id": 205912,
+          "source": 39,
+          "known_ack_bytes": 0,
+          "feedback_tx_ns": 252307,
+          "feedback_rx_ns": 260554,
+          "feedback_sequence": 9000,
+          "message_bytes": 14336
+        }
+      ],
+      "rtt_sample_count_histogram": {
+        "3": 1,
+        "1": 768,
+        "2": 20,
+        "0": 1
+      }
+    },
+    "fixed80-loss50": {
+      "timeouts": 89,
+      "timeouts_with_advancing_ack_already_inflight": 2,
+      "examples": [
+        {
+          "timeout_ns": 87266,
+          "message_id": 39,
+          "source": 0,
+          "known_ack_bytes": 0,
+          "feedback_tx_ns": 85674,
+          "feedback_rx_ns": 89706,
+          "feedback_sequence": 9000,
+          "message_bytes": 28672
+        },
+        {
+          "timeout_ns": 390941,
+          "message_id": 205912,
+          "source": 39,
+          "known_ack_bytes": 0,
+          "feedback_tx_ns": 385487,
+          "feedback_rx_ns": 393787,
+          "feedback_sequence": 9000,
+          "message_bytes": 14336
+        }
+      ],
+      "rtt_sample_count_histogram": {
+        "0": 790
+      }
+    },
+    "karn80-loss50": {
+      "timeouts": 101,
+      "timeouts_with_advancing_ack_already_inflight": 4,
+      "examples": [
+        {
+          "timeout_ns": 91248,
+          "message_id": 168,
+          "source": 0,
+          "known_ack_bytes": 0,
+          "feedback_tx_ns": 86190,
+          "feedback_rx_ns": 93430,
+          "feedback_sequence": 9000,
+          "message_bytes": 14336
+        },
+        {
+          "timeout_ns": 131039,
+          "message_id": 32694,
+          "source": 128,
+          "known_ack_bytes": 9000,
+          "feedback_tx_ns": 126470,
+          "feedback_rx_ns": 132769,
+          "feedback_sequence": 18000,
+          "message_bytes": 28672
+        },
+        {
+          "timeout_ns": 144401,
+          "message_id": 166,
+          "source": 0,
+          "known_ack_bytes": 9000,
+          "feedback_tx_ns": 138511,
+          "feedback_rx_ns": 153653,
+          "feedback_sequence": 18000,
+          "message_bytes": 28672
+        }
+      ],
+      "rtt_sample_count_histogram": {
+        "2": 17,
+        "1": 718,
+        "0": 55
+      }
+    }
+  },
+  "fixed80_vs_karn80_normal": {
+    "packet_capture_equal": true,
+    "messages_equal": true,
+    "ports_equal": true,
+    "service_equal": true
+  },
+  "script_sha256": "fd0e83ab02ec80c2290429b880afa97fca50c1a1f8eee1ecc3a58b44f94a8f78"
+}

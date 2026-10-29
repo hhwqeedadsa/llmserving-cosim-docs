@@ -1,0 +1,258 @@
+{
+  "schema_version": "moe-service-recovery-baselines-evaluation/2",
+  "passed": true,
+  "primary_metric": "application_finished_ns: final frontend service_finished COMMIT and last actual graph completion",
+  "new_network_runs": 4,
+  "reused_reference_runs": 2,
+  "hardware_calibrated": false,
+  "novel_algorithm_gain_claimed": false,
+  "scope": "15 real routing requests, 320 physical endpoints, finite two-layer/two-step ready-KV segment",
+  "packet_events_checked": 445988,
+  "cases": {
+    "fixed40-normal": {
+      "run": "runs/simai_severe_real_20261028/bottleneck25",
+      "passed": true,
+      "finish_ns": 592996,
+      "messages": 790,
+      "logical_bytes": 13533184,
+      "application_finished_ns": 569162,
+      "network_drained_ns": 592996,
+      "post_application_drain_ns": 23834,
+      "source_tx_payload_bytes": 15541576,
+      "duplicate_payload_bytes": 2008392,
+      "timeout_retransmissions": 126,
+      "rtt_samples": 0,
+      "rtt_discarded_probes": 0,
+      "messages_with_rtt_samples": 0,
+      "packet_events_checked": 78932,
+      "all_confirmation_times_checked": true,
+      "group_finished_ns": {
+        "0": 569162,
+        "1": 283653
+      },
+      "loss": null,
+      "result_sha256": "1a57c8622a04b7ca0101bf331a651d82f1d029a01a1c6259d4f680a9439379f9",
+      "wave_sha256": {
+        "g0.w0": "1f385ef960ef87862bc326051f09e0094434ef5411ed911afb267e4c9a23bc42",
+        "g0.w1": "715a1252619bc52abc7f5b8e90f43460b91e9ce9c464a5a34ba82dcc745146e0",
+        "g1.w0": "8407656806822b5fcb0e62c41caf4ec94d4defc0725c3e39e9f532369c2d4986",
+        "g1.w1": "bb26ac1e5f4319bdbe5083d4cb0c4a18e739db9f43a6e9e74ab52a5cee02b347"
+      }
+    },
+    "fixed40-loss50": {
+      "run": "runs/simai_severe_real_20261028/loss50",
+      "passed": true,
+      "finish_ns": 663998,
+      "messages": 790,
+      "logical_bytes": 13533184,
+      "application_finished_ns": 640164,
+      "network_drained_ns": 663998,
+      "post_application_drain_ns": 23834,
+      "source_tx_payload_bytes": 18090504,
+      "duplicate_payload_bytes": 4557320,
+      "timeout_retransmissions": 235,
+      "rtt_samples": 0,
+      "rtt_discarded_probes": 0,
+      "messages_with_rtt_samples": 0,
+      "packet_events_checked": 86976,
+      "all_confirmation_times_checked": true,
+      "group_finished_ns": {
+        "0": 640164,
+        "1": 393875
+      },
+      "loss": {
+        "window_packets": 438,
+        "dropped_packets": 219,
+        "eligible_packets": 2517
+      },
+      "result_sha256": "b24bb26296807eb3f42b82482c27ec4971c1e46b93656f695a3db6aa718acc1d",
+      "wave_sha256": {
+        "g0.w0": "1f385ef960ef87862bc326051f09e0094434ef5411ed911afb267e4c9a23bc42",
+        "g0.w1": "715a1252619bc52abc7f5b8e90f43460b91e9ce9c464a5a34ba82dcc745146e0",
+        "g1.w0": "8407656806822b5fcb0e62c41caf4ec94d4defc0725c3e39e9f532369c2d4986",
+        "g1.w1": "bb26ac1e5f4319bdbe5083d4cb0c4a18e739db9f43a6e9e74ab52a5cee02b347"
+      }
+    },
+    "fixed80-normal": {
+      "run": "runs/service_recovery_baselines_20261029/study/fixed80-normal",
+      "passed": true,
+      "finish_ns": 563347,
+      "messages": 790,
+      "logical_bytes": 13533184,
+      "application_finished_ns": 563347,
+      "network_drained_ns": 563347,
+      "post_application_drain_ns": 0,
+      "source_tx_payload_bytes": 13547520,
+      "duplicate_payload_bytes": 14336,
+      "timeout_retransmissions": 1,
+      "rtt_samples": 0,
+      "rtt_discarded_probes": 0,
+      "messages_with_rtt_samples": 0,
+      "packet_events_checked": 66880,
+      "all_confirmation_times_checked": true,
+      "group_finished_ns": {
+        "0": 563347,
+        "1": 283653
+      },
+      "loss": null,
+      "result_sha256": "c891c2354a17f0489f04f8710ebd8c97070df69657a167eeefbd991177b433a2",
+      "wave_sha256": {
+        "g0.w0": "1f385ef960ef87862bc326051f09e0094434ef5411ed911afb267e4c9a23bc42",
+        "g0.w1": "715a1252619bc52abc7f5b8e90f43460b91e9ce9c464a5a34ba82dcc745146e0",
+        "g1.w0": "8407656806822b5fcb0e62c41caf4ec94d4defc0725c3e39e9f532369c2d4986",
+        "g1.w1": "bb26ac1e5f4319bdbe5083d4cb0c4a18e739db9f43a6e9e74ab52a5cee02b347"
+      }
+    },
+    "karn80-normal": {
+      "run": "runs/service_recovery_baselines_20261029/study/karn80-normal",
+      "passed": true,
+      "finish_ns": 563347,
+      "messages": 790,
+      "logical_bytes": 13533184,
+      "application_finished_ns": 563347,
+      "network_drained_ns": 563347,
+      "post_application_drain_ns": 0,
+      "source_tx_payload_bytes": 13547520,
+      "duplicate_payload_bytes": 14336,
+      "timeout_retransmissions": 1,
+      "rtt_samples": 811,
+      "rtt_discarded_probes": 1,
+      "messages_with_rtt_samples": 789,
+      "packet_events_checked": 66880,
+      "all_confirmation_times_checked": true,
+      "group_finished_ns": {
+        "0": 563347,
+        "1": 283653
+      },
+      "loss": null,
+      "result_sha256": "b14c63ce4ec5c741504f35c6789d6499b451ea143cfc8b6ad6b8b63171c45c73",
+      "wave_sha256": {
+        "g0.w0": "1f385ef960ef87862bc326051f09e0094434ef5411ed911afb267e4c9a23bc42",
+        "g0.w1": "715a1252619bc52abc7f5b8e90f43460b91e9ce9c464a5a34ba82dcc745146e0",
+        "g1.w0": "8407656806822b5fcb0e62c41caf4ec94d4defc0725c3e39e9f532369c2d4986",
+        "g1.w1": "bb26ac1e5f4319bdbe5083d4cb0c4a18e739db9f43a6e9e74ab52a5cee02b347"
+      }
+    },
+    "fixed80-loss50": {
+      "run": "runs/service_recovery_baselines_20261029/study/fixed80-loss50",
+      "passed": true,
+      "finish_ns": 705271,
+      "messages": 790,
+      "logical_bytes": 13533184,
+      "application_finished_ns": 705271,
+      "network_drained_ns": 705271,
+      "post_application_drain_ns": 0,
+      "source_tx_payload_bytes": 15421304,
+      "duplicate_payload_bytes": 1888120,
+      "timeout_retransmissions": 89,
+      "rtt_samples": 0,
+      "rtt_discarded_probes": 0,
+      "messages_with_rtt_samples": 0,
+      "packet_events_checked": 72238,
+      "all_confirmation_times_checked": true,
+      "group_finished_ns": {
+        "0": 705271,
+        "1": 478224
+      },
+      "loss": {
+        "window_packets": 375,
+        "dropped_packets": 188,
+        "eligible_packets": 2143
+      },
+      "result_sha256": "c4adc8d12979e272a614570f26e04db56969f831ae445936e4faba4bafd05458",
+      "wave_sha256": {
+        "g0.w0": "1f385ef960ef87862bc326051f09e0094434ef5411ed911afb267e4c9a23bc42",
+        "g0.w1": "715a1252619bc52abc7f5b8e90f43460b91e9ce9c464a5a34ba82dcc745146e0",
+        "g1.w0": "8407656806822b5fcb0e62c41caf4ec94d4defc0725c3e39e9f532369c2d4986",
+        "g1.w1": "bb26ac1e5f4319bdbe5083d4cb0c4a18e739db9f43a6e9e74ab52a5cee02b347"
+      }
+    },
+    "karn80-loss50": {
+      "run": "runs/service_recovery_baselines_20261029/study/karn80-loss50",
+      "passed": true,
+      "finish_ns": 699488,
+      "messages": 790,
+      "logical_bytes": 13533184,
+      "application_finished_ns": 699488,
+      "network_drained_ns": 699488,
+      "post_application_drain_ns": 0,
+      "source_tx_payload_bytes": 15856080,
+      "duplicate_payload_bytes": 2322896,
+      "timeout_retransmissions": 101,
+      "rtt_samples": 752,
+      "rtt_discarded_probes": 58,
+      "messages_with_rtt_samples": 735,
+      "packet_events_checked": 74082,
+      "all_confirmation_times_checked": true,
+      "group_finished_ns": {
+        "0": 699488,
+        "1": 412135
+      },
+      "loss": {
+        "window_packets": 401,
+        "dropped_packets": 201,
+        "eligible_packets": 2204
+      },
+      "result_sha256": "a1c42742345984b336aeda938cadaa4bda905385a60efb391a03c748ea9f2343",
+      "wave_sha256": {
+        "g0.w0": "1f385ef960ef87862bc326051f09e0094434ef5411ed911afb267e4c9a23bc42",
+        "g0.w1": "715a1252619bc52abc7f5b8e90f43460b91e9ce9c464a5a34ba82dcc745146e0",
+        "g1.w0": "8407656806822b5fcb0e62c41caf4ec94d4defc0725c3e39e9f532369c2d4986",
+        "g1.w1": "bb26ac1e5f4319bdbe5083d4cb0c4a18e739db9f43a6e9e74ab52a5cee02b347"
+      }
+    }
+  },
+  "fault_pairs": {
+    "fixed40": {
+      "fault_extra_ns": 71002,
+      "fault_relative_to_own_normal_pct": 12.474831418822752
+    },
+    "fixed80": {
+      "fault_extra_ns": 141924,
+      "fault_relative_to_own_normal_pct": 25.19299827637318
+    },
+    "karn80": {
+      "fault_extra_ns": 136141,
+      "fault_relative_to_own_normal_pct": 24.166455133336996
+    }
+  },
+  "mechanism_comparisons": {
+    "fixed40-to-fixed80": {
+      "normal": {
+        "time_change_ns": -5815,
+        "time_change_pct": -1.0216774837392473,
+        "network_drain_time_change_ns": -29649,
+        "network_drain_time_change_pct": -4.999865091838728,
+        "duplicate_payload_change_bytes": -1994056
+      },
+      "loss50": {
+        "time_change_ns": 65107,
+        "time_change_pct": 10.170362594585146,
+        "network_drain_time_change_ns": 41273,
+        "network_drain_time_change_pct": 6.215831975397523,
+        "duplicate_payload_change_bytes": -2669200
+      }
+    },
+    "fixed80-to-karn80": {
+      "normal": {
+        "time_change_ns": 0,
+        "time_change_pct": 0.0,
+        "network_drain_time_change_ns": 0,
+        "network_drain_time_change_pct": 0.0,
+        "duplicate_payload_change_bytes": 0
+      },
+      "loss50": {
+        "time_change_ns": -5783,
+        "time_change_pct": -0.8199684943801744,
+        "network_drain_time_change_ns": -5783,
+        "network_drain_time_change_pct": -0.8199684943801744,
+        "duplicate_payload_change_bytes": 434776
+      }
+    }
+  },
+  "source_sha256": {
+    "run.py": "c283754208393ec49ef7237ecf75a48284c31312ea5a9a73d444959dc525328f",
+    "analyze.py": "d730bfc7e539020f75a568d18378f2f025c5f6da0be89c545cac6c86cca70005",
+    "protocol.md": "618677b94053b4c4efc499b4f63be93cde207a40f97dcff8147ad2aa4a1e62aa"
+  }
+}

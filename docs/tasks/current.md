@@ -2,9 +2,13 @@
 
 ## 2026-10-29 真实路由服务的恢复强基线实验
 
-状态：`in_progress`。平台`c27f06a06c`，独立[实验方法](../../experiments/service_recovery_baselines/protocol.md)。判断旧320端点结果的额外等待有多少来自过短冷启动及已有估计器；保留负结果，不把Karn或RTO调参当创新。旧固定40µs原件保持关闭/只读；新固定80/Karn80×正常/短窗50%四条件各一次，先冻结方法与代码，再按顺序运行，任一失败停止后续。方法不改变原定LLMServingSim服务主线。
+状态：`completed`（本轮强基线研究子项）。平台`c27f06a06c`、执行方法冻结`c008538c90`，独立[实验方法](../../experiments/service_recovery_baselines/protocol.md)。旧固定40µs原件保持关闭/只读；新固定80/Karn80×正常/短窗50%四条件各一次，全部实际执行和核验通过。保留负结果，不把Karn或RTO调参当创新；方法不改变原定LLMServingSim服务主线。
 
 新根`runs/service_recovery_baselines_20261029`，累计600受监控秒/额外512MiB、预留8GiB；单native60秒/RSS2GiB/地址4GiB/5ms模拟/256MiB产物/128MiB结果/400000捕获，准备/分析每次120秒。复用现有二进制、固定依赖和runtime；零编译/下载/GPU，不扩限/重跑旧网络。总体A类论文目标仍`in_progress`。
+
+结果：[指标解释](../../experiments/service_recovery_baselines/results/20261029/interpretation.md)、[表格/网页](../../experiments/service_recovery_baselines/results/20261029/report.md)及[收尾](../../experiments/service_recovery_baselines/results/20261029/closeout.json)。固定40→80正常重复载荷2,008,392→14,336B、超时126→1，业务569.162→563.347µs（约1.02%）；同一故障规则下业务640.164→705.271µs（慢约10.17%）。Karn80正常包/消息/端口/服务与固定80完全相同，故障仅快约0.82%且更多重传。全六项含旧参考独立核445,988包事件；图/输入保持一致，四类篡改拒绝。初次分析误用网络排空`finish_ns`，原分析保留，已按最终COMMIT/实际图/history三方核对修正并单列两时刻；零网络重跑。
+
+新工作流宿主监控17.434秒、最大组RSS437,338,112B，含准备/两次分析/诊断/反例检查累计约26.206受监控秒，根约174MiB。四网络额度关闭；后续先贯通主服务选择重传，再以实际共享资源/关键路径判断任务干扰候选，不能以本轮条件差距承诺新策略收益。总体目标继续，未获得已验证A类论文创新。
 
 ## 2026-10-29 研究迭代：先修核验与消息预检
 

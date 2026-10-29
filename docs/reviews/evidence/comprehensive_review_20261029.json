@@ -1,0 +1,105 @@
+{
+  "schema_version": "moe-comprehensive-review/1",
+  "network_runs": 0,
+  "builds": 0,
+  "sources": {
+    "backend/rdma/fabric.cc": "963c70221a180f811160c34a38f39ebc0dc6cc071a7b0cc6e943c9fd913d4262",
+    "python/moe_ub_cosim/scaleout_rdma.py": "34f5ac0143057d21f99ef361223d40e9f375d87e9620beb1599e3627b73e959a",
+    "python/moe_ub_cosim/scaleout_service.py": "efd4c307f961267e6dd5e623be3a408f03cc766e8fc892ea00dea0840b3b1f27",
+    "python/moe_ub_cosim/simai_service.py": "b6935ab9d19e70251d9704e1cbbf3385bbca0c16b8decc73c1fc1d77fb480aef",
+    "python/moe_ub_cosim/scaleout_connectivity.py": "ed5d6fcada3c3e908574ca4c51ecf095bd61d43151a1ea70dba66ec2f0bf7219",
+    "python/moe_ub_cosim/scaleout_arrivals.py": "710f1842cc6bdec2a6517d7bedc6add7a194314882cae230c956d79d57f5b2b1"
+  },
+  "cases": {
+    "wire_port_collision": {
+      "python_preflight": {
+        "accepted": true
+      },
+      "messages": [
+        {
+          "id": 0,
+          "src": 0,
+          "dst": 4,
+          "bytes": 1024,
+          "plane": 0,
+          "ready_ns": 0
+        },
+        {
+          "id": 50000,
+          "src": 0,
+          "dst": 4,
+          "bytes": 1024,
+          "plane": 0,
+          "ready_ns": 0
+        }
+      ],
+      "modeled_wire_ports": [
+        10000,
+        10000
+      ],
+      "native_guard": "Fabric::Send port_to_flow_.emplace rejects repeated source/destination/port; source-audited, not an executed native failure"
+    },
+    "admission_message_size": {
+      "service_preflight": {
+        "accepted": true
+      },
+      "generated_message": {
+        "id": 7,
+        "src": 0,
+        "dst": 8,
+        "bytes": 14336,
+        "plane": 0,
+        "ready_ns": 0
+      },
+      "direct_message_preflight": {
+        "accepted": false,
+        "reason": "Scale-Out topology: message exceeds max_active_bytes_per_source; increase budget or regenerate smaller logical messages"
+      },
+      "declared_source_byte_cap": 1
+    },
+    "source_confirmation_time": {
+      "actual_complete_feedback_rx_ns": 4,
+      "baseline_slice": {
+        "graph_id": "g0.w0",
+        "layer": 0,
+        "source_layer_id": null,
+        "phase": "dispatch",
+        "src": null,
+        "dst": null,
+        "messages": 1,
+        "logical_bytes": 100,
+        "tx_payload_bytes": 100,
+        "rx_payload_bytes": 100,
+        "unique_arrival_bytes": 100,
+        "accepted_bytes": 100,
+        "confirmed_bytes": 100,
+        "complete": true,
+        "data_ready_ns": 2,
+        "source_confirmed_ns": 4
+      },
+      "altered_ack_ns": 1,
+      "altered_audit": {
+        "accepted": true
+      },
+      "altered_slice": {
+        "graph_id": "g0.w0",
+        "layer": 0,
+        "source_layer_id": null,
+        "phase": "dispatch",
+        "src": null,
+        "dst": null,
+        "messages": 1,
+        "logical_bytes": 100,
+        "tx_payload_bytes": 100,
+        "rx_payload_bytes": 100,
+        "unique_arrival_bytes": 100,
+        "accepted_bytes": 100,
+        "confirmed_bytes": 100,
+        "complete": true,
+        "data_ready_ns": 2,
+        "source_confirmed_ns": 1
+      },
+      "scope": "artificial saved-record mutation; no evidence that historical native outputs are wrong"
+    }
+  }
+}

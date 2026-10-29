@@ -1,0 +1,406 @@
+{
+  "schema_version": "moe-comprehensive-review-validation/1",
+  "baseline_commit": "bb6880ebbab8f066b071647fc20124ab7f4c6d16",
+  "cwd": "/home/lry/moe-ub-cosim",
+  "local_run_root": "runs/comprehensive_review_20261029",
+  "scope": {
+    "network_runs": 0,
+    "builds": 0,
+    "dependency_installs": 0,
+    "downloads": 0,
+    "platform_sources_changed": false,
+    "hardware_accuracy_validated": false,
+    "novel_algorithm_gain_validated": false,
+    "newly_reproduced_gaps_fixed": false
+  },
+  "dependencies": {
+    "command": [
+      "bash",
+      "scripts/check_deps.sh"
+    ],
+    "exit_code": 0,
+    "fixed_recursive_dependencies_checked": 13,
+    "initial_recursive_worktrees_clean": true
+  },
+  "inventory": {
+    "platform_python_modules": 124,
+    "python_syntax_checked": 124,
+    "unit_test_files": 107,
+    "rdma_cpp_sources": 13,
+    "platform_imports_tests_or_experiments": [],
+    "root_license_present": false,
+    "github_workflows": []
+  },
+  "unit_checks": {
+    "initial": {
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/unit",
+        "-p",
+        "*test.py"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "environment_overrides": {
+        "PYTHONPATH": "python:.",
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "test_methods_reported": 635,
+      "outcome": "36 errors and 1 failure; missing protoc on PATH including downstream graph-worker errors",
+      "monitor_status": "child_failed",
+      "exit_code": 1,
+      "wall_seconds_monitored": 23.781681948981714,
+      "peak_sampled_group_rss_bytes": 171028480,
+      "limits": {
+        "sampled_group_rss_bytes": 1610612736,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 268435456,
+        "wall_seconds": 120.0
+      },
+      "local_logs_not_published": {
+        "runs/comprehensive_review_20261029/unit-suite/probe.json": "a29e355932e68186dc6c05a5a7c8d3dc4615e26a94a78b55ecacabeabaac88d9",
+        "runs/comprehensive_review_20261029/unit-suite/stdout.log": "45d8215e7ddb693bdbeb3a1e4421a93686f24f5465a96be277fba96a71a66e38",
+        "runs/comprehensive_review_20261029/unit-suite/stderr.log": "f458e97873c8886c435a35a11ffa5bee863cd1f7e72c0c8f278c536c1dcfe778"
+      }
+    },
+    "affected_only": {
+      "command": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "unittest",
+        "composed_service_test.ComposedServiceTest.test_each_group_has_its_own_token_budget",
+        "composed_service_test.ComposedServiceTest.test_groups_finish_independently_and_token_advances_once",
+        "composed_service_test.ComposedServiceTest.test_kv_wait_in_composed_path",
+        "continuous_batching_test.ContinuousBatchingTest.test_abc_routes_progress_and_release",
+        "continuous_batching_test.ContinuousBatchingTest.test_kv_wait_does_not_stop_resident_progress",
+        "continuous_batching_test.ContinuousBatchingTest.test_resident_not_selected_retains_kv",
+        "data_inputs_test.DataInputsTest.test_scheduler_consumes_only_normalized_selected_layer_records",
+        "dynamic_service_test.DynamicServiceTest.test_busy_arrival_preserves_batch_and_idle_group_starts_at_arrival",
+        "dynamic_service_test.DynamicServiceTest.test_explicit_interleaved_members_not_inferred_from_ep_size",
+        "dynamic_service_test.DynamicServiceTest.test_idle_jump_and_group_completion_order",
+        "evidence_service_test.EvidenceServiceTest.test_capacity_wait_and_refill_use_window_bound_only",
+        "evidence_service_test.EvidenceServiceTest.test_known_target_preserved_and_completion_is_separate",
+        "evidence_service_test.EvidenceServiceTest.test_unknown_targets_retire_without_native_completion",
+        "full_model_export_test.FullModelExportTest.test_failed_build_and_write_do_not_create_success_manifest",
+        "full_model_export_test.FullModelExportTest.test_modified_returned_or_plain_plan_still_rejected_before_writing",
+        "full_model_export_test.FullModelExportTest.test_old_and_closed_artifacts_and_input_isolation",
+        "full_model_export_test.FullModelExportTest.test_probe_hooks_preserve_closed_export_and_restore_writer",
+        "full_model_test.FullModelTest.test_service_and_evidence_reuse_native_pool",
+        "graph_storage_test.GraphStorageTest.test_budget_failure_preserves_diagnostics_and_identity",
+        "graph_storage_test.GraphStorageTest.test_closed_recipe_matches_legacy_full_validation_and_bytes",
+        "graph_storage_test.GraphStorageTest.test_worker_retirement_replay_and_corruption",
+        "model_capacity_test.ModelCapacityTest.test_reservation_progress_release_and_fifo",
+        "pd_queue_test.QueuedPdTest.test_available_capacity_prioritizes_queued_handoff",
+        "pd_queue_test.QueuedPdTest.test_busy_arrival_does_not_release_or_schedule_source",
+        "pd_queue_test.QueuedPdTest.test_capacity_wait_and_fifo_lifecycle",
+        "pd_service_test.PdServiceTest.test_prefill_real_range_and_memory_lifecycle",
+        "plan_io_test.PlanIOTest.test_legacy_bytes_compact_equivalence_and_manifest",
+        "segment_test.SegmentTest.test_verified_source_step_and_identity",
+        "service_boundaries_test.ServiceBoundariesTest.test_sparse_arrival_waits_for_whole_group_and_unequal_steps",
+        "service_test.ServiceTest.test_scheduler_progress_only_on_matching_wave_done"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "environment_overrides": {
+        "PYTHONPATH": "python:.:tests/unit",
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PATH": "/home/lry/tools/protobuf/bin prepended to existing PATH, command-local only"
+      },
+      "test_methods_reported": 30,
+      "outcome": "30 unique affected methods pass",
+      "monitor_status": "completed",
+      "exit_code": 0,
+      "wall_seconds_monitored": 10.529264461016282,
+      "peak_sampled_group_rss_bytes": 176041984,
+      "limits": {
+        "sampled_group_rss_bytes": 1610612736,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 268435456,
+        "wall_seconds": 120
+      },
+      "local_logs_not_published": {
+        "runs/comprehensive_review_20261029/unit-affected/probe.json": "122698512b2f41a27982ce96f8629ad4d353bd31b8ab69d2fc4ee3cf79be8804",
+        "runs/comprehensive_review_20261029/unit-affected/stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "runs/comprehensive_review_20261029/unit-affected/stderr.log": "c96e97e3bf7309e413b420cb87dbf03cdc7a9bc048ffecc254723c5355ac3756"
+      }
+    },
+    "interpretation": "Initial suite was not all green; only the 30 affected methods were rechecked with the already installed compiler exposed. Successful methods were not rerun."
+  },
+  "public_cli": [
+    {
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "topology",
+        "--config",
+        "examples/scaleout_rdma/small-clos-100g.json",
+        "--output",
+        "runs/comprehensive_review_20261029/public/topology"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "environment_overrides": {
+        "PYTHONPATH": "python:.",
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "exit_code": 0,
+      "state": "generated_not_executed",
+      "topology": {
+        "gpus": 8,
+        "servers": 4,
+        "tor": 4,
+        "agg": 4,
+        "core": 2,
+        "links": 20
+      },
+      "audit": {
+        "schema_version": "moe-scaleout-topology-audit/1",
+        "state": "generated_not_executed",
+        "network_executed": false,
+        "counts": {
+          "gpus": 8,
+          "servers": 4,
+          "tor": 4,
+          "agg": 4,
+          "core": 2,
+          "links": 20
+        },
+        "link_tiers": {
+          "access": 8,
+          "tor_agg": 8,
+          "agg_core": 4
+        },
+        "per_nic": {
+          "ports": 1,
+          "port_rate_bps": 100000000000,
+          "total_port_rate_bps": 100000000000,
+          "declared_total_rate_bps": 100000000000
+        },
+        "switch_ports": [
+          {
+            "node_id": 8,
+            "kind": "tor",
+            "plane": 0,
+            "rail": 0,
+            "pod": 0,
+            "segment": 0,
+            "ports_used": 4,
+            "port_limit": 128,
+            "downstream_bps": 200000000000,
+            "upstream_bps": 200000000000,
+            "down_to_up_ratio": 1.0
+          },
+          {
+            "node_id": 9,
+            "kind": "tor",
+            "plane": 0,
+            "rail": 0,
+            "pod": 0,
+            "segment": 0,
+            "ports_used": 4,
+            "port_limit": 128,
+            "downstream_bps": 200000000000,
+            "upstream_bps": 200000000000,
+            "down_to_up_ratio": 1.0
+          },
+          {
+            "node_id": 10,
+            "kind": "agg",
+            "plane": 0,
+            "rail": -1,
+            "pod": 0,
+            "segment": null,
+            "ports_used": 3,
+            "port_limit": 128,
+            "downstream_bps": 200000000000,
+            "upstream_bps": 100000000000,
+            "down_to_up_ratio": 2.0
+          },
+          {
+            "node_id": 11,
+            "kind": "agg",
+            "plane": 0,
+            "rail": -1,
+            "pod": 0,
+            "segment": null,
+            "ports_used": 3,
+            "port_limit": 128,
+            "downstream_bps": 200000000000,
+            "upstream_bps": 100000000000,
+            "down_to_up_ratio": 2.0
+          },
+          {
+            "node_id": 12,
+            "kind": "tor",
+            "plane": 0,
+            "rail": 0,
+            "pod": 1,
+            "segment": 0,
+            "ports_used": 4,
+            "port_limit": 128,
+            "downstream_bps": 200000000000,
+            "upstream_bps": 200000000000,
+            "down_to_up_ratio": 1.0
+          },
+          {
+            "node_id": 13,
+            "kind": "tor",
+            "plane": 0,
+            "rail": 0,
+            "pod": 1,
+            "segment": 0,
+            "ports_used": 4,
+            "port_limit": 128,
+            "downstream_bps": 200000000000,
+            "upstream_bps": 200000000000,
+            "down_to_up_ratio": 1.0
+          },
+          {
+            "node_id": 14,
+            "kind": "agg",
+            "plane": 0,
+            "rail": -1,
+            "pod": 1,
+            "segment": null,
+            "ports_used": 3,
+            "port_limit": 128,
+            "downstream_bps": 200000000000,
+            "upstream_bps": 100000000000,
+            "down_to_up_ratio": 2.0
+          },
+          {
+            "node_id": 15,
+            "kind": "agg",
+            "plane": 0,
+            "rail": -1,
+            "pod": 1,
+            "segment": null,
+            "ports_used": 3,
+            "port_limit": 128,
+            "downstream_bps": 200000000000,
+            "upstream_bps": 100000000000,
+            "down_to_up_ratio": 2.0
+          },
+          {
+            "node_id": 16,
+            "kind": "core",
+            "plane": 0,
+            "rail": -1,
+            "pod": null,
+            "segment": null,
+            "ports_used": 2,
+            "port_limit": 128,
+            "downstream_bps": 200000000000,
+            "upstream_bps": 0,
+            "down_to_up_ratio": null
+          },
+          {
+            "node_id": 17,
+            "kind": "core",
+            "plane": 0,
+            "rail": -1,
+            "pod": null,
+            "segment": null,
+            "ports_used": 2,
+            "port_limit": 128,
+            "downstream_bps": 200000000000,
+            "upstream_bps": 0,
+            "down_to_up_ratio": null
+          }
+        ],
+        "packet_switch_domains": [
+          {
+            "id": 0,
+            "planes": [
+              0
+            ],
+            "rails": [
+              0
+            ],
+            "switch_count": 10,
+            "gpu_ids": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7
+            ]
+          }
+        ],
+        "all_gpu_pairs_have_packet_switch_path": true,
+        "unreachable_unordered_gpu_pairs": 0,
+        "fixed_switch_counter_array_bytes": 336200000,
+        "warnings": [],
+        "limits": [
+          "Packet-switch connectivity only; no OCS circuits or reconfiguration.",
+          "Ports are logical link/device ports, not physical cage/breakout validation.",
+          "Ratios are per-switch capacity sums, not measured throughput or bisection bandwidth.",
+          "No NIC/PCIe shared service model, intra-host fabric, GPU relay, adaptive routing or traffic execution.",
+          "Native readers compute routing; rail/plane selection and application rank placement remain separate."
+        ]
+      },
+      "local_manifest_sha256": "b8ecd6f435cafa1f8145dd8d22a01f942aec27d1a3e459bf79979e2ab7efbcef"
+    },
+    {
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-preflight",
+        "--topology",
+        "runs/comprehensive_review_20261029/public/topology",
+        "--protocol",
+        "examples/scaleout_rdma/rdma.json",
+        "--output",
+        "runs/comprehensive_review_20261029/public/preflight.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "environment_overrides": {
+        "PYTHONPATH": "python:.",
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "exit_code": 0,
+      "passed": true,
+      "network_executed": false,
+      "transactions_checked": false,
+      "scope": "pinned initial MMU reserves only; no dynamic losslessness, execution or hardware calibration guarantee",
+      "local_result_sha256": "0e06eaacde26bfcb93df49470f5e5ec197cb95145c7ffae9251bec29319cb03c"
+    }
+  ],
+  "counterexamples": {
+    "script": "docs/reviews/evidence/comprehensive_review_20261029.py",
+    "script_sha256": "22023345dddcf8e6e402f995f57e4e7668d4dc8395f5d76d681897578dcfcac7",
+    "result": "docs/reviews/evidence/comprehensive_review_20261029.json",
+    "result_sha256": "7cdf067d9a0e162496c4bedde7853da18e261332fadb5ff8acb408f3dc2fc221",
+    "platform_source_sha256": {
+      "backend/rdma/fabric.cc": "963c70221a180f811160c34a38f39ebc0dc6cc071a7b0cc6e943c9fd913d4262",
+      "python/moe_ub_cosim/scaleout_rdma.py": "34f5ac0143057d21f99ef361223d40e9f375d87e9620beb1599e3627b73e959a",
+      "python/moe_ub_cosim/scaleout_service.py": "efd4c307f961267e6dd5e623be3a408f03cc766e8fc892ea00dea0840b3b1f27",
+      "python/moe_ub_cosim/simai_service.py": "b6935ab9d19e70251d9704e1cbbf3385bbca0c16b8decc73c1fc1d77fb480aef",
+      "python/moe_ub_cosim/scaleout_connectivity.py": "ed5d6fcada3c3e908574ca4c51ecf095bd61d43151a1ea70dba66ec2f0bf7219",
+      "python/moe_ub_cosim/scaleout_arrivals.py": "710f1842cc6bdec2a6517d7bedc6add7a194314882cae230c956d79d57f5b2b1"
+    },
+    "execution": "CPU-only public Python functions; no test driver or user raw routing data",
+    "native_port_collision_rejection": "Source-audited, not an executed native failure",
+    "arrival_time_mutation": "Artificial saved-record counterexample, not evidence that historical native output is incorrect"
+  },
+  "evidence_availability": "Versioned scripts and compact receipts are published. Local runs/logs listed here are not included; hashes do not imply those files are publicly available.",
+  "delivery_checks": {
+    "counterexample_script_syntax": "pass",
+    "counterexamples_recomputed_equal": true,
+    "report_local_links_checked": 41,
+    "receipt_source_fingerprints_consistent": true,
+    "git_diff_check": "pass"
+  }
+}

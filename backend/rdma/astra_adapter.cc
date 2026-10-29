@@ -15,6 +15,7 @@ void Messages::Register(const Json& messages) {
             "reused logical message identity");
     Require(m.at("src")!=m.at("dst") && m.at("bytes").get<uint64_t>()>0,"local or empty network message");
   }
+  transport_.Register(messages);
   for(const auto& m:messages) {
     const auto id=m.at("id").get<uint64_t>();
     keys_.emplace(std::make_tuple(m.at("src").get<int>(),m.at("dst").get<int>(),m.at("tag").get<int>()),id);
@@ -43,7 +44,7 @@ void Messages::Post(bool send,int rank,uint64_t bytes,int type,int peer,int tag,
   if(send) {
     Require(!op.sent,"SEND posted twice");op.sent=true;op.send_done=[callback,arg](){callback(arg);};
     op.send_post=Now();++send_posts_;
-    fabric_.Send(id,op.src,op.dst,bytes,op.plane,
+    transport_.Send(id,op.src,op.dst,bytes,op.plane,
       [this,id](){operations_.at(id).acked=true;Deliver(id);},
       [this,id](){operations_.at(id).received=true;Deliver(id);});
   } else {

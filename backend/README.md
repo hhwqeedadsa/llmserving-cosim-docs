@@ -1,5 +1,7 @@
 # 联合后端接口与执行规则
 
+原生服务`ServiceTransport`默认委托旧`Fabric::Send`，显式配置时使用持久stream/work。`Messages`继续配对SEND/RECV，源确认前不释放ASTRA发送资源；持久路径结束先检查物理排空，再Close并检查Fabric退出。配置与范围见[服务示例](../examples/astra_stream_service/README.md)。`control_channel.hh`在任何logger初始化前复制原stdout管道并设置CLOEXEC，普通stdout重定向stderr，控制帧只写私有描述符；处理部分write/EINTR并拒绝空、超长、多行帧。两Python服务共用严格解码器，不修补损坏JSON后继续。
+
 `rc_concurrent_probe.cc` 是独立多 QP 驱动，复用同一 `Fabric` 的物理网络，各连接独立保存请求/目标序号、重放、进度和定时器，按 GPU 共享注册区。反馈按目标 QPN 路由到本连接，丢包规则同时匹配连接，不能仅凭相同 PSN 命中其他 QP。`rc-fabric-build` 只编译此单元并链接版本一致的预编译库，不与单 QP 驱动混链；使用边界见[多连接参考](../examples/rc_concurrent/README.md)。
 
 独立原生`Fabric`支持协议可选`switch_counter_storage=legacy_dense|port_dense`。在物理接口安装后、MMU配置和流量前一次性分配`SwitchNode`计数矩阵；后者只改变入口×出口×优先级的精确存储维数，不修改`SwitchMmu`及事件。缺省结果不新增字段；显式元数据、非零计数和独立资源范围见[存储示例](../examples/scaleout_counter_storage/README.md)。原生类布局已变化，所有消费者须按锁文件重编，不能混用旧库。

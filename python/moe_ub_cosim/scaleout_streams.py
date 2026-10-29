@@ -26,7 +26,8 @@ def stream_limits(config):
     return dict(value)
 
 
-def validate(topology, protocol, config, *, transaction_peer_copies=False):
+def validate_transport(topology, protocol, config, *, transaction_peer_copies=False):
+    """Check transport declarations only; callers must validate actual work."""
     require(type(transaction_peer_copies) is bool, 'transaction peer mode must be boolean')
     if transaction_peer_copies:
         require(topology.get('schema_version') == 'moe-scaleout-physical-topology/2' and
@@ -130,6 +131,13 @@ def validate(topology, protocol, config, *, transaction_peer_copies=False):
     for rule in protocol.get('faults',[]):
         require(rule['message_id'] in ids,'fault names an unopened persistent stream')
         require(rule['sequence']<=64*2**20,'persistent fault sequence exceeds stream budget')
+    return counts
+
+
+def validate(topology, protocol, config, *, transaction_peer_copies=False):
+    counts=validate_transport(topology,protocol,config,transaction_peer_copies=transaction_peer_copies)
+    local_mode=config['schema_version'].endswith(('/3','/4'))
+    budget=limits(protocol);ids={s['id'] for s in config['streams']}
     require(isinstance(config['work'],list) and 1<=len(config['work'])<=counts['max_work'],
             'work count exceeds declared budget')
     seen,totals={}, {i:0 for i in ids}

@@ -1,5 +1,7 @@
 # 用户指南
 
+实际ASTRA服务可显式选择持久连接上的GBN或选择重传SR，沿用`rdma-run/rdma-check`及SimAI服务入口。它保留前端与ASTRA调度，不以保存图重放替代。输入、限制、stream/消息身份及故障语义见[持久传输服务小例](../examples/astra_stream_service/README.md)。
+
 每次`simai-run`自动保存`scenario.json/scenario.md`，包括模拟卡数、EP、专家/rank、真实batch、分层带宽和成功/失败状态。严重周期性数据丢包与`simai-summary/data-loss-check`用法见[严重丢包小例](../examples/simai_severe_loss/README.md)；原生拥塞控制与本项目额外恢复的分工见[RDMA说明](rdma_congestion_loss.md)。
 
 使用实际Alibaba SimAI调度器驱动原生ns-3，可用`scaleout simai-prepare/simai-run/simai-check`。支持源文件校验的稀疏请求、有限ready-KV MoE层段及网络完成反馈；完整可复制输入、运行命令与边界见[SimAI联合小例](../examples/simai_service/README.md)。

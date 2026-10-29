@@ -15,6 +15,7 @@ from .scaleout_limits import limits
 from .scaleout_service import export_wave, make_wave, validate as validate_service
 from .scaleout_topology import fields, integer, require
 from .simai_frontend import load, verify_runtime
+from .native_control import event as control_event
 
 
 class SparseRoutes:
@@ -182,18 +183,20 @@ def worker(output,backend,protoc):
     for rank in range(ranks):
         with (bootstrap/f'layer.{rank}.et').open('xb') as stream:write_message(stream,proto.GlobalMetadata(version='moe-simai-bootstrap/1'))
     save(output/'system.json',json.loads((ROOT/'examples/native_first_round/system.json').read_bytes()))
-    from .scaleout_messages import MessagePreflight
+    from .service_transport import message_preflight,native_arguments
     frontend=Frontend(config,planes,replay,output/'simai_runtime',output,
-                      message_preflight=MessagePreflight(topology,protocol));transcript=[];child=None
+                      message_preflight=message_preflight(topology,protocol,config['service']));transcript=[];child=None
     command=[backend,str(output/'topology.json'),str(output/'rdma.json'),str(output/'system.json'),str(bootstrap/'layer'),str(output/'result.json')]
+    command.extend(native_arguments(config['service'],output))
     save(output/'native-command.json',command)
     try:
         with (output/'native.stderr.log').open('w') as errors,(output/'native.stdout.log').open('w',buffering=1) as logs:
             child=subprocess.Popen(command,cwd=output,stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=errors,text=True)
             for line in child.stdout:
                 logs.write(line)
-                if not line.startswith('MOE_RDMA_EVENT '):continue
-                event=json.loads(line[len('MOE_RDMA_EVENT '):]);reply=frontend.decide(event,output,proto)
+                event=control_event(line)
+                if event is None:continue
+                reply=frontend.decide(event,output,proto)
                 transcript.append(dict(event=event,reply=reply));child.stdin.write(json.dumps(reply)+'\n');child.stdin.flush()
             require(child.wait()==0,'native SimAI service failed; inspect native.stderr.log')
     finally:

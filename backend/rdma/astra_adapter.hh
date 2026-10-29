@@ -1,12 +1,13 @@
 #pragma once
 #include "fabric.hh"
+#include "service_transport.hh"
 #include "astra-sim/common/AstraNetworkAPI.hh"
 
 namespace moe_rdma {
 // Every rank adapter shares this registry and the same Fabric/Simulator.
 class Messages {
  public:
-  explicit Messages(Fabric& fabric): fabric_(fabric) {}
+  Messages(Fabric& fabric,ServiceTransport& transport): fabric_(fabric),transport_(transport) {}
   void Register(const Json& messages);
   void Post(bool send, int rank, uint64_t bytes, int type, int peer, int tag,
             void (*callback)(void*), void* argument);
@@ -26,6 +27,7 @@ class Messages {
   };
   void Deliver(uint64_t id);
   Fabric& fabric_;
+  ServiceTransport& transport_;
   std::map<uint64_t,Operation> operations_;
   std::map<std::tuple<int,int,int>,uint64_t> keys_;
   uint64_t send_posts_=0,recv_posts_=0,send_callbacks_=0,recv_callbacks_=0;

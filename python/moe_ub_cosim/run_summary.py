@@ -6,6 +6,7 @@ from pathlib import Path
 from .scaleout_rdma import checked_json,save
 from .scaleout_limits import limits
 from .service_terminal import service_terminal
+from .service_transport import semantic_messages
 
 
 def describe(directory):
@@ -20,6 +21,7 @@ def describe(directory):
     requests=c['routes']['requests'];counts=Counter(q['rank_id'] for q in requests)
     result=checked_json(d/'result.json',limits(p)['result_json_bytes']) if (d/'result.json').is_file() else None
     f=checked_json(d/'frontend.json',4*2**20) if (d/'frontend.json').is_file() else None
+    messages=semantic_messages(result) if result else []
     groups=[]
     for i,group in enumerate(s['parallel']['groups']):
         groups.append(dict(group=i,ep=len(group),rank_ids=group,experts_per_rank_per_layer=s['model']['experts']//len(group),
@@ -27,8 +29,8 @@ def describe(directory):
             actual_requests_per_source_rank={str(r):counts[r] for r in group if counts[r]}))
     outcome=dict(state='not_started_or_no_result') if result is None else dict(state='completed' if result['passed'] else 'failed',
         native_network_executed=result['native_network_executed'],finish_ns=result['finish_ns'],
-        submitted_messages=len(result['messages']),logical_submitted_bytes=sum(v['bytes'] for v in result['messages']),
-        actual_data_ranks=len({rank for m in result['messages'] for rank in (m['src'],m['dst'])}),
+        submitted_messages=len(messages),logical_submitted_bytes=sum(v['bytes'] for v in messages),
+        actual_data_ranks=len({rank for m in messages for rank in (m['src'],m['dst'])}),
         complete_packet_capture=result.get('packet_capture',{}).get('complete'),
         packet_capture_events=len(result.get('packet_capture',{}).get('events',[])),
         fault_drops=result['fault_drops'],data_loss=result.get('data_loss'),failure=result.get('failure'))
@@ -42,7 +44,8 @@ def describe(directory):
         batch_cap_per_rank=s['workload']['batch_per_rank'],largest_actual_batch=max(counts.values()),
         source_layers=c['routes']['layer_ids'],decode_steps=s['workload']['decode_steps'],
         context_limit_tokens=s['workload']['context_tokens'],compute=s['compute'],
-        recovery=p.get('recovery',{'mode':'native'}),data_loss_configuration=p.get('data_loss'),
+        recovery=s['transport']['transport_recovery'] if 'transport' in s else p.get('recovery',{'mode':'native'}),
+        transport_kind='astra_persistent_streams/1' if 'transport' in s else 'legacy_messages',data_loss_configuration=p.get('data_loss'),
         source=c['routes']['source'],frontend_calls=f.get('scheduler_calls') if f else None,outcome=outcome)
 
 

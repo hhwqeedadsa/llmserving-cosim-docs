@@ -1,4 +1,5 @@
 #include "astra_adapter.hh"
+#include "control_channel.hh"
 #include "host_timing.hh"
 #include "astra-sim/system/Sys.hh"
 #include <filesystem>
@@ -13,8 +14,8 @@ namespace moe_rdma { void InitializeLogging(); void ShutdownLogging(); }
 namespace fs=std::filesystem;
 class Service {
  public:
-  Service(Fabric& fabric,int ranks,const std::string& bootstrap,const std::string& system,HostTiming& timing):
-    fabric_(fabric),messages_(fabric),owners_(ranks),boot_done_(ranks,false),timing_(timing) {
+  Service(Fabric& fabric,ServiceTransport& transport,ControlChannel& control,int ranks,const std::string& bootstrap,const std::string& system,HostTiming& timing):
+    fabric_(fabric),transport_(transport),control_(control),messages_(fabric,transport),owners_(ranks),boot_done_(ranks,false),timing_(timing) {
     for(int r=0;r<ranks;++r)
       adapters_.push_back(std::make_unique<Adapter>(r,messages_,[this,r](){Finished(r);}));
     for(int r=0;r<ranks;++r) {
@@ -63,7 +64,7 @@ class Service {
     std::string line;
     {
       auto exchange=timing_.Span("control_exchange");
-      std::cout<<"MOE_RDMA_EVENT "<<request.dump()<<std::endl;
+      control_.Send(request.dump());
       auto wait=timing_.Span("frontend_wait");
       Require(bool(std::getline(std::cin,line)) && line.size()<=1048576,"frontend EOF or oversized commit");
     }
@@ -75,7 +76,7 @@ class Service {
     const auto& submissions=commit.at("submissions");
     if(commit.at("service_finished")==true) {
       Require(submissions.empty() && waves_.empty(),"premature service termination");
-      fabric_.FinishWhenDrained([this](){finished_=true;ns3::Simulator::Stop();});return;
+      transport_.Finish([this](){finished_=true;ns3::Simulator::Stop();});return;
     }
     Require(!submissions.empty() || !waves_.empty(),"frontend and network made no progress");
     std::vector<int> activate;
@@ -133,7 +134,7 @@ class Service {
  private:
   static int64_t Now(){return ns3::Simulator::Now().GetNanoSeconds();}
   struct Wave { std::vector<uint64_t> messages;std::vector<int> ranks;std::set<int> finished;int64_t start; };
-  Fabric& fabric_;Messages messages_;
+  Fabric& fabric_;ServiceTransport& transport_;ControlChannel& control_;Messages messages_;
   std::vector<std::string> owners_;
   std::vector<bool> boot_done_;
   std::vector<std::unique_ptr<Adapter>> adapters_;
@@ -147,7 +148,7 @@ class Service {
 static int Libraries(dl_phdr_info* info,std::size_t,void* data) {
   if(info->dlpi_name && info->dlpi_name[0])static_cast<Json*>(data)->push_back(info->dlpi_name);return 0;
 }
-static void Execute(char** argv,HostTiming& timing) {
+static void Execute(char** argv,HostTiming& timing,const Json& transport_config,ControlChannel& control) {
     auto total=timing.Span("native_total");
     Require(!fs::exists(argv[5]),"result already exists");
     ns3::Time::SetResolution(ns3::Time::NS);Json topology,config;
@@ -157,9 +158,10 @@ static void Execute(char** argv,HostTiming& timing) {
     std::unique_ptr<Fabric> fabric_owner;
     {auto phase=timing.Span("fabric_init");fabric_owner=std::make_unique<Fabric>(topology,config);}
     auto& fabric=*fabric_owner;
+    ServiceTransport transport(fabric,transport_config);
     int ranks=0;for(const auto& node:topology.at("nodes"))if(node.at("kind")=="gpu")++ranks;
     std::unique_ptr<Service> service_owner;
-    {auto phase=timing.Span("astra_init");service_owner=std::make_unique<Service>(fabric,ranks,argv[4],argv[3],timing);}
+    {auto phase=timing.Span("astra_init");service_owner=std::make_unique<Service>(fabric,transport,control,ranks,argv[4],argv[3],timing);}
     auto& service=*service_owner;
     ns3::Simulator::Stop(ns3::NanoSeconds(fabric.MaxSimNs()));
     {auto phase=timing.Span("simulator_run");ns3::Simulator::Run();}
@@ -169,6 +171,13 @@ static void Execute(char** argv,HostTiming& timing) {
     }
     Json report;
     {auto phase=timing.Span("report_build");report=fabric.Report();report["service"]=service.Report();}
+    if(transport.Persistent()) {
+      report["service_transport"]=transport.Report();
+      const auto& recovery=report["service_transport"]["native"]["recovery"];
+      if(recovery.at("failed")==true)report["failure"]={{"reason","recovery_retry_exhausted"},
+        {"stream",recovery.at("failure").at("stream")},{"time_ns",recovery.at("failure").at("time_ns")},
+        {"scope","persistent source retries exhausted; whole ASTRA service stopped; no completion synthesized"}};
+    }
     report["loaded_libraries"]=Json::array();
     dl_iterate_phdr(Libraries,&report["loaded_libraries"]);
     const bool passed=report["service"]["service_finished"]==true && fabric.Drained();report["passed"]=passed;
@@ -183,8 +192,16 @@ static void Execute(char** argv,HostTiming& timing) {
 }
 int main(int argc,char** argv) {
   try {
-    Require(argc==6 || argc==7,"usage: moe-rdma-service TOPOLOGY RDMA SYSTEM BOOTSTRAP_PREFIX NEW_RESULT [NEW_HOST_TIMING.jsonl]");
-    HostTiming timing(argc==7?argv[6]:"");Execute(argv,timing);timing.Complete();return 0;
+    ControlChannel control;
+    Require(argc>=6 && argc<=9,"usage: moe-rdma-service TOPOLOGY RDMA SYSTEM BOOTSTRAP_PREFIX NEW_RESULT [NEW_HOST_TIMING.jsonl] [--transport CONFIG.json]");
+    int next=6;std::string host;Json transport;
+    if(next<argc && std::string(argv[next])!="--transport")host=argv[next++];
+    if(next<argc) {
+      Require(std::string(argv[next])=="--transport" && next+2==argc,"invalid service transport arguments");
+      transport=ReadJson(argv[next+1]);next+=2;
+    }
+    Require(next==argc,"unexpected service arguments");
+    HostTiming timing(host);Execute(argv,timing,transport,control);timing.Complete();return 0;
   } catch(const std::exception& error) {
     std::cerr<<error.what()<<'\n';ns3::Simulator::Destroy();ShutdownLogging();return 1;
   }

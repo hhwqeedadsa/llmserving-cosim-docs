@@ -26,6 +26,9 @@ def add_range(ranges, start, end):
 
 
 def reconstruct(result, waves, graph, layer, phase, src=None, dst=None):
+    if 'service_transport' in result:
+        from .service_stream_records import reconstruct as reconstruct_streams
+        return reconstruct_streams(result,waves,graph,layer,phase,src,dst)
     cap = result.get('packet_capture', {})
     require(result.get('native_network_executed') and 'service' in result,
             'requires a native rdma-run service result, not a stream/transaction probe')

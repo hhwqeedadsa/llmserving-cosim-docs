@@ -16,6 +16,9 @@ def verify(directory):
     t=checked_json(directory/'topology.json',8388608);p=checked_json(directory/'rdma.json',65536)
     n,planes,replay=validate(c,t,p,directory);receipt=verify_runtime(directory/'simai_runtime')
     r=checked_json(directory/'result.json',limits(p)['result_json_bytes']);f=checked_json(directory/'frontend.json',4*2**20)
+    if 'service_transport' in r:
+        from .service_stream_verify import verify as verify_streams
+        return verify_streams(directory)
     require(r['native_network_executed'] and r['passed'] and r['drained'] and r['service']['service_finished'] and r['service']['active_graphs']==0,
             'SimAI native fabric did not finish and drain')
     require(r['gpu_count']==n and f['scheduler_source']=='SimAI_Vidur_real_Orca_Cluster_Batch_Request' and

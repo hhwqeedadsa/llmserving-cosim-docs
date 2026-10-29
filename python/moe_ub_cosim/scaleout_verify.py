@@ -41,6 +41,9 @@ def verify(directory):
     directory=Path(directory).resolve()
     rdma=checked_json(directory/'rdma.json',65536)
     result=checked_json(directory/'result.json',limits(rdma)['result_json_bytes'])
+    if 'service_transport' in result:
+        from .service_stream_verify import verify as verify_streams
+        return verify_streams(directory)
     frontend=checked_json(directory/'frontend.json',4194304)
     require(result['passed'] and result['drained'] and result['service']['service_finished'] and
             result['service']['active_graphs']==0, 'service did not drain')

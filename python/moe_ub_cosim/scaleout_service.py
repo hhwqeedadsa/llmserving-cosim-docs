@@ -19,10 +19,12 @@ from .scaleout_topology import fields, integer, require
 from .scaleout_limits import limits
 from .scaleout_llm import EXTRA_COSTS, capacity, validate_llm
 from .host_timing import HostTiming
+from .native_control import event as control_event
 
 
 def validate(c, topology, rdma, replay=None):
-    fields(c, 'schema_version model workload parallel compute'+(' route_replay' if 'route_replay' in c else ''), 'service')
+    fields(c, 'schema_version model workload parallel compute'+(' route_replay' if 'route_replay' in c else '')+
+           (' transport' if 'transport' in c else ''), 'service')
     extended=c['schema_version']=='moe-scaleout-service/2'
     require(c['schema_version'] in ('moe-scaleout-service/1','moe-scaleout-service/2'), 'unsupported service schema')
     budget=limits(rdma)
@@ -59,6 +61,9 @@ def validate(c, topology, rdma, replay=None):
         if k != 'source':
             integer(cost[k], k, 0, 1000000)
     validate_protocol(rdma)
+    if 'transport' in c:
+        from .service_transport import validate as validate_transport
+        validate_transport(c['transport'],topology,rdma)
     if 'route_replay' in c:
         require(w['hotspot_fraction']==0, 'synthetic hotspot cannot modify replay choices')
         if replay is None:
@@ -310,15 +315,16 @@ def _worker(config_path,topology_path,protocol_path,backend,protoc,output,timing
             write_message(stream,proto.GlobalMetadata(version='moe-scaleout-bootstrap/1'))
     system=json.loads((ROOT/'examples/native_first_round/system.json').read_text())
     save(output/'system.json',system)
-    from .scaleout_messages import MessagePreflight
+    from .service_transport import message_preflight,native_arguments
     with timing.span('frontend_init'):
-        frontend=Frontend(c,ranks,planes,replay,timing,message_preflight=MessagePreflight(t,rdma))
+        frontend=Frontend(c,ranks,planes,replay,timing,message_preflight=message_preflight(t,rdma,c))
     capacities=dict(groups=[dict(rank_ids=g,**capacity(c,len(g))) for g in c['parallel']['groups']]) if not replay else dict(
         per_rank=[dict(rank_id=r,**capacity(c,len(g),replay.contexts(r))) for g in c['parallel']['groups'] for r in g])
     save(output/'capacity.json',capacities)
     command=[backend,str(Path(topology_path)/'topology.json'),protocol_path,str(output/'system.json'),
              str(bootstrap/'layer'),str(output/'result.json')]
     if host_timing:command.append(str(output/'native_host.jsonl'))
+    command.extend(native_arguments(c,output))
     transcript=[]; child=None
     try:
         # A host-budget kill must not lose already-read complete control lines
@@ -329,9 +335,8 @@ def _worker(config_path,topology_path,protocol_path,backend,protoc,output,timing
                 with timing.span('native_output_wait'):line=child.stdout.readline()
                 if not line:break
                 logs.write(line)
-                if not line.startswith('MOE_RDMA_EVENT '):
-                    continue
-                event=json.loads(line[len('MOE_RDMA_EVENT '):])
+                event=control_event(line)
+                if event is None:continue
                 with timing.span('frontend_decide'):reply=frontend.decide(event,output,proto)
                 transcript.append(dict(event=event,reply=reply))
                 child.stdin.write(json.dumps(reply)+'\n');child.stdin.flush()
@@ -391,9 +396,11 @@ def run(config, topology, protocol, backend, output, protoc='protoc', *, host_ti
     from .scaleout_verify import verify
     audit=verify(output)
     save(output/'verification.json',audit)
+    from .service_terminal import service_terminal
     return dict(passed=True,output=str(output),finish_ns=result['finish_ns'],waves=len(result['service']['waves']),
-                messages=len(result['messages']),verified_nodes=audit['verified_nodes'],
-                state='finite_ready_KV_MoE_segment_online_service')
+                messages=audit['messages'],verified_nodes=audit['verified_nodes'],
+                state='finite_ready_KV_MoE_segment_online_service',
+                **service_terminal(result,checked_json(output/'frontend.json',4*2**20),require_complete=True))
 
 
 if __name__=='__main__':

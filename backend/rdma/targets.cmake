@@ -55,6 +55,7 @@ set_target_properties(moe-rdma-logging PROPERTIES CXX_STANDARD 17 CXX_STANDARD_R
 build_exec(
   EXECNAME moe-rdma-service
   SOURCE_FILES "${CMAKE_CURRENT_LIST_DIR}/service.cc" "${CMAKE_CURRENT_LIST_DIR}/astra_adapter.cc"
+               "${CMAKE_CURRENT_LIST_DIR}/service_transport.cc" "${CMAKE_CURRENT_LIST_DIR}/persistent_streams.cc"
   LIBRARIES_TO_LINK moe-rdma-fabric moe-rdma-logging AstraSim ${libcore} ${libnetwork} ${libinternet} ${libpoint-to-point} ${libapplications}
   EXECUTABLE_DIRECTORY_PATH "${CMAKE_OUTPUT_DIRECTORY}/moe-rdma"
   IGNORE_PCH)

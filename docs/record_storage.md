@@ -1,5 +1,15 @@
 # 观测记录与存储格式
 
+## ASTRA服务持久传输记录
+
+显式`service.transport`选择`moe-astra-message-transport/1`时，原生`result.messages`为空，`service_transport.kind=astra_persistent_streams/1`。`service_transport.messages`只列实际已提交SEND的语义消息，保留原图字段并增加`stream/begin/end/ready_ns/published_ns/receive_ready_ns/ack_ns`；`registered_messages`另含已登记但可能未提交SEND的工作。未完成时间为空；底层`native.work`仍用-1表示未发生时间，读取器核对两者。`native`保存持久连接、发布、接收、确认、拥塞和恢复原件，不把这些真值喂给前端算法。
+
+实际线上包的身份是stream ID，序号为连接累计字节；不得以消息ID或分消息偏移解释故障规则。新到达摘要为`moe-rdma-arrival-audit/2`，逐包表保留全部捕获事件，另用`semantic_message_ids`作评价关联；非数据/未能归属的控制事件可为空。消息和端点表核对全运行，`arrival_curve.csv`只累计所选collective。接收按声明的有限乱序容量独立重放，原始到达、连续接受与源确认分别统计；源确认曲线字段为`source_confirmed_bytes`。旧逐消息`/1`字段与包筛选范围保持不变。来源、完成和使用方式见[服务示例](../examples/astra_stream_service/README.md)。
+
+`native.stdout.log`保存完整控制帧，原生普通stdout诊断转入`native.stderr.log`。截断、超长、错误类型或被日志污染的控制帧明确失败，原始行保留；不能将没有native结果的控制/基础设施失败当作丢包恢复耗尽。
+
+## 公共摘要与其他记录
+
 原生ASTRA服务的公共摘要、`rdma-check`、`simai-check`和sweep共用`service_terminal.py`核验业务终态。新增`application_finished_ns`为有限服务观察窗口的最后实际图完成，需与最终`service_finished` COMMIT及原生waves一致；`network_drained_ns`为成功运行排空时刻，`network_stopped_ns`保留成功/失败的原生停止时刻，`post_application_drain_ns`为业务完成之后的排空间隔。既有`finish_ns`继续表示原生停止/排空，不改旧记录含义。`timing_status`为`complete/failed/unavailable`，失败及证据缺失不猜业务完成时间，相关字段为null并附`timing_reason`；成功证据彼此矛盾则拒绝。sweep原有前端/网络别名保留；附加字段沿用既有schema，旧文件不自动重写。这些时间不代表完整模型请求或GPU可见性。
 
 SimAI运行的`scenario.json`采用`moe-run-summary/1`，中文同义说明保存在`scenario.md`；明确区分物理GPU总数、请求源、数据活动GPU、EP组、每rank专家、batch上限与实际batch，以及模拟硬件和校准边界。协议启用`data_loss`时，原生结果同名对象分别记录`eligible_destination_data_packets/window_packets/dropped_packets`和完整配置，逐包独立审核输出窗口/全观察期两种比例；失败也保留摘要和未完成曲线。字段语义见[严重丢包示例](../examples/simai_severe_loss/README.md)。

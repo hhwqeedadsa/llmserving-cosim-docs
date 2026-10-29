@@ -54,7 +54,7 @@ def validate(t, protocol, work):
         require(tuple(work['loss'][k] for k in ('node','opcode','psn')) in packets,
                 'RC loss must identify an actual endpoint request or final response')
     # Existing graph/MMU/protocol checks do not interpret RC operation bytes.
-    validate_probe(t,protocol,[dict(id=0,src=work['src'],dst=work['dst'],bytes=1,plane=work['plane'],ready_ns=0)],match_faults=False)
+    validate_probe(t,protocol,[dict(id=0,src=work['src'],dst=work['dst'],bytes=1,plane=work['plane'],ready_ns=0)],match_faults=False,legacy_messages=False)
     # Address/path checks also run natively before QP creation.
     return dict(operations=len(work['operations']), request_packets=psn, write_bytes=total)
 

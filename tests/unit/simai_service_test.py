@@ -6,7 +6,6 @@ import tempfile
 import unittest
 
 from moe_ub_cosim.scaleout_connectivity import validate_groups
-from moe_ub_cosim.scaleout_rdma import validate_probe
 from moe_ub_cosim.scaleout_service import make_wave
 from moe_ub_cosim.scaleout_topology import generate
 from moe_ub_cosim.simai_service import validate
@@ -57,7 +56,8 @@ class SimaiChecks(unittest.TestCase):
             self.assertEqual(moved.routes(list(range(64)),1,0),replay.routes(list(range(64)),1,0))
 
     def test_components_agree_with_independent_pair_bfs(self):
-        # Small two-rail/two-plane fabric; remove upper links to split rails.
+        # Independent pair BFS, rather than comparing two callers of the same
+        # component checker. Remove upper links to split the two rails.
         config=json.loads((ROOT/'examples/scaleout_multirail_native/topology.json').read_text())
         t,_=generate(config)
         protocol=deepcopy(self.p)
@@ -66,14 +66,23 @@ class SimaiChecks(unittest.TestCase):
         for disconnected in (False,True):
             topo=deepcopy(t)
             if disconnected:topo['links']=[e for e in topo['links'] if not (e['src'] in switches and e['dst'] in switches)]
+            by_id={n['id']:n for n in topo['nodes']};adjacency={n:[] for n in by_id}
+            for edge in topo['links']:
+                adjacency[edge['src']].append(edge['dst']);adjacency[edge['dst']].append(edge['src'])
             ranks=[n['id'] for n in topo['nodes'] if n['kind']=='gpu']
             for a in ranks:
                 for b in ranks:
                     if a>=b:continue
                     old=True
                     for plane in sorted({n['plane'] for n in topo['nodes'] if n['kind']!='gpu'}):
-                        try:validate_probe(topo,protocol,[dict(id=0,src=a,dst=b,bytes=1,plane=plane,ready_ns=0)],match_faults=False)
-                        except ValueError:old=False
+                        seen={a};todo=[a]
+                        while todo:
+                            for peer in adjacency[todo.pop()]:
+                                if peer in seen:continue
+                                if peer==b:seen.add(peer)
+                                elif by_id[peer]['kind']!='gpu' and by_id[peer]['plane']==plane:
+                                    seen.add(peer);todo.append(peer)
+                        old=old and b in seen
                     try:validate_groups(topo,protocol,[[a,b]]);new=True
                     except ValueError:new=False
                     self.assertEqual(new,old,(a,b,disconnected))

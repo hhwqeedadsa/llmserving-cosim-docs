@@ -209,12 +209,13 @@ def export_wave(wave, directory, proto):
 
 
 class Frontend:
-    def __init__(self, config, ranks, planes, replay=None, timing=None):
+    def __init__(self, config, ranks, planes, replay=None, timing=None, *, message_preflight):
         sys.path.insert(0, str(ROOT/'third_party/LLMServingSim'))
         from .configured_scheduler import ConfiguredScheduler
         from .lazy_uncached_pool import LazyUncachedBlockPool
         from serving.core.request import Request
         self.config, self.planes, self.replay = config, planes, replay
+        self.message_preflight=message_preflight
         self.timing=timing or HostTiming()
         m, w = config['model'], config['workload']; block_size = 16
         self.schedulers, self.requests = {}, []
@@ -269,6 +270,7 @@ class Frontend:
                         set(b.scheduled_tokens.values())=={1} for b in batches.values()), 'invalid real Decode batch')
             with self.timing.span('wave_build'):
                 wave=make_wave(self.config,group,index,self.steps[index],self.planes,self.replay)
+            self.message_preflight.accept_wave(wave,now)
             directory=output/'graphs'/wave['graph_id']
             with self.timing.span('wave_export'):export_wave(wave,directory,proto)
             history=dict(graph_id=wave['graph_id'],group_index=index,step=self.steps[index],start_ns=now,
@@ -308,7 +310,9 @@ def _worker(config_path,topology_path,protocol_path,backend,protoc,output,timing
             write_message(stream,proto.GlobalMetadata(version='moe-scaleout-bootstrap/1'))
     system=json.loads((ROOT/'examples/native_first_round/system.json').read_text())
     save(output/'system.json',system)
-    with timing.span('frontend_init'):frontend=Frontend(c,ranks,planes,replay,timing)
+    from .scaleout_messages import MessagePreflight
+    with timing.span('frontend_init'):
+        frontend=Frontend(c,ranks,planes,replay,timing,message_preflight=MessagePreflight(t,rdma))
     capacities=dict(groups=[dict(rank_ids=g,**capacity(c,len(g))) for g in c['parallel']['groups']]) if not replay else dict(
         per_rank=[dict(rank_id=r,**capacity(c,len(g),replay.contexts(r))) for g in c['parallel']['groups'] for r in g])
     save(output/'capacity.json',capacities)

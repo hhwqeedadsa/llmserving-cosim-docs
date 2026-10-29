@@ -6,6 +6,8 @@ SimAI入口的`input.json`采用`moe-simai-service/1`，原件复制到`route_so
 
 原生Scale-Out服务支持`scaleout rdma-arrivals`，从完整逐包记录导出逐rank发送/接收、逐消息规模和指定collective阶段的累计有效字节曲线。它区分物理接收、字节范围去重、Go-Back-N协议连续接受和源端确认，逐消息核对原生计数与完成回调；支持范围、CSV字段和命令见[任务两端统计](../examples/scaleout_arrivals/README.md)。
 
+`rdma-arrivals`的逐消息`ack_ns`和切片`source_confirmed_ns`从源端实际收到的累计ACK/NACK重建，采用首次覆盖全部字节的时刻，再与原生消息摘要核对；重复完整反馈不推迟确认。反馈不能确认尚未被接收端连续接受的字节，摘要与包事件矛盾时拒绝导出。数据收齐但最终反馈未到时，数据就绪可有值而源确认仍为null；确认不等于发送资源释放或GPU可见。此核验只适用于声明的有序接收服务，不能直接解释持久选择重传入口。
+
 独立多连接结果 `result.json.rc_concurrent` 中，`connections` 保存各连接源/目标 QPN、完成操作和超时次数，`memories` 按 GPU 保存最终共享注册区；`target_effects/endpoint_events` 的 `connection` 是离线记录标识。`physical_packets.packet_hex` 保存实际逐跳包，连接通过 BTH 目标 QPN 和 UDP 端口辨别，任务标识不上线。所有时间为同一时钟的 ns。字段生成及约束见[多连接示例](../examples/rc_concurrent/README.md)。
 
 原生协议显式指定`switch_counter_storage`时，结果同名对象保存`mode/payload_bytes/switches/nonzero_columns/scope`。各交换机的`actual_device_slots`包含slot0，`storage_slots`为实际或1025，`payload_bytes=storage_slots²×8×4`；`nonzero`逐行是`[ingress,egress,priority,bytes]`，按三个索引升序，只省略零值。优先级0保留上游累计只加不减的定义，不是末态队列占用。其余优先级保留入队、出队和丢弃核对。载荷字节不含容器、MMU、路由、QP和包，不能当成完整RSS；缺省协议不新增此对象。用法见[计数存储示例](../examples/scaleout_counter_storage/README.md)。

@@ -121,6 +121,7 @@ def validate(topology, protocol, config, *, transaction_peer_copies=False):
         # These descriptors validate topology only and are NEVER simulated.
         checks.append(dict(id=s['id'],src=s['src'],dst=s['dst'],plane=s['plane'],bytes=1,ready_ns=0))
     validate_probe(topology,protocol,checks,match_faults=False,
+                   legacy_messages=False,
                    max_probe_messages=counts['max_streams'] if config['schema_version'].endswith('/4') else 128)
     # Check both actual NIC attachments before output creation/MMU allocation;
     # native local-address bindings no longer require a singleton GPU route.

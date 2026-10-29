@@ -72,7 +72,7 @@ def reconstruct(result, waves, graph, layer, phase, src=None, dst=None):
             rx_unique_bytes=0, accepted_bytes=0, duplicate_rx_packets=0,
             out_of_order_discard_packets=0, out_of_order_discard_bytes=0,
             data_drop_events=0, dropped_payload_bytes=0,
-            first_tx_ns=None, first_rx_ns=None, data_ready_ns=None, ack_ns=m.get('ack_ns') if m else None)
+            first_tx_ns=None, first_rx_ns=None, data_ready_ns=None, ack_ns=None)
         ranges_tx[identity], ranges_rx[identity] = [], []
         accepted[identity], confirmed[identity] = 0, 0
     endpoints = {r:Counter(rank=r) for r in range(result['gpu_count'])}
@@ -122,7 +122,10 @@ def reconstruct(result, waves, graph, layer, phase, src=None, dst=None):
                 role='data_drop';row['data_drop_events']+=1;row['dropped_payload_bytes']+=payload
         elif protocol in (protos['ack'],protos['nack']) and event == codes['rx'] and node == meta['src']:
             role='source_feedback';require(0 <= seq <= meta['bytes'], 'feedback outside message')
+            require(seq <= accepted[identity], 'source feedback precedes receiver acceptance')
             progress=max(confirmed[identity],seq)-confirmed[identity];confirmed[identity]+=progress
+            if confirmed[identity] == meta['bytes'] and row['ack_ns'] is None:
+                row['ack_ns']=t
             if identity in selected:totals['confirmed_bytes']+=progress
         if identity in selected:
             packets.append(dict(capture_index=index, **p, graph_id=meta['graph_id'], layer=meta['layer'],
@@ -139,7 +142,8 @@ def reconstruct(result, waves, graph, layer, phase, src=None, dst=None):
                     'source packet accounting differs from native source counters')
             require(accepted[identity] == m['receiver_contiguous_bytes'], 'accepted curve differs from receiver state')
             require(row['data_ready_ns'] == m['receive_ready_ns'], 'accepted curve differs from actual data-ready callback')
-            if m.get('ack_ns') is not None:require(confirmed[identity] == m['bytes'], 'complete source missing full feedback')
+            require(row['ack_ns'] == m.get('ack_ns'),
+                    'source confirmation time differs from complete packet feedback')
         endpoints[row['src']]['logical_send_bytes']+=row['logical_bytes']
         endpoints[row['dst']]['logical_receive_bytes']+=row['logical_bytes']
         endpoints[row['src']]['source_tx_payload_bytes']+=row['tx_payload_bytes']

@@ -78,7 +78,7 @@ def validate(topology, protocol, work):
             integer(work['loss'][key],key,0,0xffffff)
         require(tuple(work['loss'][key] for key in ('connection','node','opcode','psn')) in packets,
                 'RC loss must match an actual request/final feedback of the specified connection')
-    validate_probe(topology,protocol,messages,match_faults=False)
+    validate_probe(topology,protocol,messages,match_faults=False,legacy_messages=False)
     return dict(connections=len(ids),operations=operations,request_packets=request_packets,write_bytes=write_bytes,
                 registered_bytes=sum(memories.values()),source_qpn_rule='2*id+1',destination_qpn_rule='2*id+2')
 

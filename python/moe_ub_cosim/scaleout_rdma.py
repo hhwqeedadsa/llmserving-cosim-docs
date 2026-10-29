@@ -219,7 +219,7 @@ def build(directory, *, cmake='cmake', ninja='ninja', protobuf_prefix=None, resu
     return result
 
 
-def validate_probe(t, c, batch, *, match_faults=True, max_probe_messages=128):
+def validate_probe(t, c, batch, *, match_faults=True, max_probe_messages=128, legacy_messages=True):
     validate_protocol(c)
     budget=limits(c)
     require(t.get('schema_version') in ('moe-scaleout-physical-topology/1','moe-scaleout-physical-topology/2'), 'wrong physical graph schema')
@@ -244,7 +244,6 @@ def validate_probe(t, c, batch, *, match_faults=True, max_probe_messages=128):
     validate_link_topology(t,c)
     require(type(max_probe_messages) is int and 1<=max_probe_messages<=4096, 'invalid validation descriptor budget')
     require(isinstance(batch, list) and 0 < len(batch) <= max_probe_messages, 'probe message budget exceeded')
-    adjacency = {n['id']: [] for n in nodes}
     by_id = {n['id']: n for n in nodes}
     for node in c.get('data_loss',{}).get('nodes',[]):
         require(node in gpus,'data_loss node is not a physical GPU')
@@ -256,39 +255,8 @@ def validate_probe(t, c, batch, *, match_faults=True, max_probe_messages=128):
         require(rule['node'] in by_id and (rule['port']==0 or any(
             link[side]==rule['node'] and link[side+'_port']==rule['port']
             for link in t['links'] for side in ('src','dst'))), 'fault receive node/port absent from topology')
-    for link in t['links']:
-        adjacency[link['src']].append(link['dst'])
-        adjacency[link['dst']].append(link['src'])
-    ids = set()
-    for m in batch:
-        fields(m, 'id src dst bytes plane ready_ns', 'probe message')
-        integer(m['id'], 'message id', minimum=0, maximum=2**31-1)
-        require(m['id'] not in ids, 'duplicate message id'); ids.add(m['id'])
-        integer(m['src'], 'source GPU', minimum=0, maximum=budget['max_gpus']-1)
-        integer(m['dst'], 'destination GPU', minimum=0, maximum=budget['max_gpus']-1)
-        require(m['src'] in gpus and m['dst'] in gpus and m['src'] != m['dst'], 'invalid endpoint pair')
-        integer(m['bytes'], 'message bytes', maximum=67108864)
-        byte_cap=c.get('admission',{}).get('max_active_bytes_per_source',0)
-        local=t.get('intra_host',{}).get('enabled',False) and by_id[m['src']]['server']==by_id[m['dst']]['server']
-        require(not byte_cap or local or m['bytes']<=byte_cap,
-                'message exceeds max_active_bytes_per_source; increase budget or regenerate smaller logical messages')
-        peer_cap=c.get('admission',{}).get('per_destination',{}).get('max_bytes',0)
-        require(not peer_cap or local or m['bytes']<=peer_cap,
-                'message exceeds per_destination.max_bytes; change explicit share or logical messages')
-        integer(m['plane'], 'message plane', minimum=0, maximum=15)
-        integer(m['ready_ns'], 'message ready_ns', minimum=0, maximum=budget['max_sim_ns']-1)
-        seen, todo = {m['src']}, [m['src']]
-        while todo:
-            for peer in adjacency[todo.pop()]:
-                if peer in seen:
-                    continue
-                if peer in gpus:
-                    if peer == m['dst']:
-                        seen.add(peer)
-                    continue  # GPUs never bridge two rails/planes.
-                if by_id[peer]['plane'] == m['plane']:
-                    seen.add(peer); todo.append(peer)
-        require(m['dst'] in seen, 'message has no packet-switch path in the selected rail/plane')
+    from .scaleout_messages import MessagePreflight
+    MessagePreflight(t,c,legacy_messages=legacy_messages).accept(batch)
     if 'drop_once' in c and match_faults:
         fault=c['drop_once']; selected=[m for m in batch if m['id']==fault['message_id']]
         require(len(selected)==1 and selected[0]['dst']==fault['dst_gpu'] and

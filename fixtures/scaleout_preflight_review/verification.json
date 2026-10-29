@@ -1,0 +1,387 @@
+{
+  "schema_version": "moe-preflight-review-fixes/1",
+  "starting_commit": "42ac3cb53369731bba652858f3c9ff1b8522c2c6",
+  "platform_fixes": [
+    "confirmation timestamp derived from complete source feedback and checked against native summary",
+    "actual service wave descriptors validated before export/COMMIT in both frontends",
+    "legacy endpoint/port collisions and cumulative message count checked across waves"
+  ],
+  "scope": {
+    "native_protocol_changed": false,
+    "wire_identity_assignment_changed": false,
+    "novel_algorithm_gain_claimed": false,
+    "builds": 0,
+    "dependency_installs": 0,
+    "downloads": 0,
+    "new_native_smoke_runs": 2
+  },
+  "unit_suite": {
+    "reported_tests": 648,
+    "passed": true,
+    "monitor": {
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/unit",
+        "-p",
+        "*test.py"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 30.20402255700901,
+      "peak_sampled_group_rss_bytes": 192552960,
+      "limits": {
+        "sampled_group_rss_bytes": 2147483648,
+        "per_process_address_bytes": 3221225472,
+        "artifact_bytes": 268435456,
+        "wall_seconds": 120.0
+      },
+      "local_probe": "runs/review_fixes_20261029/final-unit-suite/probe.json",
+      "probe_sha256": "336436080c1b505ef8ebaca7f2686caf3ca4a40dc0c4a0d2470b592693dfd3e8",
+      "stderr_sha256": "5407b702182aeaee42929c7185d8184d6bed4cd6c739ae9a5f66c4e14f72f6f1"
+    },
+    "environment": {
+      "PYTHONPATH": "python:.",
+      "PATH": "existing /home/lry/tools/protobuf/bin prepended command-locally",
+      "PYTHONDONTWRITEBYTECODE": "1"
+    }
+  },
+  "earlier_checks": [
+    {
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "unittest",
+        "scaleout_arrivals_test"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.12711485897307284,
+      "peak_sampled_group_rss_bytes": 7491584,
+      "limits": {
+        "sampled_group_rss_bytes": 2147483648,
+        "per_process_address_bytes": 3221225472,
+        "artifact_bytes": 268435456,
+        "wall_seconds": 120.0
+      },
+      "local_probe": "runs/review_fixes_20261029/arrival-unit/probe.json",
+      "probe_sha256": "f7cde9855bfa710b7182080ba6520d201e5e8c5d1f2d8613927286fdd266f6a2",
+      "stderr_sha256": "c6352adff70a6982c739a1cd77bbb43d2425eefd2dc2112b92b0ceebf2a6ca31"
+    },
+    {
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "unittest",
+        "scaleout_messages_test",
+        "scaleout_rdma_test",
+        "simai_service_test",
+        "scaleout_scaled_test",
+        "scaleout_replay_test"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "child_failed",
+      "child_exit_code": 1,
+      "wall_seconds": 0.8723005859937984,
+      "peak_sampled_group_rss_bytes": 85463040,
+      "limits": {
+        "sampled_group_rss_bytes": 2147483648,
+        "per_process_address_bytes": 3221225472,
+        "artifact_bytes": 268435456,
+        "wall_seconds": 120.0
+      },
+      "local_probe": "runs/review_fixes_20261029/message-unit/probe.json",
+      "probe_sha256": "4f77cb946b099fb353bcea35d12628c65e0e655b746c57926c70b24cc9943450",
+      "stderr_sha256": "a09c66ec6451d66cba236cacc1e6702320b59b23aa5ac86cf81db8efef42f1db"
+    },
+    {
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "unittest",
+        "scaleout_messages_test.MessageChecks.test_plane_identity_is_separate"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.23697246998199262,
+      "peak_sampled_group_rss_bytes": 26378240,
+      "limits": {
+        "sampled_group_rss_bytes": 2147483648,
+        "per_process_address_bytes": 3221225472,
+        "artifact_bytes": 268435456,
+        "wall_seconds": 120.0
+      },
+      "local_probe": "runs/review_fixes_20261029/message-affected/probe.json",
+      "probe_sha256": "bcf3e4d3748516e88740d79776227937fcd204d31a6fb6649154136bc7c6e7f3",
+      "stderr_sha256": "d10ffbd9f0faa72cd6837063279524e199b59fbc3d035051302a1e8dbc4b36ad"
+    },
+    {
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "unittest",
+        "simai_service_test.SimaiChecks.test_components_agree_with_independent_pair_bfs",
+        "scaleout_mmu_test",
+        "scaleout_link_failures_test",
+        "scaleout_fabric_buffers_test",
+        "scaleout_causal_waves_test",
+        "scaleout_admission_test",
+        "scaleout_recovery_test",
+        "scaleout_metrics_test",
+        "scaleout_data_loss_test"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "child_failed",
+      "child_exit_code": 1,
+      "wall_seconds": 0.44593274500221014,
+      "peak_sampled_group_rss_bytes": 36032512,
+      "limits": {
+        "sampled_group_rss_bytes": 2147483648,
+        "per_process_address_bytes": 3221225472,
+        "artifact_bytes": 268435456,
+        "wall_seconds": 120.0
+      },
+      "local_probe": "runs/review_fixes_20261029/preflight-regression/probe.json",
+      "probe_sha256": "c451a4d9ce500bcad6cfef03a9eee8443d7410171d767bfabe175835e018c8a8",
+      "stderr_sha256": "6280c588345ef9555e8bcdf1ac8df765e251918461f1e1ed299b758e814f22b1"
+    },
+    {
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "unittest",
+        "scaleout_causal_waves_test.CausalWaveTests.test_complete_48_layer_frontend_graph",
+        "scaleout_causal_waves_test.CausalWaveTests.test_exact_send_receive_and_declared_compute",
+        "scaleout_causal_waves_test.CausalWaveTests.test_unreferenced_send_ack_and_group_independence",
+        "scaleout_messages_test.MessageChecks.test_topology_only_probe_does_not_apply_legacy_port_mapping",
+        "severe_loss_test"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.34120852599153295,
+      "peak_sampled_group_rss_bytes": 37003264,
+      "limits": {
+        "sampled_group_rss_bytes": 2147483648,
+        "per_process_address_bytes": 3221225472,
+        "artifact_bytes": 268435456,
+        "wall_seconds": 120.0
+      },
+      "local_probe": "runs/review_fixes_20261029/compatibility-affected/probe.json",
+      "probe_sha256": "2fbb82ccfebc0cb5e605f0fd9774b36a40ac168f9fc23e66d72185f9606688cb",
+      "stderr_sha256": "ace016ebec696f4fdef876dcb37271e57fa4921ea618b507b9695d84e57b07c1"
+    }
+  ],
+  "failure_explanations": {
+    "message-unit": "New two-plane test accidentally loaded a one-plane example; corrected test configuration.",
+    "preflight-regression": "Three compatibility errors: no-server minimal topologies need no server when bypass disabled. One command named a nonexistent module; replaced with severe_loss_test. Native identity rules explicitly excluded from topology-only persistent/RC projections."
+  },
+  "saved_real_audit": {
+    "versioned_result": "saved-real-audit.json",
+    "sha256": "1d20dff4bae35741499c9d636d3d0d75015ef1d82b7779ba453a3a5353656dd3",
+    "monitor": {
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "tests/integration/check_saved_service_messages.py",
+        "--run",
+        "runs/simai_severe_real_20261028/clean400",
+        "--run",
+        "runs/simai_severe_real_20261028/bottleneck25",
+        "--run",
+        "runs/simai_severe_real_20261028/loss50",
+        "--run",
+        "runs/simai_severe_real_20261028/loss75",
+        "--run",
+        "runs/simai_severe_real_20261028/blackout",
+        "--run",
+        "runs/simai_severe_real_20261028/persistent",
+        "--output",
+        "runs/review_fixes_20261029/saved-real-audit.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 2.163030778989196,
+      "peak_sampled_group_rss_bytes": 89497600,
+      "limits": {
+        "sampled_group_rss_bytes": 2147483648,
+        "per_process_address_bytes": 3221225472,
+        "artifact_bytes": 268435456,
+        "wall_seconds": 120.0
+      },
+      "local_probe": "runs/review_fixes_20261029/saved-real-audit/probe.json",
+      "probe_sha256": "631ae54bbfaf515714062fcfd65ba67d761b5fed816974cb187188173055c943",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "all_six_conditions_passed": true,
+    "packet_events_checked": 426742
+  },
+  "smoke": [
+    {
+      "run": "runs/review_fixes_20261029/native-smoke/llm-service",
+      "monitor": {
+        "command": [
+          ".venv/frontend/bin/python",
+          "-B",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-run",
+          "--config",
+          "examples/scaleout_route_replay/service.json",
+          "--topology",
+          "runs/review_fixes_20261029/native-smoke/llm-topology",
+          "--protocol",
+          "examples/scaleout_route_replay/rdma.json",
+          "--backend",
+          "/dev/shm/moe-heavy-loss-20261028/build/output/moe-rdma/ns3.42-moe-rdma-service",
+          "--protoc",
+          "/home/lry/tools/protobuf/bin/protoc",
+          "--output",
+          "runs/review_fixes_20261029/native-smoke/llm-service"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "status": "completed",
+        "child_exit_code": 0,
+        "wall_seconds": 0.982914455991704,
+        "peak_sampled_group_rss_bytes": 270471168,
+        "limits": {
+          "sampled_group_rss_bytes": 2147483648,
+          "per_process_address_bytes": 4294967296,
+          "artifact_bytes": 134217728,
+          "wall_seconds": 60.0
+        },
+        "local_probe": "runs/review_fixes_20261029/native-smoke/llm-host/probe.json",
+        "probe_sha256": "5c62f92afc5a983a3ffbf50f7fa243e4c53284693e3873932549b21fdcb6626a",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "passed": true,
+      "finish_ns": 68252,
+      "gpu_count": 4,
+      "messages": 50,
+      "verification": {
+        "passed": true,
+        "messages": 50,
+        "remote_payload_bytes": 25600,
+        "verified_nodes": 164,
+        "waves": 2,
+        "finish_ns": 68252,
+        "evidence": "raw token routes, native messages/MMU thresholds/paths, ASTRA issue/callback log, frontend completion history",
+        "intra_host_payload_bytes": 10240,
+        "inter_host_payload_bytes": 15360,
+        "route_source": "synthetic_test",
+        "source_records_verified": 16,
+        "eos_inferred": false
+      },
+      "verification_sha256": "e0dd4b15619263211d059b7bed62213124a2302610dbeaef06f57d344355adcc",
+      "result_sha256": "9e2d9b805ecc2e9529177fadcf0c9f960a37e6eb604ad3d99ffc2280f1d1b51c"
+    },
+    {
+      "run": "runs/review_fixes_20261029/native-smoke/simai-service",
+      "monitor": {
+        "command": [
+          ".venv/frontend/bin/python",
+          "-B",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "simai-run",
+          "--config",
+          "examples/simai_service/service.json",
+          "--topology",
+          "runs/review_fixes_20261029/native-smoke/simai-topology",
+          "--protocol",
+          "examples/simai_service/rdma.json",
+          "--runtime",
+          "runs/simai_severe_real_20261028/bottleneck25/simai_runtime",
+          "--backend",
+          "/dev/shm/moe-heavy-loss-20261028/build/output/moe-rdma/ns3.42-moe-rdma-service",
+          "--protoc",
+          "/home/lry/tools/protobuf/bin/protoc",
+          "--output",
+          "runs/review_fixes_20261029/native-smoke/simai-service"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "status": "completed",
+        "child_exit_code": 0,
+        "wall_seconds": 1.0950568849802949,
+        "peak_sampled_group_rss_bytes": 146878464,
+        "limits": {
+          "sampled_group_rss_bytes": 2147483648,
+          "per_process_address_bytes": 4294967296,
+          "artifact_bytes": 134217728,
+          "wall_seconds": 60.0
+        },
+        "local_probe": "runs/review_fixes_20261029/native-smoke/simai-host/probe.json",
+        "probe_sha256": "bae485886be4db3f8fbb8051f4fefd196c01f3997a32ef7eafb4834196dcc92d",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "passed": true,
+      "finish_ns": 47603,
+      "gpu_count": 64,
+      "messages": 64,
+      "verification": {
+        "passed": true,
+        "frontend": "actual_SimAI_Vidur",
+        "simai_revision": "a57d765c5478f319c5f5ab6fdc53f9cc7f461743",
+        "gpu_count": 64,
+        "planes": 1,
+        "source_requests": 2,
+        "active_source_ranks": 2,
+        "source_token_layer_rows": 4,
+        "waves": 2,
+        "messages": 64,
+        "remote_payload_bytes": 917504,
+        "verified_nodes": 640,
+        "finish_ns": 47603,
+        "recovery": {
+          "available": true,
+          "failed": false,
+          "failed_ids": [],
+          "source_states": 64,
+          "timeout_retransmissions": 0,
+          "duplicate_ack_responses": 0,
+          "reconstructed": true,
+          "scope": "offline protocol audit; no source policy access to receiver/global truth",
+          "completed": 64,
+          "exhausted": 0,
+          "silence_bounds": []
+        },
+        "data_loss": {
+          "available": false
+        },
+        "hardware_calibrated": false,
+        "route_source": "synthetic_test",
+        "scope": "finite_ready_KV_MoE_segment; source-checked choices; single native ns3 fabric",
+        "active_data_ranks": 32
+      },
+      "verification_sha256": "7ccc503d7121f222abba1cc9da4dbd4314a25e6e582c955e64162e35aa2877b2",
+      "result_sha256": "2f3febb7c3466e5d15d44324f8167a2b57a652c7749dff78fa15036e596888cd"
+    }
+  ],
+  "source_sha256": {
+    "python/moe_ub_cosim/scaleout_messages.py": "d36dd20a49c9bc3ae516ba7999d6c8ea340a5a2039ab5b996ce3beadabe12e7e",
+    "python/moe_ub_cosim/scaleout_rdma.py": "2878d7db87095d0a1df86577ddd6f80fbbda54f1a1784b0ea21e1bd7e859b54a",
+    "python/moe_ub_cosim/scaleout_service.py": "d37f220993a9e39f66520f9ddd212888e2e112590753d2f89f02b169dddb5910",
+    "python/moe_ub_cosim/simai_service.py": "b83607cd9f9dfb8110752393d46f8268f543ee23d519eb54fa61400f21bf0df7",
+    "python/moe_ub_cosim/scaleout_arrivals.py": "b41e37aff4a7e1e10c12ccbf1c7d0129b1dc9e24f49c85b2d1a5ee1c4b801dd5",
+    "python/moe_ub_cosim/scaleout_streams.py": "4ba8c61150918b804222953efe5125a76b762af0ffe4d76345d20d8026149138",
+    "python/moe_ub_cosim/rc_packet.py": "922b5dff46bbf45ad2b84216bfeff8b769bf451cd4a8664788c9e4235316db4e",
+    "python/moe_ub_cosim/rc_concurrent.py": "1227f7a53f94e4ef56c356c859453cb563c06ac660e8c5929341fecc7b81150b",
+    "tests/integration/check_saved_service_messages.py": "f13aceb30248598ff40268c70f892666b051727a4e6e8f0786f9ba5096cc5cd8"
+  },
+  "evidence_availability": "Compact receipts and scripts published; local runs and user raw routes are not included. Raw results remain unchanged."
+}

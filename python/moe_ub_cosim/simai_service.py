@@ -97,8 +97,9 @@ def validate(config,topology,protocol,base):
 
 
 class Frontend:
-    def __init__(self,config,planes,replay,runtime,output):
+    def __init__(self,config,planes,replay,runtime,output, *, message_preflight):
         self.config=config;self.service=config['service'];self.replay=replay;self.planes=planes
+        self.message_preflight=message_preflight
         self.groups=self.service['parallel']['groups'];self.steps=[0]*len(self.groups)
         self.active={};self.history=[];self.calls=0;self.requests={};self.schedulers={};self.clusters=[]
         self.origin_seconds=1.0;classes=load(runtime);self.receipt=classes['receipt'];logging.getLogger('vidur').setLevel(logging.ERROR)
@@ -150,6 +151,7 @@ class Frontend:
             require(set(selected)==expected and len(selected)==len(expected),'SimAI batch omitted or duplicated declared request')
             self.replay.active_ids=set(selected)
             wave=make_wave(self.service,group,index,self.steps[index],self.planes,self.replay)
+            self.message_preflight.accept_wave(wave,now)
             directory=Path(output)/'graphs'/wave['graph_id'];export_wave(wave,directory,proto)
             history=dict(graph_id=wave['graph_id'],group_index=index,step=self.steps[index],start_ns=now,
                          selected_request_ids=sorted(selected),batch_request_ids={str(r):[self.request_identity[id(q)] for q in b.requests] for r,b in batches.items()})
@@ -180,7 +182,9 @@ def worker(output,backend,protoc):
     for rank in range(ranks):
         with (bootstrap/f'layer.{rank}.et').open('xb') as stream:write_message(stream,proto.GlobalMetadata(version='moe-simai-bootstrap/1'))
     save(output/'system.json',json.loads((ROOT/'examples/native_first_round/system.json').read_bytes()))
-    frontend=Frontend(config,planes,replay,output/'simai_runtime',output);transcript=[];child=None
+    from .scaleout_messages import MessagePreflight
+    frontend=Frontend(config,planes,replay,output/'simai_runtime',output,
+                      message_preflight=MessagePreflight(topology,protocol));transcript=[];child=None
     command=[backend,str(output/'topology.json'),str(output/'rdma.json'),str(output/'system.json'),str(bootstrap/'layer'),str(output/'result.json')]
     save(output/'native-command.json',command)
     try:

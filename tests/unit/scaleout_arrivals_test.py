@@ -52,6 +52,47 @@ class ArrivalsTest(unittest.TestCase):
         self.assertEqual(add_range(ranges,3,12),0)
         self.assertEqual(ranges,[(0,15)])
 
+    def test_confirmation_time_is_independent_of_summary(self):
+        r,w=self.inputs()
+        for stamp in (1,8,10,None):
+            changed=deepcopy(r);changed['messages'][0]['ack_ns']=stamp
+            with self.subTest(stamp=stamp),self.assertRaisesRegex(ValueError,'confirmation time'):
+                reconstruct(changed,w,'g0.w0',0,'dispatch')
+        summary,m,*_=reconstruct(r,w,'g0.w0',0,'dispatch')
+        self.assertEqual(summary['slice']['source_confirmed_ns'],9)
+        self.assertEqual(m[0]['ack_ns'],9)
+
+    def test_complete_data_without_final_feedback_stays_unconfirmed(self):
+        r,w=self.inputs();r['passed']=False
+        r['messages'][0]['ack_ns']=None
+        r['packet_capture']['events'].pop()
+        summary,*_=reconstruct(r,w,'g0.w0',0,'dispatch')
+        self.assertTrue(summary['slice']['complete'])
+        self.assertEqual(summary['slice']['confirmed_bytes'],0)
+        self.assertIsNone(summary['slice']['source_confirmed_ns'])
+
+    def test_duplicate_feedback_keeps_first_completion_and_equal_times_work(self):
+        r,w=self.inputs()
+        ack=deepcopy(r['packet_capture']['events'][-1]);ack[0]=10
+        r['packet_capture']['events'].append(ack)
+        summary,*_=reconstruct(r,w,'g0.w0',0,'dispatch')
+        self.assertEqual(summary['slice']['source_confirmed_ns'],9)
+        r,w=self.inputs()
+        r['packet_capture']['events'][-1][0]=8
+        r['messages'][0]['ack_ns']=8
+        # The complete ACK can follow a destination event at the same ns.
+        summary,*_=reconstruct(r,w,'g0.w0',0,'dispatch')
+        self.assertEqual(summary['slice']['source_confirmed_ns'],8)
+
+    def test_feedback_cannot_confirm_unreceived_data(self):
+        r,w=self.inputs()
+        ack=r['packet_capture']['events'][-1]
+        ack[0]=3
+        r['packet_capture']['events'].insert(3,r['packet_capture']['events'].pop())
+        r['messages'][0]['ack_ns']=3
+        with self.assertRaisesRegex(ValueError,'precedes receiver acceptance'):
+            reconstruct(r,w,'g0.w0',0,'dispatch')
+
     def test_failed_service_keeps_missing_bytes(self):
         r,w=self.inputs();r.update(passed=False,finish_ns=5)
         r['packet_capture']['events']=r['packet_capture']['events'][:3]

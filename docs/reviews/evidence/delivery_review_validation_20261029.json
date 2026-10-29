@@ -1,0 +1,74 @@
+{
+  "schema_version": "moe-delivery-review-validation/1",
+  "passed": true,
+  "source_head": "4253fa7fb47c719288ecf9cd4411d26df3b7bb93",
+  "worktree_scope": "HEAD plus recorded uncommitted platform source hashes; not a published release",
+  "dependency_check": {
+    "command": [
+      "bash",
+      "scripts/check_deps.sh"
+    ],
+    "cwd": "/home/lry/moe-ub-cosim",
+    "exit_code": 0,
+    "checkouts": 13,
+    "resource_monitor": false,
+    "note": "tool execution; local platform changes warned and preserved"
+  },
+  "checks": {
+    "unit": {
+      "command": [
+        ".venv/frontend/bin/python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/unit",
+        "-p",
+        "*_test.py"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 29.25269264698727,
+      "peak_sampled_group_rss_bytes": 175648768
+    },
+    "evidence": {
+      "command": [
+        ".venv/frontend/bin/python",
+        "docs/reviews/evidence/delivery_review_20261029.py",
+        "--acceptance",
+        "runs/astra_stream_service_20261029/acceptance",
+        "--summary-run",
+        "runs/service_recovery_baselines_20261029/study/fixed80-normal",
+        "--output",
+        "docs/reviews/evidence/delivery_review_20261029.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 1.1185341050149873,
+      "peak_sampled_group_rss_bytes": 31735808
+    }
+  },
+  "python_modules_parsed": 129,
+  "cpu_unit_tests_passed": 658,
+  "saved_network_runs_reverified": 5,
+  "saved_terminal_summaries_reverified": 1,
+  "new_network_runs": 0,
+  "builds": 0,
+  "downloads": 0,
+  "gpu_measurements": 0,
+  "local_links_checked": 11,
+  "source_snapshot_hashes_rechecked": 231,
+  "diff_check_passed": true,
+  "monitored_wall_seconds": 30.371226752002258,
+  "report_sha256": "46afaf19729f1912ef3830df8d98c145c8a95e3fb399da0e662bfd1af16a9dcf",
+  "evidence_sha256": "499fea44b5eaeabca8bbf974ef81383203edbb2897995b14fc180466b3fcd070",
+  "script_sha256": "260eb517ab3cd5e9f49ea5a922d382ff9d3d4ce456ad6c447a97c9e565272e05",
+  "initial_validation_failure": "receipt forward-reference failed before receipt creation; original recorded in runs; no network retry",
+  "limitations": [
+    "no new native execution or C++ build",
+    "blackhole and SimAI SR acceptance remain incomplete",
+    "not a validated new algorithm, calibrated model or thousand-card MoE result"
+  ]
+}

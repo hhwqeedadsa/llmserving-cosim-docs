@@ -1,0 +1,65 @@
+{
+  "passed": true,
+  "public_verification": {
+    "passed": true,
+    "transport": "astra_persistent_streams/1",
+    "frontend": "actual_LLMServingSim",
+    "gpu_count": 128,
+    "messages": 122,
+    "remote_payload_bytes": 1760704,
+    "verified_nodes": 1140,
+    "waves": 1,
+    "finish_ns": 136829,
+    "packet_events_checked": 8154,
+    "source_payload_bytes": 1804096,
+    "receiver_accepted_bytes": 1760704,
+    "hardware_calibrated": false,
+    "scope": "actual ASTRA scheduling and persistent message intervals; finite service; not calibrated hardware",
+    "timing_status": "complete",
+    "timing_reason": null,
+    "application_finished_ns": 136829,
+    "network_drained_ns": 136829,
+    "network_stopped_ns": 136829,
+    "post_application_drain_ns": 0,
+    "execution_observation": {
+      "schema_version": "moe-execution-observation/1",
+      "events": 2770,
+      "last_time_ns": 136829,
+      "service_drained_ns": 136829,
+      "registered_graphs": 1,
+      "retired_graphs": 1,
+      "nodes": 1140,
+      "node_completions": 1140,
+      "messages": 122,
+      "receiver_completions": 122,
+      "sender_completions": 122,
+      "scope": "passive_actual_callbacks_no_recovery_or_tensor_validation"
+    }
+  },
+  "relocated": true,
+  "new_network_executions": 0,
+  "standby_data_bytes": 0,
+  "originals_unchanged": true,
+  "rejected_mutations": [
+    {
+      "case": "extra_admission",
+      "error": "Scale-Out topology: admitted EP groups differ from explicit source requests"
+    },
+    {
+      "case": "missing_admission",
+      "error": "Scale-Out topology: admitted EP groups differ from explicit source requests"
+    },
+    {
+      "case": "inactive_wave",
+      "error": "Scale-Out topology: inactive EP group executed undeclared work"
+    },
+    {
+      "case": "fake_request",
+      "error": "Scale-Out topology: missing/duplicate replay request"
+    },
+    {
+      "case": "legacy_layout",
+      "error": "Scale-Out topology: each sparse EP group needs at least one explicit source request"
+    }
+  ]
+}

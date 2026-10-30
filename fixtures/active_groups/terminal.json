@@ -1,0 +1,52 @@
+{
+  "schema_version": "moe-service-terminal-audit/1",
+  "new_network_runs": 0,
+  "cases": [
+    {
+      "run": "runs/whole_control_20261030/normal",
+      "passed": true,
+      "original_passed": true,
+      "timing_status": "complete",
+      "timing_reason": null,
+      "application_finished_ns": 62506,
+      "network_drained_ns": 62506,
+      "network_stopped_ns": 62506,
+      "post_application_drain_ns": 0,
+      "public_summary_checked": false,
+      "full_public_verifier_checked": true,
+      "rejected_mutations": [
+        "native_wave",
+        "final_commit",
+        "history"
+      ],
+      "input_sha256": {
+        "input.json": "3ac4acc6b68fd8e477800af0e6301aefc09430ff16cdae416994e1d9da0d894e",
+        "result.json": "791cd1f543c4b65869fc3e220f1662174b0fd1ac71be6714fcfd0a8e9ef182ac",
+        "frontend.json": "d17adb62977dcb2292c5b3e8dd109b91eae74473778cffca0210c2f05570db3a"
+      }
+    },
+    {
+      "run": "runs/whole_control_20261030/local",
+      "passed": true,
+      "original_passed": true,
+      "timing_status": "complete",
+      "timing_reason": null,
+      "application_finished_ns": 136829,
+      "network_drained_ns": 136829,
+      "network_stopped_ns": 136829,
+      "post_application_drain_ns": 0,
+      "public_summary_checked": false,
+      "full_public_verifier_checked": true,
+      "rejected_mutations": [
+        "native_wave",
+        "final_commit",
+        "history"
+      ],
+      "input_sha256": {
+        "input.json": "3ac4acc6b68fd8e477800af0e6301aefc09430ff16cdae416994e1d9da0d894e",
+        "result.json": "f4b23a6b5c61120dbd12f90f1f4331cb3ab123def97fa913973cee7cd00f8c1f",
+        "frontend.json": "67dba302df6af162573378661e3acfe7db62fc5110e0fe78641877018fc6a51b"
+      }
+    }
+  ]
+}

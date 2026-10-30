@@ -71,6 +71,8 @@ def verify(directory):
     observations=audit_events(directory,result,checked_json(directory/'frontend.json',4194304))
     from .contribution_binding import audit as audit_binding
     config=checked_json(directory/'input.json',1048576)
+    from .whole_call import audit as audit_whole
+    audit_whole(directory,config,result,checked_json(directory/'frontend.json',4194304))
     helper_audit=None
     if 'inflight_helpers' in config:
         from .inflight_helpers import audit as audit_helpers
@@ -257,7 +259,7 @@ def verify(directory):
     if replay:
         verify_replay_requests(config,replay,frontend)
     from .service_terminal import service_terminal
-    terminal=service_terminal(result,frontend,require_complete=True)
+    terminal=service_terminal(result,frontend,require_complete=True,config=config)
     report=dict(passed=True,messages=len(flows),remote_payload_bytes=total_bytes,verified_nodes=node_count,
                 waves=len(frontend['history']),finish_ns=result['finish_ns'],
                 evidence='raw token routes, native messages/MMU thresholds/paths, ASTRA issue/callback log, frontend completion history')

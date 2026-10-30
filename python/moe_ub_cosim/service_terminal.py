@@ -26,7 +26,7 @@ def _graphs(rows, label, stop):
     return result
 
 
-def service_terminal(result, frontend=None, *, require_complete=False):
+def service_terminal(result, frontend=None, *, require_complete=False, config=None):
     """Return explicit nanosecond times; reject contradictory success evidence.
 
     A missing result/frontend yields unavailable timing, never a guessed
@@ -57,6 +57,11 @@ def service_terminal(result, frontend=None, *, require_complete=False):
         require(not require_complete, 'missing frontend terminal evidence')
         timing['timing_reason'] = 'missing_frontend_evidence'
         return timing
+    from .whole_call import configuration as whole_configuration
+    whole=whole_configuration(config) if config is not None else None
+    require(('whole_call_replication' in frontend)==(whole is not None),'whole call timing requires explicit matching input')
+    if whole is not None:
+        require(frontend['whole_call_replication'].get('configuration')==whole,'whole result configuration differs from input')
     history = _graphs(frontend.get('history'), 'frontend', stop)
     native = _graphs(service.get('waves'), 'native', stop)
     require(history == native, 'frontend/native graph completion differs')
@@ -77,6 +82,12 @@ def service_terminal(result, frontend=None, *, require_complete=False):
     require(not event.get('completed') or all(
         row.get('graph_id') in history and row.get('finished_ns') == history[row['graph_id']][1]
         for row in event['completed']), 'terminal completed graph differs')
+    if 'whole_call_replication' in frontend:
+        from .whole_call import logical_finish
+        logical=logical_finish(frontend['whole_call_replication'],history)
+        require(logical<=finish,'whole client result after attempts')
+        timing.update(timing_scope='eager_whole_finite_segment/1',attempts_finished_ns=finish)
+        finish=logical
     timing.update(timing_status='complete', timing_reason=None, application_finished_ns=finish,
                   post_application_drain_ns=stop-finish)
     return timing

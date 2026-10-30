@@ -1,5 +1,7 @@
 # 用户指南
 
+比较同一片段的两个完整副本，可使用[完整片段副本](whole_call.md)及[128端点Clos示例](../examples/scaleout_whole_call/README.md)。只在一个整个尝试实际完成后提交逻辑结果，另一个继续清理；分列原始请求数和副本执行数，等价ready-KV为声明初态。
+
 需要在服务运行中发现“某次发送超过声明期限仍未确认”，可显式启用[源端确认超时通知](source_ack_watchdog.md)及[128端点Clos示例](../examples/scaleout_source_ack_watchdog/README.md)。它依赖实际post、同一ns-3定时器和真实确认，不读取故障真值，也不自动重传或重算。
 
 需要跟踪每个原请求的专家贡献何时收到输入、完成计算、返回结果及退出，可显式开启[贡献绑定](contribution_binding.md)，使用[128端点Clos独立示例](../examples/scaleout_contribution_tracking/README.md)。时间来自同一次实际执行；没有激活张量或备用恢复。

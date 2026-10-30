@@ -72,7 +72,8 @@ def metrics(case, run):
     r=checked_json(run/'result.json',1073741824)
     frontend=checked_json(run/'frontend.json',268435456)
     from .service_terminal import service_terminal
-    terminal=service_terminal(r,frontend,require_complete=r['passed'])
+    config=checked_json(run/'input.json',1048576)
+    terminal=service_terminal(r,frontend,require_complete=r['passed'],config=config)
     finish=terminal['application_finished_ns']
     recovery=r.get('recovery',{});states=recovery.get('states',[]);cache=recovery.get('history',{})
     return dict(name=case['name'],expect=case['expect'],comparison_group=case['comparison_group'],

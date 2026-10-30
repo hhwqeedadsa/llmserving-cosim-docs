@@ -1,5 +1,7 @@
 # 观测记录与存储格式
 
+显式`whole_call_replication`新增`whole_call_events.jsonl`、`whole_call_report.json`及`frontend.whole_call_replication`，只取整图退休作为完整结果。公共时间增加`timing_scope=eager_whole_finite_segment/1`、`attempts_finished_ns`；此模式application取逻辑call完整赢家，终态COMMIT仍等全部物理图。默认口径不变；来源派生、三个时间和失败边界见[完整片段副本](whole_call.md)。
+
 可选`contribution_tracking`新增`contribution_calls.jsonl`和`contribution_summary.json`，分别保存每个token/原始层的贡献包/实际节点与消息绑定、生命周期记录及完整覆盖/退休计数。`input_identity`显式为仿真来源，没有激活张量摘要。源确认与图退出后才关闭相应逻辑义务，不能把重复引用当多份物理分配。格式、口径与核验见[贡献绑定](contribution_binding.md)。
 
 LLMServingSim Scale-Out服务可选的`execution_events.jsonl`保存实际节点/消息事件，`execution_observation.json`保存已验证前缀摘要；`result.service.execution_events`给出原生计数与上限。时间为同一ns-3绝对纳秒，同时间按sequence排序，失败不补全。字段、接收/源确认/退出口径及独立核验见[实时执行事件](execution_events.md)。

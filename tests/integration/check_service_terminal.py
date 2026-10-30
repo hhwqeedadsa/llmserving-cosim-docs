@@ -16,7 +16,7 @@ def check(directory, full_check):
     require(all(p.stat().st_size<=128*2**20 for p in paths),'saved input exceeds audit limit')
     raw=[p.read_bytes() for p in paths]
     config,result,frontend=[json.loads(v) for v in raw]
-    terminal=service_terminal(result,frontend,require_complete=result['passed'])
+    terminal=service_terminal(result,frontend,require_complete=result['passed'],config=config)
     is_simai=config.get('schema_version')=='moe-simai-service/1'
     public=describe(directory)['outcome'] if is_simai else None
     if public is not None:
@@ -37,7 +37,7 @@ def check(directory, full_check):
             if name=='native_wave':r['service']['waves'][0]['finished_ns']+=1
             elif name=='final_commit':f['transcript'][-1]['reply']['now_ns']+=1
             else:f['history'][0]['finished_ns']+=1
-            try:service_terminal(r,f,require_complete=True)
+            try:service_terminal(r,f,require_complete=True,config=config)
             except ValueError:mutations.append(name)
             else:raise ValueError('terminal contradiction accepted: '+name)
     require([p.read_bytes() for p in paths]==raw,'saved originals changed')

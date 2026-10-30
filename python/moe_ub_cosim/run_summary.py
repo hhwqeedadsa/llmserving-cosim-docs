@@ -34,7 +34,7 @@ def describe(directory):
         complete_packet_capture=result.get('packet_capture',{}).get('complete'),
         packet_capture_events=len(result.get('packet_capture',{}).get('events',[])),
         fault_drops=result['fault_drops'],data_loss=result.get('data_loss'),failure=result.get('failure'))
-    outcome.update(service_terminal(result,f))
+    outcome.update(service_terminal(result,f,config=c))
     if result is not None and 'switch_drop_capture' in p:
         from .scaleout_switch_drops import analyze
         outcome['switch_drops']=analyze(result,t,p)

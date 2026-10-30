@@ -28,6 +28,8 @@ def read_ref(ref, base, maximum):
 class Replay:
     def __init__(self, config, base):
         self.config, self.base = config, Path(base)
+        from .whole_call import configuration as whole_configuration, source_groups, derive_replicas
+        whole_option=whole_configuration(config)
         spec = config['route_replay']
         fields(spec, 'manifest layer_ids requests budget'+
                (' request_layout' if 'request_layout' in spec else '')+
@@ -88,8 +90,11 @@ class Replay:
                     'replay must explicitly supply every scheduled request; no cycling or cloning')
         else:
             require(all(any(rank in group for rank, _ in seen_slots)
-                        for group in config['parallel']['groups']),
+                        for group in source_groups(config)),
                     'each sparse EP group needs at least one explicit source request')
+        if whole_option:
+            primary_ranks={r for g in source_groups(config) for r in g}
+            require(all(rank in primary_ranks for rank,_ in seen_slots),'whole source request placed in replica group')
         require(len(mapping) <= budget['max_files'], 'replay file budget exceeded')
         selected = deepcopy(self.manifest)
         selected['files'] = [f for f in selected['files'] if f['file_id'] in mapping]
@@ -119,6 +124,7 @@ class Replay:
             identity = request['rank_id']*w['batch_per_rank']+request['slot']
             self.records[identity] = dict(**request, context_tokens=context, choices=choices,
                                          source_file=source['file'], original_path=source['original_path'])
+        derive_replicas(config,self.records)
         self._rank_ids = {r: sorted(i for i, row in self.records.items() if row['rank_id'] == r)
                           for r in ranks}
 
@@ -165,4 +171,8 @@ class Replay:
                           input_bytes=self.input_bytes, requests=len(self.records),
                           source_layer_ids=self.layers, scope='original_choices_declared_compute_and_deployment',
                           eos_inferred=False, raw_snapshots=len(manifest['files']))
+        if 'whole_call_replication' in self.config:
+            provenance.update(logical_requests=sum('replica_of' not in r for r in self.records.values()),
+                execution_attempt_requests=len(self.records),intentional_replica_derivation=True,
+                equivalent_ready_kv_verified=False)
         return c, provenance

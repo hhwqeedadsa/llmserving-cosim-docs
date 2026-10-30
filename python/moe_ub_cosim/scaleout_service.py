@@ -26,6 +26,7 @@ from .execution_events import configuration as event_configuration, ExecutionObs
 from .contribution_binding import configuration as binding_configuration, ContributionBinding
 from .source_ack_watchdog import configuration as watchdog_configuration, SourceAckObserver
 from .inflight_helpers import configuration as helper_configuration, HelperObserver
+from .whole_call import configuration as whole_configuration, WholeCallConsumer
 
 
 def validate(c, topology, rdma, replay=None):
@@ -35,7 +36,8 @@ def validate(c, topology, rdma, replay=None):
            (' execution_events' if 'execution_events' in c else '')+
            (' contribution_tracking' if 'contribution_tracking' in c else '')+
            (' source_ack_watchdog' if 'source_ack_watchdog' in c else '')+
-           (' inflight_helpers' if 'inflight_helpers' in c else ''), 'service')
+           (' inflight_helpers' if 'inflight_helpers' in c else '')+
+           (' whole_call_replication' if 'whole_call_replication' in c else ''), 'service')
     phase_enabled(c)
     token_configuration(c)
     event_option = event_configuration(c)
@@ -44,6 +46,7 @@ def validate(c, topology, rdma, replay=None):
     binding_configuration(c)
     watchdog_configuration(c)
     helper_configuration(c)
+    whole_configuration(c)
     extended=c['schema_version']=='moe-scaleout-service/2'
     require(c['schema_version'] in ('moe-scaleout-service/1','moe-scaleout-service/2'), 'unsupported service schema')
     budget=limits(rdma)
@@ -398,6 +401,7 @@ def _worker(config_path,topology_path,protocol_path,backend,protoc,output,timing
     binding=ContributionBinding(c,replay,observation) if binding_configuration(c) else None
     watchdog=SourceAckObserver(c,observation) if watchdog_configuration(c) else None
     helpers=HelperObserver(c,binding) if helper_configuration(c) else None
+    whole=WholeCallConsumer(c,replay) if whole_configuration(c) else None
     event_file=(output/'execution_events.jsonl').open('x',buffering=1) if observation else None
     timeout_file=(output/'source_ack_timeouts.jsonl').open('x',buffering=1) if watchdog else None
     helper_file=(output/'helper_events.jsonl').open('x',buffering=1) if helpers else None
@@ -417,6 +421,7 @@ def _worker(config_path,topology_path,protocol_path,backend,protoc,output,timing
                     else:observation.accept(event)
                     if watchdog:watchdog.observe(event)
                     if helpers:helpers.source_execution(event)
+                    if whole:whole.accept(event)
                     event_file.write(json.dumps(event,separators=(',',':'))+'\n')
                     continue
                 if event['type']=='SOURCE_ACK_TIMEOUT':
@@ -439,6 +444,7 @@ def _worker(config_path,topology_path,protocol_path,backend,protoc,output,timing
                         if binding:binding.register(wave)
                         else:observation.register(wave)
                         if helpers:helpers.register(wave)
+                        if whole:whole.register(wave,reply['now_ns'])
                 transcript.append(dict(event=event,reply=reply))
                 child.stdin.write(json.dumps(reply)+'\n');child.stdin.flush()
             code=child.wait();require(code==0, 'native service failed; inspect native.stderr.log')
@@ -454,11 +460,13 @@ def _worker(config_path,topology_path,protocol_path,backend,protoc,output,timing
         if child is not None and child.poll() is None:
             child.terminate();child.wait(timeout=5)
         if binding:binding.write(output)
+        if whole:whole.write(output)
         report=dict(history=frontend.history,transcript=transcript,scheduler_calls=frontend.calls,
             active_source_ranks=sorted(frontend.schedulers),
             scheduler_source='pinned_LLMServingSim_ConfiguredScheduler_initialization_only',
             requests=[dict(id=q.id,state=q.status.name,computed_tokens=q.num_computed_tokens,
                            reached_tokens=q.num_tokens_reached,intertoken_ns=q.itl) for q in frontend.requests])
+        if whole:report['whole_call_replication']=whole.snapshot()
         if replay:
             report.update(route_source=replay.manifest['source']['kind'],completion_semantics='observation_window_ended_not_EOS')
             for q in report['requests']:
@@ -525,6 +533,12 @@ def run(config, topology, protocol, backend, output, protoc='protoc', *, host_ti
         module=ROOT/'python/moe_ub_cosim/inflight_helpers.py'
         provenance['hashes'][str(module)]=digest(module)
         save(output/'provenance.json',provenance)
+    if whole_configuration(c):
+        provenance=checked_json(output/'provenance.json',65536)
+        provenance['whole_call_replication']=dict(c['whole_call_replication'])
+        module=ROOT/'python/moe_ub_cosim/whole_call.py'
+        provenance['hashes'][str(module)]=digest(module)
+        save(output/'provenance.json',provenance)
     command=[sys.executable,'-m','moe_ub_cosim.scaleout_service','--worker',str(output/'input.json'),str(output),str(output/'rdma.json'),
              str(backend),str(protoc),str(output)]
     if host_timing:command.append('--host-timing')
@@ -538,7 +552,7 @@ def run(config, topology, protocol, backend, output, protoc='protoc', *, host_ti
     return dict(passed=True,output=str(output),finish_ns=result['finish_ns'],waves=len(result['service']['waves']),
                 messages=audit['messages'],verified_nodes=audit['verified_nodes'],
                 state='finite_ready_KV_MoE_segment_online_service',
-                **service_terminal(result,checked_json(output/'frontend.json',4*2**20),require_complete=True))
+                **service_terminal(result,checked_json(output/'frontend.json',4*2**20),require_complete=True,config=c))
 
 
 if __name__=='__main__':

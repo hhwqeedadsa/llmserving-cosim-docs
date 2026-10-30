@@ -17,7 +17,7 @@ def verify(directory):
     c=checked_json(directory/'input.json',2**20);t=checked_json(directory/'topology.json',8*2**20)
     p=checked_json(directory/'rdma.json',65536);r=checked_json(directory/'result.json',limits(p)['result_json_bytes'])
     f=checked_json(directory/'frontend.json',4*2**20)
-    terminal=service_terminal(r,f,require_complete=True)
+    terminal=service_terminal(r,f,require_complete=True,config=c)
     simai=c.get('schema_version')=='moe-simai-service/1'
     if simai:
         from .simai_service import validate

@@ -1,0 +1,229 @@
+{
+  "passed": true,
+  "budget": {
+    "monitored_seconds": 1200,
+    "artifact_bytes": 1073741824,
+    "min_free_bytes": 8589934592
+  },
+  "monitored_seconds": 36.60347273410298,
+  "new_networks": 4,
+  "builds": 0,
+  "downloads": 0,
+  "failed_monitored_stages": 0,
+  "finalization_correction": "Initial finalizer expected 10 monitor receipts, found 11; count corrected after inspection. No network retried.",
+  "peak_sampled_stage_group_rss_bytes": 319606784,
+  "peak_sampled_artifact_bytes": 123363328,
+  "free_disk_bytes": 30058967040,
+  "graphs_per_case": 264,
+  "graphs_independently_equal": true,
+  "configs_independently_equal_except_initial_RTO": true,
+  "markdown_links": 10,
+  "figure_review": "PNG manually viewed; no browser-rendering claim",
+  "stages": [
+    {
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "experiments/transport_baseline/study.py",
+        "analyze",
+        "--study",
+        "runs/transport_baseline_20261030/study"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 11.437448094016872,
+      "peak_rss_bytes": 159330304
+    },
+    {
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "experiments/transport_baseline/study.py",
+        "run",
+        "--study",
+        "runs/transport_baseline_20261030/study",
+        "--case",
+        "base-local",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 4.5437676010187715,
+      "peak_rss_bytes": 319188992
+    },
+    {
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "experiments/transport_baseline/study.py",
+        "run",
+        "--study",
+        "runs/transport_baseline_20261030/study",
+        "--case",
+        "base-normal",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 4.483075030031614,
+      "peak_rss_bytes": 319541248
+    },
+    {
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "experiments/transport_baseline/study.py",
+        "calibrate",
+        "--study",
+        "runs/transport_baseline_20261030/study"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 2.653661308984738,
+      "peak_rss_bytes": 125784064
+    },
+    {
+      "command": [
+        "bash",
+        "scripts/check_deps.sh"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 0.4302522109937854,
+      "peak_rss_bytes": 18923520
+    },
+    {
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "experiments/transport_baseline/study.py",
+        "prepare",
+        "--source-manifest",
+        "runs/message_buffers_20261030/real-final-input/buffer-source-manifest.json",
+        "--source-base",
+        ".",
+        "--build",
+        "runs/message_buffers_20261030/build",
+        "--output",
+        "runs/transport_baseline_20261030/study"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 0.9650562969618477,
+      "peak_rss_bytes": 113938432
+    },
+    {
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "experiments/transport_baseline/verify.py",
+        "--study",
+        "runs/transport_baseline_20261030/study",
+        "--delivery",
+        "experiments/transport_baseline/results/20261030",
+        "--output",
+        "experiments/transport_baseline/results/20261030/verification.json"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 0.6571816069772467,
+      "peak_rss_bytes": 120651776
+    },
+    {
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "experiments/transport_baseline/verify.py",
+        "--study",
+        "runs/transport_baseline_20261030/study",
+        "--delivery",
+        "experiments/transport_baseline/results/20261030",
+        "--output",
+        "experiments/transport_baseline/results/20261030/verification.json"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 0.6720756500144489,
+      "peak_rss_bytes": 120651776
+    },
+    {
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "experiments/transport_baseline/publish.py",
+        "--study",
+        "runs/transport_baseline_20261030/study",
+        "--output",
+        "experiments/transport_baseline/results/20261030"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 0.5564082250348292,
+      "peak_rss_bytes": 107757568
+    },
+    {
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "experiments/transport_baseline/publish.py",
+        "--study",
+        "runs/transport_baseline_20261030/study",
+        "--output",
+        "experiments/transport_baseline/results/20261030"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 0.45436329004587606,
+      "peak_rss_bytes": 108273664
+    },
+    {
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "experiments/transport_baseline/study.py",
+        "run",
+        "--study",
+        "runs/transport_baseline_20261030/study",
+        "--case",
+        "short-local",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 4.655094614019617,
+      "peak_rss_bytes": 319606784
+    },
+    {
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "experiments/transport_baseline/study.py",
+        "run",
+        "--study",
+        "runs/transport_baseline_20261030/study",
+        "--case",
+        "short-normal",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 4.438195666996762,
+      "peak_rss_bytes": 319434752
+    },
+    {
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "experiments/transport_baseline/verify.py",
+        "--study",
+        "runs/transport_baseline_20261030/study",
+        "--delivery",
+        "runs/transport_baseline_20261030/study/delivery",
+        "--output",
+        "runs/transport_baseline_20261030/verification.json"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 0.65689313900657,
+      "peak_rss_bytes": 119656448
+    }
+  ],
+  "publication_sources_sha256": {
+    "experiments/transport_baseline/study.py": "04afcd402507f819ed2c1d17401f7f10c88d4951d3abf57ebf49c1bcb7ca1cbb",
+    "experiments/transport_baseline/monitor.py": "077ef8084bbb7a0b38eb0f25f1e52879f005366f300e103d321c4c10ae02cdcf",
+    "experiments/transport_baseline/verify.py": "743ad951cb6ce37c125e82c21530cb19706d41d5b6fd400c43a4293900d54c3d",
+    "experiments/transport_baseline/publish.py": "2475284ccce841b594531f1f2c6e9bb921a15ce666a0e70ff6e756d31dcda2db"
+  },
+  "publication_formatting": "Initial diff check found Matplotlib SVG trailing spaces; normalized published SVG only, regenerated explanation and reverified. Original publication retained. No network rerun."
+}

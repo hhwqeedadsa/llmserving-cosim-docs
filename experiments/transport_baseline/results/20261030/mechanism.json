@@ -1,0 +1,301 @@
+{
+  "passed": true,
+  "normal_packet_and_queue_traces_identical": true,
+  "cases": {
+    "base-local": {
+      "stream": 10,
+      "message": {
+        "ack_ns": 85504,
+        "begin": 0,
+        "bytes": 14464,
+        "contributions": 1,
+        "dst": 32,
+        "end": 14464,
+        "id": 7,
+        "layer": 0,
+        "phase": "dispatch",
+        "plane": 0,
+        "published_ns": 1030,
+        "ready_ns": 1030,
+        "receive_ready_ns": 83502,
+        "src": 0,
+        "stream": 10,
+        "tag": 7,
+        "transport_tokens": 1
+      },
+      "source_transmissions": [
+        {
+          "time_ns": 1030,
+          "stream": 10,
+          "src": 0,
+          "dst": 32,
+          "nic": 1,
+          "sequence": 0,
+          "payload_bytes": 9000,
+          "packet_uid": 0
+        },
+        {
+          "time_ns": 2116,
+          "stream": 10,
+          "src": 0,
+          "dst": 32,
+          "nic": 1,
+          "sequence": 9000,
+          "payload_bytes": 5464,
+          "packet_uid": 48
+        },
+        {
+          "time_ns": 81030,
+          "stream": 10,
+          "src": 0,
+          "dst": 32,
+          "nic": 1,
+          "sequence": 0,
+          "payload_bytes": 9000,
+          "packet_uid": 735
+        },
+        {
+          "time_ns": 81211,
+          "stream": 10,
+          "src": 0,
+          "dst": 32,
+          "nic": 1,
+          "sequence": 9000,
+          "payload_bytes": 5464,
+          "packet_uid": 739
+        }
+      ],
+      "actual_data_rx": [
+        {
+          "time_ns": 83392,
+          "node": 32,
+          "port": 1,
+          "event": 1,
+          "packet_uid": 735,
+          "message_id": 10,
+          "ip_protocol": 17,
+          "sequence": 0,
+          "model_bytes": 9036,
+          "ecn": 0,
+          "egress_queue_bytes": 0,
+          "data_payload_bytes": 9000
+        },
+        {
+          "time_ns": 83502,
+          "node": 32,
+          "port": 1,
+          "event": 1,
+          "packet_uid": 739,
+          "message_id": 10,
+          "ip_protocol": 17,
+          "sequence": 9000,
+          "model_bytes": 5500,
+          "ecn": 0,
+          "egress_queue_bytes": 0,
+          "data_payload_bytes": 5464
+        }
+      ],
+      "timeout": {
+        "time_ns": 81030,
+        "event": 2,
+        "source": 0,
+        "message_id": 10,
+        "acknowledged_bytes": 0,
+        "highest_sent_bytes": 14464,
+        "retries_since_progress": 1,
+        "rto_ns": 160000,
+        "deadline_ns": 241030
+      },
+      "first_dispatch_gate_ns": 85504,
+      "unaffected_input_r68": {
+        "input_ns": 10146,
+        "expert_start_ns": 85504,
+        "fifo_wait_ns": 0
+      },
+      "target_step_history": [
+        {
+          "graph_id": "g0.w0",
+          "group_index": 0,
+          "step": 0,
+          "start_ns": 0,
+          "batch_request_ids": {
+            "0": [
+              0
+            ]
+          },
+          "batch_ids": {
+            "0": 0
+          },
+          "finished_ns": 129271
+        },
+        {
+          "graph_id": "g0.w1",
+          "group_index": 0,
+          "step": 1,
+          "start_ns": 129271,
+          "batch_request_ids": {
+            "0": [
+              0
+            ]
+          },
+          "batch_ids": {
+            "0": 1
+          },
+          "finished_ns": 189208
+        }
+      ]
+    },
+    "short-local": {
+      "stream": 10,
+      "message": {
+        "ack_ns": 22504,
+        "begin": 0,
+        "bytes": 14464,
+        "contributions": 1,
+        "dst": 32,
+        "end": 14464,
+        "id": 7,
+        "layer": 0,
+        "phase": "dispatch",
+        "plane": 0,
+        "published_ns": 1030,
+        "ready_ns": 1030,
+        "receive_ready_ns": 20502,
+        "src": 0,
+        "stream": 10,
+        "tag": 7,
+        "transport_tokens": 1
+      },
+      "source_transmissions": [
+        {
+          "time_ns": 1030,
+          "stream": 10,
+          "src": 0,
+          "dst": 32,
+          "nic": 1,
+          "sequence": 0,
+          "payload_bytes": 9000,
+          "packet_uid": 0
+        },
+        {
+          "time_ns": 2116,
+          "stream": 10,
+          "src": 0,
+          "dst": 32,
+          "nic": 1,
+          "sequence": 9000,
+          "payload_bytes": 5464,
+          "packet_uid": 48
+        },
+        {
+          "time_ns": 18030,
+          "stream": 10,
+          "src": 0,
+          "dst": 32,
+          "nic": 1,
+          "sequence": 0,
+          "payload_bytes": 9000,
+          "packet_uid": 249
+        },
+        {
+          "time_ns": 18211,
+          "stream": 10,
+          "src": 0,
+          "dst": 32,
+          "nic": 1,
+          "sequence": 9000,
+          "payload_bytes": 5464,
+          "packet_uid": 251
+        }
+      ],
+      "actual_data_rx": [
+        {
+          "time_ns": 20392,
+          "node": 32,
+          "port": 1,
+          "event": 1,
+          "packet_uid": 249,
+          "message_id": 10,
+          "ip_protocol": 17,
+          "sequence": 0,
+          "model_bytes": 9036,
+          "ecn": 0,
+          "egress_queue_bytes": 0,
+          "data_payload_bytes": 9000
+        },
+        {
+          "time_ns": 20502,
+          "node": 32,
+          "port": 1,
+          "event": 1,
+          "packet_uid": 251,
+          "message_id": 10,
+          "ip_protocol": 17,
+          "sequence": 9000,
+          "model_bytes": 5500,
+          "ecn": 0,
+          "egress_queue_bytes": 0,
+          "data_payload_bytes": 5464
+        }
+      ],
+      "timeout": {
+        "time_ns": 18030,
+        "event": 2,
+        "source": 0,
+        "message_id": 10,
+        "acknowledged_bytes": 0,
+        "highest_sent_bytes": 14464,
+        "retries_since_progress": 1,
+        "rto_ns": 34000,
+        "deadline_ns": 52030
+      },
+      "first_dispatch_gate_ns": 22504,
+      "unaffected_input_r68": {
+        "input_ns": 10146,
+        "expert_start_ns": 22504,
+        "fifo_wait_ns": 0
+      },
+      "target_step_history": [
+        {
+          "graph_id": "g0.w0",
+          "group_index": 0,
+          "step": 0,
+          "start_ns": 0,
+          "batch_request_ids": {
+            "0": [
+              0
+            ]
+          },
+          "batch_ids": {
+            "0": 0
+          },
+          "finished_ns": 65949
+        },
+        {
+          "graph_id": "g0.w1",
+          "group_index": 0,
+          "step": 1,
+          "start_ns": 65949,
+          "batch_request_ids": {
+            "0": [
+              0
+            ]
+          },
+          "batch_ids": {
+            "0": 1
+          },
+          "finished_ns": 125977
+        }
+      ]
+    }
+  },
+  "target_saved_fraction": 0.3341877721872225,
+  "original_fault_penalty_ns": 68088,
+  "fault_penalty_recovered_fraction": 0.9286658442016215,
+  "remaining_gap_to_normal_ns": 4857,
+  "extra_arena_peak_bytes": 71552,
+  "original_dispatch_advance_ns": 63000,
+  "target_advance_ns": 63231,
+  "publisher_sha256": "2475284ccce841b594531f1f2c6e9bb921a15ce666a0e70ff6e756d31dcda2db",
+  "assertion_scope": "These four fixed networks only; no optimal-RTO, production or novelty claim"
+}

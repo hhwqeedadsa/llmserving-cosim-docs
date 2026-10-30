@@ -1,5 +1,9 @@
 # 当前任务与交接
 
+## 2026-10-30 恢复计时语义与调度机会核查
+
+状态：`in_progress`。上一轮为progress：`541fce5650`完成四个新128Clos真实路由网络和逐包/末前驱核查。本轮沿用已有结果，只读审计当前QP级计时、TCP/RoCE来源边界，以及较强绕行条件下恢复发送等待与同NIC竞争，先判断任务进度感知恢复是否有实际施力位置。没有新网络、构建、安装或依赖修改；不把观测轨迹重放当反事实收益。根`runs/recovery_timer_audit_20261030`预算300宿主秒/64MiB/留8GiB，单阶段60秒/RSS512MiB/地址1GiB；公开资料最多6请求/2MiB/60秒，不重试同一失败请求。实际发现四个mlx5设备但端口均DOWN，只作可见设备状态，不称两机RoCE校准。只发布既有用户分支，整体目标active。
+
 ## 2026-10-30 真实MoE的显式绕路强基线
 
 状态：`completed`（真实MoE强基线对照已验收，整体目标仍active）。上一目标轮只解释normal/local，未改项目状态，分类no progress；本轮按[冻结方法](../../experiments/explicit_prefix_moe/README.md)完成四个新128Clos网络各一次，独立公开准备同一15真实选择/四EP32组/两层两步/17µs SR。normal与local-w60原始结果除库路径外与旧同条件一致，另复用五旧条件。交付[网页](../../experiments/explicit_prefix_moe/results/20261030/report.html)、[结果与复核](../../experiments/explicit_prefix_moe/RESULTS.md)、[逐包核验](../../experiments/explicit_prefix_moe/results/20261030/verification.json)及[资源身份](../../experiments/explicit_prefix_moe/results/20261030/receipt.json)。

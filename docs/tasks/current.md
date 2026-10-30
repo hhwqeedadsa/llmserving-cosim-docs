@@ -1,5 +1,9 @@
 # 当前任务与交接
 
+## 2026-10-30 真实MoE的显式绕路强基线
+
+状态：`in_progress`。上一目标轮为progress：`43a5dc08b8`交付实际显式修复段及六个128Clos功能验收。本轮按[独立研究方法](../../experiments/explicit_prefix_moe/README.md)，固定同一15真实选择/四EP32组/两层两步/17µs SR/20与60µs临时断链，新增normal、local-w60构建核对及两个prefix条件，各一次。旧七条件只读；先核验再冻结，比较实际源ACK、四组完成、其他组拖累、额外字节及排空，不预设创新或收益。根`runs/explicit_prefix_moe_20261030`预算1800秒/2GiB/留8GiB、每阶段120秒/RSS1GiB/地址2GiB；最多四新网络，零构建/下载/平台变更，方法先提交，只发布用户既有分支，整体目标active。
+
 ## 2026-10-30 原生显式修复段执行
 
 状态：`completed`（原生显式段功能已验收，真实MoE收益研究及整体目标仍active）。上一目标轮为progress：`7e71381b3c`交付无环规划并发布用户分支。本轮按[规范](explicit_prefix_execution_spec.md)新增可选`explicit_prefix/1`：旧图预计算，仅本地空候选激活；实际IPv4/MRP1封装通过原生队列/MMU/Qbb，到合流点拆封并传回CE，保留原QP、ACK/SACK、选择性重传及确认/退出语义。两跳修复段真实增加38B，不是标准RoCE/MPLS/TI-LFA，也没有硬件检测/处理/路径分发成本校准。公开操作见[独立128Clos示例](../../examples/scaleout_explicit_prefix/README.md)，结果见[网页](../../fixtures/explicit_prefix/report.html)、[独立检查](../../fixtures/explicit_prefix/verification.json)和[资源身份](../../fixtures/explicit_prefix/receipt.json)。

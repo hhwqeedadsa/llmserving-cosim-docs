@@ -13,7 +13,9 @@ def main():
     for path in a.figures.iterdir():
         if path.is_file():shutil.copyfile(path,fig/path.name)
         elif (path/'arrival_curve.csv').is_file():
-            target=fig/path.name;target.mkdir();shutil.copyfile(path/'arrival_curve.csv',target/'arrival_curve.csv')
+            target=fig/path.name;target.mkdir()
+            # Git normalizes text CSVs to LF; hash the same portable bytes.
+            (target/'arrival_curve.csv').write_text((path/'arrival_curve.csv').read_text())
             shutil.copyfile(path/'summary.json',target/'summary.json')
     summary=json.loads((fig/'slice-summaries.json').read_bytes());single,primary,replica=(summary[k]['slice'] for k in
         ('single-primary','delayed-primary','delayed-replica'))

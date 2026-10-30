@@ -22,19 +22,90 @@
     "frozen.json": "73fbf1b0e89238742f584e33578ffafb50790a53c33594c8343ca145d4fc0c7e",
     "report.html": "50bc277ff238632b26e2414ed05c7a0983cb3e25a6fa3781f7ca686067771d2a",
     "README.md": "bd484278e74fb855d96bcea230b9ed4194bade658dea714442a4a1a81e3411b9",
-    "receipt.json": "9b296b77b58815c6fc93f6cb374c6f0a97189fd61f8accef2b43de71a4794c3b",
-    "resources.json": "ed5249fa435a78ae50be3c9bda5c69d15c8f8d62fd8cfe7ce35e64a8fc4fb09f",
+    "receipt.json": "0e7597d8862e2bdfcfc740bde7af45de0d9b4d5e128b9df3a74e643b6d925138",
+    "resources.json": "27bb406449bc8eb9516bfe2d9d3b33a64df27a1f6003f6908d3ec20033aa79cf",
     "figures/latency-comparison.png": "790ac3666fce2e74ab3736dcce2c9acd76f63acf89f0e4378a34e417ec31b9f6",
     "figures/latency-comparison.svg": "e4d45121d8fde7c44302f1be213fdf42768cac1f486a673fbb5f9a3b39dd45e5",
     "figures/dispatch-arrivals.png": "8f3678df1d1724fb2f9fb68b5ae3aef242295c59dc68bea362481aaa20cbe8e3",
     "figures/dispatch-arrivals.svg": "723eb1aeb8b3ab83f55ab8a721e29aa4447ad28fd8e491faa9fff85260822295",
     "figures/slice-summaries.json": "da7cb5830e8ccd13d6c155942628ba8a2b7fe22ffb58c7877f8abd33bc178436",
-    "figures/single-primary/arrival_curve.csv": "540df1986f7fb3eb529d970b4c4182cb9d45343a8e1129abdf1833a0824f2bf8",
+    "figures/single-primary/arrival_curve.csv": "4896c1bd8eda5c7c2a28ee9b8966a242e0a419d7d4d948e0621a424d493d1f7a",
     "figures/single-primary/summary.json": "c8ad293638c4de7f58aadb54c4f6e3092205e091e1a342a5a942d6a0c35aba8f",
-    "figures/delayed-primary/arrival_curve.csv": "eac1232ff5eed92d491ceb371653b8dae7305851825dab578c1a28772bfb66ae",
+    "figures/delayed-primary/arrival_curve.csv": "e8cc195ce55284132e017a3c5969ee9cfdc0097dd6f6581da7e81b7dadcfca8c",
     "figures/delayed-primary/summary.json": "d934040cd0781ef90a6e729d0f4a1302a9785447b87a965a574d7346b70ebb73",
-    "figures/delayed-replica/arrival_curve.csv": "1c5fb5bdf61f341ce2263f743cddd08826bc12e50d0153dd5adeb98b6a7d23fc",
+    "figures/delayed-replica/arrival_curve.csv": "c523f04474f757547b4b22d4545c67c14660012b8ad37d2185f65504ccec3e96",
     "figures/delayed-replica/summary.json": "19d01899c2d9162e65c6d935d7744a1fa15f883af333515ed2fddd2bc943f449"
   },
-  "all_execution_monitors_terminal": true
+  "all_execution_monitors_terminal": true,
+  "markdown_local_links_checked": [
+    [
+      "docs/tasks/current.md",
+      "../../fixtures/delayed_whole/README.md"
+    ],
+    [
+      "docs/tasks/current.md",
+      "../../experiments/delayed_replica_value/results/20261030/report.html"
+    ],
+    [
+      "docs/tasks/current.md",
+      "../../experiments/delayed_replica_value/results/20261030/README.md"
+    ],
+    [
+      "docs/tasks/current.md",
+      "../../experiments/delayed_replica_value/results/20261030/analysis.json"
+    ],
+    [
+      "fixtures/delayed_whole/README.md",
+      "../../docs/whole_call.md"
+    ],
+    [
+      "fixtures/delayed_whole/README.md",
+      "../../examples/scaleout_whole_call/README.md"
+    ],
+    [
+      "fixtures/delayed_whole/README.md",
+      "pre-network.json"
+    ],
+    [
+      "fixtures/delayed_whole/README.md",
+      "normal-verification.json"
+    ],
+    [
+      "fixtures/delayed_whole/README.md",
+      "local-verification.json"
+    ],
+    [
+      "fixtures/delayed_whole/README.md",
+      "../../experiments/delayed_replica_value/results/20261030/README.md"
+    ],
+    [
+      "experiments/delayed_replica_value/README.md",
+      "results/20261030/report.html"
+    ],
+    [
+      "experiments/delayed_replica_value/README.md",
+      "protocol.md"
+    ],
+    [
+      "experiments/delayed_replica_value/README.md",
+      "../../examples/scaleout_whole_call/README.md"
+    ],
+    [
+      "experiments/delayed_replica_value/results/20261030/README.md",
+      "report.html"
+    ],
+    [
+      "experiments/delayed_replica_value/results/20261030/README.md",
+      "analysis.json"
+    ],
+    [
+      "experiments/delayed_replica_value/results/20261030/README.md",
+      "frozen.json"
+    ],
+    [
+      "experiments/delayed_replica_value/results/20261030/README.md",
+      "../../README.md"
+    ]
+  ],
+  "csv_line_endings": "LF, parsed rows equal original public exports"
 }

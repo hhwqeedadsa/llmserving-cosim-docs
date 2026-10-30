@@ -7,7 +7,7 @@
     "experiments/delayed_replica_value/prepare.py": "df042933bf9e6cec7829760b69082b2ae17e011cba3fb7f552d1fb1229ad8916",
     "experiments/delayed_replica_value/analyze.py": "0e318a775ba319cbaf2f65e3502d24e061c3ff58079a75626d90726937972b0f",
     "experiments/delayed_replica_value/plot.py": "63da2003c752b05e65d8005bb1b8080a0f67d9d188b08a6ddc3464d7a462f336",
-    "experiments/delayed_replica_value/report.py": "0e507d1010816c1bdbeed0ee55a4c230ad836fa0006a9eb34f20ee2e9bdadc27",
+    "experiments/delayed_replica_value/report.py": "831a51aa1e8eb91d6e617bcee10fb827037037ad6f980515d5a6ad7ed98a9ec3",
     "tests/integration/check_delayed_whole_run.py": "56f336dfd035cdb1ebb4d51836e227eeb8054539daacf033cab770f42ac4a05f"
   },
   "platform_source_sha256": {
@@ -1144,5 +1144,10 @@
   "installs": 0,
   "gpu_executions": 0,
   "graph_original_inputs_and_protocol_matched": true,
-  "new_algorithm_benefit_proven": false
+  "new_algorithm_benefit_proven": false,
+  "portable_CSV_normalized_to_LF": true,
+  "additional_check_failure_retained": {
+    "log": "runs/delayed_whole_20261030/final-links-first-failure.txt",
+    "reason": "Link checker treated a Markdown fragment as part of a filesystem path; fixed checker to resolve URL path. No source/artifact link was broken."
+  }
 }

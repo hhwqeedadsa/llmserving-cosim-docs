@@ -1,6 +1,6 @@
 {
   "passed": true,
-  "monitored_wall_seconds_upper_bound": 52.775239110866096,
+  "monitored_wall_seconds_upper_bound": 52.969126143842004,
   "wall_accounting": "Includes nested native probes again; copied relocated probes excluded; all registered execution monitors now terminal",
   "peak_sampled_group_rss_bytes": 1039310848,
   "monitors": {
@@ -953,6 +953,48 @@
         "allocated_bytes": 64192512
       }
     },
+    "monitors/final-portability/probe.json": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "runs/delayed_whole_20261030/final_portability.py"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-30T15:16:58.702575+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 805306368,
+        "wall_seconds": 120.0
+      },
+      "peak_sampled_group_rss_bytes": 6414336,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/runs/delayed_whole_20261030"
+      ],
+      "peak_sampled_artifact_bytes": 64212992,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 60416239,
+      "peak_sampled_artifact_allocated_bytes": 64212992,
+      "process_group": 902530,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-30T15:16:58.896457+00:00",
+      "wall_seconds": 0.19388703297590837,
+      "max_waited_child_rss_kib": 15624,
+      "artifact_bytes_before_report": 566,
+      "aggregate_artifact_bytes_before_report": 64212992,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 60416239,
+        "allocated_bytes": 64212992
+      }
+    },
     "normal/execution/probe.json": {
       "schema_version": "moe-ub-host-probe/1",
       "command": [
@@ -1054,17 +1096,17 @@
   },
   "artifacts": {
     "runs/delayed_whole_20261030": {
-      "apparent_bytes": 60410920,
-      "allocated_bytes": 64188416
+      "apparent_bytes": 60417677,
+      "allocated_bytes": 64217088
     },
     "experiments/delayed_replica_value/results/20261030": {
-      "apparent_bytes": 362134,
-      "allocated_bytes": 397312
+      "apparent_bytes": 407294,
+      "allocated_bytes": 450560
     },
     "fixtures/delayed_whole": {
-      "apparent_bytes": 56114,
+      "apparent_bytes": 56916,
       "allocated_bytes": 65536
     }
   },
-  "remaining_free_bytes": 31921340416
+  "remaining_free_bytes": 31917809664
 }

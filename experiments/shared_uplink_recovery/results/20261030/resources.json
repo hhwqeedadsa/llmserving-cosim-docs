@@ -1,0 +1,291 @@
+{
+  "passed": true,
+  "budget": {
+    "monitored_seconds": 1200,
+    "artifact_bytes": 2147483648,
+    "min_free_bytes": 8589934592
+  },
+  "monitored_seconds": 76.78488348500105,
+  "monitored_stages": 14,
+  "peak_group_rss_bytes": 514023424,
+  "peak_task_artifact_bytes": 492138496,
+  "free_disk_bytes": 28440403968,
+  "new_networks": 5,
+  "failed_networks": 0,
+  "reused_normal_networks": 1,
+  "builds": 0,
+  "downloads": 0,
+  "GPU_executions": 0,
+  "failed_monitored_stages": 3,
+  "setup_notes": [
+    "Initial monitor invocation omitted PYTHONPATH=python and failed to import the public host probe; no monitor child or network started. Subsequent source-checkout commands used PYTHONPATH=python.",
+    "First preparation correctly stopped on a raw manifest SHA comparison: public replay relocates files and reserializes the manifest. Route content/source identity was checked explicitly in a separate method commit before any new network.",
+    "Second preparation exposed an incorrect manifest-relative resolution in the research checker; public Replay resolves paths relative to the run base. Corrected the research checker, retained both failed preparation directories, then froze study-v3 before all networks.",
+    "First publisher used tag at the wrong graph-node nesting level and failed before producing files. Corrected publisher only, retained the empty output under the run root, and generated the final publication. No network was rerun."
+  ],
+  "png_viewed": true,
+  "browser_rendering_verified": false,
+  "source_sha256": {
+    "experiments/shared_uplink_recovery/monitor.py": "e35b8e41e25a308f047c2dcd09ab21bb443e8cb597d0e17711b59c7aa09790c2",
+    "experiments/shared_uplink_recovery/study.py": "f5de0b441a3090736822f472a97e05d018236a61a672e8a9fedcb19eacb2c04a",
+    "experiments/shared_uplink_recovery/verify.py": "a55107e702282330a1cfe5f9fa11cba59ed469e5a02bbebcd436ec6cb65b2cd3",
+    "experiments/shared_uplink_recovery/publish.py": "05f1689458259c4e0859f349634e19ae2740bab10f625188a58ece4f7cfb6cbf",
+    "experiments/shared_uplink_recovery/delivery_check.py": "d997cf33ce3e0a0327255a66af4fc35c98f67c64ec60067e9baf5099ef3f8bbd"
+  },
+  "stages": [
+    {
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "experiments/shared_uplink_recovery/study.py",
+        "analyze",
+        "--study",
+        "runs/shared_uplink_recovery_20261030/study-v3",
+        "--output",
+        "runs/shared_uplink_recovery_20261030/delivery"
+      ],
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 3.7465316739981063,
+      "peak_rss_bytes": 224206848
+    },
+    {
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "experiments/shared_uplink_recovery/delivery_check.py",
+        "--study",
+        "runs/shared_uplink_recovery_20261030/study-v3",
+        "--delivery",
+        "experiments/shared_uplink_recovery/results/20261030",
+        "--output",
+        "experiments/shared_uplink_recovery/results/20261030/verification.json"
+      ],
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 0.9969791280454956,
+      "peak_rss_bytes": 228458496
+    },
+    {
+      "command": [
+        "bash",
+        "scripts/check_deps.sh"
+      ],
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 0.4750383099890314,
+      "peak_rss_bytes": 23498752
+    },
+    {
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "experiments/shared_uplink_recovery/study.py",
+        "prepare",
+        "--source-manifest",
+        "runs/multicall_externality_20261030/study-counted/source-manifest.json",
+        "--source-base",
+        ".",
+        "--build",
+        "runs/message_buffers_20261030/build",
+        "--normal",
+        "runs/transport_window_coverage_20261030/study/transfer-normal",
+        "--output",
+        "runs/shared_uplink_recovery_20261030/study"
+      ],
+      "status": "child_failed",
+      "exit_code": 1,
+      "wall_seconds": 1.9443337580305524,
+      "peak_rss_bytes": 197832704
+    },
+    {
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "experiments/shared_uplink_recovery/study.py",
+        "prepare",
+        "--source-manifest",
+        "runs/multicall_externality_20261030/study-counted/source-manifest.json",
+        "--source-base",
+        ".",
+        "--build",
+        "runs/message_buffers_20261030/build",
+        "--normal",
+        "runs/transport_window_coverage_20261030/study/transfer-normal",
+        "--output",
+        "runs/shared_uplink_recovery_20261030/study-v2"
+      ],
+      "status": "child_failed",
+      "exit_code": 1,
+      "wall_seconds": 1.9592973479884677,
+      "peak_rss_bytes": 197038080
+    },
+    {
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "experiments/shared_uplink_recovery/study.py",
+        "prepare",
+        "--source-manifest",
+        "runs/multicall_externality_20261030/study-counted/source-manifest.json",
+        "--source-base",
+        ".",
+        "--build",
+        "runs/message_buffers_20261030/build",
+        "--normal",
+        "runs/transport_window_coverage_20261030/study/transfer-normal",
+        "--output",
+        "runs/shared_uplink_recovery_20261030/study-v3"
+      ],
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 2.1674391989945434,
+      "peak_rss_bytes": 199995392
+    },
+    {
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "experiments/shared_uplink_recovery/publish.py",
+        "--study",
+        "runs/shared_uplink_recovery_20261030/study-v3",
+        "--analysis",
+        "runs/shared_uplink_recovery_20261030/delivery/analysis.json",
+        "--verification",
+        "runs/shared_uplink_recovery_20261030/verification.json",
+        "--output",
+        "experiments/shared_uplink_recovery/results/20261030"
+      ],
+      "status": "child_failed",
+      "exit_code": 1,
+      "wall_seconds": 0.9999593769898638,
+      "peak_rss_bytes": 273944576
+    },
+    {
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "experiments/shared_uplink_recovery/publish.py",
+        "--study",
+        "runs/shared_uplink_recovery_20261030/study-v3",
+        "--analysis",
+        "runs/shared_uplink_recovery_20261030/delivery/analysis.json",
+        "--verification",
+        "runs/shared_uplink_recovery_20261030/verification.json",
+        "--output",
+        "experiments/shared_uplink_recovery/results/20261030"
+      ],
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 1.9210402199532837,
+      "peak_rss_bytes": 287633408
+    },
+    {
+      "command": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-B",
+        "experiments/shared_uplink_recovery/study.py",
+        "run",
+        "--study",
+        "runs/shared_uplink_recovery_20261030/study-v3",
+        "--case",
+        "global0",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc"
+      ],
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 11.757992182974704,
+      "peak_rss_bytes": 501612544
+    },
+    {
+      "command": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-B",
+        "experiments/shared_uplink_recovery/study.py",
+        "run",
+        "--study",
+        "runs/shared_uplink_recovery_20261030/study-v3",
+        "--case",
+        "global20",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc"
+      ],
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 11.845038382976782,
+      "peak_rss_bytes": 510242816
+    },
+    {
+      "command": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-B",
+        "experiments/shared_uplink_recovery/study.py",
+        "run",
+        "--study",
+        "runs/shared_uplink_recovery_20261030/study-v3",
+        "--case",
+        "global60",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc"
+      ],
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 11.791815915028565,
+      "peak_rss_bytes": 511279104
+    },
+    {
+      "command": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-B",
+        "experiments/shared_uplink_recovery/study.py",
+        "run",
+        "--study",
+        "runs/shared_uplink_recovery_20261030/study-v3",
+        "--case",
+        "local20",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc"
+      ],
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 11.913018974009901,
+      "peak_rss_bytes": 501862400
+    },
+    {
+      "command": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-B",
+        "experiments/shared_uplink_recovery/study.py",
+        "run",
+        "--study",
+        "runs/shared_uplink_recovery_20261030/study-v3",
+        "--case",
+        "local60",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc"
+      ],
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 12.07924843300134,
+      "peak_rss_bytes": 514023424
+    },
+    {
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "experiments/shared_uplink_recovery/verify.py",
+        "--study",
+        "runs/shared_uplink_recovery_20261030/study-v3",
+        "--delivery",
+        "runs/shared_uplink_recovery_20261030/delivery",
+        "--output",
+        "runs/shared_uplink_recovery_20261030/verification.json"
+      ],
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 3.1871505830204114,
+      "peak_rss_bytes": 251621376
+    }
+  ]
+}

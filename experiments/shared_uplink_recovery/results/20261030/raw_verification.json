@@ -1,0 +1,51 @@
+{
+  "passed": true,
+  "new_networks": 5,
+  "reused_normal": true,
+  "messages_checked": 4668,
+  "physical_data_hops_checked": 46067,
+  "queue_rows_checked": 150396,
+  "all_original_graphs_equal": true,
+  "inputs_only_declared_fault_changes": true,
+  "source_bytes_and_physical_DATA_arrivals_checked": true,
+  "final_buffers_zero": true,
+  "per_case": {
+    "normal": {
+      "physical_data_hops": 7480,
+      "source_data_packets": 1556,
+      "messages": 778,
+      "graph_files": 264
+    },
+    "global20": {
+      "physical_data_hops": 7656,
+      "source_data_packets": 1617,
+      "messages": 778,
+      "graph_files": 264
+    },
+    "local20": {
+      "physical_data_hops": 7637,
+      "source_data_packets": 1600,
+      "messages": 778,
+      "graph_files": 264
+    },
+    "global60": {
+      "physical_data_hops": 7900,
+      "source_data_packets": 1689,
+      "messages": 778,
+      "graph_files": 264
+    },
+    "local60": {
+      "physical_data_hops": 7881,
+      "source_data_packets": 1654,
+      "messages": 778,
+      "graph_files": 264
+    },
+    "global0": {
+      "physical_data_hops": 7513,
+      "source_data_packets": 1573,
+      "messages": 778,
+      "graph_files": 264
+    }
+  },
+  "analysis_sha256": "b45e5fcaebf23f7f8a9c665995d1455cf3a5efe93fa3000505ed26424a737773"
+}

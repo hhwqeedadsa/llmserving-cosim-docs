@@ -7,8 +7,11 @@ def validate(recovery,max_sim_ns):
     keys='mode' if recovery['mode']=='native' else 'mode initial_rto_ns max_rto_ns max_retries max_events'
     if recovery['mode']=='go_back_n' and 'rtt_estimator' in recovery:keys+=' rtt_estimator'
     if recovery['mode']=='go_back_n' and 'history' in recovery:keys+=' history'
+    if recovery['mode']=='go_back_n' and 'terminal_snapshot' in recovery:keys+=' terminal_snapshot'
     fields(recovery,keys,'recovery')
     if recovery['mode']=='native':return
+    if 'terminal_snapshot' in recovery:
+        require(type(recovery['terminal_snapshot']) is bool,'terminal recovery snapshot must be boolean')
     integer(recovery['initial_rto_ns'],'initial recovery RTO',1,max_sim_ns)
     integer(recovery['max_rto_ns'],'maximum recovery RTO',recovery['initial_rto_ns'],1000000000)
     integer(recovery['max_retries'],'recovery retries without ACK progress',1,16)

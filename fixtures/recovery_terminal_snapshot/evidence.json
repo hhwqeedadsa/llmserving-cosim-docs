@@ -1,0 +1,297 @@
+{
+  "schema_version": "recovery-terminal-observation-evidence/1",
+  "source_base_commit": "a8cd4efd3f96f99032e1343e0a7703594d84e8b2",
+  "run_root": "runs/recovery_terminal_snapshot_20261030",
+  "scope": "passive terminal observation, one synthetic failed incast; not calibrated GPU/network or new algorithm gain",
+  "source_hashes": {
+    "backend/rdma/recovery.cc": "25410da02725015347f82a86cddb60b04805c99af16e8514ad17fcafac4f477f",
+    "python/moe_ub_cosim/scaleout_recovery.py": "27a0af36e20ff1c0dbff53eb9235a4c45d1bc91017028ba59761a3944624a3d3",
+    "python/moe_ub_cosim/scaleout_recovery_config.py": "9958598b5615babdc32eacdb40013ee0c22ef72fc5c9bf99266b81c2ed2acc5f",
+    "tests/unit/scaleout_recovery_test.py": "74581f1f2fa175fcf08fbbd060ba4db6b02a912d6ecca930921119e599cdc0e6",
+    "tests/integration/check_recovery_terminal_snapshot.py": "0e30c4d72af834a9d8c8e63f1c0196b2361d329612945d17b408127ad7e3e811",
+    "examples/scaleout_rdma_recovery/terminal-incast.json": "24019587d3fdc3336e8aac0eff0e3ecde17c698027e600e8469eaff7d21c3d0f"
+  },
+  "compiled_cpp_hashes": {
+    "backend/rdma/recovery.cc": "25410da02725015347f82a86cddb60b04805c99af16e8514ad17fcafac4f477f"
+  },
+  "binary_hashes": {
+    "/dev/shm/moe-heavy-loss-20261028/build/output/moe-rdma/ns3.42-moe-rdma-service": "bb71575db1de42b9d5beae62af2e3c730960553ecc3ac8f5c6733f195d72e7ee",
+    "/dev/shm/moe-heavy-loss-20261028/build/output/moe-rdma/ns3.42-moe-rdma-transaction-session": "011678087231614ca3c9330bac55f9733403b1755bef2be2b23d2c539e2e6f0f",
+    "/dev/shm/moe-heavy-loss-20261028/build/output/moe-rdma/ns3.42-moe-rdma-transaction-probe": "37241ff27a5cd57cdd480106fc7f8383ffdc08b5aa8765f5521dcec48fda99a2",
+    "/dev/shm/moe-heavy-loss-20261028/build/output/moe-rdma/ns3.42-moe-rdma-stream-probe": "c8360b45f616786618d1246d2a87f7e9300de751eef0cfae714fa7722b9b300c",
+    "/dev/shm/moe-heavy-loss-20261028/build/output/moe-rdma/ns3.42-moe-rdma-probe": "1dc2132072f68412567db68b347bf52d90e644472f9bde7b49254074be0d7c85",
+    "/dev/shm/moe-heavy-loss-20261028/build/output/moe-rdma/ns3.42-moe-rdma-rc-probe": "603616bd1ee0bb0872eb644f2861ac30b146f91ea01046776eea8d4a2e4a9079",
+    "/dev/shm/moe-heavy-loss-20261028/build/output/moe-rdma/ns3.42-moe-rdma-switch-drop-test": "43cbc27993a8949e0aaa50a043c85a806468ce9d8bd508432d2fa4cc7dd9d8f0"
+  },
+  "native_library_hashes": {
+    "/dev/shm/moe-heavy-loss-20261028/build/output/lib/libns3.42-point-to-point.so": "5113fd7048c367120119d339007550efaf059a25b0e82f6798ba7e523d626839",
+    "/dev/shm/moe-heavy-loss-20261028/build/output/lib/libns3.42-applications.so": "25c9ea0548421f52ebf8191c8b662e1ddb0f63c546fd544c5dc405a4e062ed72",
+    "/dev/shm/moe-heavy-loss-20261028/build/output/lib/libns3.42-internet.so": "43339f38fb0502c00c5f19537f6ba6771a168200cd7c83529a12a05b3d2e27f0",
+    "/dev/shm/moe-heavy-loss-20261028/build/output/lib/libns3.42-traffic-control.so": "b52a47933b85e2f61f9a94f29a2871aed9e5941e0cec0e9c9f03570ad15ddc99",
+    "/dev/shm/moe-heavy-loss-20261028/build/output/lib/libns3.42-bridge.so": "28f3b410e4f388e13113dee45b4ade98e90da59e99abb56179994d6f0ee797f5",
+    "/dev/shm/moe-heavy-loss-20261028/build/output/lib/libns3.42-network.so": "b94272a020f3438347a8bde2b3fa10355d40b09e96792232b3198dac87cd4b94",
+    "/dev/shm/moe-heavy-loss-20261028/build/output/lib/libns3.42-stats.so": "9f211655e5fe19ade99d1419bdcbcb41618dcaa1fbcba6ab4fa8ee65fb9ace98",
+    "/dev/shm/moe-heavy-loss-20261028/build/output/lib/libns3.42-core.so": "4e06c366e439e338d6acaa1f5e802c05dcce8df10b1ba500b83dd945ed2e5f35"
+  },
+  "native_libraries_unchanged": true,
+  "prior_build_receipt_role": "records source hashes at initial build time; final Python analysis hashes are separately bound here",
+  "files": [
+    {
+      "path": "backend.json",
+      "sha256": "92a96173362ca3a848b9d6bfaa4c0c091298b921e26a06e02a57691e7dc09ab1",
+      "bytes": 3324
+    },
+    {
+      "path": "previous-build.json",
+      "sha256": "2655e30763df57726754cce07537b613402c8eacb774d496c591fb0fcce00e77",
+      "bytes": 2423
+    },
+    {
+      "path": "input-provenance.json",
+      "sha256": "0ebdca7eaeefe39b4d72094a4ee5f3c1c921b298b4876359810139245f47877b",
+      "bytes": 373
+    },
+    {
+      "path": "rdma.json",
+      "sha256": "24019587d3fdc3336e8aac0eff0e3ecde17c698027e600e8469eaff7d21c3d0f",
+      "bytes": 1260
+    },
+    {
+      "path": "capture/inputs.json",
+      "sha256": "61490e917ebeef19600d1fdb1d26153999fe72b0eb483895315f218b13b0c0c8",
+      "bytes": 1258
+    },
+    {
+      "path": "capture/result.json",
+      "sha256": "36846c5d565371afeea9ccdca102aaad4ce90eeb4dea3d59ef8b18cc4a396a73",
+      "bytes": 1386478
+    },
+    {
+      "path": "capture/execution/probe.json",
+      "sha256": "8b35a0ae47d30df66340abb9d773a2a7e5c51625e9afb7ed8905eee50d3bb77b",
+      "bytes": 1806
+    },
+    {
+      "path": "verification-final.json",
+      "sha256": "fa44cbed272a4f2fad399948fc9865d0f5cd899fe5517494b02adc93ceaca15d",
+      "bytes": 7452
+    },
+    {
+      "path": "diagnosis.json",
+      "sha256": "ae7313b74c9bb1b448e648c38e2ffd53e3c55d91675382f1ca416d4234034763",
+      "bytes": 22030
+    },
+    {
+      "path": "final-cpu-monitor/stderr.log",
+      "sha256": "19bd052a4b8bf27ee1e0921c278f6a5964645f62653c56f7287a332fc7aa911b",
+      "bytes": 122
+    },
+    {
+      "path": "final-cpu-single-thread-monitor/stderr.log",
+      "sha256": "ae768993c1ab417bc8856469257fcc74c4607af64868b4f924d2c4c35aa2dd5e",
+      "bytes": 292
+    },
+    {
+      "path": "final-config-monitor/stderr.log",
+      "sha256": "21c7e48d0b1ec908feef784bbce1fa55f2c9a7acf76382fa7578754a78bd1ed8",
+      "bytes": 105
+    }
+  ],
+  "read_only_source_review": {
+    "path": "runs/recovery_send_diagnosis_20261030/source-review.json",
+    "sha256": "457056584724ef848fdb9f340a8162fe9743ac0e35a93ac2c11df9fcf139108f"
+  },
+  "monitors": [
+    {
+      "path": "analysis-monitor/probe.json",
+      "sha256": "f3b068aab787efd1c2e023b483fc0efdb38583ea665e07f3b152bca87aa6ae1d",
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 0.2547982130199671,
+      "peak_sampled_group_rss_bytes": 22265856,
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "tests/integration/check_recovery_terminal_snapshot.py",
+        "--run",
+        "runs/recovery_terminal_snapshot_20261030/capture",
+        "--reference",
+        "runs/switch_drop_capture_20261030/acceptance/on",
+        "--output",
+        "runs/recovery_terminal_snapshot_20261030/verification.json"
+      ]
+    },
+    {
+      "path": "build-monitor/probe.json",
+      "sha256": "e3ab32a29ae6918b2180f175e0400a6cfa611393365590eeda63ffb18a888e0f",
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 8.943685122008901,
+      "peak_sampled_group_rss_bytes": 490217472,
+      "command": [
+        "/usr/bin/cmake",
+        "--build",
+        "/dev/shm/moe-heavy-loss-20261028/build/cmake",
+        "--target",
+        "moe-rdma-service",
+        "moe-rdma-probe",
+        "moe-rdma-stream-probe",
+        "moe-rdma-rc-probe",
+        "moe-rdma-transaction-probe",
+        "moe-rdma-transaction-session",
+        "-j1"
+      ]
+    },
+    {
+      "path": "capture-monitor/probe.json",
+      "sha256": "e02a74a92038801e9226907cab5619c5d04c3d38a4f7a24bb95d1817ec964735",
+      "status": "child_failed",
+      "exit_code": 1,
+      "wall_seconds": 0.3636778359650634,
+      "peak_sampled_group_rss_bytes": 47980544,
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-probe",
+        "--topology",
+        "runs/switch_drop_capture_20261030/acceptance/fabric",
+        "--config",
+        "runs/recovery_terminal_snapshot_20261030/rdma.json",
+        "--messages",
+        "runs/switch_drop_capture_20261030/acceptance/inputs/messages.json",
+        "--backend",
+        "/dev/shm/moe-heavy-loss-20261028/build/output/moe-rdma/ns3.42-moe-rdma-probe",
+        "--output",
+        "runs/recovery_terminal_snapshot_20261030/capture"
+      ]
+    },
+    {
+      "path": "cpu-monitor/probe.json",
+      "sha256": "7d8415b51861a689f2c9af4c83a9b26504078fc71a53daef596df91f74c6c89b",
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 0.1406393339857459,
+      "peak_sampled_group_rss_bytes": 7438336,
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/unit",
+        "-p",
+        "scaleout_recovery_test.py"
+      ]
+    },
+    {
+      "path": "diagnose-monitor/probe.json",
+      "sha256": "12f6b5aae60310547a0f5f60f823934c771c14915aa2e5394403f955d333f0dd",
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 0.1450373189873062,
+      "peak_sampled_group_rss_bytes": 7442432,
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-diagnose",
+        "--run",
+        "runs/recovery_terminal_snapshot_20261030/capture",
+        "--output",
+        "runs/recovery_terminal_snapshot_20261030/diagnosis.json"
+      ]
+    },
+    {
+      "path": "final-analysis-monitor/probe.json",
+      "sha256": "990e727c675cbe0145a68671bfa05c61f5225635b6da3cfc2d8e1e1020a1a0ed",
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 0.14103099901694804,
+      "peak_sampled_group_rss_bytes": 7438336,
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "tests/integration/check_recovery_terminal_snapshot.py",
+        "--run",
+        "runs/recovery_terminal_snapshot_20261030/capture",
+        "--reference",
+        "runs/switch_drop_capture_20261030/acceptance/on",
+        "--output",
+        "runs/recovery_terminal_snapshot_20261030/verification-final.json"
+      ]
+    },
+    {
+      "path": "final-config-monitor/probe.json",
+      "sha256": "ac154d662aec4c0995b064f057e9522020fd7276deb85fd61d5e6debf7f5eff7",
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 0.14509265398373827,
+      "peak_sampled_group_rss_bytes": 7471104,
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/unit",
+        "-p",
+        "scaleout_recovery_test.py"
+      ]
+    },
+    {
+      "path": "final-cpu-monitor/probe.json",
+      "sha256": "e3d62e32d218e2ccbe7cf90936b65ab4fdcee098d0480d3f1c8345994a1a3465",
+      "status": "child_failed",
+      "exit_code": 1,
+      "wall_seconds": 0.4742829699534923,
+      "peak_sampled_group_rss_bytes": 39071744,
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-c",
+        "import unittest; loader=unittest.TestLoader(); suite=unittest.TestSuite(loader.discover(\"tests/unit\",pattern=p) for p in (\"scaleout*test.py\",\"simai_service_test.py\",\"service_stream_test.py\",\"service_terminal_test.py\")); result=unittest.TextTestRunner(verbosity=1).run(suite); raise SystemExit(not result.wasSuccessful())"
+      ]
+    },
+    {
+      "path": "final-cpu-single-thread-monitor/probe.json",
+      "sha256": "86c5bf1223faa7821a1daf2f1599409c40155c35cdcf9841490061f5e531785c",
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 1.6838820510311052,
+      "peak_sampled_group_rss_bytes": 103632896,
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-c",
+        "import unittest; loader=unittest.TestLoader(); suite=unittest.TestSuite(loader.discover(\"tests/unit\",pattern=p) for p in (\"scaleout*test.py\",\"simai_service_test.py\",\"service_stream_test.py\",\"service_terminal_test.py\")); result=unittest.TextTestRunner(verbosity=1).run(suite); raise SystemExit(not result.wasSuccessful())"
+      ],
+      "environment_override": {
+        "OPENBLAS_NUM_THREADS": "1",
+        "OMP_NUM_THREADS": "1"
+      }
+    }
+  ],
+  "resources": {
+    "monitored_wall_seconds_sum_including_overlaps": 12.292126497952268,
+    "run_apparent_bytes": 15998972,
+    "run_allocated_bytes": 16130048,
+    "free_bytes": 33598177280
+  },
+  "new_network_conditions": 1,
+  "network_failure_expected": true,
+  "cpu_tests": 192,
+  "final_boolean_tampering_tests": 7,
+  "preserved_failures": [
+    "capture-monitor: same native retry exhaustion as baseline",
+    "final-cpu-monitor: OpenBLAS allocation failure at unchanged 512MiB RSS/1GiB address limit"
+  ],
+  "runtime_thread_override_scope": "one CPU regression process; no native network environment changes",
+  "versioned_config_matches_native_input": true
+}

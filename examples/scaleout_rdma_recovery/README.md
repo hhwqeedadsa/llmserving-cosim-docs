@@ -58,8 +58,28 @@ python -m moe_ub_cosim scaleout rdma-check --run /dev/shm/recovery-service
 | `max_rto_ns` | 超时后倍增的上限，至少为初值，最多 1 秒。新的累计 ACK 进展恢复初值；重复/过期反馈不延后截止时间。无自适应 RTT 估计。 |
 | `max_retries` | 连续没有 ACK 进展时最多 1—16 次超时重传决策，次数用尽后的下一次超时失败。原生 NACK 重传另外发生；决策次数不等于实际重传包数。 |
 | `max_events` | 源事件与接收端重复 ACK 事件共享记录上限，0—100000。达到上限只截断记录，不改变协议；计数继续累计，完整性显式导出。 |
+| `terminal_snapshot` | 可选布尔值，默认关闭；开启后在Report只读存活源QP的速率、下次允许发送时刻、窗口和发送/确认游标。已清理QP只报告不存在，不猜测最后速率。它不增加事件、不改变恢复决策，且只适用于此处的逐消息GBN。持久传输另有源端速率观测。 |
 
 短超时会产生不必要的重传与反向 ACK。示例 40 μs 是功能验证的声明值，不能直接推广到千卡网络。
+
+排查“多次触发恢复却没有发包”时，可在上述恢复对象中添加 `"terminal_snapshot": true`，再用相同公开probe或service命令生成新目录；成功和失败原件都保留。随后执行 `scaleout rdma-diagnose --run 新目录 --output 新诊断.json`，其 `recovery.terminal_snapshots`给出经过校验的终态观察。该诊断命令不会执行网络，诊断成功也不表示原任务成功。
+
+每个快照包含 `time_ns/qp_present`；QP存活时还包含 `rate_bps/max_rate_bps/next_available_ns/last_packet_model_bytes/snd_nxt_bytes/snd_una_bytes/remaining_bytes/configured_window_bytes/effective_window_bytes/window_blocked/variable_window`。时间单位为ns，速率为bit/s，其余字节字段为B。`next_available_ns`可以早于或晚于采样时刻，只表示节奏门限，不包含PFC、链路和NIC仲裁的完整状态。只有终态，没有历史轨迹；不能据此推断此前所有超时都由限速造成。
+
+`terminal-incast.json`固定一个不需要真实数据或历史结果的失败场景，配合公开生成器使用：
+
+```bash
+python examples/scaleout_switch_drops/prepare.py --output runs/terminal-inputs
+python -m moe_ub_cosim scaleout topology \
+  --config runs/terminal-inputs/topology.json --output runs/terminal-fabric
+python -m moe_ub_cosim scaleout rdma-probe \
+  --topology runs/terminal-fabric --config examples/scaleout_rdma_recovery/terminal-incast.json \
+  --messages runs/terminal-inputs/messages.json --backend "$COSIM_PROBE" --output runs/terminal-incast
+python -m moe_ub_cosim scaleout rdma-diagnose \
+  --run runs/terminal-incast --output runs/terminal-incast-diagnosis.json
+```
+
+其中probe预期返回1并保存重试耗尽；诊断返回0并保留原失败。7个源各发送262144B到一个目标，接入100G、上层25G、缓冲1MiB、分包9000B；不是完整推理或生产校准。每个native条件限60秒、RSS1GiB、地址2GiB、模拟5ms、产物64MiB、结果16MiB，保留8GiB磁盘空间。定向采集的[时序与验收](../../fixtures/recovery_terminal_snapshot/README.md)说明为什么失败早于下一次允许发送；不要将其当作优化收益。
 
 ## 如何判断结果可信
 

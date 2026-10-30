@@ -1,16 +1,51 @@
 """Independent offline checks for the declared native-RDMA recovery extension."""
-from .scaleout_topology import require
+from .scaleout_topology import require, fields, integer
+
+
+def _terminal_snapshot(state, flow, result, enabled):
+    if not enabled:
+        require('terminal_snapshot' not in state, 'undeclared terminal recovery snapshot')
+        return
+    d=state.get('terminal_snapshot',{})
+    require(type(d.get('qp_present')) is bool and d['qp_present']==flow['sender_qp_present'],
+            'terminal recovery QP presence differs')
+    keys='time_ns qp_present'
+    if d['qp_present']:
+        keys+=' rate_bps max_rate_bps next_available_ns last_packet_model_bytes snd_nxt_bytes snd_una_bytes remaining_bytes configured_window_bytes effective_window_bytes window_blocked variable_window'
+    fields(d,keys,'terminal recovery snapshot')
+    integer(d['time_ns'],'terminal recovery time',0,result['finish_ns'])
+    require(d['time_ns']==result['finish_ns'],'terminal recovery snapshot clock differs')
+    if not d['qp_present']:return
+    for key in ('rate_bps','max_rate_bps','last_packet_model_bytes'):
+        integer(d[key],key,1,2**63-1)
+    require(type(d['next_available_ns']) is int and -2**63<=d['next_available_ns']<2**63,
+            'terminal recovery availability must be signed integer nanoseconds')
+    for key in ('snd_nxt_bytes','snd_una_bytes','remaining_bytes','configured_window_bytes','effective_window_bytes'):
+        integer(d[key],key,0,2**63-1)
+    require(type(d['window_blocked']) is bool and type(d['variable_window']) is bool,
+            'terminal recovery window flags must be boolean')
+    require(d['rate_bps']<=d['max_rate_bps'] and
+            d['snd_una_bytes']==state['acknowledged_bytes']<=d['snd_nxt_bytes']<=state['highest_sent_bytes'] and
+            d['remaining_bytes']==flow['bytes']-d['snd_nxt_bytes'],'terminal recovery rate/sequence differs')
+    window=d['configured_window_bytes']
+    if window and d['variable_window']:window=max(1,window*d['rate_bps']//d['max_rate_bps'])
+    require(d['effective_window_bytes']==window and
+            d['window_blocked']==bool(window and d['snd_nxt_bytes']-d['snd_una_bytes']>=window),
+            'terminal recovery window differs')
 
 
 def audit(result):
     if 'recovery' not in result:return dict(available=False)
     r=result['recovery'];c=r['config'];states=r['states'];flows={f['id']:f for f in result['messages']}
+    require('terminal_snapshot' not in c or type(c['terminal_snapshot']) is bool,
+            'terminal recovery snapshot option must be boolean')
     require(len({s['id'] for s in states})==len(states),'duplicate recovery state')
     state_by_id={s['id']:s for s in states}
     totals=0;failed=[];adaptive=c.get('rtt_estimator');floor=adaptive['min_rto_ns'] if adaptive else c['initial_rto_ns']
     for s in states:
         require(s['id'] in flows,'recovery state lacks an actual message')
         f=flows[s['id']];ack,high=s['acknowledged_bytes'],s['highest_sent_bytes']
+        _terminal_snapshot(s,f,result,c.get('terminal_snapshot',False))
         if 'history' in c:
             require(c['initial_rto_ns']<=s['seed_rto_ns']<=c['max_rto_ns'] and type(s['history_hit']) is bool,
                     'invalid history-seeded initial RTO')
@@ -61,6 +96,9 @@ def audit(result):
     summary=dict(available=True,failed=r['failed'],failed_ids=failed,source_states=len(states),
         timeout_retransmissions=totals,duplicate_ack_responses=r['duplicate_ack_responses'],
         reconstructed=False,scope='offline protocol audit; no source policy access to receiver/global truth')
+    if c.get('terminal_snapshot',False):
+        summary['terminal_snapshots']=[dict(message_id=s['id'],source=s['source'],**s['terminal_snapshot'])
+                                       for s in states]
     if not r['complete']:
         if adaptive:summary['rtt']=dict(reconstructed=False,reason='capture_truncated')
         return dict(summary,reason='capture_truncated')

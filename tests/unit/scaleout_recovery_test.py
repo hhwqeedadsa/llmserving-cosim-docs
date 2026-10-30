@@ -50,15 +50,45 @@ class RecoveryConfigTest(unittest.TestCase):
     def test_modes_and_bounds(self):
         base=json.loads((Path(__file__).resolve().parents[2]/'examples/scaleout_rdma/rdma.json').read_text())
         valid=dict(mode='go_back_n',initial_rto_ns=40000,max_rto_ns=160000,max_retries=2,max_events=100000)
-        for config in (dict(mode='native'),valid,dict(valid,max_events=0)):
+        for config in (dict(mode='native'),valid,dict(valid,max_events=0),
+                       dict(valid,terminal_snapshot=True),dict(valid,terminal_snapshot=False)):
             validate_protocol(dict(base,recovery=config))
         for key,value in [('initial_rto_ns',True),('initial_rto_ns',0),('initial_rto_ns',5000001),
                           ('max_rto_ns',39999),('max_retries',0),('max_retries',17),('max_events',100001),
-                          ('max_events',True),('mode','other'),('extra',0)]:
+                          ('max_events',True),('mode','other'),('extra',0),('terminal_snapshot',1),('terminal_snapshot','yes')]:
             with self.subTest(key=key,value=value):
                 with self.assertRaises(ValueError):validate_protocol(dict(base,recovery=dict(valid,**{key:value})))
         for config in (dict(mode='native',max_retries=2),None,{},True):
             with self.assertRaises(ValueError):validate_protocol(dict(base,recovery=config))
+
+    def test_terminal_snapshot_absent_and_closed_qp(self):
+        d=complete();s=d['recovery']['states'][0];s['terminal_snapshot']=dict(time_ns=5,qp_present=False)
+        with self.assertRaisesRegex(ValueError,'undeclared'):audit(d)
+        d['recovery']['config']['terminal_snapshot']=True
+        checked=audit(d)
+        self.assertTrue(checked['reconstructed'])
+        self.assertEqual(checked['terminal_snapshots'],[dict(message_id=8,source=0,time_ns=5,qp_present=False)])
+        bad=deepcopy(d);bad['recovery']['config']['terminal_snapshot']=1
+        with self.assertRaisesRegex(ValueError,'boolean'):audit(bad)
+        s['terminal_snapshot']['qp_present']=True
+        with self.assertRaises(ValueError):audit(d)
+
+    def test_terminal_live_snapshot_checks_progress_and_window(self):
+        d=complete();d.update(passed=False)
+        d['messages'][0].update(ack_callbacks=0,ack_ns=None,sender_qp_present=True,sender_resource_released_ns=None)
+        r=d['recovery'];r['config']['terminal_snapshot']=True
+        r.update(observations=1,events=r['events'][:1]);s=r['states'][0]
+        s.update(acknowledged_bytes=0,state='waiting_ack',deadline_ns=10)
+        s['terminal_snapshot']=dict(time_ns=5,qp_present=True,rate_bps=500,max_rate_bps=1000,
+            next_available_ns=10,last_packet_model_bytes=1000,snd_nxt_bytes=1000,snd_una_bytes=0,
+            remaining_bytes=0,configured_window_bytes=0,effective_window_bytes=0,
+            window_blocked=False,variable_window=False)
+        self.assertTrue(audit(d)['reconstructed'])
+        for key,value in [('time_ns',4),('rate_bps',True),('rate_bps',1001),('snd_una_bytes',1),
+                          ('remaining_bytes',1),('effective_window_bytes',1),('window_blocked',True),
+                          ('next_available_ns',True)]:
+            bad=deepcopy(d);bad['recovery']['states'][0]['terminal_snapshot'][key]=value
+            with self.subTest(key=key),self.assertRaises(ValueError):audit(bad)
 
     def test_old_ack_between_native_pacing_intervals(self):
         d=complete();d.update(finish_ns=25);d['messages'][0]['ack_ns']=25

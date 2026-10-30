@@ -13,6 +13,8 @@ RdmaRecovery::RdmaRecovery(const Json& c,std::function<void(uint64_t)> failed):o
     records_(c.at("max_events"),c.contains("rtt_estimator")),failure_(std::move(failed)) {
   if(c.at("mode")!="go_back_n" || c.at("max_events").get<uint64_t>()>100000)
     throw std::invalid_argument("Invalid explicit recovery mode/event budget");
+  if(c.contains("terminal_snapshot") && !c.at("terminal_snapshot").is_boolean())
+    throw std::invalid_argument("Terminal recovery snapshot must be boolean");
   if(c.contains("rtt_estimator")) {
     const auto& r=c.at("rtt_estimator");
     if(r.at("kind")!="karn")throw std::invalid_argument("Unknown RTT estimator kind");
@@ -147,6 +149,18 @@ RdmaRecovery::Json RdmaRecovery::Report() const {
       {"highest_sent_bytes",t.High()},{"retries_since_progress",t.Retries()},{"timeout_retransmissions",t.TotalRetries()},
       {"timeout_expiries",t.Expiries()},{"current_rto_ns",t.Rto()},{"deadline_ns",t.Deadline()},
       {"state",t.Failed()?"retry_exhausted":t.Complete()?"complete":"waiting_ack"}});
+    if(options_.value("terminal_snapshot",false)) {
+      Json snapshot={{"time_ns",Now()},{"qp_present",bool(s.qp)}};
+      if(s.qp) {
+        const auto& q=s.qp;
+        snapshot.update({{"rate_bps",q->m_rate.GetBitRate()},{"max_rate_bps",q->m_max_rate.GetBitRate()},
+          {"next_available_ns",q->m_nextAvail.GetNanoSeconds()},{"last_packet_model_bytes",q->lastPktSize},
+          {"snd_nxt_bytes",q->snd_nxt},{"snd_una_bytes",q->snd_una},{"remaining_bytes",q->GetBytesLeft()},
+          {"configured_window_bytes",q->m_win},{"effective_window_bytes",q->GetWin()},
+          {"window_blocked",q->IsWinBound()},{"variable_window",q->m_var_win}});
+      }
+      states.back()["terminal_snapshot"]=snapshot;
+    }
     if(options_.contains("history")) {
       states.back()["seed_rto_ns"]=s.seed_rto;states.back()["history_hit"]=s.history_hit;
     }

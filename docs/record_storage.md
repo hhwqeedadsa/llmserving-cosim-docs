@@ -83,6 +83,8 @@ transactions/2新增顶层`local_model/local_work/completed_local_work/pending_l
 
 原生Fabric的顶层`rdma_parameters`保存每个端点初始化后读回的有效属性、单位与适配器覆盖来源。持久字节入口可选`persistent_transport.source_rate_capture`在已有TX/ACK回调内保存QP速率及拥塞状态；时间窗左闭右开，达到容量后再次采样明确失败，终态另列且不受时间窗限制。它不是连续定时器轨迹、测量吞吐或硬件校准，详见[速率观测及字段口径](../examples/scaleout_rdma_streams/README.md#可选的源端速率观测)。
 
+逐消息GBN可选`recovery.terminal_snapshot=true`在最终Report只读源QP。原始字段在`recovery.states[].terminal_snapshot`，公开`rdma-diagnose`校验后放入`recovery.terminal_snapshots`；已清理QP只报告不存在。它不记录PFC/NIC完整状态、不增加仿真事件，也不把恢复请求当作已发出的重传包。字段、单位与边界见[恢复示例](../examples/scaleout_rdma_recovery/README.md)。
+
 原生在线service的`native.stdout.log`按完整行写出；worker接收一条后端控制记录后，先提交给操作系统文件缓冲，再处理前端回复。它减少宿主超时/终止时Python块缓冲导致的整行丢失，不保证断电持久性，也不说明任务已完成。历史版本采用块缓冲，其失败日志中的完成通知数只能作下限；ASTRA异步节点日志也可能有未刷出的尾部。终态仍以成功的`result.json`和独立核验为准。
 
 原生事务`transactions.queue_fences`记录操作的捕获/完成时刻及每个连接的固定target/covered_operations；等待未完成时completed_ns为−1，日志不编码进报文。字段与同ns内捕获规则见[队列前缀等待](../examples/scaleout_rdma_transactions/README.md#等待调用时已有的工作前缀)。

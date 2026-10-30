@@ -1,0 +1,257 @@
+{
+  "passed": true,
+  "network_rerun_by_checker": false,
+  "all_old_simulation_fields_equal": true,
+  "original_run_success": false,
+  "failure": {
+    "message_id": 4,
+    "reason": "recovery_retry_exhausted",
+    "scope": "whole shared simulation stopped; no successful callbacks or credits synthesized; live resources retained for diagnosis until teardown",
+    "time_ns": 861088
+  },
+  "recovery_audit": {
+    "available": true,
+    "failed": true,
+    "failed_ids": [
+      4
+    ],
+    "source_states": 7,
+    "timeout_retransmissions": 36,
+    "duplicate_ack_responses": 3,
+    "reconstructed": true,
+    "scope": "offline protocol audit; no source policy access to receiver/global truth",
+    "terminal_snapshots": [
+      {
+        "message_id": 0,
+        "source": 0,
+        "configured_window_bytes": 0,
+        "effective_window_bytes": 0,
+        "last_packet_model_bytes": 9036,
+        "max_rate_bps": 100000000000,
+        "next_available_ns": 896342,
+        "qp_present": true,
+        "rate_bps": 1562500000,
+        "remaining_bytes": 91144,
+        "snd_nxt_bytes": 171000,
+        "snd_una_bytes": 162000,
+        "time_ns": 861088,
+        "variable_window": false,
+        "window_blocked": false
+      },
+      {
+        "message_id": 1,
+        "source": 1,
+        "configured_window_bytes": 0,
+        "effective_window_bytes": 0,
+        "last_packet_model_bytes": 9036,
+        "max_rate_bps": 100000000000,
+        "next_available_ns": 1035143,
+        "qp_present": true,
+        "rate_bps": 390625000,
+        "remaining_bytes": 163144,
+        "snd_nxt_bytes": 99000,
+        "snd_una_bytes": 90000,
+        "time_ns": 861088,
+        "variable_window": false,
+        "window_blocked": false
+      },
+      {
+        "message_id": 2,
+        "source": 2,
+        "configured_window_bytes": 0,
+        "effective_window_bytes": 0,
+        "last_packet_model_bytes": 9036,
+        "max_rate_bps": 100000000000,
+        "next_available_ns": 905022,
+        "qp_present": true,
+        "rate_bps": 100000000,
+        "remaining_bytes": 136144,
+        "snd_nxt_bytes": 126000,
+        "snd_una_bytes": 126000,
+        "time_ns": 861088,
+        "variable_window": false,
+        "window_blocked": false
+      },
+      {
+        "message_id": 3,
+        "source": 3,
+        "qp_present": false,
+        "time_ns": 861088
+      },
+      {
+        "message_id": 4,
+        "source": 4,
+        "configured_window_bytes": 0,
+        "effective_window_bytes": 0,
+        "last_packet_model_bytes": 9036,
+        "max_rate_bps": 100000000000,
+        "next_available_ns": 910672,
+        "qp_present": true,
+        "rate_bps": 100000000,
+        "remaining_bytes": 136144,
+        "snd_nxt_bytes": 126000,
+        "snd_una_bytes": 126000,
+        "time_ns": 861088,
+        "variable_window": false,
+        "window_blocked": false
+      },
+      {
+        "message_id": 5,
+        "source": 5,
+        "configured_window_bytes": 0,
+        "effective_window_bytes": 0,
+        "last_packet_model_bytes": 9036,
+        "max_rate_bps": 100000000000,
+        "next_available_ns": 925130,
+        "qp_present": true,
+        "rate_bps": 100000000,
+        "remaining_bytes": 127144,
+        "snd_nxt_bytes": 135000,
+        "snd_una_bytes": 135000,
+        "time_ns": 861088,
+        "variable_window": false,
+        "window_blocked": false
+      },
+      {
+        "message_id": 6,
+        "source": 6,
+        "qp_present": false,
+        "time_ns": 861088
+      }
+    ],
+    "completed": 2,
+    "exhausted": 1,
+    "silence_bounds": [
+      {
+        "id": 0,
+        "origin_ns": 828896,
+        "reset_rto_ns": 40000,
+        "no_progress_budget_ns": 600000,
+        "failure_deadline_ns": 1428896,
+        "outcome": "execution_stopped_before_or_at_bound",
+        "assumptions": "source timer armed; no subsequent cumulative ACK progress; simulator processes timer events"
+      },
+      {
+        "id": 1,
+        "origin_ns": 692996,
+        "reset_rto_ns": 40000,
+        "no_progress_budget_ns": 600000,
+        "failure_deadline_ns": 1292996,
+        "outcome": "execution_stopped_before_or_at_bound",
+        "assumptions": "source timer armed; no subsequent cumulative ACK progress; simulator processes timer events"
+      },
+      {
+        "id": 2,
+        "origin_ns": 327120,
+        "reset_rto_ns": 40000,
+        "no_progress_budget_ns": 600000,
+        "failure_deadline_ns": 927120,
+        "outcome": "execution_stopped_before_or_at_bound",
+        "assumptions": "source timer armed; no subsequent cumulative ACK progress; simulator processes timer events"
+      },
+      {
+        "id": 4,
+        "origin_ns": 261088,
+        "reset_rto_ns": 40000,
+        "no_progress_budget_ns": 600000,
+        "failure_deadline_ns": 861088,
+        "outcome": "failed_at_bound",
+        "assumptions": "source timer armed; no subsequent cumulative ACK progress; simulator processes timer events"
+      },
+      {
+        "id": 5,
+        "origin_ns": 266872,
+        "reset_rto_ns": 40000,
+        "no_progress_budget_ns": 600000,
+        "failure_deadline_ns": 866872,
+        "outcome": "execution_stopped_before_or_at_bound",
+        "assumptions": "source timer armed; no subsequent cumulative ACK progress; simulator processes timer events"
+      }
+    ]
+  },
+  "switch_drops": {
+    "complete": true,
+    "selected_observations": 28,
+    "saved_events": 28,
+    "all_switch_drops": 28,
+    "all_switch_reason_counts": [
+      28,
+      0,
+      0,
+      0
+    ],
+    "scope": "all-switch aggregate counters plus selected detail; not device/injection loss totals"
+  },
+  "packet_events": 6830,
+  "source": 4,
+  "message_id": 4,
+  "terminal_snapshot": {
+    "configured_window_bytes": 0,
+    "effective_window_bytes": 0,
+    "last_packet_model_bytes": 9036,
+    "max_rate_bps": 100000000000,
+    "next_available_ns": 910672,
+    "qp_present": true,
+    "rate_bps": 100000000,
+    "remaining_bytes": 136144,
+    "snd_nxt_bytes": 126000,
+    "snd_una_bytes": 126000,
+    "time_ns": 861088,
+    "variable_window": false,
+    "window_blocked": false
+  },
+  "last_source_data_tx_ns": 187792,
+  "last_ack_progress_ns": 261088,
+  "timeout_requests_after_progress_ns": [
+    301088,
+    381088,
+    541088,
+    701088
+  ],
+  "actual_data_tx_after_progress": 0,
+  "last_source_pfc_rx_ns": 66349,
+  "source_ports": [
+    {
+      "control_tx_bytes": 0,
+      "data_packets": 25,
+      "data_tx_bytes": 225900,
+      "delay_ns": 1000,
+      "ecn_ce_seen": 0,
+      "max_queue_at_hook_bytes": 0,
+      "model_tx_bytes": 225900,
+      "node": 4,
+      "peer": 12,
+      "pfc_pause": 6,
+      "pfc_resume": 6,
+      "port": 1,
+      "rate_bps": 100000000000,
+      "tier": "access"
+    }
+  ],
+  "native_source_attributes": {
+    "AlphaResumInterval": 55.0,
+    "CcMode": 1,
+    "ClampTargetRate": false,
+    "EwmaGain": 0.0625,
+    "FastRecoveryTimes": 5,
+    "L2AckInterval": 1,
+    "L2BackToZero": false,
+    "L2ChunkSize": 9000,
+    "MinRate": 100000000,
+    "Mtu": 9000,
+    "RPTimer": 1500.0,
+    "RateAI": 5000000,
+    "RateBound": true,
+    "RateDecreaseInterval": 4.0,
+    "RateHAI": 50000000,
+    "RateOnFirstCnp": 1.0,
+    "TotalPauseTimes": 0
+  },
+  "pacing_deadline_after_stop": true,
+  "pacing_deadline_minus_stop_ns": 49584,
+  "source_last_tx_to_deadline_ns": 722880,
+  "scope": "read-only terminal QP facts and complete packet/timer history; not a new recovery algorithm, production calibration, or gain",
+  "cpu_tests": 192,
+  "final_targeted_tests": 7,
+  "native_libraries_unchanged": true
+}

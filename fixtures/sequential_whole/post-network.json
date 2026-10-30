@@ -1,0 +1,230 @@
+{
+  "passed": true,
+  "actual_relocated_runs": 2,
+  "checks": {
+    "normal": {
+      "passed": true,
+      "relocated_public_verification": {
+        "passed": true,
+        "transport": "astra_persistent_streams/1",
+        "frontend": "actual_LLMServingSim",
+        "gpu_count": 128,
+        "messages": 992,
+        "remote_payload_bytes": 14316544,
+        "verified_nodes": 4672,
+        "waves": 6,
+        "finish_ns": 197577,
+        "packet_events_checked": 69924,
+        "source_payload_bytes": 14316544,
+        "receiver_accepted_bytes": 14316544,
+        "hardware_calibrated": false,
+        "scope": "actual ASTRA scheduling and persistent message intervals; finite service; not calibrated hardware",
+        "timing_status": "complete",
+        "timing_reason": null,
+        "application_finished_ns": 140083,
+        "network_drained_ns": 197577,
+        "network_stopped_ns": 197577,
+        "post_application_drain_ns": 57494,
+        "timing_scope": "delayed_whole_finite_segment/1",
+        "attempts_finished_ns": 197577,
+        "execution_observation": {
+          "schema_version": "moe-execution-observation/1",
+          "events": 13319,
+          "last_time_ns": 197577,
+          "service_drained_ns": 197577,
+          "registered_graphs": 6,
+          "retired_graphs": 6,
+          "nodes": 4672,
+          "node_completions": 4672,
+          "messages": 992,
+          "receiver_completions": 992,
+          "sender_completions": 992,
+          "scope": "passive_actual_callbacks_no_recovery_or_tensor_validation"
+        }
+      },
+      "rejected_mutations": [
+        {
+          "case": "target_deadline",
+          "error": "Scale-Out topology: delayed decision identity/deadline differs"
+        },
+        {
+          "case": "healthy_deadline",
+          "error": "Scale-Out topology: delayed decision identity/deadline differs"
+        },
+        {
+          "case": "swapped_replica_groups",
+          "error": "Scale-Out topology: delayed submission differs from actual prefix policy"
+        },
+        {
+          "case": "missing_call",
+          "error": "Scale-Out topology: delayed result differs from native prefix policy"
+        },
+        {
+          "case": "timer_replacement",
+          "error": "Scale-Out topology: native wakeup lifecycle differs from actual control transcript"
+        },
+        {
+          "case": "healthy_fake_execution",
+          "error": "Scale-Out topology: delayed result differs from native prefix policy"
+        },
+        {
+          "case": "healthy_fake_ITL",
+          "error": "Scale-Out topology: skipped replica must remain unexecuted with no fabricated completion"
+        },
+        {
+          "case": "healthy_borrowed_deadline",
+          "error": "Scale-Out topology: delayed result differs from native prefix policy"
+        },
+        {
+          "case": "healthy_early_result",
+          "error": "Scale-Out topology: delayed result differs from native prefix policy"
+        },
+        {
+          "case": "healthy_KV_release",
+          "error": "Scale-Out topology: standby KV reservation/release differs from source contexts and actual lifecycle"
+        },
+        {
+          "case": "target_KV_release",
+          "error": "Scale-Out topology: standby KV reservation/release differs from source contexts and actual lifecycle"
+        },
+        {
+          "case": "missing_final_step",
+          "error": "Scale-Out topology: delayed result differs from native prefix policy"
+        },
+        {
+          "case": "intermediate_as_result",
+          "error": "Scale-Out topology: delayed result differs from native prefix policy"
+        },
+        {
+          "case": "early_second_step",
+          "error": "Scale-Out topology: delayed result differs from native prefix policy"
+        },
+        {
+          "case": "KV_release_at_first_step",
+          "error": "Scale-Out topology: standby KV reservation/release differs from source contexts and actual lifecycle"
+        },
+        {
+          "case": "unknown_source_upgraded_to_published",
+          "error": "Real traces require a fixed dataset revision"
+        }
+      ],
+      "original_files_unchanged": true,
+      "restored_copy_identical": true,
+      "new_network_executions": 0
+    },
+    "local": {
+      "passed": true,
+      "relocated_public_verification": {
+        "passed": true,
+        "transport": "astra_persistent_streams/1",
+        "frontend": "actual_LLMServingSim",
+        "gpu_count": 128,
+        "messages": 992,
+        "remote_payload_bytes": 14316544,
+        "verified_nodes": 4672,
+        "waves": 6,
+        "finish_ns": 203067,
+        "packet_events_checked": 70610,
+        "source_payload_bytes": 14359936,
+        "receiver_accepted_bytes": 14316544,
+        "hardware_calibrated": false,
+        "scope": "actual ASTRA scheduling and persistent message intervals; finite service; not calibrated hardware",
+        "timing_status": "complete",
+        "timing_reason": null,
+        "application_finished_ns": 200046,
+        "network_drained_ns": 203067,
+        "network_stopped_ns": 203067,
+        "post_application_drain_ns": 3021,
+        "timing_scope": "delayed_whole_finite_segment/1",
+        "attempts_finished_ns": 203067,
+        "execution_observation": {
+          "schema_version": "moe-execution-observation/1",
+          "events": 13319,
+          "last_time_ns": 203067,
+          "service_drained_ns": 203067,
+          "registered_graphs": 6,
+          "retired_graphs": 6,
+          "nodes": 4672,
+          "node_completions": 4672,
+          "messages": 992,
+          "receiver_completions": 992,
+          "sender_completions": 992,
+          "scope": "passive_actual_callbacks_no_recovery_or_tensor_validation"
+        }
+      },
+      "rejected_mutations": [
+        {
+          "case": "target_deadline",
+          "error": "Scale-Out topology: delayed decision identity/deadline differs"
+        },
+        {
+          "case": "healthy_deadline",
+          "error": "Scale-Out topology: delayed decision identity/deadline differs"
+        },
+        {
+          "case": "swapped_replica_groups",
+          "error": "Scale-Out topology: delayed submission differs from actual prefix policy"
+        },
+        {
+          "case": "missing_call",
+          "error": "Scale-Out topology: delayed result differs from native prefix policy"
+        },
+        {
+          "case": "timer_replacement",
+          "error": "Scale-Out topology: native wakeup lifecycle differs from actual control transcript"
+        },
+        {
+          "case": "healthy_fake_execution",
+          "error": "Scale-Out topology: delayed result differs from native prefix policy"
+        },
+        {
+          "case": "healthy_fake_ITL",
+          "error": "Scale-Out topology: skipped replica must remain unexecuted with no fabricated completion"
+        },
+        {
+          "case": "healthy_borrowed_deadline",
+          "error": "Scale-Out topology: delayed result differs from native prefix policy"
+        },
+        {
+          "case": "healthy_early_result",
+          "error": "Scale-Out topology: delayed result differs from native prefix policy"
+        },
+        {
+          "case": "healthy_KV_release",
+          "error": "Scale-Out topology: standby KV reservation/release differs from source contexts and actual lifecycle"
+        },
+        {
+          "case": "target_KV_release",
+          "error": "Scale-Out topology: standby KV reservation/release differs from source contexts and actual lifecycle"
+        },
+        {
+          "case": "missing_final_step",
+          "error": "Scale-Out topology: delayed result differs from native prefix policy"
+        },
+        {
+          "case": "intermediate_as_result",
+          "error": "Scale-Out topology: delayed result differs from native prefix policy"
+        },
+        {
+          "case": "early_second_step",
+          "error": "Scale-Out topology: delayed result differs from native prefix policy"
+        },
+        {
+          "case": "KV_release_at_first_step",
+          "error": "Scale-Out topology: standby KV reservation/release differs from source contexts and actual lifecycle"
+        },
+        {
+          "case": "unknown_source_upgraded_to_published",
+          "error": "Real traces require a fixed dataset revision"
+        }
+      ],
+      "original_files_unchanged": true,
+      "restored_copy_identical": true,
+      "new_network_executions": 0
+    }
+  },
+  "rejected_mutations": 32,
+  "new_network_executions": 0,
+  "test_sha256": "963dab74023c6c8cab2b9226b1e60883c912a3e34dcb83baaf0eda0162e74d6c",
+  "scope": "Complete multi-Decode histories, distinct per-call deadlines, held scheduler/KV and no first-step-as-result; not an algorithm benefit"
+}

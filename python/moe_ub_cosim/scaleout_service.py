@@ -136,6 +136,8 @@ def routes(config, group, step, layer):
 
 
 def make_wave(config, group, group_index, step, planes, replay=None):
+    if replay and config.get('route_replay',{}).get('request_layout')=='sparse_active_groups/1':
+        require(group_index in replay.active_group_indices,'inactive EP group has no admitted graph')
     m, w, cost = config['model'], config['workload'], config['compute']
     graph = f'g{group_index}.w{step}'
     nodes = {r: [] for r in group}; next_node = {r: 1 for r in group}; previous = {r: [] for r in group}
@@ -288,6 +290,8 @@ class Frontend:
         m, w = config['model'], config['workload']; block_size = 16
         self.schedulers, self.requests = {}, []
         self.groups = config['parallel']['groups']; self.active = {}; self.steps = [0]*len(self.groups)
+        self.admitted_groups=(replay.active_group_indices if replay and replay.request_layout=='sparse_active_groups/1'
+                              else list(range(len(self.groups))))
         self.history = []; self.calls = 0
         # Explicit local KV reservation for a finite ready-KV segment. This is a
         # resource model declaration, not full-model A100 capacity validation.
@@ -332,6 +336,7 @@ class Frontend:
             history['finished_ns']=now; self.steps[index]+=1
         submissions=[]
         for index,group in enumerate(self.groups):
+            if index not in self.admitted_groups:continue
             if self.steps[index]>=self.config['workload']['decode_steps'] or any(i==index for i,_,_ in self.active.values()):
                 continue
             require(all(r in event['available_rank_ids'] for r in group), 'backend group unavailable')
@@ -354,7 +359,7 @@ class Frontend:
                 batch_ids={str(r):b.batch_id for r,b in batches.items()})
             self.history.append(history); self.active[wave['graph_id']]=(index,batches,history)
             submissions.append(str(directory))
-        finished=not self.active and all(self.steps[i]==self.config['workload']['decode_steps'] for i in range(len(self.groups)))
+        finished=not self.active and all(self.steps[i]==self.config['workload']['decode_steps'] for i in self.admitted_groups)
         if finished:
             require(all(s.is_request_empty() and s.kv.npu_pool.used_bytes()==0 for s in self.schedulers.values()),
                     'final scheduler/KV state is not empty')
@@ -467,6 +472,8 @@ def _worker(config_path,topology_path,protocol_path,backend,protoc,output,timing
             requests=[dict(id=q.id,state=q.status.name,computed_tokens=q.num_computed_tokens,
                            reached_tokens=q.num_tokens_reached,intertoken_ns=q.itl) for q in frontend.requests])
         if whole:report['whole_call_replication']=whole.snapshot()
+        if replay and replay.request_layout=='sparse_active_groups/1':
+            report['admitted_group_indices']=list(frontend.admitted_groups)
         if replay:
             report.update(route_source=replay.manifest['source']['kind'],completion_semantics='observation_window_ended_not_EOS')
             for q in report['requests']:

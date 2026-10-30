@@ -31,3 +31,9 @@ PYTHONPATH=python .venv/frontend/bin/python -B examples/scaleout_whole_call/prep
 查看`whole-preparation.json`、`route_evidence.json`、`whole_call_events.jsonl`及`whole_call_report.json`，区分源文件数、逻辑请求、物理尝试、结果、全部尝试退出和网络排空。准备不执行网络；新机器继续用公开`rdma-build`。本功能没有新原生选项，不要求重编已有支持执行事件的后端。
 
 接口和成本边界见[完整说明](../../docs/whole_call.md)。完整副本是成熟基线；没有原地SR和延迟备用对照时，不将两次尝试的时间差当成净恢复收益。
+
+## 在相同部署中准备无冗余控制
+
+给上面的准备命令增加`--include-primary-control`，会另生成`service-primary.json`。它保留相同128端点、两组EP64、全部连接绑定、专家部署、原始请求和原尝试图，只取消副本执行；显式使用`sparse_active_groups/1`允许第二组没有请求。仍用相同的`rdma-run/rdma-check`，将`--config`换为`service-primary.json`，输出使用新目录。
+
+此控制不删除网络节点或改变EP大小，也不为备用组虚构请求/KV。normal仍用`rdma.json`，local仍用准备时已固定的`rdma-whole-local.json`。这是无副本控制，不是延迟备用；副本初态建立、延迟启动和其他请求负载须另研究。

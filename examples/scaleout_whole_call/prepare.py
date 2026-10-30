@@ -4,6 +4,7 @@ No downloads, execution, numerical tensor checks or hardware calibration.
 """
 import argparse
 from collections import Counter
+from copy import deepcopy
 import hashlib
 import json
 from pathlib import Path
@@ -26,6 +27,7 @@ def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--output',type=Path,required=True)
     p.add_argument('--source-manifest',type=Path)
     p.add_argument('--max-source-files',type=int,default=4)
+    p.add_argument('--include-primary-control',action='store_true',help='Also prepare a no-redundancy control on the identical deployment')
     a=p.parse_args();out=a.output.resolve()
     if not 1<=a.max_source_files<=16:raise ValueError('max source files must be 1..16')
     subprocess.run([sys.executable,'-B',str(ROOT/'examples/scaleout_source_ack_watchdog/prepare.py'),
@@ -61,6 +63,11 @@ def main():
     topology=load(out/'topology/topology.json')
     for protocol in (normal,local):validate(c,topology,protocol,Replay(c,ROOT))
     save(out/'service-whole.json',c)
+    if a.include_primary_control:
+        primary=deepcopy(c);primary.pop('whole_call_replication')
+        primary['route_replay']['request_layout']='sparse_active_groups/1'
+        for protocol in (normal,local):validate(primary,topology,protocol,Replay(primary,ROOT))
+        save(out/'service-primary.json',primary)
     save(out/'whole-preparation.json',dict(passed=True,network_executed=False,simulated_endpoints=128,
         expert_parallel_groups=[64,64],source_kind=replay.manifest['source']['kind'],
         unique_source_files=len(replay.selected['files']),logical_requests=len(replay.records)//2,

@@ -1,5 +1,7 @@
 # 观测记录与存储格式
 
+有限片段持久服务显式选择`sparse_active_groups/1`时，`frontend.admitted_group_indices`保存实际准入组索引；`route_evidence`另含`inactive_group_indices`及空闲组范围说明。无源整组没有图、请求或KV，`parallel.groups`和物理端点仍完整保留。默认及旧稀疏模式不新增此字段，接口见[空闲EP组](../examples/scaleout_sparse_clos/README.md#保留部署但让整个ep组空闲)。
+
 显式`whole_call_replication`新增`whole_call_events.jsonl`、`whole_call_report.json`及`frontend.whole_call_replication`，只取整图退休作为完整结果。公共时间增加`timing_scope=eager_whole_finite_segment/1`、`attempts_finished_ns`；此模式application取逻辑call完整赢家，终态COMMIT仍等全部物理图。默认口径不变；来源派生、三个时间和失败边界见[完整片段副本](whole_call.md)。
 
 可选`contribution_tracking`新增`contribution_calls.jsonl`和`contribution_summary.json`，分别保存每个token/原始层的贡献包/实际节点与消息绑定、生命周期记录及完整覆盖/退休计数。`input_identity`显式为仿真来源，没有激活张量摘要。源确认与图退出后才关闭相应逻辑义务，不能把重复引用当多份物理分配。格式、口径与核验见[贡献绑定](contribution_binding.md)。

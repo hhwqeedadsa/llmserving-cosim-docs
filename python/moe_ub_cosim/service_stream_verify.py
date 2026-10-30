@@ -91,6 +91,9 @@ def verify(directory):
     verify_phases(waves,service,r,events)
     for index in range(len(service['parallel']['groups'])):
         history=sorted((h for h in f['history'] if h['group_index']==index),key=lambda h:h['step'])
+        if not simai and replay and replay.request_layout=='sparse_active_groups/1' and index not in replay.active_group_indices:
+            require(not history,'inactive EP group executed undeclared work')
+            continue
         require([h['step'] for h in history]==list(range(service['workload']['decode_steps'])) and
                 history[0]['start_ns']==0 and all(b['start_ns']==a['finished_ns'] for a,b in zip(history,history[1:])),
                 'next batch did not follow actual preceding completion')

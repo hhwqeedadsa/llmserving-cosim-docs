@@ -34,6 +34,14 @@ PYTHONPATH=python python -m moe_ub_cosim scaleout rdma-check --run /path/to/new/
 
 每个EP组至少有一个来源请求；重复slot、重复文件或相同SHA内容冒充不同原件、越界和来源窗口不足都会拒绝。没有请求的rank不创建调度请求或KV预留，本地Attention/打包/归并的token工作量为0；它仍持有专家权重，并根据实际收到的贡献执行专家计算及回传。支持有限MoE片段及现有全MoE GQA声明；这不会补齐完整R1所需的Dense/MLA模型。
 
+### 保留部署但让整个EP组空闲
+
+有限片段持久连接服务`moe-scaleout-service/1`可显式选择`sparse_active_groups/1`：只给包含来源请求的EP组提交图，其余组仍保留物理端点、链路与专家部署声明，但不创建请求、KV、零工作图或伪造完成步。它用于相同部署下的无冗余控制，不能理解成关闭交换机或把128卡拓扑缩成64卡。
+
+至少要有一个来源请求；旧`sparse_explicit/1`仍要求每组有源。本模式暂不与完整副本、单贡献备用、贡献跟踪或ACK-watchdog同时使用。活动组内无来源rank依然参与完整门限、专家计算与回传；仅整个无源组不执行。`frontend.admitted_group_indices`及`route_evidence`记录活动组，公开检查拒绝给空闲组补入图。
+
+可用[完整副本示例](../scaleout_whole_call/README.md)的`--include-primary-control`准备相同两组EP64部署的单份执行。备用组不持有这批请求的重复KV；比较时应单列这项实际内存占用差异，而不是把双副本的初态建立成本当作已模拟。
+
 采用已有三层Clos参考结构：每64个端点一个Pod，每服务器8卡，每Pod四ToR和四Agg，共四Core；单rail/plane、各层链路400Gb/s、每跳1µs。ToR和Agg各有4:1下行/上行带宽比，不能称为无阻塞网络。GPU类型仅是描述标签。同机流量在本例也经RDMA，机内旁路显式关闭；采用已有`port_dense`交换机计数存储，不改变交换网络。
 
 只为这些固定请求实际使用的`(src,dst,plane)`集合配置持久连接，覆盖全部声明层和步数。这不提高平台4096连接上限，不是任意路由变化下的动态建连；更换路由后必须重算完整窗口的连接集合。仍由实际SEND发布和ACK/接收事件推进，准备时没有注入固定的通信时刻。

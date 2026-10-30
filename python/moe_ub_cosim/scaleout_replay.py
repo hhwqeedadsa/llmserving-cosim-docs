@@ -35,8 +35,13 @@ class Replay:
                (' request_layout' if 'request_layout' in spec else '')+
                (' expert_to_group_rank' if 'expert_to_group_rank' in spec else ''), 'route replay')
         self.request_layout = spec.get('request_layout', 'dense_per_rank/1')
-        require(self.request_layout in ('dense_per_rank/1', 'sparse_explicit/1'),
+        require(self.request_layout in ('dense_per_rank/1', 'sparse_explicit/1', 'sparse_active_groups/1'),
                 'unsupported replay request layout')
+        if self.request_layout=='sparse_active_groups/1':
+            require(config['schema_version']=='moe-scaleout-service/1' and 'transport' in config and
+                    'whole_call_replication' not in config and 'inflight_helpers' not in config and
+                    'contribution_tracking' not in config and 'source_ack_watchdog' not in config,
+                    'active-group replay requires finite persistent service without replica/helper observers')
         budget = spec['budget']
         fields(budget, 'max_files max_bytes', 'replay budget')
         integer(budget['max_files'], 'replay max files', 1, 4096)
@@ -88,10 +93,11 @@ class Replay:
         if self.request_layout == 'dense_per_rank/1':
             require(seen_slots == {(r,s) for r in ranks for s in range(w['batch_per_rank'])},
                     'replay must explicitly supply every scheduled request; no cycling or cloning')
-        else:
+        elif self.request_layout=='sparse_explicit/1':
             require(all(any(rank in group for rank, _ in seen_slots)
                         for group in source_groups(config)),
                     'each sparse EP group needs at least one explicit source request')
+        else:require(bool(seen_slots),'active-group replay needs at least one explicit source request')
         if whole_option:
             primary_ranks={r for g in source_groups(config) for r in g}
             require(all(rank in primary_ranks for rank,_ in seen_slots),'whole source request placed in replica group')
@@ -127,6 +133,8 @@ class Replay:
         derive_replicas(config,self.records)
         self._rank_ids = {r: sorted(i for i, row in self.records.items() if row['rank_id'] == r)
                           for r in ranks}
+        self.active_group_indices=[i for i,g in enumerate(config['parallel']['groups'])
+                                   if any(self._rank_ids[r] for r in g)]
 
     def request_ids(self, rank):
         """Stable rank/slot identities; absent slots never create requests."""
@@ -175,4 +183,8 @@ class Replay:
             provenance.update(logical_requests=sum('replica_of' not in r for r in self.records.values()),
                 execution_attempt_requests=len(self.records),intentional_replica_derivation=True,
                 equivalent_ready_kv_verified=False)
+        if self.request_layout=='sparse_active_groups/1':
+            provenance.update(admitted_group_indices=self.active_group_indices,
+                inactive_group_indices=[i for i in range(len(self.config['parallel']['groups'])) if i not in self.active_group_indices],
+                inactive_groups='deployed_experts_and_endpoints_retained; no_requests_KV_or_graph_execution')
         return c, provenance

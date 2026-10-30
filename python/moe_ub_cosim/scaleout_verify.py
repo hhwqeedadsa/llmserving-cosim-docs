@@ -40,6 +40,11 @@ def event_time(events, graph, rank, node, kind):
 def verify_replay_requests(config, replay, frontend):
     """Cross-check actual scheduler selection, not only regenerated graphs."""
     ids=set(replay.records)
+    if replay.request_layout=='sparse_active_groups/1':
+        require(frontend.get('admitted_group_indices')==replay.active_group_indices,
+                'admitted EP groups differ from explicit source requests')
+        require(all(h['group_index'] in replay.active_group_indices for h in frontend['history']),
+                'inactive EP group executed undeclared work')
     requests=frontend['requests']
     require({q['id'] for q in requests}==ids and len(requests)==len(ids),
             'missing/duplicate replay request')

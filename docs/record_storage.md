@@ -1,5 +1,7 @@
 # 观测记录与存储格式
 
+可选`contribution_tracking`新增`contribution_calls.jsonl`和`contribution_summary.json`，分别保存每个token/原始层的贡献包/实际节点与消息绑定、生命周期记录及完整覆盖/退休计数。`input_identity`显式为仿真来源，没有激活张量摘要。源确认与图退出后才关闭相应逻辑义务，不能把重复引用当多份物理分配。格式、口径与核验见[贡献绑定](contribution_binding.md)。
+
 LLMServingSim Scale-Out服务可选的`execution_events.jsonl`保存实际节点/消息事件，`execution_observation.json`保存已验证前缀摘要；`result.service.execution_events`给出原生计数与上限。时间为同一ns-3绝对纳秒，同时间按sequence排序，失败不补全。字段、接收/源确认/退出口径及独立核验见[实时执行事件](execution_events.md)。
 
 离线`contribution-check`保存原样`input.json`与`moe-contribution-state/1`格式`report.json`。其中`transcript_sha256`是回调输入文件hash；`logical_complete_ns`、`all_started_attempts_retired`及`declared_call_retirable`分别记录声明贡献到齐和资源退出，不能当网络仿真结果。`events`保留输入顺序、time_ns、sequence和outcome，人工时刻不代表设备测量；身份、预算和字段定义见[贡献包说明](contribution_attempts.md)。

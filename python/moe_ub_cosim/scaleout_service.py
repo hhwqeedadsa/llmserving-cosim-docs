@@ -23,16 +23,19 @@ from .native_control import event as control_event
 from .phase_completion import enabled as phase_enabled
 from .token_transport import configuration as token_configuration, payload_sizes
 from .execution_events import configuration as event_configuration, ExecutionObserver
+from .contribution_binding import configuration as binding_configuration, ContributionBinding
 
 
 def validate(c, topology, rdma, replay=None):
     fields(c, 'schema_version model workload parallel compute'+(' route_replay' if 'route_replay' in c else '')+
            (' transport' if 'transport' in c else '')+(' phase_completion' if 'phase_completion' in c else '')+
            (' token_transport' if 'token_transport' in c else '')+
-           (' execution_events' if 'execution_events' in c else ''), 'service')
+           (' execution_events' if 'execution_events' in c else '')+
+           (' contribution_tracking' if 'contribution_tracking' in c else ''), 'service')
     phase_enabled(c)
     token_configuration(c)
     event_configuration(c)
+    binding_configuration(c)
     extended=c['schema_version']=='moe-scaleout-service/2'
     require(c['schema_version'] in ('moe-scaleout-service/1','moe-scaleout-service/2'), 'unsupported service schema')
     budget=limits(rdma)
@@ -85,6 +88,9 @@ def validate(c, topology, rdma, replay=None):
         for group in p['groups']:
             for rank in group if replay else group[:1]:
                 capacity(c,len(group),replay.contexts(rank) if replay else None)
+    if binding_configuration(c):
+        from .contribution_binding import preflight
+        preflight(c,replay)
     # Every pair still needs a common switch component; GPUs never bridge
     # components. Avoid rebuilding the whole graph for each 128-pair batch.
     from .scaleout_connectivity import validate_groups
@@ -373,6 +379,7 @@ def _worker(config_path,topology_path,protocol_path,backend,protoc,output,timing
     command.extend(native_arguments(c,output))
     transcript=[]; child=None
     observation=ExecutionObserver(event_configuration(c)) if event_configuration(c) else None
+    binding=ContributionBinding(c,replay,observation) if binding_configuration(c) else None
     event_file=(output/'execution_events.jsonl').open('x',buffering=1) if observation else None
     try:
         # A host-budget kill must not lose already-read complete control lines
@@ -386,13 +393,16 @@ def _worker(config_path,topology_path,protocol_path,backend,protoc,output,timing
                 event=control_event(line,observations=observation is not None)
                 if event is None:continue
                 if event['type']=='OBSERVE':
-                    observation.accept(event)
+                    if binding:binding.accept(event)
+                    else:observation.accept(event)
                     event_file.write(json.dumps(event,separators=(',',':'))+'\n')
                     continue
                 with timing.span('frontend_decide'):reply=frontend.decide(event,output,proto)
                 if observation:
                     for submission in reply['submissions']:
-                        observation.register(checked_json(Path(submission)/'wave.json',268435456))
+                        wave=checked_json(Path(submission)/'wave.json',268435456)
+                        if binding:binding.register(wave)
+                        else:observation.register(wave)
                 transcript.append(dict(event=event,reply=reply))
                 child.stdin.write(json.dumps(reply)+'\n');child.stdin.flush()
             code=child.wait();require(code==0, 'native service failed; inspect native.stderr.log')
@@ -402,6 +412,7 @@ def _worker(config_path,topology_path,protocol_path,backend,protoc,output,timing
             save(output/'execution_observation.json',observation.snapshot())
         if child is not None and child.poll() is None:
             child.terminate();child.wait(timeout=5)
+        if binding:binding.write(output)
         report=dict(history=frontend.history,transcript=transcript,scheduler_calls=frontend.calls,
             active_source_ranks=sorted(frontend.schedulers),
             scheduler_source='pinned_LLMServingSim_ConfiguredScheduler_initialization_only',
@@ -451,6 +462,13 @@ def run(config, topology, protocol, backend, output, protoc='protoc', *, host_ti
         provenance=checked_json(output/'provenance.json',65536)
         provenance['execution_events']=dict(c['execution_events'])
         for name in ('execution_events.py','native_control.py'):
+            module=ROOT/'python/moe_ub_cosim'/name
+            provenance['hashes'][str(module)]=digest(module)
+        save(output/'provenance.json',provenance)
+    if binding_configuration(c):
+        provenance=checked_json(output/'provenance.json',65536)
+        provenance['contribution_tracking']=dict(c['contribution_tracking'])
+        for name in ('contribution_binding.py','contribution_attempts.py'):
             module=ROOT/'python/moe_ub_cosim'/name
             provenance['hashes'][str(module)]=digest(module)
         save(output/'provenance.json',provenance)

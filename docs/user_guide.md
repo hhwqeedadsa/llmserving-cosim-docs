@@ -1,5 +1,7 @@
 # 用户指南
 
+需要跟踪每个原请求的专家贡献何时收到输入、完成计算、返回结果及退出，可显式开启[贡献绑定](contribution_binding.md)，使用[128端点Clos独立示例](../examples/scaleout_contribution_tracking/README.md)。时间来自同一次实际执行；没有激活张量或备用恢复。
+
 需要在运行中区分节点完成、消息接收、发送确认和任务图退出时，可在LLMServingSim Scale-Out服务配置显式开启[实时执行事件](execution_events.md)。它使用实际回调，只观察、不触发备用执行；默认关闭。
 
 检查专家贡献包的原/备用回调、重复结果与资源退出，可用`scaleout contribution-check`和[自包含人工例](../examples/contribution_attempts/README.md)。这是无计时CPU状态检查，尚不接入ASTRA/ns-3服务；退出0表示事件合法，完整覆盖和资源退休须分别查看报告。

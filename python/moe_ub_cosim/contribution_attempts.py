@@ -52,15 +52,29 @@ class ContributionAttempts:
 
     def __init__(self, spec):
         fields(spec, 'schema_version invocation expected_experts bundles replicas limits', 'specification')
-        require(spec['schema_version'] == 'moe-contribution-attempts/1', 'unsupported specification schema')
+        require(spec['schema_version'] in ('moe-contribution-attempts/1', 'moe-contribution-attempts/2'), 'unsupported specification schema')
         context = spec['invocation']
-        fields(context, 'request_id decode_step source_layer token_position execution_sha256 input_sha256 routing_sha256', 'invocation')
+        modeled = spec['schema_version'] == 'moe-contribution-attempts/2'
+        fields(context, 'request_id decode_step source_layer execution_sha256 routing_sha256 '+
+               ('token_coordinate input_identity' if modeled else 'token_position input_sha256'), 'invocation')
         identity(context['request_id'])
-        for name in ('decode_step', 'token_position'):
+        for name in ('decode_step',) if modeled else ('decode_step', 'token_position'):
             integer(context[name], 0, 2**31-1, name)
         integer(context['source_layer'], 0, 127, 'original source layer')
-        for name in ('execution_sha256', 'input_sha256', 'routing_sha256'):
+        for name in ('execution_sha256', 'routing_sha256') if modeled else ('execution_sha256', 'input_sha256', 'routing_sha256'):
             digest(context[name])
+        if modeled:
+            coordinate = context['token_coordinate']
+            fields(coordinate, 'kind source_entry source_token_row', 'token coordinate')
+            require(coordinate['kind'] == 'route_decode_entry/1', 'unsupported token coordinate')
+            integer(coordinate['source_entry'], 1, 2**31-1, 'Decode source entry')
+            integer(coordinate['source_token_row'], 0, 2**31-1, 'source token row')
+            lineage = context['input_identity']
+            fields(lineage, 'kind namespace graph_id producer_rank producer_node', 'simulation input lineage')
+            require(lineage['kind'] == 'simulation_lineage/1', 'unsupported simulation input identity')
+            identity(lineage['namespace']);identity(lineage['graph_id'])
+            integer(lineage['producer_rank'], 0, 511, 'input producer rank')
+            integer(lineage['producer_node'], 1, 2**64-1, 'input producer node')
         experts(spec['expected_experts'])
         require(type(spec['bundles']) is list and 1 <= len(spec['bundles']) <= 8, 'invalid bundle count')
         self._bundles, cover = {}, set()
@@ -212,7 +226,9 @@ class ContributionAttempts:
             logical_complete_ns=self._complete, all_started_attempts_retired=retired,
             declared_call_retirable=self._complete is not None and retired,
             attempts=attempts, resources=self._resources, events=self._events,
-            execution_scope='untimed_caller_callbacks_no_ASTRA_ns3_or_tensor_validation'))
+            execution_scope=('caller_callbacks_simulation_lineage_no_tensor_validation' if
+                self._spec['schema_version'] == 'moe-contribution-attempts/2' else
+                'untimed_caller_callbacks_no_ASTRA_ns3_or_tensor_validation')))
 
 
 def unique(pairs):

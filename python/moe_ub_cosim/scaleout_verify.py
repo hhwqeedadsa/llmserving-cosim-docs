@@ -69,10 +69,13 @@ def verify(directory):
     result=checked_json(directory/'result.json',limits(rdma)['result_json_bytes'])
     from .execution_events import audit as audit_events
     observations=audit_events(directory,result,checked_json(directory/'frontend.json',4194304))
+    from .contribution_binding import audit as audit_binding
+    contributions=audit_binding(directory,checked_json(directory/'frontend.json',4194304))
     if 'service_transport' in result:
         from .service_stream_verify import verify as verify_streams
         verified=verify_streams(directory)
         if observations:verified['execution_observation']=observations
+        if contributions:verified['contribution_binding']=contributions
         return verified
     frontend=checked_json(directory/'frontend.json',4194304)
     require(result['passed'] and result['drained'] and result['service']['service_finished'] and

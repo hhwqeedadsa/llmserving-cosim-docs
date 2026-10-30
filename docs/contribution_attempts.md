@@ -1,10 +1,12 @@
 # 贡献包与执行尝试
 
-`ContributionAttempts`记录一个token在一个原始MoE层中需要的专家贡献、原/备用尝试和资源退出。它是调用方回调驱动的无计时核心，尚未接入ASTRA/ns-3；没有定时器、网络/GPU调度或张量计算，不改变现有`rdma-run`。公共命令见[自包含示例](../examples/contribution_attempts/README.md)，实现见[contribution_attempts.py](../python/moe_ub_cosim/contribution_attempts.py)，研究依据见[已有工作审查](reviews/专家副本恢复的已有工作与实施边界_20261030.md)。
+`ContributionAttempts`记录一个token在一个原始MoE层中需要的专家贡献、原/备用尝试和资源退出。它是调用方回调驱动的无计时核心，没有定时器、网络/GPU调度或张量计算。独立公共命令见[自包含示例](../examples/contribution_attempts/README.md)；可选[实际服务绑定](contribution_binding.md)使用同一次ASTRA/ns-3事件驱动原尝试，默认服务不改变，尚不调度备用。实现见[contribution_attempts.py](../python/moe_ub_cosim/contribution_attempts.py)，研究依据见[已有工作审查](reviews/专家副本恢复的已有工作与实施边界_20261030.md)。
 
 ## 输入身份
 
 规格`moe-contribution-attempts/1`恰有`schema_version,invocation,expected_experts,bundles,replicas,limits`。
+
+`moe-contribution-attempts/2`沿用覆盖和生命周期行为，将`token_position/input_sha256`替换为有类型的`token_coordinate/input_identity`，明确表示原路由入口和仿真来源，不伪造激活摘要。其完整格式及声明执行/路由摘要的边界见[绑定说明](contribution_binding.md)。下表继续定义旧/1规格，原有输入与输出保持兼容。
 
 | 字段 | 定义与约束 |
 |---|---|
@@ -57,4 +59,4 @@ ID使用记录保留到实例结束。resource是租约身份，不是物理显�
 
 ## 接入服务的剩余工作
 
-须绑定同一次真实服务回调，核验资源/代际，计入检测、传输、GPU排队/计算、返回及清理成本，分开贡献就绪与ASTRA图/连接退休。原合法门限和回调须保留或显式重构，不能删断言、伪造ACK。本模块不选择副本或恢复时机，不代表任意前端任务已支持副本恢复。后续网络仍选择128/256/512中的一档Clos；本轮未创建网络。
+原尝试可经可选绑定接入同一次实际服务；仍需支持备用执行及其真实资源代际，计入检测、传输、GPU排队/计算、返回和清理成本。原合法门限和回调须保留或显式重构，不能删断言、伪造ACK。本模块不选择副本或恢复时机，不代表任意前端任务已支持副本恢复。后续网络仍选择128/256/512中的一档Clos。

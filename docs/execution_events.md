@@ -42,4 +42,4 @@ LLMServingSim Scale-Out服务可在执行中向Python发送节点和消息事件
 
 `result.service.execution_events`给出有效配置和原生已发事件总数。`rdma-check`重新读取JSONL，对照独立ASTRA日志、消息post/回调结果、图退出和排空时刻，检查事件总数与在线摘要。部分前缀不是完整验收。关闭记录时不生成这些文件或结果字段。
 
-平台接口`moe_ub_cosim.execution_events.ExecutionObserver(option)`提供`register(wave)`、`accept(event)`和`snapshot()`。register只接受调用者实际已提交的任务图；它不生成执行时刻。事件验证包括依赖、计算最小时长、消息两端身份、重复/乱序以及未完成资源退出。该接口目前没有接入`ContributionAttempts`结果提交，也不能插入备用任务。下一步需要贡献与真实调用的映射、在线故障触发及共享GPU/NIC资源调度，不能靠解析日志或改目的rank代替。
+平台接口`moe_ub_cosim.execution_events.ExecutionObserver(option)`提供`register(wave)`、`accept(event)`和`snapshot()`。register只接受调用者实际已提交的任务图；它不生成执行时刻。事件验证包括依赖、计算最小时长、消息两端身份、重复/乱序以及未完成资源退出。可选[贡献绑定](contribution_binding.md)将这些事件接入`ContributionAttempts`的原尝试状态；尚不能插入备用任务。后续仍需在线故障触发及共享GPU/NIC资源调度，不能靠解析日志或改目的rank代替。

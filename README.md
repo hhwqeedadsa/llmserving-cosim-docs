@@ -49,7 +49,7 @@ moe-ub run --config examples/first_round/run.json --output runs/demo-run
 | 我想了解 | 阅读入口 |
 |---|---|
 | 在实际运行中读取节点完成、消息接收、发送确认及任务图退出 | [实时被动事件](docs/execution_events.md)，沿用LLMServingSim服务与原ns-3时钟，尚不调度恢复 |
-| 原/备用专家贡献如何一次提交、迟到结果及资源退出如何区分 | [无计时功能例](examples/contribution_attempts/README.md)、[接口与限制](docs/contribution_attempts.md)；尚未接入网络服务 |
+| 原/备用专家贡献如何一次提交、迟到结果及资源退出如何区分 | [无计时功能例](examples/contribution_attempts/README.md)、[接口与限制](docs/contribution_attempts.md)；原尝试可选[实际服务绑定](examples/scaleout_contribution_tracking/README.md)，尚不调度备用 |
 | 从系统领域选择创新主线、具体修改位置与验证方法 | [创新方案报告](docs/reviews/系统视角的仿真器创新方案与修改建议_20261021.md)、[HTML阅读版](docs/review_artifacts/system_innovation_20261021/report.html) |
 | 丢包、包级事件、发送资源与软件准入实际结果 | [故障入口](examples/scaleout_rdma_faults/README.md)、[准入入口](examples/scaleout_rdma_admission/README.md)、[7组对照与发现](docs/review_artifacts/scaleout_admission_20261021/report.html) |
 | 宏观网络与微观硬件如何结合、当前ns-3缺项及系统级研究问题 | [研究报告](docs/reviews/宏微结合与硬件联合仿真研究_20261020.md)、[离线阅读版](docs/review_artifacts/hardware_systems_20261020/report.html) |

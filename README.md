@@ -61,7 +61,8 @@ moe-ub run --config examples/first_round/run.json --output runs/demo-run
 | 实验目录的关系与历史范围 | [实验总索引](experiments/README.md) |
 | Scale-Out 问题、限制和研究步骤 | [千卡与热点研究](docs/reviews/scaleout_scaling_hotspots_20261015.md)、[规模探针](experiments/scaleout_scaling/README.md) |
 | 实际进度、预算和交接 | [当前任务](docs/tasks/current.md) |
-| 与 LLMServingSim 的区别、当前网络/系统问题和改进优先级 | [整体项目审查与改进方案](docs/reviews/整体项目审查与网络系统改进方案_20261029.md) |
+| 最新网络/系统问题、收益空间和改进优先级 | [已发布版本整体检查与改进路线](docs/reviews/已发布项目整体检查与改进路线_20261030.md) |
+| SimAI/LLMServingSim选型与历史源码审查 | [整体项目审查与改进方案](docs/reviews/整体项目审查与网络系统改进方案_20261029.md) |
 | 既有研究结果 | [研究结论](experiments/scaleup_issue_screening/conclusions.md)、[历史分区](experiments/scaleup_issue_screening/archive/README.md) |
 
 平台里程碑与旧设计见[里程碑历史](docs/milestone_history.md)和[设计档案](docs/archive/README.md)。新实验方案、目录迁移目标和现有实现分别说明，文档交接不表示新实验已经完成。

@@ -1,0 +1,36 @@
+{
+  "passed": true,
+  "scope": "documentation links, static audit checks, fixed-source hashes and source-derived arithmetic; no network reruns",
+  "report_sha256": "838e5562c4fb5c76bc86324eae115995a054f0f5a62bc47a07836ec14801dc26",
+  "evidence_sha256": "f397c3c74c280b7fa1f6c17c5dd95b02ea2f68245f202c3bf99448445b054f07",
+  "local_links_checked": 10,
+  "source_hashes_rechecked": 229,
+  "fixed_sources_rechecked": 19,
+  "commands": [
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0
+    },
+    {
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "--help"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0
+    }
+  ],
+  "new_network_runs": 0,
+  "builds": 0,
+  "downloads": 0,
+  "full_unit_reruns": 0
+}

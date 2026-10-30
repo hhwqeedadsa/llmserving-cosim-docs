@@ -1,0 +1,28 @@
+{
+  "passed": true,
+  "html_validation": "static parse and local links only; no browser render",
+  "markdown_files": [
+    "backend/README.md",
+    "docs/model_validation.md",
+    "docs/record_storage.md",
+    "docs/tasks/atomic32_spec.md",
+    "docs/tasks/current.md",
+    "docs/user_guide.md",
+    "examples/scaleout_atomic32/README.md",
+    "examples/scaleout_rdma_transactions/README.md",
+    "fixtures/atomic32/README.md"
+  ],
+  "source_hashes": 31,
+  "completed_monitored_wall_seconds": 456.18709141295403,
+  "peak_sampled_group_rss_bytes": 1831403520,
+  "help_command": [
+    "python3",
+    "-B",
+    "-m",
+    "moe_ub_cosim",
+    "scaleout",
+    "--help"
+  ],
+  "help_exit_code": 0,
+  "network_reruns": 0
+}

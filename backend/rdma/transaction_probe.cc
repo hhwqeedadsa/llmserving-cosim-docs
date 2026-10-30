@@ -81,11 +81,12 @@ int main(int argc,char** argv) {
           if(op.contains("copy")) {Require(local_memory_mode,"copy requires v4");keys.push_back("copy");}
         } else {
           keys.insert(keys.end(),{"connection","verb","key","address"});
-          Require(op.at("verb")=="put" || op.at("verb")=="fetch_add","unsupported transaction verb");
+          Require(op.at("verb")=="put" || op.at("verb")=="fetch_add" || op.at("verb")=="fetch_add32","unsupported transaction verb");
           Require(!op.contains("source") || (source_mode && op.at("verb")=="put" && !op.contains("hex")),"source requires v3 put without hex");
           keys.push_back(op.contains("source")?"source":op.at("verb")=="put"?"hex":"value");
           Integer(op.at("connection"),execution_limits.connections-1);Integer(op.at("key"),UINT32_MAX);Integer(op.at("address"),UINT64_MAX);
           if(op.at("verb")=="fetch_add")Integer(op.at("value"),UINT64_MAX);
+          if(op.at("verb")=="fetch_add32")Integer(op.at("value"),UINT32_MAX);
           if(explicit_submission)keys.push_back("aggregate_requests");
           if(op.contains("queue_fence"))keys.push_back("queue_fence");
           Require(!(op.contains("queue_fence") && op.contains("local_wait")),"queue fence and local wait require separate steps");

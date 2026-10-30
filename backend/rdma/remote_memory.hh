@@ -10,9 +10,10 @@ namespace moe_rdma {
 // MRT1 is an EXPLICIT FUNCTIONAL framing protocol over the native byte carrier,
 // not a RoCE wire encoding. Never use these frame sizes as GIN timing evidence.
 // Network-byte-order header: magic32, verb32, sequence64, address64, key32,
-// body_length32. Put has raw bytes; FetchAdd/Reply have one BE64 integer.
+// body_length32. Put has raw bytes; FetchAdd/Reply have one BE64 integer,
+// FetchAdd32/Reply32 have one BE32 integer. None are RoCE wire opcodes.
 struct MemoryFrame {
-  enum Verb : uint32_t { Put=1, FetchAdd=2, Reply=3 };
+  enum Verb : uint32_t { Put=1, FetchAdd=2, Reply=3, FetchAdd32=4, Reply32=5 };
   uint32_t verb=0, key=0;
   uint64_t sequence=0, address=0;
   std::vector<uint8_t> body;
@@ -24,14 +25,20 @@ inline uint64_t MemoryRead(const uint8_t* p,unsigned count) {
 inline void MemoryWrite(std::vector<uint8_t>& out,uint64_t value,unsigned count) {
   for(unsigned i=count;i;--i)out.push_back(value>>((i-1)*8));
 }
-inline std::vector<uint8_t> MemoryInteger(uint64_t value) {
-  std::vector<uint8_t> out;MemoryWrite(out,value,8);return out;
+inline bool MemoryAtomic(uint32_t verb) {return verb==MemoryFrame::FetchAdd || verb==MemoryFrame::FetchAdd32;}
+inline bool MemoryReply(uint32_t verb) {return verb==MemoryFrame::Reply || verb==MemoryFrame::Reply32;}
+inline unsigned MemoryValueBytes(uint32_t verb) {
+  return verb==MemoryFrame::FetchAdd32 || verb==MemoryFrame::Reply32?4u:8u;
+}
+inline std::vector<uint8_t> MemoryInteger(uint64_t value,unsigned bytes=8) {
+  MemoryCheck((bytes==8 || bytes==4) && (bytes==8 || value<=UINT32_MAX),"invalid memory integer width/value");
+  std::vector<uint8_t> out;MemoryWrite(out,value,bytes);return out;
 }
 inline std::vector<uint8_t> EncodeMemoryFrame(const MemoryFrame& frame) {
-  MemoryCheck(frame.verb>=1 && frame.verb<=3 && frame.body.size()>0 && frame.body.size()<=32768,
+  MemoryCheck(frame.verb>=1 && frame.verb<=5 && frame.body.size()>0 && frame.body.size()<=32768,
               "invalid memory frame verb/length");
-  MemoryCheck(frame.verb==MemoryFrame::Put || frame.body.size()==8,"atomic frame requires 8-byte value");
-  MemoryCheck(frame.verb!=MemoryFrame::Reply || (!frame.address && !frame.key),"reply has no remote address/key");
+  MemoryCheck(frame.verb==MemoryFrame::Put || frame.body.size()==MemoryValueBytes(frame.verb),"atomic frame value width mismatch");
+  MemoryCheck(!MemoryReply(frame.verb) || (!frame.address && !frame.key),"reply has no remote address/key");
   std::vector<uint8_t> out;out.reserve(32+frame.body.size());
   MemoryWrite(out,0x4d525431,4);MemoryWrite(out,frame.verb,4);MemoryWrite(out,frame.sequence,8);
   MemoryWrite(out,frame.address,8);MemoryWrite(out,frame.key,4);MemoryWrite(out,frame.body.size(),4);
@@ -149,7 +156,7 @@ class RemoteMemory {
     windows_.push_back(std::move(window));
   }
   // Functional model: serial application on the ns-3 event clock; LE64 memory
-  // atomics; retained request/result cache for this bounded connection lifetime.
+  // or LE32 atomics; retained request/result cache for this bounded connection lifetime.
   // It does NOT implement PSNs, retry timers, GPU coherence or remote NIC delay.
   Result Apply(uint64_t context,unsigned owner,const MemoryFrame& frame) {
     MemoryCheck(!nic_scoped_,"NIC-scoped target requires actual ingress NIC");
@@ -161,10 +168,10 @@ class RemoteMemory {
       return r.owner==owner && r.nic==nic && r.key==frame.key;
     });
     MemoryCheck(it!=registrations_.end(),"unknown remote owner/NIC/key registration");
-    const uint64_t length=frame.verb==MemoryFrame::Put?frame.body.size():8;
+    const uint64_t length=frame.verb==MemoryFrame::Put?frame.body.size():MemoryValueBytes(frame.verb);
     MemoryCheck(length>0 && frame.address>=it->address && frame.address-it->address<=it->bytes &&
                 length<=it->bytes-(frame.address-it->address),"remote registration range exceeded");
-    MemoryCheck(frame.verb!=MemoryFrame::FetchAdd || it->atomic,"registration atomic denied");
+    MemoryCheck(!MemoryAtomic(frame.verb) || it->atomic,"registration atomic denied");
     const auto binding=std::pair{owner,nic};
     MemoryCheck(!context_bindings_.count(context) || context_bindings_.at(context)==binding,"memory context changed ingress owner/NIC");
     auto result=ApplyImpl(context,owner,frame,&*it);
@@ -172,7 +179,7 @@ class RemoteMemory {
   }
  private:
   Result ApplyImpl(uint64_t context,unsigned owner,const MemoryFrame& frame,const Registration* registration) {
-    MemoryCheck(frame.verb==MemoryFrame::Put || frame.verb==MemoryFrame::FetchAdd,"target received non-request");
+    MemoryCheck(frame.verb==MemoryFrame::Put || MemoryAtomic(frame.verb),"target received non-request");
     MemoryCheck(!carrier_once_put_ || frame.verb==MemoryFrame::Put,"carrier-once target supports put only");
     const auto encoded=EncodeMemoryFrame(frame);
     MemoryCheck(contexts_.count(context) || contexts_.size()<max_contexts_,"remote memory context budget exceeded");
@@ -187,19 +194,18 @@ class RemoteMemory {
     const auto storage_key=registration?registration->window_key:frame.key;
     auto it=std::find_if(windows_.begin(),windows_.end(),[&](const Window& w){return w.owner==owner && w.key==storage_key;});
     MemoryCheck(it!=windows_.end(),"unknown remote memory key/owner");
-    const auto length=frame.verb==MemoryFrame::Put?frame.body.size():8;
+    const auto length=frame.verb==MemoryFrame::Put?frame.body.size():MemoryValueBytes(frame.verb);
     MemoryCheck(frame.address>=it->address && frame.address-it->address<=Size(*it) &&
                 length<=Size(*it)-(frame.address-it->address),"remote memory address out of bounds");
     const auto offset=frame.address-it->address;
-    if(frame.verb==MemoryFrame::FetchAdd)MemoryCheck(it->atomic && frame.address%8==0,"remote atomic denied/unaligned");
+    if(MemoryAtomic(frame.verb))MemoryCheck(it->atomic && frame.address%length==0,"remote atomic denied/unaligned");
     CheckWritable(owner,storage_key,frame.address,length);
     if(cache_capacity_)MemoryCheck(encoded.size()<=cache_capacity_-cache_bytes_[owner],"target request cache capacity exceeded");
-    Result result{false,frame.verb==MemoryFrame::FetchAdd,0};
+    Result result{false,MemoryAtomic(frame.verb),0};
     if(result.atomic) {
-      MemoryCheck(it->atomic && frame.address%8==0,"remote atomic denied/unaligned");
-      for(unsigned i=0;i<8;++i)result.old_value|=uint64_t(Byte(*it,offset+i))<<(8*i);
-      const uint64_t updated=result.old_value+MemoryRead(frame.body.data(),8);
-      std::vector<uint8_t> bytes(8);for(unsigned i=0;i<8;++i)bytes[i]=updated>>(8*i);
+      for(unsigned i=0;i<length;++i)result.old_value|=uint64_t(Byte(*it,offset+i))<<(8*i);
+      const uint64_t updated=result.old_value+MemoryRead(frame.body.data(),static_cast<unsigned>(length));
+      std::vector<uint8_t> bytes(length);for(unsigned i=0;i<length;++i)bytes[i]=updated>>(8*i);
       Write(*it,offset,bytes);
     } else Write(*it,offset,frame.body);
     if(!carrier_once_put_)state.saved.emplace(frame.sequence,Saved{owner,encoded,result});
@@ -273,6 +279,20 @@ class RemoteMemory {
     }
   }
   // Target-local functional accesses; no GPU coherence or polling delay.
+  uint32_t Load32(unsigned owner,uint32_t key,uint64_t address) const {
+    CheckReadable(owner,key,address,4);
+    const auto& w=LocalWindow(owner,key,address,4);
+    uint32_t value=0;
+    for(unsigned i=0;i<4;++i)value|=uint32_t(Byte(w,address-w.address+i))<<(8*i);
+    return value;
+  }
+  void Store32(unsigned owner,uint32_t key,uint64_t address,uint32_t value) {
+    const auto& found=LocalWindow(owner,key,address,4);
+    CheckWritable(owner,key,address,4);
+    auto& w=windows_.at(static_cast<std::size_t>(&found-windows_.data()));
+    std::vector<uint8_t> bytes(4);for(unsigned i=0;i<4;++i)bytes[i]=value>>(8*i);
+    Write(w,address-w.address,bytes);
+  }
   uint64_t Load64(unsigned owner,uint32_t key,uint64_t address) const {
     CheckReadable(owner,key,address,8);
     const auto& w=LocalWindow(owner,key,address);
@@ -309,11 +329,11 @@ class RemoteMemory {
                 bytes<=Size(*it)-(address-it->address),"invalid source memory range");
     return *it;
   }
-  const Window& LocalWindow(unsigned owner,uint32_t key,uint64_t address) const {
+  const Window& LocalWindow(unsigned owner,uint32_t key,uint64_t address,unsigned bytes=8) const {
     const auto it=std::find_if(windows_.begin(),windows_.end(),[&](const Window& w){return w.owner==owner && w.key==key;});
-    MemoryCheck(it!=windows_.end() && address%8==0 && address>=it->address &&
-                address-it->address<=Size(*it) && 8<=Size(*it)-(address-it->address),
-                "invalid local 64-bit memory access");
+    MemoryCheck((bytes==4 || bytes==8) && it!=windows_.end() && address%bytes==0 && address>=it->address &&
+                address-it->address<=Size(*it) && bytes<=Size(*it)-(address-it->address),
+                "invalid local memory access width/range/alignment");
     return *it;
   }
   struct Saved {unsigned owner;std::vector<uint8_t> bytes;Result result;};

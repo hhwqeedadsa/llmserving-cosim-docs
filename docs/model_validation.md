@@ -62,7 +62,7 @@ stream-work/3的本地阶段使用输入显式声明的ns耗时，每GPU单个�
 
 原生queue_fence将多连接已预留前缀映射到真实ACK/响应进度，避免动态等待集合包含未来工作。一个回调中的捕获及MRT1完成仍是功能选择，不能当作GDAKI逐peer取样、CQ或GIN flush精度验证。来源和反例见[队列快照验收](../fixtures/queue_fences/README.md)。
 
-原生事务新增本地窗口等待，以实际解码后的LE64值决定功能程序是否继续，支持消费后清零。人工两轮验证及错误数据不放行不等于现代DeepEP或GPU可见性校准；模型没有给轮询添加实测代价。证据见[本地等待验收](../fixtures/local_memory_waits/README.md)。
+原生事务新增本地窗口等待，以实际解码后的LE64值（显式`bits=32`时为LE32）决定功能程序是否继续，支持按位宽消费后清零。人工两轮验证及错误数据不放行不等于现代DeepEP或GPU可见性校准；模型没有给轮询添加实测代价。旧功能证据见[本地等待验收](../fixtures/local_memory_waits/README.md)，相邻4B计数器及32位原子请求/回复见[32位示例](../examples/scaleout_atomic32/README.md)。MRT1 verb4/5不是RoCE线编码，补齐功能位宽不表示已接上完整旧低延迟计划或GIN。
 
 独立远端事务入口已用实际包负载传递地址、key、数据、原子增量和旧值，目标功能状态按接收事件执行。MRT1帧、反向普通字节流及原子后等待请求ACK+回复均是显式功能选择，不等价于真实RoCE报文、Atomic ACK或GIN CQ；没有NIC原子服务时间、GPU可见性或现代应用映射。来源核查、重复应用检查与真实网络功能测试分开记录，见[远端事务验收](../fixtures/remote_transactions/README.md)。不能用此入口的时延判断现代DeepEP性能或方法收益。
 

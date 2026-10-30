@@ -1,0 +1,473 @@
+{
+  "passed": true,
+  "scope": "functional 32-bit notifications on sparse 128-endpoint Clos",
+  "overall_goal": "active",
+  "cpu": {
+    "atomic32_memory": {
+      "passed": true,
+      "checks": 4279,
+      "independent_arithmetic_cases": 196,
+      "network_execution": false
+    },
+    "remote_memory": {
+      "passed": true,
+      "checks": 7085,
+      "network_execution": false
+    },
+    "session_wakeups": {
+      "checks": 50,
+      "network_executed": false,
+      "passed": true,
+      "rejected_cases": 22
+    }
+  },
+  "python_unit_methods": {
+    "atomic32_input_test.py": 4,
+    "alltransactions_test.py": 27,
+    "allsessionalltest.py": 15,
+    "allapplication_windowalltest.py": 7
+  },
+  "network": {
+    "passed": true,
+    "cases": {
+      "normal": {
+        "passed": true,
+        "request_frames": 9,
+        "reply_frames": 7,
+        "logical_transport_bytes": 608,
+        "transmitted_payload_bytes": 608,
+        "retransmitted_payload_bytes": 0,
+        "retransmitted_ranges": [],
+        "finish_ns": 28046,
+        "actual_delivery_events": 16,
+        "memory_events": 25,
+        "packet_events": 400,
+        "final_window_sha256": {
+          "16:7": "c375189303c9ab0f538954c2132bbb1fcce95160c8375bcd46e94a9e808c23ec",
+          "17:8": "5a55bd030e531ef900530502f86bdb72c39d344010779fbbf3ed722db643c47d",
+          "0:9": "388627e71933b05590f35761af3b5d930af54c7ab40ad2a285037de2397cf35d"
+        },
+        "gpu_endpoints": 128,
+        "active_ranks": [
+          0,
+          1,
+          16,
+          17
+        ],
+        "real_routes": false,
+        "hardware_calibrated": false,
+        "full_moe_execution": false
+      },
+      "recovery": {
+        "passed": true,
+        "request_frames": 9,
+        "reply_frames": 7,
+        "logical_transport_bytes": 608,
+        "transmitted_payload_bytes": 792,
+        "retransmitted_payload_bytes": 184,
+        "retransmitted_ranges": [
+          {
+            "stream": 0,
+            "sequence": 48,
+            "bytes": 36,
+            "time_ns": 25012
+          },
+          {
+            "stream": 1,
+            "sequence": 0,
+            "bytes": 36,
+            "time_ns": 41031
+          },
+          {
+            "stream": 1,
+            "sequence": 72,
+            "bytes": 40,
+            "time_ns": 41032
+          },
+          {
+            "stream": 1,
+            "sequence": 0,
+            "bytes": 36,
+            "time_ns": 46017
+          },
+          {
+            "stream": 1,
+            "sequence": 112,
+            "bytes": 36,
+            "time_ns": 46018
+          }
+        ],
+        "finish_ns": 54026,
+        "actual_delivery_events": 16,
+        "memory_events": 25,
+        "packet_events": 512,
+        "final_window_sha256": {
+          "16:7": "c375189303c9ab0f538954c2132bbb1fcce95160c8375bcd46e94a9e808c23ec",
+          "17:8": "5a55bd030e531ef900530502f86bdb72c39d344010779fbbf3ed722db643c47d",
+          "0:9": "388627e71933b05590f35761af3b5d930af54c7ab40ad2a285037de2397cf35d"
+        },
+        "gpu_endpoints": 128,
+        "active_ranks": [
+          0,
+          1,
+          16,
+          17
+        ],
+        "real_routes": false,
+        "hardware_calibrated": false,
+        "full_moe_execution": false
+      },
+      "session-recovery": {
+        "passed": true,
+        "request_frames": 9,
+        "reply_frames": 7,
+        "logical_transport_bytes": 608,
+        "transmitted_payload_bytes": 792,
+        "retransmitted_payload_bytes": 184,
+        "retransmitted_ranges": [
+          {
+            "stream": 0,
+            "sequence": 48,
+            "bytes": 36,
+            "time_ns": 25012
+          },
+          {
+            "stream": 1,
+            "sequence": 0,
+            "bytes": 36,
+            "time_ns": 41031
+          },
+          {
+            "stream": 1,
+            "sequence": 72,
+            "bytes": 40,
+            "time_ns": 41032
+          },
+          {
+            "stream": 1,
+            "sequence": 0,
+            "bytes": 36,
+            "time_ns": 46017
+          },
+          {
+            "stream": 1,
+            "sequence": 112,
+            "bytes": 36,
+            "time_ns": 46018
+          }
+        ],
+        "finish_ns": 54026,
+        "actual_delivery_events": 16,
+        "memory_events": 25,
+        "packet_events": 512,
+        "final_window_sha256": {
+          "16:7": "c375189303c9ab0f538954c2132bbb1fcce95160c8375bcd46e94a9e808c23ec",
+          "17:8": "5a55bd030e531ef900530502f86bdb72c39d344010779fbbf3ed722db643c47d",
+          "0:9": "388627e71933b05590f35761af3b5d930af54c7ab40ad2a285037de2397cf35d"
+        },
+        "gpu_endpoints": 128,
+        "active_ranks": [
+          0,
+          1,
+          16,
+          17
+        ],
+        "real_routes": false,
+        "hardware_calibrated": false,
+        "full_moe_execution": false
+      }
+    },
+    "final_windows_equal": true,
+    "tamper_rejections": [
+      "wrong-return",
+      "early-retirement",
+      "wrong-wait-width",
+      "changed-neighbor",
+      "changed-delivered-byte",
+      "incomplete-capture"
+    ],
+    "auditor_sha256": "2cc0435c40490eec7664c83288e959a077389ddd009737384fccbc33e4049ab9"
+  },
+  "admission": {
+    "passed": true,
+    "python_rejections": 9,
+    "native_rejections": 18,
+    "rejected_before_fabric": true,
+    "network_executed": false,
+    "rejections": [
+      {
+        "case": "atomic-value",
+        "python": "Scale-Out topology: invalid atomic addend",
+        "native": "session integer out of bounds"
+      },
+      {
+        "case": "atomic-alignment",
+        "python": "Scale-Out topology: atomic denied/unaligned",
+        "native": "session atomic denied/unaligned"
+      },
+      {
+        "case": "atomic-range",
+        "python": "Scale-Out topology: remote address out of bounds",
+        "native": "session memory range out of bounds"
+      },
+      {
+        "case": "atomic-permission",
+        "python": "Scale-Out topology: atomic denied/unaligned",
+        "native": "session atomic denied/unaligned"
+      },
+      {
+        "case": "wait-bits",
+        "python": "Scale-Out topology: local wait bits must be 32 or 64",
+        "native": "session wait bits must be 32 or 64"
+      },
+      {
+        "case": "wait-value",
+        "python": "Scale-Out topology: invalid local wait value",
+        "native": "session integer out of bounds"
+      },
+      {
+        "case": "wait-reset",
+        "python": "Scale-Out topology: invalid local consume value",
+        "native": "session integer out of bounds"
+      },
+      {
+        "case": "wait-alignment",
+        "python": "Scale-Out topology: local wait address out of bounds/unaligned",
+        "native": "invalid session wait comparison/address"
+      },
+      {
+        "case": "wait-overlap",
+        "python": "Scale-Out topology: overlapping local wait ranges",
+        "native": "overlapping session wait ranges"
+      }
+    ],
+    "wall_seconds": 0.2659384320140816
+  },
+  "build": {
+    "native_commit": "69cb14764c0c5de2c7ad31599ee5b3999dddc154",
+    "translation_units": 442,
+    "built_source_sha256": {
+      "backend/ack_rtt_estimator.hh": "f957d8c54e7a5bc534b3b2966894eee4007d6e99753b0223e4071117a8494113",
+      "backend/communication_admission.hh": "5afc6a84570b253e4c2298ff2992f2b4ec542fd083f3aee717ee0c59935dcd0c",
+      "backend/queue_integral.hh": "5a020da9bc650b2294bcdcc41003989e8ca2a333395bac033ee1a6ebac166f0e",
+      "backend/rdma/application_window_validation.hh": "7c7354050d87da7b6a054b22516520d7fcc58a0dbed1f08c7a2345ed9d3424f8",
+      "backend/rdma/application_windows.hh": "02ca231ac69c903904dcc760b304890eef0961a047b70ca31367651d65d311e5",
+      "backend/rdma/astra_adapter.cc": "4accd41263ca67ce79728b6dd02447b7e552e460d31a24bbdc658ec98b219763",
+      "backend/rdma/astra_adapter.hh": "7b13348498d34b7f246274244097311ec8e75e15573078999466ac76a8084477",
+      "backend/rdma/bounded_buffers.hh": "ff3bf7ed0014288db60862583259e01da3959afc5984087a61987826e25a950a",
+      "backend/rdma/cnp_switch.hh": "63bff84ed7b79e684a23db92cf54a18d7cdc228fec7d0df611cacd6002039728",
+      "backend/rdma/control_channel.hh": "cca54568ae579613c5f536d7d0897ee310854f0a1a41b511171607d98d11afc7",
+      "backend/rdma/dcqcn_reference.hh": "b80eac69407c3d1fd670bb2c5da9a27a04b67faa6a83b322f61673b84bbfc60c",
+      "backend/rdma/execution_events.hh": "41871a80348f713d6a59d137fe80f9966f29facf2273a8baf8e40ba284a1a2a5",
+      "backend/rdma/fabric.cc": "b4c381f0260ecbb025c669aa660504262cd8960c93bd3797892ef2220d64cc43",
+      "backend/rdma/fabric.hh": "3e37365353595fe2c173c0bd731ad23401591a7eabd510b80349ca32a61323b7",
+      "backend/rdma/gin_work_queue.hh": "8b56c7ca749c9fcc400ceb4e9f1ce6b830336daab910b4158fb0a27f27b81c37",
+      "backend/rdma/host_timing.hh": "7114fcab1d671d7961a4fdfc33e3e19a1cedc5de3ca907e49097573a68ff7d8c",
+      "backend/rdma/inflight_helpers.hh": "3f51eb8e7b699376733d4f0f5f69bce8ac7c2ffc087a9fc8e12a4a20e3bd7bf1",
+      "backend/rdma/inject.cmake": "41eb6d214905d81b6c7da60ae29042ca2403a79f8375bb332f917974baf66546",
+      "backend/rdma/link_failure_validation.hh": "f38706413c3f2733792bc3894f46398a79c55fadd5ceb8b063d6a6941036f79d",
+      "backend/rdma/logging.cc": "535806de03c3f2805022f9875c062d9091c94f9552692e6155fe9be1fc463db9",
+      "backend/rdma/low_latency_posting.hh": "bcbde0f3da4d3e2ce02bf7a573f5607c6cb4cef374058cf07d9546786e46b4ab",
+      "backend/rdma/memory_registrations.hh": "a02799fac561d8ed368576dfd75994c50659d4b3803fcbe332353c4f010ba738",
+      "backend/rdma/message_buffers.hh": "8d2241903931ee67b6fc5794a12d585ab87863718c20c067ff08ece79665adb1",
+      "backend/rdma/nack_grace.hh": "07b0dd90eeafebe3f7c84bb997736bfab5be8ac483d36e5f38fb54a8ca6c8ddc",
+      "backend/rdma/persistent_streams.cc": "b1a747fd72347f7be5e0207dab4240c40b583c00148e6891a2a225e3d2f73cf8",
+      "backend/rdma/persistent_streams.hh": "6ec8f111801a192f9e48343d2fe52261815ae20427ea562772980548d7f0acfb",
+      "backend/rdma/phase_gates.hh": "89c3b19fff179d21b807d0910118e39565d21c4e4c774fbc2bb15cf0ae868f06",
+      "backend/rdma/probe.cc": "6f2820c6b9f595d01349f1e00aa5d0c55e86c024f05790353077d18ee7692a71",
+      "backend/rdma/rc_concurrent_probe.cc": "1dd964b0d4541b640e0b49effc8dc437766d1367efde75b08323d0aaa25668e9",
+      "backend/rdma/rc_packet_probe.cc": "9f1b11f429c2e299c44d430e1c243146505ddb92c1c847242b916cfb18608242",
+      "backend/rdma/rc_wire.hh": "270307a59be1335773b8f49b93d7b5ccdb8f1797754a042f297fbe6a72fa593b",
+      "backend/rdma/recoverable_qbb.hh": "6d602c54d4dcd3bbce3ae457f5025c9a61426ba209a01e0170f2049bea426154",
+      "backend/rdma/recovery.cc": "25410da02725015347f82a86cddb60b04805c99af16e8514ad17fcafac4f477f",
+      "backend/rdma/recovery.hh": "51f15d2c463b729c357ec1845770e110194da9908372cbf567b4961549fd90f4",
+      "backend/rdma/recovery_records.hh": "864c8e7977876bf0759eef849124983f8b61fe84d7cbc8b2ebda9c3ad2cf392c",
+      "backend/rdma/remote_memory.hh": "2fd63c6e5e19afb8f45bf78ad41723dbf7b389547dea93297a527d40f45c437c",
+      "backend/rdma/remote_transactions.cc": "e428f96504c37b79c74d04f9657de00d0f754db124dfb1b5559ba384457dfded",
+      "backend/rdma/remote_transactions.hh": "ef6a49881538a7d37cfbe4547ab11b6c050c0ab6e75a13fc5e9fc04aaeb29d2a",
+      "backend/rdma/repair_plan.hh": "a235dd15da3d4bb69205da3d8b06670393c6cc89c22c66761b85eb9ac99e441e",
+      "backend/rdma/repair_wire.hh": "26c4245a9061109bd2930ff876be3282e978de269a6bf0473518476705e94193",
+      "backend/rdma/selective_repeat.hh": "b1fd43f06631511e45f8711886b9594edb957fa5c06158844c356999d72dbe21",
+      "backend/rdma/self_peer_service.hh": "2f7583dd7880935778bb239ed55ff93de50dc6794d224f90b5bf792aa5605b85",
+      "backend/rdma/serial_native.cmake": "a8c7a97dea061d58a2faf17f56a0f477b0fc704ec509be9a0180fd6b1ff2b344",
+      "backend/rdma/service.cc": "b5bf83a8c74601cf20e5bb8550143b15555418eff2523fd5190a3efb451cd47d",
+      "backend/rdma/service_transport.cc": "9bca20b0ce56cc813e413195bc05e5422a9c892eb07e2b4c8150cf25d0b6abcc",
+      "backend/rdma/service_transport.hh": "a338c45bbf4635bbf9fbb8a0f3e79b70a7c8e03ca27cef1c65e825192dbfe242",
+      "backend/rdma/service_wakeup.hh": "14c4194823193a17f8eb5148375e76dbb4bfdd76e7f41294e89bc5fc0a3f7e43",
+      "backend/rdma/session_callback_batches.hh": "dd911806b5025342d056c12e2af68023718df6bce1ddc5364e828b19a516d529",
+      "backend/rdma/session_wakeups.hh": "5209c830af386085ebe027febf9fbd34d4ee41dacdb9e30feb4263e7751971de",
+      "backend/rdma/shared_compute.hh": "512708588df3cd87b70ac4fd83167c29a14853512f98d6d8b0e4d1ec5c7b0093",
+      "backend/rdma/source_ack_watchdog.hh": "d67951515bbaea31f6ec714cf381751062b2365a7a1495dceb23eaae03e1242e",
+      "backend/rdma/stream_probe.cc": "4914bbf99d826923bf24f5b9878dacb1775a8a52bbc7407085eec4edccb07331",
+      "backend/rdma/switch_drop_capture.cc": "0a5db918618254b9ffb6f1cc8b030a6afba0e608937f5c1e0e130377b306f028",
+      "backend/rdma/targets.cmake": "b024c143939265a33a7dabf514e76e202c723ecd2da510a20f298a2088d9ee8a",
+      "backend/rdma/transaction_effect_order.hh": "d5a91cd3850022adb88afc9cc380c08f15b508db079fd4c0e32445a898dfd32d",
+      "backend/rdma/transaction_limits.hh": "dfe0b38787283ff50bce0a0f3bdd8d355bfdac5fa9b7f4ddb29de6b0517280a5",
+      "backend/rdma/transaction_probe.cc": "8beea348c0dadd0338aa44cd2ab28894de1d0ca1ca1653c25594cf515aae706a",
+      "backend/rdma/transaction_session.cc": "aff47a42c9599c6c62c4b6466fbcd4b31ae99224d7e817604ceef43d092165f5",
+      "backend/rdma/transaction_session_validation.hh": "5d2ff15e06fc2d585beaa3f39459e380fa885469be4cc9d93035b66db7bb7c3f",
+      "backend/rdma/transaction_transport.hh": "3ddad982f95e9f76f8ef46a51b9bd1ef1c90bc85685b1c08951af2fea33df901",
+      "backend/recovery_history.hh": "aaab3402c7922aad8187c32f0f2e77da73c69a06d60da2d2e8f3508429f1731e",
+      "backend/retransmission_timer.hh": "05f0a5e1f46dbf34d17977c4c425a8ea3612fecf572fe81f3f6bd309fbceb782",
+      "backend/source_recovery.hh": "cb2cc9e9bc8cf8c5f3cf4f5f854ef98e52337f0e4fc5f3c0b8c8d0247411fa08"
+    },
+    "linked_library_sha256": {
+      "libns3.42-applications.so": "48d47ab995ae4a6600195791a8274020f7aaefc2dffa726ee7c80b2c73ffda4f",
+      "libns3.42-point-to-point.so": "6c52dcecfe400d8840eb9566f00d5aeeb8838a5ac24ccfab75f6c21b0913dbb2",
+      "libns3.42-internet.so": "78761b95d3c10e8257248818c12894cb38e09b6e920ba246331f83dd339d1494",
+      "libns3.42-network.so": "f6df1daff56f78b4433456d25f1668e9e8aec7e7eddda58c631396870e7dd66c",
+      "libns3.42-core.so": "1981dcffbfedbbfc7591ad2690de9a9c143b05af4a106db7bc24a3e6ecb1de48",
+      "libns3.42-stats.so": "ae7cfc494d6cc8b7c81e95afe273edaef155279d304b6e45d86e353b8d1dd93f",
+      "libns3.42-bridge.so": "48605953ce37d77d61f393753775d8747f8e4e5359ec622d86fb2d89dd587338",
+      "libns3.42-traffic-control.so": "30df40ab2cfa42a7ef2c5c3f4ec78bc6f9ec95fb670b2d58a026aec91d191fc0"
+    }
+  },
+  "executed": {
+    "normal": {
+      "result_sha256": "4b8e3e409abd9f87cfb542a226e83a291789ac9f7b62b9ee4bbed801f65209c3",
+      "input_identity": {
+        "/home/lry/moe-ub-cosim/runs/atomic32_transactions_20261030/inputs/work.json": "5c9f088c8cafc46e064d08740588ca28294487b14ac8234db18d90f02cc8a69b",
+        "/home/lry/moe-ub-cosim/runs/atomic32_transactions_20261030/inputs/normal.json": "eb1070ae8ea839f2d0bb3694d2ede9719cf8b9b573cf76a75901e63599490733",
+        "/home/lry/moe-ub-cosim/runs/atomic32_transactions_20261030/inputs/topology/topology.json": "5389993e9aa1dfc148b4713b0a2b0c0521de24b41b74060e2db7eb9f048c444f",
+        "/home/lry/moe-ub-cosim/runs/atomic32_transactions_20261030/build/backend.json": "bd4e213a71beb337138ff2f9bb58f57b4248acf57fdd9618619aaba294c2d886",
+        "/home/lry/moe-ub-cosim/runs/atomic32_transactions_20261030/build/output/moe-rdma/ns3.42-moe-rdma-transaction-probe": "58fb7c6f488eba69a3208738c943e0e4566c045d5961628926109fd325da01f0",
+        "/home/lry/moe-ub-cosim/tests/integration/check_atomic32_network.py": "aaf8d2b125a9ab82f5c355542c36a32d6b93be1b2882835175bf84394ca93d69"
+      },
+      "executable": "/home/lry/moe-ub-cosim/runs/atomic32_transactions_20261030/build/output/moe-rdma/ns3.42-moe-rdma-transaction-probe"
+    },
+    "recovery": {
+      "result_sha256": "c96ae55cded71b0220f5a52b9df956e938226955e5d18a39788eb96e06d59e81",
+      "input_identity": {
+        "/home/lry/moe-ub-cosim/runs/atomic32_transactions_20261030/inputs/work.json": "5c9f088c8cafc46e064d08740588ca28294487b14ac8234db18d90f02cc8a69b",
+        "/home/lry/moe-ub-cosim/runs/atomic32_transactions_20261030/inputs/recovery.json": "57558c4df6362d215b0c7345fd92160f331b4e860d7e5074cc6a973216335c35",
+        "/home/lry/moe-ub-cosim/runs/atomic32_transactions_20261030/inputs/topology/topology.json": "5389993e9aa1dfc148b4713b0a2b0c0521de24b41b74060e2db7eb9f048c444f",
+        "/home/lry/moe-ub-cosim/runs/atomic32_transactions_20261030/build/backend.json": "bd4e213a71beb337138ff2f9bb58f57b4248acf57fdd9618619aaba294c2d886",
+        "/home/lry/moe-ub-cosim/runs/atomic32_transactions_20261030/build/output/moe-rdma/ns3.42-moe-rdma-transaction-probe": "58fb7c6f488eba69a3208738c943e0e4566c045d5961628926109fd325da01f0",
+        "/home/lry/moe-ub-cosim/tests/integration/check_atomic32_network.py": "aaf8d2b125a9ab82f5c355542c36a32d6b93be1b2882835175bf84394ca93d69"
+      },
+      "executable": "/home/lry/moe-ub-cosim/runs/atomic32_transactions_20261030/build/output/moe-rdma/ns3.42-moe-rdma-transaction-probe"
+    },
+    "session-recovery": {
+      "result_sha256": "2f42d7588cb386a8931a70a820a5f2cf1bbf8e7cf742216869f163f2ee5ed96b",
+      "input_identity": {
+        "/home/lry/moe-ub-cosim/runs/atomic32_transactions_20261030/inputs/work.json": "5c9f088c8cafc46e064d08740588ca28294487b14ac8234db18d90f02cc8a69b",
+        "/home/lry/moe-ub-cosim/runs/atomic32_transactions_20261030/inputs/recovery.json": "57558c4df6362d215b0c7345fd92160f331b4e860d7e5074cc6a973216335c35",
+        "/home/lry/moe-ub-cosim/runs/atomic32_transactions_20261030/inputs/topology/topology.json": "5389993e9aa1dfc148b4713b0a2b0c0521de24b41b74060e2db7eb9f048c444f",
+        "/home/lry/moe-ub-cosim/runs/atomic32_transactions_20261030/build/backend.json": "bd4e213a71beb337138ff2f9bb58f57b4248acf57fdd9618619aaba294c2d886",
+        "/home/lry/moe-ub-cosim/runs/atomic32_transactions_20261030/build/output/moe-rdma/ns3.42-moe-rdma-transaction-session": "f5e375aaa585c460da43e6f49cba74c6afbbf4a132ae54cc8de3cf028d21dcb2",
+        "/home/lry/moe-ub-cosim/tests/integration/check_atomic32_network.py": "aaf8d2b125a9ab82f5c355542c36a32d6b93be1b2882835175bf84394ca93d69"
+      },
+      "executable": "/home/lry/moe-ub-cosim/runs/atomic32_transactions_20261030/build/output/moe-rdma/ns3.42-moe-rdma-transaction-session"
+    }
+  },
+  "source_sha256": {
+    "backend/README.md": "8c5aa135ac5a6a699a431a038d56fc1aa7cfb36fe46cf01546e0d270192d9b55",
+    "backend/rdma/application_window_validation.hh": "7c7354050d87da7b6a054b22516520d7fcc58a0dbed1f08c7a2345ed9d3424f8",
+    "backend/rdma/remote_memory.hh": "2fd63c6e5e19afb8f45bf78ad41723dbf7b389547dea93297a527d40f45c437c",
+    "backend/rdma/remote_transactions.cc": "e428f96504c37b79c74d04f9657de00d0f754db124dfb1b5559ba384457dfded",
+    "backend/rdma/session_wakeups.hh": "5209c830af386085ebe027febf9fbd34d4ee41dacdb9e30feb4263e7751971de",
+    "backend/rdma/transaction_effect_order.hh": "d5a91cd3850022adb88afc9cc380c08f15b508db079fd4c0e32445a898dfd32d",
+    "backend/rdma/transaction_probe.cc": "8beea348c0dadd0338aa44cd2ab28894de1d0ca1ca1653c25594cf515aae706a",
+    "backend/rdma/transaction_session_validation.hh": "5d2ff15e06fc2d585beaa3f39459e380fa885469be4cc9d93035b66db7bb7c3f",
+    "docs/model_validation.md": "9a56b629844542e5213a0b9de11ec7ba5f1baf1c3a4788bbf656399e1b783eab",
+    "docs/record_storage.md": "058361b851bdc4b71dc2ae5a32e508ad24c7a14dcf1f19631efa3fb9e28a3902",
+    "docs/tasks/atomic32_spec.md": "42482bf5265d9813b000f20a865ddd29246540c617a58a4d413397ff39f8077f",
+    "docs/tasks/current.md": "f78c4cc6e75a78658ff35a3ea32bef52a27f2f62ef7a0b8d5101b5d4ddd2dc86",
+    "docs/user_guide.md": "58c1e09bed11462e75df9c7010e15e349037467eb7c7249e56acfc183f4a3e30",
+    "examples/scaleout_atomic32/README.md": "74fa619cb77575810918bc376282087855d1392701b1f5ca3256626772081186",
+    "examples/scaleout_atomic32/prepare.py": "285f48d4cbe8e81fe63c067a74becb801fd2b661554f4e065a6a83cc03ec4b4e",
+    "examples/scaleout_rdma_transactions/README.md": "7347eee6be9423009ccf440e0e4699b19c5d471ad2eaab4c7dd6ca59c4470b1f",
+    "python/moe_ub_cosim/application_windows.py": "11da7deed12d131610ba568c5bebd77f0f53745f19878d0d1ff592c2ea7e23e8",
+    "python/moe_ub_cosim/cli.py": "46a3f446b16b5b5abc2dffa579f5848b2f539f5d335609a3a8fa06dcab6cfd9c",
+    "python/moe_ub_cosim/scaleout_transactions.py": "14a4f0b312124b59522ad8e019083339ffee8657f4b2066ee6950ca0fea2be24",
+    "python/moe_ub_cosim/transaction_session.py": "310ceff5dbd62b77942ee40b770abb7e95affc5d3da8433d0696cdbe387c5fe6",
+    "tests/integration/audit_atomic32_network.py": "2cc0435c40490eec7664c83288e959a077389ddd009737384fccbc33e4049ab9",
+    "tests/integration/check_atomic32_admission.py": "8b948993efb0d442605d7fc1fa1fd275e98c4908856fc4f36fcae9ab8c365a0f",
+    "tests/integration/check_atomic32_cpu.py": "de658f3a272554c9e6e1f38949897616d6aa4400d42e1f1fb95a55acdde04e33",
+    "tests/integration/check_atomic32_network.py": "aaf8d2b125a9ab82f5c355542c36a32d6b93be1b2882835175bf84394ca93d69",
+    "tests/integration/summarize_atomic32.py": "ba6486a83938828db1805e30ac2861dd60d0f09221fded6e64b5759a4d64fe93",
+    "tests/unit/atomic32_input_test.py": "86625179fe225df1f49b917453f97aa78e5fa0f4078cf0e35ba4e153d4c89902",
+    "tests/unit/atomic32_memory_test.cc": "66c9deeec4f75e5f8a4dc2f2cf0187b35587dfc3d9894c6dc51b6b050c3f8b5d",
+    "tests/unit/session_wakeups_test.cc": "0a93e2d99bb83e016cc886ec7d644484016dc14e4037377315d6c7816a3079eb",
+    "examples/scaleout_clos128/clos-128.json": "126d85b9320aba4e9368d643777798166269eab06edef5bf90d37ca112c35ce0",
+    "examples/scaleout_clos128/rdma.json": "79fce8a721d328bc87f3ae5deb9028039c020605b53b0d0b552674d12cdf7af9",
+    "examples/scaleout_rdma_transactions/selective-chain.json": "efe62d54f08cfc246c45d8e1ef4fac9ea5f14cd141abae9211a6d2358c929472"
+  },
+  "monitors": {
+    "admission": {
+      "wall_seconds": 0.43193687399616465,
+      "peak_rss_bytes": 20246528,
+      "peak_artifact_bytes": 105668608,
+      "sha256": "99adbf7c0efe8cf1624633cffe87a408343137b4b6d5cef40aa23f36fb6bf742"
+    },
+    "audit-final": {
+      "wall_seconds": 0.2155224879970774,
+      "peak_rss_bytes": 5349376,
+      "peak_artifact_bytes": 105709568,
+      "sha256": "273e1c9e551788a69ef4cd8bac4bc9519e5ca1ecc9bef1a45832bde9a0dd92eb"
+    },
+    "audit-v1": {
+      "wall_seconds": 0.21056995500111952,
+      "peak_rss_bytes": 5345280,
+      "peak_artifact_bytes": 105488384,
+      "sha256": "8b1712b51eac39575d492058f0b329622c5f452f6d278a9ac11ca7b919fed7de"
+    },
+    "audit-v2": {
+      "wall_seconds": 0.21412952401442453,
+      "peak_rss_bytes": 5316608,
+      "peak_artifact_bytes": 105689088,
+      "sha256": "e6198a44ea4acd7bae58bb0c4dbc169f569235729f554ec303487c3c73cd30af"
+    },
+    "build": {
+      "wall_seconds": 431.0500059229671,
+      "peak_rss_bytes": 1831403520,
+      "peak_artifact_bytes": 104505344,
+      "sha256": "595fabadf17db3471b1058747b724c1c4689e161695fbc17f85b6a98f8b2dd75"
+    },
+    "cpu": {
+      "wall_seconds": 6.639535373018589,
+      "peak_rss_bytes": 367259648,
+      "peak_artifact_bytes": 1613824,
+      "sha256": "d18c0bb4579613ec5bfb4f870b0701b9caa1bf1f5bf26f29bf94dd4cbbaa3253"
+    },
+    "network-normal": {
+      "wall_seconds": 0.6300326939672232,
+      "peak_rss_bytes": 106442752,
+      "peak_artifact_bytes": 104779776,
+      "sha256": "535971c5ea5cf5f9fa1335d3ba9389646022e65f63d869c58c762e6b82bc3021"
+    },
+    "network-recovery": {
+      "wall_seconds": 0.6380199089762755,
+      "peak_rss_bytes": 107528192,
+      "peak_artifact_bytes": 105062400,
+      "sha256": "3a7b44e692ba177d76fa85c7ff90d5e00c25829f28d9211db438b0c764bca6da"
+    },
+    "network-session-recovery": {
+      "wall_seconds": 0.8750706900027581,
+      "peak_rss_bytes": 153698304,
+      "peak_artifact_bytes": 105472000,
+      "sha256": "e32d26596a34d2e3da53e6a8823ba2e299ad49e4a6078e5d693fb250e4007c1b"
+    },
+    "preflight": {
+      "wall_seconds": 14.962237602972891,
+      "peak_rss_bytes": 665260032,
+      "peak_artifact_bytes": 1859584,
+      "sha256": "a0b53af30b1cf02529340f955ec7c43021fe11f5569b87e48b2f838e34b0629a"
+    }
+  },
+  "completed_monitored_wall_seconds_at_receipt": 455.8670610329136,
+  "peak_sampled_group_rss_bytes": 1831403520,
+  "artifact_apparent_bytes_at_receipt": 102653366,
+  "raw_run": "/home/lry/moe-ub-cosim/runs/atomic32_transactions_20261030",
+  "limitations": [
+    "artificial data, four active ranks, no real routing input",
+    "MRT1 framing and reliable response streams, not RoCE Atomic ACK",
+    "no GIN/provider/GPU timing or visibility calibration",
+    "complete legacy MoE plan network binding remains incomplete"
+  ],
+  "review_notes": [
+    "Initial read-only audit used queue column 10 as payload length; corrected to column-name lookup.",
+    "Existing normal network reused for auditor refinements; each declared network executed once.",
+    "No dependency/source upgrade, package install, cleanup or physical GPU execution."
+  ]
+}

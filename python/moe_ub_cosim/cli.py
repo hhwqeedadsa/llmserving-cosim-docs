@@ -123,7 +123,7 @@ def parser():
     rp.add_argument('--messages', type=Path, required=True, help='Bounded microprobe message array, not an LLM workload')
     rp.add_argument('--backend', type=Path, required=True, help='Executable returned by rdma-build')
     rp.add_argument('--output', type=Path, required=True, help='New result directory on a volume with at least 8GiB free')
-    rt = sc.add_parser('rdma-transaction-probe', help='Execute native MRT1 transactions; v4 guarded copy, v5 sparse/prefix, same-server peer copy and explicit self-peer service, optional NIC registrations/local views; not GIN/RoCE timing')
+    rt = sc.add_parser('rdma-transaction-probe', help='Execute native MRT1 put/fetch_add(64)/fetch_add32 with optional local 32/64-bit waits; v4 guarded copy, v5 sparse/prefix, peer service and NIC registrations/local views; not GIN/RoCE timing')
     rt.add_argument('--topology', type=Path, required=True)
     rt.add_argument('--protocol', type=Path, required=True)
     rt.add_argument('--config', type=Path, required=True)
@@ -138,7 +138,7 @@ def parser():
     rcf = sc.add_parser('rc-fabric-probe', help='Concurrent RC QPs on one shared native network and target memory; one WQE per QP, fixed rate, zero ICRC placeholder')
     for name in ('topology','protocol','config','backend','output'):
         rcf.add_argument('--'+name,type=Path,required=True)
-    session = sc.add_parser('rdma-transaction-session', help='Submit v4/v5 work after actual native callbacks; optional NIC registrations/local views, v5 sparse/prefix, same-server peer copy and explicit self-peer service; not modern GIN/GPU timing')
+    session = sc.add_parser('rdma-transaction-session', help='Submit v4/v5 put/fetch_add(64)/fetch_add32 and local 32/64-bit waits after actual native callbacks; optional NIC registrations/local views, sparse/prefix and peer service; not modern GIN/GPU timing')
     for name in ('topology', 'protocol', 'config', 'backend', 'output'):
         session.add_argument('--'+name, type=Path, required=True)
     session.add_argument('--reuse-static-validation',action='store_true',help='Reuse an exact type-preserving static streams check within this session; writes host-only static-validation.json')

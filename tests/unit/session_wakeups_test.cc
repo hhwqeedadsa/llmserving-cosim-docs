@@ -39,6 +39,8 @@ int main() {
   catch(const std::invalid_argument&){failed=true;}check(failed);++rejections;
   check(W::Parse(J{{"wake_on",J::array({reference(0,"prepared")})}},program,{},48)->size()==1);
   auto put=program;put["operations"][0]["verb"]="put";failed=false;
+  auto atomic32=program;atomic32["operations"][0]["verb"]="fetch_add32";
+  check(W::Parse(J{{"wake_on",J::array({reference(0,"response")})}},atomic32,{},48)->size()==1);
   try {W::Parse(J{{"wake_on",J::array({reference(0,"response")})}},put,{},48);}
   catch(const std::invalid_argument&){failed=true;}check(failed);++rejections;
   auto self=program;self["connections"][0]["self_service"]=J::object();

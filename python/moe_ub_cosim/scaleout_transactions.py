@@ -39,21 +39,27 @@ def sparse_window_size(window):
 
 def _local_waits(waits, owner, registered):
     require(isinstance(waits, list) and 1 <= len(waits) <= 8, 'require 1..8 local wait conditions')
-    locations = set()
+    locations, ranges = set(), []
     for wait in waits:
         require(isinstance(wait, dict), 'local wait must be an object')
-        fields(wait, 'key address compare value'+(' reset_to' if 'reset_to' in wait else ''), 'local wait')
+        fields(wait, 'key address compare value'+(' reset_to' if 'reset_to' in wait else '')+
+               (' bits' if 'bits' in wait else ''), 'local wait')
+        bits = wait.get('bits', 64)
+        require(type(bits) is int and bits in (32, 64), 'local wait bits must be 32 or 64')
         integer(wait['key'], 'local key', 1, 2**32-1)
         integer(wait['address'], 'local address', 0, 2**64-1)
-        integer(wait['value'], 'local wait value', 0, 2**64-1)
-        if 'reset_to' in wait: integer(wait['reset_to'], 'local consume value', 0, 2**64-1)
+        integer(wait['value'], 'local wait value', 0, 2**bits-1)
+        if 'reset_to' in wait: integer(wait['reset_to'], 'local consume value', 0, 2**bits-1)
         location = owner, wait['key']
         require(location in registered and wait['compare'] in ('eq', 'ge'), 'unknown local owner/key or comparison')
         window, size = registered[location]
-        require(wait['address']%8 == 0 and window['address'] <= wait['address'] and
-                wait['address']+8 <= window['address']+size, 'local wait address out of bounds/unaligned')
+        require(wait['address']%(bits//8) == 0 and window['address'] <= wait['address'] and
+                wait['address']+bits//8 <= window['address']+size, 'local wait address out of bounds/unaligned')
         item = wait['key'], wait['address']
         require(item not in locations, 'repeated local wait location'); locations.add(item)
+        require(all(wait['key'] != key or wait['address']+bits//8 <= start or end <= wait['address']
+                    for key, start, end in ranges), 'overlapping local wait ranges')
+        ranges.append((wait['key'], wait['address'], wait['address']+bits//8))
 
 
 def execution_limits(config):
@@ -223,7 +229,7 @@ def validate(topology, protocol, config, *, allow_no_remote=False, stream_cache=
                     window, size = registered[key]
                     require(window['address'] <= item['address'] and item['address']+source['bytes'] <= window['address']+size,
                             'local copy range out of bounds')
-                    require(all(owner != op['rank'] or 'reset_to' not in w or w['address']+8 <= item['address'] or
+                    require(all(owner != op['rank'] or 'reset_to' not in w or w['address']+w.get('bits',64)//8 <= item['address'] or
                                 item['address']+source['bytes'] <= w['address'] for w in op.get('local_wait', [])),
                             'local copy overlaps own condition reset')
                 require(target_owner != op['rank'] or source['address']+source['bytes'] <= target['address'] or
@@ -235,7 +241,7 @@ def validate(topology, protocol, config, *, allow_no_remote=False, stream_cache=
             continue
         remote_count += 1
         require(remote_count <= counts['max_remote_operations'], 'remote transaction budget exceeded')
-        require(isinstance(op, dict) and op.get('verb') in ('put', 'fetch_add'), 'unsupported transaction verb')
+        require(isinstance(op, dict) and op.get('verb') in ('put', 'fetch_add', 'fetch_add32'), 'unsupported transaction verb')
         from_source = 'source' in op
         require(not from_source or (source_mode and op['verb'] == 'put' and 'hex' not in op), 'source requires v3 put without hex')
         fields(op, 'id connection verb key address after '+('source' if from_source else 'hex' if op['verb'] == 'put' else 'value')+
@@ -270,9 +276,9 @@ def validate(topology, protocol, config, *, allow_no_remote=False, stream_cache=
         elif op['verb'] == 'put':
             length = _hex(op['hex'], 32768, 'put')
         else:
-            integer(op['value'], 'atomic addend', 0, 2**64-1)
-            require(window['allow_atomic'] and (access is None or access['allow_atomic']) and op['address']%8 == 0, 'atomic denied/unaligned')
-            length = 8
+            length = 4 if op['verb'] == 'fetch_add32' else 8
+            integer(op['value'], 'atomic addend', 0, 2**(length*8)-1)
+            require(window['allow_atomic'] and (access is None or access['allow_atomic']) and op['address']%length == 0, 'atomic denied/unaligned')
         require(window['address'] <= op['address'] and op['address']+length <= window['address']+size,
                 'remote address out of bounds')
         if access is not None:
@@ -290,12 +296,12 @@ def validate(topology, protocol, config, *, allow_no_remote=False, stream_cache=
         if 'local_wait' in op:
             _local_waits(op['local_wait'], by_id[op['connection']]['src'], registered)
             if from_source:
-                require(all('reset_to' not in w or w['address']+8 <= source['address'] or
+                require(all('reset_to' not in w or w['address']+w.get('bits',64)//8 <= source['address'] or
                             source['address']+length <= w['address'] for w in op['local_wait']),
                         'source overlaps own condition reset; use separate steps')
         for prior, prior_key, n in accesses:
             if key == prior_key and op['address'] < prior['address']+n and prior['address'] < op['address']+length:
-                require(op['verb'] == prior['verb'] == 'fetch_add' or prior['id'] in safe_parents or
+                require((op['verb'] in ('fetch_add','fetch_add32') and prior['verb'] in ('fetch_add','fetch_add32')) or prior['id'] in safe_parents or
                         (prior['connection'] == op['connection'] and prior['id'] in parents),
                         'overlapping non-atomic memory writes require remote effect order; '
                         'prepared does not order writes across connections')

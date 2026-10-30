@@ -117,6 +117,8 @@ transactions/2新增顶层`local_model/local_work/completed_local_work/pending_l
 
 原生事务的`transactions.local_events`记录提交GPU读到的本地条件、observed_value和可选reset_to；与`target_events`共用`order`，用于离线核对同ns内的先后，不影响报文。顶层`pending_operations`在截止时保存未提交操作及其当前local_wait，便于区别条件不满足与网络已排空；字段见[本地窗口等待](../examples/scaleout_rdma_transactions/README.md#根据实际收到的值推进下一轮)。
 
+显式32位事务的操作行`verb=fetch_add32`、`returned_value`为32位无符号旧值；目标事件`verb=4/body_hex`来自实际4B请求，回复在实际负载中为MRT1 verb5。32位条件保留`bits=32`，缺省条件不增加该字段；`observed_value/reset_to`只作用于对应4B。实际消费过32位条件时`local_wait_scope`说明LE32/LE64；旧64位输出默认不变。包重传不等于再次目标应用，核查须区分source TX、`payload_delivered`与`target_events`，见[逐包方法](../examples/scaleout_atomic32/README.md#逐包复核)。
+
 `rdma-transaction-probe`的`result.json.transactions`保存操作六种时刻、原子返回值、最终窗口、队列前缀及目标实际应用事件；底层记录在`transport`。payload接收模式另含`source_payload_packets`的实际发出有效载荷hex，可按stream/sequence独立还原MRT1帧。目标事件及操作匹配仅供离线核查，不提供给算法；`applied`不代表GPU可见，`completed`不代表真实GIN CQE。字段、预算和层次见[远端事务输出](../examples/scaleout_rdma_transactions/README.md#输出与完成)。
 
 v5显式声明`execution_limits`时，`transactions.execution_limits`保存本次生效的`max_connections/max_remote_operations/max_local_operations`；离线入口和在线会话相同。省略声明时不输出该字段，默认行为不变。它们是生命周期准入数量，不是峰值占用、带宽、硬件容量或实测GPU内存；具体独立限制见[执行额度](../examples/scaleout_rdma_transactions/README.md#配置较多连接与较长程序)。

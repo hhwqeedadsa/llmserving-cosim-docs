@@ -78,7 +78,7 @@ def _wake_plan(program, wake_on, delivered):
             connections = {connection['id']: connection for connection in program['connections']}
             require('self_service' not in connections[known[identity]['connection']],
                     'self service has no wire ACK or response callback')
-            require(event != 'response' or known[identity]['verb'] == 'fetch_add', 'put has no response callback')
+            require(event != 'response' or known[identity]['verb'] in ('fetch_add', 'fetch_add32'), 'put has no response callback')
         key = identity, event
         require(key not in delivered and key not in seen, 'duplicate or already delivered session wakeup')
         seen.add(key)
@@ -282,8 +282,9 @@ class NativeTransactionSession:
                 require(key not in self._delivered and key not in incoming, 'duplicate session callback')
                 incoming.add(key)
                 if 'returned_value' in row:
+                    maximum = 2**32 if known[row['operation']].get('verb') == 'fetch_add32' else 2**64
                     require(row['event'] in ('response', 'completed') and type(row['returned_value']) is int and
-                            0 <= row['returned_value'] < 2**64, 'invalid session return value')
+                            0 <= row['returned_value'] < maximum, 'invalid session return value')
             self._delivered.update(incoming)
             for identity in fired_alarms:
                 self._alarms[identity]['status'] = 'fired'

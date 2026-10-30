@@ -62,7 +62,7 @@ inline void ValidateApplicationWindows(const Json& input) {
       for(auto i:uses) {const auto& v=lookup.at(i);if(v.key==key && address>=v.address && address-v.address<=v.bytes && bytes<=v.bytes-(address-v.address))found=true;}
       Require(found,"local memory range missing covering application use");
     };
-    if(op.contains("local_wait"))for(const auto& r:op.at("local_wait"))range(r,8);
+    if(op.contains("local_wait"))for(const auto& r:op.at("local_wait"))range(r,r.value("bits",64)/8);
     if(op.contains("source"))range(op.at("source"),op.at("source").at("bytes"));
     if(op.contains("copy"))for(const auto* k:{"source","target"})range(op.at("copy").at(k),op.at("copy").at("source").at("bytes"));
     if(op.contains("release_window")) {

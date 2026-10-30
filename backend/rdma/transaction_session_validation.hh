@@ -136,19 +136,27 @@ inline void ValidateSessionProgram(const Json& input,const Json& topology,int64_
     uint64_t owner;
     if(is_local) {owner=SessionInteger(op.at("rank"),31);Require(gpus.count(owner),"session local rank absent");SessionInteger(op.at("duration_ns"),max_ns);++local_count;}
     else {const auto c=SessionInteger(op.at("connection"),execution_limits.connections-1);Require(endpoints.count(c),"unknown session connection");owner=endpoints.at(c).first;++remote_count;}
-    std::vector<std::pair<uint64_t,uint64_t>> resets;
+    struct Reset {uint64_t key,address,bytes;};std::vector<Reset> resets,wait_ranges;
     if(op.contains("local_wait")) {
       const auto& waits=op.at("local_wait");Require(waits.is_array() && !waits.empty() && waits.size()<=8,"invalid session local waits");
       std::set<std::pair<uint64_t,uint64_t>> seen;
       for(const auto& w:waits) {
-        std::vector<std::string> wk={"key","address","compare","value"};if(w.contains("reset_to"))wk.push_back("reset_to");SessionKeys(w,wk);
-        const auto key=SessionInteger(w.at("key"),UINT32_MAX),address=SessionInteger(w.at("address"));SessionInteger(w.at("value"));
-        Require(address%8==0 && (w.at("compare")=="eq" || w.at("compare")=="ge") && seen.emplace(key,address).second,"invalid session wait comparison/address");range(owner,key,address,8);
-        if(w.contains("reset_to")) {SessionInteger(w.at("reset_to"));resets.emplace_back(key,address);}
+        std::vector<std::string> wk={"key","address","compare","value"};
+        if(w.contains("reset_to"))wk.push_back("reset_to");
+        if(w.contains("bits"))wk.push_back("bits");
+        SessionKeys(w,wk);
+        const auto bits=w.contains("bits")?SessionInteger(w.at("bits"),64):64;
+        Require(bits==32 || bits==64,"session wait bits must be 32 or 64");
+        const auto maximum=bits==32?uint64_t(UINT32_MAX):UINT64_MAX;
+        const auto key=SessionInteger(w.at("key"),UINT32_MAX),address=SessionInteger(w.at("address"));SessionInteger(w.at("value"),maximum);
+        Require(address%(bits/8)==0 && (w.at("compare")=="eq" || w.at("compare")=="ge") && seen.emplace(key,address).second,"invalid session wait comparison/address");range(owner,key,address,bits/8);
+        for(const auto& r:wait_ranges)Require(r.key!=key || address+bits/8<=r.address || r.address+r.bytes<=address,"overlapping session wait ranges");
+        wait_ranges.push_back({key,address,bits/8});
+        if(w.contains("reset_to")) {SessionInteger(w.at("reset_to"),maximum);resets.push_back({key,address,bits/8});}
       }
     }
     auto separate_resets=[&](uint64_t key,uint64_t address,uint64_t bytes) {
-      for(const auto& [rk,ra]:resets)Require(rk!=key || ra+8<=address || address+bytes<=ra,"session source/copy overlaps own reset");
+      for(const auto& r:resets)Require(r.key!=key || r.address+r.bytes<=address || address+bytes<=r.address,"session source/copy overlaps own reset");
     };
     if(is_local && op.contains("copy")) {
       const auto& cp=op.at("copy");SessionKeys(cp,{"source","target"});const auto& s=cp.at("source");const auto& t=cp.at("target");
@@ -172,19 +180,19 @@ inline void ValidateSessionProgram(const Json& input,const Json& topology,int64_
         for(const auto& r:registrations)if(r.owner==dst && r.nic==destination_nics.at(op.at("connection")) && r.key==key)access=&r;
         Require(access,"unknown session destination NIC/key registration");storage_key=access->window_key;
       }
-      const auto verb=op.at("verb").get<std::string>();Require(verb=="put" || verb=="fetch_add","invalid session verb");uint64_t bytes;
+      const auto verb=op.at("verb").get<std::string>();Require(verb=="put" || verb=="fetch_add" || verb=="fetch_add32","invalid session verb");uint64_t bytes;
       if(op.contains("source")) {
         Require(verb=="put","session source requires put");const auto& s=op.at("source");SessionKeys(s,{"key","address","bytes"});
         const auto sk=SessionInteger(s.at("key"),UINT32_MAX),sa=SessionInteger(s.at("address"));bytes=SessionInteger(s.at("bytes"),32768);range(owner,sk,sa,bytes);separate_resets(sk,sa,bytes);
       } else if(verb=="put") {bytes=MemoryUnhex(op.at("hex").get<std::string>()).size();Require(bytes>0 && bytes<=32768,"session put length exceeded");}
-      else {bytes=8;SessionInteger(op.at("value"));Require(windows.count({dst,storage_key}) && windows.at({dst,storage_key}).atomic &&
-        (!access || access->atomic) && address%8==0,"session atomic denied/unaligned");}
+      else {bytes=verb=="fetch_add32"?4:8;SessionInteger(op.at("value"),bytes==4?uint64_t(UINT32_MAX):UINT64_MAX);Require(windows.count({dst,storage_key}) && windows.at({dst,storage_key}).atomic &&
+        (!access || access->atomic) && address%bytes==0,"session atomic denied/unaligned");}
       range(dst,storage_key,address,bytes);
       if(access)Require(address>=access->address && address-access->address<=access->bytes &&
         bytes<=access->bytes-(address-access->address),"session registration range exceeded");
       for(const auto& w:writes)if(w.owner==dst && address<w.address+w.bytes && w.address<address+bytes)
-        Require((verb=="fetch_add" && w.atomic) || parents.count(w.id),"session overlapping remote writes lack causal order");
-      writes.push_back({id,dst,key,address,bytes,verb=="fetch_add"});
+        Require(((verb=="fetch_add" || verb=="fetch_add32") && w.atomic) || parents.count(w.id),"session overlapping remote writes lack causal order");
+      writes.push_back({id,dst,key,address,bytes,verb=="fetch_add" || verb=="fetch_add32"});
       if(op.contains("queue_fence")) {
         const auto& fs=op.at("queue_fence");Require(fs.is_array() && !fs.empty() && fs.size()<=execution_limits.connections,"invalid session fence budget");std::set<uint64_t> seen;
         for(const auto& item:fs) {const auto c=SessionInteger(item,execution_limits.connections-1);Require(endpoints.count(c) && endpoints.at(c).first==owner && seen.insert(c).second,"invalid session fence connection");}

@@ -144,8 +144,9 @@ Json RemoteTransactions::LocalWaits(const Json& input) const {
   const auto& waits=input.at("local_wait");
   Require(waits.is_array() && !waits.empty() && waits.size()<=8,"invalid local wait budget");
   std::set<std::pair<uint32_t,uint64_t>> seen;
+  struct WaitRange {uint32_t key;uint64_t address,bytes;};std::vector<WaitRange> ranges;
   for(const auto& condition:waits) {
-    Require(condition.is_object() && condition.size()==(condition.contains("reset_to")?5u:4u),"invalid local wait fields");
+    Require(condition.is_object() && condition.size()==4u+condition.contains("reset_to")+condition.contains("bits"),"invalid local wait fields");
     auto integer=[&](const char* name,uint64_t maximum=UINT64_MAX) {
       const auto& value=condition.at(name);
       Require(value.is_number_integer() && (value.is_number_unsigned() || value.get<int64_t>()>=0),"invalid local condition integer");
@@ -153,11 +154,16 @@ Json RemoteTransactions::LocalWaits(const Json& input) const {
     };
     const auto key=static_cast<uint32_t>(integer("key",UINT32_MAX));
     Require(key>0,"local condition key must be nonzero");
-    const auto address=integer("address"),expected=integer("value");
-    if(condition.contains("reset_to"))integer("reset_to");
+    const auto bits=condition.contains("bits")?integer("bits",64):64;
+    Require(bits==32 || bits==64,"local wait bits must be 32 or 64");
+    const auto maximum=bits==32?uint64_t(UINT32_MAX):UINT64_MAX;
+    const auto address=integer("address"),expected=integer("value",maximum);
+    if(condition.contains("reset_to"))integer("reset_to",maximum);
     const auto compare=condition.at("compare").get<std::string>();
     Require((compare=="eq" || compare=="ge") && seen.emplace(key,address).second,"invalid/repeated local wait");
-    const auto value=memory_.Load64(owner,key,address);
+    for(const auto& r:ranges)Require(r.key!=key || address+bits/8<=r.address || r.address+r.bytes<=address,"overlapping local wait ranges");
+    const uint64_t value=bits==32?memory_.Load32(owner,key,address):memory_.Load64(owner,key,address);
+    ranges.push_back({key,address,bits/8});
     Json row=condition;row["owner"]=owner;row["observed_value"]=value;
     row["matched"]=compare=="eq"?value==expected:value>=expected;out.push_back(row);
   }
@@ -173,9 +179,11 @@ void RemoteTransactions::ConsumeConditions(const Json& input,const Json& observa
   for(const auto& condition:observations)Require(condition.at("matched"),"consume before local conditions satisfied");
   // Precheck every reset before the first write, including outstanding readers.
   for(const auto& condition:observations)if(condition.contains("reset_to"))
-    memory_.CheckWritable(owner,condition.at("key"),condition.at("address"),8);
-  for(const auto& condition:observations)if(condition.contains("reset_to"))
-    memory_.Store64(owner,condition.at("key"),condition.at("address"),condition.at("reset_to"));
+    memory_.CheckWritable(owner,condition.at("key"),condition.at("address"),condition.value("bits",64)/8);
+  for(const auto& condition:observations)if(condition.contains("reset_to")) {
+    if(condition.value("bits",64)==32)memory_.Store32(owner,condition.at("key"),condition.at("address"),condition.at("reset_to"));
+    else memory_.Store64(owner,condition.at("key"),condition.at("address"),condition.at("reset_to"));
+  }
   local_events_.push_back({{"order",memory_order_++},{"time_ns",MemoryNow()},{"operation",input.at("id")},
     {"owner",owner},{"conditions",observations}});
 }
@@ -217,9 +225,9 @@ RemoteTransactions::LocalCopy RemoteTransactions::Copy(const Json& input) const 
   const auto& a=result.source;const auto& b=result.target;
   Require(a.owner!=b.owner || a.address+a.bytes<=b.address || b.address+b.bytes<=a.address,"local copy source/target overlap");
   for(const auto& w:LocalWaits(input))if(w.contains("reset_to")) {
-    const auto address=w.at("address").get<uint64_t>();
-    Require((address+8<=a.address || a.address+a.bytes<=address) &&
-            (b.owner!=owner || address+8<=b.address || b.address+b.bytes<=address),"local copy overlaps own condition reset");
+    const auto address=w.at("address").get<uint64_t>();const uint64_t bytes=w.value("bits",64)/8;
+    Require((address+bytes<=a.address || a.address+a.bytes<=address) &&
+            (b.owner!=owner || address+bytes<=b.address || b.address+b.bytes<=address),"local copy overlaps own condition reset");
   }
   return result;
 }
@@ -283,8 +291,8 @@ RemoteMemory::ReadLease RemoteTransactions::Source(const Json& input) const {
   // Consuming a counter inside this same source would change the data before
   // publication. Require separate application steps instead of picking an order.
   for(const auto& w:LocalWaits(input))if(w.contains("reset_to")) {
-    const auto address=w.at("address").get<uint64_t>();
-    Require(address+8<=range.address || range.address+range.bytes<=address,"source overlaps own condition reset");
+    const auto address=w.at("address").get<uint64_t>();const uint64_t bytes=w.value("bits",64)/8;
+    Require(address+bytes<=range.address || range.address+range.bytes<=address,"source overlaps own condition reset");
   }
   return range;
 }
@@ -340,8 +348,9 @@ void RemoteTransactions::Submit(const Json& input) {
     } else op.request.body=MemoryUnhex(input.at("hex"));
   }
   else {
-    Require(input.at("verb")=="fetch_add","unsupported memory transaction verb");
-    op.request.verb=MemoryFrame::FetchAdd;op.request.body=MemoryInteger(input.at("value"));
+    Require(input.at("verb")=="fetch_add" || input.at("verb")=="fetch_add32","unsupported memory transaction verb");
+    op.request.verb=input.at("verb")=="fetch_add32"?MemoryFrame::FetchAdd32:MemoryFrame::FetchAdd;
+    op.request.body=MemoryInteger(input.at("value"),MemoryValueBytes(op.request.verb));
   }
   if(!bounded_buffers_)EncodeMemoryFrame(op.request);
   const auto observations=LocalWaits(input);
@@ -499,17 +508,19 @@ void RemoteTransactions::Request(uint64_t connection,const MemoryFrame& frame) {
   else {Require(op.applied<0,"duplicate target application");op.applied=MemoryNow();dirty_progress_.insert(op.id);}
   if(c.self && result.atomic)op.returned_value=result.old_value;
   if(result.atomic && !c.self) {
-    MemoryFrame reply;reply.verb=MemoryFrame::Reply;reply.sequence=frame.sequence;reply.body=MemoryInteger(result.old_value);
+    MemoryFrame reply;reply.verb=frame.verb==MemoryFrame::FetchAdd32?MemoryFrame::Reply32:MemoryFrame::Reply;
+    reply.sequence=frame.sequence;reply.body=MemoryInteger(result.old_value,MemoryValueBytes(frame.verb));
     transport_.SubmitPayload(connection*2+1,transport_work_++,EncodeMemoryFrame(reply),{});
   }
   if(changed)ns3::Simulator::ScheduleNow(changed);
 }
 void RemoteTransactions::Response(uint64_t connection,const MemoryFrame& frame) {
   auto& c=connections_.at(connection);
-  Require(frame.verb==MemoryFrame::Reply && frame.sequence<c.operations.size(),"invalid transaction response");
+  Require(MemoryReply(frame.verb) && frame.sequence<c.operations.size(),"invalid transaction response");
   auto& op=operations_.at(c.operations.at(frame.sequence));
-  Require(op.request.verb==MemoryFrame::FetchAdd && op.published>=0,"response for non-atomic/unpublished work");
-  const auto value=MemoryRead(frame.body.data(),8);
+  Require(MemoryAtomic(op.request.verb) && op.published>=0,"response for non-atomic/unpublished work");
+  Require(MemoryValueBytes(frame.verb)==MemoryValueBytes(op.request.verb),"atomic response width mismatch");
+  const auto value=MemoryRead(frame.body.data(),MemoryValueBytes(frame.verb));
   if(op.response>=0) {Require(value==op.returned_value,"conflicting duplicate response");return;}
   op.returned_value=value;op.response=MemoryNow();dirty_progress_.insert(op.id);Retire(connection);
 }
@@ -518,7 +529,7 @@ void RemoteTransactions::Retire(uint64_t connection) {
   for(const auto id:c.operations) {
     auto& op=operations_.at(id);
     if(op.completed>=0)continue;
-    if(c.self?op.self_finished<0:(op.request_ack<0 || (op.request.verb==MemoryFrame::FetchAdd && op.response<0)))break;
+    if(c.self?op.self_finished<0:(op.request_ack<0 || (MemoryAtomic(op.request.verb) && op.response<0)))break;
     op.completed=MemoryNow();dirty_progress_.insert(id);c.queue.CompleteThrough(op.ticket+1);
     if(op.has_source) {memory_.ReleaseRead(id);SourceEvent(id,"released",op.source);}
     ReleaseApplicationUse(id);
@@ -544,12 +555,12 @@ void RemoteTransactions::Close() {
 }
 Json RemoteTransactions::ProgressRow(const Operation& op) const {
     Json value={{"id",op.id},{"connection",op.connection},{"sequence",op.request.sequence},{"ticket",op.ticket},
-      {"verb",op.request.verb==MemoryFrame::Put?"put":"fetch_add"},{"ready_ns",op.ready},{"published_ns",op.published},
+      {"verb",op.request.verb==MemoryFrame::Put?"put":op.request.verb==MemoryFrame::FetchAdd32?"fetch_add32":"fetch_add"},{"ready_ns",op.ready},{"published_ns",op.published},
       {"applied_ns",op.applied},{"request_acked_ns",op.request_ack},{"response_ns",op.response},{"completed_ns",op.completed}};
     if(connections_.at(op.connection).self) {
       value["delivery"]="declared_self_service/1";value["self_started_ns"]=op.self_started;value["self_completed_ns"]=op.self_finished;
     }
-    if(op.request.verb==MemoryFrame::FetchAdd && (op.response>=0 || op.self_finished>=0))value["returned_value"]=op.returned_value;
+    if(MemoryAtomic(op.request.verb) && (op.response>=0 || op.self_finished>=0))value["returned_value"]=op.returned_value;
     if(explicit_submission_)value["prepared_ns"]=op.prepared;
     if(staged_submission_)value["descriptor_ready_ns"]=op.descriptor_ready;
     return value;
@@ -632,6 +643,9 @@ Json RemoteTransactions::Report() const {
   if(explicit_submission_)out["submission"]={{"mode",staged_submission_?"staged_prefix/1":"explicit_prefix/1"},{"publications",publications_}};
   out["target_events"]=target_events_;out["local_events"]=local_events_;
   out["local_wait_scope"]="functional local LE64 eq/ge, optional consume; no GPU coherence or polling cost";
+  if(std::any_of(local_events_.begin(),local_events_.end(),[](const auto& event){
+    return std::any_of(event.at("conditions").begin(),event.at("conditions").end(),[](const auto& w){return w.value("bits",64)==32;});
+  }))out["local_wait_scope"]="functional local LE32/LE64 unsigned eq/ge, optional consume; no GPU coherence or polling cost";
   out["queue_fences"]=Json::array();
   for(const auto& fence:queue_fences_.items())out["queue_fences"].push_back(fence.value());
   out["queue_fence_scope"]="snapshot of source-owned MRT1 application queue prefixes, ACK/response completion; not GIN flush or GPU source reuse";

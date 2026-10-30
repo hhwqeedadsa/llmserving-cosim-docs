@@ -40,7 +40,7 @@ def validate_application_windows(config, storage, connections):
         for i in ids: integer(i, 'application use id', 0, 65535)
         require(len(set(ids)) == len(ids) and all(i in views and views[i]['owner'] == owner and
                 i not in closed for i in ids), 'application use unknown/foreign/closed/duplicate')
-        ranges = [(w['key'], w['address'], 8) for w in op.get('local_wait', [])]
+        ranges = [(w['key'], w['address'], w.get('bits',64)//8) for w in op.get('local_wait', [])]
         if 'source' in op:
             s = op['source']; ranges.append((s['key'], s['address'], s['bytes']))
         if 'copy' in op:

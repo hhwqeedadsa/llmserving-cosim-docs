@@ -1,5 +1,7 @@
 # 联合后端接口与执行规则
 
+`RemoteTransactions`显式支持`fetch_add32`和`local_wait.bits=32`，缺省`fetch_add`和未声明位宽的等待仍是64位。MRT1请求/回复verb4/5携带4B大端值，目标按4B小端模加；注册权限、范围、读写保护、reset及重放缓存按实际位宽执行。源退休仍等待请求ACK、实际原子回复及前序退休；这不是RoCE扩展原子或Atomic ACK编码。公开用法与相邻计数器例见[32位通知](../examples/scaleout_atomic32/README.md)。
+
 `ServiceTransport`可通过传输JSON的`message_buffers`启用功能字节缓冲。[纯核心](rdma/message_buffers.hh)管理同GPU共享的源/目标范围、实际片段写入、ACK和执行范围退休；`PersistentStreams`承载并独立核算重传副本。原图和helper分别在实际退休时结束范围，不提前释放原消息。配置、容量、输出及非RoCE寻址边界见[接口说明](../docs/message_buffers.md)。
 
 延迟完整副本可选`--control-wakeup MAX_EVENTS`：一个原生ns-3定时事件产生带`wakeup_ns`的DECIDE，COMMIT用`wake_at_ns`设置或取消下一期限。定时事件不制造消息/图完成；关闭时不增加事件。要求持久传输与执行观察，不与watchdog/helper控制混用；完整语义、资源与核验见[完整片段副本](../docs/whole_call.md)。

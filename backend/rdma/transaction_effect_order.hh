@@ -30,8 +30,8 @@ inline void ValidateTransactionEffectOrder(const Json& input) {
     if(!node.local) {
       const auto connection=op.at("connection").get<uint64_t>();
       Require(destinations.count(connection),"unknown transaction order connection");
-      const bool atomic=op.at("verb")=="fetch_add";
-      const uint64_t bytes=atomic?8:op.contains("source")?op.at("source").at("bytes").get<uint64_t>():
+      const bool atomic=op.at("verb")=="fetch_add" || op.at("verb")=="fetch_add32";
+      const uint64_t bytes=atomic?(op.at("verb")=="fetch_add32"?4:8):op.contains("source")?op.at("source").at("bytes").get<uint64_t>():
         MemoryUnhex(op.at("hex").get<std::string>()).size();
       Access current{id,connection,destinations.at(connection),op.at("key"),op.at("address"),bytes,atomic};
       Require(bytes>0 && current.address<=UINT64_MAX-bytes,"invalid transaction order range");

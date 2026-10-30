@@ -43,7 +43,7 @@ struct SessionWakeups {
       Check((is_local?local:remote).count(event),"invalid session wakeup transition kind");
       if(!is_local && (event=="response" || event=="request_acked")) {
         Check(!self.at(op.at("connection").get<uint64_t>()),"self service has no wire ACK or response callback");
-        Check(event!="response" || op.at("verb")=="fetch_add","put has no response callback");
+        Check(event!="response" || op.at("verb")=="fetch_add" || op.at("verb")=="fetch_add32","put has no response callback");
       }
       const Key key{identity,event};
       Check(!delivered.count(key) && result.insert(key).second,"duplicate or already delivered session wakeup");

@@ -1,0 +1,17 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>32位通知：功能验收</title><style>
+body{max-width:1000px;margin:40px auto;padding:0 22px;font:17px/1.75 system-ui;color:#17283b;background:#f8fafc}
+article{background:white;padding:28px;border-radius:16px}table{border-collapse:collapse;width:100%;font-size:15px}
+th,td{padding:10px;border-bottom:1px solid #d7e0ea;text-align:left}code{background:#edf2f7;padding:2px 5px}
+.note{border-left:4px solid #4279ba;padding:10px 18px;background:#eef5ff}a{color:#2163aa}</style>
+<article><h1>4字节通知已能经过实际网络推进</h1>
+<p>旧低延迟通信需要4字节计数器；原事务接口只支持8字节。本次新增显式32位原子和条件等待，保持原64位默认行为。</p>
+<p class="note">128端点Clos，只有0、1、16、17四个rank活动。人工功能事务；没有运行真实模型或GPU。本页展示正确性，不展示研究加速收益。</p>
+<h2>实际执行</h2><p>两次写入、六次32位原子、一次64位原子和两个本地复制节点，共用一张原生ns-3网络和同一时钟。</p>
+<table><thead><tr><th>条件</th><th>请求帧</th><th>回复帧</th><th>去重传输B</th><th>实际发送B</th><th>重复发送B</th></tr></thead><tbody><tr><td>normal</td><td>9</td><td>7</td><td>608</td><td>608</td><td>0</td></tr><tr><td>recovery</td><td>9</td><td>7</td><td>608</td><td>792</td><td>184</td></tr><tr><td>session-recovery</td><td>9</td><td>7</td><td>608</td><td>792</td><td>184</td></tr></tbody></table>
+<p>恢复条件各丢失一个请求包和一个回复包。三条件最终窗口逐字节相同，邻居哨兵不变；目标仅应用9个请求，所有源保护、队列和物理包排空。</p>
+<h2>为什么额外发送184字节</h2><p>请求流重发36B；回复流快速重传发送76B、随后超时重传发送72B。反馈尚未覆盖的在途片段也可能再次发送。不能把源重传包数当作目标应用次数。</p>
+<h2>怎样核查</h2><p>独立脚本读取实际source TX与payload_delivered字节，还原MRT1请求/回复；按事件顺序重放32/64位加法、本地条件清零和复制，并比较完整最终窗口。9类非法输入在Python与两个原生入口均拒绝，6类篡改结果也被检出。原子退休仍等待请求ACK、实际旧值回复及前序退休。</p>
+<h2>交付边界与下一步</h2><p>这是接入完整旧低延迟MoE计划的前置能力。仍需将计划操作绑定到持久连接、注册窗口、通知及发送发布；随后才能做真实专家流量下的完整比较。MRT1不是RoCE线格式，反向可靠流不是Atomic ACK；本地耗时没有GPU校准。</p>
+<p><a href="verification.json">完整核验、源码身份与资源摘要</a> · <a href="../../examples/scaleout_atomic32/README.md">用户运行说明</a></p></article></html>

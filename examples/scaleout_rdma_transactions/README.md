@@ -37,9 +37,12 @@ PYTHONPATH=python python3 -m moe_ub_cosim scaleout rdma-transaction-probe \
 | operations | 共1—32项；id仅供本地记录，connection引用上述上下文，key/address定位目标窗口 |
 | verb=put | hex 是1—32768B小写十六进制。完整事务到齐时一次修改目标窗口；不模拟部分DMA写入或源GPU buffer寿命 |
 | verb=fetch_add | value 是0—2⁶⁴−1增量；目标地址必须8B对齐并允许原子。窗口按小端64位值执行模2⁶⁴加法，返回修改前的值 |
+| verb=fetch_add32 | value 是0—2³²−1增量；目标地址必须4B对齐并允许原子。只修改对应4B小端计数器，按模2³²加法，返回32位旧值；不扩大为8B |
 | after | 依赖输入中较早操作的 applied、request_acked 或 completed，无固定ready时间。根操作在0ns提交 |
 
 同一owner的窗口地址不得重叠，key不得重复；窗口不在运行中注销或重新注册，没有 epoch/跨运行缓存。重叠访问若包含普通put，须声明明确因果顺序；不同连接对同一位置的原子加法由实际接收事件顺序决定。配置层检查权限和越界，接收端仍根据报文重新检查，不相信发送端的工作说明。
+
+`local_wait`可加`bits: 32`，省略为64；地址按对应4B/8B对齐，`value`及`reset_to`不得超出位宽，`eq/ge`均为无符号比较。一次条件列表不得重叠，包含不同位宽的重叠；消费清零只改对应字节。32位负增量须显式编码，例如减1写为4294967295。请求仍等实际请求ACK，原子还须等实际旧值回复及本连接前序退休。MRT1的32位请求/回复是本项目功能格式，不是RoCE原子包或旧DeepEP原子WQE的等价实现。独立128端点Clos输入与运行步骤见[相邻32位计数器](../scaleout_atomic32/README.md)。
 
 ## 配置较多连接与较长程序
 

@@ -1,0 +1,1062 @@
+{
+  "schema_version": "moe-local-transient-analysis/1",
+  "preparation_sha256": "074e115064174e48c6b0d99f19d77bcec4e1a39f1ef4559e2d01a9bf8d6b2031",
+  "cases": {
+    "gbn-normal": {
+      "timing": {
+        "timing_status": "complete",
+        "timing_reason": null,
+        "application_finished_ns": 2544364,
+        "network_drained_ns": 2544364,
+        "network_stopped_ns": 2544364,
+        "post_application_drain_ns": 0
+      },
+      "groups": [
+        {
+          "group": 0,
+          "rank_ids": [
+            0,
+            1,
+            4,
+            5
+          ],
+          "start_ns": 0,
+          "finished_ns": 1006613,
+          "messages": 72,
+          "logical_bytes": 2809856,
+          "source_payload_bytes": 2917536,
+          "repeated_payload_bytes": 107680,
+          "accepted_bytes": 2809856,
+          "direct_data_drop_events": 0,
+          "graphs": [
+            {
+              "graph_id": "g0.w0",
+              "start_ns": 0,
+              "finished_ns": 382436
+            },
+            {
+              "graph_id": "g0.w1",
+              "start_ns": 382436,
+              "finished_ns": 1006613
+            }
+          ]
+        },
+        {
+          "group": 1,
+          "rank_ids": [
+            2,
+            3,
+            6,
+            7
+          ],
+          "start_ns": 0,
+          "finished_ns": 2544364,
+          "messages": 72,
+          "logical_bytes": 2551808,
+          "source_payload_bytes": 2566144,
+          "repeated_payload_bytes": 14336,
+          "accepted_bytes": 2551808,
+          "direct_data_drop_events": 0,
+          "graphs": [
+            {
+              "graph_id": "g1.w0",
+              "start_ns": 0,
+              "finished_ns": 349508
+            },
+            {
+              "graph_id": "g1.w1",
+              "start_ns": 349508,
+              "finished_ns": 2544364
+            }
+          ]
+        }
+      ],
+      "arrival_audit": {
+        "schema_version": "moe-rdma-arrival-audit/2",
+        "transport_kind": "astra_persistent_streams/1",
+        "simulation_finished_ns": 2544364,
+        "service_passed": true,
+        "capture_complete": true,
+        "gpu_count": 8,
+        "generated_graphs": 4,
+        "generated_graph_message_count": 144,
+        "submitted_message_count": 144,
+        "generated_graph_logical_bytes": 5361664,
+        "submitted_logical_bytes": 5361664,
+        "source_tx_payload_bytes": 5483680,
+        "destination_rx_payload_bytes": 5483680,
+        "accepted_bytes": 5361664,
+        "slice": {
+          "graph_id": "g0.w0",
+          "layer": 0,
+          "source_layer_id": 3,
+          "phase": "dispatch",
+          "src": null,
+          "dst": null,
+          "messages": 9,
+          "logical_bytes": 344064,
+          "tx_payload_bytes": 344064,
+          "unique_arrival_bytes": 344064,
+          "accepted_bytes": 344064,
+          "source_confirmed_bytes": 344064,
+          "complete": true,
+          "data_ready_ns": 100594,
+          "source_confirmed_ns": 116635
+        },
+        "semantics": {
+          "receiver": "go_back_n/1",
+          "identity": "original packets identify streams; message association uses published byte intervals",
+          "packet_export": "full captured network; semantic_message_ids is an evaluation association, not a wire field",
+          "accepted": "contiguous accepted byte prefixes; selective mode independently replays finite reordering capacity",
+          "timestamps": "simulated ns, not GPU visibility or calibrated hardware",
+          "scope": "generated graphs only; evaluation association"
+        }
+      },
+      "other_slice": {
+        "graph_id": "g1.w0",
+        "layer": 0,
+        "source_layer_id": 3,
+        "phase": "dispatch",
+        "src": null,
+        "dst": null,
+        "messages": 8,
+        "logical_bytes": 315392,
+        "tx_payload_bytes": 315392,
+        "unique_arrival_bytes": 315392,
+        "accepted_bytes": 315392,
+        "source_confirmed_bytes": 315392,
+        "complete": true,
+        "data_ready_ns": 94456,
+        "source_confirmed_ns": 110274
+      },
+      "data_loss": {
+        "available": false
+      },
+      "source_data_packets": 685,
+      "source_payload_bytes": 5483680,
+      "packet_events": 24932,
+      "recovery_event_counts": {
+        "ack_progress": 552,
+        "complete": 118,
+        "old_feedback": 15,
+        "prefix_published": 144,
+        "retry_exhausted": 0,
+        "timeout_retransmit": 4,
+        "timer_started": 159
+      },
+      "recovery_count_scope": "timeout_retransmit counts recovery requests; actual retransmitted bytes require source packet ranges",
+      "reference_event_counts": {
+        "source_sent": 685,
+        "np_mark": 186,
+        "cnp_generated": 92,
+        "cnp_tx": 92,
+        "cnp_received": 92,
+        "rp_alpha": 654,
+        "rp_timer": 654,
+        "qp_close": 24
+      },
+      "pfc_pause": 0,
+      "pfc_resume": 0,
+      "switch_drop_counts": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "shared_directed_exits": [
+        {
+          "node": 8,
+          "port": 5,
+          "group0_model_bytes": 1064068,
+          "group1_model_bytes": 854800
+        },
+        {
+          "node": 9,
+          "port": 1,
+          "group0_model_bytes": 956544,
+          "group1_model_bytes": 840488
+        },
+        {
+          "node": 9,
+          "port": 2,
+          "group0_model_bytes": 1064068,
+          "group1_model_bytes": 854800
+        },
+        {
+          "node": 10,
+          "port": 5,
+          "group0_model_bytes": 956544,
+          "group1_model_bytes": 840488
+        },
+        {
+          "node": 11,
+          "port": 1,
+          "group0_model_bytes": 1064068,
+          "group1_model_bytes": 854800
+        },
+        {
+          "node": 11,
+          "port": 2,
+          "group0_model_bytes": 956544,
+          "group1_model_bytes": 840488
+        },
+        {
+          "node": 12,
+          "port": 1,
+          "group0_model_bytes": 956544,
+          "group1_model_bytes": 840488
+        },
+        {
+          "node": 12,
+          "port": 2,
+          "group0_model_bytes": 1064068,
+          "group1_model_bytes": 854800
+        }
+      ],
+      "all_hop_tx_by_protocol": {
+        "17": 3206,
+        "252": 3206,
+        "255": 552
+      },
+      "identities": {
+        "result_sha256": "5971bd57ff16e0c54da66728b00097174c6cf57dfff756c4a0b326c15d5bf634",
+        "frontend_sha256": "17641467b2bf10f3e7b091d8ff2ef6e3efd862bec85932cf27d1f99d02c3804c"
+      },
+      "group0_late_combine": {
+        "graph_id": "g0.w1",
+        "layer": 1,
+        "source_layer_id": 4,
+        "phase": "combine",
+        "src": null,
+        "dst": null,
+        "messages": 8,
+        "logical_bytes": 329728,
+        "tx_payload_bytes": 329728,
+        "unique_arrival_bytes": 329728,
+        "accepted_bytes": 329728,
+        "source_confirmed_bytes": 329728,
+        "complete": true,
+        "data_ready_ns": 1000545,
+        "source_confirmed_ns": 1006613
+      },
+      "group1_late_combine": {
+        "graph_id": "g1.w1",
+        "layer": 1,
+        "source_layer_id": 4,
+        "phase": "combine",
+        "src": null,
+        "dst": null,
+        "messages": 10,
+        "logical_bytes": 358400,
+        "tx_payload_bytes": 358400,
+        "unique_arrival_bytes": 358400,
+        "accepted_bytes": 358400,
+        "source_confirmed_bytes": 358400,
+        "complete": true,
+        "data_ready_ns": 2538296,
+        "source_confirmed_ns": 2544364
+      }
+    },
+    "gbn-local": {
+      "timing": {
+        "timing_status": "complete",
+        "timing_reason": null,
+        "application_finished_ns": 2930103,
+        "network_drained_ns": 2930103,
+        "network_stopped_ns": 2930103,
+        "post_application_drain_ns": 0
+      },
+      "groups": [
+        {
+          "group": 0,
+          "rank_ids": [
+            0,
+            1,
+            4,
+            5
+          ],
+          "start_ns": 0,
+          "finished_ns": 2930103,
+          "messages": 72,
+          "logical_bytes": 2809856,
+          "source_payload_bytes": 3611000,
+          "repeated_payload_bytes": 801144,
+          "accepted_bytes": 2809856,
+          "direct_data_drop_events": 32,
+          "graphs": [
+            {
+              "graph_id": "g0.w0",
+              "start_ns": 0,
+              "finished_ns": 544591
+            },
+            {
+              "graph_id": "g0.w1",
+              "start_ns": 544591,
+              "finished_ns": 2930103
+            }
+          ]
+        },
+        {
+          "group": 1,
+          "rank_ids": [
+            2,
+            3,
+            6,
+            7
+          ],
+          "start_ns": 0,
+          "finished_ns": 2685347,
+          "messages": 72,
+          "logical_bytes": 2551808,
+          "source_payload_bytes": 2931872,
+          "repeated_payload_bytes": 380064,
+          "accepted_bytes": 2551808,
+          "direct_data_drop_events": 0,
+          "graphs": [
+            {
+              "graph_id": "g1.w0",
+              "start_ns": 0,
+              "finished_ns": 395348
+            },
+            {
+              "graph_id": "g1.w1",
+              "start_ns": 395348,
+              "finished_ns": 2685347
+            }
+          ]
+        }
+      ],
+      "arrival_audit": {
+        "schema_version": "moe-rdma-arrival-audit/2",
+        "transport_kind": "astra_persistent_streams/1",
+        "simulation_finished_ns": 2930103,
+        "service_passed": true,
+        "capture_complete": true,
+        "gpu_count": 8,
+        "generated_graphs": 4,
+        "generated_graph_message_count": 144,
+        "submitted_message_count": 144,
+        "generated_graph_logical_bytes": 5361664,
+        "submitted_logical_bytes": 5361664,
+        "source_tx_payload_bytes": 6542872,
+        "destination_rx_payload_bytes": 6275504,
+        "accepted_bytes": 5361664,
+        "slice": {
+          "graph_id": "g0.w0",
+          "layer": 0,
+          "source_layer_id": 3,
+          "phase": "dispatch",
+          "src": null,
+          "dst": null,
+          "messages": 9,
+          "logical_bytes": 344064,
+          "tx_payload_bytes": 688128,
+          "unique_arrival_bytes": 344064,
+          "accepted_bytes": 344064,
+          "source_confirmed_bytes": 344064,
+          "complete": true,
+          "data_ready_ns": 249084,
+          "source_confirmed_ns": 251092
+        },
+        "semantics": {
+          "receiver": "go_back_n/1",
+          "identity": "original packets identify streams; message association uses published byte intervals",
+          "packet_export": "full captured network; semantic_message_ids is an evaluation association, not a wire field",
+          "accepted": "contiguous accepted byte prefixes; selective mode independently replays finite reordering capacity",
+          "timestamps": "simulated ns, not GPU visibility or calibrated hardware",
+          "scope": "generated graphs only; evaluation association"
+        }
+      },
+      "other_slice": {
+        "graph_id": "g1.w0",
+        "layer": 0,
+        "source_layer_id": 3,
+        "phase": "dispatch",
+        "src": null,
+        "dst": null,
+        "messages": 8,
+        "logical_bytes": 315392,
+        "tx_payload_bytes": 315392,
+        "unique_arrival_bytes": 315392,
+        "accepted_bytes": 315392,
+        "source_confirmed_bytes": 315392,
+        "complete": true,
+        "data_ready_ns": 94456,
+        "source_confirmed_ns": 110214
+      },
+      "data_loss": {
+        "available": true,
+        "passed": true,
+        "eligible_data_packets": 160,
+        "window_data_packets": 32,
+        "dropped_packets": 32,
+        "window_loss_fraction": 1.0,
+        "whole_observed_loss_fraction": 0.2,
+        "affected_message_count": 3,
+        "scope": "actual destination data arrivals including retransmissions; deterministic artificial loss; no congestion causality inference"
+      },
+      "source_data_packets": 815,
+      "source_payload_bytes": 6542872,
+      "packet_events": 30002,
+      "recovery_event_counts": {
+        "ack_progress": 553,
+        "complete": 117,
+        "old_feedback": 107,
+        "prefix_published": 144,
+        "retry_exhausted": 0,
+        "timeout_retransmit": 23,
+        "timer_started": 176
+      },
+      "recovery_count_scope": "timeout_retransmit counts recovery requests; actual retransmitted bytes require source packet ranges",
+      "reference_event_counts": {
+        "source_sent": 815,
+        "np_mark": 307,
+        "cnp_generated": 115,
+        "cnp_tx": 115,
+        "cnp_received": 115,
+        "rp_alpha": 745,
+        "rp_timer": 745,
+        "qp_close": 24
+      },
+      "pfc_pause": 0,
+      "pfc_resume": 0,
+      "switch_drop_counts": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "shared_directed_exits": [
+        {
+          "node": 8,
+          "port": 5,
+          "group0_model_bytes": 958704,
+          "group1_model_bytes": 914304
+        },
+        {
+          "node": 9,
+          "port": 1,
+          "group0_model_bytes": 1598440,
+          "group1_model_bytes": 1150660
+        },
+        {
+          "node": 9,
+          "port": 2,
+          "group0_model_bytes": 958704,
+          "group1_model_bytes": 914304
+        },
+        {
+          "node": 10,
+          "port": 5,
+          "group0_model_bytes": 1598440,
+          "group1_model_bytes": 1150660
+        },
+        {
+          "node": 11,
+          "port": 1,
+          "group0_model_bytes": 958704,
+          "group1_model_bytes": 914304
+        },
+        {
+          "node": 11,
+          "port": 2,
+          "group0_model_bytes": 1598440,
+          "group1_model_bytes": 1150660
+        },
+        {
+          "node": 12,
+          "port": 1,
+          "group0_model_bytes": 1598440,
+          "group1_model_bytes": 1150660
+        },
+        {
+          "node": 12,
+          "port": 2,
+          "group0_model_bytes": 958704,
+          "group1_model_bytes": 914304
+        }
+      ],
+      "all_hop_tx_by_protocol": {
+        "17": 3906,
+        "252": 3746,
+        "255": 690,
+        "253": 12
+      },
+      "identities": {
+        "result_sha256": "50cc5091c8d04e962ed1b219e9ed7acb1a4f4c2033859d651aef69ca5411c74f",
+        "frontend_sha256": "964bc8ea64b65861bb8b22923147a1069a0bb68e1e4a71b4e9e2ced1b86066c1"
+      },
+      "group0_late_combine": {
+        "graph_id": "g0.w1",
+        "layer": 1,
+        "source_layer_id": 4,
+        "phase": "combine",
+        "src": null,
+        "dst": null,
+        "messages": 8,
+        "logical_bytes": 329728,
+        "tx_payload_bytes": 329728,
+        "unique_arrival_bytes": 329728,
+        "accepted_bytes": 329728,
+        "source_confirmed_bytes": 329728,
+        "complete": true,
+        "data_ready_ns": 2924035,
+        "source_confirmed_ns": 2930103
+      },
+      "group1_late_combine": {
+        "graph_id": "g1.w1",
+        "layer": 1,
+        "source_layer_id": 4,
+        "phase": "combine",
+        "src": null,
+        "dst": null,
+        "messages": 10,
+        "logical_bytes": 358400,
+        "tx_payload_bytes": 358400,
+        "unique_arrival_bytes": 358400,
+        "accepted_bytes": 358400,
+        "source_confirmed_bytes": 358400,
+        "complete": true,
+        "data_ready_ns": 2679279,
+        "source_confirmed_ns": 2685347
+      }
+    },
+    "sr-normal": {
+      "timing": {
+        "timing_status": "complete",
+        "timing_reason": null,
+        "application_finished_ns": 2544477,
+        "network_drained_ns": 2544477,
+        "network_stopped_ns": 2544477,
+        "post_application_drain_ns": 0
+      },
+      "groups": [
+        {
+          "group": 0,
+          "rank_ids": [
+            0,
+            1,
+            4,
+            5
+          ],
+          "start_ns": 0,
+          "finished_ns": 1006681,
+          "messages": 72,
+          "logical_bytes": 2809856,
+          "source_payload_bytes": 2917536,
+          "repeated_payload_bytes": 107680,
+          "accepted_bytes": 2809856,
+          "direct_data_drop_events": 0,
+          "graphs": [
+            {
+              "graph_id": "g0.w0",
+              "start_ns": 0,
+              "finished_ns": 382550
+            },
+            {
+              "graph_id": "g0.w1",
+              "start_ns": 382550,
+              "finished_ns": 1006681
+            }
+          ]
+        },
+        {
+          "group": 1,
+          "rank_ids": [
+            2,
+            3,
+            6,
+            7
+          ],
+          "start_ns": 0,
+          "finished_ns": 2544477,
+          "messages": 72,
+          "logical_bytes": 2551808,
+          "source_payload_bytes": 2566144,
+          "repeated_payload_bytes": 14336,
+          "accepted_bytes": 2551808,
+          "direct_data_drop_events": 0,
+          "graphs": [
+            {
+              "graph_id": "g1.w0",
+              "start_ns": 0,
+              "finished_ns": 349617
+            },
+            {
+              "graph_id": "g1.w1",
+              "start_ns": 349617,
+              "finished_ns": 2544477
+            }
+          ]
+        }
+      ],
+      "arrival_audit": {
+        "schema_version": "moe-rdma-arrival-audit/2",
+        "transport_kind": "astra_persistent_streams/1",
+        "simulation_finished_ns": 2544477,
+        "service_passed": true,
+        "capture_complete": true,
+        "gpu_count": 8,
+        "generated_graphs": 4,
+        "generated_graph_message_count": 144,
+        "submitted_message_count": 144,
+        "generated_graph_logical_bytes": 5361664,
+        "submitted_logical_bytes": 5361664,
+        "source_tx_payload_bytes": 5483680,
+        "destination_rx_payload_bytes": 5483680,
+        "accepted_bytes": 5361664,
+        "slice": {
+          "graph_id": "g0.w0",
+          "layer": 0,
+          "source_layer_id": 3,
+          "phase": "dispatch",
+          "src": null,
+          "dst": null,
+          "messages": 9,
+          "logical_bytes": 344064,
+          "tx_payload_bytes": 344064,
+          "unique_arrival_bytes": 344064,
+          "accepted_bytes": 344064,
+          "source_confirmed_bytes": 344064,
+          "complete": true,
+          "data_ready_ns": 100617,
+          "source_confirmed_ns": 116663
+        },
+        "semantics": {
+          "receiver": "selective_repeat/1",
+          "identity": "original packets identify streams; message association uses published byte intervals",
+          "packet_export": "full captured network; semantic_message_ids is an evaluation association, not a wire field",
+          "accepted": "contiguous accepted byte prefixes; selective mode independently replays finite reordering capacity",
+          "timestamps": "simulated ns, not GPU visibility or calibrated hardware",
+          "scope": "generated graphs only; evaluation association"
+        }
+      },
+      "other_slice": {
+        "graph_id": "g1.w0",
+        "layer": 0,
+        "source_layer_id": 3,
+        "phase": "dispatch",
+        "src": null,
+        "dst": null,
+        "messages": 8,
+        "logical_bytes": 315392,
+        "tx_payload_bytes": 315392,
+        "unique_arrival_bytes": 315392,
+        "accepted_bytes": 315392,
+        "source_confirmed_bytes": 315392,
+        "complete": true,
+        "data_ready_ns": 94479,
+        "source_confirmed_ns": 110300
+      },
+      "data_loss": {
+        "available": false
+      },
+      "source_data_packets": 685,
+      "source_payload_bytes": 5483680,
+      "packet_events": 24932,
+      "recovery_event_counts": {
+        "ack_progress": 552,
+        "complete": 118,
+        "old_feedback": 15,
+        "prefix_published": 144,
+        "retry_exhausted": 0,
+        "timeout_retransmit": 4,
+        "timer_started": 159
+      },
+      "recovery_count_scope": "timeout_retransmit counts recovery requests; actual retransmitted bytes require source packet ranges",
+      "reference_event_counts": {
+        "source_sent": 685,
+        "np_mark": 186,
+        "cnp_generated": 92,
+        "cnp_tx": 92,
+        "cnp_received": 92,
+        "rp_alpha": 654,
+        "rp_timer": 654,
+        "qp_close": 24
+      },
+      "pfc_pause": 0,
+      "pfc_resume": 0,
+      "switch_drop_counts": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "shared_directed_exits": [
+        {
+          "node": 8,
+          "port": 5,
+          "group0_model_bytes": 1064300,
+          "group1_model_bytes": 855012
+        },
+        {
+          "node": 9,
+          "port": 1,
+          "group0_model_bytes": 956802,
+          "group1_model_bytes": 840704
+        },
+        {
+          "node": 9,
+          "port": 2,
+          "group0_model_bytes": 1064300,
+          "group1_model_bytes": 855012
+        },
+        {
+          "node": 10,
+          "port": 5,
+          "group0_model_bytes": 956802,
+          "group1_model_bytes": 840704
+        },
+        {
+          "node": 11,
+          "port": 1,
+          "group0_model_bytes": 1064300,
+          "group1_model_bytes": 855012
+        },
+        {
+          "node": 11,
+          "port": 2,
+          "group0_model_bytes": 956802,
+          "group1_model_bytes": 840704
+        },
+        {
+          "node": 12,
+          "port": 1,
+          "group0_model_bytes": 956802,
+          "group1_model_bytes": 840704
+        },
+        {
+          "node": 12,
+          "port": 2,
+          "group0_model_bytes": 1064300,
+          "group1_model_bytes": 855012
+        }
+      ],
+      "all_hop_tx_by_protocol": {
+        "17": 3206,
+        "252": 3206,
+        "255": 552
+      },
+      "identities": {
+        "result_sha256": "8866ea7206830218e77430a7166a42aa8ec483e62bb351549ac0249769d6b04f",
+        "frontend_sha256": "dc0154c00afe313edd62b7145749d782fa5e09d92611e2523abebd74a0133cfc"
+      },
+      "group0_late_combine": {
+        "graph_id": "g0.w1",
+        "layer": 1,
+        "source_layer_id": 4,
+        "phase": "combine",
+        "src": null,
+        "dst": null,
+        "messages": 8,
+        "logical_bytes": 329728,
+        "tx_payload_bytes": 329728,
+        "unique_arrival_bytes": 329728,
+        "accepted_bytes": 329728,
+        "source_confirmed_bytes": 329728,
+        "complete": true,
+        "data_ready_ns": 1000609,
+        "source_confirmed_ns": 1006681
+      },
+      "group1_late_combine": {
+        "graph_id": "g1.w1",
+        "layer": 1,
+        "source_layer_id": 4,
+        "phase": "combine",
+        "src": null,
+        "dst": null,
+        "messages": 10,
+        "logical_bytes": 358400,
+        "tx_payload_bytes": 358400,
+        "unique_arrival_bytes": 358400,
+        "accepted_bytes": 358400,
+        "source_confirmed_bytes": 358400,
+        "complete": true,
+        "data_ready_ns": 2538405,
+        "source_confirmed_ns": 2544477
+      }
+    },
+    "sr-local": {
+      "timing": {
+        "timing_status": "complete",
+        "timing_reason": null,
+        "application_finished_ns": 2922925,
+        "network_drained_ns": 2922925,
+        "network_stopped_ns": 2922925,
+        "post_application_drain_ns": 0
+      },
+      "groups": [
+        {
+          "group": 0,
+          "rank_ids": [
+            0,
+            1,
+            4,
+            5
+          ],
+          "start_ns": 0,
+          "finished_ns": 2922925,
+          "messages": 72,
+          "logical_bytes": 2809856,
+          "source_payload_bytes": 3587984,
+          "repeated_payload_bytes": 778128,
+          "accepted_bytes": 2809856,
+          "direct_data_drop_events": 32,
+          "graphs": [
+            {
+              "graph_id": "g0.w0",
+              "start_ns": 0,
+              "finished_ns": 537409
+            },
+            {
+              "graph_id": "g0.w1",
+              "start_ns": 537409,
+              "finished_ns": 2922925
+            }
+          ]
+        },
+        {
+          "group": 1,
+          "rank_ids": [
+            2,
+            3,
+            6,
+            7
+          ],
+          "start_ns": 0,
+          "finished_ns": 2382405,
+          "messages": 72,
+          "logical_bytes": 2551808,
+          "source_payload_bytes": 2931872,
+          "repeated_payload_bytes": 380064,
+          "accepted_bytes": 2551808,
+          "direct_data_drop_events": 0,
+          "graphs": [
+            {
+              "graph_id": "g1.w0",
+              "start_ns": 0,
+              "finished_ns": 393801
+            },
+            {
+              "graph_id": "g1.w1",
+              "start_ns": 393801,
+              "finished_ns": 2382405
+            }
+          ]
+        }
+      ],
+      "arrival_audit": {
+        "schema_version": "moe-rdma-arrival-audit/2",
+        "transport_kind": "astra_persistent_streams/1",
+        "simulation_finished_ns": 2922925,
+        "service_passed": true,
+        "capture_complete": true,
+        "gpu_count": 8,
+        "generated_graphs": 4,
+        "generated_graph_message_count": 144,
+        "submitted_message_count": 144,
+        "generated_graph_logical_bytes": 5361664,
+        "submitted_logical_bytes": 5361664,
+        "source_tx_payload_bytes": 6519856,
+        "destination_rx_payload_bytes": 6252488,
+        "accepted_bytes": 5361664,
+        "slice": {
+          "graph_id": "g0.w0",
+          "layer": 0,
+          "source_layer_id": 3,
+          "phase": "dispatch",
+          "src": null,
+          "dst": null,
+          "messages": 9,
+          "logical_bytes": 344064,
+          "tx_payload_bytes": 679448,
+          "unique_arrival_bytes": 344064,
+          "accepted_bytes": 344064,
+          "source_confirmed_bytes": 344064,
+          "complete": true,
+          "data_ready_ns": 249084,
+          "source_confirmed_ns": 251092
+        },
+        "semantics": {
+          "receiver": "selective_repeat/1",
+          "identity": "original packets identify streams; message association uses published byte intervals",
+          "packet_export": "full captured network; semantic_message_ids is an evaluation association, not a wire field",
+          "accepted": "contiguous accepted byte prefixes; selective mode independently replays finite reordering capacity",
+          "timestamps": "simulated ns, not GPU visibility or calibrated hardware",
+          "scope": "generated graphs only; evaluation association"
+        }
+      },
+      "other_slice": {
+        "graph_id": "g1.w0",
+        "layer": 0,
+        "source_layer_id": 3,
+        "phase": "dispatch",
+        "src": null,
+        "dst": null,
+        "messages": 8,
+        "logical_bytes": 315392,
+        "tx_payload_bytes": 315392,
+        "unique_arrival_bytes": 315392,
+        "accepted_bytes": 315392,
+        "source_confirmed_bytes": 315392,
+        "complete": true,
+        "data_ready_ns": 94479,
+        "source_confirmed_ns": 110237
+      },
+      "data_loss": {
+        "available": true,
+        "passed": true,
+        "eligible_data_packets": 157,
+        "window_data_packets": 32,
+        "dropped_packets": 32,
+        "window_loss_fraction": 1.0,
+        "whole_observed_loss_fraction": 0.20382165605095542,
+        "affected_message_count": 3,
+        "scope": "actual destination data arrivals including retransmissions; deterministic artificial loss; no congestion causality inference"
+      },
+      "source_data_packets": 812,
+      "source_payload_bytes": 6519856,
+      "packet_events": 30002,
+      "recovery_event_counts": {
+        "ack_progress": 544,
+        "complete": 118,
+        "old_feedback": 118,
+        "prefix_published": 144,
+        "retry_exhausted": 0,
+        "timeout_retransmit": 23,
+        "timer_started": 178
+      },
+      "recovery_count_scope": "timeout_retransmit counts recovery requests; actual retransmitted bytes require source packet ranges",
+      "reference_event_counts": {
+        "source_sent": 812,
+        "np_mark": 303,
+        "cnp_generated": 115,
+        "cnp_tx": 115,
+        "cnp_received": 115,
+        "rp_alpha": 741,
+        "rp_timer": 741,
+        "qp_close": 24
+      },
+      "pfc_pause": 0,
+      "pfc_resume": 0,
+      "switch_drop_counts": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "shared_directed_exits": [
+        {
+          "node": 8,
+          "port": 5,
+          "group0_model_bytes": 959202,
+          "group1_model_bytes": 914594
+        },
+        {
+          "node": 9,
+          "port": 1,
+          "group0_model_bytes": 1575548,
+          "group1_model_bytes": 1150892
+        },
+        {
+          "node": 9,
+          "port": 2,
+          "group0_model_bytes": 959202,
+          "group1_model_bytes": 914594
+        },
+        {
+          "node": 10,
+          "port": 5,
+          "group0_model_bytes": 1575548,
+          "group1_model_bytes": 1150892
+        },
+        {
+          "node": 11,
+          "port": 1,
+          "group0_model_bytes": 959202,
+          "group1_model_bytes": 914594
+        },
+        {
+          "node": 11,
+          "port": 2,
+          "group0_model_bytes": 1575548,
+          "group1_model_bytes": 1150892
+        },
+        {
+          "node": 12,
+          "port": 1,
+          "group0_model_bytes": 1575548,
+          "group1_model_bytes": 1150892
+        },
+        {
+          "node": 12,
+          "port": 2,
+          "group0_model_bytes": 959202,
+          "group1_model_bytes": 914594
+        }
+      ],
+      "all_hop_tx_by_protocol": {
+        "17": 3888,
+        "252": 3728,
+        "255": 690,
+        "253": 48
+      },
+      "identities": {
+        "result_sha256": "4761085c143e1255283c1bcf44ee8f42ce252a6964c282566ae732a70b9893bd",
+        "frontend_sha256": "5a479f1c38f1538229441fe85a4f7fec9261bcff09a977c7ead84f74b18a378c"
+      },
+      "group0_late_combine": {
+        "graph_id": "g0.w1",
+        "layer": 1,
+        "source_layer_id": 4,
+        "phase": "combine",
+        "src": null,
+        "dst": null,
+        "messages": 8,
+        "logical_bytes": 329728,
+        "tx_payload_bytes": 329728,
+        "unique_arrival_bytes": 329728,
+        "accepted_bytes": 329728,
+        "source_confirmed_bytes": 329728,
+        "complete": true,
+        "data_ready_ns": 2916853,
+        "source_confirmed_ns": 2922925
+      },
+      "group1_late_combine": {
+        "graph_id": "g1.w1",
+        "layer": 1,
+        "source_layer_id": 4,
+        "phase": "combine",
+        "src": null,
+        "dst": null,
+        "messages": 10,
+        "logical_bytes": 358400,
+        "tx_payload_bytes": 358400,
+        "unique_arrival_bytes": 358400,
+        "accepted_bytes": 358400,
+        "source_confirmed_bytes": 358400,
+        "complete": true,
+        "data_ready_ns": 2376333,
+        "source_confirmed_ns": 2382405
+      }
+    }
+  },
+  "contrasts": {
+    "gbn": {
+      "application_extra_ns": 385739,
+      "group0_extra_ns": 1923490,
+      "group1_extra_ns": 140983,
+      "group1_direct_drops": 0,
+      "extra_source_payload_bytes": 1059192
+    },
+    "sr": {
+      "application_extra_ns": 378448,
+      "group0_extra_ns": 1916244,
+      "group1_extra_ns": -162072,
+      "group1_direct_drops": 0,
+      "extra_source_payload_bytes": 1036176
+    }
+  },
+  "scope": "finite real-route communication segment; unknown remote revision; reference compute and deployment; not production gain",
+  "interpretation": "extra waiting and GBN/SR differences are measured costs, not demonstrated novel or eliminable gain"
+}

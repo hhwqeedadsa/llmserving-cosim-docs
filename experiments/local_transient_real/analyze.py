@@ -28,11 +28,11 @@ def analyze_case(directory,prepared):
     for wave in waves:
         if wave!=load(prepared/'planned'/(wave['graph_id']+'.json')):raise ValueError('workload changed')
     native=result['service_transport']['native'];config=load(directory/'input.json')
-    summary,rows,endpoints,packets,curve=reconstruct(result,waves,'g0.w0',0,'dispatch')
+    summary,rows,endpoints,_,curve=reconstruct(result,waves,'g0.w0',0,'dispatch')
     other,_,_,_,other_curve=reconstruct(result,waves,'g1.w0',0,'dispatch')
     streams={s['id']:s for s in native['streams']};groups=config['parallel']['groups']
     stream_group={sid:next(i for i,g in enumerate(groups) if s['src'] in g) for sid,s in streams.items()}
-    drops=Counter();control=Counter();shared=defaultdict(lambda:Counter());repeated=Counter()
+    drops=Counter();control=Counter();shared=defaultdict(lambda:Counter())
     capture=result['packet_capture']
     for values in capture['events']:
         p=dict(zip(capture['columns'],values));sid=p['message_id'];node=p['node']
@@ -63,10 +63,15 @@ def analyze_case(directory,prepared):
             raise ValueError('fault location/window changed')
         if not loss_audit(result)['dropped_packets']:raise ValueError('local fault never hit')
     drop_summary=result.get('switch_drop_capture',{})
+    recovery_counts=Counter(dict(zip(native['recovery']['columns'],row))['event'] for row in native['recovery']['events'])
     return dict(timing=timing,groups=by_group,arrival_audit=summary,other_slice=other['slice'],
         data_loss=loss_audit(result),source_data_packets=sum(s['source_data_packets'] for s in streams.values()),
         source_payload_bytes=sum(s['source_payload_bytes'] for s in streams.values()),
-        packet_events=len(capture['events']),recovery=native['recovery'].get('counters',{}),
+        packet_events=len(capture['events']),
+        recovery_event_counts={name:recovery_counts[code] for name,code in native['recovery']['event_codes'].items()},
+        recovery_count_scope='timeout_retransmit counts recovery requests; actual retransmitted bytes require source packet ranges',
+        reference_event_counts=dict(Counter(row['kind'] for row in native['dcqcn_reference']['events'])),
+        pfc_pause=sum(p['pfc_pause'] for p in result['ports']),pfc_resume=sum(p['pfc_resume'] for p in result['ports']),
         switch_drop_counts=drop_summary.get('all_switch_reason_counts'),
         shared_directed_exits=ports,all_hop_tx_by_protocol=dict(control),
         identities=dict(result_sha256=sha(directory/'result.json'),frontend_sha256=sha(directory/'frontend.json'))),rows,endpoints,curve,other_curve
@@ -81,7 +86,16 @@ def analyze(root,output):
         info,rows,endpoints,curve,other=analyze_case(root/case,prepared);cases[case]=info
         for name,values in (('messages',rows),('endpoints',endpoints),('group0-dispatch',curve),('group1-dispatch',other)):
             with (output/(case+'-'+name+'.csv')).open('x',newline='') as f:
-                writer=csv.DictWriter(f,fieldnames=list(values[0]));writer.writeheader();writer.writerows(values)
+                writer=csv.DictWriter(f,fieldnames=list(values[0]),lineterminator='\n');writer.writeheader();writer.writerows(values)
+        # The first slice can be unchanged while later phases inherit feedback
+        # history; keep a late collective without executing a second network.
+        result=load(root/case/'result.json')
+        waves=[load(p) for p in sorted((root/case/'graphs').glob('*/wave.json'))]
+        for group in (0,1):
+            late,_,_,_,curve=reconstruct(result,waves,f'g{group}.w1',1,'combine')
+            info[f'group{group}_late_combine']=late['slice']
+            with (output/(case+f'-group{group}-late-combine.csv')).open('x',newline='') as f:
+                writer=csv.DictWriter(f,fieldnames=list(curve[0]),lineterminator='\n');writer.writeheader();writer.writerows(curve)
     contrasts={}
     for mode in ('gbn','sr'):
         clean,local=(cases[mode+'-'+suffix] for suffix in ('normal','local'))

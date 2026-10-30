@@ -1,0 +1,1718 @@
+{
+  "schema_version": "moe-local-transient-diagnosis/1",
+  "network_runs": 0,
+  "cases": {
+    "gbn-normal": {
+      "tails": [
+        {
+          "group": 0,
+          "graph_id": "g0.w1",
+          "message_id": 137,
+          "stream": 5,
+          "src": 1,
+          "dst": 5,
+          "phase": "combine",
+          "layer": 1,
+          "ready_ns": 698604,
+          "published_ns": 698604,
+          "first_tx_ns": 769951,
+          "last_tx_ns": 981995,
+          "receive_ready_ns": 1000545,
+          "ack_ns": 1006613,
+          "logical_bytes": 71680,
+          "actual_source_packets": 8,
+          "source_payload_bytes": 71680,
+          "first_send_wait_ns": 71347,
+          "actual_sending_span_ns": 212044,
+          "min_actual_tx_rate_bps": 2372613460,
+          "min_historical_reference_rate_bps": 1190184849,
+          "cnp_received": [
+            {
+              "time_ns": 42536,
+              "rate_bps": 50000000000
+            },
+            {
+              "time_ns": 93093,
+              "rate_bps": 25000000000
+            },
+            {
+              "time_ns": 141052,
+              "rate_bps": 12500000000
+            },
+            {
+              "time_ns": 244153,
+              "rate_bps": 9411621093
+            },
+            {
+              "time_ns": 293373,
+              "rate_bps": 4724120813
+            },
+            {
+              "time_ns": 343280,
+              "rate_bps": 2371215261
+            },
+            {
+              "time_ns": 383632,
+              "rate_bps": 1190184849
+            }
+          ],
+          "source_unique_prefix_before_publication": 245704,
+          "earlier_unsent_bytes_at_publication": 12344,
+          "earlier_unconfirmed_work": [
+            {
+              "message_id": 125,
+              "graph_id": "g0.w1",
+              "phase": "dispatch",
+              "layer": 1,
+              "begin": 200704,
+              "end": 258048,
+              "ready_ns": 555734,
+              "acked_ns": 783284
+            }
+          ],
+          "source_tx_samples": [
+            {
+              "time_ns": 769951,
+              "stream": 5,
+              "event": 0,
+              "packet_uid": 1179,
+              "sequence": 258048,
+              "model_bytes": 9036,
+              "ack_cnp": 0,
+              "rate_bps": 2372613460,
+              "target_rate_bps": 2386215261,
+              "max_rate_bps": 100000000000,
+              "snd_nxt": 267048,
+              "snd_una": 254704,
+              "published_bytes": 329728,
+              "next_avail_ns": 769951,
+              "alpha": 0.969232963080526,
+              "recovery_stage": 7,
+              "first_cnp": false,
+              "alpha_cnp_arrived": false,
+              "decrease_cnp_arrived": false
+            },
+            {
+              "time_ns": 800419,
+              "stream": 5,
+              "event": 0,
+              "packet_uid": 1195,
+              "sequence": 267048,
+              "model_bytes": 9036,
+              "ack_cnp": 0,
+              "rate_bps": 2372613460,
+              "target_rate_bps": 2386215261,
+              "max_rate_bps": 100000000000,
+              "snd_nxt": 276048,
+              "snd_una": 258048,
+              "published_bytes": 329728,
+              "next_avail_ns": 800419,
+              "alpha": 0.969232963080526,
+              "recovery_stage": 7,
+              "first_cnp": false,
+              "alpha_cnp_arrived": false,
+              "decrease_cnp_arrived": false
+            },
+            {
+              "time_ns": 830768,
+              "stream": 5,
+              "event": 0,
+              "packet_uid": 1211,
+              "sequence": 276048,
+              "model_bytes": 9036,
+              "ack_cnp": 0,
+              "rate_bps": 2381914360,
+              "target_rate_bps": 2391215261,
+              "max_rate_bps": 100000000000,
+              "snd_nxt": 285048,
+              "snd_una": 276048,
+              "published_bytes": 329728,
+              "next_avail_ns": 830768,
+              "alpha": 0.9654468968184927,
+              "recovery_stage": 8,
+              "first_cnp": false,
+              "alpha_cnp_arrived": false,
+              "decrease_cnp_arrived": false
+            },
+            {
+              "time_ns": 861117,
+              "stream": 5,
+              "event": 0,
+              "packet_uid": 1215,
+              "sequence": 285048,
+              "model_bytes": 9036,
+              "ack_cnp": 0,
+              "rate_bps": 2381914360,
+              "target_rate_bps": 2391215261,
+              "max_rate_bps": 100000000000,
+              "snd_nxt": 294048,
+              "snd_una": 285048,
+              "published_bytes": 329728,
+              "next_avail_ns": 861117,
+              "alpha": 0.9654468968184927,
+              "recovery_stage": 8,
+              "first_cnp": false,
+              "alpha_cnp_arrived": false,
+              "decrease_cnp_arrived": false
+            },
+            {
+              "time_ns": 891375,
+              "stream": 5,
+              "event": 0,
+              "packet_uid": 1219,
+              "sequence": 294048,
+              "model_bytes": 9036,
+              "ack_cnp": 0,
+              "rate_bps": 2389064810,
+              "target_rate_bps": 2396215261,
+              "max_rate_bps": 100000000000,
+              "snd_nxt": 303048,
+              "snd_una": 294048,
+              "published_bytes": 329728,
+              "next_avail_ns": 891375,
+              "alpha": 0.9616756198777955,
+              "recovery_stage": 9,
+              "first_cnp": false,
+              "alpha_cnp_arrived": false,
+              "decrease_cnp_arrived": false
+            },
+            {
+              "time_ns": 921633,
+              "stream": 5,
+              "event": 0,
+              "packet_uid": 1224,
+              "sequence": 303048,
+              "model_bytes": 9036,
+              "ack_cnp": 0,
+              "rate_bps": 2389064810,
+              "target_rate_bps": 2396215261,
+              "max_rate_bps": 100000000000,
+              "snd_nxt": 312048,
+              "snd_una": 303048,
+              "published_bytes": 329728,
+              "next_avail_ns": 921633,
+              "alpha": 0.9616756198777955,
+              "recovery_stage": 9,
+              "first_cnp": false,
+              "alpha_cnp_arrived": false,
+              "decrease_cnp_arrived": false
+            },
+            {
+              "time_ns": 951814,
+              "stream": 5,
+              "event": 0,
+              "packet_uid": 1229,
+              "sequence": 312048,
+              "model_bytes": 9036,
+              "ack_cnp": 0,
+              "rate_bps": 2395140035,
+              "target_rate_bps": 2401215261,
+              "max_rate_bps": 100000000000,
+              "snd_nxt": 321048,
+              "snd_una": 312048,
+              "published_bytes": 329728,
+              "next_avail_ns": 951814,
+              "alpha": 0.9579190744876478,
+              "recovery_stage": 10,
+              "first_cnp": false,
+              "alpha_cnp_arrived": false,
+              "decrease_cnp_arrived": false
+            },
+            {
+              "time_ns": 981995,
+              "stream": 5,
+              "event": 0,
+              "packet_uid": 1231,
+              "sequence": 321048,
+              "model_bytes": 8716,
+              "ack_cnp": 0,
+              "rate_bps": 2395140035,
+              "target_rate_bps": 2401215261,
+              "max_rate_bps": 100000000000,
+              "snd_nxt": 329728,
+              "snd_una": 321048,
+              "published_bytes": 329728,
+              "next_avail_ns": 981995,
+              "alpha": 0.9579190744876478,
+              "recovery_stage": 10,
+              "first_cnp": false,
+              "alpha_cnp_arrived": false,
+              "decrease_cnp_arrived": false
+            }
+          ]
+        },
+        {
+          "group": 1,
+          "graph_id": "g1.w1",
+          "message_id": 182,
+          "stream": 14,
+          "src": 2,
+          "dst": 7,
+          "phase": "combine",
+          "layer": 1,
+          "ready_ns": 2318671,
+          "published_ns": 2318671,
+          "first_tx_ns": 2393276,
+          "last_tx_ns": 2524560,
+          "receive_ready_ns": 2538296,
+          "ack_ns": 2544364,
+          "logical_bytes": 14336,
+          "actual_source_packets": 2,
+          "source_payload_bytes": 14336,
+          "first_send_wait_ns": 74605,
+          "actual_sending_span_ns": 131284,
+          "min_actual_tx_rate_bps": 540624999,
+          "min_historical_reference_rate_bps": 195312500,
+          "cnp_received": [
+            {
+              "time_ns": 46155,
+              "rate_bps": 50000000000
+            },
+            {
+              "time_ns": 93801,
+              "rate_bps": 25000000000
+            },
+            {
+              "time_ns": 143989,
+              "rate_bps": 12500000000
+            },
+            {
+              "time_ns": 195487,
+              "rate_bps": 6250000000
+            },
+            {
+              "time_ns": 244168,
+              "rate_bps": 3125000000
+            },
+            {
+              "time_ns": 296280,
+              "rate_bps": 1562500000
+            },
+            {
+              "time_ns": 343310,
+              "rate_bps": 781250000
+            },
+            {
+              "time_ns": 396397,
+              "rate_bps": 390625000
+            },
+            {
+              "time_ns": 441556,
+              "rate_bps": 195312500
+            }
+          ],
+          "source_unique_prefix_before_publication": 286720,
+          "earlier_unsent_bytes_at_publication": 0,
+          "earlier_unconfirmed_work": [],
+          "source_tx_samples": [
+            {
+              "time_ns": 2393276,
+              "stream": 14,
+              "event": 0,
+              "packet_uid": 1458,
+              "sequence": 286720,
+              "model_bytes": 9036,
+              "ack_cnp": 0,
+              "rate_bps": 540624999,
+              "target_rate_bps": 545625000,
+              "max_rate_bps": 100000000000,
+              "snd_nxt": 295720,
+              "snd_una": 286720,
+              "published_bytes": 301056,
+              "next_avail_ns": 2393276,
+              "alpha": 0.8719820185281126,
+              "recovery_stage": 35,
+              "first_cnp": false,
+              "alpha_cnp_arrived": false,
+              "decrease_cnp_arrived": false
+            },
+            {
+              "time_ns": 2524560,
+              "stream": 14,
+              "event": 0,
+              "packet_uid": 1460,
+              "sequence": 295720,
+              "model_bytes": 5372,
+              "ack_cnp": 0,
+              "rate_bps": 550624999,
+              "target_rate_bps": 555625000,
+              "max_rate_bps": 100000000000,
+              "snd_nxt": 301056,
+              "snd_una": 295720,
+              "published_bytes": 301056,
+              "next_avail_ns": 2524560,
+              "alpha": 0.8651829643980488,
+              "recovery_stage": 37,
+              "first_cnp": false,
+              "alpha_cnp_arrived": false,
+              "decrease_cnp_arrived": false
+            }
+          ]
+        }
+      ],
+      "timeout_recovery_requests": 4,
+      "all_endpoint_data_arrival_attempts": 685,
+      "all_endpoint_data_drops": 0,
+      "all_endpoint_observed_drop_fraction": 0.0,
+      "sr_max_per_stream_peak_reorder_bytes": null,
+      "pfc_pause": 0,
+      "pfc_resume": 0,
+      "all_switch_drop_counts": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "reference_feedback_counts": {
+        "source_sent": 685,
+        "np_mark": 186,
+        "cnp_generated": 92,
+        "cnp_tx": 92,
+        "cnp_received": 92,
+        "rp_alpha": 654,
+        "rp_timer": 654,
+        "qp_close": 24
+      }
+    },
+    "gbn-local": {
+      "tails": [
+        {
+          "group": 0,
+          "graph_id": "g0.w1",
+          "message_id": 142,
+          "stream": 10,
+          "src": 5,
+          "dst": 1,
+          "phase": "combine",
+          "layer": 1,
+          "ready_ns": 1181375,
+          "published_ns": 1181375,
+          "first_tx_ns": 2212851,
+          "last_tx_ns": 2913167,
+          "receive_ready_ns": 2924035,
+          "ack_ns": 2930103,
+          "logical_bytes": 57344,
+          "actual_source_packets": 7,
+          "source_payload_bytes": 57344,
+          "first_send_wait_ns": 1031476,
+          "actual_sending_span_ns": 700316,
+          "min_actual_tx_rate_bps": 584803149,
+          "min_historical_reference_rate_bps": 242794708,
+          "cnp_received": [
+            {
+              "time_ns": 45443,
+              "rate_bps": 50000000000
+            },
+            {
+              "time_ns": 98039,
+              "rate_bps": 25000000000
+            },
+            {
+              "time_ns": 154741,
+              "rate_bps": 18823242187
+            },
+            {
+              "time_ns": 195332,
+              "rate_bps": 9448241628
+            },
+            {
+              "time_ns": 432205,
+              "rate_bps": 9295091611
+            },
+            {
+              "time_ns": 480779,
+              "rate_bps": 4737121158
+            },
+            {
+              "time_ns": 527089,
+              "rate_bps": 2414033155
+            },
+            {
+              "time_ns": 580242,
+              "rate_bps": 1230098847
+            },
+            {
+              "time_ns": 624588,
+              "rate_bps": 626765319
+            },
+            {
+              "time_ns": 686286,
+              "rate_bps": 474803151
+            },
+            {
+              "time_ns": 724588,
+              "rate_bps": 242794708
+            }
+          ],
+          "source_unique_prefix_before_publication": 209704,
+          "earlier_unsent_bytes_at_publication": 62680,
+          "earlier_unconfirmed_work": [
+            {
+              "message_id": 130,
+              "graph_id": "g0.w1",
+              "phase": "dispatch",
+              "layer": 1,
+              "begin": 200704,
+              "end": 272384,
+              "ready_ns": 688873,
+              "acked_ns": 2118236
+            }
+          ],
+          "source_tx_samples": [
+            {
+              "time_ns": 2212851,
+              "stream": 10,
+              "event": 0,
+              "packet_uid": 1687,
+              "sequence": 272384,
+              "model_bytes": 9036,
+              "ack_cnp": 0,
+              "rate_bps": 584803149,
+              "target_rate_bps": 589803151,
+              "max_rate_bps": 100000000000,
+              "snd_nxt": 281384,
+              "snd_una": 272384,
+              "published_bytes": 329728,
+              "next_avail_ns": 2212851,
+              "alpha": 0.8793574227619889,
+              "recovery_stage": 27,
+              "first_cnp": false,
+              "alpha_cnp_arrived": false,
+              "decrease_cnp_arrived": false
+            },
+            {
+              "time_ns": 2334384,
+              "stream": 10,
+              "event": 0,
+              "packet_uid": 1689,
+              "sequence": 281384,
+              "model_bytes": 9036,
+              "ack_cnp": 0,
+              "rate_bps": 594803150,
+              "target_rate_bps": 599803151,
+              "max_rate_bps": 100000000000,
+              "snd_nxt": 290384,
+              "snd_una": 281384,
+              "published_bytes": 329728,
+              "next_avail_ns": 2334384,
+              "alpha": 0.8725008608260854,
+              "recovery_stage": 29,
+              "first_cnp": false,
+              "alpha_cnp_arrived": false,
+              "decrease_cnp_arrived": false
+            },
+            {
+              "time_ns": 2453907,
+              "stream": 10,
+              "event": 0,
+              "packet_uid": 1693,
+              "sequence": 290384,
+              "model_bytes": 9036,
+              "ack_cnp": 0,
+              "rate_bps": 604803150,
+              "target_rate_bps": 609803151,
+              "max_rate_bps": 100000000000,
+              "snd_nxt": 299384,
+              "snd_una": 290384,
+              "published_bytes": 329728,
+              "next_avail_ns": 2453907,
+              "alpha": 0.8656977611574738,
+              "recovery_stage": 31,
+              "first_cnp": false,
+              "alpha_cnp_arrived": false,
+              "decrease_cnp_arrived": false
+            },
+            {
+              "time_ns": 2571486,
+              "stream": 10,
+              "event": 0,
+              "packet_uid": 1697,
+              "sequence": 299384,
+              "model_bytes": 9036,
+              "ack_cnp": 0,
+              "rate_bps": 614803150,
+              "target_rate_bps": 619803151,
+              "max_rate_bps": 100000000000,
+              "snd_nxt": 308384,
+              "snd_una": 299384,
+              "published_bytes": 329728,
+              "next_avail_ns": 2571486,
+              "alpha": 0.8589477068979604,
+              "recovery_stage": 33,
+              "first_cnp": false,
+              "alpha_cnp_arrived": false,
+              "decrease_cnp_arrived": false
+            },
+            {
+              "time_ns": 2687183,
+              "stream": 10,
+              "event": 0,
+              "packet_uid": 1701,
+              "sequence": 308384,
+              "model_bytes": 9036,
+              "ack_cnp": 0,
+              "rate_bps": 624803150,
+              "target_rate_bps": 629803151,
+              "max_rate_bps": 100000000000,
+              "snd_nxt": 317384,
+              "snd_una": 308384,
+              "published_bytes": 329728,
+              "next_avail_ns": 2687183,
+              "alpha": 0.8522502844396953,
+              "recovery_stage": 35,
+              "first_cnp": false,
+              "alpha_cnp_arrived": false,
+              "decrease_cnp_arrived": false
+            },
+            {
+              "time_ns": 2801058,
+              "stream": 10,
+              "event": 0,
+              "packet_uid": 1703,
+              "sequence": 317384,
+              "model_bytes": 9036,
+              "ack_cnp": 0,
+              "rate_bps": 634803150,
+              "target_rate_bps": 639803151,
+              "max_rate_bps": 100000000000,
+              "snd_nxt": 326384,
+              "snd_una": 317384,
+              "published_bytes": 329728,
+              "next_avail_ns": 2801058,
+              "alpha": 0.8456050833998289,
+              "recovery_stage": 37,
+              "first_cnp": false,
+              "alpha_cnp_arrived": false,
+              "decrease_cnp_arrived": false
+            },
+            {
+              "time_ns": 2913167,
+              "stream": 10,
+              "event": 0,
+              "packet_uid": 1705,
+              "sequence": 326384,
+              "model_bytes": 3380,
+              "ack_cnp": 0,
+              "rate_bps": 644803150,
+              "target_rate_bps": 649803151,
+              "max_rate_bps": 100000000000,
+              "snd_nxt": 329728,
+              "snd_una": 326384,
+              "published_bytes": 329728,
+              "next_avail_ns": 2913167,
+              "alpha": 0.8390116965953656,
+              "recovery_stage": 39,
+              "first_cnp": false,
+              "alpha_cnp_arrived": false,
+              "decrease_cnp_arrived": false
+            }
+          ]
+        },
+        {
+          "group": 1,
+          "graph_id": "g1.w1",
+          "message_id": 186,
+          "stream": 18,
+          "src": 6,
+          "dst": 2,
+          "phase": "combine",
+          "layer": 1,
+          "ready_ns": 1655059,
+          "published_ns": 1655059,
+          "first_tx_ns": 1655059,
+          "last_tx_ns": 2668411,
+          "receive_ready_ns": 2679279,
+          "ack_ns": 2685347,
+          "logical_bytes": 57344,
+          "actual_source_packets": 7,
+          "source_payload_bytes": 57344,
+          "first_send_wait_ns": 0,
+          "actual_sending_span_ns": 1013352,
+          "min_actual_tx_rate_bps": 373044138,
+          "min_historical_reference_rate_bps": 159492580,
+          "cnp_received": [
+            {
+              "time_ns": 42491,
+              "rate_bps": 50000000000
+            },
+            {
+              "time_ns": 81896,
+              "rate_bps": 25000000000
+            },
+            {
+              "time_ns": 140423,
+              "rate_bps": 18823242187
+            },
+            {
+              "time_ns": 191268,
+              "rate_bps": 9448241628
+            },
+            {
+              "time_ns": 309705,
+              "rate_bps": 8335679843
+            },
+            {
+              "time_ns": 360651,
+              "rate_bps": 4216175749
+            },
+            {
+              "time_ns": 402873,
+              "rate_bps": 2132440570
+            },
+            {
+              "time_ns": 455949,
+              "rate_bps": 1078489181
+            },
+            {
+              "time_ns": 531727,
+              "rate_bps": 815033054
+            },
+            {
+              "time_ns": 581712,
+              "rate_bps": 413736686
+            },
+            {
+              "time_ns": 642554,
+              "rate_bps": 313044700
+            },
+            {
+              "time_ns": 688230,
+              "rate_bps": 159492580
+            }
+          ],
+          "source_unique_prefix_before_publication": 157696,
+          "earlier_unsent_bytes_at_publication": 0,
+          "earlier_unconfirmed_work": [],
+          "source_tx_samples": [
+            {
+              "time_ns": 1655059,
+              "stream": 18,
+              "event": 0,
+              "packet_uid": 1604,
+              "sequence": 157696,
+              "model_bytes": 9036,
+              "ack_cnp": 0,
+              "rate_bps": 373044138,
+              "target_rate_bps": 378044700,
+              "max_rate_bps": 100000000000,
+              "snd_nxt": 166696,
+              "snd_una": 157696,
+              "published_bytes": 215040,
+              "next_avail_ns": 1468691,
+              "alpha": 0.9179434524080969,
+              "recovery_stage": 17,
+              "first_cnp": false,
+              "alpha_cnp_arrived": false,
+              "decrease_cnp_arrived": false
+            },
+            {
+              "time_ns": 1841347,
+              "stream": 18,
+              "event": 0,
+              "packet_uid": 1647,
+              "sequence": 166696,
+              "model_bytes": 9036,
+              "ack_cnp": 0,
+              "rate_bps": 388044629,
+              "target_rate_bps": 393044700,
+              "max_rate_bps": 100000000000,
+              "snd_nxt": 175696,
+              "snd_una": 166696,
+              "published_bytes": 215040,
+              "next_avail_ns": 1841347,
+              "alpha": 0.9072282679780309,
+              "recovery_stage": 20,
+              "first_cnp": false,
+              "alpha_cnp_arrived": false,
+              "decrease_cnp_arrived": false
+            },
+            {
+              "time_ns": 2018504,
+              "stream": 18,
+              "event": 0,
+              "packet_uid": 1654,
+              "sequence": 175696,
+              "model_bytes": 9036,
+              "ack_cnp": 0,
+              "rate_bps": 408044695,
+              "target_rate_bps": 413044700,
+              "max_rate_bps": 100000000000,
+              "snd_nxt": 184696,
+              "snd_una": 175696,
+              "published_bytes": 215040,
+              "next_avail_ns": 2018504,
+              "alpha": 0.8931356694306657,
+              "recovery_stage": 24,
+              "first_cnp": false,
+              "alpha_cnp_arrived": false,
+              "decrease_cnp_arrived": false
+            },
+            {
+              "time_ns": 2189380,
+              "stream": 18,
+              "event": 0,
+              "packet_uid": 1685,
+              "sequence": 184696,
+              "model_bytes": 9036,
+              "ack_cnp": 0,
+              "rate_bps": 423044699,
+              "target_rate_bps": 428044700,
+              "max_rate_bps": 100000000000,
+              "snd_nxt": 193696,
+              "snd_una": 184696,
+              "published_bytes": 215040,
+              "next_avail_ns": 2189380,
+              "alpha": 0.8827100670758428,
+              "recovery_stage": 27,
+              "first_cnp": false,
+              "alpha_cnp_arrived": false,
+              "decrease_cnp_arrived": false
+            },
+            {
+              "time_ns": 2354404,
+              "stream": 18,
+              "event": 0,
+              "packet_uid": 1691,
+              "sequence": 193696,
+              "model_bytes": 9036,
+              "ack_cnp": 0,
+              "rate_bps": 438044699,
+              "target_rate_bps": 443044700,
+              "max_rate_bps": 100000000000,
+              "snd_nxt": 202696,
+              "snd_una": 193696,
+              "published_bytes": 215040,
+              "next_avail_ns": 2354404,
+              "alpha": 0.8724061631238283,
+              "recovery_stage": 30,
+              "first_cnp": false,
+              "alpha_cnp_arrived": false,
+              "decrease_cnp_arrived": false
+            },
+            {
+              "time_ns": 2513964,
+              "stream": 18,
+              "event": 0,
+              "packet_uid": 1695,
+              "sequence": 202696,
+              "model_bytes": 9036,
+              "ack_cnp": 0,
+              "rate_bps": 453044699,
+              "target_rate_bps": 458044700,
+              "max_rate_bps": 100000000000,
+              "snd_nxt": 211696,
+              "snd_una": 202696,
+              "published_bytes": 215040,
+              "next_avail_ns": 2513964,
+              "alpha": 0.8622225369851213,
+              "recovery_stage": 33,
+              "first_cnp": false,
+              "alpha_cnp_arrived": false,
+              "decrease_cnp_arrived": false
+            },
+            {
+              "time_ns": 2668411,
+              "stream": 18,
+              "event": 0,
+              "packet_uid": 1699,
+              "sequence": 211696,
+              "model_bytes": 3380,
+              "ack_cnp": 0,
+              "rate_bps": 468044699,
+              "target_rate_bps": 473044700,
+              "max_rate_bps": 100000000000,
+              "snd_nxt": 215040,
+              "snd_una": 211696,
+              "published_bytes": 215040,
+              "next_avail_ns": 2668411,
+              "alpha": 0.8521577846528092,
+              "recovery_stage": 36,
+              "first_cnp": false,
+              "alpha_cnp_arrived": false,
+              "decrease_cnp_arrived": false
+            }
+          ]
+        }
+      ],
+      "timeout_recovery_requests": 23,
+      "all_endpoint_data_arrival_attempts": 815,
+      "all_endpoint_data_drops": 32,
+      "all_endpoint_observed_drop_fraction": 0.0392638036809816,
+      "sr_max_per_stream_peak_reorder_bytes": null,
+      "pfc_pause": 0,
+      "pfc_resume": 0,
+      "all_switch_drop_counts": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "reference_feedback_counts": {
+        "source_sent": 815,
+        "np_mark": 307,
+        "cnp_generated": 115,
+        "cnp_tx": 115,
+        "cnp_received": 115,
+        "rp_alpha": 745,
+        "rp_timer": 745,
+        "qp_close": 24
+      }
+    },
+    "sr-normal": {
+      "tails": [
+        {
+          "group": 0,
+          "graph_id": "g0.w1",
+          "message_id": 137,
+          "stream": 5,
+          "src": 1,
+          "dst": 5,
+          "phase": "combine",
+          "layer": 1,
+          "ready_ns": 698714,
+          "published_ns": 698714,
+          "first_tx_ns": 770015,
+          "last_tx_ns": 982059,
+          "receive_ready_ns": 1000609,
+          "ack_ns": 1006681,
+          "logical_bytes": 71680,
+          "actual_source_packets": 8,
+          "source_payload_bytes": 71680,
+          "first_send_wait_ns": 71301,
+          "actual_sending_span_ns": 212044,
+          "min_actual_tx_rate_bps": 2372613460,
+          "min_historical_reference_rate_bps": 1190184849,
+          "cnp_received": [
+            {
+              "time_ns": 42539,
+              "rate_bps": 50000000000
+            },
+            {
+              "time_ns": 93116,
+              "rate_bps": 25000000000
+            },
+            {
+              "time_ns": 141086,
+              "rate_bps": 12500000000
+            },
+            {
+              "time_ns": 244218,
+              "rate_bps": 9411621093
+            },
+            {
+              "time_ns": 293451,
+              "rate_bps": 4724120813
+            },
+            {
+              "time_ns": 343377,
+              "rate_bps": 2371215261
+            },
+            {
+              "time_ns": 383696,
+              "rate_bps": 1190184849
+            }
+          ],
+          "source_unique_prefix_before_publication": 245704,
+          "earlier_unsent_bytes_at_publication": 12344,
+          "earlier_unconfirmed_work": [
+            {
+              "message_id": 125,
+              "graph_id": "g0.w1",
+              "phase": "dispatch",
+              "layer": 1,
+              "begin": 200704,
+              "end": 258048,
+              "ready_ns": 555843,
+              "acked_ns": 783398
+            }
+          ],
+          "source_tx_samples": [
+            {
+              "time_ns": 770015,
+              "stream": 5,
+              "event": 0,
+              "packet_uid": 1179,
+              "sequence": 258048,
+              "model_bytes": 9036,
+              "ack_cnp": 0,
+              "rate_bps": 2372613460,
+              "target_rate_bps": 2386215261,
+              "max_rate_bps": 100000000000,
+              "snd_nxt": 267048,
+              "snd_una": 254704,
+              "published_bytes": 329728,
+              "next_avail_ns": 770015,
+              "alpha": 0.969232963080526,
+              "recovery_stage": 7,
+              "first_cnp": false,
+              "alpha_cnp_arrived": false,
+              "decrease_cnp_arrived": false
+            },
+            {
+              "time_ns": 800483,
+              "stream": 5,
+              "event": 0,
+              "packet_uid": 1195,
+              "sequence": 267048,
+              "model_bytes": 9036,
+              "ack_cnp": 0,
+              "rate_bps": 2372613460,
+              "target_rate_bps": 2386215261,
+              "max_rate_bps": 100000000000,
+              "snd_nxt": 276048,
+              "snd_una": 258048,
+              "published_bytes": 329728,
+              "next_avail_ns": 800483,
+              "alpha": 0.969232963080526,
+              "recovery_stage": 7,
+              "first_cnp": false,
+              "alpha_cnp_arrived": false,
+              "decrease_cnp_arrived": false
+            },
+            {
+              "time_ns": 830832,
+              "stream": 5,
+              "event": 0,
+              "packet_uid": 1211,
+              "sequence": 276048,
+              "model_bytes": 9036,
+              "ack_cnp": 0,
+              "rate_bps": 2381914360,
+              "target_rate_bps": 2391215261,
+              "max_rate_bps": 100000000000,
+              "snd_nxt": 285048,
+              "snd_una": 276048,
+              "published_bytes": 329728,
+              "next_avail_ns": 830832,
+              "alpha": 0.9654468968184927,
+              "recovery_stage": 8,
+              "first_cnp": false,
+              "alpha_cnp_arrived": false,
+              "decrease_cnp_arrived": false
+            },
+            {
+              "time_ns": 861181,
+              "stream": 5,
+              "event": 0,
+              "packet_uid": 1215,
+              "sequence": 285048,
+              "model_bytes": 9036,
+              "ack_cnp": 0,
+              "rate_bps": 2381914360,
+              "target_rate_bps": 2391215261,
+              "max_rate_bps": 100000000000,
+              "snd_nxt": 294048,
+              "snd_una": 285048,
+              "published_bytes": 329728,
+              "next_avail_ns": 861181,
+              "alpha": 0.9654468968184927,
+              "recovery_stage": 8,
+              "first_cnp": false,
+              "alpha_cnp_arrived": false,
+              "decrease_cnp_arrived": false
+            },
+            {
+              "time_ns": 891439,
+              "stream": 5,
+              "event": 0,
+              "packet_uid": 1219,
+              "sequence": 294048,
+              "model_bytes": 9036,
+              "ack_cnp": 0,
+              "rate_bps": 2389064810,
+              "target_rate_bps": 2396215261,
+              "max_rate_bps": 100000000000,
+              "snd_nxt": 303048,
+              "snd_una": 294048,
+              "published_bytes": 329728,
+              "next_avail_ns": 891439,
+              "alpha": 0.9616756198777955,
+              "recovery_stage": 9,
+              "first_cnp": false,
+              "alpha_cnp_arrived": false,
+              "decrease_cnp_arrived": false
+            },
+            {
+              "time_ns": 921697,
+              "stream": 5,
+              "event": 0,
+              "packet_uid": 1224,
+              "sequence": 303048,
+              "model_bytes": 9036,
+              "ack_cnp": 0,
+              "rate_bps": 2389064810,
+              "target_rate_bps": 2396215261,
+              "max_rate_bps": 100000000000,
+              "snd_nxt": 312048,
+              "snd_una": 303048,
+              "published_bytes": 329728,
+              "next_avail_ns": 921697,
+              "alpha": 0.9616756198777955,
+              "recovery_stage": 9,
+              "first_cnp": false,
+              "alpha_cnp_arrived": false,
+              "decrease_cnp_arrived": false
+            },
+            {
+              "time_ns": 951878,
+              "stream": 5,
+              "event": 0,
+              "packet_uid": 1229,
+              "sequence": 312048,
+              "model_bytes": 9036,
+              "ack_cnp": 0,
+              "rate_bps": 2395140035,
+              "target_rate_bps": 2401215261,
+              "max_rate_bps": 100000000000,
+              "snd_nxt": 321048,
+              "snd_una": 312048,
+              "published_bytes": 329728,
+              "next_avail_ns": 951878,
+              "alpha": 0.9579190744876478,
+              "recovery_stage": 10,
+              "first_cnp": false,
+              "alpha_cnp_arrived": false,
+              "decrease_cnp_arrived": false
+            },
+            {
+              "time_ns": 982059,
+              "stream": 5,
+              "event": 0,
+              "packet_uid": 1231,
+              "sequence": 321048,
+              "model_bytes": 8716,
+              "ack_cnp": 0,
+              "rate_bps": 2395140035,
+              "target_rate_bps": 2401215261,
+              "max_rate_bps": 100000000000,
+              "snd_nxt": 329728,
+              "snd_una": 321048,
+              "published_bytes": 329728,
+              "next_avail_ns": 982059,
+              "alpha": 0.9579190744876478,
+              "recovery_stage": 10,
+              "first_cnp": false,
+              "alpha_cnp_arrived": false,
+              "decrease_cnp_arrived": false
+            }
+          ]
+        },
+        {
+          "group": 1,
+          "graph_id": "g1.w1",
+          "message_id": 182,
+          "stream": 14,
+          "src": 2,
+          "dst": 7,
+          "phase": "combine",
+          "layer": 1,
+          "ready_ns": 2318780,
+          "published_ns": 2318780,
+          "first_tx_ns": 2393385,
+          "last_tx_ns": 2524669,
+          "receive_ready_ns": 2538405,
+          "ack_ns": 2544477,
+          "logical_bytes": 14336,
+          "actual_source_packets": 2,
+          "source_payload_bytes": 14336,
+          "first_send_wait_ns": 74605,
+          "actual_sending_span_ns": 131284,
+          "min_actual_tx_rate_bps": 540624999,
+          "min_historical_reference_rate_bps": 195312500,
+          "cnp_received": [
+            {
+              "time_ns": 46158,
+              "rate_bps": 50000000000
+            },
+            {
+              "time_ns": 93824,
+              "rate_bps": 25000000000
+            },
+            {
+              "time_ns": 144025,
+              "rate_bps": 12500000000
+            },
+            {
+              "time_ns": 195540,
+              "rate_bps": 6250000000
+            },
+            {
+              "time_ns": 244233,
+              "rate_bps": 3125000000
+            },
+            {
+              "time_ns": 296358,
+              "rate_bps": 1562500000
+            },
+            {
+              "time_ns": 343408,
+              "rate_bps": 781250000
+            },
+            {
+              "time_ns": 396506,
+              "rate_bps": 390625000
+            },
+            {
+              "time_ns": 441674,
+              "rate_bps": 195312500
+            }
+          ],
+          "source_unique_prefix_before_publication": 286720,
+          "earlier_unsent_bytes_at_publication": 0,
+          "earlier_unconfirmed_work": [],
+          "source_tx_samples": [
+            {
+              "time_ns": 2393385,
+              "stream": 14,
+              "event": 0,
+              "packet_uid": 1458,
+              "sequence": 286720,
+              "model_bytes": 9036,
+              "ack_cnp": 0,
+              "rate_bps": 540624999,
+              "target_rate_bps": 545625000,
+              "max_rate_bps": 100000000000,
+              "snd_nxt": 295720,
+              "snd_una": 286720,
+              "published_bytes": 301056,
+              "next_avail_ns": 2393385,
+              "alpha": 0.8719820185281126,
+              "recovery_stage": 35,
+              "first_cnp": false,
+              "alpha_cnp_arrived": false,
+              "decrease_cnp_arrived": false
+            },
+            {
+              "time_ns": 2524669,
+              "stream": 14,
+              "event": 0,
+              "packet_uid": 1460,
+              "sequence": 295720,
+              "model_bytes": 5372,
+              "ack_cnp": 0,
+              "rate_bps": 550624999,
+              "target_rate_bps": 555625000,
+              "max_rate_bps": 100000000000,
+              "snd_nxt": 301056,
+              "snd_una": 295720,
+              "published_bytes": 301056,
+              "next_avail_ns": 2524669,
+              "alpha": 0.8651829643980488,
+              "recovery_stage": 37,
+              "first_cnp": false,
+              "alpha_cnp_arrived": false,
+              "decrease_cnp_arrived": false
+            }
+          ]
+        }
+      ],
+      "timeout_recovery_requests": 4,
+      "all_endpoint_data_arrival_attempts": 685,
+      "all_endpoint_data_drops": 0,
+      "all_endpoint_observed_drop_fraction": 0.0,
+      "sr_max_per_stream_peak_reorder_bytes": 0,
+      "pfc_pause": 0,
+      "pfc_resume": 0,
+      "all_switch_drop_counts": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "reference_feedback_counts": {
+        "source_sent": 685,
+        "np_mark": 186,
+        "cnp_generated": 92,
+        "cnp_tx": 92,
+        "cnp_received": 92,
+        "rp_alpha": 654,
+        "rp_timer": 654,
+        "qp_close": 24
+      }
+    },
+    "sr-local": {
+      "tails": [
+        {
+          "group": 0,
+          "graph_id": "g0.w1",
+          "message_id": 142,
+          "stream": 10,
+          "src": 5,
+          "dst": 1,
+          "phase": "combine",
+          "layer": 1,
+          "ready_ns": 1172401,
+          "published_ns": 1172401,
+          "first_tx_ns": 2205669,
+          "last_tx_ns": 2905985,
+          "receive_ready_ns": 2916853,
+          "ack_ns": 2922925,
+          "logical_bytes": 57344,
+          "actual_source_packets": 7,
+          "source_payload_bytes": 57344,
+          "first_send_wait_ns": 1033268,
+          "actual_sending_span_ns": 700316,
+          "min_actual_tx_rate_bps": 584803149,
+          "min_historical_reference_rate_bps": 242794708,
+          "cnp_received": [
+            {
+              "time_ns": 45446,
+              "rate_bps": 50000000000
+            },
+            {
+              "time_ns": 98059,
+              "rate_bps": 25000000000
+            },
+            {
+              "time_ns": 154790,
+              "rate_bps": 18823242187
+            },
+            {
+              "time_ns": 195459,
+              "rate_bps": 9448241628
+            },
+            {
+              "time_ns": 427743,
+              "rate_bps": 9295091611
+            },
+            {
+              "time_ns": 475421,
+              "rate_bps": 4737121158
+            },
+            {
+              "time_ns": 520885,
+              "rate_bps": 2414033155
+            },
+            {
+              "time_ns": 573049,
+              "rate_bps": 1230098847
+            },
+            {
+              "time_ns": 617265,
+              "rate_bps": 626765319
+            },
+            {
+              "time_ns": 676212,
+              "rate_bps": 474803151
+            },
+            {
+              "time_ns": 717265,
+              "rate_bps": 242794708
+            }
+          ],
+          "source_unique_prefix_before_publication": 209704,
+          "earlier_unsent_bytes_at_publication": 62680,
+          "earlier_unconfirmed_work": [
+            {
+              "message_id": 130,
+              "graph_id": "g0.w1",
+              "phase": "dispatch",
+              "layer": 1,
+              "begin": 200704,
+              "end": 272384,
+              "ready_ns": 678769,
+              "acked_ns": 2111058
+            }
+          ],
+          "source_tx_samples": [
+            {
+              "time_ns": 2205669,
+              "stream": 10,
+              "event": 0,
+              "packet_uid": 1689,
+              "sequence": 272384,
+              "model_bytes": 9036,
+              "ack_cnp": 0,
+              "rate_bps": 584803149,
+              "target_rate_bps": 589803151,
+              "max_rate_bps": 100000000000,
+              "snd_nxt": 281384,
+              "snd_una": 272384,
+              "published_bytes": 329728,
+              "next_avail_ns": 2205669,
+              "alpha": 0.8793574227619889,
+              "recovery_stage": 27,
+              "first_cnp": false,
+              "alpha_cnp_arrived": false,
+              "decrease_cnp_arrived": false
+            },
+            {
+              "time_ns": 2327202,
+              "stream": 10,
+              "event": 0,
+              "packet_uid": 1693,
+              "sequence": 281384,
+              "model_bytes": 9036,
+              "ack_cnp": 0,
+              "rate_bps": 594803150,
+              "target_rate_bps": 599803151,
+              "max_rate_bps": 100000000000,
+              "snd_nxt": 290384,
+              "snd_una": 281384,
+              "published_bytes": 329728,
+              "next_avail_ns": 2327202,
+              "alpha": 0.8725008608260854,
+              "recovery_stage": 29,
+              "first_cnp": false,
+              "alpha_cnp_arrived": false,
+              "decrease_cnp_arrived": false
+            },
+            {
+              "time_ns": 2446725,
+              "stream": 10,
+              "event": 0,
+              "packet_uid": 1697,
+              "sequence": 290384,
+              "model_bytes": 9036,
+              "ack_cnp": 0,
+              "rate_bps": 604803150,
+              "target_rate_bps": 609803151,
+              "max_rate_bps": 100000000000,
+              "snd_nxt": 299384,
+              "snd_una": 290384,
+              "published_bytes": 329728,
+              "next_avail_ns": 2446725,
+              "alpha": 0.8656977611574738,
+              "recovery_stage": 31,
+              "first_cnp": false,
+              "alpha_cnp_arrived": false,
+              "decrease_cnp_arrived": false
+            },
+            {
+              "time_ns": 2564304,
+              "stream": 10,
+              "event": 0,
+              "packet_uid": 1699,
+              "sequence": 299384,
+              "model_bytes": 9036,
+              "ack_cnp": 0,
+              "rate_bps": 614803150,
+              "target_rate_bps": 619803151,
+              "max_rate_bps": 100000000000,
+              "snd_nxt": 308384,
+              "snd_una": 299384,
+              "published_bytes": 329728,
+              "next_avail_ns": 2564304,
+              "alpha": 0.8589477068979604,
+              "recovery_stage": 33,
+              "first_cnp": false,
+              "alpha_cnp_arrived": false,
+              "decrease_cnp_arrived": false
+            },
+            {
+              "time_ns": 2680001,
+              "stream": 10,
+              "event": 0,
+              "packet_uid": 1701,
+              "sequence": 308384,
+              "model_bytes": 9036,
+              "ack_cnp": 0,
+              "rate_bps": 624803150,
+              "target_rate_bps": 629803151,
+              "max_rate_bps": 100000000000,
+              "snd_nxt": 317384,
+              "snd_una": 308384,
+              "published_bytes": 329728,
+              "next_avail_ns": 2680001,
+              "alpha": 0.8522502844396953,
+              "recovery_stage": 35,
+              "first_cnp": false,
+              "alpha_cnp_arrived": false,
+              "decrease_cnp_arrived": false
+            },
+            {
+              "time_ns": 2793876,
+              "stream": 10,
+              "event": 0,
+              "packet_uid": 1703,
+              "sequence": 317384,
+              "model_bytes": 9036,
+              "ack_cnp": 0,
+              "rate_bps": 634803150,
+              "target_rate_bps": 639803151,
+              "max_rate_bps": 100000000000,
+              "snd_nxt": 326384,
+              "snd_una": 317384,
+              "published_bytes": 329728,
+              "next_avail_ns": 2793876,
+              "alpha": 0.8456050833998289,
+              "recovery_stage": 37,
+              "first_cnp": false,
+              "alpha_cnp_arrived": false,
+              "decrease_cnp_arrived": false
+            },
+            {
+              "time_ns": 2905985,
+              "stream": 10,
+              "event": 0,
+              "packet_uid": 1705,
+              "sequence": 326384,
+              "model_bytes": 3380,
+              "ack_cnp": 0,
+              "rate_bps": 644803150,
+              "target_rate_bps": 649803151,
+              "max_rate_bps": 100000000000,
+              "snd_nxt": 329728,
+              "snd_una": 326384,
+              "published_bytes": 329728,
+              "next_avail_ns": 2905985,
+              "alpha": 0.8390116965953656,
+              "recovery_stage": 39,
+              "first_cnp": false,
+              "alpha_cnp_arrived": false,
+              "decrease_cnp_arrived": false
+            }
+          ]
+        },
+        {
+          "group": 1,
+          "graph_id": "g1.w1",
+          "message_id": 186,
+          "stream": 18,
+          "src": 6,
+          "dst": 2,
+          "phase": "combine",
+          "layer": 1,
+          "ready_ns": 1668451,
+          "published_ns": 1668451,
+          "first_tx_ns": 1668451,
+          "last_tx_ns": 2365465,
+          "receive_ready_ns": 2376333,
+          "ack_ns": 2382405,
+          "logical_bytes": 57344,
+          "actual_source_packets": 7,
+          "source_payload_bytes": 57344,
+          "first_send_wait_ns": 0,
+          "actual_sending_span_ns": 697014,
+          "min_actual_tx_rate_bps": 582732598,
+          "min_historical_reference_rate_bps": 262825837,
+          "cnp_received": [
+            {
+              "time_ns": 42492,
+              "rate_bps": 50000000000
+            },
+            {
+              "time_ns": 81896,
+              "rate_bps": 25000000000
+            },
+            {
+              "time_ns": 140471,
+              "rate_bps": 18823242187
+            },
+            {
+              "time_ns": 191390,
+              "rate_bps": 9448241628
+            },
+            {
+              "time_ns": 300999,
+              "rate_bps": 7122766416
+            },
+            {
+              "time_ns": 351520,
+              "rate_bps": 3588936072
+            },
+            {
+              "time_ns": 400835,
+              "rate_bps": 1808296820
+            },
+            {
+              "time_ns": 455096,
+              "rate_bps": 911088869
+            },
+            {
+              "time_ns": 524545,
+              "rate_bps": 687680044
+            },
+            {
+              "time_ns": 574526,
+              "rate_bps": 347786488
+            },
+            {
+              "time_ns": 633112,
+              "rate_bps": 262825837
+            }
+          ],
+          "source_unique_prefix_before_publication": 157696,
+          "earlier_unsent_bytes_at_publication": 0,
+          "earlier_unconfirmed_work": [],
+          "source_tx_samples": [
+            {
+              "time_ns": 1668451,
+              "stream": 18,
+              "event": 0,
+              "packet_uid": 1610,
+              "sequence": 157696,
+              "model_bytes": 9036,
+              "ack_cnp": 0,
+              "rate_bps": 582732598,
+              "target_rate_bps": 587733266,
+              "max_rate_bps": 100000000000,
+              "snd_nxt": 166696,
+              "snd_una": 157696,
+              "published_bytes": 215040,
+              "next_avail_ns": 1297133,
+              "alpha": 0.9177758734253014,
+              "recovery_stage": 18,
+              "first_cnp": false,
+              "alpha_cnp_arrived": false,
+              "decrease_cnp_arrived": false
+            },
+            {
+              "time_ns": 1789388,
+              "stream": 18,
+              "event": 0,
+              "packet_uid": 1644,
+              "sequence": 166696,
+              "model_bytes": 9036,
+              "ack_cnp": 0,
+              "rate_bps": 597733182,
+              "target_rate_bps": 602733266,
+              "max_rate_bps": 100000000000,
+              "snd_nxt": 175696,
+              "snd_una": 166696,
+              "published_bytes": 215040,
+              "next_avail_ns": 1789388,
+              "alpha": 0.9070626451502715,
+              "recovery_stage": 21,
+              "first_cnp": false,
+              "alpha_cnp_arrived": false,
+              "decrease_cnp_arrived": false
+            },
+            {
+              "time_ns": 1908335,
+              "stream": 18,
+              "event": 0,
+              "packet_uid": 1652,
+              "sequence": 175696,
+              "model_bytes": 9036,
+              "ack_cnp": 0,
+              "rate_bps": 607733245,
+              "target_rate_bps": 612733266,
+              "max_rate_bps": 100000000000,
+              "snd_nxt": 184696,
+              "snd_una": 175696,
+              "published_bytes": 215040,
+              "next_avail_ns": 1908335,
+              "alpha": 0.8999900589126039,
+              "recovery_stage": 23,
+              "first_cnp": false,
+              "alpha_cnp_arrived": false,
+              "decrease_cnp_arrived": false
+            },
+            {
+              "time_ns": 2025356,
+              "stream": 18,
+              "event": 0,
+              "packet_uid": 1656,
+              "sequence": 184696,
+              "model_bytes": 9036,
+              "ack_cnp": 0,
+              "rate_bps": 617733260,
+              "target_rate_bps": 622733266,
+              "max_rate_bps": 100000000000,
+              "snd_nxt": 193696,
+              "snd_una": 184696,
+              "published_bytes": 215040,
+              "next_avail_ns": 2025356,
+              "alpha": 0.8929726193358164,
+              "recovery_stage": 25,
+              "first_cnp": false,
+              "alpha_cnp_arrived": false,
+              "decrease_cnp_arrived": false
+            },
+            {
+              "time_ns": 2140513,
+              "stream": 18,
+              "event": 0,
+              "packet_uid": 1678,
+              "sequence": 193696,
+              "model_bytes": 9036,
+              "ack_cnp": 0,
+              "rate_bps": 627733264,
+              "target_rate_bps": 632733266,
+              "max_rate_bps": 100000000000,
+              "snd_nxt": 202696,
+              "snd_una": 193696,
+              "published_bytes": 215040,
+              "next_avail_ns": 2140513,
+              "alpha": 0.8860098964280924,
+              "recovery_stage": 27,
+              "first_cnp": false,
+              "alpha_cnp_arrived": false,
+              "decrease_cnp_arrived": false
+            },
+            {
+              "time_ns": 2253864,
+              "stream": 18,
+              "event": 0,
+              "packet_uid": 1691,
+              "sequence": 202696,
+              "model_bytes": 9036,
+              "ack_cnp": 0,
+              "rate_bps": 637733265,
+              "target_rate_bps": 642733266,
+              "max_rate_bps": 100000000000,
+              "snd_nxt": 211696,
+              "snd_una": 202696,
+              "published_bytes": 215040,
+              "next_avail_ns": 2253864,
+              "alpha": 0.8791014635503647,
+              "recovery_stage": 29,
+              "first_cnp": false,
+              "alpha_cnp_arrived": false,
+              "decrease_cnp_arrived": false
+            },
+            {
+              "time_ns": 2365465,
+              "stream": 18,
+              "event": 0,
+              "packet_uid": 1695,
+              "sequence": 211696,
+              "model_bytes": 3380,
+              "ack_cnp": 0,
+              "rate_bps": 647733265,
+              "target_rate_bps": 652733266,
+              "max_rate_bps": 100000000000,
+              "snd_nxt": 215040,
+              "snd_una": 211696,
+              "published_bytes": 215040,
+              "next_avail_ns": 2365465,
+              "alpha": 0.8722468973901742,
+              "recovery_stage": 31,
+              "first_cnp": false,
+              "alpha_cnp_arrived": false,
+              "decrease_cnp_arrived": false
+            }
+          ]
+        }
+      ],
+      "timeout_recovery_requests": 23,
+      "all_endpoint_data_arrival_attempts": 812,
+      "all_endpoint_data_drops": 32,
+      "all_endpoint_observed_drop_fraction": 0.03940886699507389,
+      "sr_max_per_stream_peak_reorder_bytes": 51688,
+      "pfc_pause": 0,
+      "pfc_resume": 0,
+      "all_switch_drop_counts": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "reference_feedback_counts": {
+        "source_sent": 812,
+        "np_mark": 303,
+        "cnp_generated": 115,
+        "cnp_tx": 115,
+        "cnp_received": 115,
+        "rp_alpha": 741,
+        "rp_timer": 741,
+        "qp_close": 24
+      }
+    }
+  },
+  "local_group1_same_source_sequence_size_multiset": true,
+  "local_same_data_drop_stream_sequence_size_multiset": true,
+  "normal_group1_same_source_sequence_size_multiset": true,
+  "scope": "post-hoc observation of actual tails; controller is an uncalibrated reference; no causal partition or achievable gain claim"
+}

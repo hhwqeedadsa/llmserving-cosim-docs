@@ -1,0 +1,380 @@
+{
+  "schema_version": "moe-local-transient-closeout/1",
+  "execution_commit": "3a6a2aa75141d382263e7fca0224eaa3ba3ea4a1",
+  "platform_source_commit": "d22491608f1462a022553f5f42392c08166f16ec",
+  "network_runs": 4,
+  "extra_network_runs_after_first_four": 0,
+  "cpu_route_replay_distinct_tests": 36,
+  "source_test_subsets": 5,
+  "monitored_wall_seconds_including_overlaps": 31.69538450316759,
+  "monitors": {
+    "source-cpu": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.1281943839858286,
+      "peak_sampled_group_rss_bytes": 7438336,
+      "aggregate_artifact_bytes_before_report": 8192
+    },
+    "route-regression": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.4551194640225731,
+      "peak_sampled_group_rss_bytes": 28540928,
+      "aggregate_artifact_bytes_before_report": 40960
+    },
+    "replay-regression": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.1315855230204761,
+      "peak_sampled_group_rss_bytes": 7442432,
+      "aggregate_artifact_bytes_before_report": 28672
+    },
+    "prepare": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 1.7182148359715939,
+      "peak_sampled_group_rss_bytes": 34172928,
+      "aggregate_artifact_bytes_before_report": 16392192
+    },
+    "gbn-normal": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 2.668309160042554,
+      "peak_sampled_group_rss_bytes": 336179200,
+      "aggregate_artifact_bytes_before_report": 35549184
+    },
+    "check-gbn-normal": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.5716557550476864,
+      "peak_sampled_group_rss_bytes": 57679872,
+      "aggregate_artifact_bytes_before_report": 35561472
+    },
+    "gbn-local": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 2.5565098440274596,
+      "peak_sampled_group_rss_bytes": 340221952,
+      "aggregate_artifact_bytes_before_report": 55234560
+    },
+    "check-gbn-local": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.6825110919889994,
+      "peak_sampled_group_rss_bytes": 75087872,
+      "aggregate_artifact_bytes_before_report": 55259136
+    },
+    "loss-gbn-local": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.25203953695017844,
+      "peak_sampled_group_rss_bytes": 34316288,
+      "aggregate_artifact_bytes_before_report": 55250944
+    },
+    "sr-normal": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 2.5915723799844272,
+      "peak_sampled_group_rss_bytes": 366133248,
+      "aggregate_artifact_bytes_before_report": 74899456
+    },
+    "check-sr-normal": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.683654595981352,
+      "peak_sampled_group_rss_bytes": 61784064,
+      "aggregate_artifact_bytes_before_report": 74911744
+    },
+    "sr-local": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 2.6445482679991983,
+      "peak_sampled_group_rss_bytes": 373501952,
+      "aggregate_artifact_bytes_before_report": 95121408
+    },
+    "check-sr-local": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.702844348968938,
+      "peak_sampled_group_rss_bytes": 77033472,
+      "aggregate_artifact_bytes_before_report": 95145984
+    },
+    "loss-sr-local": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.2641403150046244,
+      "peak_sampled_group_rss_bytes": 36638720,
+      "aggregate_artifact_bytes_before_report": 95137792
+    },
+    "analysis": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 1.364087712019682,
+      "peak_sampled_group_rss_bytes": 69709824,
+      "aggregate_artifact_bytes_before_report": 95326208
+    },
+    "verify": {
+      "status": "child_failed",
+      "child_exit_code": 1,
+      "wall_seconds": 0.376979490974918,
+      "peak_sampled_group_rss_bytes": 56475648,
+      "aggregate_artifact_bytes_before_report": 95338496
+    },
+    "verify-corrected": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 1.5946931420476176,
+      "peak_sampled_group_rss_bytes": 139325440,
+      "aggregate_artifact_bytes_before_report": 95424512
+    },
+    "diagnosis": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.4833905650302768,
+      "peak_sampled_group_rss_bytes": 42688512,
+      "aggregate_artifact_bytes_before_report": 95412224
+    },
+    "analysis-complete": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 1.2981770529877394,
+      "peak_sampled_group_rss_bytes": 70279168,
+      "aggregate_artifact_bytes_before_report": 95682560
+    },
+    "diagnosis-backlog": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.48867469205288216,
+      "peak_sampled_group_rss_bytes": 50925568,
+      "aggregate_artifact_bytes_before_report": 95535104
+    },
+    "render": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 1.9694634159677662,
+      "peak_sampled_group_rss_bytes": 98136064,
+      "aggregate_artifact_bytes_before_report": 96276480
+    },
+    "analysis-late": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 2.135950585012324,
+      "peak_sampled_group_rss_bytes": 101814272,
+      "aggregate_artifact_bytes_before_report": 96534528
+    },
+    "render-late": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 2.703509411017876,
+      "peak_sampled_group_rss_bytes": 105521152,
+      "aggregate_artifact_bytes_before_report": 97419264
+    },
+    "diagnosis-final": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.4970357380225323,
+      "peak_sampled_group_rss_bytes": 49762304,
+      "aggregate_artifact_bytes_before_report": 97492992
+    },
+    "render-final": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 2.732523195038084,
+      "peak_sampled_group_rss_bytes": 108875776,
+      "aggregate_artifact_bytes_before_report": 98377728
+    }
+  },
+  "task_root_usage": {
+    "apparent_bytes": 97248201,
+    "allocated_bytes": 98381824
+  },
+  "commands": {
+    "gbn-normal": {
+      "status": "terminal",
+      "case": "gbn-normal",
+      "command": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--config",
+        "/home/lry/moe-ub-cosim/runs/local_transient_real_20261030/prepared/gbn-normal-service.json",
+        "--protocol",
+        "/home/lry/moe-ub-cosim/runs/local_transient_real_20261030/prepared/gbn-normal-protocol.json",
+        "--topology",
+        "/home/lry/moe-ub-cosim/runs/local_transient_real_20261030/prepared/topology",
+        "--backend",
+        "/dev/shm/moe-heavy-loss-20261028/build/output/moe-rdma/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc-33.1.0",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/local_transient_real_20261030/gbn-normal"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "receipt_sha256": "92a96173362ca3a848b9d6bfaa4c0c091298b921e26a06e02a57691e7dc09ab1",
+      "backend_sha256": "bb71575db1de42b9d5beae62af2e3c730960553ecc3ac8f5c6733f195d72e7ee",
+      "protoc": "/home/lry/tools/protobuf/bin/protoc-33.1.0",
+      "protoc_sha256": "56ea8057c7a5902a1c453bb6e349c4d6fd4b57cd810698a09786c9acc96ff358",
+      "preparation_sha256": "074e115064174e48c6b0d99f19d77bcec4e1a39f1ef4559e2d01a9bf8d6b2031",
+      "execution_commit": "3a6a2aa75141d382263e7fca0224eaa3ba3ea4a1",
+      "exit_code": 0,
+      "elapsed_seconds": 2.3192681850050576,
+      "passed": true,
+      "finish_ns": 2544364,
+      "failure": null
+    },
+    "gbn-local": {
+      "status": "terminal",
+      "case": "gbn-local",
+      "command": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--config",
+        "/home/lry/moe-ub-cosim/runs/local_transient_real_20261030/prepared/gbn-local-service.json",
+        "--protocol",
+        "/home/lry/moe-ub-cosim/runs/local_transient_real_20261030/prepared/gbn-local-protocol.json",
+        "--topology",
+        "/home/lry/moe-ub-cosim/runs/local_transient_real_20261030/prepared/topology",
+        "--backend",
+        "/dev/shm/moe-heavy-loss-20261028/build/output/moe-rdma/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc-33.1.0",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/local_transient_real_20261030/gbn-local"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "receipt_sha256": "92a96173362ca3a848b9d6bfaa4c0c091298b921e26a06e02a57691e7dc09ab1",
+      "backend_sha256": "bb71575db1de42b9d5beae62af2e3c730960553ecc3ac8f5c6733f195d72e7ee",
+      "protoc": "/home/lry/tools/protobuf/bin/protoc-33.1.0",
+      "protoc_sha256": "56ea8057c7a5902a1c453bb6e349c4d6fd4b57cd810698a09786c9acc96ff358",
+      "preparation_sha256": "074e115064174e48c6b0d99f19d77bcec4e1a39f1ef4559e2d01a9bf8d6b2031",
+      "execution_commit": "3a6a2aa75141d382263e7fca0224eaa3ba3ea4a1",
+      "exit_code": 0,
+      "elapsed_seconds": 2.168405555014033,
+      "passed": true,
+      "finish_ns": 2930103,
+      "failure": null
+    },
+    "sr-normal": {
+      "status": "terminal",
+      "case": "sr-normal",
+      "command": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--config",
+        "/home/lry/moe-ub-cosim/runs/local_transient_real_20261030/prepared/sr-normal-service.json",
+        "--protocol",
+        "/home/lry/moe-ub-cosim/runs/local_transient_real_20261030/prepared/sr-normal-protocol.json",
+        "--topology",
+        "/home/lry/moe-ub-cosim/runs/local_transient_real_20261030/prepared/topology",
+        "--backend",
+        "/dev/shm/moe-heavy-loss-20261028/build/output/moe-rdma/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc-33.1.0",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/local_transient_real_20261030/sr-normal"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "receipt_sha256": "92a96173362ca3a848b9d6bfaa4c0c091298b921e26a06e02a57691e7dc09ab1",
+      "backend_sha256": "bb71575db1de42b9d5beae62af2e3c730960553ecc3ac8f5c6733f195d72e7ee",
+      "protoc": "/home/lry/tools/protobuf/bin/protoc-33.1.0",
+      "protoc_sha256": "56ea8057c7a5902a1c453bb6e349c4d6fd4b57cd810698a09786c9acc96ff358",
+      "preparation_sha256": "074e115064174e48c6b0d99f19d77bcec4e1a39f1ef4559e2d01a9bf8d6b2031",
+      "execution_commit": "3a6a2aa75141d382263e7fca0224eaa3ba3ea4a1",
+      "exit_code": 0,
+      "elapsed_seconds": 2.1181549870525487,
+      "passed": true,
+      "finish_ns": 2544477,
+      "failure": null
+    },
+    "sr-local": {
+      "status": "terminal",
+      "case": "sr-local",
+      "command": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--config",
+        "/home/lry/moe-ub-cosim/runs/local_transient_real_20261030/prepared/sr-local-service.json",
+        "--protocol",
+        "/home/lry/moe-ub-cosim/runs/local_transient_real_20261030/prepared/sr-local-protocol.json",
+        "--topology",
+        "/home/lry/moe-ub-cosim/runs/local_transient_real_20261030/prepared/topology",
+        "--backend",
+        "/dev/shm/moe-heavy-loss-20261028/build/output/moe-rdma/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc-33.1.0",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/local_transient_real_20261030/sr-local"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "receipt_sha256": "92a96173362ca3a848b9d6bfaa4c0c091298b921e26a06e02a57691e7dc09ab1",
+      "backend_sha256": "bb71575db1de42b9d5beae62af2e3c730960553ecc3ac8f5c6733f195d72e7ee",
+      "protoc": "/home/lry/tools/protobuf/bin/protoc-33.1.0",
+      "protoc_sha256": "56ea8057c7a5902a1c453bb6e349c4d6fd4b57cd810698a09786c9acc96ff358",
+      "preparation_sha256": "074e115064174e48c6b0d99f19d77bcec4e1a39f1ef4559e2d01a9bf8d6b2031",
+      "execution_commit": "3a6a2aa75141d382263e7fca0224eaa3ba3ea4a1",
+      "exit_code": 0,
+      "elapsed_seconds": 2.2181430170312524,
+      "passed": true,
+      "finish_ns": 2922925,
+      "failure": null
+    }
+  },
+  "backend_receipt_sha256": "92a96173362ca3a848b9d6bfaa4c0c091298b921e26a06e02a57691e7dc09ab1",
+  "binary_hashes": {
+    "/dev/shm/moe-heavy-loss-20261028/build/output/moe-rdma/ns3.42-moe-rdma-service": "bb71575db1de42b9d5beae62af2e3c730960553ecc3ac8f5c6733f195d72e7ee",
+    "/dev/shm/moe-heavy-loss-20261028/build/output/moe-rdma/ns3.42-moe-rdma-transaction-session": "011678087231614ca3c9330bac55f9733403b1755bef2be2b23d2c539e2e6f0f",
+    "/dev/shm/moe-heavy-loss-20261028/build/output/moe-rdma/ns3.42-moe-rdma-transaction-probe": "37241ff27a5cd57cdd480106fc7f8383ffdc08b5aa8765f5521dcec48fda99a2",
+    "/dev/shm/moe-heavy-loss-20261028/build/output/moe-rdma/ns3.42-moe-rdma-stream-probe": "c8360b45f616786618d1246d2a87f7e9300de751eef0cfae714fa7722b9b300c",
+    "/dev/shm/moe-heavy-loss-20261028/build/output/moe-rdma/ns3.42-moe-rdma-probe": "1dc2132072f68412567db68b347bf52d90e644472f9bde7b49254074be0d7c85",
+    "/dev/shm/moe-heavy-loss-20261028/build/output/moe-rdma/ns3.42-moe-rdma-rc-probe": "603616bd1ee0bb0872eb644f2861ac30b146f91ea01046776eea8d4a2e4a9079",
+    "/dev/shm/moe-heavy-loss-20261028/build/output/moe-rdma/ns3.42-moe-rdma-switch-drop-test": "43cbc27993a8949e0aaa50a043c85a806468ce9d8bd508432d2fa4cc7dd9d8f0"
+  },
+  "library_hashes": {
+    "/dev/shm/moe-heavy-loss-20261028/build/output/lib/libns3.42-point-to-point.so": "5113fd7048c367120119d339007550efaf059a25b0e82f6798ba7e523d626839",
+    "/dev/shm/moe-heavy-loss-20261028/build/output/lib/libns3.42-applications.so": "25c9ea0548421f52ebf8191c8b662e1ddb0f63c546fd544c5dc405a4e062ed72",
+    "/dev/shm/moe-heavy-loss-20261028/build/output/lib/libns3.42-internet.so": "43339f38fb0502c00c5f19537f6ba6771a168200cd7c83529a12a05b3d2e27f0",
+    "/dev/shm/moe-heavy-loss-20261028/build/output/lib/libns3.42-traffic-control.so": "b52a47933b85e2f61f9a94f29a2871aed9e5941e0cec0e9c9f03570ad15ddc99",
+    "/dev/shm/moe-heavy-loss-20261028/build/output/lib/libns3.42-bridge.so": "28f3b410e4f388e13113dee45b4ade98e90da59e99abb56179994d6f0ee797f5",
+    "/dev/shm/moe-heavy-loss-20261028/build/output/lib/libns3.42-network.so": "b94272a020f3438347a8bde2b3fa10355d40b09e96792232b3198dac87cd4b94",
+    "/dev/shm/moe-heavy-loss-20261028/build/output/lib/libns3.42-stats.so": "9f211655e5fe19ade99d1419bdcbcb41618dcaa1fbcba6ab4fa8ee65fb9ace98",
+    "/dev/shm/moe-heavy-loss-20261028/build/output/lib/libns3.42-core.so": "4e06c366e439e338d6acaa1f5e802c05dcce8df10b1ba500b83dd945ed2e5f35"
+  },
+  "native_programs_and_libraries_unchanged": true,
+  "frozen_method_hashes_verified": 5,
+  "final_research_source_hashes": {
+    "protocol.md": "c3fd4fccb204ca182864517029038ec764041686ca016c4ad3ce4ebcb7de488f",
+    "prepare.py": "45e7eceed76a16d88249e7656a8ba686262004ed6c37e47273cfdf0dfd6d5a38",
+    "run.py": "1432cd0ed8ba0fc0dd500180b0bfa6589c6316c96add22b6e86349bae3ac5932",
+    "analyze.py": "ac10c1329640d866a45f6051ff27319ab8a472723c18f68fabf27bc59e21aabb",
+    "README.md": "f208172787cfce0e57ed746187c849e19e1dedebaa50f778c4cf355b554eb44f",
+    "verify.py": "c1855862e6faa8cdb2293e8c253db7b86dc5064d0667784f4ee5b4acb6e9f913",
+    "diagnose.py": "9d8ae172f22ca67121eb5483757a0f837d715e8f7c750442b5d7bff3935769ad",
+    "render.py": "46f1b889b103ef2204b5f9ff860cd50791efa23496bfd2a6802542da34dfc13b"
+  },
+  "one_retained_offline_field_name_failure": "monitors/verify/stderr.log",
+  "scope": "completed bounded real-route experiment; overall research goal remains active; no new algorithm gain",
+  "versioned_result_usage": {
+    "apparent_bytes": 803810,
+    "allocated_bytes": 892928
+  },
+  "report_links_checked": 7,
+  "analysis_files_hash_checked": 34,
+  "semantic_note": "Offline report note synchronized with renderer; no figure or network rerun. Target dispatch/compute overlap remains unvalidated.",
+  "csv_publication": "LF for Git checkout hash stability; CRLF source hashes in receipt.json; no network rerun",
+  "svg_publication": "Trailing spaces removed from generated SVG; coordinates and figure data unchanged"
+}

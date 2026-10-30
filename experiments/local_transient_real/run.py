@@ -38,7 +38,8 @@ def run(root,receipt,protoc,case):
     if record.exists() or (root/case).exists():raise ValueError('case already attempted')
     for previous in CASES[:CASES.index(case)]:
         state=load(attempts/(previous+'.json'))
-        if state.get('exit_code')!=0 or state.get('passed') is not True:raise ValueError('earlier case failed or unverified')
+        if state.get('exit_code')!=0 or state.get('passed') is not True or state.get('graphs_verified') is not True:
+            raise ValueError('earlier case failed or unverified')
     if shutil.disk_usage(root).free<8*2**30:raise ValueError('free reserve exhausted')
     monitors=list((root/'monitors').glob('*/probe.json'))
     if sum(load(p)['wall_seconds'] for p in monitors)>=900:raise ValueError('cumulative time exhausted')
@@ -51,10 +52,16 @@ def run(root,receipt,protoc,case):
         preparation_sha256=sha(prepared/'preparation.json'),
         execution_commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()))
     start=time.monotonic()
-    with (attempts/(case+'.stdout')).open('x') as out,(attempts/(case+'.stderr')).open('x') as err:
-        completed=subprocess.run(command,cwd=ROOT,env=dict(os.environ,PYTHONPATH=str(ROOT/'python'),
-            PYTHONDONTWRITEBYTECODE='1'),stdout=out,stderr=err,timeout=90)
-    entry=load(record);entry.update(exit_code=completed.returncode,elapsed_seconds=time.monotonic()-start,status='terminal')
+    try:
+        with (attempts/(case+'.stdout')).open('x') as out,(attempts/(case+'.stderr')).open('x') as err:
+            completed=subprocess.run(command,cwd=ROOT,env=dict(os.environ,PYTHONPATH=str(ROOT/'python'),
+                PYTHONDONTWRITEBYTECODE='1'),stdout=out,stderr=err,timeout=90)
+    except BaseException as error:
+        entry=load(record);entry.update(status='execution_error',error=type(error).__name__,
+            elapsed_seconds=time.monotonic()-start,graphs_verified=False)
+        record.write_text(json.dumps(entry,indent=2)+'\n');raise
+    entry=load(record);entry.update(exit_code=completed.returncode,elapsed_seconds=time.monotonic()-start,
+        status='native_terminal',graphs_verified=False)
     result_path=root/case/'result.json'
     if result_path.is_file():
         result=load(result_path);entry.update(passed=result['passed'],finish_ns=result['finish_ns'],failure=result.get('failure'))
@@ -63,6 +70,7 @@ def run(root,receipt,protoc,case):
     for path in (root/case/'graphs').glob('*/wave.json'):
         if load(path)!=load(prepared/'planned'/(path.parent.name+'.json')):raise ValueError('actual graph differs from plan')
     if len(list((root/case/'graphs').glob('*/wave.json')))!=4:raise ValueError('missing actual graph')
+    entry.update(status='verified',graphs_verified=True);record.write_text(json.dumps(entry,indent=2)+'\n')
     print(json.dumps(entry))
 
 

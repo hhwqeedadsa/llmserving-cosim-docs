@@ -1,0 +1,52 @@
+{
+  "schema_version": "moe-local-transient-verification/1",
+  "passed": true,
+  "network_runs": 0,
+  "cases": {
+    "gbn-normal": {
+      "messages": 144,
+      "logical_bytes": 5361664,
+      "packet_events": 24932,
+      "source_packets": 685,
+      "source_payload_bytes": 5483680,
+      "unique_source_bytes": 5361664,
+      "fault_drops": 0
+    },
+    "gbn-local": {
+      "messages": 144,
+      "logical_bytes": 5361664,
+      "packet_events": 30002,
+      "source_packets": 815,
+      "source_payload_bytes": 6542872,
+      "unique_source_bytes": 5361664,
+      "fault_drops": 32
+    },
+    "sr-normal": {
+      "messages": 144,
+      "logical_bytes": 5361664,
+      "packet_events": 24932,
+      "source_packets": 685,
+      "source_payload_bytes": 5483680,
+      "unique_source_bytes": 5361664,
+      "fault_drops": 0
+    },
+    "sr-local": {
+      "messages": 144,
+      "logical_bytes": 5361664,
+      "packet_events": 30002,
+      "source_packets": 812,
+      "source_payload_bytes": 6519856,
+      "unique_source_bytes": 5361664,
+      "fault_drops": 32
+    }
+  },
+  "tamper_rejections": {
+    "workload": true,
+    "fault_position": true,
+    "completion_time": true,
+    "source_count": true,
+    "source_hash": true
+  },
+  "input_sha256": "074e115064174e48c6b0d99f19d77bcec4e1a39f1ef4559e2d01a9bf8d6b2031",
+  "scope": "independent raw expert matrices/source packet hooks/interval coverage and public terminal checks; not hardware calibration"
+}

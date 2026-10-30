@@ -22,8 +22,8 @@ def main():
         p.add_argument('--'+name, type=Path, required=True)
     a = p.parse_args()
     root = Path(__file__).resolve().parents[2]
-    f, analysis = load(a.study/'frozen.json'), load(a.analysis)
-    assert sha(a.study/'frozen.json') == analysis['frozen_sha256']
+    f, analysis = load(a.study/'frozen-v2.json'), load(a.analysis)
+    assert sha(a.study/'frozen-v2.json') == analysis['frozen_sha256']
     assert len(f['conditions']) == len(analysis['cases']) == 7
     for group in ('compiled_sources_sha256', 'source_sha256'):
         for name, h in f[group].items():

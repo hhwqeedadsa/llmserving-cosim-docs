@@ -9,7 +9,7 @@
 - 沿用SR选择性重传：初始17µs、上限640µs、3次重试及参考DCQCN；禁用备用，不使用弱80µs唯一基线。
 - 第一条ToR–Agg边128–132在4µs双向关闭，分别在24/64µs恢复，即中断20/60µs。位置沿用此前按拓扑排序确定的边，不按新结果寻找热点。
 - 每个持续时间比较`global`：关闭和恢复通知各延迟60µs；`local`：相同通知延迟，额外立即从两端旧ECMP候选剔除坏出口，物理上线时重新筛选；`instant`：两种通知延迟均为0，无本地策略。没有额外控制报文；local/instant均为零检测编程开销的理想参考，instant不是时延数学下界或可部署性能。
-- 共七个新网络：一个无注入`normal`，以及`global-w20/local-w20/instant-w20/global-w60/local-w60/instant-w60`，每个仅运行一次。新normal与已验收十五请求17µs正常原件比较完整结果，只允许同hash库的路径变化；新网络均使用临时恢复平台构建。已知旧永久故障及DATA黑洞结果，不宣称盲测。
+- 共七个新网络：一个无注入`normal`，以及`global-w20/local-w20/instant-w20/global-w60/local-w60/instant-w60`，每个仅运行一次。新normal与已验收十五请求17µs正常原件比较完整结果，只允许加载库路径变化；独立构建的固定源码版本、串行overlay及442条编译命令须在规范化构建路径后相同，不要求ELF逐字节一致；新网络均使用临时恢复平台构建。已知旧永久故障及DATA黑洞结果，不宣称盲测。
 - `w20/w60`只表示物理故障窗口；`global/local`的60µs表示通知延迟。w60的上线与关闭通知在64µs同刻发生，独立包/控制记录不能推出跨数组同ns顺序，核查保留歧义。
 
 ## 判别与收益口径
@@ -37,3 +37,5 @@ export PYTHONPATH=python
 ```
 
 其余case同样执行；随后用`study.py analyze --study ... --output /new-analysis-dir`和独立`verify.py --study ... --analysis .../analysis.json --output /new-verification.json`。展示另行生成，不参与在线控制。平台依据见[恢复示例](../../examples/scaleout_link_restore/README.md)和[功能验收](../../fixtures/temporary_link_restore/README.md)。
+
+运行normal后的核查修订：初版检查错误地要求独立构建的库hash完全一致，原检查失败。八库带有不同RUNPATH/build-id，point-to-point还含生成源码的`__FILE__`路径，不能据此推断数据路径变化。`compatibility.py`在新故障运行前核对固定原生提交、串行overlay、规范化后的全部442条编译命令及完整normal结果；明确不宣称库二进制等价。保留初版`frozen.json`，修订源码及已知normal记录另存`frozen-v2.json`，不重跑normal，不改七个条件或任何输入参数。新复现可直接生成v2，normal后执行compatibility检查再继续。

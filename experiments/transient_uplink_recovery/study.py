@@ -111,7 +111,7 @@ def prepare(a):
     sources = [*sorted((ROOT/'python/moe_ub_cosim').glob('*.py')),
                *sorted((ROOT/'examples').glob('*/prepare.py')), *sorted(Path(__file__).parent.glob('*.py')),
                Path(__file__).with_name('README.md')]
-    save(out/'frozen.json', dict(schema_version='moe-transient-uplink-study/1', network_executed=False,
+    save(out/'frozen-v2.json', dict(schema_version='moe-transient-uplink-study/1', network_executed=False,
         platform_commit=subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip(),
         prepared=str(p), prepared_sha256=hashes(p), backend=str(backend), backend_sha256=sha(backend),
         compiled_sources_sha256=prov['sources'], libraries_sha256={str(x): sha(x) for x in libs},
@@ -126,7 +126,7 @@ def prepare(a):
 
 
 def checked(study):
-    f = load(study/'frozen.json')
+    f = load(study/'frozen-v2.json')
     assert sha(f['backend']) == f['backend_sha256']
     for group in ('compiled_sources_sha256', 'source_sha256'):
         for p, h in f[group].items():
@@ -261,7 +261,8 @@ def analyze(a):
         rows[name] = summary(directory, f['failed_link'])
         gc.collect()
     old, new = load(Path(f['normal'])/'result.json'), load(study/'normal/result.json')
-    assert {Path(x).name: sha(x) for x in new['loaded_libraries'] if Path(x).is_file()} == f['normal_library_hashes']
+    assert load(study/'compatibility.json')['passed']
+    assert sorted(Path(x).name for x in new['loaded_libraries']) == sorted(Path(x).name for x in old['loaded_libraries'])
     for result in (old, new):
         result.pop('loaded_libraries')
     assert old == new, 'new full-service normal behavior changed'
@@ -280,7 +281,7 @@ def analyze(a):
             drain_saved_ns=baseline['drain_ns']-local['drain_ns'],
             local_minus_normal_ns=local['max_group_complete_ns']-normal,
             local_minus_instant_ns=local['max_group_complete_ns']-instant['max_group_complete_ns'])
-    save(out/'analysis.json', dict(frozen_sha256=sha(study/'frozen.json'), cases=rows, effects=effects,
+    save(out/'analysis.json', dict(frozen_sha256=sha(study/'frozen-v2.json'), cases=rows, effects=effects,
         max_new_networks=7, new_normal_identical_except_library_paths=True, failed_link=f['failed_link']))
     print(json.dumps(dict(passed=True, effects=effects, group_ns={n: v['group_complete_ns'] for n, v in rows.items()})))
 

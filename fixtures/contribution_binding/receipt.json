@@ -1,0 +1,807 @@
+{
+  "passed": true,
+  "execution_commit": "ca9cf6ea8de1fa8eef9114795750eebdada6b7f9",
+  "platform_source_sha256": {
+    "python/moe_ub_cosim/contribution_attempts.py": "858994fcdabb0df1d63cd8374682407e1faeed9ff460700d9be1d7b80d966b23",
+    "python/moe_ub_cosim/contribution_binding.py": "2a373218549ad70141549791e93b922dec84ba91a4e48e0363abbd85fe7b7319",
+    "python/moe_ub_cosim/scaleout_service.py": "3b4ec30374b49bc3f5d88cbdab1ce265549f7e7ee326b5243ba61184b9df366b",
+    "python/moe_ub_cosim/scaleout_verify.py": "a2a82dea8aeb9c3923fb54f2b02276c81f9d707b2b99ee8945414ab4ea58e528",
+    "examples/scaleout_contribution_tracking/prepare.py": "d5de4a14d22547662f89821649ea4e690185c1082215e9baa98cb0472008abcd",
+    "tests/unit/contribution_binding_test.py": "ad4dae48c2821f3aaefb15d8c0402515d289ae02b4e247330994273ed7866eaf",
+    "tests/integration/check_contribution_binding.py": "03f8e2fe6b793dfcb4559d0656baf03f1f9597c1362c710c98b0d324afb0185a",
+    "fixtures/contribution_binding/evidence.py": "fa9437a1f2452ace3d9849475cca26614867cee178af273aa1d92b106896e002"
+  },
+  "run_sha256": {
+    "normal/result.json": "8b5e0396903c2c470bde8567fc4d89e9f182f7bd7ce1349ff5b669dd202c6860",
+    "normal/input.json": "04bcc5db99868b9e83c93dddd8508ddd508454728a05bbde2449ef3962c247f3",
+    "normal/rdma.json": "2e96b611d1985507bf3eda5816c1cd4595a0c120b4ef5b460ab74c1e0d20b3db",
+    "normal/contribution_calls.jsonl": "e72f227ec8b0b06aa963943f87d9ffe7107872f0dc376a66df6f63584e46d240",
+    "normal/contribution_summary.json": "fbc0b33702711122aeb97d938e21dee05fe059501653740c8814b6d825ed6b8d",
+    "normal/execution_events.jsonl": "fab2439297d591b546e7b0475b7600703129521704cf467779d58068aede320a",
+    "local/result.json": "5b21eac2c049f5e9393375c2bbc5860ccaf440032b3016bf76652f9df4061859",
+    "local/input.json": "04bcc5db99868b9e83c93dddd8508ddd508454728a05bbde2449ef3962c247f3",
+    "local/rdma.json": "ce4380fe0443dfd8d3026f353f964832980d5ace0f5100fd4dba8c33f9114408",
+    "local/contribution_calls.jsonl": "36e0a57db848fe78d19d852a020e1763b3d750182c573e86ccce847ef91c8fdf",
+    "local/contribution_summary.json": "31ae6e059f5ea8d0d65bfbe40ba8c774ba328f5d9f8a8fd2412210b44fe66ef0",
+    "local/execution_events.jsonl": "664f16c59a08946029406054e52dde6d20b694ea3222bd71abb2d3f321dee49b"
+  },
+  "public_commands": {
+    "monitors/unit/probe.json": [
+      ".venv/frontend/bin/python",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests/unit",
+      "-p",
+      "contribution_binding_test.py",
+      "-v"
+    ],
+    "monitors/prepare/probe.json": [
+      ".venv/frontend/bin/python",
+      "-B",
+      "examples/scaleout_contribution_tracking/prepare.py",
+      "--output",
+      "/home/lry/moe-ub-cosim/runs/contribution_binding_20261030/input"
+    ],
+    "monitors/related-unit/probe.json": [
+      ".venv/frontend/bin/python",
+      "-B",
+      "-c",
+      "import unittest; names=(\"contribution_binding_test.py\",\"contribution_attempts_test.py\",\"execution_events_test.py\",\"native_control_test.py\",\"phase_completion_test.py\",\"token_transport_test.py\",\"scaleout_messages_test.py\"); suite=unittest.TestSuite(unittest.defaultTestLoader.discover(\"tests/unit\",pattern=n) for n in names); result=unittest.TextTestRunner(verbosity=2).run(suite); raise SystemExit(not result.wasSuccessful())"
+    ],
+    "monitors/legacy-workflow/probe.json": [
+      ".venv/frontend/bin/python",
+      "-B",
+      "tests/integration/check_contribution_workflow.py",
+      "--output",
+      "runs/contribution_binding_20261030/legacy-workflow"
+    ],
+    "monitors/normal/probe.json": [
+      ".venv/frontend/bin/python",
+      "-B",
+      "-m",
+      "moe_ub_cosim",
+      "scaleout",
+      "rdma-run",
+      "--config",
+      "runs/contribution_binding_20261030/input/service-tracked.json",
+      "--protocol",
+      "runs/contribution_binding_20261030/input/rdma.json",
+      "--topology",
+      "runs/contribution_binding_20261030/input/topology",
+      "--backend",
+      "runs/execution_events_20261030/build/ns3.42-moe-rdma-service",
+      "--protoc",
+      "/home/lry/tools/protobuf/bin/protoc",
+      "--output",
+      "runs/contribution_binding_20261030/normal"
+    ],
+    "monitors/local/probe.json": [
+      ".venv/frontend/bin/python",
+      "-B",
+      "-m",
+      "moe_ub_cosim",
+      "scaleout",
+      "rdma-run",
+      "--config",
+      "runs/contribution_binding_20261030/input/service-tracked.json",
+      "--protocol",
+      "runs/contribution_binding_20261030/input/rdma-transient.json",
+      "--topology",
+      "runs/contribution_binding_20261030/input/topology",
+      "--backend",
+      "runs/execution_events_20261030/build/ns3.42-moe-rdma-service",
+      "--protoc",
+      "/home/lry/tools/protobuf/bin/protoc",
+      "--output",
+      "runs/contribution_binding_20261030/local"
+    ],
+    "monitors/independent/probe.json": [
+      ".venv/frontend/bin/python",
+      "-B",
+      "tests/integration/check_contribution_binding.py",
+      "--normal",
+      "runs/contribution_binding_20261030/normal",
+      "--local",
+      "runs/contribution_binding_20261030/local",
+      "--reference",
+      "runs/execution_events_20261030/on",
+      "--inputs",
+      "/home/lry/moe-ub-cosim/runs/contribution_binding_20261030/input",
+      "--output",
+      "runs/contribution_binding_20261030/independent"
+    ],
+    "monitors/final-independent/probe.json": [
+      ".venv/frontend/bin/python",
+      "-B",
+      "tests/integration/check_contribution_binding.py",
+      "--normal",
+      "runs/contribution_binding_20261030/normal",
+      "--local",
+      "runs/contribution_binding_20261030/local",
+      "--reference",
+      "runs/execution_events_20261030/on",
+      "--inputs",
+      "/home/lry/moe-ub-cosim/runs/contribution_binding_20261030/input",
+      "--output",
+      "runs/contribution_binding_20261030/final-independent"
+    ],
+    "normal/execution/probe.json": [
+      "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+      "-m",
+      "moe_ub_cosim.scaleout_service",
+      "--worker",
+      "/home/lry/moe-ub-cosim/runs/contribution_binding_20261030/normal/input.json",
+      "/home/lry/moe-ub-cosim/runs/contribution_binding_20261030/normal",
+      "/home/lry/moe-ub-cosim/runs/contribution_binding_20261030/normal/rdma.json",
+      "/home/lry/moe-ub-cosim/runs/execution_events_20261030/build/ns3.42-moe-rdma-service",
+      "/home/lry/tools/protobuf/bin/protoc",
+      "/home/lry/moe-ub-cosim/runs/contribution_binding_20261030/normal"
+    ],
+    "local/execution/probe.json": [
+      "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+      "-m",
+      "moe_ub_cosim.scaleout_service",
+      "--worker",
+      "/home/lry/moe-ub-cosim/runs/contribution_binding_20261030/local/input.json",
+      "/home/lry/moe-ub-cosim/runs/contribution_binding_20261030/local",
+      "/home/lry/moe-ub-cosim/runs/contribution_binding_20261030/local/rdma.json",
+      "/home/lry/moe-ub-cosim/runs/execution_events_20261030/build/ns3.42-moe-rdma-service",
+      "/home/lry/tools/protobuf/bin/protoc",
+      "/home/lry/moe-ub-cosim/runs/contribution_binding_20261030/local"
+    ]
+  },
+  "negative_workflow_commands": [
+    {
+      "argv": [
+        "rdma-check",
+        "--run",
+        "/home/lry/moe-ub-cosim/runs/contribution_binding_20261030/final-independent/relocated"
+      ],
+      "exit_code": 0,
+      "stdout": "{\n  \"passed\": true,\n  \"transport\": \"astra_persistent_streams/1\",\n  \"frontend\": \"actual_LLMServingSim\",\n  \"gpu_count\": 128,\n  \"messages\": 62,\n  \"remote_payload_bytes\": 37696,\n  \"verified_nodes\": 3708,\n  \"waves\": 4,\n  \"finish_ns\": 103852,\n  \"packet_events_checked\": 2120,\n  \"source_payload_bytes\": 37696,\n  \"receiver_accepted_bytes\": 37696,\n  \"hardware_calibrated\": false,\n  \"scope\": \"actual ASTRA scheduling and persistent message intervals; finite service; not calibrated hardware\",\n  \"timing_status\": \"complete\",\n  \"timing_reason\": null,\n  \"application_finished_ns\": 103852,\n  \"network_drained_ns\": 103852,\n  \"network_stopped_ns\": 103852,\n  \"post_application_drain_ns\": 0,\n  \"execution_observation\": {\n    \"schema_version\": \"moe-execution-observation/1\",\n    \"events\": 7669,\n    \"last_time_ns\": 103852,\n    \"service_drained_ns\": 103852,\n    \"registered_graphs\": 4,\n    \"retired_graphs\": 4,\n    \"nodes\": 3708,\n    \"node_completions\": 3708,\n    \"messages\": 62,\n    \"receiver_completions\": 62,\n    \"sender_completions\": 62,\n    \"scope\": \"passive_actual_callbacks_no_recovery_or_tensor_validation\"\n  },\n  \"contribution_binding\": {\n    \"schema_version\": \"moe-contribution-binding-report/1\",\n    \"configuration\": {\n      \"schema_version\": \"moe-contribution-binding/1\",\n      \"namespace\": \"contribution-example-v1\",\n      \"max_invocations\": 64,\n      \"max_bundles\": 512,\n      \"max_lifecycle_events\": 6144,\n      \"max_report_bytes\": 4194304\n    },\n    \"invocations\": 16,\n    \"bundles\": 32,\n    \"lifecycle_events\": 380,\n    \"reserved_lifecycle_events\": 380,\n    \"logical_complete_calls\": 16,\n    \"retired_calls\": 16,\n    \"source_events\": 7669,\n    \"service_drained_ns\": 103852,\n    \"scope\": \"actual_service_callbacks_simulation_lineage_original_attempts_no_tensors_or_recovery\"\n  }\n}\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "rdma-check",
+        "--run",
+        "/home/lry/moe-ub-cosim/runs/contribution_binding_20261030/final-independent/relocated"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "moe-ub: Scale-Out topology: bound contribution differs from actual service events\n"
+    },
+    {
+      "argv": [
+        "rdma-check",
+        "--run",
+        "/home/lry/moe-ub-cosim/runs/contribution_binding_20261030/final-independent/relocated"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "moe-ub: Scale-Out topology: bound contribution differs from actual service events\n"
+    },
+    {
+      "argv": [
+        "rdma-check",
+        "--run",
+        "/home/lry/moe-ub-cosim/runs/contribution_binding_20261030/final-independent/relocated"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "moe-ub: Scale-Out topology: bound contribution differs from actual service events\n"
+    },
+    {
+      "argv": [
+        "rdma-check",
+        "--run",
+        "/home/lry/moe-ub-cosim/runs/contribution_binding_20261030/final-independent/relocated"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "moe-ub: Scale-Out topology: bound contribution differs from actual service events\n"
+    },
+    {
+      "argv": [
+        "rdma-check",
+        "--run",
+        "/home/lry/moe-ub-cosim/runs/contribution_binding_20261030/final-independent/relocated"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "moe-ub: Scale-Out topology: bound contribution differs from actual service events\n"
+    },
+    {
+      "argv": [
+        "rdma-check",
+        "--run",
+        "/home/lry/moe-ub-cosim/runs/contribution_binding_20261030/final-independent/relocated"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "moe-ub: Scale-Out topology: incomplete or mismatched contribution binding summary\n"
+    },
+    {
+      "argv": [
+        "rdma-run",
+        "--config",
+        "/home/lry/moe-ub-cosim/runs/contribution_binding_20261030/final-independent/insufficient.json",
+        "--protocol",
+        "/home/lry/moe-ub-cosim/runs/contribution_binding_20261030/input/rdma.json",
+        "--topology",
+        "/home/lry/moe-ub-cosim/runs/contribution_binding_20261030/input/topology",
+        "--backend",
+        "/home/lry/moe-ub-cosim/runs/execution_events_20261030/build/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/unused-after-preflight",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/contribution_binding_20261030/final-independent/must-not-start"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "moe-ub: Scale-Out topology: contribution tracking input exceeds cumulative budget\n"
+    }
+  ],
+  "prepared_input": {
+    "passed": true,
+    "network_executed": false,
+    "gpu_endpoints": 128,
+    "ep_sizes": [
+      64,
+      64
+    ],
+    "independent_synthetic_sources": 4,
+    "preflight": {
+      "invocations": 16,
+      "bundles": 32,
+      "lifecycle_events": 380
+    },
+    "reference_report_bytes": 4194304,
+    "fault_scope": "destination GPU6 DATA blackhole [0,20us); controls retained",
+    "preparation_command": [
+      "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+      "-B",
+      "/home/lry/moe-ub-cosim/examples/scaleout_token_transport/prepare.py",
+      "--output",
+      "/home/lry/moe-ub-cosim/runs/contribution_binding_20261030/input",
+      "--combine",
+      "rank_reduced/1",
+      "--local-reduce-ns-per-extra",
+      "100"
+    ]
+  },
+  "tests": 56,
+  "new_tests": 11,
+  "related_tests": 45,
+  "legacy_cli_commands": 5,
+  "legacy_v1_report_byte_identical": true,
+  "native_network_executions": 2,
+  "new_builds": 0,
+  "dependency_changes": false,
+  "new_downloads": 0,
+  "real_gpu_executions": 0,
+  "dependency_check": {
+    "exit_code": 0,
+    "stdout": "WARN: main repository has local file changes; review before committing\n   M docs/architecture.md\n   M docs/user_guide.md\n  ?? fixtures/contribution_binding/\n  ?? tests/integration/check_contribution_binding.py\nREAD: . @ ca9cf6ea8de1fa8eef9114795750eebdada6b7f9\nREAD: third_party/LLMServingSim @ 77da4a67204789249994a6a6ca82aaa2b1c41fc7\nREAD: third_party/LLMServingSim/astra-sim @ 04948bc1dd8833201967560fd4ece0a57c642705\nREAD: third_party/LLMServingSim/astra-sim/extern/graph_frontend/chakra @ 30221ab8bfd9212aa9c063cd0b14a7d0a2ea6dd7\nREAD: third_party/LLMServingSim/astra-sim/extern/helper/fmt @ 7e73566ce7bd3617cd4b14a2e3a19a2a30b524c7\nREAD: third_party/LLMServingSim/astra-sim/extern/helper/spdlog @ 63f0875000bf90867aa7c76a831bd834cb7d4b5e\nREAD: third_party/LLMServingSim/astra-sim/extern/memory_backend/analytical @ 62313ef09abaf6a9764d13e2684ca61247def14b\nREAD: third_party/LLMServingSim/astra-sim/extern/network_backend/analytical @ 5dc02322f04ac42fcfbb5304d5f7f2fa20d25e3e\nINFO: checking transitive dependency against its parent: third_party/LLMServingSim/astra-sim/extern/network_backend/analytical/extern/googletest\nREAD: third_party/LLMServingSim/astra-sim/extern/network_backend/analytical/extern/googletest @ 1204d634444b0ba6da53201a8b6caf2a502d883c\nINFO: checking transitive dependency against its parent: third_party/LLMServingSim/astra-sim/extern/network_backend/analytical/extern/yaml-cpp\nREAD: third_party/LLMServingSim/astra-sim/extern/network_backend/analytical/extern/yaml-cpp @ 3d2888cc8a45da2f420454ad728cdfad01a3d54f\nREAD: third_party/LLMServingSim/astra-sim/extern/network_backend/csg-htsim @ 67cbbbb1cccdbddc400803414127d044ecd55290\nREAD: third_party/LLMServingSim/astra-sim/extern/network_backend/ns-3 @ 69cb14764c0c5de2c7ad31599ee5b3999dddc154\nREAD: third_party/ns-3-ub @ fee9fbf6e471f2e1db93db16fbbc44a115dda0b1\nREAD: third_party/ns-3-ub/scratch/ns-3-ub-tools @ 2afc7202f88c132b63c38e8c7dcfc08505b13bb2\nPASS: checked 13 dependency checkouts; versions and inspected states agree.\nThis result does not validate remote availability, compilation, or simulation.\n",
+    "stderr": ""
+  },
+  "links": [
+    "docs/execution_events.md",
+    "docs/contribution_attempts.md",
+    "examples/scaleout_contribution_tracking/README.md",
+    "docs/execution_events.md",
+    "examples/scaleout_token_transport/README.md",
+    "docs/development.md",
+    "docs/contribution_binding.md",
+    "examples/scaleout_contribution_tracking/README.md",
+    "fixtures/contribution_binding/report.html",
+    "fixtures/contribution_binding/verification.json",
+    "fixtures/contribution_binding/receipt.json",
+    "fixtures/contribution_binding/resources.json",
+    "docs/contribution_binding.md"
+  ],
+  "monitors_before_evidence": {
+    "monitors/unit/probe.json": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/unit",
+        "-p",
+        "contribution_binding_test.py",
+        "-v"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-30T11:34:27.569209+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 536870912,
+        "wall_seconds": 120.0
+      },
+      "peak_sampled_group_rss_bytes": 7471104,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/runs/contribution_binding_20261030"
+      ],
+      "peak_sampled_artifact_bytes": 8192,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 2234,
+      "peak_sampled_artifact_allocated_bytes": 8192,
+      "process_group": 878791,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-30T11:34:27.699140+00:00",
+      "wall_seconds": 0.12994126399280503,
+      "max_waited_child_rss_kib": 20696,
+      "artifact_bytes_before_report": 2234,
+      "aggregate_artifact_bytes_before_report": 8192,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 2234,
+        "allocated_bytes": 8192
+      }
+    },
+    "monitors/prepare/probe.json": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "examples/scaleout_contribution_tracking/prepare.py",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/contribution_binding_20261030/input"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-30T11:35:56.234551+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 536870912,
+        "wall_seconds": 120.0
+      },
+      "peak_sampled_group_rss_bytes": 40411136,
+      "peak_sampled_processes": 2,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/runs/contribution_binding_20261030"
+      ],
+      "peak_sampled_artifact_bytes": 204800,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 151464,
+      "peak_sampled_artifact_allocated_bytes": 204800,
+      "process_group": 878863,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-30T11:35:56.575523+00:00",
+      "wall_seconds": 0.3409773579915054,
+      "max_waited_child_rss_kib": 23872,
+      "artifact_bytes_before_report": 1701,
+      "aggregate_artifact_bytes_before_report": 204800,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 151464,
+        "allocated_bytes": 204800
+      }
+    },
+    "monitors/related-unit/probe.json": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-c",
+        "import unittest; names=(\"contribution_binding_test.py\",\"contribution_attempts_test.py\",\"execution_events_test.py\",\"native_control_test.py\",\"phase_completion_test.py\",\"token_transport_test.py\",\"scaleout_messages_test.py\"); suite=unittest.TestSuite(unittest.defaultTestLoader.discover(\"tests/unit\",pattern=n) for n in names); result=unittest.TextTestRunner(verbosity=2).run(suite); raise SystemExit(not result.wasSuccessful())"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-30T11:39:14.184973+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 536870912,
+        "wall_seconds": 120.0
+      },
+      "peak_sampled_group_rss_bytes": 72798208,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/runs/contribution_binding_20261030"
+      ],
+      "peak_sampled_artifact_bytes": 225280,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 163728,
+      "peak_sampled_artifact_allocated_bytes": 225280,
+      "process_group": 879291,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-30T11:39:14.859072+00:00",
+      "wall_seconds": 0.6741040319902822,
+      "max_waited_child_rss_kib": 78280,
+      "artifact_bytes_before_report": 10741,
+      "aggregate_artifact_bytes_before_report": 225280,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 163728,
+        "allocated_bytes": 225280
+      }
+    },
+    "monitors/legacy-workflow/probe.json": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "tests/integration/check_contribution_workflow.py",
+        "--output",
+        "runs/contribution_binding_20261030/legacy-workflow"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-30T11:40:16.059496+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 536870912,
+        "wall_seconds": 120.0
+      },
+      "peak_sampled_group_rss_bytes": 26570752,
+      "peak_sampled_processes": 2,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/runs/contribution_binding_20261030"
+      ],
+      "peak_sampled_artifact_bytes": 348160,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 230840,
+      "peak_sampled_artifact_allocated_bytes": 348160,
+      "process_group": 879448,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-30T11:40:16.511105+00:00",
+      "wall_seconds": 0.45162163698114455,
+      "max_waited_child_rss_kib": 17652,
+      "artifact_bytes_before_report": 1408,
+      "aggregate_artifact_bytes_before_report": 348160,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 230840,
+        "allocated_bytes": 348160
+      }
+    },
+    "monitors/normal/probe.json": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--config",
+        "runs/contribution_binding_20261030/input/service-tracked.json",
+        "--protocol",
+        "runs/contribution_binding_20261030/input/rdma.json",
+        "--topology",
+        "runs/contribution_binding_20261030/input/topology",
+        "--backend",
+        "runs/execution_events_20261030/build/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "runs/contribution_binding_20261030/normal"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-30T11:40:32.067147+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 536870912,
+        "wall_seconds": 120.0
+      },
+      "peak_sampled_group_rss_bytes": 212119552,
+      "peak_sampled_processes": 4,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/runs/contribution_binding_20261030"
+      ],
+      "peak_sampled_artifact_bytes": 6709248,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 5201252,
+      "peak_sampled_artifact_allocated_bytes": 6709248,
+      "process_group": 879540,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-30T11:40:33.985060+00:00",
+      "wall_seconds": 1.9179154689772986,
+      "max_waited_child_rss_kib": 95788,
+      "artifact_bytes_before_report": 6175,
+      "aggregate_artifact_bytes_before_report": 6709248,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 5201252,
+        "allocated_bytes": 6709248
+      }
+    },
+    "monitors/local/probe.json": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--config",
+        "runs/contribution_binding_20261030/input/service-tracked.json",
+        "--protocol",
+        "runs/contribution_binding_20261030/input/rdma-transient.json",
+        "--topology",
+        "runs/contribution_binding_20261030/input/topology",
+        "--backend",
+        "runs/execution_events_20261030/build/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "runs/contribution_binding_20261030/local"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-30T11:41:58.728880+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 536870912,
+        "wall_seconds": 120.0
+      },
+      "peak_sampled_group_rss_bytes": 211574784,
+      "peak_sampled_processes": 4,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/runs/contribution_binding_20261030"
+      ],
+      "peak_sampled_artifact_bytes": 13082624,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 10182519,
+      "peak_sampled_artifact_allocated_bytes": 13082624,
+      "process_group": 879675,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-30T11:42:00.451003+00:00",
+      "wall_seconds": 1.7221268540015444,
+      "max_waited_child_rss_kib": 95872,
+      "artifact_bytes_before_report": 5587,
+      "aggregate_artifact_bytes_before_report": 13082624,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 10182519,
+        "allocated_bytes": 13082624
+      }
+    },
+    "monitors/independent/probe.json": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "tests/integration/check_contribution_binding.py",
+        "--normal",
+        "runs/contribution_binding_20261030/normal",
+        "--local",
+        "runs/contribution_binding_20261030/local",
+        "--reference",
+        "runs/execution_events_20261030/on",
+        "--inputs",
+        "/home/lry/moe-ub-cosim/runs/contribution_binding_20261030/input",
+        "--output",
+        "runs/contribution_binding_20261030/independent"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-30T11:44:17.121581+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 536870912,
+        "wall_seconds": 120.0
+      },
+      "peak_sampled_group_rss_bytes": 51408896,
+      "peak_sampled_processes": 2,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/runs/contribution_binding_20261030"
+      ],
+      "peak_sampled_artifact_bytes": 19501056,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 15205171,
+      "peak_sampled_artifact_allocated_bytes": 19501056,
+      "process_group": 879850,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-30T11:44:19.534589+00:00",
+      "wall_seconds": 2.4130111259873956,
+      "max_waited_child_rss_kib": 28972,
+      "artifact_bytes_before_report": 6502,
+      "aggregate_artifact_bytes_before_report": 19501056,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 15205171,
+        "allocated_bytes": 19501056
+      }
+    },
+    "monitors/final-independent/probe.json": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "tests/integration/check_contribution_binding.py",
+        "--normal",
+        "runs/contribution_binding_20261030/normal",
+        "--local",
+        "runs/contribution_binding_20261030/local",
+        "--reference",
+        "runs/execution_events_20261030/on",
+        "--inputs",
+        "/home/lry/moe-ub-cosim/runs/contribution_binding_20261030/input",
+        "--output",
+        "runs/contribution_binding_20261030/final-independent"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-30T11:48:27.509613+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 536870912,
+        "wall_seconds": 120.0
+      },
+      "peak_sampled_group_rss_bytes": 51699712,
+      "peak_sampled_processes": 2,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/runs/contribution_binding_20261030"
+      ],
+      "peak_sampled_artifact_bytes": 25919488,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 20228103,
+      "peak_sampled_artifact_allocated_bytes": 25919488,
+      "process_group": 880148,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-30T11:48:29.807309+00:00",
+      "wall_seconds": 2.2976996949873865,
+      "max_waited_child_rss_kib": 27920,
+      "artifact_bytes_before_report": 6246,
+      "aggregate_artifact_bytes_before_report": 25919488,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 20228103,
+        "allocated_bytes": 25919488
+      }
+    },
+    "normal/execution/probe.json": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-m",
+        "moe_ub_cosim.scaleout_service",
+        "--worker",
+        "/home/lry/moe-ub-cosim/runs/contribution_binding_20261030/normal/input.json",
+        "/home/lry/moe-ub-cosim/runs/contribution_binding_20261030/normal",
+        "/home/lry/moe-ub-cosim/runs/contribution_binding_20261030/normal/rdma.json",
+        "/home/lry/moe-ub-cosim/runs/execution_events_20261030/build/ns3.42-moe-rdma-service",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "/home/lry/moe-ub-cosim/runs/contribution_binding_20261030/normal"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-30T11:40:32.213670+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 134217728,
+        "wall_seconds": 60.0
+      },
+      "peak_sampled_group_rss_bytes": 176373760,
+      "peak_sampled_processes": 2,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/runs/contribution_binding_20261030/normal"
+      ],
+      "peak_sampled_artifact_bytes": 6336512,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 4959041,
+      "peak_sampled_artifact_allocated_bytes": 6336512,
+      "process_group": 879542,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-30T11:40:33.459290+00:00",
+      "wall_seconds": 1.2456217240542173,
+      "max_waited_child_rss_kib": 95788,
+      "artifact_bytes_before_report": 3268,
+      "aggregate_artifact_bytes_before_report": 6336512,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 4959041,
+        "allocated_bytes": 6336512
+      }
+    },
+    "local/execution/probe.json": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-m",
+        "moe_ub_cosim.scaleout_service",
+        "--worker",
+        "/home/lry/moe-ub-cosim/runs/contribution_binding_20261030/local/input.json",
+        "/home/lry/moe-ub-cosim/runs/contribution_binding_20261030/local",
+        "/home/lry/moe-ub-cosim/runs/contribution_binding_20261030/local/rdma.json",
+        "/home/lry/moe-ub-cosim/runs/execution_events_20261030/build/ns3.42-moe-rdma-service",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "/home/lry/moe-ub-cosim/runs/contribution_binding_20261030/local"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-30T11:41:58.868174+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 134217728,
+        "wall_seconds": 60.0
+      },
+      "peak_sampled_group_rss_bytes": 177319936,
+      "peak_sampled_processes": 2,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/runs/contribution_binding_20261030/local"
+      ],
+      "peak_sampled_artifact_bytes": 6348800,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 4970107,
+      "peak_sampled_artifact_allocated_bytes": 6348800,
+      "process_group": 879677,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-30T11:42:00.027266+00:00",
+      "wall_seconds": 1.159103725978639,
+      "max_waited_child_rss_kib": 95872,
+      "artifact_bytes_before_report": 2969,
+      "aggregate_artifact_bytes_before_report": 6348800,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 4970107,
+        "allocated_bytes": 6348800
+      }
+    }
+  },
+  "monitored_seconds_before_evidence": 12.352122884942219,
+  "sampled_peak_group_rss_bytes": 212119552,
+  "scope": "actual original-attempt callback binding, declared simulation identity; no backup or optimization gain"
+}

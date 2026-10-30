@@ -1,0 +1,35 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>原专家贡献与实际执行绑定</title><style>body{font:17px/1.75 system-ui,sans-serif;color:#163047;background:#f3f6fa;margin:0;padding:32px}
+main{max-width:1080px;margin:auto;background:white;border-radius:12px;padding:32px}h1{line-height:1.3}table{width:100%;border-collapse:collapse}
+td,th{padding:9px;border:1px solid #ccd5e1;text-align:left}.note{background:#edf5ff;border-left:5px solid #2875b5;padding:16px}a{color:#155da0}</style>
+<main><h1>从“包到了”进一步追到“哪个请求的专家贡献完成了”</h1>
+<p class="note">原专家贡献已接入同一次ASTRA/ns-3的实时回调。当前只跟踪原尝试，没有启动备用专家，也没有新的恢复加速收益。</p>
+<p>每个token按目标rank划分完整专家贡献集合。输入到达、聚合专家计算、贡献返回、发送确认与原图退出分开记录；
+共享一条消息的多个贡献只引用同一次真实传输。</p>
+<h2>两个128端点Clos功能条件</h2><p>16服务器×8，8ToR/8Agg/4Core，单rail/plane，各层400G、每链路1us。
+两个EP64组、E256/Top8/H256、两层两步；4份不同人工来源、31个数据活跃rank。声明计算，未运行完整R1或GPU。</p>
+<table><tr><th>指标</th><th>正常</th><th>GPU6前20us丢目的数据</th></tr>
+<tr><td>token/层调用 · 贡献包 · 专家贡献</td><td>16 · 32 · 128</td><td>相同，全部覆盖和退出</td></tr>
+<tr><td>生命周期事件 / 原生执行事件</td><td>380 / 7669</td><td>相同</td></tr>
+<tr><td>消息 / 布局载荷</td><td>62 / 37696B</td><td>相同</td></tr>
+<tr><td>完整包事件 / 注入丢弃包</td><td>2120 / 0</td><td>2126 / 1</td></tr>
+<tr><td>任务完成 / 网络排空</td><td>103.852 / 103.852us</td><td>175.778 / 175.778us</td></tr></table>
+<p>正常条件与上一轮保存的完整原生结果、图文件和事件逐项一致，没有重跑旧网络。
+已有选择性重传和参考DCQCN保持原配置。局部故障只丢了一个目标数据包，不是全网100%丢包。</p>
+<h2>同一请求内，受损和未受损专家为何都等待</h2><p>调用g0.w0.l0.r0.s0；下表均为同一ns-3绝对微秒。</p>
+<table><tr><th>实际阶段</th><th>正常 / us</th><th>局部故障 / us</th></tr><tr><td>rank6 · 输入就绪</td><td>3.058</td><td>83.058</td></tr><tr><td>rank8 · 输入就绪</td><td>5.100</td><td>5.100</td></tr><tr><td>rank6 · 专家开始</td><td>13.134</td><td>85.060</td></tr><tr><td>rank8 · 专家开始</td><td>13.134</td><td>85.060</td></tr><tr><td>rank6 · 专家完成</td><td>13.534</td><td>85.460</td></tr><tr><td>rank8 · 专家完成</td><td>13.534</td><td>85.460</td></tr><tr><td>rank6 · 贡献返回</td><td>15.858</td><td>87.784</td></tr><tr><td>rank8 · 贡献返回</td><td>17.882</td><td>89.808</td></tr></table>
+<p>rank8输入两次都在5.100us到达，但专家开始从13.134us推迟到85.060us。
+这是原图整组Dispatch门限的等待传播，不是已经完成的健康专家计算被丢弃。</p>
+<p>该调用的全部贡献正常17.882us、故障89.808us到齐；原图分别51.908us、123.834us才退出。
+rank6的Combine接收正常15.858us、故障87.784us；源确认分别17.860us、89.786us。结果到达不提前关闭发送义务。</p>
+<h2>收益与证据边界</h2><p>关键Dispatch消息2/stream0的实际源发送为1.030us，故障下再次发送为81.030us，
+每次640B数据。20us故障结束不代表立即再次发送。本例额外任务等待71.926us是故障代价；
+多少可以在相同资源和合法通信语义下消除，尚未验证。</p>
+<p>路由JSON没有激活张量或门控权重。新增有类型的仿真来源身份，未填造input_sha256；
+每rank聚合专家节点也不等于逐专家内核观测。</p>
+<p>56项CPU检查通过，旧/1报告逐字节兼容；原JSON独立核对16调用/32包/128贡献。
+迁移后的公开核验通过，6类篡改被拒绝，短缺预算在后端启动前拒绝。没有构建、依赖更新、下载、GPU执行或成功网络重跑。</p>
+<p>下一步仍需实际可见的故障触发、合法备用执行和共享GPU/NIC竞争，再比较已有备用请求与候选机制。
+当前保留单rank活动图、EP通信域、阶段门限及原连接退出约束。</p>
+<p><a href="README.md">方法和边界</a> · <a href="verification.json">独立核验</a> · <a href="receipt.json">命令与版本</a> ·
+<a href="resources.json">完整资源</a> · <a href="../../docs/contribution_binding.md">使用说明</a></p></main></html>

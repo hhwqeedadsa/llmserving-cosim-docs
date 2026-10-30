@@ -1,0 +1,1231 @@
+{
+  "passed": true,
+  "execution_commit": "ca9cf6ea8de1fa8eef9114795750eebdada6b7f9",
+  "cases": {
+    "normal": {
+      "application_finished_ns": 103852,
+      "network_drained_ns": 103852,
+      "invocations": 16,
+      "bundles": 32,
+      "expert_contributions": 128,
+      "lifecycle_events": 380,
+      "packet_events": 2120,
+      "fault_drops": 0,
+      "calls": [
+        {
+          "call": "g0.w0.l0.r0.s0",
+          "graph_id": "g0.w0",
+          "source_rank": 0,
+          "logical_complete_ns": 17882,
+          "retired_ns": 51908,
+          "expert_count": 8,
+          "bundles": 2
+        },
+        {
+          "call": "g0.w0.l1.r0.s0",
+          "graph_id": "g0.w0",
+          "source_rank": 0,
+          "logical_complete_ns": 43848,
+          "retired_ns": 51908,
+          "expert_count": 8,
+          "bundles": 2
+        },
+        {
+          "call": "g0.w0.l0.r64.s0",
+          "graph_id": "g0.w0",
+          "source_rank": 64,
+          "logical_complete_ns": 19918,
+          "retired_ns": 51908,
+          "expert_count": 8,
+          "bundles": 2
+        },
+        {
+          "call": "g0.w0.l1.r64.s0",
+          "graph_id": "g0.w0",
+          "source_rank": 64,
+          "logical_complete_ns": 45872,
+          "retired_ns": 51908,
+          "expert_count": 8,
+          "bundles": 2
+        },
+        {
+          "call": "g1.w0.l0.r1.s0",
+          "graph_id": "g1.w0",
+          "source_rank": 1,
+          "logical_complete_ns": 17908,
+          "retired_ns": 51922,
+          "expert_count": 8,
+          "bundles": 2
+        },
+        {
+          "call": "g1.w0.l1.r1.s0",
+          "graph_id": "g1.w0",
+          "source_rank": 1,
+          "logical_complete_ns": 43862,
+          "retired_ns": 51922,
+          "expert_count": 8,
+          "bundles": 2
+        },
+        {
+          "call": "g1.w0.l0.r65.s0",
+          "graph_id": "g1.w0",
+          "source_rank": 65,
+          "logical_complete_ns": 19932,
+          "retired_ns": 51922,
+          "expert_count": 8,
+          "bundles": 2
+        },
+        {
+          "call": "g1.w0.l1.r65.s0",
+          "graph_id": "g1.w0",
+          "source_rank": 65,
+          "logical_complete_ns": 45886,
+          "retired_ns": 51922,
+          "expert_count": 8,
+          "bundles": 2
+        },
+        {
+          "call": "g0.w1.l0.r0.s0",
+          "graph_id": "g0.w1",
+          "source_rank": 0,
+          "logical_complete_ns": 69802,
+          "retired_ns": 103852,
+          "expert_count": 8,
+          "bundles": 2
+        },
+        {
+          "call": "g0.w1.l1.r0.s0",
+          "graph_id": "g0.w1",
+          "source_rank": 0,
+          "logical_complete_ns": 95768,
+          "retired_ns": 103852,
+          "expert_count": 8,
+          "bundles": 2
+        },
+        {
+          "call": "g0.w1.l0.r64.s0",
+          "graph_id": "g0.w1",
+          "source_rank": 64,
+          "logical_complete_ns": 71838,
+          "retired_ns": 103852,
+          "expert_count": 8,
+          "bundles": 2
+        },
+        {
+          "call": "g0.w1.l1.r64.s0",
+          "graph_id": "g0.w1",
+          "source_rank": 64,
+          "logical_complete_ns": 97816,
+          "retired_ns": 103852,
+          "expert_count": 8,
+          "bundles": 2
+        },
+        {
+          "call": "g1.w1.l0.r1.s0",
+          "graph_id": "g1.w1",
+          "source_rank": 1,
+          "logical_complete_ns": 69816,
+          "retired_ns": 103804,
+          "expert_count": 8,
+          "bundles": 2
+        },
+        {
+          "call": "g1.w1.l1.r1.s0",
+          "graph_id": "g1.w1",
+          "source_rank": 1,
+          "logical_complete_ns": 93732,
+          "retired_ns": 103804,
+          "expert_count": 8,
+          "bundles": 2
+        },
+        {
+          "call": "g1.w1.l0.r65.s0",
+          "graph_id": "g1.w1",
+          "source_rank": 65,
+          "logical_complete_ns": 71840,
+          "retired_ns": 103804,
+          "expert_count": 8,
+          "bundles": 2
+        },
+        {
+          "call": "g1.w1.l1.r65.s0",
+          "graph_id": "g1.w1",
+          "source_rank": 65,
+          "logical_complete_ns": 97768,
+          "retired_ns": 103804,
+          "expert_count": 8,
+          "bundles": 2
+        }
+      ],
+      "message_references": [
+        {
+          "call": "g0.w0.l0.r0.s0",
+          "phase": "dispatch",
+          "message": 2,
+          "receiver_ns": 3058,
+          "source_ack_ns": 5060
+        },
+        {
+          "call": "g0.w0.l0.r0.s0",
+          "phase": "combine",
+          "message": 4221,
+          "receiver_ns": 15858,
+          "source_ack_ns": 17860
+        },
+        {
+          "call": "g0.w0.l0.r0.s0",
+          "phase": "dispatch",
+          "message": 3,
+          "receiver_ns": 5100,
+          "source_ack_ns": 9104
+        },
+        {
+          "call": "g0.w0.l0.r0.s0",
+          "phase": "combine",
+          "message": 4284,
+          "receiver_ns": 17882,
+          "source_ack_ns": 21886
+        },
+        {
+          "call": "g0.w0.l1.r0.s0",
+          "phase": "dispatch",
+          "message": 8070,
+          "receiver_ns": 31040,
+          "source_ack_ns": 35044
+        },
+        {
+          "call": "g0.w0.l1.r0.s0",
+          "phase": "combine",
+          "message": 12537,
+          "receiver_ns": 43836,
+          "source_ack_ns": 47840
+        },
+        {
+          "call": "g0.w0.l1.r0.s0",
+          "phase": "dispatch",
+          "message": 8071,
+          "receiver_ns": 31054,
+          "source_ack_ns": 35058
+        },
+        {
+          "call": "g0.w0.l1.r0.s0",
+          "phase": "combine",
+          "message": 12600,
+          "receiver_ns": 43848,
+          "source_ack_ns": 47852
+        },
+        {
+          "call": "g0.w0.l0.r64.s0",
+          "phase": "dispatch",
+          "message": 2033,
+          "receiver_ns": 7114,
+          "source_ack_ns": 13120
+        },
+        {
+          "call": "g0.w0.l0.r64.s0",
+          "phase": "combine",
+          "message": 5134,
+          "receiver_ns": 19906,
+          "source_ack_ns": 25912
+        },
+        {
+          "call": "g0.w0.l0.r64.s0",
+          "phase": "dispatch",
+          "message": 2034,
+          "receiver_ns": 7128,
+          "source_ack_ns": 13134
+        },
+        {
+          "call": "g0.w0.l0.r64.s0",
+          "phase": "combine",
+          "message": 5197,
+          "receiver_ns": 19918,
+          "source_ack_ns": 25924
+        },
+        {
+          "call": "g0.w0.l1.r64.s0",
+          "phase": "dispatch",
+          "message": 10101,
+          "receiver_ns": 33068,
+          "source_ack_ns": 39074
+        },
+        {
+          "call": "g0.w0.l1.r64.s0",
+          "phase": "combine",
+          "message": 13450,
+          "receiver_ns": 45860,
+          "source_ack_ns": 51866
+        },
+        {
+          "call": "g0.w0.l1.r64.s0",
+          "phase": "dispatch",
+          "message": 10102,
+          "receiver_ns": 33082,
+          "source_ack_ns": 39088
+        },
+        {
+          "call": "g0.w0.l1.r64.s0",
+          "phase": "combine",
+          "message": 13513,
+          "receiver_ns": 45872,
+          "source_ack_ns": 51878
+        },
+        {
+          "call": "g1.w0.l0.r1.s0",
+          "phase": "dispatch",
+          "message": 16137,
+          "receiver_ns": 5086,
+          "source_ack_ns": 9090
+        },
+        {
+          "call": "g1.w0.l0.r1.s0",
+          "phase": "combine",
+          "message": 20790,
+          "receiver_ns": 17896,
+          "source_ack_ns": 21900
+        },
+        {
+          "call": "g1.w0.l0.r1.s0",
+          "phase": "dispatch",
+          "message": 16138,
+          "receiver_ns": 5100,
+          "source_ack_ns": 9104
+        },
+        {
+          "call": "g1.w0.l0.r1.s0",
+          "phase": "combine",
+          "message": 20853,
+          "receiver_ns": 17908,
+          "source_ack_ns": 21912
+        },
+        {
+          "call": "g1.w0.l1.r1.s0",
+          "phase": "dispatch",
+          "message": 24205,
+          "receiver_ns": 31054,
+          "source_ack_ns": 35058
+        },
+        {
+          "call": "g1.w0.l1.r1.s0",
+          "phase": "combine",
+          "message": 29106,
+          "receiver_ns": 43850,
+          "source_ack_ns": 47854
+        },
+        {
+          "call": "g1.w0.l1.r1.s0",
+          "phase": "dispatch",
+          "message": 24206,
+          "receiver_ns": 31068,
+          "source_ack_ns": 35072
+        },
+        {
+          "call": "g1.w0.l1.r1.s0",
+          "phase": "combine",
+          "message": 29169,
+          "receiver_ns": 43862,
+          "source_ack_ns": 47866
+        },
+        {
+          "call": "g1.w0.l0.r65.s0",
+          "phase": "dispatch",
+          "message": 18168,
+          "receiver_ns": 7128,
+          "source_ack_ns": 13134
+        },
+        {
+          "call": "g1.w0.l0.r65.s0",
+          "phase": "combine",
+          "message": 21703,
+          "receiver_ns": 19920,
+          "source_ack_ns": 25926
+        },
+        {
+          "call": "g1.w0.l0.r65.s0",
+          "phase": "dispatch",
+          "message": 18169,
+          "receiver_ns": 7142,
+          "source_ack_ns": 13148
+        },
+        {
+          "call": "g1.w0.l0.r65.s0",
+          "phase": "combine",
+          "message": 21766,
+          "receiver_ns": 19932,
+          "source_ack_ns": 25938
+        },
+        {
+          "call": "g1.w0.l1.r65.s0",
+          "phase": "dispatch",
+          "message": 26236,
+          "receiver_ns": 33082,
+          "source_ack_ns": 39088
+        },
+        {
+          "call": "g1.w0.l1.r65.s0",
+          "phase": "combine",
+          "message": 30019,
+          "receiver_ns": 45874,
+          "source_ack_ns": 51880
+        },
+        {
+          "call": "g1.w0.l1.r65.s0",
+          "phase": "dispatch",
+          "message": 26237,
+          "receiver_ns": 33096,
+          "source_ack_ns": 39102
+        },
+        {
+          "call": "g1.w0.l1.r65.s0",
+          "phase": "combine",
+          "message": 30082,
+          "receiver_ns": 45886,
+          "source_ack_ns": 51892
+        },
+        {
+          "call": "g0.w1.l0.r0.s0",
+          "phase": "dispatch",
+          "message": 32261,
+          "receiver_ns": 56994,
+          "source_ack_ns": 60998
+        },
+        {
+          "call": "g0.w1.l0.r0.s0",
+          "phase": "combine",
+          "message": 36666,
+          "receiver_ns": 69790,
+          "source_ack_ns": 73794
+        },
+        {
+          "call": "g0.w1.l0.r0.s0",
+          "phase": "dispatch",
+          "message": 32262,
+          "receiver_ns": 57008,
+          "source_ack_ns": 61013
+        },
+        {
+          "call": "g0.w1.l0.r0.s0",
+          "phase": "combine",
+          "message": 36729,
+          "receiver_ns": 69802,
+          "source_ack_ns": 73806
+        },
+        {
+          "call": "g0.w1.l1.r0.s0",
+          "phase": "dispatch",
+          "message": 40329,
+          "receiver_ns": 82960,
+          "source_ack_ns": 86964
+        },
+        {
+          "call": "g0.w1.l1.r0.s0",
+          "phase": "combine",
+          "message": 44982,
+          "receiver_ns": 95756,
+          "source_ack_ns": 99760
+        },
+        {
+          "call": "g0.w1.l1.r0.s0",
+          "phase": "dispatch",
+          "message": 40330,
+          "receiver_ns": 82974,
+          "source_ack_ns": 86978
+        },
+        {
+          "call": "g0.w1.l1.r0.s0",
+          "phase": "combine",
+          "message": 45045,
+          "receiver_ns": 95768,
+          "source_ack_ns": 99772
+        },
+        {
+          "call": "g0.w1.l0.r64.s0",
+          "phase": "dispatch",
+          "message": 34292,
+          "receiver_ns": 59022,
+          "source_ack_ns": 65028
+        },
+        {
+          "call": "g0.w1.l0.r64.s0",
+          "phase": "combine",
+          "message": 37579,
+          "receiver_ns": 71838,
+          "source_ack_ns": 77844
+        },
+        {
+          "call": "g0.w1.l0.r64.s0",
+          "phase": "dispatch",
+          "message": 34293,
+          "receiver_ns": 59036,
+          "source_ack_ns": 65042
+        },
+        {
+          "call": "g0.w1.l0.r64.s0",
+          "phase": "combine",
+          "message": 37642,
+          "receiver_ns": 71826,
+          "source_ack_ns": 77832
+        },
+        {
+          "call": "g0.w1.l1.r64.s0",
+          "phase": "dispatch",
+          "message": 42360,
+          "receiver_ns": 84988,
+          "source_ack_ns": 90994
+        },
+        {
+          "call": "g0.w1.l1.r64.s0",
+          "phase": "combine",
+          "message": 45895,
+          "receiver_ns": 97804,
+          "source_ack_ns": 103810
+        },
+        {
+          "call": "g0.w1.l1.r64.s0",
+          "phase": "dispatch",
+          "message": 42361,
+          "receiver_ns": 85002,
+          "source_ack_ns": 91008
+        },
+        {
+          "call": "g0.w1.l1.r64.s0",
+          "phase": "combine",
+          "message": 45958,
+          "receiver_ns": 97816,
+          "source_ack_ns": 103822
+        },
+        {
+          "call": "g1.w1.l0.r1.s0",
+          "phase": "dispatch",
+          "message": 48396,
+          "receiver_ns": 57008,
+          "source_ack_ns": 61012
+        },
+        {
+          "call": "g1.w1.l0.r1.s0",
+          "phase": "combine",
+          "message": 53235,
+          "receiver_ns": 69804,
+          "source_ack_ns": 73808
+        },
+        {
+          "call": "g1.w1.l0.r1.s0",
+          "phase": "dispatch",
+          "message": 48397,
+          "receiver_ns": 57022,
+          "source_ack_ns": 61026
+        },
+        {
+          "call": "g1.w1.l0.r1.s0",
+          "phase": "combine",
+          "message": 53298,
+          "receiver_ns": 69816,
+          "source_ack_ns": 73820
+        },
+        {
+          "call": "g1.w1.l1.r1.s0",
+          "phase": "dispatch",
+          "message": 56464,
+          "receiver_ns": 80934,
+          "source_ack_ns": 82936
+        },
+        {
+          "call": "g1.w1.l1.r1.s0",
+          "phase": "combine",
+          "message": 61551,
+          "receiver_ns": 93720,
+          "source_ack_ns": 95722
+        },
+        {
+          "call": "g1.w1.l1.r1.s0",
+          "phase": "dispatch",
+          "message": 56465,
+          "receiver_ns": 80948,
+          "source_ack_ns": 82950
+        },
+        {
+          "call": "g1.w1.l1.r1.s0",
+          "phase": "combine",
+          "message": 61614,
+          "receiver_ns": 93732,
+          "source_ack_ns": 95734
+        },
+        {
+          "call": "g1.w1.l0.r65.s0",
+          "phase": "dispatch",
+          "message": 50427,
+          "receiver_ns": 59036,
+          "source_ack_ns": 65042
+        },
+        {
+          "call": "g1.w1.l0.r65.s0",
+          "phase": "combine",
+          "message": 54148,
+          "receiver_ns": 71840,
+          "source_ack_ns": 77846
+        },
+        {
+          "call": "g1.w1.l0.r65.s0",
+          "phase": "dispatch",
+          "message": 50428,
+          "receiver_ns": 59050,
+          "source_ack_ns": 65056
+        },
+        {
+          "call": "g1.w1.l0.r65.s0",
+          "phase": "combine",
+          "message": 54211,
+          "receiver_ns": 71828,
+          "source_ack_ns": 77834
+        },
+        {
+          "call": "g1.w1.l1.r65.s0",
+          "phase": "dispatch",
+          "message": 58495,
+          "receiver_ns": 84990,
+          "source_ack_ns": 90996
+        },
+        {
+          "call": "g1.w1.l1.r65.s0",
+          "phase": "combine",
+          "message": 62464,
+          "receiver_ns": 97768,
+          "source_ack_ns": 103774
+        }
+      ],
+      "target_dispatch": {
+        "message_id": 2,
+        "stream_id": 0,
+        "source_transmissions": [
+          {
+            "time_ns": 1030,
+            "sequence": 0,
+            "payload_bytes": 640
+          }
+        ]
+      }
+    },
+    "local": {
+      "application_finished_ns": 175778,
+      "network_drained_ns": 175778,
+      "invocations": 16,
+      "bundles": 32,
+      "expert_contributions": 128,
+      "lifecycle_events": 380,
+      "packet_events": 2126,
+      "fault_drops": 1,
+      "calls": [
+        {
+          "call": "g0.w0.l0.r0.s0",
+          "graph_id": "g0.w0",
+          "source_rank": 0,
+          "logical_complete_ns": 89808,
+          "retired_ns": 123834,
+          "expert_count": 8,
+          "bundles": 2
+        },
+        {
+          "call": "g0.w0.l1.r0.s0",
+          "graph_id": "g0.w0",
+          "source_rank": 0,
+          "logical_complete_ns": 115774,
+          "retired_ns": 123834,
+          "expert_count": 8,
+          "bundles": 2
+        },
+        {
+          "call": "g0.w0.l0.r64.s0",
+          "graph_id": "g0.w0",
+          "source_rank": 64,
+          "logical_complete_ns": 91844,
+          "retired_ns": 123834,
+          "expert_count": 8,
+          "bundles": 2
+        },
+        {
+          "call": "g0.w0.l1.r64.s0",
+          "graph_id": "g0.w0",
+          "source_rank": 64,
+          "logical_complete_ns": 117798,
+          "retired_ns": 123834,
+          "expert_count": 8,
+          "bundles": 2
+        },
+        {
+          "call": "g1.w0.l0.r1.s0",
+          "graph_id": "g1.w0",
+          "source_rank": 1,
+          "logical_complete_ns": 17908,
+          "retired_ns": 51922,
+          "expert_count": 8,
+          "bundles": 2
+        },
+        {
+          "call": "g1.w0.l1.r1.s0",
+          "graph_id": "g1.w0",
+          "source_rank": 1,
+          "logical_complete_ns": 43862,
+          "retired_ns": 51922,
+          "expert_count": 8,
+          "bundles": 2
+        },
+        {
+          "call": "g1.w0.l0.r65.s0",
+          "graph_id": "g1.w0",
+          "source_rank": 65,
+          "logical_complete_ns": 19932,
+          "retired_ns": 51922,
+          "expert_count": 8,
+          "bundles": 2
+        },
+        {
+          "call": "g1.w0.l1.r65.s0",
+          "graph_id": "g1.w0",
+          "source_rank": 65,
+          "logical_complete_ns": 45886,
+          "retired_ns": 51922,
+          "expert_count": 8,
+          "bundles": 2
+        },
+        {
+          "call": "g1.w1.l0.r1.s0",
+          "graph_id": "g1.w1",
+          "source_rank": 1,
+          "logical_complete_ns": 69816,
+          "retired_ns": 103804,
+          "expert_count": 8,
+          "bundles": 2
+        },
+        {
+          "call": "g1.w1.l1.r1.s0",
+          "graph_id": "g1.w1",
+          "source_rank": 1,
+          "logical_complete_ns": 93732,
+          "retired_ns": 103804,
+          "expert_count": 8,
+          "bundles": 2
+        },
+        {
+          "call": "g1.w1.l0.r65.s0",
+          "graph_id": "g1.w1",
+          "source_rank": 65,
+          "logical_complete_ns": 71840,
+          "retired_ns": 103804,
+          "expert_count": 8,
+          "bundles": 2
+        },
+        {
+          "call": "g1.w1.l1.r65.s0",
+          "graph_id": "g1.w1",
+          "source_rank": 65,
+          "logical_complete_ns": 97768,
+          "retired_ns": 103804,
+          "expert_count": 8,
+          "bundles": 2
+        },
+        {
+          "call": "g0.w1.l0.r0.s0",
+          "graph_id": "g0.w1",
+          "source_rank": 0,
+          "logical_complete_ns": 141728,
+          "retired_ns": 175778,
+          "expert_count": 8,
+          "bundles": 2
+        },
+        {
+          "call": "g0.w1.l1.r0.s0",
+          "graph_id": "g0.w1",
+          "source_rank": 0,
+          "logical_complete_ns": 167694,
+          "retired_ns": 175778,
+          "expert_count": 8,
+          "bundles": 2
+        },
+        {
+          "call": "g0.w1.l0.r64.s0",
+          "graph_id": "g0.w1",
+          "source_rank": 64,
+          "logical_complete_ns": 143764,
+          "retired_ns": 175778,
+          "expert_count": 8,
+          "bundles": 2
+        },
+        {
+          "call": "g0.w1.l1.r64.s0",
+          "graph_id": "g0.w1",
+          "source_rank": 64,
+          "logical_complete_ns": 169742,
+          "retired_ns": 175778,
+          "expert_count": 8,
+          "bundles": 2
+        }
+      ],
+      "message_references": [
+        {
+          "call": "g0.w0.l0.r0.s0",
+          "phase": "dispatch",
+          "message": 2,
+          "receiver_ns": 83058,
+          "source_ack_ns": 85060
+        },
+        {
+          "call": "g0.w0.l0.r0.s0",
+          "phase": "combine",
+          "message": 4221,
+          "receiver_ns": 87784,
+          "source_ack_ns": 89786
+        },
+        {
+          "call": "g0.w0.l0.r0.s0",
+          "phase": "dispatch",
+          "message": 3,
+          "receiver_ns": 5100,
+          "source_ack_ns": 9104
+        },
+        {
+          "call": "g0.w0.l0.r0.s0",
+          "phase": "combine",
+          "message": 4284,
+          "receiver_ns": 89808,
+          "source_ack_ns": 93812
+        },
+        {
+          "call": "g0.w0.l1.r0.s0",
+          "phase": "dispatch",
+          "message": 8070,
+          "receiver_ns": 102966,
+          "source_ack_ns": 106970
+        },
+        {
+          "call": "g0.w0.l1.r0.s0",
+          "phase": "combine",
+          "message": 12537,
+          "receiver_ns": 115762,
+          "source_ack_ns": 119766
+        },
+        {
+          "call": "g0.w0.l1.r0.s0",
+          "phase": "dispatch",
+          "message": 8071,
+          "receiver_ns": 102980,
+          "source_ack_ns": 106984
+        },
+        {
+          "call": "g0.w0.l1.r0.s0",
+          "phase": "combine",
+          "message": 12600,
+          "receiver_ns": 115774,
+          "source_ack_ns": 119778
+        },
+        {
+          "call": "g0.w0.l0.r64.s0",
+          "phase": "dispatch",
+          "message": 2033,
+          "receiver_ns": 7114,
+          "source_ack_ns": 13120
+        },
+        {
+          "call": "g0.w0.l0.r64.s0",
+          "phase": "combine",
+          "message": 5134,
+          "receiver_ns": 91832,
+          "source_ack_ns": 97838
+        },
+        {
+          "call": "g0.w0.l0.r64.s0",
+          "phase": "dispatch",
+          "message": 2034,
+          "receiver_ns": 7128,
+          "source_ack_ns": 13134
+        },
+        {
+          "call": "g0.w0.l0.r64.s0",
+          "phase": "combine",
+          "message": 5197,
+          "receiver_ns": 91844,
+          "source_ack_ns": 97850
+        },
+        {
+          "call": "g0.w0.l1.r64.s0",
+          "phase": "dispatch",
+          "message": 10101,
+          "receiver_ns": 104994,
+          "source_ack_ns": 111000
+        },
+        {
+          "call": "g0.w0.l1.r64.s0",
+          "phase": "combine",
+          "message": 13450,
+          "receiver_ns": 117786,
+          "source_ack_ns": 123792
+        },
+        {
+          "call": "g0.w0.l1.r64.s0",
+          "phase": "dispatch",
+          "message": 10102,
+          "receiver_ns": 105008,
+          "source_ack_ns": 111014
+        },
+        {
+          "call": "g0.w0.l1.r64.s0",
+          "phase": "combine",
+          "message": 13513,
+          "receiver_ns": 117798,
+          "source_ack_ns": 123804
+        },
+        {
+          "call": "g1.w0.l0.r1.s0",
+          "phase": "dispatch",
+          "message": 16137,
+          "receiver_ns": 5086,
+          "source_ack_ns": 9090
+        },
+        {
+          "call": "g1.w0.l0.r1.s0",
+          "phase": "combine",
+          "message": 20790,
+          "receiver_ns": 17896,
+          "source_ack_ns": 21900
+        },
+        {
+          "call": "g1.w0.l0.r1.s0",
+          "phase": "dispatch",
+          "message": 16138,
+          "receiver_ns": 5100,
+          "source_ack_ns": 9104
+        },
+        {
+          "call": "g1.w0.l0.r1.s0",
+          "phase": "combine",
+          "message": 20853,
+          "receiver_ns": 17908,
+          "source_ack_ns": 21912
+        },
+        {
+          "call": "g1.w0.l1.r1.s0",
+          "phase": "dispatch",
+          "message": 24205,
+          "receiver_ns": 31054,
+          "source_ack_ns": 35058
+        },
+        {
+          "call": "g1.w0.l1.r1.s0",
+          "phase": "combine",
+          "message": 29106,
+          "receiver_ns": 43850,
+          "source_ack_ns": 47854
+        },
+        {
+          "call": "g1.w0.l1.r1.s0",
+          "phase": "dispatch",
+          "message": 24206,
+          "receiver_ns": 31068,
+          "source_ack_ns": 35072
+        },
+        {
+          "call": "g1.w0.l1.r1.s0",
+          "phase": "combine",
+          "message": 29169,
+          "receiver_ns": 43862,
+          "source_ack_ns": 47866
+        },
+        {
+          "call": "g1.w0.l0.r65.s0",
+          "phase": "dispatch",
+          "message": 18168,
+          "receiver_ns": 7128,
+          "source_ack_ns": 13134
+        },
+        {
+          "call": "g1.w0.l0.r65.s0",
+          "phase": "combine",
+          "message": 21703,
+          "receiver_ns": 19920,
+          "source_ack_ns": 25926
+        },
+        {
+          "call": "g1.w0.l0.r65.s0",
+          "phase": "dispatch",
+          "message": 18169,
+          "receiver_ns": 7142,
+          "source_ack_ns": 13148
+        },
+        {
+          "call": "g1.w0.l0.r65.s0",
+          "phase": "combine",
+          "message": 21766,
+          "receiver_ns": 19932,
+          "source_ack_ns": 25938
+        },
+        {
+          "call": "g1.w0.l1.r65.s0",
+          "phase": "dispatch",
+          "message": 26236,
+          "receiver_ns": 33082,
+          "source_ack_ns": 39088
+        },
+        {
+          "call": "g1.w0.l1.r65.s0",
+          "phase": "combine",
+          "message": 30019,
+          "receiver_ns": 45874,
+          "source_ack_ns": 51880
+        },
+        {
+          "call": "g1.w0.l1.r65.s0",
+          "phase": "dispatch",
+          "message": 26237,
+          "receiver_ns": 33096,
+          "source_ack_ns": 39102
+        },
+        {
+          "call": "g1.w0.l1.r65.s0",
+          "phase": "combine",
+          "message": 30082,
+          "receiver_ns": 45886,
+          "source_ack_ns": 51892
+        },
+        {
+          "call": "g1.w1.l0.r1.s0",
+          "phase": "dispatch",
+          "message": 48396,
+          "receiver_ns": 57008,
+          "source_ack_ns": 61012
+        },
+        {
+          "call": "g1.w1.l0.r1.s0",
+          "phase": "combine",
+          "message": 53235,
+          "receiver_ns": 69804,
+          "source_ack_ns": 73808
+        },
+        {
+          "call": "g1.w1.l0.r1.s0",
+          "phase": "dispatch",
+          "message": 48397,
+          "receiver_ns": 57022,
+          "source_ack_ns": 61026
+        },
+        {
+          "call": "g1.w1.l0.r1.s0",
+          "phase": "combine",
+          "message": 53298,
+          "receiver_ns": 69816,
+          "source_ack_ns": 73820
+        },
+        {
+          "call": "g1.w1.l1.r1.s0",
+          "phase": "dispatch",
+          "message": 56464,
+          "receiver_ns": 80934,
+          "source_ack_ns": 82936
+        },
+        {
+          "call": "g1.w1.l1.r1.s0",
+          "phase": "combine",
+          "message": 61551,
+          "receiver_ns": 93720,
+          "source_ack_ns": 95722
+        },
+        {
+          "call": "g1.w1.l1.r1.s0",
+          "phase": "dispatch",
+          "message": 56465,
+          "receiver_ns": 80948,
+          "source_ack_ns": 82950
+        },
+        {
+          "call": "g1.w1.l1.r1.s0",
+          "phase": "combine",
+          "message": 61614,
+          "receiver_ns": 93732,
+          "source_ack_ns": 95734
+        },
+        {
+          "call": "g1.w1.l0.r65.s0",
+          "phase": "dispatch",
+          "message": 50427,
+          "receiver_ns": 59036,
+          "source_ack_ns": 65042
+        },
+        {
+          "call": "g1.w1.l0.r65.s0",
+          "phase": "combine",
+          "message": 54148,
+          "receiver_ns": 71828,
+          "source_ack_ns": 77834
+        },
+        {
+          "call": "g1.w1.l0.r65.s0",
+          "phase": "dispatch",
+          "message": 50428,
+          "receiver_ns": 59050,
+          "source_ack_ns": 65056
+        },
+        {
+          "call": "g1.w1.l0.r65.s0",
+          "phase": "combine",
+          "message": 54211,
+          "receiver_ns": 71840,
+          "source_ack_ns": 77846
+        },
+        {
+          "call": "g1.w1.l1.r65.s0",
+          "phase": "dispatch",
+          "message": 58495,
+          "receiver_ns": 84990,
+          "source_ack_ns": 90996
+        },
+        {
+          "call": "g1.w1.l1.r65.s0",
+          "phase": "combine",
+          "message": 62464,
+          "receiver_ns": 97768,
+          "source_ack_ns": 103774
+        },
+        {
+          "call": "g0.w1.l0.r0.s0",
+          "phase": "dispatch",
+          "message": 32261,
+          "receiver_ns": 128920,
+          "source_ack_ns": 132924
+        },
+        {
+          "call": "g0.w1.l0.r0.s0",
+          "phase": "combine",
+          "message": 36666,
+          "receiver_ns": 141716,
+          "source_ack_ns": 145720
+        },
+        {
+          "call": "g0.w1.l0.r0.s0",
+          "phase": "dispatch",
+          "message": 32262,
+          "receiver_ns": 128934,
+          "source_ack_ns": 132938
+        },
+        {
+          "call": "g0.w1.l0.r0.s0",
+          "phase": "combine",
+          "message": 36729,
+          "receiver_ns": 141728,
+          "source_ack_ns": 145732
+        },
+        {
+          "call": "g0.w1.l1.r0.s0",
+          "phase": "dispatch",
+          "message": 40329,
+          "receiver_ns": 154886,
+          "source_ack_ns": 158890
+        },
+        {
+          "call": "g0.w1.l1.r0.s0",
+          "phase": "combine",
+          "message": 44982,
+          "receiver_ns": 167682,
+          "source_ack_ns": 171686
+        },
+        {
+          "call": "g0.w1.l1.r0.s0",
+          "phase": "dispatch",
+          "message": 40330,
+          "receiver_ns": 154900,
+          "source_ack_ns": 158904
+        },
+        {
+          "call": "g0.w1.l1.r0.s0",
+          "phase": "combine",
+          "message": 45045,
+          "receiver_ns": 167694,
+          "source_ack_ns": 171698
+        },
+        {
+          "call": "g0.w1.l0.r64.s0",
+          "phase": "dispatch",
+          "message": 34292,
+          "receiver_ns": 130948,
+          "source_ack_ns": 136954
+        },
+        {
+          "call": "g0.w1.l0.r64.s0",
+          "phase": "combine",
+          "message": 37579,
+          "receiver_ns": 143764,
+          "source_ack_ns": 149770
+        },
+        {
+          "call": "g0.w1.l0.r64.s0",
+          "phase": "dispatch",
+          "message": 34293,
+          "receiver_ns": 130962,
+          "source_ack_ns": 136968
+        },
+        {
+          "call": "g0.w1.l0.r64.s0",
+          "phase": "combine",
+          "message": 37642,
+          "receiver_ns": 143752,
+          "source_ack_ns": 149758
+        },
+        {
+          "call": "g0.w1.l1.r64.s0",
+          "phase": "dispatch",
+          "message": 42360,
+          "receiver_ns": 156914,
+          "source_ack_ns": 162920
+        },
+        {
+          "call": "g0.w1.l1.r64.s0",
+          "phase": "combine",
+          "message": 45895,
+          "receiver_ns": 169730,
+          "source_ack_ns": 175736
+        },
+        {
+          "call": "g0.w1.l1.r64.s0",
+          "phase": "dispatch",
+          "message": 42361,
+          "receiver_ns": 156928,
+          "source_ack_ns": 162934
+        },
+        {
+          "call": "g0.w1.l1.r64.s0",
+          "phase": "combine",
+          "message": 45958,
+          "receiver_ns": 169742,
+          "source_ack_ns": 175748
+        }
+      ],
+      "target_dispatch": {
+        "message_id": 2,
+        "stream_id": 0,
+        "source_transmissions": [
+          {
+            "time_ns": 1030,
+            "sequence": 0,
+            "payload_bytes": 640
+          },
+          {
+            "time_ns": 81030,
+            "sequence": 0,
+            "payload_bytes": 640
+          }
+        ]
+      }
+    }
+  },
+  "reference_unchanged_normal_native_graphs_and_events": true,
+  "raw_sources_independently_checked": true,
+  "negative_checks": {
+    "wrong-source": true,
+    "missing-expert": true,
+    "early-result": true,
+    "early-release": true,
+    "missing-call": true,
+    "wrong-summary": true
+  },
+  "cumulative_budget_rejected_before_output": true,
+  "relocation_passed": true,
+  "new_network_executions": 0,
+  "scope": "original-attempt binding correctness; fault cost is not optimization gain"
+}

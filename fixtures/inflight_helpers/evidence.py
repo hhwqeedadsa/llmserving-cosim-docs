@@ -84,6 +84,8 @@ def collect(run,verification_dir):
     axes[1].set(yticks=range(len(points)),yticklabels=[p[0] for p in points],xlabel='Simulated time (us)',xlim=(0,142),title='Earlier contribution does not bypass remaining dependencies')
     axes[1].invert_yaxis();axes[1].grid(axis='x',alpha=.2)
     fig.savefig(HERE/'timing.png',dpi=160);fig.savefig(HERE/'timing.svg');plt.close(fig)
+    svg=HERE/'timing.svg'
+    svg.write_text('\n'.join(line.rstrip() for line in svg.read_text().splitlines())+'\n')
     rows=''.join(f'<tr><td>{label}</td><td>{cases[m]["application_finished_ns"]/1000:.3f}</td><td>{cases[m]["actual_messages"]}</td><td>{cases[m]["packet_events"]}</td><td>{cases[m]["compute_tasks"]}</td><td>{cases[m]["declared_payload_bytes"]}</td></tr>' for label,m in zip(['正常','局部故障','相同故障＋一次备用'],modes))
     (HERE/'report.html').write_text('''<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>共享资源备用执行：为什么还没有业务收益</title><style>
     body{font:17px/1.8 system-ui,sans-serif;background:#f3f6f8;color:#183449;margin:0}main{max-width:1000px;margin:auto;padding:35px 22px}h1{font-size:32px;line-height:1.4}h2{font-size:23px}section{background:white;padding:22px 26px;margin:22px 0;border-radius:12px}table{border-collapse:collapse;width:100%;font-size:15px}td,th{padding:9px;border-bottom:1px solid #dce4e8;text-align:left}.callout{border-left:5px solid #b56936;background:#fff4e9;padding:16px}a{color:#1c638a}img{width:100%}code{overflow-wrap:anywhere}small{color:#566c7b}.table{overflow:auto}</style><main>

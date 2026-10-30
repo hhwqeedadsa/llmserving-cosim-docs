@@ -6,7 +6,6 @@ import hashlib
 from html import escape
 import json
 from pathlib import Path
-import subprocess
 
 
 def load(path):return json.loads(path.read_bytes())
@@ -40,6 +39,7 @@ def inspect(run):
     c=load(run/'input.json');r=load(run/'result.json');f=load(run/'frontend.json')
     assert c['execution_events']['schema_version']=='moe-execution-events/2'
     assert r['passed'] and r['drained'] and r['gpu_count']==128
+    assert r['service']['shared_compute']['empty']
     assert r['packet_capture']['complete'] and not r['packet_capture']['omitted_events']
     waves={h['graph_id']:load(run/'graphs'/h['graph_id']/'wave.json') for h in f['history']}
     nodes={(g,int(rank),n['id']):n for g,w in waves.items() for rank,rows in w['rank_nodes'].items() for n in rows}
@@ -83,7 +83,8 @@ def inspect(run):
         original_queued_tasks=sum(t['kind']=='original' for t in waits),queued_tasks=waits,
         helper_events=[e for e in raw if e['type']=='HELPER_OBSERVE'],
         original_messages=sum(len(w['messages']) for w in waves.values()),
-        source_sha256={str(p.relative_to(run)):sha(p) for p in [run/'input.json',run/'result.json',run/'execution_events.jsonl',run/'contribution_calls.jsonl']}),c,waves
+        policy=c['inflight_helpers']['policy'],
+        source_sha256={str(p.relative_to(run)):sha(p) for p in [run/'input.json',run/'rdma.json',run/'topology.json',run/'result.json',run/'execution_events.jsonl',run/'contribution_calls.jsonl']}),c,waves
 
 
 def main():
@@ -99,7 +100,12 @@ def main():
         graphs.append(w)
     if a.run:
         assert len(a.run)==2 and configs[0]==configs[1] and graphs[0]==graphs[1]
+        first,second=report['conditions'].values()
+        assert first['policy']=='observe_only/1' and second['policy']=='first_missing_bundle/1'
+        assert all(first['source_sha256'][name]==second['source_sha256'][name] for name in ('rdma.json','topology.json'))
         assert any(row['original_queued_tasks']>0 for row in report['conditions'].values()), 'stress case did not produce original GPU queueing'
+        report['application_change_ns']=second['application_finished_ns']-first['application_finished_ns']
+        report['application_change_percent']=100*report['application_change_ns']/first['application_finished_ns']
     save(out/'verification.json',report)
     cards=[]
     for name,row in report['conditions'].items():
@@ -110,7 +116,8 @@ def main():
             values=[escape(label),str(t['rank']),*[f'{t[k]/1000:.3f}' for k in ('ready_ns','start_ns','done_ns','wait_ns')]]
             cards.append('<tr>'+''.join('<td>'+v+'</td>' for v in values)+'</tr>')
         cards.append('</table>')
-    html='''<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>共享GPU实际开始与排队核验</title><style>body{font:17px/1.7 system-ui;margin:36px auto;padding:0 24px;max-width:1100px;color:#182b40;background:#f6f8fc}table{border-collapse:collapse;background:white;width:100%;font-size:15px}th,td{border:1px solid #cad4e0;padding:10px;text-align:left}h1{font-size:28px}h2{margin-top:30px}</style><h1>提交计算，不等于已经开始计算</h1><p>新记录区分任务提交、实际占用GPU引擎、实际完成。排队期间网络接收与ACK继续运行，阶段门限保持。128端点Clos、两个EP64副本、四个人工请求，两层两步；两组都有GPU6前20µs的数据故障，区别只有备用策略。</p><p>这是人工计算压力下的功能核验，专家单位成本50µs不是GPU实测。不能将队列记录功能、故障增加的耗时或单贡献提前量写成创新收益。</p>'''+''.join(cards)+'<p>详细记录见 <a href="verification.json">verification.json</a>。全局研究目标仍在进行，当前接口保留原调用完成依赖。</p></html>'
+    comparison=(f'<p><strong>本压力用例中，备用执行增加任务耗时 {report["application_change_ns"]/1000:.3f} µs（{report["application_change_percent"]:.2f}%）。</strong>这说明本例简单备用策略存在资源干扰，不能作为新算法收益；成熟负载感知备用方法仍需比较。</p>' if a.run else '')
+    html='''<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>共享GPU实际开始与排队核验</title><style>body{font:17px/1.7 system-ui;margin:36px auto;padding:0 24px;max-width:1100px;color:#182b40;background:#f6f8fc}table{border-collapse:collapse;background:white;width:100%;font-size:15px}th,td{border:1px solid #cad4e0;padding:10px;text-align:left}h1{font-size:28px}h2{margin-top:30px}</style><h1>提交计算，不等于已经开始计算</h1><p>新记录区分任务提交、实际占用GPU引擎、实际完成。排队期间网络接收与ACK继续运行，阶段门限保持。128端点Clos、两个EP64副本、四个人工请求，两层两步；两组都有GPU6前20µs的数据故障，区别只有备用策略。</p><p>这是人工计算压力下的功能核验，专家单位成本50µs不是GPU实测。不能将队列记录功能、故障增加的耗时或单贡献提前量写成创新收益。</p>'''+comparison+''.join(cards)+'<p>详细记录见 <a href="verification.json">verification.json</a>。全局研究目标仍在进行，当前接口保留原调用完成依赖。</p></html>'
     (out/'report.html').write_text(html)
     print(json.dumps(dict(passed=True,conditions=len(a.run),harness_tasks=6)))
 

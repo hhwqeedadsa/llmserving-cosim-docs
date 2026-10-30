@@ -2,7 +2,9 @@
 
 可选[源端确认watchdog](source_ack_watchdog.md)在同一Simulator中按实际SEND post启动一次性定时器，真实源确认取消，超时以独立单向帧在线交付。原执行事件保持原身份、顺序和回调；通知不成为调度DECIDE，不生成ACK或恢复任务。
 
-LLMServingSim Scale-Out服务的可选[执行事件通道](execution_events.md)由ASTRA被动节点观察器及共享消息适配器发出，Python在同一控制输出中在线消费`OBSERVE`，不将其传给`Frontend.decide`或回复`COMMIT`。原调度决策、组级退出、回调和网络排空逻辑保持独立。可选贡献绑定消费同一事件流，目前尚未调度恢复任务。
+LLMServingSim Scale-Out服务的可选[执行事件通道](execution_events.md)由ASTRA被动节点观察器及共享消息适配器发出，Python在同一控制输出中在线消费`OBSERVE`，不将其传给`Frontend.decide`或回复`COMMIT`。原调度决策、组级退出、回调和网络排空逻辑保持独立。可选贡献绑定消费同一事件流；[备用执行](inflight_helpers.md)通过另外的同刻HELPER_DECIDE/HELPER_COMMIT接入共享GPU/NIC，不把观察帧当恢复命令。
+
+显式执行记录`/2`直接从共享GPU FIFO的开始回调发出原COMP实际开始，与ASTRA issue和完成分列；贡献开始采用实际开始。GATE独立等待，不占计算引擎。默认`/1`保留历史提交口径，记录版本不改变原阶段完成依赖，也不表示已经获得应用恢复收益。
 
 `contribution_attempts.py`记录贡献包一次提交及执行尝试/资源退出，见[接口说明](contribution_attempts.md)。可选`contribution_binding.py`把原始请求、层/路由入口、目标rank完整专家集合绑定到同一次实时事件，区分输入、聚合专家计算、结果、源确认及图退休，见[贡献绑定](contribution_binding.md)。独立CLI继续检查无计时回调；默认`rdma-run`的图、门限和收发定义不变。核心不发包、不调度GPU、不伪造原传输ACK，也尚不执行备用恢复。
 

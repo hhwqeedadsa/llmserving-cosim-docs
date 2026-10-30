@@ -4,6 +4,8 @@
 
 原生服务可显式传入`--execution-events MAX_EVENTS`，由ASTRA被动节点观察器和`Messages`在实际回调位置发出单向`OBSERVE`帧。它不接受恢复命令、不改变现有调度；默认关闭。公开服务JSON、格式、边界和核验见[实时执行事件](../docs/execution_events.md)。
 
+共享计算服务可改用`--execution-events-v2 MAX_EVENTS`，由FIFO开始回调另记录每个原COMP的`node_compute_start`；事件/报告采用`/2`，原node_issue保留入队口径，GATE不占计算队列。该选项要求显式`inflight_helpers`，与旧选项互斥；缺少共享模型或旧程序明确拒绝。日志不另调度事件，不回填开始。默认`/1`保持兼容，详细成本与核验仍见同一接口。
+
 原生服务的显式`--phase-completion ep_transport_flush/1`开启组内阶段完成门限，图使用`moe-scaleout-wave/2`的完整成员声明。每rank零时长GATE编码为ASTRA外部事件；`PhaseGates`仅汇合实际到达回调，最后成员到达后按rank顺序交付完成，再由ASTRA登记零时延回调，不创建第二时钟或控制包。缺省图/报告保持原行为。此模式仅表达传输完成的必要依赖下界，详见[配置与限制](../examples/scaleout_sparse_clos/README.md#可选的ep阶段传输完成依赖)。
 
 原生服务`ServiceTransport`默认委托旧`Fabric::Send`，显式配置时使用持久stream/work。`Messages`继续配对SEND/RECV，源确认前不释放ASTRA发送资源；持久路径结束先检查物理排空，再Close并检查Fabric退出。配置与范围见[服务示例](../examples/astra_stream_service/README.md)。`control_channel.hh`在任何logger初始化前复制原stdout管道并设置CLOEXEC，普通stdout重定向stderr，控制帧只写私有描述符；处理部分write/EINTR并拒绝空、超长、多行帧。两Python服务共用严格解码器，不修补损坏JSON后继续。

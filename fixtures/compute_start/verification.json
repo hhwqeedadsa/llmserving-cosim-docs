@@ -1,0 +1,202 @@
+{
+  "passed": true,
+  "harness": {
+    "passed": true,
+    "tasks": 6,
+    "events": 20,
+    "max_queue_wait_ns": 11,
+    "source_sha256": "c2ab9aca2c96ca8fb72180340798f2b431cc6fef80c641859bdcbb3f75690a99"
+  },
+  "conditions": {
+    "observe": {
+      "passed": true,
+      "application_finished_ns": 974142,
+      "network_drained_ns": 974142,
+      "original_compute_tasks": 2560,
+      "execution_events": 10229,
+      "original_queued_tasks": 0,
+      "queued_tasks": [],
+      "helper_events": [],
+      "original_messages": 62,
+      "policy": "observe_only/1",
+      "source_sha256": {
+        "input.json": "e6123cc1093c54c83f6a070cf863d929f653e1a2a943d47859706435edd25987",
+        "rdma.json": "ce4380fe0443dfd8d3026f353f964832980d5ace0f5100fd4dba8c33f9114408",
+        "topology.json": "5389993e9aa1dfc148b4713b0a2b0c0521de24b41b74060e2db7eb9f048c444f",
+        "result.json": "a1cebf1b41bf48ae7018e09f679f5fdd30188ee03e69e4ac49c74e23c153f5d9",
+        "execution_events.jsonl": "033b84f45ba443fecdb4efb5b478b027888ae547791a877b227f8d99ae5bde03",
+        "contribution_calls.jsonl": "8cb9c9126d7433ed8afa53e1e9495014ae5bc34a8e2aec931817ff64a9d7f4a1"
+      }
+    },
+    "helper": {
+      "passed": true,
+      "application_finished_ns": 1094138,
+      "network_drained_ns": 1094138,
+      "original_compute_tasks": 2560,
+      "execution_events": 10229,
+      "original_queued_tasks": 1,
+      "queued_tasks": [
+        {
+          "done_ns": 413134,
+          "duration_ns": 200000,
+          "helper_id": "g0.w0.l0.r0.s0.r6.h7",
+          "key": "g0.w0.l0.r0.s0.r6.h7.experts",
+          "kind": "helper_experts",
+          "rank": 7,
+          "ready_ns": 23058,
+          "sequence": 380,
+          "start_ns": 213134,
+          "wait_ns": 190076
+        },
+        {
+          "done_ns": 413734,
+          "duration_ns": 300,
+          "helper_id": "g0.w0.l0.r0.s0.r6.h7",
+          "key": "g0.w0.l0.r0.s0.r6.h7.reduce",
+          "kind": "helper_reduce",
+          "rank": 7,
+          "ready_ns": 413134,
+          "sequence": 829,
+          "start_ns": 413434,
+          "wait_ns": 300
+        },
+        {
+          "done_ns": 413434,
+          "duration_ns": 300,
+          "graph_id": "g1.w0",
+          "key": "g1.w0.r7.n6",
+          "kind": "original",
+          "node": 6,
+          "rank": 7,
+          "ready_ns": 213134,
+          "sequence": 505,
+          "start_ns": 413134,
+          "wait_ns": 200000
+        }
+      ],
+      "helper_events": [
+        {
+          "id": "g0.w0.l0.r0.s0.r6.h7",
+          "kind": "accepted",
+          "observed_events": 1492,
+          "schema_version": "moe-helper-event/1",
+          "sequence": 0,
+          "time_ns": 21030,
+          "type": "HELPER_OBSERVE"
+        },
+        {
+          "id": "g0.w0.l0.r0.s0.r6.h7",
+          "kind": "input_post",
+          "observed_events": 1492,
+          "schema_version": "moe-helper-event/1",
+          "sequence": 1,
+          "time_ns": 21030,
+          "type": "HELPER_OBSERVE"
+        },
+        {
+          "id": "g0.w0.l0.r0.s0.r6.h7",
+          "kind": "input_ready",
+          "observed_events": 1492,
+          "schema_version": "moe-helper-event/1",
+          "sequence": 2,
+          "time_ns": 23058,
+          "type": "HELPER_OBSERVE"
+        },
+        {
+          "id": "g0.w0.l0.r0.s0.r6.h7",
+          "kind": "input_ack",
+          "observed_events": 1492,
+          "schema_version": "moe-helper-event/1",
+          "sequence": 3,
+          "time_ns": 25060,
+          "type": "HELPER_OBSERVE"
+        },
+        {
+          "id": "g0.w0.l0.r0.s0.r6.h7",
+          "kind": "compute_begin",
+          "observed_events": 1988,
+          "schema_version": "moe-helper-event/1",
+          "sequence": 4,
+          "time_ns": 213134,
+          "type": "HELPER_OBSERVE"
+        },
+        {
+          "id": "g0.w0.l0.r0.s0.r6.h7",
+          "kind": "compute_done",
+          "observed_events": 3289,
+          "schema_version": "moe-helper-event/1",
+          "sequence": 5,
+          "time_ns": 413134,
+          "type": "HELPER_OBSERVE"
+        },
+        {
+          "id": "g0.w0.l0.r0.s0.r6.h7",
+          "kind": "reduce_begin",
+          "observed_events": 3289,
+          "schema_version": "moe-helper-event/1",
+          "sequence": 6,
+          "time_ns": 413434,
+          "type": "HELPER_OBSERVE"
+        },
+        {
+          "id": "g0.w0.l0.r0.s0.r6.h7",
+          "kind": "reduce_done",
+          "observed_events": 3292,
+          "schema_version": "moe-helper-event/1",
+          "sequence": 7,
+          "time_ns": 413734,
+          "type": "HELPER_OBSERVE"
+        },
+        {
+          "id": "g0.w0.l0.r0.s0.r6.h7",
+          "kind": "result_post",
+          "observed_events": 3292,
+          "schema_version": "moe-helper-event/1",
+          "sequence": 8,
+          "time_ns": 413734,
+          "type": "HELPER_OBSERVE"
+        },
+        {
+          "id": "g0.w0.l0.r0.s0.r6.h7",
+          "kind": "result_ready",
+          "observed_events": 3295,
+          "schema_version": "moe-helper-event/1",
+          "sequence": 9,
+          "time_ns": 415758,
+          "type": "HELPER_OBSERVE"
+        },
+        {
+          "id": "g0.w0.l0.r0.s0.r6.h7",
+          "kind": "result_ack",
+          "observed_events": 3988,
+          "schema_version": "moe-helper-event/1",
+          "sequence": 10,
+          "time_ns": 417760,
+          "type": "HELPER_OBSERVE"
+        },
+        {
+          "id": "g0.w0.l0.r0.s0.r6.h7",
+          "kind": "retired",
+          "observed_events": 3988,
+          "schema_version": "moe-helper-event/1",
+          "sequence": 11,
+          "time_ns": 417760,
+          "type": "HELPER_OBSERVE"
+        }
+      ],
+      "original_messages": 62,
+      "policy": "first_missing_bundle/1",
+      "source_sha256": {
+        "input.json": "2366bbf583e16d6c7b91cf020d61d93a02b5cb5f035b54a7a3994facf693647e",
+        "rdma.json": "ce4380fe0443dfd8d3026f353f964832980d5ace0f5100fd4dba8c33f9114408",
+        "topology.json": "5389993e9aa1dfc148b4713b0a2b0c0521de24b41b74060e2db7eb9f048c444f",
+        "result.json": "a7eff39e2647d77cab47c1995ffafafc479554b7626988db36171625741af607",
+        "execution_events.jsonl": "6e09906934a094b29280e63120c531baf5a4867d4821907aa663beb0247338f1",
+        "contribution_calls.jsonl": "81be94b3de3892876004d791ccea4189497f3d4a2a214f7ac08d5bf62074472d"
+      }
+    }
+  },
+  "scope": "functional FIFO/start evidence; synthetic routes and costs; no recovery-benefit claim",
+  "application_change_ns": 119996,
+  "application_change_percent": 12.318121998640855
+}

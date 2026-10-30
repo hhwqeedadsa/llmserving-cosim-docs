@@ -1,0 +1,1359 @@
+{
+  "schema_version": "moe-clos-transient-analysis/1",
+  "passed": true,
+  "gpu_endpoints": 128,
+  "ep_sizes": [
+    64,
+    64
+  ],
+  "independent_requests": 15,
+  "preparation_sha256": "c960f0997df3bcaf42784003bf35bf4a79f4f86d8f1e1b07ae450c3eee5b2b78",
+  "cases": {
+    "normal": {
+      "timing": {
+        "timing_status": "complete",
+        "timing_reason": null,
+        "application_finished_ns": 134994,
+        "network_drained_ns": 183357,
+        "network_stopped_ns": 183357,
+        "post_application_drain_ns": 48363
+      },
+      "groups": [
+        {
+          "group": 0,
+          "rank_count": 64,
+          "finished_ns": 134994,
+          "messages": 470,
+          "logical_bytes": 7196672,
+          "source_payload_bytes": 7196672,
+          "repeated_payload_bytes": 0,
+          "accepted_bytes": 7196672,
+          "direct_drop_events": 0,
+          "destination_ecn_ce_packets": 23,
+          "graphs": [
+            {
+              "graph_id": "g0.w0",
+              "start_ns": 0,
+              "finished_ns": 67505,
+              "elapsed_ns": 67505
+            },
+            {
+              "graph_id": "g0.w1",
+              "start_ns": 67505,
+              "finished_ns": 134994,
+              "elapsed_ns": 67489
+            }
+          ]
+        },
+        {
+          "group": 1,
+          "rank_count": 64,
+          "finished_ns": 134962,
+          "messages": 412,
+          "logical_bytes": 6393856,
+          "source_payload_bytes": 6393856,
+          "repeated_payload_bytes": 0,
+          "accepted_bytes": 6393856,
+          "direct_drop_events": 0,
+          "destination_ecn_ce_packets": 16,
+          "graphs": [
+            {
+              "graph_id": "g1.w0",
+              "start_ns": 0,
+              "finished_ns": 67721,
+              "elapsed_ns": 67721
+            },
+            {
+              "graph_id": "g1.w1",
+              "start_ns": 67721,
+              "finished_ns": 134962,
+              "elapsed_ns": 67241
+            }
+          ]
+        }
+      ],
+      "slices": {
+        "g0-first-dispatch": {
+          "graph_id": "g0.w0",
+          "layer": 0,
+          "source_layer_id": 3,
+          "phase": "dispatch",
+          "src": null,
+          "dst": null,
+          "messages": 59,
+          "logical_bytes": 903168,
+          "tx_payload_bytes": 903168,
+          "unique_arrival_bytes": 903168,
+          "accepted_bytes": 903168,
+          "source_confirmed_bytes": 903168,
+          "complete": true,
+          "data_ready_ns": 11433,
+          "source_confirmed_ns": 17439
+        },
+        "g0-last-combine": {
+          "graph_id": "g0.w1",
+          "layer": 1,
+          "source_layer_id": 4,
+          "phase": "combine",
+          "src": null,
+          "dst": null,
+          "messages": 57,
+          "logical_bytes": 888832,
+          "tx_payload_bytes": 888832,
+          "unique_arrival_bytes": 888832,
+          "accepted_bytes": 888832,
+          "source_confirmed_bytes": 888832,
+          "complete": true,
+          "data_ready_ns": 128958,
+          "source_confirmed_ns": 134964
+        },
+        "g1-first-dispatch": {
+          "graph_id": "g1.w0",
+          "layer": 0,
+          "source_layer_id": 3,
+          "phase": "dispatch",
+          "src": null,
+          "dst": null,
+          "messages": 55,
+          "logical_bytes": 802816,
+          "tx_payload_bytes": 802816,
+          "unique_arrival_bytes": 802816,
+          "accepted_bytes": 802816,
+          "source_confirmed_bytes": 802816,
+          "complete": true,
+          "data_ready_ns": 11424,
+          "source_confirmed_ns": 17430
+        },
+        "g1-last-combine": {
+          "graph_id": "g1.w1",
+          "layer": 1,
+          "source_layer_id": 4,
+          "phase": "combine",
+          "src": null,
+          "dst": null,
+          "messages": 53,
+          "logical_bytes": 788480,
+          "tx_payload_bytes": 788480,
+          "unique_arrival_bytes": 788480,
+          "accepted_bytes": 788480,
+          "source_confirmed_bytes": 788480,
+          "complete": true,
+          "data_ready_ns": 128926,
+          "source_confirmed_ns": 134932
+        }
+      },
+      "independent_verification": {
+        "originals_checked": 15,
+        "messages": 882,
+        "logical_bytes": 13590528
+      },
+      "actual_source_data_packets": 1892,
+      "actual_source_payload_bytes": 13590528,
+      "packet_events": 66228,
+      "shared_directed_exit_count": 80,
+      "shared_directed_exits": [
+        {
+          "node": 128,
+          "port": 17,
+          "group0_data_model_bytes": 302568,
+          "group1_data_model_bytes": 374608
+        },
+        {
+          "node": 128,
+          "port": 18,
+          "group0_data_model_bytes": 216120,
+          "group1_data_model_bytes": 244936
+        },
+        {
+          "node": 128,
+          "port": 19,
+          "group0_data_model_bytes": 244936,
+          "group1_data_model_bytes": 216120
+        },
+        {
+          "node": 128,
+          "port": 20,
+          "group0_data_model_bytes": 360200,
+          "group1_data_model_bytes": 302568
+        },
+        {
+          "node": 129,
+          "port": 17,
+          "group0_data_model_bytes": 129672,
+          "group1_data_model_bytes": 129672
+        },
+        {
+          "node": 129,
+          "port": 18,
+          "group0_data_model_bytes": 86448,
+          "group1_data_model_bytes": 72040
+        },
+        {
+          "node": 129,
+          "port": 19,
+          "group0_data_model_bytes": 43224,
+          "group1_data_model_bytes": 115264
+        },
+        {
+          "node": 129,
+          "port": 20,
+          "group0_data_model_bytes": 57632,
+          "group1_data_model_bytes": 86448
+        },
+        {
+          "node": 130,
+          "port": 17,
+          "group0_data_model_bytes": 259344,
+          "group1_data_model_bytes": 244936
+        },
+        {
+          "node": 130,
+          "port": 18,
+          "group0_data_model_bytes": 360200,
+          "group1_data_model_bytes": 316976
+        },
+        {
+          "node": 130,
+          "port": 19,
+          "group0_data_model_bytes": 273752,
+          "group1_data_model_bytes": 417832
+        },
+        {
+          "node": 130,
+          "port": 20,
+          "group0_data_model_bytes": 316940,
+          "group1_data_model_bytes": 172896
+        },
+        {
+          "node": 131,
+          "port": 17,
+          "group0_data_model_bytes": 100856,
+          "group1_data_model_bytes": 57632
+        },
+        {
+          "node": 131,
+          "port": 18,
+          "group0_data_model_bytes": 86448,
+          "group1_data_model_bytes": 100856
+        },
+        {
+          "node": 131,
+          "port": 19,
+          "group0_data_model_bytes": 129672,
+          "group1_data_model_bytes": 187304
+        },
+        {
+          "node": 131,
+          "port": 20,
+          "group0_data_model_bytes": 115264,
+          "group1_data_model_bytes": 187304
+        },
+        {
+          "node": 132,
+          "port": 1,
+          "group0_data_model_bytes": 273752,
+          "group1_data_model_bytes": 302568
+        },
+        {
+          "node": 132,
+          "port": 2,
+          "group0_data_model_bytes": 100856,
+          "group1_data_model_bytes": 72040
+        },
+        {
+          "node": 132,
+          "port": 3,
+          "group0_data_model_bytes": 345756,
+          "group1_data_model_bytes": 345792
+        },
+        {
+          "node": 132,
+          "port": 4,
+          "group0_data_model_bytes": 43224,
+          "group1_data_model_bytes": 72040
+        },
+        {
+          "node": 132,
+          "port": 5,
+          "group0_data_model_bytes": 561912,
+          "group1_data_model_bytes": 345792
+        },
+        {
+          "node": 133,
+          "port": 1,
+          "group0_data_model_bytes": 216120,
+          "group1_data_model_bytes": 288160
+        },
+        {
+          "node": 133,
+          "port": 2,
+          "group0_data_model_bytes": 129672,
+          "group1_data_model_bytes": 86448
+        },
+        {
+          "node": 133,
+          "port": 3,
+          "group0_data_model_bytes": 302568,
+          "group1_data_model_bytes": 302568
+        },
+        {
+          "node": 133,
+          "port": 4,
+          "group0_data_model_bytes": 72040,
+          "group1_data_model_bytes": 201712
+        },
+        {
+          "node": 133,
+          "port": 5,
+          "group0_data_model_bytes": 489872,
+          "group1_data_model_bytes": 259344
+        },
+        {
+          "node": 134,
+          "port": 1,
+          "group0_data_model_bytes": 316976,
+          "group1_data_model_bytes": 331384
+        },
+        {
+          "node": 134,
+          "port": 2,
+          "group0_data_model_bytes": 43224,
+          "group1_data_model_bytes": 86448
+        },
+        {
+          "node": 134,
+          "port": 3,
+          "group0_data_model_bytes": 273752,
+          "group1_data_model_bytes": 216120
+        },
+        {
+          "node": 134,
+          "port": 4,
+          "group0_data_model_bytes": 115264,
+          "group1_data_model_bytes": 72040
+        },
+        {
+          "node": 134,
+          "port": 5,
+          "group0_data_model_bytes": 417832,
+          "group1_data_model_bytes": 533096
+        },
+        {
+          "node": 135,
+          "port": 1,
+          "group0_data_model_bytes": 316976,
+          "group1_data_model_bytes": 216120
+        },
+        {
+          "node": 135,
+          "port": 2,
+          "group0_data_model_bytes": 43224,
+          "group1_data_model_bytes": 158488
+        },
+        {
+          "node": 135,
+          "port": 3,
+          "group0_data_model_bytes": 288160,
+          "group1_data_model_bytes": 288160
+        },
+        {
+          "node": 135,
+          "port": 4,
+          "group0_data_model_bytes": 201712,
+          "group1_data_model_bytes": 187304
+        },
+        {
+          "node": 135,
+          "port": 5,
+          "group0_data_model_bytes": 489836,
+          "group1_data_model_bytes": 475464
+        },
+        {
+          "node": 136,
+          "port": 17,
+          "group0_data_model_bytes": 403388,
+          "group1_data_model_bytes": 43224
+        },
+        {
+          "node": 136,
+          "port": 18,
+          "group0_data_model_bytes": 360200,
+          "group1_data_model_bytes": 100856
+        },
+        {
+          "node": 136,
+          "port": 19,
+          "group0_data_model_bytes": 273752,
+          "group1_data_model_bytes": 86448
+        },
+        {
+          "node": 136,
+          "port": 20,
+          "group0_data_model_bytes": 302568,
+          "group1_data_model_bytes": 28816
+        },
+        {
+          "node": 137,
+          "port": 17,
+          "group0_data_model_bytes": 158488,
+          "group1_data_model_bytes": 331348
+        },
+        {
+          "node": 137,
+          "port": 18,
+          "group0_data_model_bytes": 144080,
+          "group1_data_model_bytes": 172896
+        },
+        {
+          "node": 137,
+          "port": 19,
+          "group0_data_model_bytes": 86448,
+          "group1_data_model_bytes": 187304
+        },
+        {
+          "node": 137,
+          "port": 20,
+          "group0_data_model_bytes": 86448,
+          "group1_data_model_bytes": 302568
+        },
+        {
+          "node": 138,
+          "port": 17,
+          "group0_data_model_bytes": 316976,
+          "group1_data_model_bytes": 86448
+        },
+        {
+          "node": 138,
+          "port": 18,
+          "group0_data_model_bytes": 230528,
+          "group1_data_model_bytes": 144044
+        },
+        {
+          "node": 138,
+          "port": 19,
+          "group0_data_model_bytes": 288160,
+          "group1_data_model_bytes": 72040
+        },
+        {
+          "node": 138,
+          "port": 20,
+          "group0_data_model_bytes": 331384,
+          "group1_data_model_bytes": 201712
+        },
+        {
+          "node": 139,
+          "port": 17,
+          "group0_data_model_bytes": 72040,
+          "group1_data_model_bytes": 129672
+        },
+        {
+          "node": 139,
+          "port": 18,
+          "group0_data_model_bytes": 115264,
+          "group1_data_model_bytes": 187304
+        },
+        {
+          "node": 139,
+          "port": 19,
+          "group0_data_model_bytes": 115264,
+          "group1_data_model_bytes": 144080
+        },
+        {
+          "node": 139,
+          "port": 20,
+          "group0_data_model_bytes": 115264,
+          "group1_data_model_bytes": 201712
+        },
+        {
+          "node": 140,
+          "port": 1,
+          "group0_data_model_bytes": 417832,
+          "group1_data_model_bytes": 28816
+        },
+        {
+          "node": 140,
+          "port": 2,
+          "group0_data_model_bytes": 144080,
+          "group1_data_model_bytes": 158488
+        },
+        {
+          "node": 140,
+          "port": 3,
+          "group0_data_model_bytes": 259344,
+          "group1_data_model_bytes": 230492
+        },
+        {
+          "node": 140,
+          "port": 4,
+          "group0_data_model_bytes": 158488,
+          "group1_data_model_bytes": 187304
+        },
+        {
+          "node": 140,
+          "port": 5,
+          "group0_data_model_bytes": 533060,
+          "group1_data_model_bytes": 331384
+        },
+        {
+          "node": 141,
+          "port": 1,
+          "group0_data_model_bytes": 273752,
+          "group1_data_model_bytes": 28816
+        },
+        {
+          "node": 141,
+          "port": 2,
+          "group0_data_model_bytes": 144080,
+          "group1_data_model_bytes": 230492
+        },
+        {
+          "node": 141,
+          "port": 3,
+          "group0_data_model_bytes": 389016,
+          "group1_data_model_bytes": 72040
+        },
+        {
+          "node": 141,
+          "port": 4,
+          "group0_data_model_bytes": 72040,
+          "group1_data_model_bytes": 129672
+        },
+        {
+          "node": 141,
+          "port": 5,
+          "group0_data_model_bytes": 461056,
+          "group1_data_model_bytes": 403424
+        },
+        {
+          "node": 142,
+          "port": 1,
+          "group0_data_model_bytes": 288160,
+          "group1_data_model_bytes": 129672
+        },
+        {
+          "node": 142,
+          "port": 2,
+          "group0_data_model_bytes": 115264,
+          "group1_data_model_bytes": 273752
+        },
+        {
+          "node": 142,
+          "port": 3,
+          "group0_data_model_bytes": 230528,
+          "group1_data_model_bytes": 158488
+        },
+        {
+          "node": 142,
+          "port": 4,
+          "group0_data_model_bytes": 72040,
+          "group1_data_model_bytes": 158488
+        },
+        {
+          "node": 142,
+          "port": 5,
+          "group0_data_model_bytes": 475464,
+          "group1_data_model_bytes": 302568
+        },
+        {
+          "node": 143,
+          "port": 1,
+          "group0_data_model_bytes": 360164,
+          "group1_data_model_bytes": 72040
+        },
+        {
+          "node": 143,
+          "port": 2,
+          "group0_data_model_bytes": 72040,
+          "group1_data_model_bytes": 331384
+        },
+        {
+          "node": 143,
+          "port": 3,
+          "group0_data_model_bytes": 288160,
+          "group1_data_model_bytes": 43224
+        },
+        {
+          "node": 143,
+          "port": 4,
+          "group0_data_model_bytes": 115264,
+          "group1_data_model_bytes": 187304
+        },
+        {
+          "node": 143,
+          "port": 5,
+          "group0_data_model_bytes": 489872,
+          "group1_data_model_bytes": 576320
+        },
+        {
+          "node": 144,
+          "port": 1,
+          "group0_data_model_bytes": 533060,
+          "group1_data_model_bytes": 331384
+        },
+        {
+          "node": 144,
+          "port": 2,
+          "group0_data_model_bytes": 561912,
+          "group1_data_model_bytes": 345792
+        },
+        {
+          "node": 145,
+          "port": 1,
+          "group0_data_model_bytes": 461056,
+          "group1_data_model_bytes": 403424
+        },
+        {
+          "node": 145,
+          "port": 2,
+          "group0_data_model_bytes": 489872,
+          "group1_data_model_bytes": 259344
+        },
+        {
+          "node": 146,
+          "port": 1,
+          "group0_data_model_bytes": 475464,
+          "group1_data_model_bytes": 302568
+        },
+        {
+          "node": 146,
+          "port": 2,
+          "group0_data_model_bytes": 417832,
+          "group1_data_model_bytes": 533096
+        },
+        {
+          "node": 147,
+          "port": 1,
+          "group0_data_model_bytes": 489872,
+          "group1_data_model_bytes": 576320
+        },
+        {
+          "node": 147,
+          "port": 2,
+          "group0_data_model_bytes": 489836,
+          "group1_data_model_bytes": 475464
+        }
+      ],
+      "switch_reason_counts": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "pfc_pause": 0,
+      "max_queue_at_hook_bytes": 107936,
+      "queue_area_byte_ns": 6326559280,
+      "data_loss": {
+        "available": false
+      },
+      "recovery_event_counts": {
+        "ack_progress": 1010,
+        "complete": 882,
+        "old_feedback": 0,
+        "prefix_published": 882,
+        "retry_exhausted": 0,
+        "timeout_retransmit": 0,
+        "timer_started": 882
+      },
+      "recovery_count_scope": "timer retransmit events are recovery requests, not actual source packet count",
+      "result_sha256": "3442e7af5619ef190a70ec60991d682192f71948857f78c30cd19848107b2704",
+      "frontend_sha256": "3a6ca2da908d81fe2c75b789f192b9e6f7d6882a6afe9648abe9327eee72ce25"
+    },
+    "local": {
+      "timing": {
+        "timing_status": "complete",
+        "timing_reason": null,
+        "application_finished_ns": 365904,
+        "network_drained_ns": 365904,
+        "network_stopped_ns": 365904,
+        "post_application_drain_ns": 0
+      },
+      "groups": [
+        {
+          "group": 0,
+          "rank_count": 64,
+          "finished_ns": 365904,
+          "messages": 470,
+          "logical_bytes": 7196672,
+          "source_payload_bytes": 7368704,
+          "repeated_payload_bytes": 172032,
+          "accepted_bytes": 7196672,
+          "direct_drop_events": 24,
+          "destination_ecn_ce_packets": 7,
+          "graphs": [
+            {
+              "graph_id": "g0.w0",
+              "start_ns": 0,
+              "finished_ns": 302942,
+              "elapsed_ns": 302942
+            },
+            {
+              "graph_id": "g0.w1",
+              "start_ns": 302942,
+              "finished_ns": 365904,
+              "elapsed_ns": 62962
+            }
+          ]
+        },
+        {
+          "group": 1,
+          "rank_count": 64,
+          "finished_ns": 130135,
+          "messages": 412,
+          "logical_bytes": 6393856,
+          "source_payload_bytes": 6393856,
+          "repeated_payload_bytes": 0,
+          "accepted_bytes": 6393856,
+          "direct_drop_events": 0,
+          "destination_ecn_ce_packets": 1,
+          "graphs": [
+            {
+              "graph_id": "g1.w0",
+              "start_ns": 0,
+              "finished_ns": 65938,
+              "elapsed_ns": 65938
+            },
+            {
+              "graph_id": "g1.w1",
+              "start_ns": 65938,
+              "finished_ns": 130135,
+              "elapsed_ns": 64197
+            }
+          ]
+        }
+      ],
+      "slices": {
+        "g0-first-dispatch": {
+          "graph_id": "g0.w0",
+          "layer": 0,
+          "source_layer_id": 3,
+          "phase": "dispatch",
+          "src": null,
+          "dst": null,
+          "messages": 59,
+          "logical_bytes": 903168,
+          "tx_payload_bytes": 1075200,
+          "unique_arrival_bytes": 903168,
+          "accepted_bytes": 903168,
+          "source_confirmed_bytes": 903168,
+          "complete": true,
+          "data_ready_ns": 248585,
+          "source_confirmed_ns": 254591
+        },
+        "g0-last-combine": {
+          "graph_id": "g0.w1",
+          "layer": 1,
+          "source_layer_id": 4,
+          "phase": "combine",
+          "src": null,
+          "dst": null,
+          "messages": 57,
+          "logical_bytes": 888832,
+          "tx_payload_bytes": 888832,
+          "unique_arrival_bytes": 888832,
+          "accepted_bytes": 888832,
+          "source_confirmed_bytes": 888832,
+          "complete": true,
+          "data_ready_ns": 359868,
+          "source_confirmed_ns": 365874
+        },
+        "g1-first-dispatch": {
+          "graph_id": "g1.w0",
+          "layer": 0,
+          "source_layer_id": 3,
+          "phase": "dispatch",
+          "src": null,
+          "dst": null,
+          "messages": 55,
+          "logical_bytes": 802816,
+          "tx_payload_bytes": 802816,
+          "unique_arrival_bytes": 802816,
+          "accepted_bytes": 802816,
+          "source_confirmed_bytes": 802816,
+          "complete": true,
+          "data_ready_ns": 11424,
+          "source_confirmed_ns": 17430
+        },
+        "g1-last-combine": {
+          "graph_id": "g1.w1",
+          "layer": 1,
+          "source_layer_id": 4,
+          "phase": "combine",
+          "src": null,
+          "dst": null,
+          "messages": 53,
+          "logical_bytes": 788480,
+          "tx_payload_bytes": 788480,
+          "unique_arrival_bytes": 788480,
+          "accepted_bytes": 788480,
+          "source_confirmed_bytes": 788480,
+          "complete": true,
+          "data_ready_ns": 124099,
+          "source_confirmed_ns": 130105
+        }
+      },
+      "independent_verification": {
+        "originals_checked": 15,
+        "messages": 882,
+        "logical_bytes": 13590528
+      },
+      "actual_source_data_packets": 1916,
+      "actual_source_payload_bytes": 13762560,
+      "packet_events": 65888,
+      "shared_directed_exit_count": 80,
+      "shared_directed_exits": [
+        {
+          "node": 128,
+          "port": 17,
+          "group0_data_model_bytes": 302568,
+          "group1_data_model_bytes": 374608
+        },
+        {
+          "node": 128,
+          "port": 18,
+          "group0_data_model_bytes": 216120,
+          "group1_data_model_bytes": 244936
+        },
+        {
+          "node": 128,
+          "port": 19,
+          "group0_data_model_bytes": 244936,
+          "group1_data_model_bytes": 216120
+        },
+        {
+          "node": 128,
+          "port": 20,
+          "group0_data_model_bytes": 389016,
+          "group1_data_model_bytes": 302568
+        },
+        {
+          "node": 129,
+          "port": 17,
+          "group0_data_model_bytes": 129672,
+          "group1_data_model_bytes": 129672
+        },
+        {
+          "node": 129,
+          "port": 18,
+          "group0_data_model_bytes": 86448,
+          "group1_data_model_bytes": 72040
+        },
+        {
+          "node": 129,
+          "port": 19,
+          "group0_data_model_bytes": 43224,
+          "group1_data_model_bytes": 115264
+        },
+        {
+          "node": 129,
+          "port": 20,
+          "group0_data_model_bytes": 57632,
+          "group1_data_model_bytes": 86448
+        },
+        {
+          "node": 130,
+          "port": 17,
+          "group0_data_model_bytes": 259344,
+          "group1_data_model_bytes": 244936
+        },
+        {
+          "node": 130,
+          "port": 18,
+          "group0_data_model_bytes": 360200,
+          "group1_data_model_bytes": 316976
+        },
+        {
+          "node": 130,
+          "port": 19,
+          "group0_data_model_bytes": 273752,
+          "group1_data_model_bytes": 417832
+        },
+        {
+          "node": 130,
+          "port": 20,
+          "group0_data_model_bytes": 316940,
+          "group1_data_model_bytes": 172896
+        },
+        {
+          "node": 131,
+          "port": 17,
+          "group0_data_model_bytes": 100856,
+          "group1_data_model_bytes": 57632
+        },
+        {
+          "node": 131,
+          "port": 18,
+          "group0_data_model_bytes": 86448,
+          "group1_data_model_bytes": 100856
+        },
+        {
+          "node": 131,
+          "port": 19,
+          "group0_data_model_bytes": 129672,
+          "group1_data_model_bytes": 187304
+        },
+        {
+          "node": 131,
+          "port": 20,
+          "group0_data_model_bytes": 115264,
+          "group1_data_model_bytes": 187304
+        },
+        {
+          "node": 132,
+          "port": 1,
+          "group0_data_model_bytes": 273752,
+          "group1_data_model_bytes": 302568
+        },
+        {
+          "node": 132,
+          "port": 2,
+          "group0_data_model_bytes": 100856,
+          "group1_data_model_bytes": 72040
+        },
+        {
+          "node": 132,
+          "port": 3,
+          "group0_data_model_bytes": 374572,
+          "group1_data_model_bytes": 345792
+        },
+        {
+          "node": 132,
+          "port": 4,
+          "group0_data_model_bytes": 43224,
+          "group1_data_model_bytes": 72040
+        },
+        {
+          "node": 132,
+          "port": 5,
+          "group0_data_model_bytes": 561912,
+          "group1_data_model_bytes": 345792
+        },
+        {
+          "node": 133,
+          "port": 1,
+          "group0_data_model_bytes": 216120,
+          "group1_data_model_bytes": 288160
+        },
+        {
+          "node": 133,
+          "port": 2,
+          "group0_data_model_bytes": 129672,
+          "group1_data_model_bytes": 86448
+        },
+        {
+          "node": 133,
+          "port": 3,
+          "group0_data_model_bytes": 302568,
+          "group1_data_model_bytes": 302568
+        },
+        {
+          "node": 133,
+          "port": 4,
+          "group0_data_model_bytes": 72040,
+          "group1_data_model_bytes": 201712
+        },
+        {
+          "node": 133,
+          "port": 5,
+          "group0_data_model_bytes": 489872,
+          "group1_data_model_bytes": 259344
+        },
+        {
+          "node": 134,
+          "port": 1,
+          "group0_data_model_bytes": 316976,
+          "group1_data_model_bytes": 331384
+        },
+        {
+          "node": 134,
+          "port": 2,
+          "group0_data_model_bytes": 43224,
+          "group1_data_model_bytes": 86448
+        },
+        {
+          "node": 134,
+          "port": 3,
+          "group0_data_model_bytes": 302568,
+          "group1_data_model_bytes": 216120
+        },
+        {
+          "node": 134,
+          "port": 4,
+          "group0_data_model_bytes": 115264,
+          "group1_data_model_bytes": 72040
+        },
+        {
+          "node": 134,
+          "port": 5,
+          "group0_data_model_bytes": 417832,
+          "group1_data_model_bytes": 533096
+        },
+        {
+          "node": 135,
+          "port": 1,
+          "group0_data_model_bytes": 316976,
+          "group1_data_model_bytes": 216120
+        },
+        {
+          "node": 135,
+          "port": 2,
+          "group0_data_model_bytes": 43224,
+          "group1_data_model_bytes": 158488
+        },
+        {
+          "node": 135,
+          "port": 3,
+          "group0_data_model_bytes": 316976,
+          "group1_data_model_bytes": 288160
+        },
+        {
+          "node": 135,
+          "port": 4,
+          "group0_data_model_bytes": 201712,
+          "group1_data_model_bytes": 187304
+        },
+        {
+          "node": 135,
+          "port": 5,
+          "group0_data_model_bytes": 489836,
+          "group1_data_model_bytes": 475464
+        },
+        {
+          "node": 136,
+          "port": 17,
+          "group0_data_model_bytes": 403388,
+          "group1_data_model_bytes": 43224
+        },
+        {
+          "node": 136,
+          "port": 18,
+          "group0_data_model_bytes": 360200,
+          "group1_data_model_bytes": 100856
+        },
+        {
+          "node": 136,
+          "port": 19,
+          "group0_data_model_bytes": 302568,
+          "group1_data_model_bytes": 86448
+        },
+        {
+          "node": 136,
+          "port": 20,
+          "group0_data_model_bytes": 302568,
+          "group1_data_model_bytes": 28816
+        },
+        {
+          "node": 137,
+          "port": 17,
+          "group0_data_model_bytes": 158488,
+          "group1_data_model_bytes": 331348
+        },
+        {
+          "node": 137,
+          "port": 18,
+          "group0_data_model_bytes": 144080,
+          "group1_data_model_bytes": 172896
+        },
+        {
+          "node": 137,
+          "port": 19,
+          "group0_data_model_bytes": 86448,
+          "group1_data_model_bytes": 187304
+        },
+        {
+          "node": 137,
+          "port": 20,
+          "group0_data_model_bytes": 86448,
+          "group1_data_model_bytes": 302568
+        },
+        {
+          "node": 138,
+          "port": 17,
+          "group0_data_model_bytes": 345792,
+          "group1_data_model_bytes": 86448
+        },
+        {
+          "node": 138,
+          "port": 18,
+          "group0_data_model_bytes": 230528,
+          "group1_data_model_bytes": 144044
+        },
+        {
+          "node": 138,
+          "port": 19,
+          "group0_data_model_bytes": 288160,
+          "group1_data_model_bytes": 72040
+        },
+        {
+          "node": 138,
+          "port": 20,
+          "group0_data_model_bytes": 331384,
+          "group1_data_model_bytes": 201712
+        },
+        {
+          "node": 139,
+          "port": 17,
+          "group0_data_model_bytes": 72040,
+          "group1_data_model_bytes": 129672
+        },
+        {
+          "node": 139,
+          "port": 18,
+          "group0_data_model_bytes": 115264,
+          "group1_data_model_bytes": 187304
+        },
+        {
+          "node": 139,
+          "port": 19,
+          "group0_data_model_bytes": 115264,
+          "group1_data_model_bytes": 144080
+        },
+        {
+          "node": 139,
+          "port": 20,
+          "group0_data_model_bytes": 115264,
+          "group1_data_model_bytes": 201712
+        },
+        {
+          "node": 140,
+          "port": 1,
+          "group0_data_model_bytes": 417832,
+          "group1_data_model_bytes": 28816
+        },
+        {
+          "node": 140,
+          "port": 2,
+          "group0_data_model_bytes": 144080,
+          "group1_data_model_bytes": 158488
+        },
+        {
+          "node": 140,
+          "port": 3,
+          "group0_data_model_bytes": 259344,
+          "group1_data_model_bytes": 230492
+        },
+        {
+          "node": 140,
+          "port": 4,
+          "group0_data_model_bytes": 158488,
+          "group1_data_model_bytes": 187304
+        },
+        {
+          "node": 140,
+          "port": 5,
+          "group0_data_model_bytes": 561876,
+          "group1_data_model_bytes": 331384
+        },
+        {
+          "node": 141,
+          "port": 1,
+          "group0_data_model_bytes": 273752,
+          "group1_data_model_bytes": 28816
+        },
+        {
+          "node": 141,
+          "port": 2,
+          "group0_data_model_bytes": 144080,
+          "group1_data_model_bytes": 230492
+        },
+        {
+          "node": 141,
+          "port": 3,
+          "group0_data_model_bytes": 389016,
+          "group1_data_model_bytes": 72040
+        },
+        {
+          "node": 141,
+          "port": 4,
+          "group0_data_model_bytes": 72040,
+          "group1_data_model_bytes": 129672
+        },
+        {
+          "node": 141,
+          "port": 5,
+          "group0_data_model_bytes": 461056,
+          "group1_data_model_bytes": 403424
+        },
+        {
+          "node": 142,
+          "port": 1,
+          "group0_data_model_bytes": 288160,
+          "group1_data_model_bytes": 129672
+        },
+        {
+          "node": 142,
+          "port": 2,
+          "group0_data_model_bytes": 115264,
+          "group1_data_model_bytes": 273752
+        },
+        {
+          "node": 142,
+          "port": 3,
+          "group0_data_model_bytes": 230528,
+          "group1_data_model_bytes": 158488
+        },
+        {
+          "node": 142,
+          "port": 4,
+          "group0_data_model_bytes": 72040,
+          "group1_data_model_bytes": 158488
+        },
+        {
+          "node": 142,
+          "port": 5,
+          "group0_data_model_bytes": 504280,
+          "group1_data_model_bytes": 302568
+        },
+        {
+          "node": 143,
+          "port": 1,
+          "group0_data_model_bytes": 360164,
+          "group1_data_model_bytes": 72040
+        },
+        {
+          "node": 143,
+          "port": 2,
+          "group0_data_model_bytes": 72040,
+          "group1_data_model_bytes": 331384
+        },
+        {
+          "node": 143,
+          "port": 3,
+          "group0_data_model_bytes": 288160,
+          "group1_data_model_bytes": 43224
+        },
+        {
+          "node": 143,
+          "port": 4,
+          "group0_data_model_bytes": 115264,
+          "group1_data_model_bytes": 187304
+        },
+        {
+          "node": 143,
+          "port": 5,
+          "group0_data_model_bytes": 489872,
+          "group1_data_model_bytes": 576320
+        },
+        {
+          "node": 144,
+          "port": 1,
+          "group0_data_model_bytes": 561876,
+          "group1_data_model_bytes": 331384
+        },
+        {
+          "node": 144,
+          "port": 2,
+          "group0_data_model_bytes": 561912,
+          "group1_data_model_bytes": 345792
+        },
+        {
+          "node": 145,
+          "port": 1,
+          "group0_data_model_bytes": 461056,
+          "group1_data_model_bytes": 403424
+        },
+        {
+          "node": 145,
+          "port": 2,
+          "group0_data_model_bytes": 489872,
+          "group1_data_model_bytes": 259344
+        },
+        {
+          "node": 146,
+          "port": 1,
+          "group0_data_model_bytes": 504280,
+          "group1_data_model_bytes": 302568
+        },
+        {
+          "node": 146,
+          "port": 2,
+          "group0_data_model_bytes": 417832,
+          "group1_data_model_bytes": 533096
+        },
+        {
+          "node": 147,
+          "port": 1,
+          "group0_data_model_bytes": 489872,
+          "group1_data_model_bytes": 576320
+        },
+        {
+          "node": 147,
+          "port": 2,
+          "group0_data_model_bytes": 489836,
+          "group1_data_model_bytes": 475464
+        }
+      ],
+      "switch_reason_counts": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "pfc_pause": 0,
+      "max_queue_at_hook_bytes": 98900,
+      "queue_area_byte_ns": 3834177262,
+      "data_loss": {
+        "available": true,
+        "passed": true,
+        "eligible_data_packets": 46,
+        "window_data_packets": 24,
+        "dropped_packets": 24,
+        "window_loss_fraction": 1.0,
+        "whole_observed_loss_fraction": 0.5217391304347826,
+        "affected_message_count": 5,
+        "scope": "actual destination data arrivals including retransmissions; deterministic artificial loss; no congestion causality inference"
+      },
+      "recovery_event_counts": {
+        "ack_progress": 1010,
+        "complete": 882,
+        "old_feedback": 0,
+        "prefix_published": 882,
+        "retry_exhausted": 0,
+        "timeout_retransmit": 10,
+        "timer_started": 882
+      },
+      "recovery_count_scope": "timer retransmit events are recovery requests, not actual source packet count",
+      "result_sha256": "d819f29eef601405106e1ceb5d232b17540709184769612ae0b0649e29317018",
+      "frontend_sha256": "eddeec57052b9d05f9a58b7890f5f4d98c74f79013ab3cccf8e96824b39e5ee1"
+    }
+  },
+  "contrast": {
+    "application_extra_ns": 230910,
+    "extra_source_payload_bytes": 172032,
+    "group_extra_ns": [
+      230910,
+      -4827
+    ],
+    "application_extra_percent": 171.05204675763366,
+    "healthy_group_extra_percent": -3.576562291608008,
+    "graphs": [
+      {
+        "graph_id": "g0.w0",
+        "start_extra_ns": 0,
+        "execution_extra_ns": 235437,
+        "finish_extra_ns": 235437
+      },
+      {
+        "graph_id": "g0.w1",
+        "start_extra_ns": 235437,
+        "execution_extra_ns": -4527,
+        "finish_extra_ns": 230910
+      },
+      {
+        "graph_id": "g1.w0",
+        "start_extra_ns": 0,
+        "execution_extra_ns": -1783,
+        "finish_extra_ns": -1783
+      },
+      {
+        "graph_id": "g1.w1",
+        "start_extra_ns": -1783,
+        "execution_extra_ns": -3044,
+        "finish_extra_ns": -4827
+      }
+    ]
+  },
+  "measured_novel_algorithm_gain": false,
+  "complete_DeepEP": false,
+  "hardware_calibrated": false,
+  "interpretation": "fault costs are measured; neither the loss cost nor healthy-group delay is proven eliminable gain"
+}

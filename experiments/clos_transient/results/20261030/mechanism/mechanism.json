@@ -1,0 +1,1891 @@
+{
+  "passed": true,
+  "cases": {
+    "normal": {
+      "last_first_dispatch_message": {
+        "ack_ns": 17439,
+        "begin": 0,
+        "bytes": 28672,
+        "contributions": 2,
+        "dst": 100,
+        "end": 28672,
+        "id": 1561,
+        "layer": 0,
+        "phase": "dispatch",
+        "plane": 0,
+        "published_ns": 1030,
+        "ready_ns": 1030,
+        "receive_ready_ns": 11433,
+        "src": 48,
+        "stream": 300,
+        "tag": 1561
+      },
+      "dispatch_gate_release_ns": 17439,
+      "recovery_events_for_message_stream": [
+        {
+          "time_ns": 1030,
+          "event": 5,
+          "source": 48,
+          "message_id": 300,
+          "acknowledged_bytes": 0,
+          "highest_sent_bytes": 0,
+          "retries_since_progress": 0,
+          "rto_ns": 80000,
+          "deadline_ns": -1
+        },
+        {
+          "time_ns": 1754,
+          "event": 0,
+          "source": 48,
+          "message_id": 300,
+          "acknowledged_bytes": 0,
+          "highest_sent_bytes": 9000,
+          "retries_since_progress": 0,
+          "rto_ns": 80000,
+          "deadline_ns": 81754
+        },
+        {
+          "time_ns": 14846,
+          "event": 1,
+          "source": 48,
+          "message_id": 300,
+          "acknowledged_bytes": 9000,
+          "highest_sent_bytes": 28672,
+          "retries_since_progress": 0,
+          "rto_ns": 80000,
+          "deadline_ns": 94846
+        },
+        {
+          "time_ns": 16903,
+          "event": 1,
+          "source": 48,
+          "message_id": 300,
+          "acknowledged_bytes": 18000,
+          "highest_sent_bytes": 28672,
+          "retries_since_progress": 0,
+          "rto_ns": 80000,
+          "deadline_ns": 96903
+        },
+        {
+          "time_ns": 17405,
+          "event": 1,
+          "source": 48,
+          "message_id": 300,
+          "acknowledged_bytes": 27000,
+          "highest_sent_bytes": 28672,
+          "retries_since_progress": 0,
+          "rto_ns": 80000,
+          "deadline_ns": 97405
+        },
+        {
+          "time_ns": 17439,
+          "event": 3,
+          "source": 48,
+          "message_id": 300,
+          "acknowledged_bytes": 28672,
+          "highest_sent_bytes": 28672,
+          "retries_since_progress": 0,
+          "rto_ns": 80000,
+          "deadline_ns": -1
+        }
+      ],
+      "actual_source_packets_for_message": [
+        {
+          "time_ns": 1754,
+          "stream": 300,
+          "src": 48,
+          "dst": 100,
+          "nic": 1,
+          "sequence": 0,
+          "payload_bytes": 9000,
+          "packet_uid": 63
+        },
+        {
+          "time_ns": 2618,
+          "stream": 300,
+          "src": 48,
+          "dst": 100,
+          "nic": 1,
+          "sequence": 9000,
+          "payload_bytes": 9000,
+          "packet_uid": 151
+        },
+        {
+          "time_ns": 3087,
+          "stream": 300,
+          "src": 48,
+          "dst": 100,
+          "nic": 1,
+          "sequence": 18000,
+          "payload_bytes": 9000,
+          "packet_uid": 209
+        },
+        {
+          "time_ns": 3302,
+          "stream": 300,
+          "src": 48,
+          "dst": 100,
+          "nic": 1,
+          "sequence": 27000,
+          "payload_bytes": 1672,
+          "packet_uid": 237
+        }
+      ],
+      "critical_message_endpoint_packet_events": [
+        {
+          "time_ns": 1754,
+          "node": 48,
+          "port": 1,
+          "event": 0,
+          "packet_uid": 63,
+          "message_id": 300,
+          "ip_protocol": 17,
+          "sequence": 0,
+          "model_bytes": 9036,
+          "ecn": 0,
+          "egress_queue_bytes": 0,
+          "data_payload_bytes": 9000
+        },
+        {
+          "time_ns": 2618,
+          "node": 48,
+          "port": 1,
+          "event": 0,
+          "packet_uid": 151,
+          "message_id": 300,
+          "ip_protocol": 17,
+          "sequence": 9000,
+          "model_bytes": 9036,
+          "ecn": 0,
+          "egress_queue_bytes": 0,
+          "data_payload_bytes": 9000
+        },
+        {
+          "time_ns": 3087,
+          "node": 48,
+          "port": 1,
+          "event": 0,
+          "packet_uid": 209,
+          "message_id": 300,
+          "ip_protocol": 17,
+          "sequence": 18000,
+          "model_bytes": 9036,
+          "ecn": 0,
+          "egress_queue_bytes": 0,
+          "data_payload_bytes": 9000
+        },
+        {
+          "time_ns": 3302,
+          "node": 48,
+          "port": 1,
+          "event": 0,
+          "packet_uid": 237,
+          "message_id": 300,
+          "ip_protocol": 17,
+          "sequence": 27000,
+          "model_bytes": 1708,
+          "ecn": 0,
+          "egress_queue_bytes": 0,
+          "data_payload_bytes": 1672
+        },
+        {
+          "time_ns": 8840,
+          "node": 100,
+          "port": 1,
+          "event": 1,
+          "packet_uid": 63,
+          "message_id": 300,
+          "ip_protocol": 17,
+          "sequence": 0,
+          "model_bytes": 9036,
+          "ecn": 0,
+          "egress_queue_bytes": 0,
+          "data_payload_bytes": 9000
+        },
+        {
+          "time_ns": 10897,
+          "node": 100,
+          "port": 1,
+          "event": 1,
+          "packet_uid": 151,
+          "message_id": 300,
+          "ip_protocol": 17,
+          "sequence": 9000,
+          "model_bytes": 9036,
+          "ecn": 0,
+          "egress_queue_bytes": 0,
+          "data_payload_bytes": 9000
+        },
+        {
+          "time_ns": 11399,
+          "node": 100,
+          "port": 1,
+          "event": 1,
+          "packet_uid": 209,
+          "message_id": 300,
+          "ip_protocol": 17,
+          "sequence": 18000,
+          "model_bytes": 9036,
+          "ecn": 0,
+          "egress_queue_bytes": 0,
+          "data_payload_bytes": 9000
+        },
+        {
+          "time_ns": 11433,
+          "node": 100,
+          "port": 1,
+          "event": 1,
+          "packet_uid": 237,
+          "message_id": 300,
+          "ip_protocol": 17,
+          "sequence": 27000,
+          "model_bytes": 1708,
+          "ecn": 0,
+          "egress_queue_bytes": 0,
+          "data_payload_bytes": 1672
+        }
+      ],
+      "all_destination_data_arrivals_including_drops": 1892,
+      "all_destination_data_drops": 0,
+      "whole_cluster_observed_destination_loss_fraction": 0.0,
+      "switch_data_hops_checked": 7232,
+      "group_switch_residence_sum_ns": {
+        "0": 490291,
+        "1": 483812
+      },
+      "group_max_switch_residence_ns": {
+        "0": 2163,
+        "1": 2051
+      },
+      "shared_directed_exits": [
+        {
+          "node": 128,
+          "port": 17,
+          "group0_data_model_bytes": 302568,
+          "group1_data_model_bytes": 374608,
+          "group0_residence_sum_ns": 11004,
+          "group1_residence_sum_ns": 8409
+        },
+        {
+          "node": 128,
+          "port": 18,
+          "group0_data_model_bytes": 216120,
+          "group1_data_model_bytes": 244936,
+          "group0_residence_sum_ns": 5205,
+          "group1_residence_sum_ns": 5993
+        },
+        {
+          "node": 128,
+          "port": 19,
+          "group0_data_model_bytes": 244936,
+          "group1_data_model_bytes": 216120,
+          "group0_residence_sum_ns": 3762,
+          "group1_residence_sum_ns": 2639
+        },
+        {
+          "node": 128,
+          "port": 20,
+          "group0_data_model_bytes": 360200,
+          "group1_data_model_bytes": 302568,
+          "group0_residence_sum_ns": 9308,
+          "group1_residence_sum_ns": 11874
+        },
+        {
+          "node": 129,
+          "port": 17,
+          "group0_data_model_bytes": 129672,
+          "group1_data_model_bytes": 129672,
+          "group0_residence_sum_ns": 7199,
+          "group1_residence_sum_ns": 7160
+        },
+        {
+          "node": 129,
+          "port": 18,
+          "group0_data_model_bytes": 86448,
+          "group1_data_model_bytes": 72040,
+          "group0_residence_sum_ns": 5379,
+          "group1_residence_sum_ns": 6874
+        },
+        {
+          "node": 129,
+          "port": 19,
+          "group0_data_model_bytes": 43224,
+          "group1_data_model_bytes": 115264,
+          "group0_residence_sum_ns": 1884,
+          "group1_residence_sum_ns": 5118
+        },
+        {
+          "node": 129,
+          "port": 20,
+          "group0_data_model_bytes": 57632,
+          "group1_data_model_bytes": 86448,
+          "group0_residence_sum_ns": 2943,
+          "group1_residence_sum_ns": 1962
+        },
+        {
+          "node": 130,
+          "port": 17,
+          "group0_data_model_bytes": 259344,
+          "group1_data_model_bytes": 244936,
+          "group0_residence_sum_ns": 7975,
+          "group1_residence_sum_ns": 13179
+        },
+        {
+          "node": 130,
+          "port": 18,
+          "group0_data_model_bytes": 360200,
+          "group1_data_model_bytes": 316976,
+          "group0_residence_sum_ns": 14544,
+          "group1_residence_sum_ns": 20742
+        },
+        {
+          "node": 130,
+          "port": 19,
+          "group0_data_model_bytes": 273752,
+          "group1_data_model_bytes": 417832,
+          "group0_residence_sum_ns": 8330,
+          "group1_residence_sum_ns": 24803
+        },
+        {
+          "node": 130,
+          "port": 20,
+          "group0_data_model_bytes": 316940,
+          "group1_data_model_bytes": 172896,
+          "group0_residence_sum_ns": 9724,
+          "group1_residence_sum_ns": 6866
+        },
+        {
+          "node": 131,
+          "port": 17,
+          "group0_data_model_bytes": 100856,
+          "group1_data_model_bytes": 57632,
+          "group0_residence_sum_ns": 3838,
+          "group1_residence_sum_ns": 1924
+        },
+        {
+          "node": 131,
+          "port": 18,
+          "group0_data_model_bytes": 86448,
+          "group1_data_model_bytes": 100856,
+          "group0_residence_sum_ns": 4280,
+          "group1_residence_sum_ns": 3452
+        },
+        {
+          "node": 131,
+          "port": 19,
+          "group0_data_model_bytes": 129672,
+          "group1_data_model_bytes": 187304,
+          "group0_residence_sum_ns": 6636,
+          "group1_residence_sum_ns": 12138
+        },
+        {
+          "node": 131,
+          "port": 20,
+          "group0_data_model_bytes": 115264,
+          "group1_data_model_bytes": 187304,
+          "group0_residence_sum_ns": 5832,
+          "group1_residence_sum_ns": 15653
+        },
+        {
+          "node": 132,
+          "port": 1,
+          "group0_data_model_bytes": 273752,
+          "group1_data_model_bytes": 302568,
+          "group0_residence_sum_ns": 444,
+          "group1_residence_sum_ns": 294
+        },
+        {
+          "node": 132,
+          "port": 2,
+          "group0_data_model_bytes": 100856,
+          "group1_data_model_bytes": 72040,
+          "group0_residence_sum_ns": 147,
+          "group1_residence_sum_ns": 74
+        },
+        {
+          "node": 132,
+          "port": 3,
+          "group0_data_model_bytes": 345756,
+          "group1_data_model_bytes": 345792,
+          "group0_residence_sum_ns": 872,
+          "group1_residence_sum_ns": 1311
+        },
+        {
+          "node": 132,
+          "port": 4,
+          "group0_data_model_bytes": 43224,
+          "group1_data_model_bytes": 72040,
+          "group0_residence_sum_ns": 90,
+          "group1_residence_sum_ns": 181
+        },
+        {
+          "node": 132,
+          "port": 5,
+          "group0_data_model_bytes": 561912,
+          "group1_data_model_bytes": 345792,
+          "group0_residence_sum_ns": 41952,
+          "group1_residence_sum_ns": 15718
+        },
+        {
+          "node": 133,
+          "port": 1,
+          "group0_data_model_bytes": 216120,
+          "group1_data_model_bytes": 288160,
+          "group0_residence_sum_ns": 199,
+          "group1_residence_sum_ns": 345
+        },
+        {
+          "node": 133,
+          "port": 2,
+          "group0_data_model_bytes": 129672,
+          "group1_data_model_bytes": 86448,
+          "group0_residence_sum_ns": 0,
+          "group1_residence_sum_ns": 0
+        },
+        {
+          "node": 133,
+          "port": 3,
+          "group0_data_model_bytes": 302568,
+          "group1_data_model_bytes": 302568,
+          "group0_residence_sum_ns": 801,
+          "group1_residence_sum_ns": 1242
+        },
+        {
+          "node": 133,
+          "port": 4,
+          "group0_data_model_bytes": 72040,
+          "group1_data_model_bytes": 201712,
+          "group0_residence_sum_ns": 148,
+          "group1_residence_sum_ns": 1127
+        },
+        {
+          "node": 133,
+          "port": 5,
+          "group0_data_model_bytes": 489872,
+          "group1_data_model_bytes": 259344,
+          "group0_residence_sum_ns": 17618,
+          "group1_residence_sum_ns": 10730
+        },
+        {
+          "node": 134,
+          "port": 1,
+          "group0_data_model_bytes": 316976,
+          "group1_data_model_bytes": 331384,
+          "group0_residence_sum_ns": 5584,
+          "group1_residence_sum_ns": 5900
+        },
+        {
+          "node": 134,
+          "port": 2,
+          "group0_data_model_bytes": 43224,
+          "group1_data_model_bytes": 86448,
+          "group0_residence_sum_ns": 0,
+          "group1_residence_sum_ns": 0
+        },
+        {
+          "node": 134,
+          "port": 3,
+          "group0_data_model_bytes": 273752,
+          "group1_data_model_bytes": 216120,
+          "group0_residence_sum_ns": 679,
+          "group1_residence_sum_ns": 532
+        },
+        {
+          "node": 134,
+          "port": 4,
+          "group0_data_model_bytes": 115264,
+          "group1_data_model_bytes": 72040,
+          "group0_residence_sum_ns": 0,
+          "group1_residence_sum_ns": 33
+        },
+        {
+          "node": 134,
+          "port": 5,
+          "group0_data_model_bytes": 417832,
+          "group1_data_model_bytes": 533096,
+          "group0_residence_sum_ns": 17167,
+          "group1_residence_sum_ns": 27987
+        },
+        {
+          "node": 135,
+          "port": 1,
+          "group0_data_model_bytes": 316976,
+          "group1_data_model_bytes": 216120,
+          "group0_residence_sum_ns": 2755,
+          "group1_residence_sum_ns": 1446
+        },
+        {
+          "node": 135,
+          "port": 2,
+          "group0_data_model_bytes": 43224,
+          "group1_data_model_bytes": 158488,
+          "group0_residence_sum_ns": 74,
+          "group1_residence_sum_ns": 173
+        },
+        {
+          "node": 135,
+          "port": 3,
+          "group0_data_model_bytes": 288160,
+          "group1_data_model_bytes": 288160,
+          "group0_residence_sum_ns": 448,
+          "group1_residence_sum_ns": 846
+        },
+        {
+          "node": 135,
+          "port": 4,
+          "group0_data_model_bytes": 201712,
+          "group1_data_model_bytes": 187304,
+          "group0_residence_sum_ns": 532,
+          "group1_residence_sum_ns": 205
+        },
+        {
+          "node": 135,
+          "port": 5,
+          "group0_data_model_bytes": 489836,
+          "group1_data_model_bytes": 475464,
+          "group0_residence_sum_ns": 34062,
+          "group1_residence_sum_ns": 34557
+        },
+        {
+          "node": 136,
+          "port": 17,
+          "group0_data_model_bytes": 403388,
+          "group1_data_model_bytes": 43224,
+          "group0_residence_sum_ns": 1686,
+          "group1_residence_sum_ns": 255
+        },
+        {
+          "node": 136,
+          "port": 18,
+          "group0_data_model_bytes": 360200,
+          "group1_data_model_bytes": 100856,
+          "group0_residence_sum_ns": 3862,
+          "group1_residence_sum_ns": 4257
+        },
+        {
+          "node": 136,
+          "port": 19,
+          "group0_data_model_bytes": 273752,
+          "group1_data_model_bytes": 86448,
+          "group0_residence_sum_ns": 1079,
+          "group1_residence_sum_ns": 4010
+        },
+        {
+          "node": 136,
+          "port": 20,
+          "group0_data_model_bytes": 302568,
+          "group1_data_model_bytes": 28816,
+          "group0_residence_sum_ns": 1455,
+          "group1_residence_sum_ns": 330
+        },
+        {
+          "node": 137,
+          "port": 17,
+          "group0_data_model_bytes": 158488,
+          "group1_data_model_bytes": 331348,
+          "group0_residence_sum_ns": 6733,
+          "group1_residence_sum_ns": 12411
+        },
+        {
+          "node": 137,
+          "port": 18,
+          "group0_data_model_bytes": 144080,
+          "group1_data_model_bytes": 172896,
+          "group0_residence_sum_ns": 3823,
+          "group1_residence_sum_ns": 255
+        },
+        {
+          "node": 137,
+          "port": 19,
+          "group0_data_model_bytes": 86448,
+          "group1_data_model_bytes": 187304,
+          "group0_residence_sum_ns": 2389,
+          "group1_residence_sum_ns": 1368
+        },
+        {
+          "node": 137,
+          "port": 20,
+          "group0_data_model_bytes": 86448,
+          "group1_data_model_bytes": 302568,
+          "group0_residence_sum_ns": 726,
+          "group1_residence_sum_ns": 6384
+        },
+        {
+          "node": 138,
+          "port": 17,
+          "group0_data_model_bytes": 316976,
+          "group1_data_model_bytes": 86448,
+          "group0_residence_sum_ns": 2351,
+          "group1_residence_sum_ns": 1774
+        },
+        {
+          "node": 138,
+          "port": 18,
+          "group0_data_model_bytes": 230528,
+          "group1_data_model_bytes": 144044,
+          "group0_residence_sum_ns": 1475,
+          "group1_residence_sum_ns": 1651
+        },
+        {
+          "node": 138,
+          "port": 19,
+          "group0_data_model_bytes": 288160,
+          "group1_data_model_bytes": 72040,
+          "group0_residence_sum_ns": 4299,
+          "group1_residence_sum_ns": 2836
+        },
+        {
+          "node": 138,
+          "port": 20,
+          "group0_data_model_bytes": 331384,
+          "group1_data_model_bytes": 201712,
+          "group0_residence_sum_ns": 4905,
+          "group1_residence_sum_ns": 5498
+        },
+        {
+          "node": 139,
+          "port": 17,
+          "group0_data_model_bytes": 72040,
+          "group1_data_model_bytes": 129672,
+          "group0_residence_sum_ns": 3188,
+          "group1_residence_sum_ns": 2305
+        },
+        {
+          "node": 139,
+          "port": 18,
+          "group0_data_model_bytes": 115264,
+          "group1_data_model_bytes": 187304,
+          "group0_residence_sum_ns": 5150,
+          "group1_residence_sum_ns": 5101
+        },
+        {
+          "node": 139,
+          "port": 19,
+          "group0_data_model_bytes": 115264,
+          "group1_data_model_bytes": 144080,
+          "group0_residence_sum_ns": 5177,
+          "group1_residence_sum_ns": 3198
+        },
+        {
+          "node": 139,
+          "port": 20,
+          "group0_data_model_bytes": 115264,
+          "group1_data_model_bytes": 201712,
+          "group0_residence_sum_ns": 5936,
+          "group1_residence_sum_ns": 4354
+        },
+        {
+          "node": 140,
+          "port": 1,
+          "group0_data_model_bytes": 417832,
+          "group1_data_model_bytes": 28816,
+          "group0_residence_sum_ns": 1113,
+          "group1_residence_sum_ns": 0
+        },
+        {
+          "node": 140,
+          "port": 2,
+          "group0_data_model_bytes": 144080,
+          "group1_data_model_bytes": 158488,
+          "group0_residence_sum_ns": 189,
+          "group1_residence_sum_ns": 695
+        },
+        {
+          "node": 140,
+          "port": 3,
+          "group0_data_model_bytes": 259344,
+          "group1_data_model_bytes": 230492,
+          "group0_residence_sum_ns": 651,
+          "group1_residence_sum_ns": 648
+        },
+        {
+          "node": 140,
+          "port": 4,
+          "group0_data_model_bytes": 158488,
+          "group1_data_model_bytes": 187304,
+          "group0_residence_sum_ns": 772,
+          "group1_residence_sum_ns": 403
+        },
+        {
+          "node": 140,
+          "port": 5,
+          "group0_data_model_bytes": 533060,
+          "group1_data_model_bytes": 331384,
+          "group0_residence_sum_ns": 24604,
+          "group1_residence_sum_ns": 17918
+        },
+        {
+          "node": 141,
+          "port": 1,
+          "group0_data_model_bytes": 273752,
+          "group1_data_model_bytes": 28816,
+          "group0_residence_sum_ns": 519,
+          "group1_residence_sum_ns": 31
+        },
+        {
+          "node": 141,
+          "port": 2,
+          "group0_data_model_bytes": 144080,
+          "group1_data_model_bytes": 230492,
+          "group0_residence_sum_ns": 74,
+          "group1_residence_sum_ns": 335
+        },
+        {
+          "node": 141,
+          "port": 3,
+          "group0_data_model_bytes": 389016,
+          "group1_data_model_bytes": 72040,
+          "group0_residence_sum_ns": 3551,
+          "group1_residence_sum_ns": 0
+        },
+        {
+          "node": 141,
+          "port": 4,
+          "group0_data_model_bytes": 72040,
+          "group1_data_model_bytes": 129672,
+          "group0_residence_sum_ns": 156,
+          "group1_residence_sum_ns": 0
+        },
+        {
+          "node": 141,
+          "port": 5,
+          "group0_data_model_bytes": 461056,
+          "group1_data_model_bytes": 403424,
+          "group0_residence_sum_ns": 33015,
+          "group1_residence_sum_ns": 26636
+        },
+        {
+          "node": 142,
+          "port": 1,
+          "group0_data_model_bytes": 288160,
+          "group1_data_model_bytes": 129672,
+          "group0_residence_sum_ns": 839,
+          "group1_residence_sum_ns": 75
+        },
+        {
+          "node": 142,
+          "port": 2,
+          "group0_data_model_bytes": 115264,
+          "group1_data_model_bytes": 273752,
+          "group0_residence_sum_ns": 148,
+          "group1_residence_sum_ns": 740
+        },
+        {
+          "node": 142,
+          "port": 3,
+          "group0_data_model_bytes": 230528,
+          "group1_data_model_bytes": 158488,
+          "group0_residence_sum_ns": 2340,
+          "group1_residence_sum_ns": 588
+        },
+        {
+          "node": 142,
+          "port": 4,
+          "group0_data_model_bytes": 72040,
+          "group1_data_model_bytes": 158488,
+          "group0_residence_sum_ns": 0,
+          "group1_residence_sum_ns": 148
+        },
+        {
+          "node": 142,
+          "port": 5,
+          "group0_data_model_bytes": 475464,
+          "group1_data_model_bytes": 302568,
+          "group0_residence_sum_ns": 13197,
+          "group1_residence_sum_ns": 13343
+        },
+        {
+          "node": 143,
+          "port": 1,
+          "group0_data_model_bytes": 360164,
+          "group1_data_model_bytes": 72040,
+          "group0_residence_sum_ns": 588,
+          "group1_residence_sum_ns": 510
+        },
+        {
+          "node": 143,
+          "port": 2,
+          "group0_data_model_bytes": 72040,
+          "group1_data_model_bytes": 331384,
+          "group0_residence_sum_ns": 0,
+          "group1_residence_sum_ns": 1494
+        },
+        {
+          "node": 143,
+          "port": 3,
+          "group0_data_model_bytes": 288160,
+          "group1_data_model_bytes": 43224,
+          "group0_residence_sum_ns": 772,
+          "group1_residence_sum_ns": 0
+        },
+        {
+          "node": 143,
+          "port": 4,
+          "group0_data_model_bytes": 115264,
+          "group1_data_model_bytes": 187304,
+          "group0_residence_sum_ns": 345,
+          "group1_residence_sum_ns": 74
+        },
+        {
+          "node": 143,
+          "port": 5,
+          "group0_data_model_bytes": 489872,
+          "group1_data_model_bytes": 576320,
+          "group0_residence_sum_ns": 41978,
+          "group1_residence_sum_ns": 53182
+        },
+        {
+          "node": 144,
+          "port": 1,
+          "group0_data_model_bytes": 533060,
+          "group1_data_model_bytes": 331384,
+          "group0_residence_sum_ns": 1990,
+          "group1_residence_sum_ns": 1257
+        },
+        {
+          "node": 144,
+          "port": 2,
+          "group0_data_model_bytes": 561912,
+          "group1_data_model_bytes": 345792,
+          "group0_residence_sum_ns": 2611,
+          "group1_residence_sum_ns": 1643
+        },
+        {
+          "node": 145,
+          "port": 1,
+          "group0_data_model_bytes": 461056,
+          "group1_data_model_bytes": 403424,
+          "group0_residence_sum_ns": 1816,
+          "group1_residence_sum_ns": 1593
+        },
+        {
+          "node": 145,
+          "port": 2,
+          "group0_data_model_bytes": 489872,
+          "group1_data_model_bytes": 259344,
+          "group0_residence_sum_ns": 2513,
+          "group1_residence_sum_ns": 1332
+        },
+        {
+          "node": 146,
+          "port": 1,
+          "group0_data_model_bytes": 475464,
+          "group1_data_model_bytes": 302568,
+          "group0_residence_sum_ns": 1998,
+          "group1_residence_sum_ns": 1258
+        },
+        {
+          "node": 146,
+          "port": 2,
+          "group0_data_model_bytes": 417832,
+          "group1_data_model_bytes": 533096,
+          "group0_residence_sum_ns": 2080,
+          "group1_residence_sum_ns": 2734
+        },
+        {
+          "node": 147,
+          "port": 1,
+          "group0_data_model_bytes": 489872,
+          "group1_data_model_bytes": 576320,
+          "group0_residence_sum_ns": 2448,
+          "group1_residence_sum_ns": 2818
+        },
+        {
+          "node": 147,
+          "port": 2,
+          "group0_data_model_bytes": 489836,
+          "group1_data_model_bytes": 475464,
+          "group0_residence_sum_ns": 1994,
+          "group1_residence_sum_ns": 2053
+        }
+      ],
+      "result_sha256": "3442e7af5619ef190a70ec60991d682192f71948857f78c30cd19848107b2704",
+      "scope": "actual switch MacRx to MacTx residence; includes modeled queue/forwarding wait; cumulative across packets/hops, not business critical path"
+    },
+    "local": {
+      "last_first_dispatch_message": {
+        "ack_ns": 254591,
+        "begin": 0,
+        "bytes": 14336,
+        "contributions": 1,
+        "dst": 20,
+        "end": 14336,
+        "id": 3538,
+        "layer": 0,
+        "phase": "dispatch",
+        "plane": 0,
+        "published_ns": 1030,
+        "ready_ns": 1030,
+        "receive_ready_ns": 248585,
+        "src": 112,
+        "stream": 655,
+        "tag": 3538
+      },
+      "dispatch_gate_release_ns": 254591,
+      "recovery_events_for_message_stream": [
+        {
+          "time_ns": 1030,
+          "event": 5,
+          "source": 112,
+          "message_id": 655,
+          "acknowledged_bytes": 0,
+          "highest_sent_bytes": 0,
+          "retries_since_progress": 0,
+          "rto_ns": 80000,
+          "deadline_ns": -1
+        },
+        {
+          "time_ns": 1392,
+          "event": 0,
+          "source": 112,
+          "message_id": 655,
+          "acknowledged_bytes": 0,
+          "highest_sent_bytes": 9000,
+          "retries_since_progress": 0,
+          "rto_ns": 80000,
+          "deadline_ns": 81392
+        },
+        {
+          "time_ns": 81392,
+          "event": 2,
+          "source": 112,
+          "message_id": 655,
+          "acknowledged_bytes": 0,
+          "highest_sent_bytes": 14336,
+          "retries_since_progress": 1,
+          "rto_ns": 160000,
+          "deadline_ns": 241392
+        },
+        {
+          "time_ns": 241392,
+          "event": 2,
+          "source": 112,
+          "message_id": 655,
+          "acknowledged_bytes": 0,
+          "highest_sent_bytes": 14336,
+          "retries_since_progress": 2,
+          "rto_ns": 320000,
+          "deadline_ns": 561392
+        },
+        {
+          "time_ns": 254484,
+          "event": 1,
+          "source": 112,
+          "message_id": 655,
+          "acknowledged_bytes": 9000,
+          "highest_sent_bytes": 14336,
+          "retries_since_progress": 0,
+          "rto_ns": 80000,
+          "deadline_ns": 334484
+        },
+        {
+          "time_ns": 254591,
+          "event": 3,
+          "source": 112,
+          "message_id": 655,
+          "acknowledged_bytes": 14336,
+          "highest_sent_bytes": 14336,
+          "retries_since_progress": 0,
+          "rto_ns": 80000,
+          "deadline_ns": -1
+        }
+      ],
+      "actual_source_packets_for_message": [
+        {
+          "time_ns": 1392,
+          "stream": 655,
+          "src": 112,
+          "dst": 20,
+          "nic": 1,
+          "sequence": 0,
+          "payload_bytes": 9000,
+          "packet_uid": 37
+        },
+        {
+          "time_ns": 2692,
+          "stream": 655,
+          "src": 112,
+          "dst": 20,
+          "nic": 1,
+          "sequence": 9000,
+          "payload_bytes": 5336,
+          "packet_uid": 158
+        },
+        {
+          "time_ns": 81392,
+          "stream": 655,
+          "src": 112,
+          "dst": 20,
+          "nic": 1,
+          "sequence": 0,
+          "payload_bytes": 9000,
+          "packet_uid": 1362
+        },
+        {
+          "time_ns": 81573,
+          "stream": 655,
+          "src": 112,
+          "dst": 20,
+          "nic": 1,
+          "sequence": 9000,
+          "payload_bytes": 5336,
+          "packet_uid": 1366
+        },
+        {
+          "time_ns": 241392,
+          "stream": 655,
+          "src": 112,
+          "dst": 20,
+          "nic": 1,
+          "sequence": 0,
+          "payload_bytes": 9000,
+          "packet_uid": 2038
+        },
+        {
+          "time_ns": 241573,
+          "stream": 655,
+          "src": 112,
+          "dst": 20,
+          "nic": 1,
+          "sequence": 9000,
+          "payload_bytes": 5336,
+          "packet_uid": 2042
+        }
+      ],
+      "critical_message_endpoint_packet_events": [
+        {
+          "time_ns": 1392,
+          "node": 112,
+          "port": 1,
+          "event": 0,
+          "packet_uid": 37,
+          "message_id": 655,
+          "ip_protocol": 17,
+          "sequence": 0,
+          "model_bytes": 9036,
+          "ecn": 0,
+          "egress_queue_bytes": 0,
+          "data_payload_bytes": 9000
+        },
+        {
+          "time_ns": 2692,
+          "node": 112,
+          "port": 1,
+          "event": 0,
+          "packet_uid": 158,
+          "message_id": 655,
+          "ip_protocol": 17,
+          "sequence": 9000,
+          "model_bytes": 5372,
+          "ecn": 0,
+          "egress_queue_bytes": 0,
+          "data_payload_bytes": 5336
+        },
+        {
+          "time_ns": 8840,
+          "node": 20,
+          "port": 1,
+          "event": 2,
+          "packet_uid": 37,
+          "message_id": 655,
+          "ip_protocol": 17,
+          "sequence": 0,
+          "model_bytes": 9036,
+          "ecn": 0,
+          "egress_queue_bytes": 0,
+          "data_payload_bytes": 9000
+        },
+        {
+          "time_ns": 9589,
+          "node": 20,
+          "port": 1,
+          "event": 2,
+          "packet_uid": 158,
+          "message_id": 655,
+          "ip_protocol": 17,
+          "sequence": 9000,
+          "model_bytes": 5372,
+          "ecn": 0,
+          "egress_queue_bytes": 0,
+          "data_payload_bytes": 5336
+        },
+        {
+          "time_ns": 81392,
+          "node": 112,
+          "port": 1,
+          "event": 0,
+          "packet_uid": 1362,
+          "message_id": 655,
+          "ip_protocol": 17,
+          "sequence": 0,
+          "model_bytes": 9036,
+          "ecn": 0,
+          "egress_queue_bytes": 0,
+          "data_payload_bytes": 9000
+        },
+        {
+          "time_ns": 81573,
+          "node": 112,
+          "port": 1,
+          "event": 0,
+          "packet_uid": 1366,
+          "message_id": 655,
+          "ip_protocol": 17,
+          "sequence": 9000,
+          "model_bytes": 5372,
+          "ecn": 0,
+          "egress_queue_bytes": 0,
+          "data_payload_bytes": 5336
+        },
+        {
+          "time_ns": 88478,
+          "node": 20,
+          "port": 1,
+          "event": 2,
+          "packet_uid": 1362,
+          "message_id": 655,
+          "ip_protocol": 17,
+          "sequence": 0,
+          "model_bytes": 9036,
+          "ecn": 0,
+          "egress_queue_bytes": 0,
+          "data_payload_bytes": 9000
+        },
+        {
+          "time_ns": 88585,
+          "node": 20,
+          "port": 1,
+          "event": 2,
+          "packet_uid": 1366,
+          "message_id": 655,
+          "ip_protocol": 17,
+          "sequence": 9000,
+          "model_bytes": 5372,
+          "ecn": 0,
+          "egress_queue_bytes": 0,
+          "data_payload_bytes": 5336
+        },
+        {
+          "time_ns": 241392,
+          "node": 112,
+          "port": 1,
+          "event": 0,
+          "packet_uid": 2038,
+          "message_id": 655,
+          "ip_protocol": 17,
+          "sequence": 0,
+          "model_bytes": 9036,
+          "ecn": 0,
+          "egress_queue_bytes": 0,
+          "data_payload_bytes": 9000
+        },
+        {
+          "time_ns": 241573,
+          "node": 112,
+          "port": 1,
+          "event": 0,
+          "packet_uid": 2042,
+          "message_id": 655,
+          "ip_protocol": 17,
+          "sequence": 9000,
+          "model_bytes": 5372,
+          "ecn": 0,
+          "egress_queue_bytes": 0,
+          "data_payload_bytes": 5336
+        },
+        {
+          "time_ns": 248478,
+          "node": 20,
+          "port": 1,
+          "event": 1,
+          "packet_uid": 2038,
+          "message_id": 655,
+          "ip_protocol": 17,
+          "sequence": 0,
+          "model_bytes": 9036,
+          "ecn": 0,
+          "egress_queue_bytes": 0,
+          "data_payload_bytes": 9000
+        },
+        {
+          "time_ns": 248585,
+          "node": 20,
+          "port": 1,
+          "event": 1,
+          "packet_uid": 2042,
+          "message_id": 655,
+          "ip_protocol": 17,
+          "sequence": 9000,
+          "model_bytes": 5372,
+          "ecn": 0,
+          "egress_queue_bytes": 0,
+          "data_payload_bytes": 5336
+        }
+      ],
+      "all_destination_data_arrivals_including_drops": 1916,
+      "all_destination_data_drops": 24,
+      "whole_cluster_observed_destination_loss_fraction": 0.012526096033402923,
+      "switch_data_hops_checked": 7296,
+      "group_switch_residence_sum_ns": {
+        "0": 324265,
+        "1": 280306
+      },
+      "group_max_switch_residence_ns": {
+        "0": 1836,
+        "1": 1447
+      },
+      "shared_directed_exits": [
+        {
+          "node": 128,
+          "port": 17,
+          "group0_data_model_bytes": 302568,
+          "group1_data_model_bytes": 374608,
+          "group0_residence_sum_ns": 5283,
+          "group1_residence_sum_ns": 4668
+        },
+        {
+          "node": 128,
+          "port": 18,
+          "group0_data_model_bytes": 216120,
+          "group1_data_model_bytes": 244936,
+          "group0_residence_sum_ns": 1685,
+          "group1_residence_sum_ns": 2912
+        },
+        {
+          "node": 128,
+          "port": 19,
+          "group0_data_model_bytes": 244936,
+          "group1_data_model_bytes": 216120,
+          "group0_residence_sum_ns": 1679,
+          "group1_residence_sum_ns": 1019
+        },
+        {
+          "node": 128,
+          "port": 20,
+          "group0_data_model_bytes": 389016,
+          "group1_data_model_bytes": 302568,
+          "group0_residence_sum_ns": 1405,
+          "group1_residence_sum_ns": 1770
+        },
+        {
+          "node": 129,
+          "port": 17,
+          "group0_data_model_bytes": 129672,
+          "group1_data_model_bytes": 129672,
+          "group0_residence_sum_ns": 3382,
+          "group1_residence_sum_ns": 2707
+        },
+        {
+          "node": 129,
+          "port": 18,
+          "group0_data_model_bytes": 86448,
+          "group1_data_model_bytes": 72040,
+          "group0_residence_sum_ns": 2096,
+          "group1_residence_sum_ns": 1205
+        },
+        {
+          "node": 129,
+          "port": 19,
+          "group0_data_model_bytes": 43224,
+          "group1_data_model_bytes": 115264,
+          "group0_residence_sum_ns": 798,
+          "group1_residence_sum_ns": 2941
+        },
+        {
+          "node": 129,
+          "port": 20,
+          "group0_data_model_bytes": 57632,
+          "group1_data_model_bytes": 86448,
+          "group0_residence_sum_ns": 1047,
+          "group1_residence_sum_ns": 1344
+        },
+        {
+          "node": 130,
+          "port": 17,
+          "group0_data_model_bytes": 259344,
+          "group1_data_model_bytes": 244936,
+          "group0_residence_sum_ns": 6991,
+          "group1_residence_sum_ns": 10587
+        },
+        {
+          "node": 130,
+          "port": 18,
+          "group0_data_model_bytes": 360200,
+          "group1_data_model_bytes": 316976,
+          "group0_residence_sum_ns": 9855,
+          "group1_residence_sum_ns": 10444
+        },
+        {
+          "node": 130,
+          "port": 19,
+          "group0_data_model_bytes": 273752,
+          "group1_data_model_bytes": 417832,
+          "group0_residence_sum_ns": 1135,
+          "group1_residence_sum_ns": 13518
+        },
+        {
+          "node": 130,
+          "port": 20,
+          "group0_data_model_bytes": 316940,
+          "group1_data_model_bytes": 172896,
+          "group0_residence_sum_ns": 7138,
+          "group1_residence_sum_ns": 812
+        },
+        {
+          "node": 131,
+          "port": 17,
+          "group0_data_model_bytes": 100856,
+          "group1_data_model_bytes": 57632,
+          "group0_residence_sum_ns": 1538,
+          "group1_residence_sum_ns": 162
+        },
+        {
+          "node": 131,
+          "port": 18,
+          "group0_data_model_bytes": 86448,
+          "group1_data_model_bytes": 100856,
+          "group0_residence_sum_ns": 584,
+          "group1_residence_sum_ns": 2394
+        },
+        {
+          "node": 131,
+          "port": 19,
+          "group0_data_model_bytes": 129672,
+          "group1_data_model_bytes": 187304,
+          "group0_residence_sum_ns": 4398,
+          "group1_residence_sum_ns": 5624
+        },
+        {
+          "node": 131,
+          "port": 20,
+          "group0_data_model_bytes": 115264,
+          "group1_data_model_bytes": 187304,
+          "group0_residence_sum_ns": 2615,
+          "group1_residence_sum_ns": 13560
+        },
+        {
+          "node": 132,
+          "port": 1,
+          "group0_data_model_bytes": 273752,
+          "group1_data_model_bytes": 302568,
+          "group0_residence_sum_ns": 296,
+          "group1_residence_sum_ns": 232
+        },
+        {
+          "node": 132,
+          "port": 2,
+          "group0_data_model_bytes": 100856,
+          "group1_data_model_bytes": 72040,
+          "group0_residence_sum_ns": 147,
+          "group1_residence_sum_ns": 74
+        },
+        {
+          "node": 132,
+          "port": 3,
+          "group0_data_model_bytes": 374572,
+          "group1_data_model_bytes": 345792,
+          "group0_residence_sum_ns": 598,
+          "group1_residence_sum_ns": 1570
+        },
+        {
+          "node": 132,
+          "port": 4,
+          "group0_data_model_bytes": 43224,
+          "group1_data_model_bytes": 72040,
+          "group0_residence_sum_ns": 90,
+          "group1_residence_sum_ns": 181
+        },
+        {
+          "node": 132,
+          "port": 5,
+          "group0_data_model_bytes": 561912,
+          "group1_data_model_bytes": 345792,
+          "group0_residence_sum_ns": 32237,
+          "group1_residence_sum_ns": 8104
+        },
+        {
+          "node": 133,
+          "port": 1,
+          "group0_data_model_bytes": 216120,
+          "group1_data_model_bytes": 288160,
+          "group0_residence_sum_ns": 74,
+          "group1_residence_sum_ns": 442
+        },
+        {
+          "node": 133,
+          "port": 2,
+          "group0_data_model_bytes": 129672,
+          "group1_data_model_bytes": 86448,
+          "group0_residence_sum_ns": 0,
+          "group1_residence_sum_ns": 0
+        },
+        {
+          "node": 133,
+          "port": 3,
+          "group0_data_model_bytes": 302568,
+          "group1_data_model_bytes": 302568,
+          "group0_residence_sum_ns": 765,
+          "group1_residence_sum_ns": 1242
+        },
+        {
+          "node": 133,
+          "port": 4,
+          "group0_data_model_bytes": 72040,
+          "group1_data_model_bytes": 201712,
+          "group0_residence_sum_ns": 0,
+          "group1_residence_sum_ns": 1555
+        },
+        {
+          "node": 133,
+          "port": 5,
+          "group0_data_model_bytes": 489872,
+          "group1_data_model_bytes": 259344,
+          "group0_residence_sum_ns": 8665,
+          "group1_residence_sum_ns": 3019
+        },
+        {
+          "node": 134,
+          "port": 1,
+          "group0_data_model_bytes": 316976,
+          "group1_data_model_bytes": 331384,
+          "group0_residence_sum_ns": 1856,
+          "group1_residence_sum_ns": 2466
+        },
+        {
+          "node": 134,
+          "port": 2,
+          "group0_data_model_bytes": 43224,
+          "group1_data_model_bytes": 86448,
+          "group0_residence_sum_ns": 0,
+          "group1_residence_sum_ns": 0
+        },
+        {
+          "node": 134,
+          "port": 3,
+          "group0_data_model_bytes": 302568,
+          "group1_data_model_bytes": 216120,
+          "group0_residence_sum_ns": 410,
+          "group1_residence_sum_ns": 189
+        },
+        {
+          "node": 134,
+          "port": 4,
+          "group0_data_model_bytes": 115264,
+          "group1_data_model_bytes": 72040,
+          "group0_residence_sum_ns": 16,
+          "group1_residence_sum_ns": 0
+        },
+        {
+          "node": 134,
+          "port": 5,
+          "group0_data_model_bytes": 417832,
+          "group1_data_model_bytes": 533096,
+          "group0_residence_sum_ns": 5885,
+          "group1_residence_sum_ns": 4351
+        },
+        {
+          "node": 135,
+          "port": 1,
+          "group0_data_model_bytes": 316976,
+          "group1_data_model_bytes": 216120,
+          "group0_residence_sum_ns": 4772,
+          "group1_residence_sum_ns": 518
+        },
+        {
+          "node": 135,
+          "port": 2,
+          "group0_data_model_bytes": 43224,
+          "group1_data_model_bytes": 158488,
+          "group0_residence_sum_ns": 0,
+          "group1_residence_sum_ns": 255
+        },
+        {
+          "node": 135,
+          "port": 3,
+          "group0_data_model_bytes": 316976,
+          "group1_data_model_bytes": 288160,
+          "group0_residence_sum_ns": 813,
+          "group1_residence_sum_ns": 710
+        },
+        {
+          "node": 135,
+          "port": 4,
+          "group0_data_model_bytes": 201712,
+          "group1_data_model_bytes": 187304,
+          "group0_residence_sum_ns": 368,
+          "group1_residence_sum_ns": 0
+        },
+        {
+          "node": 135,
+          "port": 5,
+          "group0_data_model_bytes": 489836,
+          "group1_data_model_bytes": 475464,
+          "group0_residence_sum_ns": 15970,
+          "group1_residence_sum_ns": 16250
+        },
+        {
+          "node": 136,
+          "port": 17,
+          "group0_data_model_bytes": 403388,
+          "group1_data_model_bytes": 43224,
+          "group0_residence_sum_ns": 1686,
+          "group1_residence_sum_ns": 148
+        },
+        {
+          "node": 136,
+          "port": 18,
+          "group0_data_model_bytes": 360200,
+          "group1_data_model_bytes": 100856,
+          "group0_residence_sum_ns": 1774,
+          "group1_residence_sum_ns": 1456
+        },
+        {
+          "node": 136,
+          "port": 19,
+          "group0_data_model_bytes": 302568,
+          "group1_data_model_bytes": 86448,
+          "group0_residence_sum_ns": 1060,
+          "group1_residence_sum_ns": 4010
+        },
+        {
+          "node": 136,
+          "port": 20,
+          "group0_data_model_bytes": 302568,
+          "group1_data_model_bytes": 28816,
+          "group0_residence_sum_ns": 912,
+          "group1_residence_sum_ns": 74
+        },
+        {
+          "node": 137,
+          "port": 17,
+          "group0_data_model_bytes": 158488,
+          "group1_data_model_bytes": 331348,
+          "group0_residence_sum_ns": 4915,
+          "group1_residence_sum_ns": 2684
+        },
+        {
+          "node": 137,
+          "port": 18,
+          "group0_data_model_bytes": 144080,
+          "group1_data_model_bytes": 172896,
+          "group0_residence_sum_ns": 3823,
+          "group1_residence_sum_ns": 255
+        },
+        {
+          "node": 137,
+          "port": 19,
+          "group0_data_model_bytes": 86448,
+          "group1_data_model_bytes": 187304,
+          "group0_residence_sum_ns": 1484,
+          "group1_residence_sum_ns": 797
+        },
+        {
+          "node": 137,
+          "port": 20,
+          "group0_data_model_bytes": 86448,
+          "group1_data_model_bytes": 302568,
+          "group0_residence_sum_ns": 686,
+          "group1_residence_sum_ns": 6384
+        },
+        {
+          "node": 138,
+          "port": 17,
+          "group0_data_model_bytes": 345792,
+          "group1_data_model_bytes": 86448,
+          "group0_residence_sum_ns": 2499,
+          "group1_residence_sum_ns": 1199
+        },
+        {
+          "node": 138,
+          "port": 18,
+          "group0_data_model_bytes": 230528,
+          "group1_data_model_bytes": 144044,
+          "group0_residence_sum_ns": 1127,
+          "group1_residence_sum_ns": 618
+        },
+        {
+          "node": 138,
+          "port": 19,
+          "group0_data_model_bytes": 288160,
+          "group1_data_model_bytes": 72040,
+          "group0_residence_sum_ns": 2097,
+          "group1_residence_sum_ns": 81
+        },
+        {
+          "node": 138,
+          "port": 20,
+          "group0_data_model_bytes": 331384,
+          "group1_data_model_bytes": 201712,
+          "group0_residence_sum_ns": 2765,
+          "group1_residence_sum_ns": 4710
+        },
+        {
+          "node": 139,
+          "port": 17,
+          "group0_data_model_bytes": 72040,
+          "group1_data_model_bytes": 129672,
+          "group0_residence_sum_ns": 1493,
+          "group1_residence_sum_ns": 946
+        },
+        {
+          "node": 139,
+          "port": 18,
+          "group0_data_model_bytes": 115264,
+          "group1_data_model_bytes": 187304,
+          "group0_residence_sum_ns": 2981,
+          "group1_residence_sum_ns": 1617
+        },
+        {
+          "node": 139,
+          "port": 19,
+          "group0_data_model_bytes": 115264,
+          "group1_data_model_bytes": 144080,
+          "group0_residence_sum_ns": 4634,
+          "group1_residence_sum_ns": 491
+        },
+        {
+          "node": 139,
+          "port": 20,
+          "group0_data_model_bytes": 115264,
+          "group1_data_model_bytes": 201712,
+          "group0_residence_sum_ns": 2365,
+          "group1_residence_sum_ns": 1167
+        },
+        {
+          "node": 140,
+          "port": 1,
+          "group0_data_model_bytes": 417832,
+          "group1_data_model_bytes": 28816,
+          "group0_residence_sum_ns": 1393,
+          "group1_residence_sum_ns": 0
+        },
+        {
+          "node": 140,
+          "port": 2,
+          "group0_data_model_bytes": 144080,
+          "group1_data_model_bytes": 158488,
+          "group0_residence_sum_ns": 189,
+          "group1_residence_sum_ns": 229
+        },
+        {
+          "node": 140,
+          "port": 3,
+          "group0_data_model_bytes": 259344,
+          "group1_data_model_bytes": 230492,
+          "group0_residence_sum_ns": 417,
+          "group1_residence_sum_ns": 630
+        },
+        {
+          "node": 140,
+          "port": 4,
+          "group0_data_model_bytes": 158488,
+          "group1_data_model_bytes": 187304,
+          "group0_residence_sum_ns": 443,
+          "group1_residence_sum_ns": 337
+        },
+        {
+          "node": 140,
+          "port": 5,
+          "group0_data_model_bytes": 561876,
+          "group1_data_model_bytes": 331384,
+          "group0_residence_sum_ns": 13955,
+          "group1_residence_sum_ns": 6914
+        },
+        {
+          "node": 141,
+          "port": 1,
+          "group0_data_model_bytes": 273752,
+          "group1_data_model_bytes": 28816,
+          "group0_residence_sum_ns": 666,
+          "group1_residence_sum_ns": 0
+        },
+        {
+          "node": 141,
+          "port": 2,
+          "group0_data_model_bytes": 144080,
+          "group1_data_model_bytes": 230492,
+          "group0_residence_sum_ns": 74,
+          "group1_residence_sum_ns": 483
+        },
+        {
+          "node": 141,
+          "port": 3,
+          "group0_data_model_bytes": 389016,
+          "group1_data_model_bytes": 72040,
+          "group0_residence_sum_ns": 5103,
+          "group1_residence_sum_ns": 0
+        },
+        {
+          "node": 141,
+          "port": 4,
+          "group0_data_model_bytes": 72040,
+          "group1_data_model_bytes": 129672,
+          "group0_residence_sum_ns": 0,
+          "group1_residence_sum_ns": 0
+        },
+        {
+          "node": 141,
+          "port": 5,
+          "group0_data_model_bytes": 461056,
+          "group1_data_model_bytes": 403424,
+          "group0_residence_sum_ns": 10272,
+          "group1_residence_sum_ns": 11316
+        },
+        {
+          "node": 142,
+          "port": 1,
+          "group0_data_model_bytes": 288160,
+          "group1_data_model_bytes": 129672,
+          "group0_residence_sum_ns": 1571,
+          "group1_residence_sum_ns": 0
+        },
+        {
+          "node": 142,
+          "port": 2,
+          "group0_data_model_bytes": 115264,
+          "group1_data_model_bytes": 273752,
+          "group0_residence_sum_ns": 0,
+          "group1_residence_sum_ns": 855
+        },
+        {
+          "node": 142,
+          "port": 3,
+          "group0_data_model_bytes": 230528,
+          "group1_data_model_bytes": 158488,
+          "group0_residence_sum_ns": 2850,
+          "group1_residence_sum_ns": 588
+        },
+        {
+          "node": 142,
+          "port": 4,
+          "group0_data_model_bytes": 72040,
+          "group1_data_model_bytes": 158488,
+          "group0_residence_sum_ns": 0,
+          "group1_residence_sum_ns": 285
+        },
+        {
+          "node": 142,
+          "port": 5,
+          "group0_data_model_bytes": 504280,
+          "group1_data_model_bytes": 302568,
+          "group0_residence_sum_ns": 3695,
+          "group1_residence_sum_ns": 6256
+        },
+        {
+          "node": 143,
+          "port": 1,
+          "group0_data_model_bytes": 360164,
+          "group1_data_model_bytes": 72040,
+          "group0_residence_sum_ns": 1031,
+          "group1_residence_sum_ns": 0
+        },
+        {
+          "node": 143,
+          "port": 2,
+          "group0_data_model_bytes": 72040,
+          "group1_data_model_bytes": 331384,
+          "group0_residence_sum_ns": 0,
+          "group1_residence_sum_ns": 827
+        },
+        {
+          "node": 143,
+          "port": 3,
+          "group0_data_model_bytes": 288160,
+          "group1_data_model_bytes": 43224,
+          "group0_residence_sum_ns": 592,
+          "group1_residence_sum_ns": 0
+        },
+        {
+          "node": 143,
+          "port": 4,
+          "group0_data_model_bytes": 115264,
+          "group1_data_model_bytes": 187304,
+          "group0_residence_sum_ns": 345,
+          "group1_residence_sum_ns": 221
+        },
+        {
+          "node": 143,
+          "port": 5,
+          "group0_data_model_bytes": 489872,
+          "group1_data_model_bytes": 576320,
+          "group0_residence_sum_ns": 14624,
+          "group1_residence_sum_ns": 20980
+        },
+        {
+          "node": 144,
+          "port": 1,
+          "group0_data_model_bytes": 561876,
+          "group1_data_model_bytes": 331384,
+          "group0_residence_sum_ns": 1616,
+          "group1_residence_sum_ns": 1009
+        },
+        {
+          "node": 144,
+          "port": 2,
+          "group0_data_model_bytes": 561912,
+          "group1_data_model_bytes": 345792,
+          "group0_residence_sum_ns": 2323,
+          "group1_residence_sum_ns": 1553
+        },
+        {
+          "node": 145,
+          "port": 1,
+          "group0_data_model_bytes": 461056,
+          "group1_data_model_bytes": 403424,
+          "group0_residence_sum_ns": 1503,
+          "group1_residence_sum_ns": 1075
+        },
+        {
+          "node": 145,
+          "port": 2,
+          "group0_data_model_bytes": 489872,
+          "group1_data_model_bytes": 259344,
+          "group0_residence_sum_ns": 2413,
+          "group1_residence_sum_ns": 862
+        },
+        {
+          "node": 146,
+          "port": 1,
+          "group0_data_model_bytes": 504280,
+          "group1_data_model_bytes": 302568,
+          "group0_residence_sum_ns": 1225,
+          "group1_residence_sum_ns": 666
+        },
+        {
+          "node": 146,
+          "port": 2,
+          "group0_data_model_bytes": 417832,
+          "group1_data_model_bytes": 533096,
+          "group0_residence_sum_ns": 1356,
+          "group1_residence_sum_ns": 2314
+        },
+        {
+          "node": 147,
+          "port": 1,
+          "group0_data_model_bytes": 489872,
+          "group1_data_model_bytes": 576320,
+          "group0_residence_sum_ns": 1790,
+          "group1_residence_sum_ns": 2346
+        },
+        {
+          "node": 147,
+          "port": 2,
+          "group0_data_model_bytes": 489836,
+          "group1_data_model_bytes": 475464,
+          "group0_residence_sum_ns": 1740,
+          "group1_residence_sum_ns": 1617
+        }
+      ],
+      "result_sha256": "d819f29eef601405106e1ceb5d232b17540709184769612ae0b0649e29317018",
+      "scope": "actual switch MacRx to MacTx residence; includes modeled queue/forwarding wait; cumulative across packets/hops, not business critical path"
+    }
+  },
+  "critical_stream_id": 655,
+  "fault_end_ns": 100000,
+  "first_retry_ns": 81392,
+  "next_retry_ns": 241392,
+  "interval_fault_end_to_next_critical_tx_ns": 141392,
+  "no_new_network_executed": true,
+  "analysis_registered_after_execution": true,
+  "limitations": "RTO backoff is existing reference behavior. Gap after fault end is not proven eliminable headroom or an algorithm gain."
+}

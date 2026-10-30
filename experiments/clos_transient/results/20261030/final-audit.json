@@ -1,0 +1,113 @@
+{
+  "passed": true,
+  "network_runs": 2,
+  "gpu_endpoints": 128,
+  "ep_sizes": [
+    64,
+    64
+  ],
+  "monitored_seconds": 19.34597512613982,
+  "peak_sampled_group_rss_bytes": 331546624,
+  "task_apparent_bytes_before_this_audit": 133001462,
+  "export_bytes_before_this_audit": 809883,
+  "final_probe": {
+    "schema_version": "moe-ub-host-probe/1",
+    "command": [
+      ".venv/frontend/bin/python",
+      "-B",
+      "-"
+    ],
+    "cwd": "/home/lry/moe-ub-cosim",
+    "started_utc": "2026-10-30T09:22:31.815099+00:00",
+    "limits": {
+      "sampled_group_rss_bytes": 1073741824,
+      "per_process_address_bytes": 2147483648,
+      "artifact_bytes": 536870912,
+      "wall_seconds": 120.0
+    },
+    "peak_sampled_group_rss_bytes": 94818304,
+    "peak_sampled_processes": 1,
+    "status": "completed",
+    "workload_semantics_validated": false,
+    "artifact_roots": [
+      "/home/lry/moe-ub-cosim/runs/clos_transient_20261030",
+      "/home/lry/moe-ub-cosim/experiments/clos_transient/results/20261030"
+    ],
+    "peak_sampled_artifact_bytes": 136687616,
+    "min_free_bytes": 8589934592,
+    "rss_scope": "owned_process_tree_including_detached_descendants",
+    "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+    "disk_sample_interval_seconds": 1.0,
+    "peak_sampled_artifact_apparent_bytes": 133809872,
+    "peak_sampled_artifact_allocated_bytes": 136687616,
+    "process_group": 860868,
+    "child_exit_code": 0,
+    "remaining_live_group_pids": [],
+    "ended_utc": "2026-10-30T09:22:32.216799+00:00",
+    "wall_seconds": 0.401704577030614,
+    "max_waited_child_rss_kib": 105908,
+    "artifact_bytes_before_report": 1113,
+    "aggregate_artifact_bytes_before_report": 136687616,
+    "aggregate_artifact_usage_before_report": {
+      "apparent_bytes": 133809872,
+      "allocated_bytes": 136687616
+    }
+  },
+  "closeout_probe": {
+    "schema_version": "moe-ub-host-probe/1",
+    "command": [
+      ".venv/frontend/bin/python",
+      "-B",
+      "experiments/clos_transient/closeout.py",
+      "--root",
+      "runs/clos_transient_20261030",
+      "--backend-receipt",
+      "runs/phase_completion_20261030/build-configured/backend.json",
+      "--output",
+      "experiments/clos_transient/results/20261030"
+    ],
+    "cwd": "/home/lry/moe-ub-cosim",
+    "started_utc": "2026-10-30T09:21:54.837563+00:00",
+    "limits": {
+      "sampled_group_rss_bytes": 1073741824,
+      "per_process_address_bytes": 2147483648,
+      "artifact_bytes": 536870912,
+      "wall_seconds": 120.0
+    },
+    "peak_sampled_group_rss_bytes": 7495680,
+    "peak_sampled_processes": 1,
+    "status": "completed",
+    "workload_semantics_validated": false,
+    "artifact_roots": [
+      "/home/lry/moe-ub-cosim/runs/clos_transient_20261030",
+      "/home/lry/moe-ub-cosim/experiments/clos_transient/results/20261030"
+    ],
+    "peak_sampled_artifact_bytes": 136675328,
+    "min_free_bytes": 8589934592,
+    "rss_scope": "owned_process_tree_including_detached_descendants",
+    "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+    "disk_sample_interval_seconds": 1.0,
+    "peak_sampled_artifact_apparent_bytes": 133807041,
+    "peak_sampled_artifact_allocated_bytes": 136675328,
+    "process_group": 860824,
+    "child_exit_code": 0,
+    "remaining_live_group_pids": [],
+    "ended_utc": "2026-10-30T09:21:55.023562+00:00",
+    "wall_seconds": 0.1860019700252451,
+    "max_waited_child_rss_kib": 23840,
+    "artifact_bytes_before_report": 683,
+    "aggregate_artifact_bytes_before_report": 136675328,
+    "aggregate_artifact_usage_before_report": {
+      "apparent_bytes": 133807041,
+      "allocated_bytes": 136675328
+    }
+  },
+  "independent_audit_stdout": "PASS: export/source hashes; report links; originals; actual gate arrivals; paired result integrity\n",
+  "fixed_dependencies_checked": 13,
+  "dependency_check_passed": true,
+  "retained_failures": [
+    "monitors/prepare/probe.json"
+  ],
+  "new_network_algorithm_gain_proven": false,
+  "overall_research_goal_active": true
+}

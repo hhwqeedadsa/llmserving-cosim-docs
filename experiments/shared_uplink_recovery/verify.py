@@ -1,7 +1,6 @@
 """Independently check raw bytes, physical DATA hops and held-constant inputs."""
 import argparse
 from collections import Counter, defaultdict
-from copy import deepcopy
 import gc
 import hashlib
 import json
@@ -30,7 +29,8 @@ def main():
         for name, h in f[group].items():
             assert sha(root/name) == h
     normal_config = load(Path(f['normal'])/'input.json')
-    normal_config['route_replay']['manifest']['path'] = '<manifest>'
+    normal_config['route_replay']['manifest'] = '<independently-checked-route-identity>'
+    normal_manifest = None
     baseline_protocol = load(Path(f['normal'])/'rdma.json')
     total_hops = total_messages = total_queue_rows = 0
     counts = {}
@@ -41,7 +41,17 @@ def main():
         assert r['passed'] and r['drained'] and load(d/'verification.json')['passed']
         assert (r['gpu_count'], r['switch_count']) == (128, 20)
         conf = load(d/'input.json')
-        conf['route_replay']['manifest']['path'] = '<manifest>'
+        ref = conf['route_replay']['manifest']
+        route_path = d/ref['path']
+        assert sha(route_path) == ref['sha256']
+        manifest = load(route_path)
+        for file in manifest['files']:
+            assert sha(route_path.parent/file['file']['path']) == file['file']['sha256']
+            file['file']['path'] = '<same-verified-content>'
+        if normal_manifest is None:
+            normal_manifest = manifest
+        assert manifest == normal_manifest
+        conf['route_replay']['manifest'] = '<independently-checked-route-identity>'
         assert conf == normal_config
         assert len(conf['route_replay']['requests']) == 15
         assert conf['transport']['transport_recovery']['initial_rto_ns'] == 17000

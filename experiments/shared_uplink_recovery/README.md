@@ -27,6 +27,7 @@
 用`.venv/frontend/bin/python -B`执行下列入口；`monitor.py`记录真实命令、退出状态和资源，输出目录必须不存在：
 
 ```bash
+export PYTHONPATH=python
 python experiments/shared_uplink_recovery/monitor.py --root /path/to/new-root --stage prepare -- \
   python experiments/shared_uplink_recovery/study.py prepare \
   --source-manifest /path/to/source-manifest.json --source-base /path/to/repo \

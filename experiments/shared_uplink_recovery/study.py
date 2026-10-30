@@ -45,8 +45,19 @@ def public(command, receipt):
 
 def normalize(c):
     c = deepcopy(c)
-    c['route_replay']['manifest']['path'] = '<same-hash-manifest>'
+    c['route_replay']['manifest'] = '<independently-checked-route-identity>'
     return c
+
+
+def route_identity(c, base):
+    ref = c['route_replay']['manifest']
+    path = base/ref['path']
+    assert sha(path) == ref['sha256']
+    manifest = load(path)
+    for row in manifest['files']:
+        assert sha(path.parent/row['file']['path']) == row['file']['sha256']
+        row['file']['path'] = '<content-addressed>'
+    return manifest
 
 
 def prepare(a):
@@ -70,6 +81,7 @@ def prepare(a):
     c = load(p/'service-buffers.json')
     c['inflight_helpers']['policy'] = 'observe_only/1'
     c['transport']['transport_recovery']['initial_rto_ns'] = 17000
+    assert route_identity(c, ROOT) == route_identity(load(normal/'input.json'), normal)
     assert normalize(c) == normalize(load(normal/'input.json'))
     save(p/'service-fixed.json', c)
     topology = load(p/'topology/topology.json')
@@ -233,6 +245,7 @@ def analyze(a):
     rows = {}
     for name, directory in [('normal', Path(f['normal'])), *[(n, study/n) for n in CASES]]:
         assert hashes(directory/'graphs') == f['normal_graphs_sha256']
+        assert route_identity(load(directory/'input.json'), directory) == route_identity(load(Path(f['prepared'])/'service-fixed.json'), ROOT)
         assert normalize(load(directory/'input.json')) == normalize(load(Path(f['prepared'])/'service-fixed.json'))
         rows[name] = summary(directory, f['failed_link'])
         gc.collect()

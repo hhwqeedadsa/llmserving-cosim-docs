@@ -1,0 +1,369 @@
+{
+  "passed": true,
+  "new_network_executions": 0,
+  "changed_healthy_messages": [
+    {
+      "message": 26977,
+      "graph": "g2.w1",
+      "phase": "L1.combine",
+      "src": 26,
+      "dst": 34,
+      "ready_change_ns": 0,
+      "receive_change_ns": 0,
+      "ack_change_ns": 150,
+      "ack_source_tx_change_ns": 0,
+      "ack_path_residence_change_ns": 150,
+      "baseline_phase_slack_ns": 7626,
+      "remaining_phase_slack_ns": 7476,
+      "phase_release_change_ns": 0,
+      "baseline_ack": {
+        "sequence": 57600,
+        "source_tx_ns": 129513,
+        "source_rx_ns": 133518,
+        "hops": [
+          {
+            "node": 128,
+            "port": 17,
+            "rx_ns": 130514,
+            "tx_ns": 130514
+          },
+          {
+            "node": 132,
+            "port": 4,
+            "rx_ns": 131515,
+            "tx_ns": 131515
+          },
+          {
+            "node": 131,
+            "port": 3,
+            "rx_ns": 132516,
+            "tx_ns": 132517
+          }
+        ],
+        "residence_ns": 1
+      },
+      "calibrated_ack": {
+        "sequence": 57600,
+        "source_tx_ns": 129513,
+        "source_rx_ns": 133668,
+        "hops": [
+          {
+            "node": 128,
+            "port": 17,
+            "rx_ns": 130514,
+            "tx_ns": 130557
+          },
+          {
+            "node": 132,
+            "port": 4,
+            "rx_ns": 131558,
+            "tx_ns": 131666
+          },
+          {
+            "node": 131,
+            "port": 3,
+            "rx_ns": 132667,
+            "tx_ns": 132667
+          }
+        ],
+        "residence_ns": 151
+      }
+    },
+    {
+      "message": 27034,
+      "graph": "g2.w1",
+      "phase": "L1.combine",
+      "src": 34,
+      "dst": 10,
+      "ready_change_ns": 0,
+      "receive_change_ns": 0,
+      "ack_change_ns": 207,
+      "ack_source_tx_change_ns": 0,
+      "ack_path_residence_change_ns": 207,
+      "baseline_phase_slack_ns": 7727,
+      "remaining_phase_slack_ns": 7520,
+      "phase_release_change_ns": 0,
+      "baseline_ack": {
+        "sequence": 43264,
+        "source_tx_ns": 129413,
+        "source_rx_ns": 133417,
+        "hops": [
+          {
+            "node": 129,
+            "port": 19,
+            "rx_ns": 130414,
+            "tx_ns": 130414
+          },
+          {
+            "node": 134,
+            "port": 1,
+            "rx_ns": 131415,
+            "tx_ns": 131415
+          },
+          {
+            "node": 128,
+            "port": 11,
+            "rx_ns": 132416,
+            "tx_ns": 132416
+          }
+        ],
+        "residence_ns": 0
+      },
+      "calibrated_ack": {
+        "sequence": 43264,
+        "source_tx_ns": 129413,
+        "source_rx_ns": 133624,
+        "hops": [
+          {
+            "node": 129,
+            "port": 19,
+            "rx_ns": 130414,
+            "tx_ns": 130446
+          },
+          {
+            "node": 134,
+            "port": 1,
+            "rx_ns": 131447,
+            "tx_ns": 131622
+          },
+          {
+            "node": 128,
+            "port": 11,
+            "rx_ns": 132623,
+            "tx_ns": 132623
+          }
+        ],
+        "residence_ns": 207
+      }
+    },
+    {
+      "message": 27286,
+      "graph": "g2.w1",
+      "phase": "L1.combine",
+      "src": 66,
+      "dst": 26,
+      "ready_change_ns": 0,
+      "receive_change_ns": 0,
+      "ack_change_ns": 1,
+      "ack_source_tx_change_ns": 0,
+      "ack_path_residence_change_ns": 1,
+      "baseline_phase_slack_ns": 1841,
+      "remaining_phase_slack_ns": 1840,
+      "phase_release_change_ns": 0,
+      "baseline_ack": {
+        "sequence": 57600,
+        "source_tx_ns": 133297,
+        "source_rx_ns": 139303,
+        "hops": [
+          {
+            "node": 131,
+            "port": 18,
+            "rx_ns": 134298,
+            "tx_ns": 134298
+          },
+          {
+            "node": 133,
+            "port": 5,
+            "rx_ns": 135299,
+            "tx_ns": 135299
+          },
+          {
+            "node": 145,
+            "port": 2,
+            "rx_ns": 136300,
+            "tx_ns": 136300
+          },
+          {
+            "node": 141,
+            "port": 1,
+            "rx_ns": 137301,
+            "tx_ns": 137301
+          },
+          {
+            "node": 136,
+            "port": 3,
+            "rx_ns": 138302,
+            "tx_ns": 138302
+          }
+        ],
+        "residence_ns": 0
+      },
+      "calibrated_ack": {
+        "sequence": 57600,
+        "source_tx_ns": 133297,
+        "source_rx_ns": 139304,
+        "hops": [
+          {
+            "node": 131,
+            "port": 18,
+            "rx_ns": 134298,
+            "tx_ns": 134298
+          },
+          {
+            "node": 133,
+            "port": 5,
+            "rx_ns": 135299,
+            "tx_ns": 135300
+          },
+          {
+            "node": 145,
+            "port": 2,
+            "rx_ns": 136301,
+            "tx_ns": 136301
+          },
+          {
+            "node": 141,
+            "port": 1,
+            "rx_ns": 137302,
+            "tx_ns": 137302
+          },
+          {
+            "node": 136,
+            "port": 3,
+            "rx_ns": 138303,
+            "tx_ns": 138303
+          }
+        ],
+        "residence_ns": 1
+      }
+    }
+  ],
+  "changed_healthy_data_hops": [
+    {
+      "stream": "946",
+      "sequence": "0",
+      "node": "134",
+      "port": "1",
+      "baseline_rx_ns": "130427",
+      "treatment_rx_ns": "130427",
+      "baseline_tx_ns": "130427",
+      "treatment_tx_ns": "130573",
+      "residence_change_ns": "146"
+    },
+    {
+      "stream": "962",
+      "sequence": "14400",
+      "node": "134",
+      "port": "1",
+      "baseline_rx_ns": "130608",
+      "treatment_rx_ns": "130608",
+      "baseline_tx_ns": "130608",
+      "treatment_tx_ns": "130754",
+      "residence_change_ns": "146"
+    },
+    {
+      "stream": "917",
+      "sequence": "43200",
+      "node": "134",
+      "port": "3",
+      "baseline_rx_ns": "130789",
+      "treatment_rx_ns": "130789",
+      "baseline_tx_ns": "130789",
+      "treatment_tx_ns": "130935",
+      "residence_change_ns": "146"
+    },
+    {
+      "stream": "763",
+      "sequence": "28800",
+      "node": "132",
+      "port": "4",
+      "baseline_rx_ns": "131659",
+      "treatment_rx_ns": "131659",
+      "baseline_tx_ns": "131659",
+      "treatment_tx_ns": "131668",
+      "residence_change_ns": "9"
+    },
+    {
+      "stream": "917",
+      "sequence": "43200",
+      "node": "130",
+      "port": "7",
+      "baseline_rx_ns": "131970",
+      "treatment_rx_ns": "132116",
+      "baseline_tx_ns": "132007",
+      "treatment_tx_ns": "132116",
+      "residence_change_ns": "-37"
+    }
+  ],
+  "healthy_data_hop_residence_sum_change_ns": 410,
+  "target_primary_phase_changes": [
+    {
+      "graph": "g0.w0",
+      "phase": "L0.combine",
+      "change_ns": 0
+    },
+    {
+      "graph": "g0.w0",
+      "phase": "L0.dispatch",
+      "change_ns": 0
+    },
+    {
+      "graph": "g0.w0",
+      "phase": "L1.combine",
+      "change_ns": 0
+    },
+    {
+      "graph": "g0.w0",
+      "phase": "L1.dispatch",
+      "change_ns": 0
+    },
+    {
+      "graph": "g0.w1",
+      "phase": "L0.combine",
+      "change_ns": 0
+    },
+    {
+      "graph": "g0.w1",
+      "phase": "L0.dispatch",
+      "change_ns": 0
+    },
+    {
+      "graph": "g0.w1",
+      "phase": "L1.combine",
+      "change_ns": 0
+    },
+    {
+      "graph": "g0.w1",
+      "phase": "L1.dispatch",
+      "change_ns": 0
+    }
+  ],
+  "actual_race": {
+    "backup_start_ns": 127000,
+    "original_remaining_until_result_ns": 74866,
+    "backup_execution_ns": 122510,
+    "backup_finished_ns": 249510,
+    "primary_finished_ns": 201866,
+    "losing_backup_after_result_ns": 47644,
+    "primary_waves": [
+      {
+        "graph_id": "g0.w0",
+        "step": 0,
+        "submitted_ns": 0,
+        "finished_ns": 140340
+      },
+      {
+        "graph_id": "g0.w1",
+        "step": 1,
+        "submitted_ns": 140340,
+        "finished_ns": 201866
+      }
+    ],
+    "replica_waves": [
+      {
+        "graph_id": "g1.w0",
+        "step": 0,
+        "submitted_ns": 127000,
+        "finished_ns": 187810
+      },
+      {
+        "graph_id": "g1.w1",
+        "step": 1,
+        "submitted_ns": 187810,
+        "finished_ns": 249510
+      }
+    ]
+  },
+  "analyzer_sha256": "32608458a78eb4bdc2c73a165a423114113bef9f2e4f4163754edafbeaedbd23",
+  "scope": "Read-only retrospective evaluation. Remaining runtime and ACK packet paths are truth for explanation, never online policy inputs. No lower-bound or optimality claim."
+}

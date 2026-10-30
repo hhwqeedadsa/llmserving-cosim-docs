@@ -1,0 +1,272 @@
+{
+  "passed": true,
+  "new_networks_exactly_once": 2,
+  "inherited_networks_unchanged": 4,
+  "source_and_backend_and_input_hashes_checked": true,
+  "complete_source_and_phase_and_ack_and_timer_and_kv_checks": true,
+  "healthy_hops_each_comparison": 4264,
+  "healthy_hops_unmatched": 0,
+  "links_checked": 52,
+  "links": [
+    {
+      "file": "experiments/calibrated_hedge/results/20261030/report.html",
+      "target": "figures/comparison.png"
+    },
+    {
+      "file": "experiments/calibrated_hedge/results/20261030/report.html",
+      "target": "figures/race.png"
+    },
+    {
+      "file": "experiments/calibrated_hedge/results/20261030/report.html",
+      "target": "analysis.json"
+    },
+    {
+      "file": "experiments/calibrated_hedge/results/20261030/report.html",
+      "target": "mechanism.json"
+    },
+    {
+      "file": "experiments/calibrated_hedge/results/20261030/report.html",
+      "target": "calibration.json"
+    },
+    {
+      "file": "experiments/calibrated_hedge/results/20261030/report.html",
+      "target": "frozen.json"
+    },
+    {
+      "file": "experiments/calibrated_hedge/results/20261030/report.html",
+      "target": "receipt.json"
+    },
+    {
+      "file": "experiments/calibrated_hedge/results/20261030/report.html",
+      "target": "resources.json"
+    },
+    {
+      "file": "experiments/calibrated_hedge/results/20261030/report.html",
+      "target": "final-audit.json"
+    },
+    {
+      "file": "experiments/calibrated_hedge/results/20261030/report.html",
+      "target": "README.md"
+    },
+    {
+      "file": "experiments/calibrated_hedge/results/20261030/report.html",
+      "target": "../../README.md"
+    },
+    {
+      "file": "experiments/calibrated_hedge/results/20261030/report.html",
+      "target": "../../protocol.md"
+    },
+    {
+      "file": "experiments/calibrated_hedge/results/20261030/report.html",
+      "target": "metrics/calibrated-local-healthy-gates.csv"
+    },
+    {
+      "file": "experiments/calibrated_hedge/results/20261030/report.html",
+      "target": "metrics/calibrated-local-healthy-matched.csv"
+    },
+    {
+      "file": "experiments/calibrated_hedge/results/20261030/report.html",
+      "target": "metrics/calibrated-local-queue-integrals.csv"
+    },
+    {
+      "file": "experiments/calibrated_hedge/results/20261030/report.html",
+      "target": "metrics/calibrated-local-switch-residence.csv"
+    },
+    {
+      "file": "experiments/calibrated_hedge/results/20261030/report.html",
+      "target": "metrics/calibrated-normal-healthy-gates.csv"
+    },
+    {
+      "file": "experiments/calibrated_hedge/results/20261030/report.html",
+      "target": "metrics/calibrated-normal-healthy-matched.csv"
+    },
+    {
+      "file": "experiments/calibrated_hedge/results/20261030/report.html",
+      "target": "metrics/calibrated-normal-queue-integrals.csv"
+    },
+    {
+      "file": "experiments/calibrated_hedge/results/20261030/report.html",
+      "target": "metrics/calibrated-normal-switch-residence.csv"
+    },
+    {
+      "file": "experiments/calibrated_hedge/results/20261030/report.html",
+      "target": "metrics/control-local-queue-integrals.csv"
+    },
+    {
+      "file": "experiments/calibrated_hedge/results/20261030/report.html",
+      "target": "metrics/control-local-switch-residence.csv"
+    },
+    {
+      "file": "experiments/calibrated_hedge/results/20261030/report.html",
+      "target": "metrics/control-normal-queue-integrals.csv"
+    },
+    {
+      "file": "experiments/calibrated_hedge/results/20261030/report.html",
+      "target": "metrics/control-normal-switch-residence.csv"
+    },
+    {
+      "file": "experiments/calibrated_hedge/results/20261030/report.html",
+      "target": "metrics/early-local-healthy-gates.csv"
+    },
+    {
+      "file": "experiments/calibrated_hedge/results/20261030/report.html",
+      "target": "metrics/early-local-healthy-matched.csv"
+    },
+    {
+      "file": "experiments/calibrated_hedge/results/20261030/report.html",
+      "target": "metrics/early-local-queue-integrals.csv"
+    },
+    {
+      "file": "experiments/calibrated_hedge/results/20261030/report.html",
+      "target": "metrics/early-local-switch-residence.csv"
+    },
+    {
+      "file": "experiments/calibrated_hedge/results/20261030/report.html",
+      "target": "metrics/early-normal-healthy-gates.csv"
+    },
+    {
+      "file": "experiments/calibrated_hedge/results/20261030/report.html",
+      "target": "metrics/early-normal-healthy-matched.csv"
+    },
+    {
+      "file": "experiments/calibrated_hedge/results/20261030/report.html",
+      "target": "metrics/early-normal-queue-integrals.csv"
+    },
+    {
+      "file": "experiments/calibrated_hedge/results/20261030/report.html",
+      "target": "metrics/early-normal-switch-residence.csv"
+    },
+    {
+      "file": "experiments/calibrated_hedge/results/20261030/report.html",
+      "target": "metrics/summary.csv"
+    },
+    {
+      "file": "experiments/calibrated_hedge/results/20261030/README.md",
+      "target": "report.html"
+    },
+    {
+      "file": "experiments/calibrated_hedge/results/20261030/README.md",
+      "target": "analysis.json"
+    },
+    {
+      "file": "experiments/calibrated_hedge/results/20261030/README.md",
+      "target": "mechanism.json"
+    },
+    {
+      "file": "experiments/calibrated_hedge/results/20261030/README.md",
+      "target": "calibration.json"
+    },
+    {
+      "file": "experiments/calibrated_hedge/results/20261030/README.md",
+      "target": "frozen.json"
+    },
+    {
+      "file": "experiments/calibrated_hedge/results/20261030/README.md",
+      "target": "receipt.json"
+    },
+    {
+      "file": "experiments/calibrated_hedge/results/20261030/README.md",
+      "target": "resources.json"
+    },
+    {
+      "file": "experiments/calibrated_hedge/results/20261030/README.md",
+      "target": "final-audit.json"
+    },
+    {
+      "file": "experiments/calibrated_hedge/results/20261030/README.md",
+      "target": "../../README.md"
+    },
+    {
+      "file": "experiments/calibrated_hedge/results/20261030/README.md",
+      "target": "../../protocol.md"
+    },
+    {
+      "file": "experiments/calibrated_hedge/README.md",
+      "target": "protocol.md"
+    },
+    {
+      "file": "experiments/calibrated_hedge/README.md",
+      "target": "results/20261030/report.html"
+    },
+    {
+      "file": "experiments/calibrated_hedge/README.md",
+      "target": "results/20261030/README.md"
+    },
+    {
+      "file": "experiments/calibrated_hedge/README.md",
+      "target": "../sequential_externality/README.md"
+    },
+    {
+      "file": "docs/tasks/current.md",
+      "target": "../../experiments/calibrated_hedge/results/20261030/report.html"
+    },
+    {
+      "file": "docs/tasks/current.md",
+      "target": "../../experiments/calibrated_hedge/results/20261030/README.md"
+    },
+    {
+      "file": "docs/tasks/current.md",
+      "target": "../../experiments/calibrated_hedge/results/20261030/analysis.json"
+    },
+    {
+      "file": "docs/tasks/current.md",
+      "target": "../../experiments/calibrated_hedge/results/20261030/mechanism.json"
+    },
+    {
+      "file": "docs/tasks/current.md",
+      "target": "../../experiments/calibrated_hedge/README.md"
+    }
+  ],
+  "csv_files": 21,
+  "portable_report_matches_generator": true,
+  "browser_executables": {
+    "chromium": null,
+    "chromium-browser": null,
+    "google-chrome": null,
+    "firefox": null,
+    "playwright": null
+  },
+  "browser_rendering_checked": false,
+  "images_visually_inspected": 2,
+  "failures_retained": [
+    "explain"
+  ],
+  "no_new_platform_changes": true,
+  "new_algorithm_benefit_proven": false,
+  "overall_goal_complete": false,
+  "artifact_sha256": {
+    "README.md": "0a046a342de86b20b82b87e556d6674f67f6f1bad34afed26ad60f9cb937ca6f",
+    "analysis.json": "426247c317b6695e303fc90aea9e13318cdb1b31174acae65c97647be7945e3c",
+    "calibration.json": "9c557a132ef02f77a53f93d77a61e8da532f862505be2ecba7d301427b3ad973",
+    "figures/comparison.png": "697b14680474a1d5a121ac7851b86914455f0c59adecc92227a08400454ef81f",
+    "figures/comparison.svg": "2ef9d2013dbc189ce01cbdf6098bb6705fce2efc9de14f4e83dd8db87868332e",
+    "figures/race.png": "4c2b0bf8d9ec30848a6117431886dac26f13602a1d3005aec9dac78518bdf943",
+    "figures/race.svg": "6424913496592140920fcd7b93514453c3a61245fca64f10e8d3dbdaceb37433",
+    "frozen.json": "54357a3f732e260e4e2aee5e8077fe1e9222b95e2d4952bbe8796f46f52a635c",
+    "mechanism.json": "96520ef3a7b33f4d23c00d7d565dd6ab8efcea867b039bf6bb2085d716796c4c",
+    "metrics/calibrated-local-healthy-gates.csv": "47aeed2439e74987b87a6141d2b7b7727cf25d8ea886282f56d343d287f44e4d",
+    "metrics/calibrated-local-healthy-matched.csv": "bd14ce685c6dbca8beec802488b7a193e98e811570859c699b6c5b7189fe7f2a",
+    "metrics/calibrated-local-queue-integrals.csv": "e16fb50558ba665f3f307fb74909a74eeba6a6f3bfd8c9e05d0e0e1190fdd029",
+    "metrics/calibrated-local-switch-residence.csv": "63f11ba32edfa4be4115a88b9238e769f2b635c8a147cae6dd2ac5c0411d5619",
+    "metrics/calibrated-normal-healthy-gates.csv": "c5ef4f84228f7a876e00452deae4a1ab55d4631ba51f599187a839a76f0a4026",
+    "metrics/calibrated-normal-healthy-matched.csv": "05022562860256bf71d4637ef714d95f904a7b5b73c79fee98bb8f768cf8ec71",
+    "metrics/calibrated-normal-queue-integrals.csv": "5672fbea84439db75c3b6ca995de02c38adf0bb024778233ea609e70d0cddf8b",
+    "metrics/calibrated-normal-switch-residence.csv": "133eb78d341afb1c8aded6ec106797ba65487cf781ccfad5ab5cb98bbc060c3b",
+    "metrics/control-local-queue-integrals.csv": "de06476d4599c8b17f39e33ac53f17e6319db5a853b37cdc961457e02d9aeeb0",
+    "metrics/control-local-switch-residence.csv": "40bc3ddfbd9219b4dd0be4cdf347244f38d48d7332281edaf426d769f572d1c0",
+    "metrics/control-normal-queue-integrals.csv": "5672fbea84439db75c3b6ca995de02c38adf0bb024778233ea609e70d0cddf8b",
+    "metrics/control-normal-switch-residence.csv": "133eb78d341afb1c8aded6ec106797ba65487cf781ccfad5ab5cb98bbc060c3b",
+    "metrics/early-local-healthy-gates.csv": "af8ccbc00940b647af6dffdb48df473c207f316db73f9340e1c105d401821ebb",
+    "metrics/early-local-healthy-matched.csv": "9825cc9d31b428cab2e477aebe33a0e7c9f81841578f0af13882943545223f6e",
+    "metrics/early-local-queue-integrals.csv": "e2e00c04ef6293c51c749a4af382022e7d794d552a45738041f14a0d15762903",
+    "metrics/early-local-switch-residence.csv": "092c4f5179e4265ee4637ab64d8cea1ac995222cc6ac1741b3557e86a25a91ae",
+    "metrics/early-normal-healthy-gates.csv": "507713cd829dc78b0c30ffd38bda775a0b4f4650b0c0db54c860b60d1d9ad853",
+    "metrics/early-normal-healthy-matched.csv": "ae4a665a936213f95abff610bc4f01fdf5481d6bffdd2b0c49fae7e5c1128d8a",
+    "metrics/early-normal-queue-integrals.csv": "c428fd75772263760ecbbce2793523428aa760a04b9a22011eb815631121da73",
+    "metrics/early-normal-switch-residence.csv": "414d9d11454746b1a4ff6a1c4e05c34774fc1fbce583880561c1a2d8a46434ec",
+    "metrics/summary.csv": "e77a4c6afebae0c18c76e990f08890185f0a01d9f15f8cadb0704978cd9337cb",
+    "receipt.json": "a93f1bac0831c4534425f6eb0d4fe815a06530f401a60ba7539dbbdd61482aa4",
+    "report.html": "ab2a471c5b27cf21926428a360fd39c245be15ae0ceeecbcfbed4e2b749eb824",
+    "resources.json": "743c7756df818d45f32d2d14eb7616c16b6c4787e660bad98592f87a44caece5"
+  }
+}

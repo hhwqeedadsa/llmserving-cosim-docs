@@ -1,0 +1,7 @@
+case,target_ns,healthy_ns,drain_ns,unique_payload_bytes,retransmitted_payload_bytes,declared_compute_work_ns,target_winner
+control-normal,126626,139136,168210,11228096,0,119300,primary
+early-normal,126586,140083,197577,14316544,0,150760,primary
+calibrated-normal,126626,139136,168210,11228096,0,119300,primary
+control-local,201866,141174,201866,11228096,43392,119300,primary
+early-local,200046,142375,203067,14316544,43392,150760,replica
+calibrated-local,201866,141174,249510,14316544,43392,150760,primary

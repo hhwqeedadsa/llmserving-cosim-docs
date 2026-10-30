@@ -67,8 +67,10 @@ def parser():
     dp = sc.add_parser('deepep-plan', help='Compile an offline pinned DeepEP low-latency application partial order; no network/GPU execution')
     dp.add_argument('--config', type=Path, required=True, help='Explicit choices, default compute-stream-wait/no-hook API and logical single-NIC RDMA-only mode')
     dp.add_argument('--output', type=Path, required=True, help='New directory for input, operation/event plan and hash manifest')
+    dp.add_argument('--format', choices=('flat', 'indexed-jsonl'), default='flat',
+                    help='flat keeps the historical limits; indexed-jsonl requires indexed-input/1 and bounded streaming storage')
     dc = sc.add_parser('deepep-check', help='Check plan integrity and untimed event reachability; withholding is not packet loss simulation')
-    dc.add_argument('--plan', type=Path, required=True, help='Directory from deepep-plan')
+    dc.add_argument('--plan', type=Path, required=True, help='Flat or indexed-jsonl directory from deepep-plan; selected by manifest schema')
     dc.add_argument('--output', type=Path, required=True, help='New JSON file with dependency closure and blocked device kernel completions')
     dc.add_argument('--withhold', action='append', default=[], help='Exact event ID to withhold from closure; repeatable')
     hp = sc.add_parser('hybrid-deepep-plan', help='Compile bounded server/rail routing, counts and Dispatch tail obligations; not a complete Hybrid DAG or network execution')
@@ -306,7 +308,10 @@ def main(argv=None):
                 from .modern_deepep_plan import check
                 value = check(args.plan, args.output, args.withhold)
             elif args.scaleout_command == 'deepep-plan':
-                from .deepep_plan import execute
+                if args.format == 'indexed-jsonl':
+                    from .deepep_indexed import execute
+                else:
+                    from .deepep_plan import execute
                 value = execute(args.config, args.output)
             elif args.scaleout_command == 'deepep-check':
                 from .deepep_plan import check

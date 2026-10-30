@@ -70,6 +70,8 @@ stream-work/3的本地阶段使用输入显式声明的ns耗时，每GPU单个�
 
 现代direct的离线`modern-deepep-plan`固定新版本源码，按目的rank去重并采用完整BF16通信布局，保留计数块、屏障和未解析的接收slot/Combine通道公式。它尚未驱动GPU、队列核心或网络，不能作为现代DeepEP时延模型；支持的分支、声明的launch参数和未验证条件见[现代计划](../examples/modern_deepep_partial_order/README.md)。下面在线rank聚合及v1说明保留各自版本范围。
 
+旧低延迟的可选[索引计划](../examples/deepep_indexed/README.md)与flat共用语义构造，保留零token通知；流式存储和依赖闭包验收不增加WQE、NIC、GPU或时延依据。完整EP32输入支持只表示计划能够生成和检查，不证明旧库或现代库已在线执行。
+
 现代plan/1的同rank路径分类已发现错误：固定源码的signal与非NVLink专家计数块仍走GIN，GDAKI为self-peer创建回环QP；token与rank count才有本地指针旁路。plan/2已纠正分类并保留专家块发送区信息。物理回环路径与成本仍未知，不能推为交换机负载或零成本；历史结论的引用须附此[更正依据](../fixtures/modern_self_gin/README.md)。
 
 窗口核心按固定源码将workspace与EP buffer映射到同一相对注册区，将GIN索引信号保留在provider独立域。原始BarrierSignals/EPSignals数据声明经替换CUDA限定词的宿主C++编译核对全部8个成员偏移；这只证明所选32/64位ABI的数据布局，未编译CUDA或测量硬件。事件驱动的计数/信号是影子状态，token数值、实际负载、GPU内存序及完整buffer寿命仍未验证；证据与检查边界见[窗口核心](../fixtures/modern_windows/README.md)。

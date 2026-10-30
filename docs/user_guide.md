@@ -71,6 +71,8 @@ Scale-Out[准入示例](../examples/scaleout_rdma_admission/README.md)新增`byt
 
 仅检查固定DeepEP低延迟操作依赖时，可用基础Python执行`scaleout deepep-plan`与`deepep-check`；不需要前端包、原生构建或GPU。新目录流程和零token通知反例见[操作计划示例](../examples/deepep_partial_order/README.md)，其输出不预测网络性能。
 
+完整EP32/E256计划可显式选择`deepep-plan --format indexed-jsonl`，采用独立indexed-input/1和逐行索引表示；全部零token通知保留，旧flat上限不变。输入预算、公开流程与字段见[流式索引计划](../examples/deepep_indexed/README.md)。`deepep-check`自动按清单选格式，两者都只是离线依赖检查。
+
 现代direct分支使用独立的`scaleout modern-deepep-plan`与`modern-deepep-check`，支持BF16、目的rank去重、计数块、屏障与动态接收slot的符号表示。该入口也不执行网络或解析动态slot，不支持hybrid；输入、上限和新目录流程见[现代操作计划](../examples/modern_deepep_partial_order/README.md)。
 
 分层路径另用`scaleout hybrid-deepep-plan`生成服务器域/同位置rail/逐token转发、计数与Dispatch进度义务；`hybrid-deepep-replay`核验调用者声明的可见性和转发轮询。它只实现逻辑子模型，没有完整Hybrid DAG、最终GPU slot、Combine进度或网络执行，不接入旧direct/native桥接。输入、输出、上限和独立小例见[分层逻辑示例](../examples/hybrid_logical/README.md)。

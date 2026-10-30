@@ -1,0 +1,18 @@
+{
+  "schema_version": "moe-deepep-ll-indexed-input/1",
+  "model": {"experts": 256, "top_k": 8, "hidden_size": 7168, "dispatch_format": "bf16"},
+  "execution": {
+    "ranks": 32, "api": "compute_stream_wait_no_hook", "cross_rank_path": "rdma_only",
+    "nics_per_rank": 1, "max_tokens_per_rank": 1
+  },
+  "calls": [{"name": "artificial-ep32", "tokens": [
+    [[0, 1, 2, 3, 4, 5, 6, 7]], [], [], [], [], [], [], [],
+    [[0, 1, 2, 3, 4, 5, 6, 7]], [], [], [], [], [], [], [],
+    [[8, 9, 10, 11, 12, 13, 14, 15]], [], [], [], [], [], [], [],
+    [[0, 2, 4, 6, 128, 130, 132, 134]], [], [], [], [], [], [], []
+  ]}],
+  "limits": {
+    "max_logical_events": 70000, "max_logical_operations": 17000,
+    "max_index_bytes": 33554432, "max_input_bytes": 65536, "max_output_bytes": 16777216
+  }
+}

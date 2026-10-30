@@ -131,6 +131,8 @@ v5显式声明`execution_limits`时，`transactions.execution_limits`保存本�
 
 `scaleout deepep-plan`的`plan.json`是无时间戳的离线输入计划，含操作、逻辑连接key、buffer epoch和事件前驱，不是执行或硬件观测。`manifest.json`保存原输入与计划SHA-256，`deepep-check`另写依赖闭包、暂扣事件与不能到达的计算完成节点。操作数字节不等于网络包长，字段见[操作计划示例](../examples/deepep_partial_order/README.md)。
 
+显式`--format indexed-jsonl`使用`moe-deepep-ll-indexed-plan/1`及manifest/1。`plan.json`保存列名、语义范围和两个JSONL的hash/字节/行数；`operations.jsonl`、`events.jsonl`逐项保存全部记录，以从0开始的行索引引用。`storage`中的不保留完整数组仅指表示策略；生成器仍保留阶段状态，索引核算也不等于总RSS。五文件完整性、单行及累计预算、原ID和读取方法见[索引格式](../examples/deepep_indexed/README.md)。
+
 非UB新增可选的活跃逻辑字节额度、源QP序号和阶段耗时。`queue_metrics=true`为全部交换机出口增加常量空间的全程队列积分，独立于包记录截断及summary模式。旧`queue_events`保持原格式，不能直接解释为减字节后状态。字段、单位与覆盖范围见[准入示例](../examples/scaleout_rdma_admission/README.md)。
 
 非UB原生交换机可配置`switch_drop_capture`记录实际转发/准入失败。全交换机全程原因计数与筛选节点/时间后的有界明细分别保存，`complete`仅描述选中明细；不能与设备QbbDrop或人工故障直接相加。schema、持久stream关联及固定出口准入恒通过的限制见[交换机丢弃示例](../examples/scaleout_switch_drops/README.md)。

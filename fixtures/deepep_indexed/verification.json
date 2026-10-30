@@ -1,0 +1,154 @@
+{
+  "passed": true,
+  "baseline_commit": "96cd9e18e5f2a7d4bf28bcc5b1a2af9951021c1d",
+  "baseline_source_sha256": "acf45ca9b56fe967ebacace5121cf6a11f6f1274cb8b812891202678cec2dbdc",
+  "historical_byte_equivalence": [
+    {
+      "ranks": 2,
+      "experts": 8,
+      "capacity": 2,
+      "calls": 1,
+      "fp8": false,
+      "byte_identical": true,
+      "bytes": 43825,
+      "sha256": "ed405bb7135e131ffeab588380bb44dbec521581973ddd57594377cf555993ff"
+    },
+    {
+      "ranks": 4,
+      "experts": 8,
+      "capacity": 1,
+      "calls": 2,
+      "fp8": false,
+      "byte_identical": true,
+      "bytes": 156577,
+      "sha256": "f11ba7335852a98f37ad9704d01a00ffdd8dd21b622cc3865f10790a3fc27f19"
+    },
+    {
+      "ranks": 4,
+      "experts": 16,
+      "capacity": 2,
+      "calls": 3,
+      "fp8": true,
+      "byte_identical": true,
+      "bytes": 459740,
+      "sha256": "f91d8ac40ddde1be19ef753799d95303188f1574a0fcc708143e7ef62930fbd7"
+    },
+    {
+      "ranks": 8,
+      "experts": 32,
+      "capacity": 1,
+      "calls": 4,
+      "fp8": false,
+      "byte_identical": true,
+      "bytes": 2233562,
+      "sha256": "ae00cf53b1057ec7cdc4783ab28b3b9681e60e9a6d62811c784ba6282724daa0"
+    }
+  ],
+  "indexed_workflow": {
+    "passed": true,
+    "public_commands": 11,
+    "expected_rejections": 3,
+    "independent": {
+      "operations": 16448,
+      "events": 66144,
+      "remote_operations": 15920,
+      "zero_count": 8160,
+      "zero_flag": 8160,
+      "all_operation_attributes_checked": true,
+      "all_event_references_checked": true
+    },
+    "probes": {
+      "normal": [],
+      "zero_count": [
+        "m0.d.count.s0.e8.visible"
+      ],
+      "flag": [
+        "m0.c.flag.d0.e8.visible"
+      ],
+      "sender_done": [
+        "m0.d.data.s0.t0.e0.sender_done"
+      ],
+      "combined": [
+        "m0.d.count.s0.e8.visible",
+        "m0.c.flag.d0.e8.visible"
+      ]
+    },
+    "total_output_bytes": 6532645,
+    "peak_accounted_index_bytes": 8319699,
+    "repeated_files_identical": 5,
+    "portable_check_identical": true,
+    "simulated_packets": false,
+    "hardware_calibrated": false,
+    "real_route_input": false,
+    "scope": "artificial CPU plan representation, not a 32-endpoint network execution"
+  },
+  "old_workflow": {
+    "passed": true,
+    "public_commands": 8,
+    "expected_rejections": 2,
+    "fresh_cwd": true,
+    "frontend_or_native_backend_required": false,
+    "portable_check_identical": true,
+    "simulated_packets": false,
+    "hardware_calibrated": false,
+    "event_count": 728,
+    "operation_count": 160
+  },
+  "unit_methods": 15,
+  "single_event_withholding_closures": 728,
+  "multi_event_withholding_closures": 1,
+  "parsed_python_files": 5,
+  "local_links_checked": 1,
+  "dependencies_checked": 13,
+  "source_sha256": {
+    "python/moe_ub_cosim/deepep_plan.py": "2699ec9d90c20945adfea35bd79a9f2b3d57354eef1553cb39cb2b69378eeadf",
+    "python/moe_ub_cosim/deepep_indexed.py": "85840f4eb74c0f9d458abc0c795d1c8315a76ff0d2df648fb9aaa9eb4356279f",
+    "python/moe_ub_cosim/cli.py": "8c31ef6713dcfda4bdeffb6c6c2a808e2de7b0497757dc5abfec161fbdb73c55",
+    "tests/unit/deepep_indexed_test.py": "b41fdeb83029e23702bb62699719ecdbf9acba20e55674a1b1d9ef9848e4ccd5",
+    "tests/integration/check_deepep_indexed_workflow.py": "5aa0c208e12aaf56722d7f1b13f6a9a76ca479458d2a99e10996d374b128aeae"
+  },
+  "simulated_packets": false,
+  "hardware_calibrated": false,
+  "wall_seconds": 24.614595847961027,
+  "resources": {
+    "root": "runs/indexed_deepep_plan_20261030",
+    "stages": [
+      {
+        "stage": "final",
+        "wall_seconds": 24.742854846990667,
+        "peak_sampled_group_rss_bytes": 139268096,
+        "peak_sampled_artifact_bytes": 27017216,
+        "sha256": "604aaf2dfd435eb33a76499eee7134aa37dadab437d465367e8c841144eecf9c"
+      },
+      {
+        "stage": "unit",
+        "wall_seconds": 10.72551044402644,
+        "peak_sampled_group_rss_bytes": 31268864,
+        "peak_sampled_artifact_bytes": 32768,
+        "sha256": "862d19220966d9d53807c919f128154d358ec8b86010cdcb810919b97de31cbb"
+      },
+      {
+        "stage": "workflow",
+        "wall_seconds": 12.242974041961133,
+        "peak_sampled_group_rss_bytes": 117129216,
+        "peak_sampled_artifact_bytes": 13258752,
+        "sha256": "eeaf8eaa7c7b2d880cdcb55b91e5e5cb7b4bcc4f53260f2f9db72554d1a218aa"
+      }
+    ],
+    "monitored_wall_seconds": 47.71133933297824,
+    "peak_sampled_group_rss_bytes": 139268096,
+    "peak_sampled_artifact_bytes": 27017216,
+    "budget": {
+      "monitored_wall_seconds": 600,
+      "per_stage_wall_seconds": 120,
+      "rss_bytes": 536870912,
+      "address_bytes": 1073741824,
+      "artifact_bytes": 134217728,
+      "free_reserve_bytes": 8589934592
+    }
+  },
+  "final_raw_checks_sha256": "d16270226582b58ecdb710ad1be35026c358e07f65b9dbc56a642aea0d095d89",
+  "raw_workflow": "runs/indexed_deepep_plan_20261030/workflow-final",
+  "old_flat_limits_unchanged": true,
+  "network_runs": 0
+}

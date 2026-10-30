@@ -1,5 +1,15 @@
 # 当前任务与交接
 
+## 2026-10-30 完整低延迟操作计划的流式索引表示
+
+状态：`completed`（平台表示增量验收；网络绑定及整体目标active）。上一目标轮解释normal/local并核对结果，未改项目状态，分类no progress。本轮新增公开`deepep-plan --format indexed-jsonl`和自动格式检查，复用旧低延迟语义生成器，以逐行数组及整数引用保存完整计划，不提高旧flat上限、不删零通知或替代为现代direct。规范见[流式计划](indexed_deepep_plan_spec.md)，交付[独立示例](../../examples/deepep_indexed/README.md)、[验收](../../fixtures/deepep_indexed/README.md)和[源码/资源摘要](../../fixtures/deepep_indexed/verification.json)。
+
+15项单元方法、728种独立单事件闭包及1种组合暂扣通过；11条公开CLI独立核对EP32/E256的16,448操作/66,144事件，含各8,160条零token count/flag。输出6,532,645B，索引浅层核算8,319,699B；不把索引数等同总RSS。五文件重复逐字节一致、迁移检查一致，重算hash后的篡改拒绝；旧flat同形状仍因旧上限拒绝。另8条旧CLI回归和4种输入对改动前源码的编码逐字节核对通过；13项固定依赖一致、解析/帮助/新增链接检查通过。三阶段47.711秒、峰值采样组RSS139,268,096B，实际产物见摘要。收尾澄清存储字段后重新验收，前版原件保留；没有新网络或GPU，不称研究收益。
+
+后续明确操作与持久QP/WQE、注册区、通知响应和发送发布的绑定，再按预算接入一种128/256/512端点Clos；本轮未完成此网络项。`accepted/visible/sender_done`仍是未来后端义务，不是硬件反馈，旧同步四条规则不成为现代direct默认。整体目标继续active。
+
+预算根`runs/indexed_deepep_plan_20261030`：累计600受监控秒/128MiB/卷留8GiB，单阶段120秒/RSS512MiB/地址1GiB；只用现有Python标准库，不安装、下载、改依赖或构建模拟器。无新网络、GPU、旧成功网络重跑；CPU EP32只是计划表示验收。公开新目录流程与旧入口回归分别检查；失败保留原因，不扩限。平台与真实路由研究分别提交；仅发布已授权user分支。当前尚无新的网络性能或创新收益。
+
 ## 2026-10-30 旧低延迟同步发布策略核心
 
 状态：`completed`（旧低延迟条件同步策略CPU验收；网络接入及整体目标active）。上一目标轮为progress：`e4f6943898`发布发送边界核查。本轮确认既有GinWorkQueue、现代事务staged_prefix和迟到发布取max已经实现，复用而不重做；新增[low_latency_posting.hh](../../backend/rdma/low_latency_posting.hh)表达旧DeepEP v1.2.1同步put的多WQE关联、按调用方message index的四条发布、通知强制发布、准备空洞及迟到旧发布。注册边界明确输入；生产者返回与本地完成分别检查，未发布尾部不自动补齐，发布/消费不释放槽。另更正旧核心“未接入”的过时注释，没有更改旧核心行为或两个网络适配器。

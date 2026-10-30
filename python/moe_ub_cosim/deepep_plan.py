@@ -87,31 +87,51 @@ def validate_config(config):
                         len(set(choices)) == len(choices), 'invalid expert choices')
 
 
-def compile_plan(config):
-    validate_config(config)
-    m, x, limits = (config[k] for k in ('model', 'execution', 'limits'))
+class _FlatStore:
+    """Historical representation; keep its limits and serialized bytes unchanged."""
+    def __init__(self, limits):
+        self.limits = limits
+        self.events, self.operations, self.seen = [], [], set()
+
+    def check_operation(self):
+        require(len(self.operations) < self.limits['max_operations'], 'operation budget exceeded')
+
+    def event(self, row):
+        require(row['id'] not in self.seen, 'duplicate event identity')
+        require(len(self.events) < self.limits['max_events'], 'event budget exceeded')
+        require(all(d in self.seen for d in row['deps']), 'missing or forward event dependency')
+        self.events.append(row)
+        self.seen.add(row['id'])
+
+    def operation(self, row):
+        self.operations.append(row)
+
+
+def _emit_plan(config, store):
+    """Shared semantic construction; storage owns admission and emitted records.
+
+    Callers validate their own representation's input/budgets before entering.
+    Neither store may suppress operations or change the dependency relation.
+    """
+    m, x = (config[k] for k in ('model', 'execution'))
     ranks, experts = x['ranks'], m['experts']
     local_experts = experts//ranks
-    events, operations, seen = [], [], set()
+    summary = Counter()
     # These are partial-order boundaries, not a connected physical QP pool.
     prior_marker, previous_complete = {}, {}
 
     def event(identity, kind, rank, dependencies, operation=None, **attributes):
-        require(identity not in seen, 'duplicate event identity')
-        require(len(events) < limits['max_events'], 'event budget exceeded')
         dependencies = sorted(set(dependencies))
-        require(all(d in seen for d in dependencies), 'missing or forward event dependency')
         row = dict(id=identity, kind=kind, rank=rank, deps=dependencies)
         if operation is not None:
             row['operation'] = operation
         row.update(attributes)
-        events.append(row)
-        seen.add(identity)
+        store.event(row)
         return identity
 
     def operation(identity, call, phase, kind, src, dst, expert, operand_bytes,
                   begin, clean=None, data=(), token=None, value=None):
-        require(len(operations) < limits['max_operations'], 'operation budget exceeded')
+        store.check_operation()
         remote = src != dst
         key = (src, dst, expert % local_experts) if remote else None
         prior = prior_marker.get(key) if remote else None
@@ -139,7 +159,13 @@ def compile_plan(config):
                    buffer_epoch=2*call+(phase == 'combine'),
                    buffer_index=0 if phase == 'dispatch' else 1,
                    events=dict(issued=issued, accepted=accepted, visible=visible, sender_done=done))
-        operations.append(row)
+        store.operation(row)
+        summary[row['path']+'_'+kind+'_operations'] += 1
+        summary[row['path']+'_'+kind+'_operand_bytes'] += operand_bytes
+        if kind == 'count' and value == -1:
+            summary[row['path']+'_zero_token_count_operations'] += 1
+        if kind == 'flag' and row['contributions'] == 0:
+            summary[row['path']+'_zero_token_flag_operations'] += 1
         return row
 
     for ci, call in enumerate(config['calls']):
@@ -206,14 +232,6 @@ def compile_plan(config):
             merged = event(f'm{ci}.c.r{rank}.consume_done', 'combine_merged', rank,
                            [start[rank]]+[flags[rank, e]['events']['visible'] for e in range(experts)])
             previous_complete[rank] = event(f'm{ci}.c.r{rank}.complete', 'kernel_complete', rank, [sent, merged])
-    summary = Counter()
-    for op in operations:
-        summary[op['path']+'_'+op['kind']+'_operations'] += 1
-        summary[op['path']+'_'+op['kind']+'_operand_bytes'] += op['operand_bytes']
-        if op['kind'] == 'count' and op['value'] == -1:
-            summary[op['path']+'_zero_token_count_operations'] += 1
-        if op['kind'] == 'flag' and op['contributions'] == 0:
-            summary[op['path']+'_zero_token_flag_operations'] += 1
     return dict(schema_version='moe-deepep-ll-partial-order/1',
         source=dict(library='DeepEP', revision=REVISION, path='csrc/kernels/internode_ll.cu'),
         scope=dict(network_executed=False, cuda_executed=False, latency_predicted=False,
@@ -224,8 +242,15 @@ def compile_plan(config):
                    intra_phase_data_order='runtime WQE reservation order not fixed',
                    unknowns=['WQE/key splitting', 'CQ and queue depth backpressure', 'retries and buffer lifetime',
                              'GPU visibility/packing cost', 'physical NIC/ECMP mapping']),
-        calls=len(config['calls']), ranks=ranks, operations=operations, events=events,
-        summary=dict(summary))
+        calls=len(config['calls']), ranks=ranks, summary=dict(summary))
+
+
+def compile_plan(config):
+    validate_config(config)
+    store = _FlatStore(config['limits'])
+    metadata = _emit_plan(config, store)
+    summary = metadata.pop('summary')
+    return dict(**metadata, operations=store.operations, events=store.events, summary=summary)
 
 
 def reachable(plan, withheld=()):
@@ -280,6 +305,10 @@ def execute(config_path, output):
 def check(directory, output, withheld=()):
     directory, output = Path(directory).resolve(), Path(output).resolve()
     require(not output.exists() and output.parent.is_dir(), 'check output must be a new file with an existing parent')
+    _, kind = read(directory/'manifest.json', MAX_INPUT)
+    if kind.get('schema_version') == 'moe-deepep-ll-indexed-manifest/1':
+        from .deepep_indexed import check as indexed_check
+        return indexed_check(directory, output, withheld)
     raw, plan = read(directory/'plan.json', MAX_OUTPUT)
     original, config = read(directory/'input.json', MAX_INPUT)
     manifest_raw, manifest = read(directory/'manifest.json', MAX_INPUT)

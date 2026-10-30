@@ -88,7 +88,7 @@ def verify(directory):
     flows={m['id']:m for m in result['messages']}
     callbacks={m['id']:m for m in result['service']['message_callbacks']}
     require(len(flows)==len(result['messages'])==len(callbacks), 'duplicate or missing message results')
-    descriptors={};node_count=0;total_bytes=0
+    descriptors={};node_count=0;total_bytes=0;waves_checked=[]
     config=checked_json(directory/'input.json',1048576)
     replay=None
     if 'route_replay' in config:
@@ -106,6 +106,7 @@ def verify(directory):
     local_payload=Counter()
     for history in frontend['history']:
         graph=history['graph_id']; wave=checked_json(directory/'graphs'/graph/'wave.json',min(limits(rdma)['result_json_bytes'],268435456))
+        waves_checked.append(wave)
         nodes=wave['rank_nodes']; ranks=wave['rank_ids']
         if replay:
             require(wave.get('route_source')==replay.manifest['source']['kind'], 'wave source kind mismatch')
@@ -216,11 +217,14 @@ def verify(directory):
                     require(dep in by_id and start>=events[graph,rank,dep,'callback'], 'ASTRA consumer ran before predecessor')
                 if task['kind']=='COMP':
                     require(end-start==task['duration_ns'], 'declared compute duration did not execute')
+                elif task['kind']=='GATE':pass
                 else:
                     cb=callbacks[task['message']['id']];prefix='send' if task['kind']=='SEND' else 'recv'
                     require(start==cb[prefix+'_post_ns'] and end==cb[prefix+'_callback_ns'], 'graph/adapter callback mismatch')
                 node_count+=1
     require(set(descriptors)==set(flows), 'extra network work outside frontend graphs')
+    from .phase_completion import actual as verify_phases
+    verify_phases(waves_checked,config,result,events)
     actual_local={(p['gpu'],p['direction']):p['payload_bytes'] for p in result.get('intra_host_links',[])}
     require(dict(local_payload)==actual_local,'intra-host physical link payload does not conserve messages')
     # Actual next-wave start must equal the preceding wave's callback time.

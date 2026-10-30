@@ -60,10 +60,12 @@ def message_preflight(topology, protocol, config):
 
 
 def native_arguments(config, output):
-    if 'transport' not in config:return []
+    from .phase_completion import enabled
+    args=['--phase-completion','ep_transport_flush/1'] if enabled(config) else []
+    if 'transport' not in config:return args
     from .scaleout_rdma import save
     path=output/'service-transport.json';save(path,config['transport'])
-    return ['--transport',str(path)]
+    return args+['--transport',str(path)]
 
 
 def semantic_messages(result):

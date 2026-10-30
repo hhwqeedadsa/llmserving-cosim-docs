@@ -1,6 +1,7 @@
 #include "astra_adapter.hh"
 #include "control_channel.hh"
 #include "host_timing.hh"
+#include "phase_gates.hh"
 #include "astra-sim/system/Sys.hh"
 #include <filesystem>
 #include <fstream>
@@ -14,8 +15,8 @@ namespace moe_rdma { void InitializeLogging(); void ShutdownLogging(); }
 namespace fs=std::filesystem;
 class Service {
  public:
-  Service(Fabric& fabric,ServiceTransport& transport,ControlChannel& control,int ranks,const std::string& bootstrap,const std::string& system,HostTiming& timing):
-    fabric_(fabric),transport_(transport),control_(control),messages_(fabric,transport),owners_(ranks),boot_done_(ranks,false),timing_(timing) {
+  Service(Fabric& fabric,ServiceTransport& transport,ControlChannel& control,int ranks,const std::string& bootstrap,const std::string& system,HostTiming& timing,bool phase_completion):
+    fabric_(fabric),transport_(transport),control_(control),messages_(fabric,transport),owners_(ranks),boot_done_(ranks,false),timing_(timing),phase_completion_(phase_completion) {
     for(int r=0;r<ranks;++r)
       adapters_.push_back(std::make_unique<Adapter>(r,messages_,[this,r](){Finished(r);}));
     for(int r=0;r<ranks;++r) {
@@ -89,6 +90,29 @@ class Service {
       Require(!id.empty() && used_.insert(id).second,"reused graph identity");
       auto ranks=descriptor.at("rank_ids").get<std::vector<int>>();
       Require(!ranks.empty() && std::set<int>(ranks.begin(),ranks.end()).size()==ranks.size(),"invalid graph ranks");
+      Require(descriptor.at("schema_version")== (phase_completion_?"moe-scaleout-wave/2":"moe-scaleout-wave/1"),"wave completion schema differs from service mode");
+      if(phase_completion_) {
+        const auto& phase=descriptor.at("phase_completion");
+        Require(phase.at("mode")=="ep_transport_flush/1" && phase.at("gates").size()==2*descriptor.at("routes").size(),"invalid phase completion declaration");
+        std::set<std::string> names;
+        for(const auto& gate:phase.at("gates")) {
+          const auto name=gate.at("id").get<std::string>();
+          Require(names.insert(name).second,"duplicate phase gate");
+          std::map<int,uint64_t> members;
+          for(const auto& m:gate.at("members"))Require(members.emplace(m.at("rank").get<int>(),m.at("node").get<uint64_t>()).second,"duplicate phase rank");
+          Require(members.size()==ranks.size(),"incomplete phase group");
+          for(int rank:ranks) {
+            Require(members.count(rank),"foreign/missing phase rank");
+            bool found=false;
+            for(const auto& task:descriptor.at("rank_nodes").at(std::to_string(rank)))
+              if(task.at("id")==members.at(rank)) {
+                Require(task.at("kind")=="GATE" && task.at("duration_ns")==0,"phase member is not a zero-compute gate");found=true;
+              }
+            Require(found,"missing phase node");
+          }
+          phase_gates_.Add({id,name},members);
+        }
+      } else Require(!descriptor.contains("phase_completion"),"undeclared phase gates");
       std::vector<std::unique_ptr<Chakra::ETFeeder>> feeders;
       for(int rank:ranks) {
         Require(rank>=0 && rank<int(owners_.size()) && owners_[rank].empty() &&
@@ -114,9 +138,16 @@ class Service {
         // its supported zero-time event path, preserving dependencies/logging.
         std::unordered_set<uint64_t> zero_nodes;
         for(const auto& task:descriptor.at("rank_nodes").at(std::to_string(rank)))
-          if(task.at("kind")=="COMP" && task.at("duration_ns")==0)
-            zero_nodes.insert(task.at("id").get<uint64_t>());
-        workload->set_external_events(std::move(zero_nodes),[](uint64_t,std::function<void()> done){done();});
+          if((task.at("kind")=="COMP" || task.at("kind")=="GATE") && task.at("duration_ns")==0) {
+            const auto node=task.at("id").get<uint64_t>();
+            Require((task.at("kind")=="GATE")==phase_gates_.Contains(id,rank,node),"undeclared/incorrect phase node");
+            zero_nodes.insert(node);
+          }
+        workload->set_external_events(std::move(zero_nodes),[this,id,rank](uint64_t node,std::function<void()> done){
+          if(!phase_gates_.Contains(id,rank,node)){done();return;}
+          auto ready=phase_gates_.Arrive(id,rank,node,Now(),std::move(done));
+          for(auto& callback:ready)callback(); // ASTRA's external completion schedules its own zero-time event.
+        });
         workload->load_graph(std::move(feeders[i]),id);activate.push_back(rank);
       }
     }
@@ -127,8 +158,20 @@ class Service {
     if(timing_.Enabled())timing_.Snapshot("message_resources",messages_.HostCounters());
   }
   Json Report() {
-    return {{"service_finished",finished_},{"decisions",decision_},{"waves",history_},
+    Json report={{"service_finished",finished_},{"decisions",decision_},{"waves",history_},
       {"active_graphs",waves_.size()},{"message_callbacks",messages_.Report()}};
+    if(phase_completion_) {
+      Json gates=Json::array();
+      for(const auto& [key,group]:phase_gates_.Groups()) {
+        Json members=Json::array();
+        for(auto [rank,node]:group.members)members.push_back({{"rank",rank},{"node",node},
+            {"arrived_ns",group.arrivals.count(rank)?Json(group.arrivals.at(rank)):Json(nullptr)}});
+        gates.push_back({{"graph_id",key.first},{"id",key.second},{"members",members},
+                        {"released_ns",group.released<0?Json(nullptr):Json(group.released)}});
+      }
+      report["phase_completion"]={{"mode","ep_transport_flush/1"},{"gates",gates}};
+    }
+    return report;
   }
   Json HostCounters() const {return messages_.HostCounters();}
  private:
@@ -144,11 +187,13 @@ class Service {
   Json history_=Json::array();
   unsigned decision_=0;bool pump_pending_=false,finished_=false;
   HostTiming& timing_;
+  bool phase_completion_;
+  PhaseGates phase_gates_;
 };
 static int Libraries(dl_phdr_info* info,std::size_t,void* data) {
   if(info->dlpi_name && info->dlpi_name[0])static_cast<Json*>(data)->push_back(info->dlpi_name);return 0;
 }
-static void Execute(char** argv,HostTiming& timing,const Json& transport_config,ControlChannel& control) {
+static void Execute(char** argv,HostTiming& timing,const Json& transport_config,ControlChannel& control,bool phase_completion) {
     auto total=timing.Span("native_total");
     Require(!fs::exists(argv[5]),"result already exists");
     ns3::Time::SetResolution(ns3::Time::NS);Json topology,config;
@@ -161,7 +206,7 @@ static void Execute(char** argv,HostTiming& timing,const Json& transport_config,
     ServiceTransport transport(fabric,transport_config);
     int ranks=0;for(const auto& node:topology.at("nodes"))if(node.at("kind")=="gpu")++ranks;
     std::unique_ptr<Service> service_owner;
-    {auto phase=timing.Span("astra_init");service_owner=std::make_unique<Service>(fabric,transport,control,ranks,argv[4],argv[3],timing);}
+    {auto phase=timing.Span("astra_init");service_owner=std::make_unique<Service>(fabric,transport,control,ranks,argv[4],argv[3],timing,phase_completion);}
     auto& service=*service_owner;
     ns3::Simulator::Stop(ns3::NanoSeconds(fabric.MaxSimNs()));
     {auto phase=timing.Span("simulator_run");ns3::Simulator::Run();}
@@ -193,15 +238,17 @@ static void Execute(char** argv,HostTiming& timing,const Json& transport_config,
 int main(int argc,char** argv) {
   try {
     ControlChannel control;
-    Require(argc>=6 && argc<=9,"usage: moe-rdma-service TOPOLOGY RDMA SYSTEM BOOTSTRAP_PREFIX NEW_RESULT [NEW_HOST_TIMING.jsonl] [--transport CONFIG.json]");
-    int next=6;std::string host;Json transport;
-    if(next<argc && std::string(argv[next])!="--transport")host=argv[next++];
-    if(next<argc) {
-      Require(std::string(argv[next])=="--transport" && next+2==argc,"invalid service transport arguments");
-      transport=ReadJson(argv[next+1]);next+=2;
+    Require(argc>=6 && argc<=11,"usage: moe-rdma-service TOPOLOGY RDMA SYSTEM BOOTSTRAP_PREFIX NEW_RESULT [NEW_HOST_TIMING.jsonl] [--phase-completion ep_transport_flush/1] [--transport CONFIG.json]");
+    int next=6;std::string host;Json transport;bool phase_completion=false,has_transport=false;
+    if(next<argc && std::string(argv[next]).rfind("--",0)!=0)host=argv[next++];
+    while(next<argc) {
+      Require(next+1<argc,"missing service option value");const std::string option=argv[next++],value=argv[next++];
+      if(option=="--transport") {Require(!has_transport,"repeated transport option");has_transport=true;transport=ReadJson(value);}
+      else if(option=="--phase-completion") {Require(!phase_completion && value=="ep_transport_flush/1","invalid phase completion option");phase_completion=true;}
+      else Require(false,"unexpected service option");
     }
     Require(next==argc,"unexpected service arguments");
-    HostTiming timing(host);Execute(argv,timing,transport,control);timing.Complete();return 0;
+    HostTiming timing(host);Execute(argv,timing,transport,control,phase_completion);timing.Complete();return 0;
   } catch(const std::exception& error) {
     std::cerr<<error.what()<<'\n';ns3::Simulator::Destroy();ShutdownLogging();return 1;
   }

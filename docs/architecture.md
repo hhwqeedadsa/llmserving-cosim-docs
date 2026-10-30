@@ -8,6 +8,8 @@
 
 LLMServingSim来源回放的显式`sparse_explicit/1`保留rank/slot请求ID，仅对实际来源rank创建请求调度器和KV预留。全部EP成员仍在同一ASTRA图执行；无本地请求rank的token计算为0，专家计算由实际贡献决定。默认每卡完整batch行为保留，公共核验同时核对真实batch选择与来源集合。准备与限制见[稀疏Clos示例](../examples/scaleout_sparse_clos/README.md)。
 
+服务可显式选择`ep_transport_flush/1`必要依赖下界：每rank的阶段GATE等待本阶段本地全部SEND/RECV及生产计算，原生服务在同EP组全部GATE实际到达时交付零时延完成。专家计算/merge保留相应门限前驱；它不增加网络信号、不清空拥塞状态，也不把源ACK声明为真实CQ。缺省仍使用原图，模式与边界见[用户说明](../examples/scaleout_sparse_clos/README.md#可选的ep阶段传输完成依赖)。
+
 独立多连接 `rc-fabric-probe` 在同一 `Fabric` 中保存各 QP 的序号、WRITE 进度、原子重放和定时器，多个目标 QP 共享同一 GPU 注册区字节。源完成由本连接的实际反馈决定，不添加跨 QP 隐藏顺序；请求共用物理 NIC 调度，回复共用物理反馈队列。有限功能范围见[多连接参考](../examples/rc_concurrent/README.md)，没有接入 LLMServingSim 或改变旧入口。
 
 独立`rdma-rc-probe`将WRITE/原子请求和Atomic ACK放在同一原生`Fabric`时钟与物理队列中：目标从收到的操作字段/字节更新内存，源从实际反馈完成，有限重放缓存防止重复原子副作用。该入口只检查单QP顺序WQE；没有将MRT1、modern控制器或LLMServingSim连接到RC路径。固定速率调度、线格式近似及公开命令见[操作包小例](../examples/rc_packet_probe/README.md)。

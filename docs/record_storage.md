@@ -1,5 +1,7 @@
 # 观测记录与存储格式
 
+服务显式开启`ep_transport_flush/1`时，`result.service.phase_completion`保存有效`mode`和`gates`；每项包含`graph_id/id/members/released_ns`，成员包含`rank/node/arrived_ns`。时间为同一ns-3绝对纳秒，未发生到达/释放为null；失败不补造完成。GATE节点自身声明计算耗时为0，但issue到callback区间表示组内等待，不能按固定COMP耗时解释。缺省服务不新增该报告字段，边界见[公开说明](../examples/scaleout_sparse_clos/README.md#可选的ep阶段传输完成依赖)。
+
 ## ASTRA服务持久传输记录
 
 显式`service.transport`选择`moe-astra-message-transport/1`时，原生`result.messages`为空，`service_transport.kind=astra_persistent_streams/1`。`service_transport.messages`只列实际已提交SEND的语义消息，保留原图字段并增加`stream/begin/end/ready_ns/published_ns/receive_ready_ns/ack_ns`；`registered_messages`另含已登记但可能未提交SEND的工作。未完成时间为空；底层`native.work`仍用-1表示未发生时间，读取器核对两者。`native`保存持久连接、发布、接收、确认、拥塞和恢复原件，不把这些真值喂给前端算法。

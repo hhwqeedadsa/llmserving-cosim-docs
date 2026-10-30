@@ -20,11 +20,13 @@ from .scaleout_limits import limits
 from .scaleout_llm import EXTRA_COSTS, capacity, validate_llm
 from .host_timing import HostTiming
 from .native_control import event as control_event
+from .phase_completion import enabled as phase_enabled
 
 
 def validate(c, topology, rdma, replay=None):
     fields(c, 'schema_version model workload parallel compute'+(' route_replay' if 'route_replay' in c else '')+
-           (' transport' if 'transport' in c else ''), 'service')
+           (' transport' if 'transport' in c else '')+(' phase_completion' if 'phase_completion' in c else ''), 'service')
+    phase_enabled(c)
     extended=c['schema_version']=='moe-scaleout-service/2'
     require(c['schema_version'] in ('moe-scaleout-service/1','moe-scaleout-service/2'), 'unsupported service schema')
     budget=limits(rdma)
@@ -54,6 +56,9 @@ def validate(c, topology, rdma, replay=None):
         require(group == sorted(set(group)) and m['experts'] % len(group) == 0, 'EP group or expert placement invalid')
         flat.extend(group)
     require(sorted(flat) == gpus, 'EP groups must partition physical GPUs exactly')
+    if phase_enabled(c):
+        require(2*m['layers']*w['decode_steps']*len(flat)<=131072 and
+                2*m['layers']*w['decode_steps']*len(p['groups'])<=65536,'phase completion event budget exceeded')
     fields(cost, 'source attention_ns_per_token pack_ns_per_token expert_ns_per_contribution merge_ns_per_token'+
            (' '+' '.join(k+'_ns_per_token' for k in EXTRA_COSTS) if extended else ''), 'compute')
     require(cost['source'] == 'declared_reference', 'this service requires declared, uncalibrated compute costs')
@@ -111,6 +116,7 @@ def make_wave(config, group, group_index, step, planes, replay=None):
     messages, route_rows = [], []
     full=config['schema_version']=='moe-scaleout-service/2'
     local_batch={r:len(replay.contexts(r)) if full and replay else w['batch_per_rank'] for r in group}
+    gated=phase_enabled(config);gates=[]
     # Identity depends on logical work, never submission/completion order.
     pair_counts=[len(g)*(len(g)-1) for g in config['parallel']['groups']]
     pairs=len(group)*(len(group)-1)
@@ -125,7 +131,7 @@ def make_wave(config, group, group_index, step, planes, replay=None):
         return identity
 
     def leg(layer, name, matrix, dependencies, leg_index):
-        incoming = {r: [] for r in group}
+        incoming = {r: [] for r in group};outgoing={r:[] for r in group}
         for src in group:
             for dst in group:
                 count = matrix.get((src, dst), 0)
@@ -139,9 +145,16 @@ def make_wave(config, group, group_index, step, planes, replay=None):
                 message = dict(id=identity, tag=identity, src=src, dst=dst, bytes=count*m['hidden_size']*m['activation_bytes'],
                                plane=plane, layer=layer, phase=name, contributions=count)
                 messages.append(message)
-                node(src, 'SEND', f'L{layer}.{name}.{src}-{dst}.send', [dependencies[src]], message=message)
+                outgoing[src].append(node(src, 'SEND', f'L{layer}.{name}.{src}-{dst}.send', [dependencies[src]], message=message))
                 incoming[dst].append(node(dst, 'RECV', f'L{layer}.{name}.{src}-{dst}.recv', [], message=message))
-        return incoming
+        return incoming,outgoing
+
+    def completion(layer,phase,incoming,outgoing,producers):
+        if not gated:return producers
+        members={r:node(r,'GATE',f'L{layer}.{phase}.flush',incoming[r]+outgoing[r]+[producers[r]]) for r in group}
+        gates.append(dict(id=f'L{layer}.{phase}',layer=layer,phase=phase,
+                          members=[dict(rank=r,node=members[r]) for r in group]))
+        return members
 
     if full:
         previous={r:[node(r,'COMP','embedding',[],cost['embedding_ns_per_token']*local_batch[r])] for r in group}
@@ -171,12 +184,14 @@ def make_wave(config, group, group_index, step, planes, replay=None):
                 residual=node(r,'COMP',f'L{layer}.attention_residual',deps,cost['residual_ns_per_token']*local_batch[r])
                 deps=[node(r,'COMP',f'L{layer}.ffn_norm',[residual],cost['norm_ns_per_token']*local_batch[r])]
             packed[r] = node(r,'COMP',f'L{layer}.pack',deps,cost['pack_ns_per_token']*(local_batch[r] if full else source_tokens[r]))
-        incoming = leg(layer,'dispatch',matrix,packed,0)
-        experts = {r:node(r,'COMP',f'L{layer}.experts',incoming[r]+[packed[r]],
+        incoming,outgoing = leg(layer,'dispatch',matrix,packed,0)
+        dispatched=completion(layer,'dispatch',incoming,outgoing,packed)
+        experts = {r:node(r,'COMP',f'L{layer}.experts',incoming[r]+[packed[r],dispatched[r]],
                          cost['expert_ns_per_contribution']*received[r]) for r in group}
         combine = Counter({(dst,src):n for (src,dst),n in matrix.items()})
-        returned = leg(layer,'combine',combine,experts,1)
-        previous = {r:[node(r,'COMP',f'L{layer}.merge',returned[r]+[experts[r]],
+        returned,outgoing = leg(layer,'combine',combine,experts,1)
+        combined=completion(layer,'combine',returned,outgoing,experts)
+        previous = {r:[node(r,'COMP',f'L{layer}.merge',returned[r]+[experts[r],combined[r]],
                            cost['merge_ns_per_token']*(local_batch[r] if full else source_tokens[r]))] for r in group}
         if full:
             previous={r:[node(r,'COMP',f'L{layer}.ffn_residual',previous[r],cost['residual_ns_per_token']*local_batch[r])] for r in group}
@@ -187,9 +202,11 @@ def make_wave(config, group, group_index, step, planes, replay=None):
                 key='norm' if stage=='final_norm' else stage
                 deps=[node(r,'COMP',stage,deps,cost[key+'_ns_per_token']*local_batch[r])]
     require(all(m['id'] < 2**31 for m in messages), 'ASTRA message tag range exceeded')
-    return dict(schema_version='moe-scaleout-wave/1', graph_id=graph, rank_ids=group,
+    wave=dict(schema_version='moe-scaleout-wave/2' if gated else 'moe-scaleout-wave/1', graph_id=graph, rank_ids=group,
                 group_index=group_index, decode_step=step, messages=messages, rank_nodes=nodes,
                 route_source=replay.manifest['source']['kind'] if replay else 'synthetic_balanced_or_explicit_hotspot', routes=route_rows)
+    if gated:wave['phase_completion']=dict(config['phase_completion'],gates=gates)
+    return wave
 
 
 def export_wave(wave, directory, proto):
@@ -197,13 +214,13 @@ def export_wave(wave, directory, proto):
     save(directory/'wave.json', wave)
     for rank in wave['rank_ids']:
         with (directory/f'layer.{rank}.et').open('xb') as stream:
-            write_message(stream, proto.GlobalMetadata(version='moe-scaleout-wave/1'))
+            write_message(stream, proto.GlobalMetadata(version=wave['schema_version']))
             for task in wave['rank_nodes'][rank]:
                 n = proto.Node(id=task['id'], name=task['name'], data_deps=task['deps'])
                 n.attr.add(name='is_cpu_op', bool_val=False)
                 n.attr.add(name='num_ops', int64_val=0)
                 n.attr.add(name='tensor_size', uint64_val=0)
-                if task['kind'] == 'COMP':
+                if task['kind'] in ('COMP','GATE'):
                     n.type = proto.COMP_NODE; n.duration_micros = task['duration_ns']  # Locked fork: ns.
                 else:
                     msg = task['message']
@@ -282,6 +299,8 @@ class Frontend:
                         set(batch.scheduled_tokens.values())=={1}, 'invalid real Decode batch')
             with self.timing.span('wave_build'):
                 wave=make_wave(self.config,group,index,self.steps[index],self.planes,self.replay)
+            from .phase_completion import structure
+            structure(wave,self.config)
             self.message_preflight.accept_wave(wave,now)
             directory=output/'graphs'/wave['graph_id']
             with self.timing.span('wave_export'):export_wave(wave,directory,proto)

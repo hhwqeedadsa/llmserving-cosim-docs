@@ -73,11 +73,14 @@ def verify(directory):
                 for dep in task['deps']:
                     require(start>=event_time(events,wave['graph_id'],rank,dep,'callback'),'ASTRA dependency violated')
                 if task['kind']=='COMP':require(end-start==task['duration_ns'],'declared compute did not execute')
+                elif task['kind']=='GATE':pass  # Waiting time is checked by the full EP join below.
                 else:
                     cb=callbacks[task['message']['id']];prefix='send' if task['kind']=='SEND' else 'recv'
                     require(start==cb[prefix+'_post_ns'] and end==cb[prefix+'_callback_ns'],'ASTRA issue/callback differs')
                 count+=1
     require(ids==set(messages)==set(callbacks) and len(ids)==a['registered_messages'],'extra/missing actual service work')
+    from .phase_completion import actual as verify_phases
+    verify_phases(waves,service,r,events)
     for index in range(len(service['parallel']['groups'])):
         history=sorted((h for h in f['history'] if h['group_index']==index),key=lambda h:h['step'])
         require([h['step'] for h in history]==list(range(service['workload']['decode_steps'])) and

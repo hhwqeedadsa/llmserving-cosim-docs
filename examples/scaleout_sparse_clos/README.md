@@ -43,3 +43,11 @@ PYTHONPATH=python python -m moe_ub_cosim scaleout rdma-check --run /path/to/new/
 沿用[来源路由输入说明](../scaleout_route_replay/README.md)，保留来源模型/E/K/层号、原件SHA和未知采集信息。明确真实请求的源rank与slot，设置稀疏模式，并重新计算连接集合与限额。15份独立原件只能说明15个请求，不能声称128/256/512卡各有一个独立请求。
 
 `frontend.json`记录实际活跃来源rank、逐轮batch请求ID和完成；`rdma-check`分别检查调度选择、原始专家选择、图依赖、逻辑字节、实际接收与源确认。既有逐专家贡献图不等于现代DeepEP的去重、flush或GPU流语义；需要先校准这些条件，才能将结果用于恢复优化研究。
+
+## 可选的EP阶段传输完成依赖
+
+在`service.json`顶层显式添加`"phase_completion": {"mode": "ep_transport_flush/1"}`后，仍使用上述`rdma-run/rdma-check`命令。需要用当前源码构建原生服务；旧后端会提前拒绝新增启动参数，不会自动退回旧语义。缺省不添加此字段，继续执行原有逐rank接收依赖。
+
+此模式使每层Dispatch、Combine分别等待本EP组所有实际发送确认、接收和生产计算，再允许后续专家计算/归并；没有请求或没有数据的rank同样参与。GATE节点的等待来自本次ASTRA/native回调，不给定固定时间，也不额外运行一套网络。
+
+**这是零协调成本的必要依赖下界，不是完整DeepEP。** 它不模拟GIN屏障信号、真实CQ成本或GPU可见性，不改变逐专家贡献的数据表示、持久连接、拥塞控制和恢复。`result.json.service.phase_completion`记录每个门限的成员到达与释放；图版本为`moe-scaleout-wave/2`。公开检查拒绝漏成员、漏本地传输前驱、漏消费依赖和提前释放。单次服务最多65536个门限、131072个成员到达，超限在前端验证时拒绝。

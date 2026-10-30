@@ -22,14 +22,17 @@ from .host_timing import HostTiming
 from .native_control import event as control_event
 from .phase_completion import enabled as phase_enabled
 from .token_transport import configuration as token_configuration, payload_sizes
+from .execution_events import configuration as event_configuration, ExecutionObserver
 
 
 def validate(c, topology, rdma, replay=None):
     fields(c, 'schema_version model workload parallel compute'+(' route_replay' if 'route_replay' in c else '')+
            (' transport' if 'transport' in c else '')+(' phase_completion' if 'phase_completion' in c else '')+
-           (' token_transport' if 'token_transport' in c else ''), 'service')
+           (' token_transport' if 'token_transport' in c else '')+
+           (' execution_events' if 'execution_events' in c else ''), 'service')
     phase_enabled(c)
     token_configuration(c)
+    event_configuration(c)
     extended=c['schema_version']=='moe-scaleout-service/2'
     require(c['schema_version'] in ('moe-scaleout-service/1','moe-scaleout-service/2'), 'unsupported service schema')
     budget=limits(rdma)
@@ -369,6 +372,8 @@ def _worker(config_path,topology_path,protocol_path,backend,protoc,output,timing
     if host_timing:command.append(str(output/'native_host.jsonl'))
     command.extend(native_arguments(c,output))
     transcript=[]; child=None
+    observation=ExecutionObserver(event_configuration(c)) if event_configuration(c) else None
+    event_file=(output/'execution_events.jsonl').open('x',buffering=1) if observation else None
     try:
         # A host-budget kill must not lose already-read complete control lines
         # in Python's block buffer. This is not fsync/power-loss durability.
@@ -378,13 +383,23 @@ def _worker(config_path,topology_path,protocol_path,backend,protoc,output,timing
                 with timing.span('native_output_wait'):line=child.stdout.readline()
                 if not line:break
                 logs.write(line)
-                event=control_event(line)
+                event=control_event(line,observations=observation is not None)
                 if event is None:continue
+                if event['type']=='OBSERVE':
+                    observation.accept(event)
+                    event_file.write(json.dumps(event,separators=(',',':'))+'\n')
+                    continue
                 with timing.span('frontend_decide'):reply=frontend.decide(event,output,proto)
+                if observation:
+                    for submission in reply['submissions']:
+                        observation.register(checked_json(Path(submission)/'wave.json',268435456))
                 transcript.append(dict(event=event,reply=reply))
                 child.stdin.write(json.dumps(reply)+'\n');child.stdin.flush()
             code=child.wait();require(code==0, 'native service failed; inspect native.stderr.log')
     finally:
+        if event_file is not None:
+            event_file.close()
+            save(output/'execution_observation.json',observation.snapshot())
         if child is not None and child.poll() is None:
             child.terminate();child.wait(timeout=5)
         report=dict(history=frontend.history,transcript=transcript,scheduler_calls=frontend.calls,
@@ -401,6 +416,7 @@ def _worker(config_path,topology_path,protocol_path,backend,protoc,output,timing
         with timing.span('frontend_report_write'):save(output/'frontend.json',report)
     with timing.span('native_result_read'):result=checked_json(output/'result.json',limits(rdma)['result_json_bytes'])
     require(result['passed'] and result['service']['service_finished'], 'service did not complete')
+    if observation:require(observation.drained_ns is not None,'native service omitted execution drain observation')
 
 
 def run(config, topology, protocol, backend, output, protoc='protoc', *, host_timing=False):
@@ -430,6 +446,13 @@ def run(config, topology, protocol, backend, output, protoc='protoc', *, host_ti
         provenance['host_timing']=dict(enabled=True,schema_version='moe-host-phase-trace/1')
         module=ROOT/'python/moe_ub_cosim/host_timing.py'
         provenance['hashes'][str(module)]=digest(module)
+        save(output/'provenance.json',provenance)
+    if event_configuration(c):
+        provenance=checked_json(output/'provenance.json',65536)
+        provenance['execution_events']=dict(c['execution_events'])
+        for name in ('execution_events.py','native_control.py'):
+            module=ROOT/'python/moe_ub_cosim'/name
+            provenance['hashes'][str(module)]=digest(module)
         save(output/'provenance.json',provenance)
     command=[sys.executable,'-m','moe_ub_cosim.scaleout_service','--worker',str(output/'input.json'),str(output),str(output/'rdma.json'),
              str(backend),str(protoc),str(output)]

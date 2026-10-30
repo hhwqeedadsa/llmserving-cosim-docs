@@ -1,5 +1,7 @@
 # 系统架构与执行过程
 
+LLMServingSim Scale-Out服务的可选[执行事件通道](execution_events.md)由ASTRA被动节点观察器及共享消息适配器发出，Python在同一控制输出中在线消费`OBSERVE`，不将其传给`Frontend.decide`或回复`COMMIT`。原调度决策、组级退出、回调和网络排空逻辑保持独立。此通道为后续贡献/尝试绑定提供执行事实，目前尚未调度恢复任务。
+
 `contribution_attempts.py`记录贡献包一次提交及执行尝试/资源退出，见[接口说明](contribution_attempts.md)。目前仅通过离线`contribution-check`验收，未接ASTRA/ns-3；原`rdma-run`的图、门限和收发定义保持不变。该核心不发包、不调度GPU、不伪造原传输ACK。
 
 服务可显式使用`deepep_direct_bf16/1`传输投影：同一token发往同一rank的Dispatch只传一次，专家工作量仍按全部专家贡献计算；Combine选择逐专家回传或在rank内归并后回传。归并是等待专家完成的独立COMP节点，发送和阶段门限等待其真实完成；耗时由输入声明。两种模式均使用已有持久传输和阶段完成机制，说明及公开示例见[传输规范](tasks/token_transport_spec.md)。

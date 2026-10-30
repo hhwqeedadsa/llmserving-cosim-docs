@@ -1,5 +1,7 @@
 # 用户指南
 
+需要在运行中区分节点完成、消息接收、发送确认和任务图退出时，可在LLMServingSim Scale-Out服务配置显式开启[实时执行事件](execution_events.md)。它使用实际回调，只观察、不触发备用执行；默认关闭。
+
 检查专家贡献包的原/备用回调、重复结果与资源退出，可用`scaleout contribution-check`和[自包含人工例](../examples/contribution_attempts/README.md)。这是无计时CPU状态检查，尚不接入ASTRA/ns-3服务；退出0表示事件合法，完整覆盖和资源退休须分别查看报告。
 
 需要按同一token的目的卡去重，并选择逐专家或卡内合并Combine时，使用显式`token_transport`配置和[128卡Clos示例](../examples/scaleout_token_transport/README.md)。该模式要求持久传输与阶段完成配置；卡内合并耗时需声明，专家计算份数保留，缺省旧图不改变。

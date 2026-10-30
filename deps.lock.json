@@ -14,7 +14,7 @@
     "native_baselines": "not_run",
     "joint_build": "not_run",
     "recursive_inventory": "observed_parent_gitlinks_only",
-    "notes": "下列提交来自固定版本及其父仓库 gitlink。更深层依赖继续由父提交锁定，完整初始化与远端可获取性尚未验证。GitCode 配套工具只核对了父仓库指针，未拉取。"
+    "notes": "\u4e0b\u5217\u63d0\u4ea4\u6765\u81ea\u56fa\u5b9a\u7248\u672c\u53ca\u5176\u7236\u4ed3\u5e93 gitlink\u3002\u66f4\u6df1\u5c42\u4f9d\u8d56\u7ee7\u7eed\u7531\u7236\u63d0\u4ea4\u9501\u5b9a\uff0c\u5b8c\u6574\u521d\u59cb\u5316\u4e0e\u8fdc\u7aef\u53ef\u83b7\u53d6\u6027\u5c1a\u672a\u9a8c\u8bc1\u3002GitCode \u914d\u5957\u5de5\u5177\u53ea\u6838\u5bf9\u4e86\u7236\u4ed3\u5e93\u6307\u9488\uff0c\u672a\u62c9\u53d6\u3002"
   },
   "environment": {
     "platform": "native-linux",
@@ -37,7 +37,7 @@
       "clone_url": "https://github.com/baoy21/LLMServingSim.git",
       "upstream_url": "https://github.com/casys-kaist/LLMServingSim.git",
       "baseline_commit": "a4053bc1161872420e1e0607cb3409ef659b828e",
-      "checkout_commit": "3ff9dee68d7184d0d9c7132e2eebfdb821cd8328",
+      "checkout_commit": "77da4a67204789249994a6a6ca82aaa2b1c41fc7",
       "project_patch_commits": [
         "47b3a219da6151207f6c21256a6dc63a9e6c4830",
         "0038df80f1a46cd7b1cd73616f739e374c11c3e4",
@@ -48,7 +48,8 @@
         "e96d8391d9ad4768bfd7c4a1206abcfb8e34e9a1",
         "94f3b005f7174575780bfe29d68e015df9719951",
         "b62f83510572cefd3fb8fa46591fdaaf89b872a7",
-        "3ff9dee68d7184d0d9c7132e2eebfdb821cd8328"
+        "3ff9dee68d7184d0d9c7132e2eebfdb821cd8328",
+        "77da4a67204789249994a6a6ca82aaa2b1c41fc7"
       ]
     },
     {
@@ -79,7 +80,7 @@
       "clone_url": "https://github.com/baoy21/astra-sim.git",
       "upstream_url": "https://github.com/casys-kaist/astra-sim.git",
       "baseline_commit": "d3469945c50410cac2e727c9ab627670c965db2a",
-      "checkout_commit": "479539202401c04c726440c3c6e61327a96a1e60",
+      "checkout_commit": "04948bc1dd8833201967560fd4ece0a57c642705",
       "project_patch_commits": [
         "3f72d0af113f468ec8031a1037685464b47e9535",
         "e2a14f55d9a45db8f3831bda7035af3e191e4bb7",
@@ -89,7 +90,8 @@
         "8ecf388a667de9d45866da1ee9829938d6218686",
         "0c51d089094d2a39aa91ac8ba32e4ca28f3e1714",
         "acb6edcd0e6dc800a37d6d6fa4c06f44d807f2b5",
-        "479539202401c04c726440c3c6e61327a96a1e60"
+        "479539202401c04c726440c3c6e61327a96a1e60",
+        "04948bc1dd8833201967560fd4ece0a57c642705"
       ]
     },
     {

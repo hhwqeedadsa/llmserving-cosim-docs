@@ -8,7 +8,9 @@ namespace moe_rdma {
 class Messages {
  public:
   Messages(Fabric& fabric,ServiceTransport& transport): fabric_(fabric),transport_(transport) {}
-  void Register(const Json& messages);
+  void Register(const Json& messages,const std::string& graph_id="");
+  using Observer=std::function<void(const std::string&,const std::string&,uint64_t,int)>;
+  void SetObserver(Observer observer) {observer_=std::move(observer);}
   void Post(bool send, int rank, uint64_t bytes, int type, int peer, int tag,
             void (*callback)(void*), void* argument);
   bool Complete(const std::vector<uint64_t>& messages) const;
@@ -20,6 +22,7 @@ class Messages {
     unsigned plane=0;
     uint64_t bytes=0;
     uint64_t id=0;
+    std::string graph_id;
     int64_t send_post=-1,recv_post=-1,send_callback=-1,recv_callback=-1;
     bool sent=false, posted=false, received=false, acked=false;
     bool send_called=false, recv_called=false;
@@ -31,6 +34,7 @@ class Messages {
   std::map<uint64_t,Operation> operations_;
   std::map<std::tuple<int,int,int>,uint64_t> keys_;
   uint64_t send_posts_=0,recv_posts_=0,send_callbacks_=0,recv_callbacks_=0;
+  Observer observer_;
 };
 
 class Adapter final: public AstraSim::AstraNetworkAPI {

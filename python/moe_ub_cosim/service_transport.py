@@ -62,6 +62,9 @@ def message_preflight(topology, protocol, config):
 def native_arguments(config, output):
     from .phase_completion import enabled
     args=['--phase-completion','ep_transport_flush/1'] if enabled(config) else []
+    from .execution_events import configuration
+    option=configuration(config)
+    if option:args+=['--execution-events',str(option['max_events'])]
     if 'transport' not in config:return args
     from .scaleout_rdma import save
     path=output/'service-transport.json';save(path,config['transport'])

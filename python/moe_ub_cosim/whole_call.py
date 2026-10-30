@@ -20,14 +20,15 @@ def configuration(config):
     if 'whole_call_replication' not in config:return None
     value=config['whole_call_replication']
     require(isinstance(value,dict),'invalid whole call replication object')
-    delayed=value.get('schema_version')=='moe-whole-call-replication/2'
+    per_call=value.get('schema_version')=='moe-whole-call-replication/3'
+    delayed=value.get('schema_version') in ('moe-whole-call-replication/2','moe-whole-call-replication/3')
     fields(value,'schema_version policy initial_state max_events calls'+
-           (' hedge_after_ns max_wakeup_events' if delayed else ''),'whole call replication')
+           (' max_wakeup_events' if per_call else ' hedge_after_ns max_wakeup_events' if delayed else ''),'whole call replication')
     require(((value['schema_version']=='moe-whole-call-replication/1' and value['policy']=='eager_complete_segment/1') or
              (delayed and value['policy']=='delayed_complete_segment/1')) and
             value['initial_state']=='declared_equivalent_ready_kv/1','unsupported whole call replication semantics')
     if delayed:
-        integer(value['hedge_after_ns'],'hedge deadline',1,4999999)
+        if not per_call:integer(value['hedge_after_ns'],'hedge deadline',1,4999999)
         integer(value['max_wakeup_events'],'wakeup event budget',2,65536)
         require('source_ack_watchdog' not in config and 'contribution_tracking' not in config,
                 'delayed whole replicas do not combine watchdog or contribution observers')
@@ -51,7 +52,8 @@ def configuration(config):
     require(sorted(flat)==list(range(len(flat))),'whole EP groups must partition physical ranks')
     require(isinstance(calls,list) and 1<=len(calls)<=32,'invalid whole call count')
     for call in calls:
-        fields(call,'id primary_group replica_group','whole call')
+        fields(call,'id primary_group replica_group'+(' hedge_after_ns' if per_call else ''),'whole call')
+        if per_call:integer(call['hedge_after_ns'],'call hedge deadline',1,4999999)
         require(isinstance(call['id'],str) and re.fullmatch(r'[A-Za-z0-9_.-]{1,64}',call['id']) and
                 call['id'] not in names,'invalid or duplicate whole call identity')
         names.add(call['id'])
@@ -62,6 +64,13 @@ def configuration(config):
     require(used==set(range(len(groups))) and 7*len(calls)<=value['max_events'],
             'whole calls must partition groups and fit lifecycle budget')
     return value
+
+
+def deadlines(option):
+    """Absolute native deadlines, keeping the original global schema intact."""
+    require(option['policy']=='delayed_complete_segment/1','deadlines require delayed whole calls')
+    return {call['id']:(call['hedge_after_ns'] if option['schema_version']=='moe-whole-call-replication/3'
+                        else option['hedge_after_ns']) for call in option['calls']}
 
 
 def source_groups(config):

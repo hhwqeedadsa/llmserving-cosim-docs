@@ -51,7 +51,8 @@ def validate(c, topology, rdma, replay=None):
     require(c['schema_version'] in ('moe-scaleout-service/1','moe-scaleout-service/2'), 'unsupported service schema')
     budget=limits(rdma)
     if whole_option and whole_option['policy']=='delayed_complete_segment/1':
-        require(whole_option['hedge_after_ns']<budget['max_sim_ns'],
+        from .whole_call import deadlines
+        require(all(t<budget['max_sim_ns'] for t in deadlines(whole_option).values()),
                 'whole replica deadline must precede simulation stop')
     m, w, p, cost = (c[k] for k in ('model', 'workload', 'parallel', 'compute'))
     fields(m, 'name hidden_size ffn_hidden_size experts top_k activation_bytes layers gpu_type'+(' llm' if extended else ''), 'model')

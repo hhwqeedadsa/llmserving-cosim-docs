@@ -60,6 +60,14 @@ primary在0提交，replica先持有实际预留KV，但不进入LLMServingSim�
 
 `result.service.control_wakeup`记录有序arm/cancel/fire及待触发时间，原始DECIDE含`wakeup_ns`，COMMIT含`wake_at_ns`。公共核验按原始OBSERVE/DECIDE顺序重建策略，核对整图覆盖、跳过状态、原生定时事件和按原始上下文计算的KV释放。时间口径为`delayed_whole_finite_segment/1`；仍分列逻辑就绪、已启动尝试结束和网络排空。
 
+### 为独立任务设置不同门槛
+
+显式`moe-whole-call-replication/3`沿用`delayed_complete_segment/1`，移除顶层`hedge_after_ns`，改为每个`calls`条目必填`hedge_after_ns`，范围仍为1～4,999,999ns且必须早于本次模拟截止。`max_wakeup_events`仍为全服务预算，不自动扩大。旧`/1`立即副本及`/2`统一门槛保持原格式和语义。
+
+每个primary仍在0提交。控制层只为尚未完成、未启动/未跳过备用的call选择最早期限，共用一个可替换的原生定时器。某call提前完整完成，只释放自己的备用KV；更晚的任务继续等待自己的门槛。到期只启动该时刻到期且尚无完整结果的call，不能借用另一call的门槛。所有已启动图继续真实收尾，实际结果与资源分别核验。
+
+这可以比较一个任务启动备用时对其他独立任务的影响。给其他任务较晚门槛仍表示预先持有完整模型/KV，不能冒称未预留资源；它们实际未启动副本须由结果核对。公开[双任务128端点Clos示例](../examples/scaleout_multicall/README.md)采用四组EP32，支持两份独立人工原件或显式提供的R1来源清单。
+
 准备与公开命令见[128端点Clos示例](../examples/scaleout_whole_call/README.md)。
 
 已保存的真实路由正常/局部故障功能验收见[结果与证据](../fixtures/whole_call/README.md)。两条件均开启立即副本，不是无冗余净收益对照。

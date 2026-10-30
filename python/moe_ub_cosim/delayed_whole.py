@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 
 from .scaleout_topology import integer,require
-from .whole_call import WholeCallConsumer
+from .whole_call import WholeCallConsumer,deadlines
 
 
 class DelayedWholeConsumer(WholeCallConsumer):
@@ -13,6 +13,7 @@ class DelayedWholeConsumer(WholeCallConsumer):
         self.replay=replay
         require(self.option['policy']=='delayed_complete_segment/1','missing delayed whole policy')
         self.retirement_sequences={}
+        self.deadlines=deadlines(self.option)
         for call in self.calls.values():call['attempts']['replica']['skipped_ns']=None
 
     def choose(self,event):
@@ -20,25 +21,26 @@ class DelayedWholeConsumer(WholeCallConsumer):
         now=event['now_ns'];integer(now,'whole decision time',0,2**63-1)
         require(event['type']=='DECIDE' and now>=self.now,'invalid delayed decision time/type')
         require('wakeup_ns' in event and (event['wakeup_ns'] is None or
-                (type(event['wakeup_ns']) is int and event['wakeup_ns']==now==self.option['hedge_after_ns'])),
+                (type(event['wakeup_ns']) is int and event['wakeup_ns']==now and now in self.deadlines.values())),
                 'missing or foreign native deadline decision')
         groups=[];wake=None
         for name,call in self.calls.items():
+            deadline=self.deadlines[name]
             primary,replica=(call['attempts'][role] for role in ('primary','replica'))
             if primary['submitted_ns'] is None:
                 require(now==0,'delayed primary must start in initial decision')
                 groups.append(primary['group_index'])
             if replica['submitted_ns'] is not None or replica['skipped_ns'] is not None:continue
             if primary['finished_ns'] is not None:
-                require(primary['finished_ns']==now<=self.option['hedge_after_ns'],
+                require(primary['finished_ns']==now<=deadline,
                         'replica skip must follow primary completion at or before deadline')
                 self.emit('attempt_skipped',name,'replica',now,self.retirement_sequences[primary['graph_id']])
                 replica['skipped_ns']=now
-            elif now>=self.option['hedge_after_ns']:
-                require(now==self.option['hedge_after_ns'] and event.get('wakeup_ns')==now,
+            elif now>=deadline:
+                require(now==deadline and event.get('wakeup_ns')==now,
                         'replica launch requires exact native deadline decision')
                 groups.append(replica['group_index'])
-            else:wake=self.option['hedge_after_ns']
+            else:wake=deadline if wake is None else min(wake,deadline)
         return sorted(groups),wake
 
     def register(self,wave,now):
@@ -49,7 +51,7 @@ class DelayedWholeConsumer(WholeCallConsumer):
                 wave['rank_ids']==self.config['parallel']['groups'][attempt['group_index']] and
                 len(wave['routes'])==self.config['model']['layers'],'invalid delayed graph scope/lifecycle')
         integer(now,'delayed submit time',0,2**63-1)
-        require(now==(0 if role=='primary' else self.option['hedge_after_ns']) and
+        require(now==(0 if role=='primary' else self.deadlines[name]) and
                 (role=='primary' or (call['attempts']['primary']['submitted_ns']==0 and call['winner'] is None)),
                 'delayed submission outside legal decision')
         self.emit('attempt_submitted',name,role,now);attempt['submitted_ns']=now
@@ -83,9 +85,11 @@ def skipped_requests(config,frontend):
 def logical_finish(report,history):
     require(report.get('schema_version')=='moe-whole-call-report/2' and report.get('all_attempts_retired') is True,
             'incomplete delayed whole report')
-    deadline=report['configuration']['hedge_after_ns'];graphs=set();ends=[]
+    by_call=deadlines(report['configuration']);graphs=set();ends=[]
     require(isinstance(report.get('calls'),dict) and report['calls'],'missing delayed calls')
-    for call in report['calls'].values():
+    require(set(report['calls'])==set(by_call),'delayed call coverage differs from input')
+    for name,call in report['calls'].items():
+        deadline=by_call[name]
         attempts=call['attempts'];require(set(attempts)=={'primary','replica'},'invalid delayed roles')
         completed={}
         for role,a in attempts.items():

@@ -1,0 +1,125 @@
+{
+  "passed": true,
+  "network_runs": 1,
+  "gpu_endpoints": 128,
+  "ep_sizes": [
+    128
+  ],
+  "experts_per_rank": 2,
+  "independent_real_requests": 15,
+  "source_kind": "user_provided_model_routes",
+  "remote_revision_verified": false,
+  "source_layers": [
+    3,
+    4
+  ],
+  "decode_entries": [
+    1,
+    2
+  ],
+  "messages": 926,
+  "logical_bytes": 13676544,
+  "packet_events_checked": 66874,
+  "verified_nodes": 4924,
+  "gates_checked": 8,
+  "gate_members_checked": 1024,
+  "phase_timing": [
+    {
+      "graph_id": "g0.w0",
+      "layer": 0,
+      "phase": "dispatch",
+      "members": 128,
+      "last_receiver_ready_ns": 10964,
+      "last_source_ack_ns": 16970,
+      "released_ns": 16970,
+      "earliest_consumer_ns": 16970,
+      "arrival_spread_ns": 16970
+    },
+    {
+      "graph_id": "g0.w0",
+      "layer": 0,
+      "phase": "combine",
+      "members": 128,
+      "last_receiver_ready_ns": 27171,
+      "last_source_ack_ns": 33177,
+      "released_ns": 33177,
+      "earliest_consumer_ns": 33177,
+      "arrival_spread_ns": 16207
+    },
+    {
+      "graph_id": "g0.w0",
+      "layer": 1,
+      "phase": "dispatch",
+      "members": 128,
+      "last_receiver_ready_ns": 45719,
+      "last_source_ack_ns": 51725,
+      "released_ns": 51725,
+      "earliest_consumer_ns": 51725,
+      "arrival_spread_ns": 18548
+    },
+    {
+      "graph_id": "g0.w0",
+      "layer": 1,
+      "phase": "combine",
+      "members": 128,
+      "last_receiver_ready_ns": 62911,
+      "last_source_ack_ns": 68917,
+      "released_ns": 68917,
+      "earliest_consumer_ns": 68917,
+      "arrival_spread_ns": 17192
+    },
+    {
+      "graph_id": "g0.w1",
+      "layer": 0,
+      "phase": "dispatch",
+      "members": 128,
+      "last_receiver_ready_ns": 80840,
+      "last_source_ack_ns": 86846,
+      "released_ns": 86846,
+      "earliest_consumer_ns": 86846,
+      "arrival_spread_ns": 17899
+    },
+    {
+      "graph_id": "g0.w1",
+      "layer": 0,
+      "phase": "combine",
+      "members": 128,
+      "last_receiver_ready_ns": 97883,
+      "last_source_ack_ns": 103889,
+      "released_ns": 103889,
+      "earliest_consumer_ns": 103889,
+      "arrival_spread_ns": 17043
+    },
+    {
+      "graph_id": "g0.w1",
+      "layer": 1,
+      "phase": "dispatch",
+      "members": 128,
+      "last_receiver_ready_ns": 115129,
+      "last_source_ack_ns": 121135,
+      "released_ns": 121135,
+      "earliest_consumer_ns": 121135,
+      "arrival_spread_ns": 17246
+    },
+    {
+      "graph_id": "g0.w1",
+      "layer": 1,
+      "phase": "combine",
+      "members": 128,
+      "last_receiver_ready_ns": 131341,
+      "last_source_ack_ns": 137347,
+      "released_ns": 137347,
+      "earliest_consumer_ns": 137347,
+      "arrival_spread_ns": 16212
+    }
+  ],
+  "application_finished_ns": 137377,
+  "network_drained_ns": 151445,
+  "post_application_drain_ns": 14068,
+  "complete_DeepEP": false,
+  "coordination_cost_modeled": false,
+  "hardware_calibrated": false,
+  "new_algorithm_gain_measured": false,
+  "network_injected_fault": false,
+  "scope": "finite real expert choices, declared compute/deployment and necessary transport phase ordering"
+}

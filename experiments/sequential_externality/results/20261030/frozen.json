@@ -1,0 +1,181 @@
+{
+  "passed": true,
+  "network_executed": false,
+  "platform_commit": "26599ca0734a0d0c5adf6eeca3dc2b7ec1c76ffe",
+  "backend": {
+    "path": "/home/lry/moe-ub-cosim/runs/delayed_whole_20261030/build/ns3.42-moe-rdma-service",
+    "sha256": "6d9680165ba06a7d1e8e15fd166ba2a28babba7902fbb7d761d3d6afafdf01a3"
+  },
+  "loaded_ns3_libraries": {
+    "/dev/shm/moe-heavy-loss-20261028/build/output/lib/libns3.42-applications.so": "25c9ea0548421f52ebf8191c8b662e1ddb0f63c546fd544c5dc405a4e062ed72",
+    "/dev/shm/moe-heavy-loss-20261028/build/output/lib/libns3.42-point-to-point.so": "5113fd7048c367120119d339007550efaf059a25b0e82f6798ba7e523d626839",
+    "/dev/shm/moe-heavy-loss-20261028/build/output/lib/libns3.42-internet.so": "43339f38fb0502c00c5f19537f6ba6771a168200cd7c83529a12a05b3d2e27f0",
+    "/dev/shm/moe-heavy-loss-20261028/build/output/lib/libns3.42-traffic-control.so": "b52a47933b85e2f61f9a94f29a2871aed9e5941e0cec0e9c9f03570ad15ddc99",
+    "/dev/shm/moe-heavy-loss-20261028/build/output/lib/libns3.42-network.so": "b94272a020f3438347a8bde2b3fa10355d40b09e96792232b3198dac87cd4b94",
+    "/dev/shm/moe-heavy-loss-20261028/build/output/lib/libns3.42-core.so": "4e06c366e439e338d6acaa1f5e802c05dcce8df10b1ba500b83dd945ed2e5f35",
+    "/dev/shm/moe-heavy-loss-20261028/build/output/lib/libns3.42-stats.so": "9f211655e5fe19ade99d1419bdcbcb41618dcaa1fbcba6ab4fa8ee65fb9ace98",
+    "/dev/shm/moe-heavy-loss-20261028/build/output/lib/libns3.42-bridge.so": "28f3b410e4f388e13113dee45b4ade98e90da59e99abb56179994d6f0ee797f5"
+  },
+  "cases": {
+    "control-normal": {
+      "output": "/home/lry/moe-ub-cosim/runs/sequential_whole_20261030/study/control-normal",
+      "config": "/home/lry/moe-ub-cosim/runs/sequential_whole_20261030/study/input/service-control.json",
+      "protocol": "/home/lry/moe-ub-cosim/runs/sequential_whole_20261030/study/input/rdma-multicall-normal.json",
+      "topology": "/home/lry/moe-ub-cosim/runs/sequential_whole_20261030/study/input/topology"
+    },
+    "treatment-normal": {
+      "output": "/home/lry/moe-ub-cosim/runs/sequential_whole_20261030/study/treatment-normal",
+      "config": "/home/lry/moe-ub-cosim/runs/sequential_whole_20261030/study/input/service-multicall.json",
+      "protocol": "/home/lry/moe-ub-cosim/runs/sequential_whole_20261030/study/input/rdma-multicall-normal.json",
+      "topology": "/home/lry/moe-ub-cosim/runs/sequential_whole_20261030/study/input/topology"
+    },
+    "control-local": {
+      "output": "/home/lry/moe-ub-cosim/runs/sequential_whole_20261030/study/control-local",
+      "config": "/home/lry/moe-ub-cosim/runs/sequential_whole_20261030/study/input/service-control.json",
+      "protocol": "/home/lry/moe-ub-cosim/runs/sequential_whole_20261030/study/input/rdma-multicall-local.json",
+      "topology": "/home/lry/moe-ub-cosim/runs/sequential_whole_20261030/study/input/topology"
+    },
+    "treatment-local": {
+      "output": "/home/lry/moe-ub-cosim/runs/sequential_whole_20261030/study/treatment-local",
+      "config": "/home/lry/moe-ub-cosim/runs/sequential_whole_20261030/study/input/service-multicall.json",
+      "protocol": "/home/lry/moe-ub-cosim/runs/sequential_whole_20261030/study/input/rdma-multicall-local.json",
+      "topology": "/home/lry/moe-ub-cosim/runs/sequential_whole_20261030/study/input/topology"
+    }
+  },
+  "prepared": "/home/lry/moe-ub-cosim/runs/sequential_whole_20261030/study/input",
+  "prepared_sha256": {
+    "topology-config.json": "6641213d81f08c2be535cebb37eabf73214c7178bb5bea6c9709392b20ce1980",
+    "manifest.json": "ddf09b5d1085b19a354e353f8d9698ed836c87ff0e60bd54a750c6056a5b2af5",
+    "service.json": "f47541d7886e4c5bdebc46783ee74dd2818462fbbbbc83140093807d8a9fb513",
+    "rdma.json": "2e96b611d1985507bf3eda5816c1cd4595a0c120b4ef5b460ab74c1e0d20b3db",
+    "preparation.json": "8f1d80f86a18e841c4f75c6baef1edfa8fadb6765f6b3d862c742e463d41b096",
+    "service-tracked.json": "2d1f39342117b8b888b30d8291b020bbf3d94f61da33907235c02fd7b21e4c42",
+    "rdma-transient.json": "ce4380fe0443dfd8d3026f353f964832980d5ace0f5100fd4dba8c33f9114408",
+    "preparation-tracking.json": "0e974e0f71471ff04d7c951570f858ba7d57cb6038c8d2436324911356cc6d31",
+    "service-watchdog.json": "1ca8eb48d3b0f649ef5ddd42d5074a5a9f9cba8ea1a5f790499224945f2c1b8d",
+    "rdma-whole-local.json": "ce4380fe0443dfd8d3026f353f964832980d5ace0f5100fd4dba8c33f9114408",
+    "service-whole.json": "a5f8ded01d8e7813314a20112350ae7cdf6c8e9d59f97faf53adab50c2e0d31d",
+    "whole-preparation.json": "e63fe699b1364c0ffb9c59c8e18d77cef3c05c2bcf36201ffb8d23e98a3c6add",
+    "multicall-manifest.json": "5bc8699f2ecf4f46b8b5c1dbb0bdc00ff74826c26b997d7a5b2cb4c60c3995de",
+    "rdma-multicall-normal.json": "820061c5c70934e8b5371ec4db37d4ab6a1a62ad6588033043715e2dbf020e0e",
+    "rdma-multicall-local.json": "7a1038ae099368f84ce549fc09f7dbf0387049ec71eec273325515cad652e51a",
+    "service-multicall.json": "451e739e261e4c56d11238fdb118a003b3d7f64c0696fa7053dc8cab3a2000cc",
+    "service-control.json": "f0c487f858bc2a4fd54c5fb3b9ad651b917173fc7e49121b2a9037ad54b268b6",
+    "multicall-preparation.json": "5c91edb08b6506b86efde2b439ef2783ebc6f343da0a728e7cbca732a84165bb",
+    "topology/topology.json": "5389993e9aa1dfc148b4713b0a2b0c0521de24b41b74060e2db7eb9f048c444f",
+    "topology/report.json": "11231d54f55050003858b12378b0abf716e37c47a26abe86b8d68286215a80a5",
+    "sources/0.json": "8bb9dc2e205c4aeccf28d4a374c5aaa5743a16503a38c2d77aac411a5d85479a",
+    "sources/1.json": "cb2358441490177e344dbd0823672dad75a4eecf0c9828dcf94e6f17125b9cb9",
+    "sources/2.json": "0355c2b08b1d3d2ac7e762322dca6e2061a062afbdf3103967692c560f92a2e7",
+    "sources/3.json": "fb46a1c64af569fe6e1805d1e869c077959882b43d1491fe0977c5e47db2e24b"
+  },
+  "source_lineage": {
+    "files": {
+      "local-1472": {
+        "identity": "known_fixed_revision",
+        "dataset_revision": "27febb7b2d24169560a9f6f83d38eb53f94916cf"
+      },
+      "local-1808": {
+        "identity": "known_fixed_revision",
+        "dataset_revision": "27febb7b2d24169560a9f6f83d38eb53f94916cf"
+      },
+      "local-2675": {
+        "identity": "known_fixed_revision",
+        "dataset_revision": "27febb7b2d24169560a9f6f83d38eb53f94916cf"
+      },
+      "local-6447": {
+        "identity": "known_fixed_revision",
+        "dataset_revision": "27febb7b2d24169560a9f6f83d38eb53f94916cf"
+      },
+      "user-900": {
+        "identity": "user_confirmed_directory_local_SHA256",
+        "dataset_revision": null,
+        "remote_revision_content_verified": false,
+        "original_path_status": "historical_catalog_candidate"
+      },
+      "user-901": {
+        "identity": "user_confirmed_directory_local_SHA256",
+        "dataset_revision": null,
+        "remote_revision_content_verified": false,
+        "original_path_status": "historical_catalog_candidate"
+      },
+      "user-905": {
+        "identity": "user_confirmed_directory_local_SHA256",
+        "dataset_revision": null,
+        "remote_revision_content_verified": false,
+        "original_path_status": "historical_catalog_candidate"
+      },
+      "user-1003": {
+        "identity": "user_confirmed_directory_local_SHA256",
+        "dataset_revision": null,
+        "remote_revision_content_verified": false,
+        "original_path_status": "historical_catalog_candidate"
+      },
+      "user-1004": {
+        "identity": "user_confirmed_directory_local_SHA256",
+        "dataset_revision": null,
+        "remote_revision_content_verified": false,
+        "original_path_status": "historical_catalog_candidate"
+      },
+      "user-1007": {
+        "identity": "user_confirmed_directory_local_SHA256",
+        "dataset_revision": null,
+        "remote_revision_content_verified": false,
+        "original_path_status": "historical_catalog_candidate"
+      },
+      "user-1008": {
+        "identity": "user_confirmed_directory_local_SHA256",
+        "dataset_revision": null,
+        "remote_revision_content_verified": false,
+        "original_path_status": "historical_catalog_candidate"
+      },
+      "user-1011": {
+        "identity": "user_confirmed_directory_local_SHA256",
+        "dataset_revision": null,
+        "remote_revision_content_verified": false,
+        "original_path_status": "historical_catalog_candidate"
+      },
+      "user-1477": {
+        "identity": "user_confirmed_directory_local_SHA256",
+        "dataset_revision": null,
+        "remote_revision_content_verified": false,
+        "original_path_status": "historical_catalog_candidate"
+      },
+      "user-1480": {
+        "identity": "user_confirmed_directory_local_SHA256",
+        "dataset_revision": null,
+        "remote_revision_content_verified": false,
+        "original_path_status": "historical_catalog_candidate"
+      },
+      "user-1481": {
+        "identity": "user_confirmed_directory_local_SHA256",
+        "dataset_revision": null,
+        "remote_revision_content_verified": false,
+        "original_path_status": "historical_catalog_candidate"
+      }
+    },
+    "intake_sha256": "6fb24dd4229bbd42d73900062f769806aecda2b20a78c30c62c564ffe6cda558",
+    "old_manifest_sha256": "caf6870f867e3307c52873a4fa1491c9225ff77f9735742b8a74313f80717a16",
+    "excluded_files": [
+      "899.json",
+      "1479.json"
+    ]
+  },
+  "source_manifest_sha256": "5bc8699f2ecf4f46b8b5c1dbb0bdc00ff74826c26b997d7a5b2cb4c60c3995de",
+  "method_sha256": "97f525051fbe4a32619d771db1c2f70c40ffeb2c7a173f515ab40a2b16dd60cf",
+  "preparer_sha256": "e5ac30019de963b8b9fe25e98dfd3ca3b0ef324e95b2805d9685444bc4cb8045",
+  "decode_steps": 2,
+  "logical_requests": {
+    "target": 4,
+    "healthy": 11
+  },
+  "simulated_endpoints": 128,
+  "ep_sizes": [
+    32,
+    32,
+    32,
+    32
+  ],
+  "fault_target": 28,
+  "new_networks_planned": 4
+}

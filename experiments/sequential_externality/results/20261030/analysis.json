@@ -1,0 +1,1093 @@
+{
+  "passed": true,
+  "cases": {
+    "control-normal": {
+      "passed": true,
+      "source_files": 15,
+      "logical_requests": {
+        "target": 4,
+        "healthy": 11
+      },
+      "inventory_requests": 30,
+      "execution_requests": 15,
+      "active_data_ranks": 62,
+      "result_ready_ns": {
+        "target": 126626,
+        "healthy": 139136
+      },
+      "call_winners": {
+        "target": "primary",
+        "healthy": "primary"
+      },
+      "attempts_finished_ns": 139136,
+      "network_drained_ns": 168210,
+      "groups_executed": [
+        0,
+        2
+      ],
+      "unique_payload_bytes": 11228096,
+      "payload_by_group": {
+        "0": 3088448,
+        "2": 8139648
+      },
+      "source_payload_bytes": 11228096,
+      "source_packets": 1556,
+      "declared_compute_work_ns": 119300,
+      "phase_member_arrivals": 512,
+      "verified_nodes": 3348,
+      "messages": 778,
+      "packet_events": 54736,
+      "queue_events": 24196,
+      "fault_drops": 0,
+      "standby_memory": {
+        "initial_reserved_bytes": 46792704,
+        "releases": [
+          {
+            "group_index": 1,
+            "time_ns": 126626,
+            "kind": "skipped_release",
+            "bytes": 10092544
+          },
+          {
+            "group_index": 3,
+            "time_ns": 139136,
+            "kind": "skipped_release",
+            "bytes": 36700160
+          }
+        ],
+        "final_used_bytes": 0
+      },
+      "first_backup_source_tx_ns": null,
+      "healthy_finish_vs_backup_source_ns": null,
+      "first_backup_switch_rx_ns": null,
+      "healthy_finish_vs_backup_switch_ns": null,
+      "shared_backup_healthy_ports": [],
+      "healthy_switch_residence_ns": 647257,
+      "queue_area_byte_ns": 5321602956,
+      "queue_peak_bytes": 157428,
+      "queue_scope": "Switch post-change occupancy, normalized enqueue-after/dequeue-before hooks; all protocols; excludes serialization",
+      "sha256": {
+        "input.json": "b9f5ac9cba7efbb907fd52774430d610bb2fff9034b4a96bf4c00f0113904ee5",
+        "rdma.json": "820061c5c70934e8b5371ec4db37d4ab6a1a62ad6588033043715e2dbf020e0e",
+        "topology.json": "5389993e9aa1dfc148b4713b0a2b0c0521de24b41b74060e2db7eb9f048c444f",
+        "frontend.json": "ec73a8465b866a2dd3a13216ce436a7f19416a5795aacdd8aeeeebb3a3a8c306",
+        "result.json": "4c79494f9869f2ea3ef5be8435c796919e1796c98f95dc46f24afe83da512abf",
+        "verification.json": "82b8f3a4ec8717c2878cc590665507cf515e6d030e09242bee53f524e30bfed5"
+      }
+    },
+    "treatment-normal": {
+      "passed": true,
+      "source_files": 15,
+      "logical_requests": {
+        "target": 4,
+        "healthy": 11
+      },
+      "inventory_requests": 30,
+      "execution_requests": 19,
+      "active_data_ranks": 92,
+      "result_ready_ns": {
+        "target": 126586,
+        "healthy": 140083
+      },
+      "call_winners": {
+        "target": "primary",
+        "healthy": "primary"
+      },
+      "attempts_finished_ns": 197577,
+      "network_drained_ns": 197577,
+      "groups_executed": [
+        0,
+        1,
+        2
+      ],
+      "unique_payload_bytes": 14316544,
+      "payload_by_group": {
+        "0": 3088448,
+        "2": 8139648,
+        "1": 3088448
+      },
+      "source_payload_bytes": 14316544,
+      "source_packets": 1984,
+      "declared_compute_work_ns": 150760,
+      "phase_member_arrivals": 768,
+      "verified_nodes": 4672,
+      "messages": 992,
+      "packet_events": 69924,
+      "queue_events": 30916,
+      "fault_drops": 0,
+      "standby_memory": {
+        "initial_reserved_bytes": 46792704,
+        "releases": [
+          {
+            "group_index": 3,
+            "time_ns": 140083,
+            "kind": "skipped_release",
+            "bytes": 36700160
+          },
+          {
+            "group_index": 1,
+            "time_ns": 197577,
+            "kind": "executed_release",
+            "bytes": 10092544
+          }
+        ],
+        "final_used_bytes": 0
+      },
+      "first_backup_source_tx_ns": 71030,
+      "healthy_finish_vs_backup_source_ns": -69053,
+      "first_backup_switch_rx_ns": 72211,
+      "healthy_finish_vs_backup_switch_ns": -67872,
+      "shared_backup_healthy_ports": [
+        [
+          128,
+          20
+        ],
+        [
+          129,
+          19
+        ],
+        [
+          129,
+          20
+        ],
+        [
+          128,
+          19
+        ],
+        [
+          128,
+          18
+        ],
+        [
+          129,
+          18
+        ],
+        [
+          130,
+          17
+        ],
+        [
+          131,
+          20
+        ],
+        [
+          131,
+          17
+        ],
+        [
+          129,
+          17
+        ],
+        [
+          128,
+          17
+        ],
+        [
+          130,
+          20
+        ],
+        [
+          130,
+          19
+        ],
+        [
+          131,
+          18
+        ],
+        [
+          134,
+          1
+        ],
+        [
+          135,
+          1
+        ],
+        [
+          134,
+          4
+        ],
+        [
+          133,
+          2
+        ],
+        [
+          133,
+          1
+        ],
+        [
+          132,
+          1
+        ],
+        [
+          132,
+          4
+        ],
+        [
+          135,
+          2
+        ],
+        [
+          134,
+          3
+        ],
+        [
+          133,
+          4
+        ],
+        [
+          132,
+          5
+        ],
+        [
+          132,
+          3
+        ],
+        [
+          135,
+          5
+        ],
+        [
+          133,
+          5
+        ],
+        [
+          135,
+          4
+        ],
+        [
+          134,
+          5
+        ],
+        [
+          132,
+          2
+        ],
+        [
+          144,
+          2
+        ],
+        [
+          147,
+          2
+        ],
+        [
+          145,
+          2
+        ],
+        [
+          146,
+          2
+        ],
+        [
+          140,
+          1
+        ],
+        [
+          143,
+          3
+        ],
+        [
+          141,
+          1
+        ],
+        [
+          142,
+          1
+        ],
+        [
+          143,
+          1
+        ],
+        [
+          141,
+          2
+        ],
+        [
+          140,
+          3
+        ],
+        [
+          142,
+          3
+        ],
+        [
+          140,
+          2
+        ],
+        [
+          142,
+          4
+        ],
+        [
+          143,
+          2
+        ],
+        [
+          141,
+          4
+        ],
+        [
+          143,
+          4
+        ],
+        [
+          141,
+          3
+        ],
+        [
+          137,
+          19
+        ],
+        [
+          138,
+          19
+        ],
+        [
+          137,
+          20
+        ],
+        [
+          131,
+          19
+        ],
+        [
+          130,
+          18
+        ],
+        [
+          136,
+          17
+        ],
+        [
+          138,
+          20
+        ],
+        [
+          136,
+          19
+        ],
+        [
+          137,
+          18
+        ],
+        [
+          138,
+          17
+        ],
+        [
+          139,
+          17
+        ],
+        [
+          139,
+          19
+        ],
+        [
+          138,
+          18
+        ],
+        [
+          136,
+          18
+        ],
+        [
+          137,
+          17
+        ],
+        [
+          134,
+          2
+        ],
+        [
+          142,
+          5
+        ],
+        [
+          143,
+          5
+        ],
+        [
+          140,
+          5
+        ],
+        [
+          141,
+          5
+        ],
+        [
+          133,
+          3
+        ],
+        [
+          146,
+          1
+        ],
+        [
+          147,
+          1
+        ],
+        [
+          144,
+          1
+        ],
+        [
+          145,
+          1
+        ],
+        [
+          140,
+          4
+        ],
+        [
+          139,
+          20
+        ],
+        [
+          142,
+          2
+        ]
+      ],
+      "healthy_switch_residence_ns": 710519,
+      "queue_area_byte_ns": 6825272970,
+      "queue_peak_bytes": 171900,
+      "queue_scope": "Switch post-change occupancy, normalized enqueue-after/dequeue-before hooks; all protocols; excludes serialization",
+      "sha256": {
+        "input.json": "b7434cffa9297afeff85714278d77d726e38c31f434c54374f8eccbc348eecad",
+        "rdma.json": "820061c5c70934e8b5371ec4db37d4ab6a1a62ad6588033043715e2dbf020e0e",
+        "topology.json": "5389993e9aa1dfc148b4713b0a2b0c0521de24b41b74060e2db7eb9f048c444f",
+        "frontend.json": "23727e3aa49c39cfaf4dce8604983272728b35f0a17955e172e07a0c54c92be7",
+        "result.json": "baaf0917ea98554efa85ee7882e3ed4e707002a337195f3115d491c41a3d080b",
+        "verification.json": "7aec06281a57e974524833417fb85a9a198b28f5c21256b9fe71371112b61455"
+      }
+    },
+    "control-local": {
+      "passed": true,
+      "source_files": 15,
+      "logical_requests": {
+        "target": 4,
+        "healthy": 11
+      },
+      "inventory_requests": 30,
+      "execution_requests": 15,
+      "active_data_ranks": 62,
+      "result_ready_ns": {
+        "target": 201866,
+        "healthy": 141174
+      },
+      "call_winners": {
+        "target": "primary",
+        "healthy": "primary"
+      },
+      "attempts_finished_ns": 201866,
+      "network_drained_ns": 201866,
+      "groups_executed": [
+        0,
+        2
+      ],
+      "unique_payload_bytes": 11228096,
+      "payload_by_group": {
+        "2": 8139648,
+        "0": 3088448
+      },
+      "source_payload_bytes": 11271488,
+      "source_packets": 1562,
+      "declared_compute_work_ns": 119300,
+      "phase_member_arrivals": 512,
+      "verified_nodes": 3348,
+      "messages": 778,
+      "packet_events": 55054,
+      "queue_events": 24338,
+      "fault_drops": 6,
+      "standby_memory": {
+        "initial_reserved_bytes": 46792704,
+        "releases": [
+          {
+            "group_index": 3,
+            "time_ns": 141174,
+            "kind": "skipped_release",
+            "bytes": 36700160
+          },
+          {
+            "group_index": 1,
+            "time_ns": 201866,
+            "kind": "skipped_release",
+            "bytes": 10092544
+          }
+        ],
+        "final_used_bytes": 0
+      },
+      "first_backup_source_tx_ns": null,
+      "healthy_finish_vs_backup_source_ns": null,
+      "first_backup_switch_rx_ns": null,
+      "healthy_finish_vs_backup_switch_ns": null,
+      "shared_backup_healthy_ports": [],
+      "healthy_switch_residence_ns": 689902,
+      "queue_area_byte_ns": 5914138832,
+      "queue_peak_bytes": 157428,
+      "queue_scope": "Switch post-change occupancy, normalized enqueue-after/dequeue-before hooks; all protocols; excludes serialization",
+      "sha256": {
+        "input.json": "b9f5ac9cba7efbb907fd52774430d610bb2fff9034b4a96bf4c00f0113904ee5",
+        "rdma.json": "7a1038ae099368f84ce549fc09f7dbf0387049ec71eec273325515cad652e51a",
+        "topology.json": "5389993e9aa1dfc148b4713b0a2b0c0521de24b41b74060e2db7eb9f048c444f",
+        "frontend.json": "c14e798c41b5491288db3bc3f49dd9212ae80b164c141f523401b1494060f531",
+        "result.json": "c33d6717107a4619ac2570e1b0010b7e81ba669eafcf068475a7d15494e2be1b",
+        "verification.json": "c2c9a1d9ff0abe09a6ce3c4594f7c975b49417363533a92b40a19ec6f33d45cf"
+      }
+    },
+    "treatment-local": {
+      "passed": true,
+      "source_files": 15,
+      "logical_requests": {
+        "target": 4,
+        "healthy": 11
+      },
+      "inventory_requests": 30,
+      "execution_requests": 19,
+      "active_data_ranks": 92,
+      "result_ready_ns": {
+        "target": 200046,
+        "healthy": 142375
+      },
+      "call_winners": {
+        "target": "replica",
+        "healthy": "primary"
+      },
+      "attempts_finished_ns": 203067,
+      "network_drained_ns": 203067,
+      "groups_executed": [
+        0,
+        1,
+        2
+      ],
+      "unique_payload_bytes": 14316544,
+      "payload_by_group": {
+        "2": 8139648,
+        "1": 3088448,
+        "0": 3088448
+      },
+      "source_payload_bytes": 14359936,
+      "source_packets": 1990,
+      "declared_compute_work_ns": 150760,
+      "phase_member_arrivals": 768,
+      "verified_nodes": 4672,
+      "messages": 992,
+      "packet_events": 70610,
+      "queue_events": 31222,
+      "fault_drops": 6,
+      "standby_memory": {
+        "initial_reserved_bytes": 46792704,
+        "releases": [
+          {
+            "group_index": 3,
+            "time_ns": 142375,
+            "kind": "skipped_release",
+            "bytes": 36700160
+          },
+          {
+            "group_index": 1,
+            "time_ns": 200046,
+            "kind": "executed_release",
+            "bytes": 10092544
+          }
+        ],
+        "final_used_bytes": 0
+      },
+      "first_backup_source_tx_ns": 71030,
+      "healthy_finish_vs_backup_source_ns": -71345,
+      "first_backup_switch_rx_ns": 72211,
+      "healthy_finish_vs_backup_switch_ns": -70164,
+      "shared_backup_healthy_ports": [
+        [
+          128,
+          20
+        ],
+        [
+          129,
+          19
+        ],
+        [
+          129,
+          20
+        ],
+        [
+          128,
+          19
+        ],
+        [
+          128,
+          18
+        ],
+        [
+          129,
+          18
+        ],
+        [
+          130,
+          17
+        ],
+        [
+          131,
+          20
+        ],
+        [
+          131,
+          17
+        ],
+        [
+          129,
+          17
+        ],
+        [
+          128,
+          17
+        ],
+        [
+          130,
+          20
+        ],
+        [
+          130,
+          19
+        ],
+        [
+          131,
+          18
+        ],
+        [
+          134,
+          1
+        ],
+        [
+          135,
+          1
+        ],
+        [
+          134,
+          4
+        ],
+        [
+          133,
+          2
+        ],
+        [
+          133,
+          1
+        ],
+        [
+          132,
+          1
+        ],
+        [
+          132,
+          4
+        ],
+        [
+          135,
+          2
+        ],
+        [
+          134,
+          3
+        ],
+        [
+          133,
+          4
+        ],
+        [
+          132,
+          5
+        ],
+        [
+          132,
+          3
+        ],
+        [
+          135,
+          5
+        ],
+        [
+          133,
+          5
+        ],
+        [
+          135,
+          4
+        ],
+        [
+          134,
+          5
+        ],
+        [
+          132,
+          2
+        ],
+        [
+          144,
+          2
+        ],
+        [
+          147,
+          2
+        ],
+        [
+          145,
+          2
+        ],
+        [
+          146,
+          2
+        ],
+        [
+          140,
+          1
+        ],
+        [
+          143,
+          3
+        ],
+        [
+          141,
+          1
+        ],
+        [
+          142,
+          1
+        ],
+        [
+          143,
+          1
+        ],
+        [
+          141,
+          2
+        ],
+        [
+          140,
+          3
+        ],
+        [
+          142,
+          3
+        ],
+        [
+          140,
+          2
+        ],
+        [
+          142,
+          4
+        ],
+        [
+          143,
+          2
+        ],
+        [
+          141,
+          4
+        ],
+        [
+          143,
+          4
+        ],
+        [
+          141,
+          3
+        ],
+        [
+          137,
+          18
+        ],
+        [
+          138,
+          17
+        ],
+        [
+          139,
+          17
+        ],
+        [
+          139,
+          19
+        ],
+        [
+          138,
+          19
+        ],
+        [
+          136,
+          18
+        ],
+        [
+          137,
+          17
+        ],
+        [
+          136,
+          17
+        ],
+        [
+          137,
+          19
+        ],
+        [
+          138,
+          18
+        ],
+        [
+          138,
+          20
+        ],
+        [
+          131,
+          19
+        ],
+        [
+          141,
+          5
+        ],
+        [
+          140,
+          5
+        ],
+        [
+          142,
+          5
+        ],
+        [
+          143,
+          5
+        ],
+        [
+          134,
+          2
+        ],
+        [
+          133,
+          3
+        ],
+        [
+          145,
+          1
+        ],
+        [
+          144,
+          1
+        ],
+        [
+          146,
+          1
+        ],
+        [
+          147,
+          1
+        ],
+        [
+          130,
+          18
+        ],
+        [
+          140,
+          4
+        ],
+        [
+          136,
+          19
+        ],
+        [
+          139,
+          20
+        ],
+        [
+          142,
+          2
+        ],
+        [
+          137,
+          20
+        ]
+      ],
+      "healthy_switch_residence_ns": 786483,
+      "queue_area_byte_ns": 7972973284,
+      "queue_peak_bytes": 180936,
+      "queue_scope": "Switch post-change occupancy, normalized enqueue-after/dequeue-before hooks; all protocols; excludes serialization",
+      "sha256": {
+        "input.json": "b7434cffa9297afeff85714278d77d726e38c31f434c54374f8eccbc348eecad",
+        "rdma.json": "7a1038ae099368f84ce549fc09f7dbf0387049ec71eec273325515cad652e51a",
+        "topology.json": "5389993e9aa1dfc148b4713b0a2b0c0521de24b41b74060e2db7eb9f048c444f",
+        "frontend.json": "da38a8a329b10606c5da5afd5f6d40b1ac5b6bd80a70daeda12cd484a5c68335",
+        "result.json": "0a8d5a8aff2f1ff29ea8f3aafaa8308f3a8d4cc5281df0c1879b85b6a9dee688",
+        "verification.json": "16445968740a327bd39beb495cfdb78eae388d5598dd812e148e66ca18ac1507"
+      }
+    }
+  },
+  "effects": {
+    "normal": {
+      "result_change_ns": {
+        "target": -40,
+        "healthy": 947
+      },
+      "attempts_change_ns": 58441,
+      "healthy_data_events_semantically_exact": false,
+      "all_packet_capture_exact": false,
+      "all_raw_queue_events_exact": false,
+      "healthy_message_lifetimes_exact": false,
+      "healthy_phase_gates_exact": false,
+      "healthy_node_times_exact": false,
+      "healthy_residence_change_ns": 63262,
+      "healthy_hops_matched": 4264,
+      "healthy_hops_unmatched": 0,
+      "matched_max_residence_increase_ns": 1063,
+      "matched_total_residence_change_ns": 63262,
+      "healthy_message_max_changes_ns": {
+        "ready_change_ns": 947,
+        "receive_change_ns": 1748,
+        "ack_change_ns": 2232
+      },
+      "healthy_phase_release_changes": [
+        {
+          "graph_id": "g2.w0",
+          "gate_id": "L0.combine",
+          "baseline_ns": 35314,
+          "treatment_ns": 35314,
+          "change_ns": 0
+        },
+        {
+          "graph_id": "g2.w0",
+          "gate_id": "L0.dispatch",
+          "baseline_ns": 18817,
+          "treatment_ns": 18817,
+          "change_ns": 0
+        },
+        {
+          "graph_id": "g2.w0",
+          "gate_id": "L1.combine",
+          "baseline_ns": 69834,
+          "treatment_ns": 69834,
+          "change_ns": 0
+        },
+        {
+          "graph_id": "g2.w0",
+          "gate_id": "L1.dispatch",
+          "baseline_ns": 52997,
+          "treatment_ns": 52997,
+          "change_ns": 0
+        },
+        {
+          "graph_id": "g2.w1",
+          "gate_id": "L0.combine",
+          "baseline_ns": 106349,
+          "treatment_ns": 107295,
+          "change_ns": 946
+        },
+        {
+          "graph_id": "g2.w1",
+          "gate_id": "L0.dispatch",
+          "baseline_ns": 87972,
+          "treatment_ns": 88628,
+          "change_ns": 656
+        },
+        {
+          "graph_id": "g2.w1",
+          "gate_id": "L1.combine",
+          "baseline_ns": 139106,
+          "treatment_ns": 140053,
+          "change_ns": 947
+        },
+        {
+          "graph_id": "g2.w1",
+          "gate_id": "L1.dispatch",
+          "baseline_ns": 123049,
+          "treatment_ns": 123996,
+          "change_ns": 947
+        }
+      ]
+    },
+    "local": {
+      "result_change_ns": {
+        "target": -1820,
+        "healthy": 1201
+      },
+      "attempts_change_ns": 1201,
+      "healthy_data_events_semantically_exact": false,
+      "all_packet_capture_exact": false,
+      "all_raw_queue_events_exact": false,
+      "healthy_message_lifetimes_exact": false,
+      "healthy_phase_gates_exact": false,
+      "healthy_node_times_exact": false,
+      "healthy_residence_change_ns": 96581,
+      "healthy_hops_matched": 4264,
+      "healthy_hops_unmatched": 0,
+      "matched_max_residence_increase_ns": 1093,
+      "matched_total_residence_change_ns": 96581,
+      "healthy_message_max_changes_ns": {
+        "ready_change_ns": 1201,
+        "receive_change_ns": 1923,
+        "ack_change_ns": 1855
+      },
+      "healthy_phase_release_changes": [
+        {
+          "graph_id": "g2.w0",
+          "gate_id": "L0.combine",
+          "baseline_ns": 35164,
+          "treatment_ns": 35164,
+          "change_ns": 0
+        },
+        {
+          "graph_id": "g2.w0",
+          "gate_id": "L0.dispatch",
+          "baseline_ns": 18817,
+          "treatment_ns": 18817,
+          "change_ns": 0
+        },
+        {
+          "graph_id": "g2.w0",
+          "gate_id": "L1.combine",
+          "baseline_ns": 69684,
+          "treatment_ns": 69684,
+          "change_ns": 0
+        },
+        {
+          "graph_id": "g2.w0",
+          "gate_id": "L1.dispatch",
+          "baseline_ns": 52847,
+          "treatment_ns": 52847,
+          "change_ns": 0
+        },
+        {
+          "graph_id": "g2.w1",
+          "gate_id": "L0.combine",
+          "baseline_ns": 106035,
+          "treatment_ns": 106796,
+          "change_ns": 761
+        },
+        {
+          "graph_id": "g2.w1",
+          "gate_id": "L0.dispatch",
+          "baseline_ns": 87658,
+          "treatment_ns": 87949,
+          "change_ns": 291
+        },
+        {
+          "graph_id": "g2.w1",
+          "gate_id": "L1.combine",
+          "baseline_ns": 141144,
+          "treatment_ns": 142345,
+          "change_ns": 1201
+        },
+        {
+          "graph_id": "g2.w1",
+          "gate_id": "L1.dispatch",
+          "baseline_ns": 124262,
+          "treatment_ns": 125463,
+          "change_ns": 1201
+        }
+      ]
+    }
+  },
+  "analyzer_sha256": "63a340b8643dac9b40a7da7e5f79572b83fed54e0f486fc23292328a10c542d4",
+  "new_network_executions": 4,
+  "decode_steps": 2,
+  "source_scope": "four known fixed-revision and11 user-directory-confirmed local-hash routes; added remote content revision unknown",
+  "new_algorithm_benefit_proven": false,
+  "scope": "Finite two-layer two-Decode batch-calls, declared compute and preexisting model/KV copies; no full serving workload, hardware calibration, throughput or economic conclusion"
+}

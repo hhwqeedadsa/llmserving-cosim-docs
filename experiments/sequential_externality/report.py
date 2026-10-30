@@ -1,0 +1,61 @@
+"""Portable two-step study report with benefit, external cost and evidence limits."""
+import argparse,json,shutil
+from pathlib import Path
+
+
+def load(p):return json.loads(p.read_bytes())
+
+
+def main():
+ p=argparse.ArgumentParser(description=__doc__)
+ for n in ('analysis','mechanism','figures','frozen','output'):p.add_argument('--'+n,type=Path,required=True)
+ a=p.parse_args();out=a.output.resolve();out.mkdir(parents=True,exist_ok=False)
+ r=load(a.analysis/'analysis.json');m=load(a.mechanism/'mechanism.json');assert r['passed'] and m['passed']
+ for src in (a.analysis/'analysis.json',a.mechanism/'mechanism.json',a.frozen):shutil.copyfile(src,out/src.name)
+ (out/'metrics').mkdir()
+ for src in a.analysis.glob('*.csv'):(out/'metrics'/src.name).write_text(src.read_text())
+ shutil.copytree(a.figures,out/'figures');rows=''
+ for condition in ('normal','local'):
+  for policy in ('control','treatment'):
+   v=r['cases'][policy+'-'+condition]
+   rows+=f"<tr><td>{condition}</td><td>{policy}</td><td>{v['result_ready_ns']['target']/1000:.3f}</td><td>{v['result_ready_ns']['healthy']/1000:.3f}</td><td>{v['network_drained_ns']/1000:.3f}</td><td>{v['unique_payload_bytes']:,}</td></tr>"
+ c,t=(r['cases'][x+'-local'] for x in ('control','treatment'))
+ pct=100*(t['unique_payload_bytes']/c['unique_payload_bytes']-1);compute=100*(t['declared_compute_work_ns']/c['declared_compute_work_ns']-1)
+ causal=''
+ for proof in m['proof']:
+  v=proof['tight_predecessors'][0]
+  causal+=f"<tr><td>{proof['gate']}</td><td>{v['message']}</td><td>{v['ready_change_ns']}</td><td>{v['last_packet_residence_change_ns']}</td><td>{v['baseline_gate_slack_ns']}</td><td>{v['gate_change_ns']}</td></tr>"
+ links=''.join(f'<li><a href="metrics/{src.name}">{src.name}</a></li>' for src in sorted((out/'metrics').glob('*.csv')))
+ html=f'''<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+ <title>两步MoE回放：备用收益与健康任务干扰</title><style>
+ *{{box-sizing:border-box}}body{{margin:0;background:#f3f6f8;color:#26384a;font:16px/1.85 system-ui,-apple-system,"Noto Sans CJK SC",sans-serif}}main{{max-width:1120px;margin:auto;padding:30px 22px 65px}}h1{{font-size:29px;line-height:1.4}}h2{{font-size:22px;margin:0 0 12px}}section{{background:white;border:1px solid #dce4e9;border-radius:12px;padding:22px;margin:18px 0}}.muted{{color:#566679;font-size:14px}}.lead{{font-size:19px}}.cards{{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}}.cards div{{border:1px solid #dce4e9;border-radius:10px;padding:18px;background:white}}strong.big{{display:block;color:#197866;font-size:29px}}.scroll{{overflow:auto}}table{{border-collapse:collapse;width:100%;font-size:14px}}th,td{{padding:10px;border-bottom:1px solid #dce4e9;text-align:right;white-space:nowrap}}th:first-child,td:first-child,th:nth-child(2),td:nth-child(2){{text-align:left}}img{{width:100%;height:auto}}a{{color:#176481}}code{{padding:2px 5px;background:#edf2f5;border-radius:3px}}.note{{border-left:4px solid #b58142;background:#fff8ed;padding:10px 16px}}li{{margin:6px 0}}@media(max-width:720px){{main{{padding:18px 12px}}.cards{{grid-template-columns:1fr}}h1{{font-size:24px}}section{{padding:15px}}}}
+ </style><main><p class="muted">2026-10-30 · 128端点Clos · 15份不同原件 · 连续两个Decode步</p>
+ <h1>备用只让故障任务少等1.820微秒，却让健康任务多等1.201微秒</h1>
+ <p class="lead">上一轮单步任务没有暴露干扰。这次补齐完整备用的多步执行，使每个任务按真实前一步完成继续推进。固定两步对照中，额外备用流量确实与健康任务重叠，并沿通信阶段依赖传成了完成延迟。</p>
+ <div class="cards"><div><strong class="big">−0.90%</strong>故障目标任务等待</div><div><strong class="big">+0.85%</strong>健康任务等待</div><div><strong class="big">+{pct:.2f}%</strong>两任务总有效通信</div></div>
+ <section><h2>先明确任务和场景</h2><p>同一128端点Clos、四组EP32。目标4份、健康11份R1-AWQ/MMLU专家选择原件，各回放原层3/4、从首Decode入口起连续两步。第二步使用原件下一条专家选择，不复制第一步；只有实际前步完成才提交后步，整个两步结束才交付结果。</p>
+ <p><code>normal</code>不人为注入故障；<code>local</code>只在前20微秒丢到达GPU28的DATA包，本次实际6包，控制包保留。local仍是跨服务器网络。两个场景使用同选择性重传与参考DCQCN。</p>
+ <p><code>control</code>：目标与健康备用门槛均4毫秒，实际均未触发；<code>treatment</code>：仅目标门槛改为70微秒。完整专家与等价ready-KV预先存在，所有已启动尝试均执行完并释放资源，不伪造取消。</p></section>
+ <section><h2>结果、收尾和代价</h2><div class="scroll"><table><thead><tr><th>网络</th><th>策略</th><th>目标完成 µs</th><th>健康完成 µs</th><th>网络排空 µs</th><th>有效字节</th></tr></thead><tbody>{rows}</tbody></table></div>
+ <img src="figures/completion.png" alt="四条件完整两步任务完成和网络排空时间">
+ <p>故障时目标201.866→200.046微秒，少1.820微秒；健康141.174→142.375微秒，多1.201微秒。网络排空201.866→203.067微秒，晚1.201微秒。两任务总有效载荷11,228,096→14,316,544字节，增加3,088,448字节（{pct:.2f}%）；总声明计算增加{compute:.2f}%。</p>
+ <p>正常时目标仅少40纳秒（0.032%），健康多947纳秒；网络排空晚29.367微秒。两个时间不能相减当经济净收益：两批请求数量不同，也没有吞吐、SLO或机会成本测量。</p>
+ <p class="note">70微秒沿用上一轮，未按两步任务重新标定；正常两步本来就需要126.626微秒完成目标，因此正常触发备用是这一参数的预期后果。它不是经过当前负载标定的最优或强门槛基线。结果证明这组固定参数下的共享干扰，不能证明成熟备用普遍无效，也不能将调门槛本身称为创新。</p></section>
+ <section><h2>干扰怎样传到任务结束</h2><img src="figures/overlap-and-gates.png" alt="77个共同出口上的数据重叠及健康任务第二步阶段释放变化">
+ <p>备用70微秒启动，第一包71.030微秒发送、72.211微秒进入交换机。健康任务仍执行第二步，两者经过77个相同出口。4,264次健康包交换机经过逐一配对，无缺失；局部条件单跳驻留最大增加1,093纳秒。</p>
+ <p>沿健康第二步每个阶段最后到达的真实依赖追踪，四处都落在SEND的源端确认。相对对照，其阶段释放晚291→761→1,201→1,201纳秒：</p>
+ <div class="scroll"><table><thead><tr><th>健康第二步阶段</th><th>紧约束消息</th><th>消息就绪增量 ns</th><th>末包逐跳驻留增量 ns</th><th>原有门限余量 ns</th><th>阶段释放增量 ns</th></tr></thead><tbody>{causal}</tbody></table></div>
+ <p>第一阶段中，消息24113末包源发送时刻相同，但5跳累计驻留增加1,164纳秒，接收与源确认也各晚1,164纳秒；它在对照中原有873纳秒余量，因此阶段仅晚291纳秒。主导依赖从原消息23962切换到24113，不能只盯着原来的最后一条消息。</p>
+ <p>随后紧约束消息的额外逐跳驻留分别增加470和440纳秒，与此前传播的291纳秒一起形成1,201纳秒。最后Combine没有新增末包驻留，只继承了更晚的发送就绪时间。第一条新紧约束健康包在交换机128出口18等待时，实际有3个备用DATA包先在同出口发送。</p>
+ <p>健康所有包累计驻留增加96,581纳秒，是多个包的总和，不能当成可优化的任务时延。这里的1,201纳秒来自实际完成对照和必要依赖，而非把累计包等待直接相加。仍不能据此保证某个新策略可回收全部延迟。</p></section>
+ <section><h2>本轮系统实现和检查</h2><ul><li>新增显式replication/4：同一ns-3时钟上推进完整多步备用，首步不冒充结果，后续由真实完成驱动，已启动输家继续执行。</li><li>实际LLMServingSim调度器在中间步保留KV，仅完整执行结束或未启动即跳过时释放；每个attempt记录逐步图与起止时刻，输入身份摘要包含步数。</li><li>72项不同CPU检查、10份旧网络只读复核通过；正常/局部两份新结果迁移检查通过，16类篡改共32项拒绝。</li></ul>
+ <p>第一份原生网络成功并排空，但旧检查器把后续图名写死为第0步，导致公开run在后检查返回失败。修复检查器并补复现检查后，对保存原件公开离线核验通过；只补存缺失的verification报告，原文件SHA未变，没有重跑网络。其余三次公开run成功。原生和运行时核心方法未改变，区别与证据见<a href="../../../../fixtures/sequential_whole/verification-correction.json">修复记录</a>。</p>
+ <p>四次实际网络各一次，零构建、依赖修改、下载、安装或GPU执行。两张图已查看，网页资源做静态检查；本机无浏览器，未做浏览器渲染验收。</p></section>
+ <section><h2>研究边界与下一步</h2><p>原4份有已核验固定版本身份，新增11份只有用户确认目录及本机SHA，远端固定修订仍未知；两份缺层文件排除。真实的是专家选择，通信为前端投影和ns-3模拟包，并非运行时抓包。128端点不是128张GPU满载；声明计算与BF16消息布局也不是AWQ模型GPU实测或完整671B部署验证。</p>
+ <p>这是有限两步片段，仍没有新请求持续到达、生产分布、完整请求、吞吐或经济收益。下一步先建立针对当前完整任务时长的成熟备用门槛与资源预算基线，再研究能否利用已完成步骤、通信阶段进度和共享网络代价减少无效备用。该方向尚待文献对比和强基线验证，没有新的算法收益结论。</p></section>
+ <section><h2>证据与复现</h2><p><a href="analysis.json">独立分析</a> · <a href="mechanism.json">紧约束逐包分析</a> · <a href="frozen.json">事前固定输入</a> · <a href="receipt.json">执行收据</a> · <a href="resources.json">资源</a> · <a href="final-audit.json">交付核查</a> · <a href="README.md">结论</a> · <a href="../../README.md">复现方法</a> · <a href="../../protocol.md">事前方法</a> · <a href="../../../../fixtures/sequential_whole/README.md">平台验收</a></p><details><summary>逐包与消息CSV</summary><ul>{links}</ul></details></section></main></html>'''
+ (out/'report.html').write_text(html)
+ print(json.dumps(dict(passed=True,figures=2,csv_files=len(list((out/'metrics').glob('*.csv'))),new_network_executions=0)))
+
+
+if __name__=='__main__':main()

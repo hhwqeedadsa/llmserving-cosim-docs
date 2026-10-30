@@ -1,0 +1,263 @@
+{
+  "passed": true,
+  "source": "actual local matched networks and tight native gate predecessors",
+  "proof": [
+    {
+      "gate": "L0.dispatch",
+      "tight_predecessors": [
+        {
+          "rank": 38,
+          "node": 11,
+          "message": 24113,
+          "stream": 575,
+          "sequence": 37928,
+          "last_payload_bytes": 5464,
+          "ready_change_ns": 0,
+          "last_source_tx_change_ns": 0,
+          "last_packet_residence_change_ns": 1164,
+          "receive_change_ns": 1164,
+          "ack_change_ns": 1164,
+          "baseline_gate_slack_ns": 873,
+          "gate_change_ns": 291,
+          "hops": [
+            {
+              "node": 128,
+              "port": 18,
+              "baseline_residence_ns": 543,
+              "treatment_residence_ns": 1416,
+              "change_ns": 873
+            },
+            {
+              "node": 133,
+              "port": 5,
+              "baseline_residence_ns": 834,
+              "treatment_residence_ns": 1125,
+              "change_ns": 291
+            },
+            {
+              "node": 145,
+              "port": 2,
+              "baseline_residence_ns": 71,
+              "treatment_residence_ns": 71,
+              "change_ns": 0
+            },
+            {
+              "node": 141,
+              "port": 2,
+              "baseline_residence_ns": 0,
+              "treatment_residence_ns": 0,
+              "change_ns": 0
+            },
+            {
+              "node": 137,
+              "port": 15,
+              "baseline_residence_ns": 0,
+              "treatment_residence_ns": 0,
+              "change_ns": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "gate": "L0.combine",
+      "tight_predecessors": [
+        {
+          "rank": 106,
+          "node": 19,
+          "message": 25615,
+          "stream": 891,
+          "sequence": 9000,
+          "last_payload_bytes": 5400,
+          "ready_change_ns": 291,
+          "last_source_tx_change_ns": 291,
+          "last_packet_residence_change_ns": 470,
+          "receive_change_ns": 761,
+          "ack_change_ns": 761,
+          "baseline_gate_slack_ns": 0,
+          "gate_change_ns": 761,
+          "hops": [
+            {
+              "node": 137,
+              "port": 17,
+              "baseline_residence_ns": 0,
+              "treatment_residence_ns": 0,
+              "change_ns": 0
+            },
+            {
+              "node": 140,
+              "port": 5,
+              "baseline_residence_ns": 2424,
+              "treatment_residence_ns": 2894,
+              "change_ns": 470
+            },
+            {
+              "node": 144,
+              "port": 1,
+              "baseline_residence_ns": 72,
+              "treatment_residence_ns": 72,
+              "change_ns": 0
+            },
+            {
+              "node": 132,
+              "port": 1,
+              "baseline_residence_ns": 0,
+              "treatment_residence_ns": 0,
+              "change_ns": 0
+            },
+            {
+              "node": 128,
+              "port": 15,
+              "baseline_residence_ns": 0,
+              "treatment_residence_ns": 0,
+              "change_ns": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "gate": "L1.dispatch",
+      "tight_predecessors": [
+        {
+          "rank": 6,
+          "node": 32,
+          "message": 25850,
+          "stream": 136,
+          "sequence": 9000,
+          "last_payload_bytes": 5464,
+          "ready_change_ns": 761,
+          "last_source_tx_change_ns": 761,
+          "last_packet_residence_change_ns": 440,
+          "receive_change_ns": 1201,
+          "ack_change_ns": 1201,
+          "baseline_gate_slack_ns": 0,
+          "gate_change_ns": 1201,
+          "hops": [
+            {
+              "node": 128,
+              "port": 20,
+              "baseline_residence_ns": 1196,
+              "treatment_residence_ns": 1416,
+              "change_ns": 220
+            },
+            {
+              "node": 135,
+              "port": 5,
+              "baseline_residence_ns": 1416,
+              "treatment_residence_ns": 1637,
+              "change_ns": 221
+            },
+            {
+              "node": 147,
+              "port": 2,
+              "baseline_residence_ns": 72,
+              "treatment_residence_ns": 71,
+              "change_ns": -1
+            },
+            {
+              "node": 143,
+              "port": 3,
+              "baseline_residence_ns": 0,
+              "treatment_residence_ns": 0,
+              "change_ns": 0
+            },
+            {
+              "node": 138,
+              "port": 11,
+              "baseline_residence_ns": 0,
+              "treatment_residence_ns": 0,
+              "change_ns": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "gate": "L1.combine",
+      "tight_predecessors": [
+        {
+          "rank": 70,
+          "node": 24,
+          "message": 27317,
+          "stream": 734,
+          "sequence": 37800,
+          "last_payload_bytes": 5400,
+          "ready_change_ns": 1201,
+          "last_source_tx_change_ns": 1201,
+          "last_packet_residence_change_ns": 0,
+          "receive_change_ns": 1201,
+          "ack_change_ns": 1201,
+          "baseline_gate_slack_ns": 0,
+          "gate_change_ns": 1201,
+          "hops": [
+            {
+              "node": 136,
+              "port": 20,
+              "baseline_residence_ns": 0,
+              "treatment_residence_ns": 0,
+              "change_ns": 0
+            },
+            {
+              "node": 143,
+              "port": 5,
+              "baseline_residence_ns": 1792,
+              "treatment_residence_ns": 1792,
+              "change_ns": 0
+            },
+            {
+              "node": 147,
+              "port": 1,
+              "baseline_residence_ns": 72,
+              "treatment_residence_ns": 72,
+              "change_ns": 0
+            },
+            {
+              "node": 135,
+              "port": 4,
+              "baseline_residence_ns": 73,
+              "treatment_residence_ns": 73,
+              "change_ns": 0
+            },
+            {
+              "node": 131,
+              "port": 3,
+              "baseline_residence_ns": 72,
+              "treatment_residence_ns": 72,
+              "change_ns": 0
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "backup_packets_transmitted_while_first_tight_healthy_packet_waited": [
+    {
+      "time_ns": 74427,
+      "node": 128,
+      "port": 18,
+      "stream": 103,
+      "sequence": 9000,
+      "model_bytes": 5500
+    },
+    {
+      "time_ns": 74647,
+      "node": 128,
+      "port": 18,
+      "stream": 104,
+      "sequence": 9000,
+      "model_bytes": 5500
+    },
+    {
+      "time_ns": 74977,
+      "node": 128,
+      "port": 18,
+      "stream": 33,
+      "sequence": 9000,
+      "model_bytes": 5500
+    }
+  ],
+  "new_network_executions": 0,
+  "analyzer_sha256": "cb985d85217b471352ed4718f6e114100732d8493d22eaa9ec2e9adc8350a6a0",
+  "scope": "All tight join predecessors enumerated for this healthy second-step path. Per-packet residence is not summed across unrelated packets as business savings; no new strategy or production calibration."
+}

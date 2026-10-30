@@ -1,0 +1,238 @@
+{
+  "passed": true,
+  "receipt_and_original_source_hashes_verified": true,
+  "new_networks_exactly_once": 4,
+  "matched_healthy_hops_each_condition": 4264,
+  "source_routing_compute_phase_ack_timer_kv_checks": true,
+  "links_checked": 47,
+  "links": [
+    {
+      "file": "experiments/sequential_externality/results/20261030/report.html",
+      "target": "figures/completion.png"
+    },
+    {
+      "file": "experiments/sequential_externality/results/20261030/report.html",
+      "target": "figures/overlap-and-gates.png"
+    },
+    {
+      "file": "experiments/sequential_externality/results/20261030/report.html",
+      "target": "../../../../fixtures/sequential_whole/verification-correction.json"
+    },
+    {
+      "file": "experiments/sequential_externality/results/20261030/report.html",
+      "target": "analysis.json"
+    },
+    {
+      "file": "experiments/sequential_externality/results/20261030/report.html",
+      "target": "mechanism.json"
+    },
+    {
+      "file": "experiments/sequential_externality/results/20261030/report.html",
+      "target": "frozen.json"
+    },
+    {
+      "file": "experiments/sequential_externality/results/20261030/report.html",
+      "target": "receipt.json"
+    },
+    {
+      "file": "experiments/sequential_externality/results/20261030/report.html",
+      "target": "resources.json"
+    },
+    {
+      "file": "experiments/sequential_externality/results/20261030/report.html",
+      "target": "final-audit.json"
+    },
+    {
+      "file": "experiments/sequential_externality/results/20261030/report.html",
+      "target": "README.md"
+    },
+    {
+      "file": "experiments/sequential_externality/results/20261030/report.html",
+      "target": "../../README.md"
+    },
+    {
+      "file": "experiments/sequential_externality/results/20261030/report.html",
+      "target": "../../protocol.md"
+    },
+    {
+      "file": "experiments/sequential_externality/results/20261030/report.html",
+      "target": "../../../../fixtures/sequential_whole/README.md"
+    },
+    {
+      "file": "experiments/sequential_externality/results/20261030/report.html",
+      "target": "metrics/control-local-queue-integrals.csv"
+    },
+    {
+      "file": "experiments/sequential_externality/results/20261030/report.html",
+      "target": "metrics/control-local-switch-residence.csv"
+    },
+    {
+      "file": "experiments/sequential_externality/results/20261030/report.html",
+      "target": "metrics/control-normal-queue-integrals.csv"
+    },
+    {
+      "file": "experiments/sequential_externality/results/20261030/report.html",
+      "target": "metrics/control-normal-switch-residence.csv"
+    },
+    {
+      "file": "experiments/sequential_externality/results/20261030/report.html",
+      "target": "metrics/local-healthy-matched.csv"
+    },
+    {
+      "file": "experiments/sequential_externality/results/20261030/report.html",
+      "target": "metrics/local-healthy-messages.csv"
+    },
+    {
+      "file": "experiments/sequential_externality/results/20261030/report.html",
+      "target": "metrics/normal-healthy-matched.csv"
+    },
+    {
+      "file": "experiments/sequential_externality/results/20261030/report.html",
+      "target": "metrics/normal-healthy-messages.csv"
+    },
+    {
+      "file": "experiments/sequential_externality/results/20261030/report.html",
+      "target": "metrics/treatment-local-queue-integrals.csv"
+    },
+    {
+      "file": "experiments/sequential_externality/results/20261030/report.html",
+      "target": "metrics/treatment-local-switch-residence.csv"
+    },
+    {
+      "file": "experiments/sequential_externality/results/20261030/report.html",
+      "target": "metrics/treatment-normal-queue-integrals.csv"
+    },
+    {
+      "file": "experiments/sequential_externality/results/20261030/report.html",
+      "target": "metrics/treatment-normal-switch-residence.csv"
+    },
+    {
+      "file": "experiments/sequential_externality/results/20261030/README.md",
+      "target": "report.html"
+    },
+    {
+      "file": "experiments/sequential_externality/results/20261030/README.md",
+      "target": "analysis.json"
+    },
+    {
+      "file": "experiments/sequential_externality/results/20261030/README.md",
+      "target": "mechanism.json"
+    },
+    {
+      "file": "experiments/sequential_externality/results/20261030/README.md",
+      "target": "receipt.json"
+    },
+    {
+      "file": "experiments/sequential_externality/results/20261030/README.md",
+      "target": "resources.json"
+    },
+    {
+      "file": "experiments/sequential_externality/results/20261030/README.md",
+      "target": "final-audit.json"
+    },
+    {
+      "file": "experiments/sequential_externality/results/20261030/README.md",
+      "target": "../../README.md"
+    },
+    {
+      "file": "experiments/sequential_externality/README.md",
+      "target": "results/20261030/report.html"
+    },
+    {
+      "file": "experiments/sequential_externality/README.md",
+      "target": "results/20261030/README.md"
+    },
+    {
+      "file": "experiments/sequential_externality/README.md",
+      "target": "protocol.md"
+    },
+    {
+      "file": "experiments/sequential_externality/README.md",
+      "target": "../../examples/scaleout_multicall/README.md"
+    },
+    {
+      "file": "experiments/sequential_externality/README.md",
+      "target": "../../fixtures/sequential_whole/verification-correction.json"
+    },
+    {
+      "file": "fixtures/sequential_whole/README.md",
+      "target": "pre-network.json"
+    },
+    {
+      "file": "fixtures/sequential_whole/README.md",
+      "target": "../../docs/whole_call.md#多步decode的完整备用"
+    },
+    {
+      "file": "fixtures/sequential_whole/README.md",
+      "target": "../../examples/scaleout_multicall/README.md"
+    },
+    {
+      "file": "fixtures/sequential_whole/README.md",
+      "target": "verification-correction.json"
+    },
+    {
+      "file": "fixtures/sequential_whole/README.md",
+      "target": "post-network.json"
+    },
+    {
+      "file": "docs/tasks/current.md",
+      "target": "../../fixtures/sequential_whole/README.md"
+    },
+    {
+      "file": "docs/tasks/current.md",
+      "target": "../../experiments/sequential_externality/results/20261030/report.html"
+    },
+    {
+      "file": "docs/tasks/current.md",
+      "target": "../../experiments/sequential_externality/results/20261030/README.md"
+    },
+    {
+      "file": "docs/tasks/current.md",
+      "target": "../../experiments/sequential_externality/results/20261030/analysis.json"
+    },
+    {
+      "file": "docs/tasks/current.md",
+      "target": "../../experiments/sequential_externality/results/20261030/mechanism.json"
+    }
+  ],
+  "report_script_present": false,
+  "script_syntax_checked": false,
+  "browser_rendering_checked": false,
+  "browser_executables_on_path": {
+    "chromium": null,
+    "chromium-browser": null,
+    "google-chrome": null,
+    "firefox": null,
+    "playwright": null
+  },
+  "images_visually_inspected": 2,
+  "csv_files_LF": 12,
+  "platform_acceptance_separate": true,
+  "new_algorithm_benefit_proven": false,
+  "overall_goal_complete": false,
+  "artifact_sha256": {
+    "analysis.json": "f29c06e454d34fb246a288ba2bd7c97c61ac0c00b378daf96de52da505582509",
+    "mechanism.json": "5611d98178461ef8cea543db27e25cf619f46287935ad8e8670c065192930e8f",
+    "frozen.json": "bfb24be4add1269ee8068c26221d148ac2a4add02873b721fbc76930fb0b6644",
+    "report.html": "9d9d5c7a14398e6f28baf70a5e80c9342f2d89ada109f53cdc88ace2c3cf5a76",
+    "README.md": "047aeb9b72c84a37563cc23d3b8f56fe9be00f2e116db89499d21df60a78ac18",
+    "receipt.json": "4f7872401988c492bab52b8d663f688adab0c6972e740122270c67472ba70bd4",
+    "resources.json": "14d26892f2cf889298faaa61a8b3b8f271c64d3e4c54b28d26221f16344f4fd8",
+    "metrics/control-normal-switch-residence.csv": "133eb78d341afb1c8aded6ec106797ba65487cf781ccfad5ab5cb98bbc060c3b",
+    "metrics/control-normal-queue-integrals.csv": "5672fbea84439db75c3b6ca995de02c38adf0bb024778233ea609e70d0cddf8b",
+    "metrics/treatment-normal-switch-residence.csv": "414d9d11454746b1a4ff6a1c4e05c34774fc1fbce583880561c1a2d8a46434ec",
+    "metrics/treatment-normal-queue-integrals.csv": "c428fd75772263760ecbbce2793523428aa760a04b9a22011eb815631121da73",
+    "metrics/control-local-switch-residence.csv": "40bc3ddfbd9219b4dd0be4cdf347244f38d48d7332281edaf426d769f572d1c0",
+    "metrics/control-local-queue-integrals.csv": "de06476d4599c8b17f39e33ac53f17e6319db5a853b37cdc961457e02d9aeeb0",
+    "metrics/treatment-local-switch-residence.csv": "092c4f5179e4265ee4637ab64d8cea1ac995222cc6ac1741b3557e86a25a91ae",
+    "metrics/treatment-local-queue-integrals.csv": "e2e00c04ef6293c51c749a4af382022e7d794d552a45738041f14a0d15762903",
+    "metrics/normal-healthy-matched.csv": "ae4a665a936213f95abff610bc4f01fdf5481d6bffdd2b0c49fae7e5c1128d8a",
+    "metrics/normal-healthy-messages.csv": "bc50f20abbec464e744ca1de5038671b7bab745c03e03850e4986dc0524600e9",
+    "metrics/local-healthy-matched.csv": "9825cc9d31b428cab2e477aebe33a0e7c9f81841578f0af13882943545223f6e",
+    "metrics/local-healthy-messages.csv": "3ab80234e855d96e88c882f2c8e1852cc24e44d30a540987707e2df70895051d",
+    "figures/completion.png": "5da72b63984d6f884caf2988ea61aef26748332f3811e477225d461c8e6ff10a",
+    "figures/completion.svg": "ee7501257158651161cd3166d0b9efa072c16f5d0cc25c03902d4cd7802fdc79",
+    "figures/overlap-and-gates.png": "88e29c8e3a3ea34457c162b2658e8385cfce960a82cf0a393aed95831cc29d1c",
+    "figures/overlap-and-gates.svg": "64838b08435c6bfb5f5a4d79f76457d1a8c8857f2b873455c2146541148182a7"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "passed": true,
+  "stage_monitor_count": 23,
+  "stage_monitored_seconds": 89.51692558109062,
+  "native_monitors": 4,
+  "nested_native_seconds": 8.481747236975934,
+  "stage_plus_nested_seconds_upper_bound": 97.99867281806655,
+  "copied_relocation_probes_excluded": 2,
+  "native_time_is_already_inside_stage_time": true,
+  "peak_sampled_group_rss_bytes": 315559936,
+  "artifact_roots": {
+    "runs/sequential_whole_20261030": {
+      "apparent_bytes": 277897248,
+      "allocated_bytes": 284446720
+    },
+    "experiments/sequential_externality/results/20261030": {
+      "apparent_bytes": 1966364,
+      "allocated_bytes": 2007040
+    }
+  },
+  "accounted_new_bytes": 286453760,
+  "accounting": "sum of per-root max(apparent,allocated), unique inodes, snapshot before small final receipts",
+  "free_bytes": 31361015808,
+  "cumulative_monitor_budget_seconds": 1200,
+  "new_artifact_budget_bytes": 1073741824,
+  "min_free_bytes": 8589934592,
+  "zero_builds_dependencies_downloads_installs_gpu": true,
+  "network_executions": 4,
+  "network_reruns": 0,
+  "failures_retained": [
+    "monitors/cpu-regression/probe.json",
+    "monitors/network-control-normal/probe.json",
+    "monitors/mechanism/probe.json"
+  ],
+  "remaining_live_pids": []
+}

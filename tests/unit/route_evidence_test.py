@@ -5,7 +5,7 @@ from pathlib import Path
 import tempfile
 import unittest
 
-from moe_ub_cosim.route_evidence import load_manifest,select_routes
+from moe_ub_cosim.route_evidence import load_manifest,select_routes,validate_manifest
 
 ROOT=Path(__file__).resolve().parents[2]
 
@@ -51,6 +51,32 @@ class RouteEvidenceTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             p=Path(tmp)/'manifest.json';p.write_text('{"schema_version":"a","schema_version":"b"}')
             with self.assertRaisesRegex(ValueError,'Duplicate JSON'):load_manifest(ref(p))
+
+    def test_user_provided_revision_is_explicit_without_weakening_published(self):
+        m=json.loads((ROOT/'fixtures/m9_evidence/manifest.json').read_text())
+        source=m['source'];source.update(kind='user_provided_model_routes',dataset_revision=None)
+        source['unknown_fields'].append('dataset_revision')
+        self.assertIs(validate_manifest(m),m)
+        for revision,unknown in ((None,False),('main',False),('a'*40,True),(12,False)):
+            bad=deepcopy(m);bad['source']['dataset_revision']=revision
+            if not unknown:bad['source']['unknown_fields'].remove('dataset_revision')
+            with self.subTest(revision=revision,unknown=unknown),self.assertRaises(ValueError):validate_manifest(bad)
+        fixed=deepcopy(m);fixed['source']['dataset_revision']='a'*40
+        fixed['source']['unknown_fields'].remove('dataset_revision');validate_manifest(fixed)
+        for kind in ('published_model_trace','captured_model_trace'):
+            bad=deepcopy(m);bad['source']['kind']=kind
+            with self.subTest(kind=kind),self.assertRaises(ValueError):validate_manifest(bad)
+
+    def test_user_provided_still_checks_actual_bytes(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            p=Path(tmp);m=json.loads((ROOT/'fixtures/m9_evidence/manifest.json').read_text())
+            m['source'].update(kind='user_provided_model_routes',dataset_revision=None)
+            m['source']['unknown_fields'].append('dataset_revision')
+            raw=p/'raw.json';raw.write_bytes((ROOT/m['files'][0]['file']['path']).read_bytes())
+            m['files'][0]['file']=ref(raw);target=p/'manifest.json';target.write_text(json.dumps(m))
+            load_manifest(ref(target))
+            raw.write_bytes(raw.read_bytes()+b' ')
+            with self.assertRaises(ValueError):load_manifest(ref(target))
 
 
 if __name__=='__main__':unittest.main()

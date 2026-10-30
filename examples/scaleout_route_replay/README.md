@@ -42,7 +42,7 @@ python -m moe_ub_cosim scaleout rdma-check --run /path/to/new/baseline
 
 ## 换成已授权的真实数据
 
-1. 先按[数据集研究说明](../../docs/reviews/moe_trace_dataset_hotspots_20261018.md)建立真实来源manifest，保留原始模型名、层结构、E/K、文件路径和SHA-256。格式沿用`moe-ub-route-manifest/1`，来源`kind`使用真实声明，不把人工数据改标签冒充原件；原始受限数据留在忽略的`data/`或运行目录，不提交Git。
+1. 先按[数据集研究说明](../../docs/reviews/moe_trace_dataset_hotspots_20261018.md)建立真实来源manifest，保留原始模型名、层结构、E/K、文件路径和SHA-256。格式沿用`moe-ub-route-manifest/1`，来源`kind`使用真实声明，不把人工数据改标签冒充原件；原始受限数据留在忽略的`data/`或运行目录，不提交Git。用户提供、尚未核实远端版本的文件使用`user_provided_model_routes`，`dataset_revision: null`且`unknown_fields`必须包含`dataset_revision`；这只声明本地文件身份，不证明远端版本/采集环境。若版本已知，填写40—64位十六进制提交并移除该未知项；`published_model_trace/captured_model_trace`仍要求固定版本。每个原件的结构与SHA-256继续核验，快照保留完整来源声明。
 2. 将配置中的模型名、hidden、E/K和层号与来源匹配。R1只能先用`service/1`做1—4个连续MoE层的网络片段，计算与KV仍为通用声明。`service/2`要求来源所有层均被执行，目前是全MoE GQA结构，不能执行含Dense与MLA的完整R1。
 3. 给每个rank的每个slot分配不同的原始请求文件，并明确起始Decode入口。增大batch需要更多独立文件，不能拿同一请求的连续token冒充并发请求；当前batch是每卡1—16，回放步数1—128且须满足其他预算。
 4. 明确激活字节、专家放置、网络和声明计算成本；权重AWQ/FP8名称不能确定激活dtype。本入口回放选择，不还原原集群的到达时间和源卡位置，仍从ready-KV Decode开始，不执行Prefill。

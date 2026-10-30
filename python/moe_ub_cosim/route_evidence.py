@@ -29,17 +29,27 @@ def validate_manifest(manifest):
     source = manifest['source']
     fields(source,'kind dataset_id dataset_revision collector_model_id collector_model_revision '
            'runtime_revision precision usage_terms source_url unknown_fields','route source')
-    require(source['kind'] in ('synthetic_test','published_model_trace','captured_model_trace'), 'Invalid route source kind')
+    require(source['kind'] in ('synthetic_test','published_model_trace','captured_model_trace',
+                              'user_provided_model_routes'), 'Invalid route source kind')
     require(isinstance(source['unknown_fields'],list) and len(set(source['unknown_fields']))==len(source['unknown_fields']),
             'Invalid unknown source fields')
-    for key in ('dataset_id','dataset_revision','collector_model_id','precision','usage_terms','source_url'):
+    for key in ('dataset_id','collector_model_id','precision','usage_terms','source_url'):
         require(isinstance(source[key],str) and source[key].strip(), 'Missing route source: '+key)
     for key in ('collector_model_revision','runtime_revision'):
         require((source[key] is None and key in source['unknown_fields']) or
                 (isinstance(source[key],str) and bool(source[key]) and key not in source['unknown_fields']),
                 'Unknown collection revision must be explicit: '+key)
-    if source['kind']!='synthetic_test':
-        require(re.fullmatch('[0-9a-f]{40,64}',source['dataset_revision']), 'Real traces require a fixed dataset revision')
+    revision=source['dataset_revision']
+    if source['kind']=='user_provided_model_routes':
+        require((revision is None and 'dataset_revision' in source['unknown_fields']) or
+                (isinstance(revision,str) and re.fullmatch('[0-9a-f]{40,64}',revision) and
+                 'dataset_revision' not in source['unknown_fields']),
+                'User-provided routes require an explicit unknown or fixed dataset revision')
+    elif source['kind']!='synthetic_test':
+        require(isinstance(revision,str) and re.fullmatch('[0-9a-f]{40,64}',revision) and
+                'dataset_revision' not in source['unknown_fields'], 'Real traces require a fixed dataset revision')
+    else:
+        require(isinstance(revision,str) and revision.strip(), 'Missing route source: dataset_revision')
     if source['kind']=='captured_model_trace':
         require(source['collector_model_revision'] and source['runtime_revision'], 'Captured routes require fixed weights/runtime')
     model=manifest['model'];fields(model,'name hidden_dim num_layers routing_precision','route model')

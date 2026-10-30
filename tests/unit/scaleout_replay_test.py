@@ -48,6 +48,20 @@ class ReplayChecks(unittest.TestCase):
             self.assertFalse(evidence['eos_inferred'])
             self.assertEqual(evidence['source']['kind'],'synthetic_test')
 
+    def test_user_provided_unknown_revision_survives_replay_snapshot(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory);manifest=json.loads((EXAMPLE/'manifest.json').read_text())
+            for row in manifest['files']:row['file']['path']=str(ROOT/row['file']['path'])
+            manifest['source'].update(kind='user_provided_model_routes',dataset_revision=None)
+            manifest['source']['unknown_fields'].append('dataset_revision')
+            path=root/'manifest.json';path.write_text(json.dumps(manifest))
+            c=deepcopy(self.c);c['route_replay']['manifest']=dict(path=str(path),sha256=hashlib.sha256(path.read_bytes()).hexdigest())
+            replay=Replay(c,ROOT);out=root/'snapshot';out.mkdir()
+            saved,evidence=replay.snapshot(out);restored=Replay(saved,out)
+            self.assertEqual(restored.routes([0,1,2,3],1,1),replay.routes([0,1,2,3],1,1))
+            self.assertIsNone(evidence['source']['dataset_revision'])
+            self.assertEqual(evidence['source']['kind'],'user_provided_model_routes')
+
     def test_missing_duplicate_and_unknown_request(self):
         for change in ('missing','slot','file','unknown'):
             c=deepcopy(self.c);rows=c['route_replay']['requests']

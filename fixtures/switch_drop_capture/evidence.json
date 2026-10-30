@@ -1,0 +1,457 @@
+{
+  "schema_version": "switch-drop-observation-evidence/1",
+  "source_base_commit": "c9a6d55b7b3a66d265786dc0db195e420d138228",
+  "scope": "incremental build and synthetic observation acceptance; not production calibration or algorithm gains",
+  "run_root": "runs/switch_drop_capture_20261030",
+  "files": [
+    {
+      "path": "backend.json",
+      "sha256": "09e50b6d6febf85e33a693c355c7a727559b360e8d21da3d9fb1988c38acedf8",
+      "bytes": 10729
+    },
+    {
+      "path": "dependency-commits.json",
+      "sha256": "76cecd214368d31c3600029440f080ef41a7a1c1e3c47b87d4cc57117ddbcd08",
+      "bytes": 540
+    },
+    {
+      "path": "acceptance/commands.json",
+      "sha256": "7822df035061ebbe79b9b9376b063da000df005970e1fe8c1bfc5a3a00e5d256",
+      "bytes": 4080
+    },
+    {
+      "path": "acceptance/verification.json",
+      "sha256": "70ea5158154505243661879e18a1c6845fc0349fba527d1ef3d5fdaa851485eb",
+      "bytes": 1838
+    },
+    {
+      "path": "native-branch-monitor/stdout.log",
+      "sha256": "05e7520e28830359d5946ea8723181913f9a6d9a9dcd26569cf915cf7a362c10",
+      "bytes": 520
+    },
+    {
+      "path": "final-cpu-monitor/stderr.log",
+      "sha256": "a426996d32fb4b4adbbd1b52ef1f270811f17e76a9b866259bd96cef6e6f0f5b",
+      "bytes": 290
+    },
+    {
+      "path": "acceptance/inputs/messages.json",
+      "sha256": "3f2a63c18df0750386148b999999d664f5fcfd2efb008a8216b6397bab53e3ba",
+      "bytes": 738
+    },
+    {
+      "path": "acceptance/inputs/off.json",
+      "sha256": "820a913d1e49c0459809035cd583a11e1c0ef50ac637d69f666e7565483b7748",
+      "bytes": 1113
+    },
+    {
+      "path": "acceptance/inputs/on.json",
+      "sha256": "48cf1f34033728fd5fe1f54b38769d0d5f5bc8108dd7eb393916f198c5a2d26d",
+      "bytes": 1229
+    },
+    {
+      "path": "acceptance/inputs/service-rdma.json",
+      "sha256": "666c2ec5d1763609185228ebaddb0840616c003f29be384f3dc8439b6392f607",
+      "bytes": 913
+    },
+    {
+      "path": "acceptance/inputs/topology.json",
+      "sha256": "f0ef8633335bf312ea131df2f3a68d25261bd86f8a49c8ef5e9dd84305ee2836",
+      "bytes": 1096
+    },
+    {
+      "path": "acceptance/off/result.json",
+      "sha256": "ed622afa25028a2709fe78e6d03415591cdb42aa602d976f5dcaee403f186bd2",
+      "bytes": 1377730
+    },
+    {
+      "path": "acceptance/off/execution/probe.json",
+      "sha256": "127cfb653df5807ea6b5064eb1746f11148c41900565b5178ac7a3529cd305cc",
+      "bytes": 1815
+    },
+    {
+      "path": "acceptance/on/result.json",
+      "sha256": "4c1de6c59f332fcf273eb31c761717ef297a5c636b601b1dadeb6f877244ca82",
+      "bytes": 1383684
+    },
+    {
+      "path": "acceptance/on/execution/probe.json",
+      "sha256": "44b81fb52a6af14e7ff004205ba3f420294cb0ef330dbcb534402be09375d1b3",
+      "bytes": 1812
+    },
+    {
+      "path": "acceptance/service/result.json",
+      "sha256": "b9a084231d54df58bc73fb64c611b1b82ae2b2a490ff2842084a5291cdfb23cd",
+      "bytes": 299038
+    },
+    {
+      "path": "acceptance/service/execution/probe.json",
+      "sha256": "e461d7963127677bdcfdc5bcffc3242515f3f59a5fda77d2b77b29460b6f3085",
+      "bytes": 1961
+    }
+  ],
+  "source_hashes": {
+    "backend/rdma/fabric.cc": "45798a401eabcae65c45bb5aab80cd16346e8324d78bc668208484248d2f2097",
+    "backend/rdma/fabric.hh": "7055a2d29c4606b260333b780a96579bcd91c669533b77129202591eca45a9f3",
+    "backend/rdma/switch_drop_capture.cc": "fb78f41a7d155435c6a1f5ff733fffaddbafe97f129bcc30db6ef459c2035430",
+    "backend/rdma/targets.cmake": "b024c143939265a33a7dabf514e76e202c723ecd2da510a20f298a2088d9ee8a",
+    "python/moe_ub_cosim/scaleout_switch_drops.py": "44c5d322026480b6e2e6a5a3faa882e2c8c74bdc5f3cc403fcdd34a78cf0ce60",
+    "python/moe_ub_cosim/scaleout_rdma.py": "924232ddf09cf3f24a4bfcb46649b4de0dd0258196dedf08bc81ac205bcdeded",
+    "python/moe_ub_cosim/scaleout_streams.py": "81f3f5ff186a08f97781538fbf8bae46f318cef21915704b5e5a90e9abbd8bd6",
+    "python/moe_ub_cosim/scaleout_verify.py": "60bb2a6fc335c06ed17a41f0c00e9cc041aa64d3a17de0fc3e7740d712f5ef91",
+    "python/moe_ub_cosim/simai_verify.py": "2489d8378637d9072240ce36125a86fc08ebb2965ac7afd42bb6839f8cbeb88b",
+    "python/moe_ub_cosim/service_stream_verify.py": "d4a82491ead1d6ad1c5ab0d00d3175c370cc550c2e61076cb9759301c50d575b",
+    "python/moe_ub_cosim/run_summary.py": "17836e8aa2c9518b3511b1c7de1a0326af1dee07e3852f082a47e3c14e5d3ec0",
+    "examples/scaleout_switch_drops/prepare.py": "874b651b0b9b873c5a5750ddb0d0c9bfc08fbfb60f7095b2a65300abb2a51c4e",
+    "tests/integration/check_switch_drop_capture.py": "c77012d38e4f58cc48079b0b217a215e5ea7d29c6f44a93b6dca006a8b269ac1",
+    "tests/unit/native_switch_drop_test.cc": "5d67a55014689476704d1b1b6b6459dace79ef743b79750bf255e65860166b65",
+    "tests/unit/scaleout_switch_drops_test.py": "7537d65a3cac5eeadcf4d928bdf2620dd12942d79d505de3bbc29bae50080ef2"
+  },
+  "build": {
+    "schema_version": "moe-switch-drop-build/1",
+    "source_head": "c9a6d55b7b3a66d265786dc0db195e420d138228",
+    "source_state": "main worktree patch; content hashes below; nested dependency commits saved",
+    "source_files": {
+      "backend/rdma/application_window_validation.hh": "13733c0de33d5e4b877b945d8c4d9f86b764fb1a1d001702abe83ab62fb1d0f7",
+      "backend/rdma/application_windows.hh": "02ca231ac69c903904dcc760b304890eef0961a047b70ca31367651d65d311e5",
+      "backend/rdma/astra_adapter.cc": "13de5bb78869cd6301a656b86fc6488ffaedd1a7284d7f7b7cc12b4e95aa62e3",
+      "backend/rdma/astra_adapter.hh": "17224faa44539018901db917263b1d909af72c1a0c946fd60204a5729026833f",
+      "backend/rdma/bounded_buffers.hh": "ff3bf7ed0014288db60862583259e01da3959afc5984087a61987826e25a950a",
+      "backend/rdma/cnp_switch.hh": "3f1166d5487c6c43b075ede4b4af96e0d30a3e93c43527e83ea61fbee63fefb5",
+      "backend/rdma/control_channel.hh": "cca54568ae579613c5f536d7d0897ee310854f0a1a41b511171607d98d11afc7",
+      "backend/rdma/dcqcn_reference.hh": "b80eac69407c3d1fd670bb2c5da9a27a04b67faa6a83b322f61673b84bbfc60c",
+      "backend/rdma/fabric.cc": "45798a401eabcae65c45bb5aab80cd16346e8324d78bc668208484248d2f2097",
+      "backend/rdma/fabric.hh": "7055a2d29c4606b260333b780a96579bcd91c669533b77129202591eca45a9f3",
+      "backend/rdma/gin_work_queue.hh": "2616252a1620bee3ebb89c603914d7476d904b9a9b9ec2a68e67fcc4f04c3b22",
+      "backend/rdma/host_timing.hh": "7114fcab1d671d7961a4fdfc33e3e19a1cedc5de3ca907e49097573a68ff7d8c",
+      "backend/rdma/inject.cmake": "41eb6d214905d81b6c7da60ae29042ca2403a79f8375bb332f917974baf66546",
+      "backend/rdma/link_failure_validation.hh": "ba2e668987426e596011822b2a0f724bdfc3eced0a53cba0a73f702dea30d1c5",
+      "backend/rdma/logging.cc": "535806de03c3f2805022f9875c062d9091c94f9552692e6155fe9be1fc463db9",
+      "backend/rdma/memory_registrations.hh": "a02799fac561d8ed368576dfd75994c50659d4b3803fcbe332353c4f010ba738",
+      "backend/rdma/nack_grace.hh": "07b0dd90eeafebe3f7c84bb997736bfab5be8ac483d36e5f38fb54a8ca6c8ddc",
+      "backend/rdma/persistent_streams.cc": "0ea6918392f6b65e4a5e135f01a0810cb7fa8e446a28b086d5ec00e85efe903c",
+      "backend/rdma/persistent_streams.hh": "2c95fb81b26cb135cbec38438087c73ea422aef4f4b20ff737dbd155deb4d57b",
+      "backend/rdma/probe.cc": "6f2820c6b9f595d01349f1e00aa5d0c55e86c024f05790353077d18ee7692a71",
+      "backend/rdma/rc_concurrent_probe.cc": "1dd964b0d4541b640e0b49effc8dc437766d1367efde75b08323d0aaa25668e9",
+      "backend/rdma/rc_packet_probe.cc": "9f1b11f429c2e299c44d430e1c243146505ddb92c1c847242b916cfb18608242",
+      "backend/rdma/rc_wire.hh": "270307a59be1335773b8f49b93d7b5ccdb8f1797754a042f297fbe6a72fa593b",
+      "backend/rdma/recovery.cc": "7b3fe217d9944776a9f094192c3a13407dcda62cbd88033ef16b42d0d5b1b8a3",
+      "backend/rdma/recovery.hh": "51f15d2c463b729c357ec1845770e110194da9908372cbf567b4961549fd90f4",
+      "backend/rdma/recovery_records.hh": "864c8e7977876bf0759eef849124983f8b61fe84d7cbc8b2ebda9c3ad2cf392c",
+      "backend/rdma/remote_memory.hh": "2bfe997bf9151ef1aee7d7c45c6b79e8d3465f3d6dca6c7ec4b73436028dda33",
+      "backend/rdma/remote_transactions.cc": "fab7d142e2cb7d20b2aab1acec9e5e7afe597389b6c11ae6dfd599c448a1a1ac",
+      "backend/rdma/remote_transactions.hh": "ef6a49881538a7d37cfbe4547ab11b6c050c0ab6e75a13fc5e9fc04aaeb29d2a",
+      "backend/rdma/selective_repeat.hh": "b1fd43f06631511e45f8711886b9594edb957fa5c06158844c356999d72dbe21",
+      "backend/rdma/self_peer_service.hh": "2f7583dd7880935778bb239ed55ff93de50dc6794d224f90b5bf792aa5605b85",
+      "backend/rdma/serial_native.cmake": "a8c7a97dea061d58a2faf17f56a0f477b0fc704ec509be9a0180fd6b1ff2b344",
+      "backend/rdma/service.cc": "7850d2c9b5345eef2e7e565076f73b6d2135e173132eabf59851c0cd11a8f220",
+      "backend/rdma/service_transport.cc": "0c8447e943d2a2b1f7a715dfdf901814a287b9e1165362c62af6e5c994e57d8e",
+      "backend/rdma/service_transport.hh": "afe1f00908cf74f66b3524dd86b4895ee6abd0e18faaaf27fc84669281e6d35e",
+      "backend/rdma/session_callback_batches.hh": "dd911806b5025342d056c12e2af68023718df6bce1ddc5364e828b19a516d529",
+      "backend/rdma/session_wakeups.hh": "47f293cbf8069f5ca661366d3f6892227409b397928f3a7d20511816196b1a10",
+      "backend/rdma/stream_probe.cc": "4914bbf99d826923bf24f5b9878dacb1775a8a52bbc7407085eec4edccb07331",
+      "backend/rdma/switch_drop_capture.cc": "fb78f41a7d155435c6a1f5ff733fffaddbafe97f129bcc30db6ef459c2035430",
+      "backend/rdma/targets.cmake": "b024c143939265a33a7dabf514e76e202c723ecd2da510a20f298a2088d9ee8a",
+      "backend/rdma/transaction_effect_order.hh": "c78a8c2b3d3a905caae1853dc2b971c0ba63576ac63df93e454a13e88ede9b43",
+      "backend/rdma/transaction_limits.hh": "dfe0b38787283ff50bce0a0f3bdd8d355bfdac5fa9b7f4ddb29de6b0517280a5",
+      "backend/rdma/transaction_probe.cc": "df8a97b64656bdc1acc96534487576d7156f02bb361214a77d17be5876837231",
+      "backend/rdma/transaction_session.cc": "aff47a42c9599c6c62c4b6466fbcd4b31ae99224d7e817604ceef43d092165f5",
+      "backend/rdma/transaction_session_validation.hh": "5f1582ad4c43f0c264c45efb8c1b4f69fae21916fc9e718ae865c3d0138125a5",
+      "backend/rdma/transaction_transport.hh": "3ddad982f95e9f76f8ef46a51b9bd1ef1c90bc85685b1c08951af2fea33df901",
+      "third_party/LLMServingSim/astra-sim/extern/network_backend/ns-3/src/point-to-point/model/switch-node.cc": "667cbfcbbbd9c8e681d25a5925c2918aa1ed46423b4bb1fa637f216cf005f3f2",
+      "third_party/LLMServingSim/astra-sim/extern/network_backend/ns-3/src/point-to-point/model/switch-node.h": "c391025c16a743cf957e1942d678370d4f8e3a2053f8fde85caa89f44c74a51a",
+      "tests/unit/native_switch_drop_test.cc": "5d67a55014689476704d1b1b6b6459dace79ef743b79750bf255e65860166b65"
+    },
+    "binary_hashes": {
+      "/dev/shm/moe-heavy-loss-20261028/build/output/moe-rdma/ns3.42-moe-rdma-probe": "e69982a59ce4d05be7b5cebeac318831548f790e52fc009c7e15c21f15d5c714",
+      "/dev/shm/moe-heavy-loss-20261028/build/output/moe-rdma/ns3.42-moe-rdma-rc-probe": "10a4b92375023e186ca6acc09c990a96a4c25620044634c5c8ece68c9a538ead",
+      "/dev/shm/moe-heavy-loss-20261028/build/output/moe-rdma/ns3.42-moe-rdma-service": "1b0a19522bb50000097813a58aaae288a358cb0b8ede1727d413de4ac5a9b391",
+      "/dev/shm/moe-heavy-loss-20261028/build/output/moe-rdma/ns3.42-moe-rdma-stream-probe": "af29533dffaf1824b0ed3871d5876183741e5f70b04edbf7fb0972d6e8fe8a7e",
+      "/dev/shm/moe-heavy-loss-20261028/build/output/moe-rdma/ns3.42-moe-rdma-switch-drop-test": "43cbc27993a8949e0aaa50a043c85a806468ce9d8bd508432d2fa4cc7dd9d8f0",
+      "/dev/shm/moe-heavy-loss-20261028/build/output/moe-rdma/ns3.42-moe-rdma-transaction-probe": "3e2bcd5ea3d4d57bfd2086a96b96ba883d0d53fc6b07d6e7e8aa5a17d909ccb1",
+      "/dev/shm/moe-heavy-loss-20261028/build/output/moe-rdma/ns3.42-moe-rdma-transaction-session": "24ab5c402c94fa1299da69d32fe0563d1e31e85bdf6cd127c6fe103f79e42ef5"
+    },
+    "library_hashes": {
+      "/dev/shm/moe-heavy-loss-20261028/build/output/lib/libns3.42-applications.so": "25c9ea0548421f52ebf8191c8b662e1ddb0f63c546fd544c5dc405a4e062ed72",
+      "/dev/shm/moe-heavy-loss-20261028/build/output/lib/libns3.42-bridge.so": "28f3b410e4f388e13113dee45b4ade98e90da59e99abb56179994d6f0ee797f5",
+      "/dev/shm/moe-heavy-loss-20261028/build/output/lib/libns3.42-core.so": "4e06c366e439e338d6acaa1f5e802c05dcce8df10b1ba500b83dd945ed2e5f35",
+      "/dev/shm/moe-heavy-loss-20261028/build/output/lib/libns3.42-internet.so": "43339f38fb0502c00c5f19537f6ba6771a168200cd7c83529a12a05b3d2e27f0",
+      "/dev/shm/moe-heavy-loss-20261028/build/output/lib/libns3.42-network.so": "b94272a020f3438347a8bde2b3fa10355d40b09e96792232b3198dac87cd4b94",
+      "/dev/shm/moe-heavy-loss-20261028/build/output/lib/libns3.42-point-to-point.so": "5113fd7048c367120119d339007550efaf059a25b0e82f6798ba7e523d626839",
+      "/dev/shm/moe-heavy-loss-20261028/build/output/lib/libns3.42-stats.so": "9f211655e5fe19ade99d1419bdcbcb41618dcaa1fbcba6ab4fa8ee65fb9ace98",
+      "/dev/shm/moe-heavy-loss-20261028/build/output/lib/libns3.42-traffic-control.so": "b52a47933b85e2f61f9a94f29a2871aed9e5941e0cec0e9c9f03570ad15ddc99"
+    },
+    "dependencies": [
+      {
+        "path": "third_party/LLMServingSim/astra-sim/extern/network_backend/ns-3",
+        "commit": "69cb14764c0c5de2c7ad31599ee5b3999dddc154",
+        "tree": "41dffd0d744ddb3f1feaf06a2d988e82d4298963"
+      },
+      {
+        "path": "third_party/LLMServingSim/astra-sim",
+        "commit": "479539202401c04c726440c3c6e61327a96a1e60",
+        "tree": "fb052ae5d4e232c6e00abdc361906dbfed6899aa"
+      },
+      {
+        "path": "third_party/LLMServingSim",
+        "commit": "3ff9dee68d7184d0d9c7132e2eebfdb821cd8328",
+        "tree": "ecc27f41dc422095550ad0529ccf19c9ee3b94b4"
+      }
+    ],
+    "monitors": {
+      "build-monitor": {
+        "path": "build-monitor/probe.json",
+        "sha256": "4669d44810e872f0a371b5afbb019057db7783f133932cf869a02ad8ca289b94",
+        "command": [
+          "/usr/bin/cmake",
+          "--build",
+          "/dev/shm/moe-heavy-loss-20261028/build/cmake",
+          "--target",
+          "moe-rdma-service",
+          "moe-rdma-probe",
+          "moe-rdma-switch-drop-test",
+          "-j1"
+        ],
+        "child_exit_code": 0,
+        "peak_sampled_group_rss_bytes": 923291648
+      },
+      "abi-closure-build-monitor": {
+        "path": "abi-closure-build-monitor/probe.json",
+        "sha256": "755c1db919b38faa950b6e1ce9543f341d5c55073eb9b73a5285a43e90aa98b1",
+        "command": [
+          "/usr/bin/cmake",
+          "--build",
+          "/dev/shm/moe-heavy-loss-20261028/build/cmake",
+          "--target",
+          "moe-rdma-stream-probe",
+          "moe-rdma-rc-probe",
+          "moe-rdma-transaction-probe",
+          "moe-rdma-transaction-session",
+          "-j1"
+        ],
+        "child_exit_code": 0,
+        "peak_sampled_group_rss_bytes": 849809408
+      },
+      "native-branch-monitor": {
+        "path": "native-branch-monitor/probe.json",
+        "sha256": "9bbb44bfe5100b9f324d3f2a4ad604e2356561f3418f24eeeec7a3fbe16e6613",
+        "command": [
+          "/dev/shm/moe-heavy-loss-20261028/build/output/moe-rdma/ns3.42-moe-rdma-switch-drop-test"
+        ],
+        "child_exit_code": 0,
+        "peak_sampled_group_rss_bytes": 7491584
+      },
+      "cpu-monitor": {
+        "path": "cpu-monitor/probe.json",
+        "sha256": "5e6c0cd1583a68fafd79efe914eb3616a8f0edac10b8be8223f5ec406c359e61",
+        "command": [
+          ".venv/frontend/bin/python",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests/unit",
+          "-p",
+          "scaleout*test.py"
+        ],
+        "child_exit_code": 0,
+        "peak_sampled_group_rss_bytes": 99770368
+      }
+    },
+    "previous_output": "previous-build/output",
+    "previous_receipt_sha256": "c90dd598a142d489f2900c18fe192087c824c221a0deb942dac2db5155dbae9c",
+    "scope": "incremental native dependency/library and all existing ABI-dependent executable closure; not a cold build or network acceptance"
+  },
+  "monitors": [
+    {
+      "path": "abi-closure-build-monitor/probe.json",
+      "sha256": "755c1db919b38faa950b6e1ce9543f341d5c55073eb9b73a5285a43e90aa98b1",
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 124.96461987798102,
+      "peak_sampled_group_rss_bytes": 849809408,
+      "command": [
+        "/usr/bin/cmake",
+        "--build",
+        "/dev/shm/moe-heavy-loss-20261028/build/cmake",
+        "--target",
+        "moe-rdma-stream-probe",
+        "moe-rdma-rc-probe",
+        "moe-rdma-transaction-probe",
+        "moe-rdma-transaction-session",
+        "-j1"
+      ]
+    },
+    {
+      "path": "acceptance-analysis-monitor/probe.json",
+      "sha256": "7b8e68daef41ddb59b46ffcccc7b74fbed487a1e24b5296a6527f623a04ad421",
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 0.16654136299621314,
+      "peak_sampled_group_rss_bytes": 7442432,
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "tests/integration/check_switch_drop_capture.py",
+        "--probe",
+        "/dev/shm/moe-heavy-loss-20261028/build/output/moe-rdma/ns3.42-moe-rdma-probe",
+        "--service",
+        "/dev/shm/moe-heavy-loss-20261028/build/output/moe-rdma/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "runs/switch_drop_capture_20261030/acceptance",
+        "--reference",
+        "runs/astra_stream_service_20261029/acceptance/normal",
+        "--resume"
+      ]
+    },
+    {
+      "path": "acceptance-monitor/probe.json",
+      "sha256": "02525385fa3247ee469e6a25ea8592ecad87e2741c4a3bc939a329d299054277",
+      "status": "child_failed",
+      "exit_code": 1,
+      "wall_seconds": 0.580623320012819,
+      "peak_sampled_group_rss_bytes": 51032064,
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "tests/integration/check_switch_drop_capture.py",
+        "--probe",
+        "/dev/shm/moe-heavy-loss-20261028/build/output/moe-rdma/ns3.42-moe-rdma-probe",
+        "--service",
+        "/dev/shm/moe-heavy-loss-20261028/build/output/moe-rdma/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "runs/switch_drop_capture_20261030/acceptance",
+        "--reference",
+        "runs/astra_stream_service_20261029/acceptance/normal"
+      ]
+    },
+    {
+      "path": "acceptance-resume-monitor/probe.json",
+      "sha256": "b85f681c73717fbb9332e9b8b8330b9a947d4975c790393828302d119ff8aa0c",
+      "status": "child_failed",
+      "exit_code": 1,
+      "wall_seconds": 1.74796248099301,
+      "peak_sampled_group_rss_bytes": 272379904,
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "tests/integration/check_switch_drop_capture.py",
+        "--probe",
+        "/dev/shm/moe-heavy-loss-20261028/build/output/moe-rdma/ns3.42-moe-rdma-probe",
+        "--service",
+        "/dev/shm/moe-heavy-loss-20261028/build/output/moe-rdma/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "runs/switch_drop_capture_20261030/acceptance",
+        "--reference",
+        "runs/astra_stream_service_20261029/acceptance/normal",
+        "--resume"
+      ]
+    },
+    {
+      "path": "build-monitor/probe.json",
+      "sha256": "4669d44810e872f0a371b5afbb019057db7783f133932cf869a02ad8ca289b94",
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 83.94983475998743,
+      "peak_sampled_group_rss_bytes": 923291648,
+      "command": [
+        "/usr/bin/cmake",
+        "--build",
+        "/dev/shm/moe-heavy-loss-20261028/build/cmake",
+        "--target",
+        "moe-rdma-service",
+        "moe-rdma-probe",
+        "moe-rdma-switch-drop-test",
+        "-j1"
+      ]
+    },
+    {
+      "path": "cpu-monitor/probe.json",
+      "sha256": "5e6c0cd1583a68fafd79efe914eb3616a8f0edac10b8be8223f5ec406c359e61",
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 1.576315816026181,
+      "peak_sampled_group_rss_bytes": 99770368,
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/unit",
+        "-p",
+        "scaleout*test.py"
+      ]
+    },
+    {
+      "path": "failure-timeline-monitor/probe.json",
+      "sha256": "80c1244f73532386a4e5064c74b307d5446f81a105ac7e5ecab6604e3c83e06b",
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 0.17683461401611567,
+      "peak_sampled_group_rss_bytes": 7491584,
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "tests/integration/check_switch_drop_capture.py",
+        "--probe",
+        "/dev/shm/moe-heavy-loss-20261028/build/output/moe-rdma/ns3.42-moe-rdma-probe",
+        "--service",
+        "/dev/shm/moe-heavy-loss-20261028/build/output/moe-rdma/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "runs/switch_drop_capture_20261030/acceptance",
+        "--reference",
+        "runs/astra_stream_service_20261029/acceptance/normal",
+        "--resume"
+      ]
+    },
+    {
+      "path": "final-cpu-monitor/probe.json",
+      "sha256": "a8d7d45b39bfad4b53d7fcd82a9d5184e6180dd8d859cb0b6846819a3ac5ba87",
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 1.5868437780300155,
+      "peak_sampled_group_rss_bytes": 96219136,
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-c",
+        "import unittest; loader=unittest.TestLoader(); suite=unittest.TestSuite(loader.discover(\"tests/unit\",pattern=p) for p in (\"scaleout*test.py\",\"simai_service_test.py\",\"service_stream_test.py\",\"service_terminal_test.py\")); result=unittest.TextTestRunner(verbosity=1).run(suite); raise SystemExit(not result.wasSuccessful())"
+      ]
+    },
+    {
+      "path": "native-branch-monitor/probe.json",
+      "sha256": "9bbb44bfe5100b9f324d3f2a4ad604e2356561f3418f24eeeec7a3fbe16e6613",
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 0.15811384795233607,
+      "peak_sampled_group_rss_bytes": 7491584,
+      "command": [
+        "/dev/shm/moe-heavy-loss-20261028/build/output/moe-rdma/ns3.42-moe-rdma-switch-drop-test"
+      ]
+    }
+  ],
+  "resources": {
+    "monitored_wall_seconds_sum_including_overlaps": 214.90768985799514,
+    "run_apparent_bytes": 38770492,
+    "run_allocated_bytes": 40722432,
+    "free_bytes": 38609317888
+  },
+  "preserved_failures": [
+    "acceptance-monitor: actual incast retry exhaustion",
+    "acceptance-resume-monitor: service library enumeration-order comparison; raw network unchanged"
+  ],
+  "network_execution_count": 3,
+  "scope_of_native_branch": "actual SwitchNode explicit saturated prestate; separate from incast",
+  "scope_of_reference_comparison": "all saved service simulation fields exact; loaded path multiplicity equal; order differs"
+}

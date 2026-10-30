@@ -197,6 +197,8 @@ Dispatch 保留源码的跨核数据栅栏再发布计数。Combine 按核发送
 
 ## 数据就绪与发送完成
 
+非UB原生RDMA的`Fabric`支持可选交换机丢弃原因观察，默认关闭。新增回调不调用包事件、在途递减、队列修改或排空调度，原有设备丢弃通知保持。固定依赖的出口准入恒true，不能以接口枚举声称已模拟出口拒绝。输入与有界输出见[公开示例](../examples/scaleout_switch_drops/README.md)，开关对照与逐包核算见[功能验收](../fixtures/switch_drop_capture/README.md)。
+
 联合路径包括 **URMA WRITE / RTP** 与原生 **STORE / LOAD**。`UbTransferExecutor` 复用 UB 的协议提交和资源处理，保存任务上下文；CSV 原生入口完成后通知 `UbTrafficGen`，联合入口通知适配器，联合任务不查询 CSV 阶段表。以下 WQE、Jetty、TA 与 TP 说明适用于 WRITE/RTP。
 
 这里的 WQE 是描述一次写操作的队列条目；Jetty 是承接 WQE 并维护事务上下文的端点资源对象。TA 是事务层拆分与重组的传输单元，TP 是承载这些单元的网络传输通道，保存分包和包序号等状态；这里的 TP 与模型的张量并行参数是不同概念。

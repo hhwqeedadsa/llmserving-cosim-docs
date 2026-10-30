@@ -127,6 +127,7 @@ Fabric::Fabric(const Json& topology, const Json& config): topology_(topology), c
   }
   Require(gpu_count > 0 && gpu_count <= gpu_limit && switch_count <= sw_limit,
           "GPU/switch budget exceeded before network allocation");
+  ConfigureSwitchDrops();
   if(config.contains("mmu_snapshot")) {
     const auto& capture=config.at("mmu_snapshot");
     Require(capture.is_object() && capture.size()==2 && capture.contains("nodes") && capture.contains("max_ports"),
@@ -159,6 +160,8 @@ Fabric::Fabric(const Json& topology, const Json& config): topology_(topology), c
       ++switches;
       planes_ = std::max(planes_, n.at("plane").get<unsigned>() + 1);
       auto sw = CreateObject<CnpSwitch>();
+      if(switch_drop_limit_)Require(sw->TraceConnectWithoutContext("SwitchDrop",
+        MakeBoundCallback(&Fabric::SwitchDropTrace,this,n.at("id").get<unsigned>())),"missing native SwitchDrop trace");
       sw->SetAttribute("EcnEnabled", BooleanValue(true));
       sw->SetAttribute("CcMode", UintegerValue(1));
       sw->SetAttribute("AckHighPrio", UintegerValue(1));
@@ -845,6 +848,7 @@ Json Fabric::Report() {
       {"observations",lifecycle_observations_},{"complete",lifecycle_observations_==lifecycle_events_.size()},
       {"omitted_events",lifecycle_observations_-lifecycle_events_.size()},
       {"owner_scope","Grant/release deltas reconstruct the full active owner set from t=0 when capture is complete; final owner sets are in admission.sources"}};
+  if(switch_drop_limit_)r["switch_drop_capture"]=SwitchDropReport();
   if(capture_limit_) {
     r["packet_capture"]={{"scope","evaluation_only_native_device_hooks"},{"selection",config_.at("packet_capture")},{"events",packet_events_},
       {"columns",{"time_ns","node","port","event","packet_uid","message_id","ip_protocol","sequence","model_bytes","ecn","egress_queue_bytes","data_payload_bytes"}},

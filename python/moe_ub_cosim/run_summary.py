@@ -35,6 +35,9 @@ def describe(directory):
         packet_capture_events=len(result.get('packet_capture',{}).get('events',[])),
         fault_drops=result['fault_drops'],data_loss=result.get('data_loss'),failure=result.get('failure'))
     outcome.update(service_terminal(result,f))
+    if result is not None and 'switch_drop_capture' in p:
+        from .scaleout_switch_drops import analyze
+        outcome['switch_drops']=analyze(result,t,p)
     return dict(schema_version='moe-run-summary/1',scope='simulated hardware/deployment; no GPU workload or hardware timing calibration',
         gpu_label=s['model']['gpu_type'],simai_capacity_reference=c['simai'],physical_gpu_count=len(gpus),
         server_count=len({n['server'] for n in gpus}),pod_count=len({n['pod'] for n in gpus}),

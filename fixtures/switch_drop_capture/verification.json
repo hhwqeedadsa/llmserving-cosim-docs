@@ -1,0 +1,59 @@
+{
+  "passed": true,
+  "network_conditions": 3,
+  "incast_messages": 7,
+  "incast_payload_bytes": 1835008,
+  "incast_switch_drops": {
+    "complete": true,
+    "selected_observations": 28,
+    "saved_events": 28,
+    "all_switch_drops": 28,
+    "all_switch_reason_counts": [
+      28,
+      0,
+      0,
+      0
+    ],
+    "scope": "all-switch aggregate counters plus selected detail; not device/injection loss totals"
+  },
+  "incast_packet_events": 6830,
+  "data_switch_receive_events": 840,
+  "data_switch_enqueue_events": 812,
+  "data_switch_drop_events": 28,
+  "incast_success": false,
+  "incast_completed_messages": 2,
+  "incast_failure": {
+    "message_id": 4,
+    "reason": "recovery_retry_exhausted",
+    "scope": "whole shared simulation stopped; no successful callbacks or credits synthesized; live resources retained for diagnosis until teardown",
+    "time_ns": 861088
+  },
+  "incast_failure_timeline": {
+    "message_id": 4,
+    "last_ack_progress_ns": 261088,
+    "retry_requests_after_last_progress_ns": [
+      301088,
+      381088,
+      541088,
+      701088
+    ],
+    "last_source_data_tx_ns": 187792,
+    "source_data_packets_after_last_progress": 0,
+    "scope": "complete source TX and source timer records; timeout requests are not actual retransmitted packets; pacing/PFC attribution still requires separate evidence"
+  },
+  "existing_native_fields_on_off_equal": true,
+  "service_matches_saved_reference": true,
+  "service_library_order_changed": true,
+  "service_library_comparison": "same paths with multiplicity; enumeration order is loader metadata",
+  "service_finish_ns": 67668,
+  "service_messages": 50,
+  "service_switch_drops": [
+    0,
+    0,
+    0,
+    0
+  ],
+  "scope": "synthetic negative incast pair plus positive ASTRA service; branch prestate test separate; no production loss frequency or gains",
+  "cpu_tests": 190,
+  "native_branch_test_passed": true
+}

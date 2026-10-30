@@ -86,6 +86,9 @@ class Fabric {
   static void RxTrace(Fabric*, unsigned, unsigned, ns3::Ptr<const ns3::Packet>);
   static void DropTrace(Fabric*, unsigned, unsigned, ns3::Ptr<const ns3::Packet>);
   static void LocalDropTrace(Fabric*, unsigned, unsigned, ns3::Ptr<const ns3::Packet>, uint32_t);
+  static void SwitchDropTrace(Fabric*, unsigned, ns3::Ptr<const ns3::Packet>, uint32_t, int32_t, uint32_t, uint32_t);
+  void ConfigureSwitchDrops();
+  Json SwitchDropReport() const;
   static void QueueTrace(Fabric*, unsigned, unsigned, ns3::Ptr<const ns3::Packet>, uint32_t);
   static void QueueEnqueueTrace(Fabric*, unsigned, unsigned, ns3::Ptr<const ns3::Packet>, uint32_t);
   static void QueueDequeueTrace(Fabric*, unsigned, unsigned, ns3::Ptr<const ns3::Packet>, uint32_t);
@@ -142,6 +145,11 @@ class Fabric {
   std::vector<uint64_t> event_wire_headers_;
   bool capture_wire_headers_=false;
   uint64_t packet_observations_ = 0;
+  uint64_t switch_drop_limit_=0,switch_drop_observations_=0;
+  int64_t switch_drop_start_=0,switch_drop_end_=0;
+  std::set<unsigned> switch_drop_nodes_;
+  std::array<uint64_t,4> switch_drop_totals_{};
+  std::vector<std::array<int64_t,12>> switch_drop_events_;
   std::set<unsigned> capture_nodes_;
   uint64_t capture_limit_ = 0;
   int64_t capture_start_ = 0, capture_end_ = 0;

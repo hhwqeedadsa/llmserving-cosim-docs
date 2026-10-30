@@ -35,11 +35,11 @@ tar -xzf third_party/source_archives/SimAI-a57d765c.tar.gz -C runs/simai-source
 
 |依赖|固定源码分支|
 |---|---|
-|llmservingsim|[a9eaf1196fcf](https://github.com/hhwqeedadsa/llmserving-cosim-docs/tree/codex/deps/llmservingsim)|
-|astra-sim|[e0fa9d93f5ff](https://github.com/hhwqeedadsa/llmserving-cosim-docs/tree/codex/deps/astra-sim)|
+|llmservingsim|[3ff9dee68d71](https://github.com/hhwqeedadsa/llmserving-cosim-docs/tree/codex/deps/llmservingsim)|
+|astra-sim|[479539202401](https://github.com/hhwqeedadsa/llmserving-cosim-docs/tree/codex/deps/astra-sim)|
 |fmt|[7e73566ce7bd](https://github.com/hhwqeedadsa/llmserving-cosim-docs/tree/codex/deps/fmt)|
 |spdlog|[63f0875000bf](https://github.com/hhwqeedadsa/llmserving-cosim-docs/tree/codex/deps/spdlog)|
-|ns3-rdma|[e9292641d56d](https://github.com/hhwqeedadsa/llmserving-cosim-docs/tree/codex/deps/ns3-rdma)|
+|ns3-rdma|[69cb14764c0c](https://github.com/hhwqeedadsa/llmserving-cosim-docs/tree/codex/deps/ns3-rdma)|
 |csg-htsim|[67cbbbb1cccd](https://github.com/hhwqeedadsa/llmserving-cosim-docs/tree/codex/deps/csg-htsim)|
 |chakra|[30221ab8bfd9](https://github.com/hhwqeedadsa/llmserving-cosim-docs/tree/codex/deps/chakra)|
 |analytical-network|[5dc02322f04a](https://github.com/hhwqeedadsa/llmserving-cosim-docs/tree/codex/deps/analytical-network)|

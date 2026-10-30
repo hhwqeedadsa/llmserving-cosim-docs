@@ -4,10 +4,17 @@ if(TARGET ns3::libunified-bus OR NOT TARGET ns3::libpoint-to-point OR NOT TARGET
   message(FATAL_ERROR "RDMA targets require the locked ASTRA native ns-3, without UB")
 endif()
 include("${CMAKE_CURRENT_LIST_DIR}/serial_native.cmake")
-add_library(moe-rdma-fabric STATIC "${CMAKE_CURRENT_LIST_DIR}/fabric.cc" "${CMAKE_CURRENT_LIST_DIR}/recovery.cc")
+add_library(moe-rdma-fabric STATIC "${CMAKE_CURRENT_LIST_DIR}/fabric.cc" "${CMAKE_CURRENT_LIST_DIR}/recovery.cc"
+  "${CMAKE_CURRENT_LIST_DIR}/switch_drop_capture.cc")
 target_include_directories(moe-rdma-fabric PUBLIC "${CMAKE_CURRENT_LIST_DIR}" "${MOE_ASTRA}/extern/helper")
 target_link_libraries(moe-rdma-fabric PUBLIC ${libcore} ${libnetwork} ${libinternet} ${libpoint-to-point} ${libapplications})
 set_target_properties(moe-rdma-fabric PROPERTIES CXX_STANDARD 20 CXX_STANDARD_REQUIRED ON)
+build_exec(
+  EXECNAME moe-rdma-switch-drop-test
+  SOURCE_FILES "${MOE_ROOT}/tests/unit/native_switch_drop_test.cc"
+  LIBRARIES_TO_LINK ${libcore} ${libnetwork} ${libinternet} ${libpoint-to-point} ${libapplications}
+  EXECUTABLE_DIRECTORY_PATH "${CMAKE_OUTPUT_DIRECTORY}/moe-rdma" IGNORE_PCH)
+set_target_properties(moe-rdma-switch-drop-test PROPERTIES CXX_STANDARD 20 CXX_STANDARD_REQUIRED ON)
 build_exec(
   EXECNAME moe-rdma-rc-probe
   SOURCE_FILES "${CMAKE_CURRENT_LIST_DIR}/rc_packet_probe.cc"

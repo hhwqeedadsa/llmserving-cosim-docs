@@ -137,10 +137,12 @@ def verify(directory):
     loss=audit_loss(r)
     from .service_terminal import service_terminal
     terminal=service_terminal(r,f,require_complete=True)
-    return dict(passed=True,frontend='actual_SimAI_Vidur',simai_revision=receipt['revision'],gpu_count=n,planes=planes,
+    report=dict(passed=True,frontend='actual_SimAI_Vidur',simai_revision=receipt['revision'],gpu_count=n,planes=planes,
         source_requests=len(replay.records),active_source_ranks=len(expected_sources),source_token_layer_rows=source_rows,
         waves=len(f['history']),messages=len(flows),remote_payload_bytes=total_bytes,verified_nodes=nodes_checked,
         finish_ns=r['finish_ns'],recovery=recovery,data_loss=loss,hardware_calibrated=False,
         route_source=c['routes']['source']['kind'],
         scope='finite_ready_KV_MoE_segment; source-checked choices; single native ns3 fabric',
         active_data_ranks=len({rank for v in r['messages'] for rank in (v['src'],v['dst'])}),**terminal)
+    from .scaleout_switch_drops import attach
+    return attach(report,r,t,p)

@@ -192,5 +192,6 @@ def probe(topology, protocol, config, backend, output):
     require(result['passed'] and result['native_network_executed'] and result['drained'] and
             transport['physical_drained'] and transport['closed'] and
             result['completed_work']==len(w['work']),'persistent stream probe incomplete')
-    return dict(passed=True,output=str(output),streams=len(w['streams']),completed_work=result['completed_work'],
-                state='native_persistent_byte_writes_executed_not_GIN',hardware_calibrated=False)
+    from .scaleout_switch_drops import attach
+    return attach(dict(passed=True,output=str(output),streams=len(w['streams']),completed_work=result['completed_work'],
+                state='native_persistent_byte_writes_executed_not_GIN',hardware_calibrated=False),result,t,c)

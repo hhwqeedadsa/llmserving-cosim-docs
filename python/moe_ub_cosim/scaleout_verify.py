@@ -226,4 +226,5 @@ def verify(directory):
         report.update(route_source=replay.manifest['source']['kind'],source_records_verified=sum(
             len(g)*config['workload']['batch_per_rank']*config['model']['layers']*config['workload']['decode_steps']
             for g in config['parallel']['groups']),eos_inferred=False)
-    return report
+    from .scaleout_switch_drops import attach
+    return attach(report,result,topology,rdma)

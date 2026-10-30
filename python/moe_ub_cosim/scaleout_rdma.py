@@ -35,7 +35,7 @@ def checked_json(path, maximum):
 def validate_protocol(c):
     fields(c, 'schema_version cc_mode payload_bytes chunk_bytes ack_interval_bytes base_rtt_ns '
            'switch_buffer_bytes ecn_by_rate seed' + (' limits' if c.get('schema_version') == 'moe-scaleout-rdma/2' else '')
-           + ''.join(' '+key for key in ('drop_once','faults','data_loss','packet_capture','admission','lifecycle_capture','queue_metrics','recovery','mmu_snapshot','link_failures','local_failover','switch_counter_storage') if key in c), 'RDMA protocol')
+           + ''.join(' '+key for key in ('drop_once','faults','data_loss','packet_capture','admission','lifecycle_capture','queue_metrics','recovery','mmu_snapshot','switch_drop_capture','link_failures','local_failover','switch_counter_storage') if key in c), 'RDMA protocol')
     budget=limits(c)
     require(c.get('switch_counter_storage','legacy_dense') in ('legacy_dense','port_dense'),
             'switch_counter_storage must be legacy_dense or port_dense')
@@ -55,6 +55,8 @@ def validate_protocol(c):
     validate_options(c)
     from .scaleout_mmu import validate_options as validate_mmu_options
     validate_mmu_options(c)
+    from .scaleout_switch_drops import validate_options as validate_switch_drop_options
+    validate_switch_drop_options(c)
     from .scaleout_link_failures import validate_options as validate_link_options
     validate_link_options(c)
     if 'queue_metrics' in c:require(type(c['queue_metrics']) is bool,'queue_metrics must be boolean')
@@ -240,6 +242,8 @@ def validate_probe(t, c, batch, *, match_faults=True, max_probe_messages=128, le
     require_buffers(t,c)
     from .scaleout_mmu import validate_topology as validate_mmu_topology
     validate_mmu_topology(t,c)
+    from .scaleout_switch_drops import validate_topology as validate_switch_drop_topology
+    validate_switch_drop_topology(t,c)
     from .scaleout_link_failures import validate_topology as validate_link_topology
     validate_link_topology(t,c)
     require(type(max_probe_messages) is int and 1<=max_probe_messages<=4096, 'invalid validation descriptor budget')
@@ -299,5 +303,6 @@ def probe(topology, config, messages, backend, output):
     for flow in result['messages']:phase_intervals(flow,result['finish_ns'])
     from .scaleout_recovery import audit as recovery_audit
     recovery_audit(result)
-    return dict(passed=True, output=str(output), messages=result['completed_messages'],
-                state='native_rdma_probe_executed_not_service')
+    from .scaleout_switch_drops import attach
+    return attach(dict(passed=True, output=str(output), messages=result['completed_messages'],
+                state='native_rdma_probe_executed_not_service'),result,t,c)

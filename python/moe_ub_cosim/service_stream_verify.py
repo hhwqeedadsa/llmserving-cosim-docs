@@ -85,8 +85,10 @@ def verify(directory):
     require(all(q['state'] in ('FINISHED','OBSERVATION_ENDED') for q in f['requests']),'frontend requests did not finish')
     chosen=next((w,m) for w in waves for m in w['messages'] if m['phase']=='dispatch')
     audit,*_=reconstruct(r,waves,chosen[0]['graph_id'],chosen[1]['layer'],'dispatch')
-    return dict(passed=True,transport='astra_persistent_streams/1',frontend='actual_SimAI_Vidur' if simai else 'actual_LLMServingSim',
+    report=dict(passed=True,transport='astra_persistent_streams/1',frontend='actual_SimAI_Vidur' if simai else 'actual_LLMServingSim',
         gpu_count=n,messages=len(ids),remote_payload_bytes=audit['submitted_logical_bytes'],verified_nodes=count,
         waves=len(waves),finish_ns=r['finish_ns'],packet_events_checked=len(r['packet_capture']['events']),
         source_payload_bytes=audit['source_tx_payload_bytes'],receiver_accepted_bytes=audit['accepted_bytes'],
         hardware_calibrated=False,scope='actual ASTRA scheduling and persistent message intervals; finite service; not calibrated hardware',**terminal)
+    from .scaleout_switch_drops import attach
+    return attach(report,r,t,p)

@@ -105,6 +105,8 @@ v5显式声明`execution_limits`时，`transactions.execution_limits`保存本�
 
 非UB新增可选的活跃逻辑字节额度、源QP序号和阶段耗时。`queue_metrics=true`为全部交换机出口增加常量空间的全程队列积分，独立于包记录截断及summary模式。旧`queue_events`保持原格式，不能直接解释为减字节后状态。字段、单位与覆盖范围见[准入示例](../examples/scaleout_rdma_admission/README.md)。
 
+非UB原生交换机可配置`switch_drop_capture`记录实际转发/准入失败。全交换机全程原因计数与筛选节点/时间后的有界明细分别保存，`complete`仅描述选中明细；不能与设备QbbDrop或人工故障直接相加。schema、持久stream关联及固定出口准入恒通过的限制见[交换机丢弃示例](../examples/scaleout_switch_drops/README.md)。
+
 非UB的可选`packet_capture`与`fault_injection`存于`result.json`，属于全局时间和业务身份已关联的内部评价资料，不是策略输入。详细事件使用`columns`对应的数值数组，含设备发送、接收、接收错误丢弃和BEgressQueue入/出队；`complete`、`omitted_events`及`selection`说明所选范围是否完整。故障计数与详细采集开关独立，记录到达上限不停止传输。关闭详细记录且无故障时保留原结果字段。字段、序号、队列和包UID的准确口径及失败诊断入口见[丢包小例](../examples/scaleout_rdma_faults/README.md)。
 
 `packet_capture.wire_headers=true`可选保存实际IPv4/UDP或原生ACK/NACK端口头。结果的`wire_headers.headers`按完整头元组去重，`event_header_indices[i]`指向第i个已保存事件的头行，避免同UID不同头的歧义；行顺序为首次出现。未支持协议的`ports_present=0`、端口=0。表不覆盖未保存事件或窗口外packet，不能由表中没有某QP推断该QP不存在。默认关闭，无新增字段；它不改写现有message_id为内部stream ID。

@@ -21,6 +21,11 @@ def parser():
     resolve.add_argument('--output', type=Path, required=True, help='New resolved input directory')
     scaleout = sub.add_parser('scaleout', help='Generate fabrics, estimate capacity, or execute independent native RDMA probes/services')
     sc = scaleout.add_subparsers(dest='scaleout_command', required=True)
+    contributions = sc.add_parser('contribution-check',
+        help='Check declared contribution/attempt callbacks; no network, GPU or timing prediction',
+        description='Check declared contribution/attempt callbacks; no network, GPU or timing prediction')
+    contributions.add_argument('--config', type=Path, required=True, help='Bounded contribution transcript JSON; no external references')
+    contributions.add_argument('--output', type=Path, required=True, help='New directory for copied input and untimed state report')
     simai_prepare = sc.add_parser('simai-prepare', help='Verify pinned SimAI sources and prepare its real Vidur scheduler; no network execution')
     simai_prepare.add_argument('--source-root',type=Path,required=True,help='Extracted aliyun/SimAI a57d765c source root')
     simai_prepare.add_argument('--output',type=Path,required=True,help='New runtime with hash receipt and two lazy registry initializers')
@@ -319,6 +324,9 @@ def main(argv=None):
             elif args.scaleout_command == 'data-loss-check':
                 from .scaleout_data_loss import check
                 value=check(args.run)
+            elif args.scaleout_command == 'contribution-check':
+                from .contribution_attempts import check
+                value = check(args.config, args.output)
             elif args.scaleout_command == 'rdma-check':
                 from .scaleout_verify import verify
                 value = verify(args.run)

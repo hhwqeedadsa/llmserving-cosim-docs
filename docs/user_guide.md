@@ -1,5 +1,7 @@
 # 用户指南
 
+检查专家贡献包的原/备用回调、重复结果与资源退出，可用`scaleout contribution-check`和[自包含人工例](../examples/contribution_attempts/README.md)。这是无计时CPU状态检查，尚不接入ASTRA/ns-3服务；退出0表示事件合法，完整覆盖和资源退休须分别查看报告。
+
 需要按同一token的目的卡去重，并选择逐专家或卡内合并Combine时，使用显式`token_transport`配置和[128卡Clos示例](../examples/scaleout_token_transport/README.md)。该模式要求持久传输与阶段完成配置；卡内合并耗时需声明，专家计算份数保留，缺省旧图不改变。
 
 实际ASTRA服务可显式选择持久连接上的GBN或选择重传SR，沿用`rdma-run/rdma-check`及SimAI服务入口。它保留前端与ASTRA调度，不以保存图重放替代。输入、限制、stream/消息身份及故障语义见[持久传输服务小例](../examples/astra_stream_service/README.md)。LLMServingSim来源回放可显式接受稀疏请求：未发起请求的卡仍参与远端专家计算，128/256/512卡Clos的准备方法与证据边界见[稀疏请求示例](../examples/scaleout_sparse_clos/README.md)。

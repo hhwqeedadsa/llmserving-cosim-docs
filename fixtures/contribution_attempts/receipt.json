@@ -1,0 +1,368 @@
+{
+  "passed": true,
+  "source_head_before_commit": "db8cd4310d12bc69fc9f21b0694398dd0ac0eebf",
+  "source_sha256": {
+    "python/moe_ub_cosim/contribution_attempts.py": "5c1d9364bfa5ba79593e8d119c17f239880590e32c61928e7360bd66183e03fa",
+    "python/moe_ub_cosim/cli.py": "e4251164eb392d6ac641210cdfb68c01963ef06b46cab5e6982ada2cfd9f66a9",
+    "tests/unit/contribution_attempts_test.py": "6b9bd52fb992961ff73091c06ce50ee432503aeb680fa9f19e57cf1d40850a0c",
+    "tests/integration/check_contribution_workflow.py": "ab8ead04799355cdcd7893350ca305ad9b633146f269222816e7716454a5d65c",
+    "examples/contribution_attempts/input.json": "802888dfa82423b211c7d95bd04fb26a6f91dee5a8889d858cd534e34c24e5a1",
+    "examples/contribution_attempts/README.md": "dc414970cd68ce68315ce3c4a0499c12ceb80d8c9ef4a118001b56860b79f755",
+    "docs/contribution_attempts.md": "4fc5976a8ed3804a9489550e75f94143c8c6493b725a3096713242d7cd2dae11",
+    "fixtures/contribution_attempts/evidence.py": "ec4545329a7bd184c99e73289181bc7d5bba73567b63c12a4af34be3f25b28d5"
+  },
+  "unit_tests": 14,
+  "related_regressions": 21,
+  "arrival_order_permutations": 24,
+  "workflow": {
+    "passed": true,
+    "commands": 5,
+    "offline_callback_model_only": true,
+    "network_executions": 0,
+    "logical_complete_ns": 7,
+    "original_resource_closed_ns": 12,
+    "original_retired_ns": 13,
+    "result_identity_rejected": true,
+    "overwrite_rejected": true,
+    "relocation_identical": true
+  },
+  "commands": [
+    {
+      "command": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "contribution-check",
+        "--config",
+        "input.json",
+        "--output",
+        "full"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim/runs/contribution_attempts_20261030/workflow",
+      "exit_code": 0,
+      "expected_exit_code": 0
+    },
+    {
+      "command": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "contribution-check",
+        "--config",
+        "prefix.json",
+        "--output",
+        "logical-only"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim/runs/contribution_attempts_20261030/workflow",
+      "exit_code": 0,
+      "expected_exit_code": 0
+    },
+    {
+      "command": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "contribution-check",
+        "--config",
+        "wrong-result.json",
+        "--output",
+        "invalid"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim/runs/contribution_attempts_20261030/workflow",
+      "exit_code": 1,
+      "expected_exit_code": 1
+    },
+    {
+      "command": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "contribution-check",
+        "--config",
+        "input.json",
+        "--output",
+        "full"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim/runs/contribution_attempts_20261030/workflow",
+      "exit_code": 1,
+      "expected_exit_code": 1
+    },
+    {
+      "command": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "contribution-check",
+        "--config",
+        "relocated/input.json",
+        "--output",
+        "relocated-result"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim/runs/contribution_attempts_20261030/workflow",
+      "exit_code": 0,
+      "expected_exit_code": 0
+    }
+  ],
+  "public_help": "usage: moe-ub scaleout contribution-check [-h] --config CONFIG --output OUTPUT\n\nCheck declared contribution/attempt callbacks; no network, GPU or timing\nprediction\n\noptions:\n  -h, --help       show this help message and exit\n  --config CONFIG  Bounded contribution transcript JSON; no external\n                   references\n  --output OUTPUT  New directory for copied input and untimed state report\n",
+  "checked_local_links": [
+    "examples/contribution_attempts/README.md",
+    "python/moe_ub_cosim/contribution_attempts.py",
+    "docs/reviews/专家副本恢复的已有工作与实施边界_20261030.md",
+    "docs/contribution_attempts.md"
+  ],
+  "dependency_check": {
+    "exit_code": 0,
+    "stdout": "WARN: main repository has local file changes; review before committing\n   M README.md\n   M docs/architecture.md\n   M docs/record_storage.md\n   M docs/tasks/current.md\n   M docs/user_guide.md\n   M python/moe_ub_cosim/cli.py\n  ?? docs/contribution_attempts.md\n  ?? examples/contribution_attempts/\n  ?? fixtures/contribution_attempts/\n  ?? python/moe_ub_cosim/contribution_attempts.py\n  ?? tests/integration/check_contribution_workflow.py\n  ?? tests/unit/contribution_attempts_test.py\nREAD: . @ db8cd4310d12bc69fc9f21b0694398dd0ac0eebf\nREAD: third_party/LLMServingSim @ 3ff9dee68d7184d0d9c7132e2eebfdb821cd8328\nREAD: third_party/LLMServingSim/astra-sim @ 479539202401c04c726440c3c6e61327a96a1e60\nREAD: third_party/LLMServingSim/astra-sim/extern/graph_frontend/chakra @ 30221ab8bfd9212aa9c063cd0b14a7d0a2ea6dd7\nREAD: third_party/LLMServingSim/astra-sim/extern/helper/fmt @ 7e73566ce7bd3617cd4b14a2e3a19a2a30b524c7\nREAD: third_party/LLMServingSim/astra-sim/extern/helper/spdlog @ 63f0875000bf90867aa7c76a831bd834cb7d4b5e\nREAD: third_party/LLMServingSim/astra-sim/extern/memory_backend/analytical @ 62313ef09abaf6a9764d13e2684ca61247def14b\nREAD: third_party/LLMServingSim/astra-sim/extern/network_backend/analytical @ 5dc02322f04ac42fcfbb5304d5f7f2fa20d25e3e\nINFO: checking transitive dependency against its parent: third_party/LLMServingSim/astra-sim/extern/network_backend/analytical/extern/googletest\nREAD: third_party/LLMServingSim/astra-sim/extern/network_backend/analytical/extern/googletest @ 1204d634444b0ba6da53201a8b6caf2a502d883c\nINFO: checking transitive dependency against its parent: third_party/LLMServingSim/astra-sim/extern/network_backend/analytical/extern/yaml-cpp\nREAD: third_party/LLMServingSim/astra-sim/extern/network_backend/analytical/extern/yaml-cpp @ 3d2888cc8a45da2f420454ad728cdfad01a3d54f\nREAD: third_party/LLMServingSim/astra-sim/extern/network_backend/csg-htsim @ 67cbbbb1cccdbddc400803414127d044ecd55290\nREAD: third_party/LLMServingSim/astra-sim/extern/network_backend/ns-3 @ 69cb14764c0c5de2c7ad31599ee5b3999dddc154\nREAD: third_party/ns-3-ub @ fee9fbf6e471f2e1db93db16fbbc44a115dda0b1\nREAD: third_party/ns-3-ub/scratch/ns-3-ub-tools @ 2afc7202f88c132b63c38e8c7dcfc08505b13bb2\nPASS: checked 13 dependency checkouts; versions and inspected states agree.\nThis result does not validate remote availability, compilation, or simulation.\n",
+    "stderr": ""
+  },
+  "monitors_before_evidence": {
+    "default-regression": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-c",
+        "import unittest; suite=unittest.TestSuite(); loader=unittest.TestLoader(); [suite.addTests(loader.discover(\"tests/unit\",pattern=p)) for p in (\"token_transport_test.py\",\"phase_completion_test.py\",\"scaleout_messages_test.py\")]; result=unittest.TextTestRunner(verbosity=2).run(suite); raise SystemExit(not result.wasSuccessful())"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-30T10:50:09.605051+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 67108864,
+        "wall_seconds": 120.0
+      },
+      "peak_sampled_group_rss_bytes": 77156352,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/runs/contribution_attempts_20261030"
+      ],
+      "peak_sampled_artifact_bytes": 155648,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 80073,
+      "peak_sampled_artifact_allocated_bytes": 155648,
+      "process_group": 872299,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-30T10:50:10.162133+00:00",
+      "wall_seconds": 0.5571112700272352,
+      "max_waited_child_rss_kib": 77420,
+      "artifact_bytes_before_report": 4794,
+      "aggregate_artifact_bytes_before_report": 155648,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 80073,
+        "allocated_bytes": 155648
+      }
+    },
+    "evidence": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "fixtures/contribution_attempts/evidence.py"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-30T10:55:57.698525+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 67108864,
+        "wall_seconds": 120.0
+      },
+      "peak_sampled_group_rss_bytes": 7442432,
+      "peak_sampled_processes": 1,
+      "status": "child_failed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/runs/contribution_attempts_20261030",
+        "/home/lry/moe-ub-cosim/fixtures/contribution_attempts"
+      ],
+      "peak_sampled_artifact_bytes": 180224,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 89210,
+      "peak_sampled_artifact_allocated_bytes": 180224,
+      "process_group": 872993,
+      "child_exit_code": 1,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-30T10:55:57.830130+00:00",
+      "wall_seconds": 0.13160682999296114,
+      "max_waited_child_rss_kib": 18668,
+      "artifact_bytes_before_report": 859,
+      "aggregate_artifact_bytes_before_report": 180224,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 89210,
+        "allocated_bytes": 180224
+      }
+    },
+    "final-unit": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/unit",
+        "-p",
+        "contribution_attempts_test.py",
+        "-v"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-30T10:50:09.408256+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 67108864,
+        "wall_seconds": 120.0
+      },
+      "peak_sampled_group_rss_bytes": 7442432,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/runs/contribution_attempts_20261030"
+      ],
+      "peak_sampled_artifact_bytes": 143360,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 73777,
+      "peak_sampled_artifact_allocated_bytes": 143360,
+      "process_group": 872294,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-30T10:50:09.538672+00:00",
+      "wall_seconds": 0.1304180839797482,
+      "max_waited_child_rss_kib": 19680,
+      "artifact_bytes_before_report": 2976,
+      "aggregate_artifact_bytes_before_report": 143360,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 73777,
+        "allocated_bytes": 143360
+      }
+    },
+    "unit": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/unit",
+        "-p",
+        "contribution_attempts_test.py",
+        "-v"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-30T10:46:56.429331+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 67108864,
+        "wall_seconds": 120.0
+      },
+      "peak_sampled_group_rss_bytes": 7475200,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/runs/contribution_attempts_20261030"
+      ],
+      "peak_sampled_artifact_bytes": 8192,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 2584,
+      "peak_sampled_artifact_allocated_bytes": 8192,
+      "process_group": 872031,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-30T10:46:56.560094+00:00",
+      "wall_seconds": 0.13076626299880445,
+      "max_waited_child_rss_kib": 19744,
+      "artifact_bytes_before_report": 2584,
+      "aggregate_artifact_bytes_before_report": 8192,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 2584,
+        "allocated_bytes": 8192
+      }
+    },
+    "workflow": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "tests/integration/check_contribution_workflow.py",
+        "--output",
+        "runs/contribution_attempts_20261030/workflow"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-30T10:49:15.231992+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 67108864,
+        "wall_seconds": 120.0
+      },
+      "peak_sampled_group_rss_bytes": 26574848,
+      "peak_sampled_processes": 2,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/runs/contribution_attempts_20261030"
+      ],
+      "peak_sampled_artifact_bytes": 131072,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 69300,
+      "peak_sampled_artifact_allocated_bytes": 131072,
+      "process_group": 872180,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-30T10:49:15.679238+00:00",
+      "wall_seconds": 0.44725502998335287,
+      "max_waited_child_rss_kib": 17660,
+      "artifact_bytes_before_report": 1392,
+      "aggregate_artifact_bytes_before_report": 131072,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 69300,
+        "allocated_bytes": 131072
+      }
+    }
+  },
+  "monitored_seconds_before_evidence": 1.3971574769821018,
+  "preserved_failure": "Initial evidence collection found that subcommand help lacked its scope description; corrected CLI description, no provider or network executed.",
+  "new_network_executions": 0,
+  "builds": 0,
+  "gpu_executions": 0,
+  "backend_behavior_changed": false,
+  "real_route_inputs_used": false,
+  "model": "declared_untimed_artificial_callbacks",
+  "example_report_sha256": "6815e984ad2f446cd3692c546da7f50ea2842ecc7617fa190b010ad7fc7541d0",
+  "scope": "logical correctness only; no runtime recovery or benefit claim"
+}

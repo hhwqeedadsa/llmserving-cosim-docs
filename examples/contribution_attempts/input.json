@@ -1,0 +1,212 @@
+{
+  "schema_version": "moe-contribution-transcript/1",
+  "spec": {
+    "schema_version": "moe-contribution-attempts/1",
+    "invocation": {
+      "request_id": "artificial-request-0",
+      "decode_step": 1,
+      "source_layer": 3,
+      "token_position": 128,
+      "execution_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "input_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "routing_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+    },
+    "expected_experts": [
+      40,
+      42,
+      80
+    ],
+    "bundles": [
+      {
+        "id": "hot",
+        "experts": [
+          40,
+          42
+        ]
+      },
+      {
+        "id": "other",
+        "experts": [
+          80
+        ]
+      }
+    ],
+    "replicas": [
+      {
+        "rank": 20,
+        "execution_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "experts": [
+          40,
+          41,
+          42,
+          43
+        ]
+      },
+      {
+        "rank": 21,
+        "execution_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "experts": [
+          40,
+          41,
+          42,
+          43
+        ]
+      },
+      {
+        "rank": 40,
+        "execution_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "experts": [
+          80
+        ]
+      }
+    ],
+    "limits": {
+      "max_attempts_per_bundle": 2,
+      "max_resources": 16,
+      "max_events": 128
+    }
+  },
+  "events": [
+    {
+      "time_ns": 0,
+      "kind": "start",
+      "attempt": "original",
+      "bundle": "hot",
+      "rank": 20
+    },
+    {
+      "time_ns": 0,
+      "kind": "resource_open",
+      "attempt": "original",
+      "resource": "original-QP-and-source-buffer"
+    },
+    {
+      "time_ns": 0,
+      "kind": "start",
+      "attempt": "other",
+      "bundle": "other",
+      "rank": 40
+    },
+    {
+      "time_ns": 0,
+      "kind": "resource_open",
+      "attempt": "other",
+      "resource": "other-provider-lease"
+    },
+    {
+      "time_ns": 0,
+      "kind": "input_ready",
+      "attempt": "other"
+    },
+    {
+      "time_ns": 0,
+      "kind": "compute_begin",
+      "attempt": "other"
+    },
+    {
+      "time_ns": 1,
+      "kind": "compute_done",
+      "attempt": "other"
+    },
+    {
+      "time_ns": 2,
+      "kind": "result",
+      "attempt": "other",
+      "key_sha256": "ababa2f3aa8401707df1471c579aa79d686399c27df1fbf63112d16bef4f3bbc"
+    },
+    {
+      "time_ns": 2,
+      "kind": "resource_close",
+      "attempt": "other",
+      "resource": "other-provider-lease"
+    },
+    {
+      "time_ns": 2,
+      "kind": "retire",
+      "attempt": "other"
+    },
+    {
+      "time_ns": 3,
+      "kind": "start",
+      "attempt": "backup",
+      "bundle": "hot",
+      "rank": 21
+    },
+    {
+      "time_ns": 3,
+      "kind": "resource_open",
+      "attempt": "backup",
+      "resource": "backup-provider-lease"
+    },
+    {
+      "time_ns": 4,
+      "kind": "input_ready",
+      "attempt": "backup"
+    },
+    {
+      "time_ns": 5,
+      "kind": "compute_begin",
+      "attempt": "backup"
+    },
+    {
+      "time_ns": 6,
+      "kind": "compute_done",
+      "attempt": "backup"
+    },
+    {
+      "time_ns": 7,
+      "kind": "result",
+      "attempt": "backup",
+      "key_sha256": "143b7530b32c8d21b8dc2a58e3b8e028986233e3633f77a3fc95922203976f98"
+    },
+    {
+      "time_ns": 8,
+      "kind": "input_ready",
+      "attempt": "original"
+    },
+    {
+      "time_ns": 9,
+      "kind": "compute_begin",
+      "attempt": "original"
+    },
+    {
+      "time_ns": 9,
+      "kind": "resource_close",
+      "attempt": "backup",
+      "resource": "backup-provider-lease"
+    },
+    {
+      "time_ns": 9,
+      "kind": "retire",
+      "attempt": "backup"
+    },
+    {
+      "time_ns": 10,
+      "kind": "compute_done",
+      "attempt": "original"
+    },
+    {
+      "time_ns": 11,
+      "kind": "result",
+      "attempt": "original",
+      "key_sha256": "143b7530b32c8d21b8dc2a58e3b8e028986233e3633f77a3fc95922203976f98"
+    },
+    {
+      "time_ns": 12,
+      "kind": "resource_close",
+      "attempt": "original",
+      "resource": "original-QP-and-source-buffer"
+    },
+    {
+      "time_ns": 13,
+      "kind": "retire",
+      "attempt": "original"
+    },
+    {
+      "time_ns": 14,
+      "kind": "result",
+      "attempt": "original",
+      "key_sha256": "143b7530b32c8d21b8dc2a58e3b8e028986233e3633f77a3fc95922203976f98"
+    }
+  ]
+}

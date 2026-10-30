@@ -1,0 +1,281 @@
+{
+  "transcript_valid": true,
+  "transcript_sha256": "802888dfa82423b211c7d95bd04fb26a6f91dee5a8889d858cd534e34c24e5a1",
+  "schema_version": "moe-contribution-state/1",
+  "clock_ns": 14,
+  "keys": {
+    "hot": "143b7530b32c8d21b8dc2a58e3b8e028986233e3633f77a3fc95922203976f98",
+    "other": "ababa2f3aa8401707df1471c579aa79d686399c27df1fbf63112d16bef4f3bbc"
+  },
+  "winners": {
+    "other": {
+      "attempt": "other",
+      "time_ns": 2
+    },
+    "hot": {
+      "attempt": "backup",
+      "time_ns": 7
+    }
+  },
+  "accepted_experts": [
+    40,
+    42,
+    80
+  ],
+  "missing_experts": [],
+  "logical_complete_ns": 7,
+  "all_started_attempts_retired": true,
+  "declared_call_retirable": true,
+  "attempts": {
+    "original": {
+      "bundle": "hot",
+      "rank": 20,
+      "started_ns": 0,
+      "input_ready_ns": 8,
+      "compute_begin_ns": 9,
+      "compute_done_ns": 10,
+      "result_ready_ns": 11,
+      "failed_ns": null,
+      "failure_reason": null,
+      "retired_ns": 13,
+      "resources": []
+    },
+    "other": {
+      "bundle": "other",
+      "rank": 40,
+      "started_ns": 0,
+      "input_ready_ns": 0,
+      "compute_begin_ns": 0,
+      "compute_done_ns": 1,
+      "result_ready_ns": 2,
+      "failed_ns": null,
+      "failure_reason": null,
+      "retired_ns": 2,
+      "resources": []
+    },
+    "backup": {
+      "bundle": "hot",
+      "rank": 21,
+      "started_ns": 3,
+      "input_ready_ns": 4,
+      "compute_begin_ns": 5,
+      "compute_done_ns": 6,
+      "result_ready_ns": 7,
+      "failed_ns": null,
+      "failure_reason": null,
+      "retired_ns": 9,
+      "resources": []
+    }
+  },
+  "resources": {
+    "original-QP-and-source-buffer": {
+      "attempt": "original",
+      "opened_ns": 0,
+      "closed_ns": 12
+    },
+    "other-provider-lease": {
+      "attempt": "other",
+      "opened_ns": 0,
+      "closed_ns": 2
+    },
+    "backup-provider-lease": {
+      "attempt": "backup",
+      "opened_ns": 3,
+      "closed_ns": 9
+    }
+  },
+  "events": [
+    {
+      "time_ns": 0,
+      "kind": "start",
+      "attempt": "original",
+      "bundle": "hot",
+      "rank": 20,
+      "sequence": 0,
+      "outcome": "started"
+    },
+    {
+      "time_ns": 0,
+      "kind": "resource_open",
+      "attempt": "original",
+      "resource": "original-QP-and-source-buffer",
+      "sequence": 1,
+      "outcome": "resource_opened"
+    },
+    {
+      "time_ns": 0,
+      "kind": "start",
+      "attempt": "other",
+      "bundle": "other",
+      "rank": 40,
+      "sequence": 2,
+      "outcome": "started"
+    },
+    {
+      "time_ns": 0,
+      "kind": "resource_open",
+      "attempt": "other",
+      "resource": "other-provider-lease",
+      "sequence": 3,
+      "outcome": "resource_opened"
+    },
+    {
+      "time_ns": 0,
+      "kind": "input_ready",
+      "attempt": "other",
+      "sequence": 4,
+      "outcome": "input_ready"
+    },
+    {
+      "time_ns": 0,
+      "kind": "compute_begin",
+      "attempt": "other",
+      "sequence": 5,
+      "outcome": "compute_began"
+    },
+    {
+      "time_ns": 1,
+      "kind": "compute_done",
+      "attempt": "other",
+      "sequence": 6,
+      "outcome": "compute_done"
+    },
+    {
+      "time_ns": 2,
+      "kind": "result",
+      "attempt": "other",
+      "key_sha256": "ababa2f3aa8401707df1471c579aa79d686399c27df1fbf63112d16bef4f3bbc",
+      "sequence": 7,
+      "outcome": "committed"
+    },
+    {
+      "time_ns": 2,
+      "kind": "resource_close",
+      "attempt": "other",
+      "resource": "other-provider-lease",
+      "sequence": 8,
+      "outcome": "resource_closed"
+    },
+    {
+      "time_ns": 2,
+      "kind": "retire",
+      "attempt": "other",
+      "sequence": 9,
+      "outcome": "retired"
+    },
+    {
+      "time_ns": 3,
+      "kind": "start",
+      "attempt": "backup",
+      "bundle": "hot",
+      "rank": 21,
+      "sequence": 10,
+      "outcome": "started"
+    },
+    {
+      "time_ns": 3,
+      "kind": "resource_open",
+      "attempt": "backup",
+      "resource": "backup-provider-lease",
+      "sequence": 11,
+      "outcome": "resource_opened"
+    },
+    {
+      "time_ns": 4,
+      "kind": "input_ready",
+      "attempt": "backup",
+      "sequence": 12,
+      "outcome": "input_ready"
+    },
+    {
+      "time_ns": 5,
+      "kind": "compute_begin",
+      "attempt": "backup",
+      "sequence": 13,
+      "outcome": "compute_began"
+    },
+    {
+      "time_ns": 6,
+      "kind": "compute_done",
+      "attempt": "backup",
+      "sequence": 14,
+      "outcome": "compute_done"
+    },
+    {
+      "time_ns": 7,
+      "kind": "result",
+      "attempt": "backup",
+      "key_sha256": "143b7530b32c8d21b8dc2a58e3b8e028986233e3633f77a3fc95922203976f98",
+      "sequence": 15,
+      "outcome": "committed"
+    },
+    {
+      "time_ns": 8,
+      "kind": "input_ready",
+      "attempt": "original",
+      "sequence": 16,
+      "outcome": "input_ready"
+    },
+    {
+      "time_ns": 9,
+      "kind": "compute_begin",
+      "attempt": "original",
+      "sequence": 17,
+      "outcome": "compute_began"
+    },
+    {
+      "time_ns": 9,
+      "kind": "resource_close",
+      "attempt": "backup",
+      "resource": "backup-provider-lease",
+      "sequence": 18,
+      "outcome": "resource_closed"
+    },
+    {
+      "time_ns": 9,
+      "kind": "retire",
+      "attempt": "backup",
+      "sequence": 19,
+      "outcome": "retired"
+    },
+    {
+      "time_ns": 10,
+      "kind": "compute_done",
+      "attempt": "original",
+      "sequence": 20,
+      "outcome": "compute_done"
+    },
+    {
+      "time_ns": 11,
+      "kind": "result",
+      "attempt": "original",
+      "key_sha256": "143b7530b32c8d21b8dc2a58e3b8e028986233e3633f77a3fc95922203976f98",
+      "sequence": 21,
+      "outcome": "redundant"
+    },
+    {
+      "time_ns": 12,
+      "kind": "resource_close",
+      "attempt": "original",
+      "resource": "original-QP-and-source-buffer",
+      "sequence": 22,
+      "outcome": "resource_closed"
+    },
+    {
+      "time_ns": 13,
+      "kind": "retire",
+      "attempt": "original",
+      "sequence": 23,
+      "outcome": "retired"
+    },
+    {
+      "time_ns": 14,
+      "kind": "result",
+      "attempt": "original",
+      "key_sha256": "143b7530b32c8d21b8dc2a58e3b8e028986233e3633f77a3fc95922203976f98",
+      "sequence": 24,
+      "outcome": "late_retired"
+    }
+  ],
+  "execution_scope": "untimed_caller_callbacks_no_ASTRA_ns3_or_tensor_validation"
+}

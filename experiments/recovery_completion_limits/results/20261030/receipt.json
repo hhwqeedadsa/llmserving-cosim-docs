@@ -4,7 +4,7 @@
   "simulation_implementation_commit": "a7b736ec76",
   "current_commit": "8b32e07276a1459807e8acb98d4413a0fa27469a",
   "source_sha256": {
-    "experiments/recovery_completion_limits/analysis/analyze.py": "51b1b8aa427cbe834c20df667aa9df5ed224dea09ac2bb113178a7f388173230",
+    "experiments/recovery_completion_limits/analysis/analyze.py": "ee10791b50d6417636e6947c78afd705c70ad14e6e4adc2d3a623bfebfb399f4",
     "experiments/recovery_completion_limits/tests/check.py": "a6a098f167e6f6ad141656c70a618e63f0a395b9623c96b51f72156c9660fcae",
     "experiments/recovery_completion_limits/README.md": "576cc7f1c41ecedccb14c1012c6eb1d6b5e9de714dd7d9376c157c556f347e51"
   },
@@ -22,8 +22,8 @@
     "scope": "analysis guard checks; not new network or application gain"
   },
   "guard_checked_analysis_sha256": "9f7fbfc8ba51b871e8f8d0438a68dee9f63ceac1b4129932a6bb79c0eceeb75c",
-  "current_analysis_sha256": "51b1b8aa427cbe834c20df667aa9df5ed224dea09ac2bb113178a7f388173230",
-  "post_check_change": "HTML explanation only; all numerical analysis and assertions unchanged",
+  "current_analysis_sha256": "ee10791b50d6417636e6947c78afd705c70ad14e6e4adc2d3a623bfebfb399f4",
+  "post_check_change": "HTML explanation and labels only; original-rank start distinguished from first valid result; numerical analysis and assertions unchanged",
   "original_input_source_sha256": {
     "normal": {
       "input.json": "f3a85af1f438046d4fe74e7e13bc17ccd7aa6fe49cf07847a0ac8eca7cbec583",

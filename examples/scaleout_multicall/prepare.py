@@ -28,6 +28,8 @@ def main():
     p.add_argument('--target-deadline-ns',type=int,default=70000)
     p.add_argument('--healthy-deadline-ns',type=int,default=4000000)
     p.add_argument('--control-deadline-ns',type=int,default=4000000)
+    p.add_argument('--decode-steps',type=int,default=1,choices=(1,2,3,4),
+        help='finite actual-completion-driven Decode steps; multiple steps use explicit replication/4')
     a=p.parse_args();out=a.output.resolve()
     for t in (a.target_deadline_ns,a.healthy_deadline_ns,a.control_deadline_ns):
         if not 1<=t<=4999999:raise ValueError('deadline must be1..4999999ns')
@@ -54,18 +56,21 @@ def main():
         sha256=sha(out/'multicall-manifest.json')),budget=dict(max_files=64,max_bytes=64*2**20),requests=[
             dict(rank_id=groups[0 if i<count else 2][i if i<count else i-count],slot=0,
                 file_id=f['file_id'],first_decode_entry=1) for i,f in enumerate(manifest['files'])])
-    c['whole_call_replication']=dict(schema_version='moe-whole-call-replication/3',policy='delayed_complete_segment/1',
+    c['workload']['decode_steps']=a.decode_steps
+    sequential=a.decode_steps>1
+    c['whole_call_replication']=dict(schema_version='moe-whole-call-replication/4' if sequential else 'moe-whole-call-replication/3',policy='delayed_complete_segment/1',
         initial_state='declared_equivalent_ready_kv/1',max_events=14,max_wakeup_events=16,calls=[
             dict(id='target',primary_group=0,replica_group=1,hedge_after_ns=a.target_deadline_ns),
             dict(id='healthy',primary_group=2,replica_group=3,hedge_after_ns=a.healthy_deadline_ns)])
-    c['execution_events']['max_events']=65536
-    replay=Replay(c,ROOT);waves=[make_wave(c,g,i,0,1,replay) for i,g in enumerate(groups)]
+    c['execution_events']['max_events']=131072 if sequential else 65536
+    replay=Replay(c,ROOT);waves=[make_wave(c,g,i,step,1,replay) for step in range(a.decode_steps) for i,g in enumerate(groups)]
     keys=sorted({(m['src'],m['dst'],m['plane']) for w in waves for m in w['messages']})
-    if len(keys)>1024:raise ValueError('example stream planning budget1024 exceeded')
+    maximum_streams=2048 if sequential else 1024;maximum_work=4096 if sequential else 2048
+    if len(keys)>maximum_streams:raise ValueError(f'example stream planning budget{maximum_streams} exceeded')
     c['transport']['streams']=[dict(id=i,src=s,dst=d,plane=plane,wire_port=21000+i,
         source_nic=1,destination_nic=1,queue_depth=32) for i,(s,d,plane) in enumerate(keys)]
-    c['transport']['limits'].update(max_streams=len(keys),max_work=2048,max_link_transmissions=200000)
-    normal=load(out/'rdma.json');normal['limits'].update(max_messages=2048,queue_capture='events')
+    c['transport']['limits'].update(max_streams=len(keys),max_work=maximum_work,max_link_transmissions=200000)
+    normal=load(out/'rdma.json');normal['limits'].update(max_messages=maximum_work,queue_capture='events')
     incoming=Counter()
     for m in waves[0]['messages']:
         if m['phase']=='dispatch' and m['layer']==0:incoming[m['dst']]+=m['bytes']
@@ -89,7 +94,7 @@ def main():
         source_dataset_revision=manifest['source']['dataset_revision'],source_bytes=replay.input_bytes,
         streams=len(keys),all_attempt_messages=sum(len(w['messages']) for w in waves),fault_target=target,
         deadlines=c['whole_call_replication']['calls'],control_deadline_ns=a.control_deadline_ns,
-        scope='Finite declared two-layer single-Decode calls, preexisting replicas/KV; no numerical or hardware validation'))
+        decode_steps=a.decode_steps,scope='Finite declared multi-layer Decode sequence, preexisting replicas/KV; no request arrivals, numerical or hardware validation'))
     print(json.dumps(dict(passed=True,network_executed=False,independent_requests=len(manifest['files']),
         target_requests=count,healthy_requests=len(manifest['files'])-count,streams=len(keys),fault_target=target)))
 

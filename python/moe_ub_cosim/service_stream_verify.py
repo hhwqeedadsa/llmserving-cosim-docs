@@ -98,10 +98,12 @@ def verify(directory):
             if attempt.get('skipped_ns') is not None:
                 require(not history,'skipped replica has an actual graph')
             else:
-                require(len(history)==1 and history[0]['step']==0 and
+                require(len(history)==service['workload']['decode_steps'] and
+                        [h['step'] for h in history]==list(range(service['workload']['decode_steps'])) and
                         history[0]['graph_id']==attempt['graph_id'] and
                         history[0]['start_ns']==attempt['submitted_ns'] and
-                        history[0]['finished_ns']==attempt['finished_ns'],
+                        history[-1]['finished_ns']==attempt['finished_ns'] and
+                        all(b['start_ns']==a['finished_ns'] for a,b in zip(history,history[1:])),
                         'delayed graph differs from actual attempt lifetime')
             continue
         if not simai and replay and replay.request_layout=='sparse_active_groups/1' and index not in replay.active_group_indices:

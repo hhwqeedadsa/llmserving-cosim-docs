@@ -115,7 +115,8 @@ def logical_finish(report,history):
 def audit(directory,config,result,frontend):
     from .scaleout_rdma import checked_json
     from .scaleout_replay import Replay
-    directory=Path(directory);consumer=DelayedWholeConsumer(config,Replay(config,directory))
+    from .whole_call import consumer as make_consumer,logical_finish as finish_whole
+    directory=Path(directory);consumer=make_consumer(config,Replay(config,directory))
     rows=iter(frontend['transcript']);decisions=0;observed=[]
     from .native_control import event as control_event
     for line in (directory/'native.stdout.log').read_text().splitlines(keepends=True):
@@ -142,7 +143,7 @@ def audit(directory,config,result,frontend):
     path=directory/'whole_call_events.jsonl'
     require(path.stat().st_size<=config['whole_call_replication']['max_events']*1024 and
             [json.loads(line) for line in path.read_text().splitlines()]==consumer.events,'delayed lifecycle differs')
-    logical_finish(expected,{w['graph_id']:(w['start_ns'],w['finished_ns']) for w in result['service']['waves']})
+    finish_whole(expected,{w['graph_id']:(w['start_ns'],w['finished_ns']) for w in result['service']['waves']})
     from .service_wakeup import audit as audit_wakeup
     audit_wakeup(config,result,frontend)
     audit_standby(config,consumer.replay,frontend)
@@ -162,7 +163,7 @@ def audit_standby(config,replay,frontend):
         event=row['event'];now=event['now_ns']
         for done in event['completed']:
             for index in reserved:
-                if done['graph_id']==f'g{index}.w0':
+                if done['graph_id']==f'g{index}.w{config["workload"]["decode_steps"]-1}':
                     require(index not in released,'replica KV released twice')
                     releases.append(dict(group_index=index,time_ns=now,kind='executed_release',bytes=reserved[index]))
                     released.add(index)

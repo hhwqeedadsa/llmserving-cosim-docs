@@ -348,7 +348,8 @@ class Frontend:
                 require(prompt==0 and generated==len(batch.requests) and not self.schedulers[rank].inflight,
                         'LLMServingSim completion mismatch')
             history['finished_ns']=now; self.steps[index]+=1
-            if self.delayed and any(call['replica_group']==index for call in self.config['whole_call_replication']['calls']):
+            if self.delayed and self.steps[index]==self.config['workload']['decode_steps'] and any(
+                    call['replica_group']==index for call in self.config['whole_call_replication']['calls']):
                 self.standby_releases.append(dict(group_index=index,time_ns=now,kind='executed_release',bytes=reserved))
         permitted=set(self.admitted_groups);wake=None
         if self.delayed:
@@ -589,7 +590,9 @@ def run(config, topology, protocol, backend, output, protoc='protoc', *, host_ti
         module=ROOT/'python/moe_ub_cosim/whole_call.py'
         provenance['hashes'][str(module)]=digest(module)
         if c['whole_call_replication']['policy']=='delayed_complete_segment/1':
-            for name in ('delayed_whole.py','service_wakeup.py'):
+            for name in (('delayed_whole.py','service_wakeup.py','sequential_whole.py') if
+                         c['whole_call_replication']['schema_version']=='moe-whole-call-replication/4' else
+                         ('delayed_whole.py','service_wakeup.py')):
                 module=ROOT/'python/moe_ub_cosim'/name
                 provenance['hashes'][str(module)]=digest(module)
         save(output/'provenance.json',provenance)

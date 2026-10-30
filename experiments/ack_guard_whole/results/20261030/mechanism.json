@@ -1,0 +1,2965 @@
+{
+  "passed": true,
+  "healthy_gates": {
+    "normal": [
+      {
+        "graph": "g2.w0",
+        "phase": "L0.combine",
+        "baseline_release_ns": 35314,
+        "treatment_release_ns": 35314,
+        "change_ns": 0,
+        "tight_predecessors": [
+          {
+            "rank": 70,
+            "node": 13,
+            "kind": "SEND",
+            "name": "L0.combine.70-42.send",
+            "baseline_dependency_complete_ns": 35314,
+            "treatment_dependency_complete_ns": 35314,
+            "completion_change_ns": 0,
+            "baseline_gate_slack_ns": 0,
+            "message": 9465,
+            "source_ready_change_ns": 0,
+            "packet_paths": {
+              "baseline": {
+                "data": {
+                  "source_ns": 20268,
+                  "destination_ns": 29308,
+                  "residence_ns": 2386,
+                  "nonresidence_ns": 6654,
+                  "hops": [
+                    {
+                      "node": 136,
+                      "port": 17,
+                      "rx_ns": 21377,
+                      "tx_ns": 21720
+                    },
+                    {
+                      "node": 140,
+                      "port": 5,
+                      "rx_ns": 22829,
+                      "tx_ns": 24800
+                    },
+                    {
+                      "node": 144,
+                      "port": 1,
+                      "rx_ns": 25909,
+                      "tx_ns": 25981
+                    },
+                    {
+                      "node": 132,
+                      "port": 2,
+                      "rx_ns": 27090,
+                      "tx_ns": 27090
+                    },
+                    {
+                      "node": 129,
+                      "port": 11,
+                      "rx_ns": 28199,
+                      "tx_ns": 28199
+                    }
+                  ]
+                },
+                "ack": {
+                  "source_ns": 29308,
+                  "destination_ns": 35314,
+                  "residence_ns": 0,
+                  "nonresidence_ns": 6006,
+                  "hops": [
+                    {
+                      "node": 129,
+                      "port": 20,
+                      "rx_ns": 30309,
+                      "tx_ns": 30309
+                    },
+                    {
+                      "node": 135,
+                      "port": 5,
+                      "rx_ns": 31310,
+                      "tx_ns": 31310
+                    },
+                    {
+                      "node": 147,
+                      "port": 2,
+                      "rx_ns": 32311,
+                      "tx_ns": 32311
+                    },
+                    {
+                      "node": 143,
+                      "port": 1,
+                      "rx_ns": 33312,
+                      "tx_ns": 33312
+                    },
+                    {
+                      "node": 136,
+                      "port": 7,
+                      "rx_ns": 34313,
+                      "tx_ns": 34313
+                    }
+                  ]
+                }
+              },
+              "treatment": {
+                "data": {
+                  "source_ns": 20268,
+                  "destination_ns": 29308,
+                  "residence_ns": 2386,
+                  "nonresidence_ns": 6654,
+                  "hops": [
+                    {
+                      "node": 136,
+                      "port": 17,
+                      "rx_ns": 21377,
+                      "tx_ns": 21720
+                    },
+                    {
+                      "node": 140,
+                      "port": 5,
+                      "rx_ns": 22829,
+                      "tx_ns": 24800
+                    },
+                    {
+                      "node": 144,
+                      "port": 1,
+                      "rx_ns": 25909,
+                      "tx_ns": 25981
+                    },
+                    {
+                      "node": 132,
+                      "port": 2,
+                      "rx_ns": 27090,
+                      "tx_ns": 27090
+                    },
+                    {
+                      "node": 129,
+                      "port": 11,
+                      "rx_ns": 28199,
+                      "tx_ns": 28199
+                    }
+                  ]
+                },
+                "ack": {
+                  "source_ns": 29308,
+                  "destination_ns": 35314,
+                  "residence_ns": 0,
+                  "nonresidence_ns": 6006,
+                  "hops": [
+                    {
+                      "node": 129,
+                      "port": 20,
+                      "rx_ns": 30309,
+                      "tx_ns": 30309
+                    },
+                    {
+                      "node": 135,
+                      "port": 5,
+                      "rx_ns": 31310,
+                      "tx_ns": 31310
+                    },
+                    {
+                      "node": 147,
+                      "port": 2,
+                      "rx_ns": 32311,
+                      "tx_ns": 32311
+                    },
+                    {
+                      "node": 143,
+                      "port": 1,
+                      "rx_ns": 33312,
+                      "tx_ns": 33312
+                    },
+                    {
+                      "node": 136,
+                      "port": 7,
+                      "rx_ns": 34313,
+                      "tx_ns": 34313
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "graph": "g2.w0",
+        "phase": "L0.dispatch",
+        "baseline_release_ns": 18817,
+        "treatment_release_ns": 18817,
+        "change_ns": 0,
+        "tight_predecessors": [
+          {
+            "rank": 6,
+            "node": 8,
+            "kind": "SEND",
+            "name": "L0.dispatch.6-122.send",
+            "baseline_dependency_complete_ns": 18817,
+            "treatment_dependency_complete_ns": 18817,
+            "completion_change_ns": 0,
+            "baseline_gate_slack_ns": 0,
+            "message": 7996,
+            "source_ready_change_ns": 0,
+            "packet_paths": {
+              "baseline": {
+                "data": {
+                  "source_ns": 2847,
+                  "destination_ns": 12811,
+                  "residence_ns": 3304,
+                  "nonresidence_ns": 6660,
+                  "hops": [
+                    {
+                      "node": 128,
+                      "port": 20,
+                      "rx_ns": 3957,
+                      "tx_ns": 5884
+                    },
+                    {
+                      "node": 135,
+                      "port": 5,
+                      "rx_ns": 6994,
+                      "tx_ns": 8300
+                    },
+                    {
+                      "node": 147,
+                      "port": 2,
+                      "rx_ns": 9410,
+                      "tx_ns": 9481
+                    },
+                    {
+                      "node": 143,
+                      "port": 4,
+                      "rx_ns": 10591,
+                      "tx_ns": 10591
+                    },
+                    {
+                      "node": 139,
+                      "port": 11,
+                      "rx_ns": 11701,
+                      "tx_ns": 11701
+                    }
+                  ]
+                },
+                "ack": {
+                  "source_ns": 12811,
+                  "destination_ns": 18817,
+                  "residence_ns": 0,
+                  "nonresidence_ns": 6006,
+                  "hops": [
+                    {
+                      "node": 139,
+                      "port": 17,
+                      "rx_ns": 13812,
+                      "tx_ns": 13812
+                    },
+                    {
+                      "node": 140,
+                      "port": 5,
+                      "rx_ns": 14813,
+                      "tx_ns": 14813
+                    },
+                    {
+                      "node": 144,
+                      "port": 1,
+                      "rx_ns": 15814,
+                      "tx_ns": 15814
+                    },
+                    {
+                      "node": 132,
+                      "port": 1,
+                      "rx_ns": 16815,
+                      "tx_ns": 16815
+                    },
+                    {
+                      "node": 128,
+                      "port": 7,
+                      "rx_ns": 17816,
+                      "tx_ns": 17816
+                    }
+                  ]
+                }
+              },
+              "treatment": {
+                "data": {
+                  "source_ns": 2847,
+                  "destination_ns": 12811,
+                  "residence_ns": 3304,
+                  "nonresidence_ns": 6660,
+                  "hops": [
+                    {
+                      "node": 128,
+                      "port": 20,
+                      "rx_ns": 3957,
+                      "tx_ns": 5884
+                    },
+                    {
+                      "node": 135,
+                      "port": 5,
+                      "rx_ns": 6994,
+                      "tx_ns": 8300
+                    },
+                    {
+                      "node": 147,
+                      "port": 2,
+                      "rx_ns": 9410,
+                      "tx_ns": 9481
+                    },
+                    {
+                      "node": 143,
+                      "port": 4,
+                      "rx_ns": 10591,
+                      "tx_ns": 10591
+                    },
+                    {
+                      "node": 139,
+                      "port": 11,
+                      "rx_ns": 11701,
+                      "tx_ns": 11701
+                    }
+                  ]
+                },
+                "ack": {
+                  "source_ns": 12811,
+                  "destination_ns": 18817,
+                  "residence_ns": 0,
+                  "nonresidence_ns": 6006,
+                  "hops": [
+                    {
+                      "node": 139,
+                      "port": 17,
+                      "rx_ns": 13812,
+                      "tx_ns": 13812
+                    },
+                    {
+                      "node": 140,
+                      "port": 5,
+                      "rx_ns": 14813,
+                      "tx_ns": 14813
+                    },
+                    {
+                      "node": 144,
+                      "port": 1,
+                      "rx_ns": 15814,
+                      "tx_ns": 15814
+                    },
+                    {
+                      "node": 132,
+                      "port": 1,
+                      "rx_ns": 16815,
+                      "tx_ns": 16815
+                    },
+                    {
+                      "node": 128,
+                      "port": 7,
+                      "rx_ns": 17816,
+                      "tx_ns": 17816
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "graph": "g2.w0",
+        "phase": "L1.combine",
+        "baseline_release_ns": 69834,
+        "treatment_release_ns": 69834,
+        "change_ns": 0,
+        "tight_predecessors": [
+          {
+            "rank": 82,
+            "node": 28,
+            "kind": "SEND",
+            "name": "L1.combine.82-42.send",
+            "baseline_dependency_complete_ns": 69834,
+            "treatment_dependency_complete_ns": 69834,
+            "completion_change_ns": 0,
+            "baseline_gate_slack_ns": 0,
+            "message": 11542,
+            "source_ready_change_ns": 0,
+            "packet_paths": {
+              "baseline": {
+                "data": {
+                  "source_ns": 55438,
+                  "destination_ns": 63828,
+                  "residence_ns": 1736,
+                  "nonresidence_ns": 6654,
+                  "hops": [
+                    {
+                      "node": 138,
+                      "port": 18,
+                      "rx_ns": 56547,
+                      "tx_ns": 56690
+                    },
+                    {
+                      "node": 141,
+                      "port": 5,
+                      "rx_ns": 57799,
+                      "tx_ns": 59320
+                    },
+                    {
+                      "node": 145,
+                      "port": 1,
+                      "rx_ns": 60429,
+                      "tx_ns": 60501
+                    },
+                    {
+                      "node": 133,
+                      "port": 2,
+                      "rx_ns": 61610,
+                      "tx_ns": 61610
+                    },
+                    {
+                      "node": 129,
+                      "port": 11,
+                      "rx_ns": 62719,
+                      "tx_ns": 62719
+                    }
+                  ]
+                },
+                "ack": {
+                  "source_ns": 63828,
+                  "destination_ns": 69834,
+                  "residence_ns": 0,
+                  "nonresidence_ns": 6006,
+                  "hops": [
+                    {
+                      "node": 129,
+                      "port": 18,
+                      "rx_ns": 64829,
+                      "tx_ns": 64829
+                    },
+                    {
+                      "node": 133,
+                      "port": 5,
+                      "rx_ns": 65830,
+                      "tx_ns": 65830
+                    },
+                    {
+                      "node": 145,
+                      "port": 2,
+                      "rx_ns": 66831,
+                      "tx_ns": 66831
+                    },
+                    {
+                      "node": 141,
+                      "port": 3,
+                      "rx_ns": 67832,
+                      "tx_ns": 67832
+                    },
+                    {
+                      "node": 138,
+                      "port": 3,
+                      "rx_ns": 68833,
+                      "tx_ns": 68833
+                    }
+                  ]
+                }
+              },
+              "treatment": {
+                "data": {
+                  "source_ns": 55438,
+                  "destination_ns": 63828,
+                  "residence_ns": 1736,
+                  "nonresidence_ns": 6654,
+                  "hops": [
+                    {
+                      "node": 138,
+                      "port": 18,
+                      "rx_ns": 56547,
+                      "tx_ns": 56690
+                    },
+                    {
+                      "node": 141,
+                      "port": 5,
+                      "rx_ns": 57799,
+                      "tx_ns": 59320
+                    },
+                    {
+                      "node": 145,
+                      "port": 1,
+                      "rx_ns": 60429,
+                      "tx_ns": 60501
+                    },
+                    {
+                      "node": 133,
+                      "port": 2,
+                      "rx_ns": 61610,
+                      "tx_ns": 61610
+                    },
+                    {
+                      "node": 129,
+                      "port": 11,
+                      "rx_ns": 62719,
+                      "tx_ns": 62719
+                    }
+                  ]
+                },
+                "ack": {
+                  "source_ns": 63828,
+                  "destination_ns": 69834,
+                  "residence_ns": 0,
+                  "nonresidence_ns": 6006,
+                  "hops": [
+                    {
+                      "node": 129,
+                      "port": 18,
+                      "rx_ns": 64829,
+                      "tx_ns": 64829
+                    },
+                    {
+                      "node": 133,
+                      "port": 5,
+                      "rx_ns": 65830,
+                      "tx_ns": 65830
+                    },
+                    {
+                      "node": 145,
+                      "port": 2,
+                      "rx_ns": 66831,
+                      "tx_ns": 66831
+                    },
+                    {
+                      "node": 141,
+                      "port": 3,
+                      "rx_ns": 67832,
+                      "tx_ns": 67832
+                    },
+                    {
+                      "node": 138,
+                      "port": 3,
+                      "rx_ns": 68833,
+                      "tx_ns": 68833
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "graph": "g2.w0",
+        "phase": "L1.dispatch",
+        "baseline_release_ns": 52997,
+        "treatment_release_ns": 52997,
+        "change_ns": 0,
+        "tight_predecessors": [
+          {
+            "rank": 18,
+            "node": 28,
+            "kind": "SEND",
+            "name": "L1.dispatch.18-114.send",
+            "baseline_dependency_complete_ns": 52997,
+            "treatment_dependency_complete_ns": 52997,
+            "completion_change_ns": 0,
+            "baseline_gate_slack_ns": 0,
+            "message": 10071,
+            "source_ready_change_ns": 0,
+            "packet_paths": {
+              "baseline": {
+                "data": {
+                  "source_ns": 38482,
+                  "destination_ns": 46991,
+                  "residence_ns": 1849,
+                  "nonresidence_ns": 6660,
+                  "hops": [
+                    {
+                      "node": 130,
+                      "port": 18,
+                      "rx_ns": 39592,
+                      "tx_ns": 39592
+                    },
+                    {
+                      "node": 133,
+                      "port": 5,
+                      "rx_ns": 40702,
+                      "tx_ns": 42480
+                    },
+                    {
+                      "node": 145,
+                      "port": 2,
+                      "rx_ns": 43590,
+                      "tx_ns": 43661
+                    },
+                    {
+                      "node": 141,
+                      "port": 3,
+                      "rx_ns": 44771,
+                      "tx_ns": 44771
+                    },
+                    {
+                      "node": 138,
+                      "port": 11,
+                      "rx_ns": 45881,
+                      "tx_ns": 45881
+                    }
+                  ]
+                },
+                "ack": {
+                  "source_ns": 46991,
+                  "destination_ns": 52997,
+                  "residence_ns": 0,
+                  "nonresidence_ns": 6006,
+                  "hops": [
+                    {
+                      "node": 138,
+                      "port": 18,
+                      "rx_ns": 47992,
+                      "tx_ns": 47992
+                    },
+                    {
+                      "node": 141,
+                      "port": 5,
+                      "rx_ns": 48993,
+                      "tx_ns": 48993
+                    },
+                    {
+                      "node": 145,
+                      "port": 1,
+                      "rx_ns": 49994,
+                      "tx_ns": 49994
+                    },
+                    {
+                      "node": 133,
+                      "port": 3,
+                      "rx_ns": 50995,
+                      "tx_ns": 50995
+                    },
+                    {
+                      "node": 130,
+                      "port": 3,
+                      "rx_ns": 51996,
+                      "tx_ns": 51996
+                    }
+                  ]
+                }
+              },
+              "treatment": {
+                "data": {
+                  "source_ns": 38482,
+                  "destination_ns": 46991,
+                  "residence_ns": 1849,
+                  "nonresidence_ns": 6660,
+                  "hops": [
+                    {
+                      "node": 130,
+                      "port": 18,
+                      "rx_ns": 39592,
+                      "tx_ns": 39592
+                    },
+                    {
+                      "node": 133,
+                      "port": 5,
+                      "rx_ns": 40702,
+                      "tx_ns": 42480
+                    },
+                    {
+                      "node": 145,
+                      "port": 2,
+                      "rx_ns": 43590,
+                      "tx_ns": 43661
+                    },
+                    {
+                      "node": 141,
+                      "port": 3,
+                      "rx_ns": 44771,
+                      "tx_ns": 44771
+                    },
+                    {
+                      "node": 138,
+                      "port": 11,
+                      "rx_ns": 45881,
+                      "tx_ns": 45881
+                    }
+                  ]
+                },
+                "ack": {
+                  "source_ns": 46991,
+                  "destination_ns": 52997,
+                  "residence_ns": 0,
+                  "nonresidence_ns": 6006,
+                  "hops": [
+                    {
+                      "node": 138,
+                      "port": 18,
+                      "rx_ns": 47992,
+                      "tx_ns": 47992
+                    },
+                    {
+                      "node": 141,
+                      "port": 5,
+                      "rx_ns": 48993,
+                      "tx_ns": 48993
+                    },
+                    {
+                      "node": 145,
+                      "port": 1,
+                      "rx_ns": 49994,
+                      "tx_ns": 49994
+                    },
+                    {
+                      "node": 133,
+                      "port": 3,
+                      "rx_ns": 50995,
+                      "tx_ns": 50995
+                    },
+                    {
+                      "node": 130,
+                      "port": 3,
+                      "rx_ns": 51996,
+                      "tx_ns": 51996
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "graph": "g2.w1",
+        "phase": "L0.combine",
+        "baseline_release_ns": 106349,
+        "treatment_release_ns": 106349,
+        "change_ns": 0,
+        "tight_predecessors": [
+          {
+            "rank": 106,
+            "node": 19,
+            "kind": "SEND",
+            "name": "L0.combine.106-38.send",
+            "baseline_dependency_complete_ns": 106349,
+            "treatment_dependency_complete_ns": 106349,
+            "completion_change_ns": 0,
+            "baseline_gate_slack_ns": 0,
+            "message": 25615,
+            "source_ready_change_ns": 0,
+            "packet_paths": {
+              "baseline": {
+                "data": {
+                  "source_ns": 91193,
+                  "destination_ns": 100343,
+                  "residence_ns": 2496,
+                  "nonresidence_ns": 6654,
+                  "hops": [
+                    {
+                      "node": 137,
+                      "port": 17,
+                      "rx_ns": 92302,
+                      "tx_ns": 92302
+                    },
+                    {
+                      "node": 140,
+                      "port": 5,
+                      "rx_ns": 93411,
+                      "tx_ns": 95835
+                    },
+                    {
+                      "node": 144,
+                      "port": 1,
+                      "rx_ns": 96944,
+                      "tx_ns": 97016
+                    },
+                    {
+                      "node": 132,
+                      "port": 1,
+                      "rx_ns": 98125,
+                      "tx_ns": 98125
+                    },
+                    {
+                      "node": 128,
+                      "port": 15,
+                      "rx_ns": 99234,
+                      "tx_ns": 99234
+                    }
+                  ]
+                },
+                "ack": {
+                  "source_ns": 100343,
+                  "destination_ns": 106349,
+                  "residence_ns": 0,
+                  "nonresidence_ns": 6006,
+                  "hops": [
+                    {
+                      "node": 128,
+                      "port": 18,
+                      "rx_ns": 101344,
+                      "tx_ns": 101344
+                    },
+                    {
+                      "node": 133,
+                      "port": 5,
+                      "rx_ns": 102345,
+                      "tx_ns": 102345
+                    },
+                    {
+                      "node": 145,
+                      "port": 2,
+                      "rx_ns": 103346,
+                      "tx_ns": 103346
+                    },
+                    {
+                      "node": 141,
+                      "port": 2,
+                      "rx_ns": 104347,
+                      "tx_ns": 104347
+                    },
+                    {
+                      "node": 137,
+                      "port": 11,
+                      "rx_ns": 105348,
+                      "tx_ns": 105348
+                    }
+                  ]
+                }
+              },
+              "treatment": {
+                "data": {
+                  "source_ns": 91193,
+                  "destination_ns": 100343,
+                  "residence_ns": 2496,
+                  "nonresidence_ns": 6654,
+                  "hops": [
+                    {
+                      "node": 137,
+                      "port": 17,
+                      "rx_ns": 92302,
+                      "tx_ns": 92302
+                    },
+                    {
+                      "node": 140,
+                      "port": 5,
+                      "rx_ns": 93411,
+                      "tx_ns": 95835
+                    },
+                    {
+                      "node": 144,
+                      "port": 1,
+                      "rx_ns": 96944,
+                      "tx_ns": 97016
+                    },
+                    {
+                      "node": 132,
+                      "port": 1,
+                      "rx_ns": 98125,
+                      "tx_ns": 98125
+                    },
+                    {
+                      "node": 128,
+                      "port": 15,
+                      "rx_ns": 99234,
+                      "tx_ns": 99234
+                    }
+                  ]
+                },
+                "ack": {
+                  "source_ns": 100343,
+                  "destination_ns": 106349,
+                  "residence_ns": 0,
+                  "nonresidence_ns": 6006,
+                  "hops": [
+                    {
+                      "node": 128,
+                      "port": 18,
+                      "rx_ns": 101344,
+                      "tx_ns": 101344
+                    },
+                    {
+                      "node": 133,
+                      "port": 5,
+                      "rx_ns": 102345,
+                      "tx_ns": 102345
+                    },
+                    {
+                      "node": 145,
+                      "port": 2,
+                      "rx_ns": 103346,
+                      "tx_ns": 103346
+                    },
+                    {
+                      "node": 141,
+                      "port": 2,
+                      "rx_ns": 104347,
+                      "tx_ns": 104347
+                    },
+                    {
+                      "node": 137,
+                      "port": 11,
+                      "rx_ns": 105348,
+                      "tx_ns": 105348
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "graph": "g2.w1",
+        "phase": "L0.dispatch",
+        "baseline_release_ns": 87972,
+        "treatment_release_ns": 87972,
+        "change_ns": 0,
+        "tight_predecessors": [
+          {
+            "rank": 26,
+            "node": 11,
+            "kind": "SEND",
+            "name": "L0.dispatch.26-110.send",
+            "baseline_dependency_complete_ns": 87972,
+            "treatment_dependency_complete_ns": 87972,
+            "completion_change_ns": 0,
+            "baseline_gate_slack_ns": 0,
+            "message": 24020,
+            "source_ready_change_ns": 0,
+            "packet_paths": {
+              "baseline": {
+                "data": {
+                  "source_ns": 72821,
+                  "destination_ns": 81692,
+                  "residence_ns": 2211,
+                  "nonresidence_ns": 6660,
+                  "hops": [
+                    {
+                      "node": 131,
+                      "port": 20,
+                      "rx_ns": 73931,
+                      "tx_ns": 73931
+                    },
+                    {
+                      "node": 135,
+                      "port": 5,
+                      "rx_ns": 75041,
+                      "tx_ns": 77181
+                    },
+                    {
+                      "node": 147,
+                      "port": 2,
+                      "rx_ns": 78291,
+                      "tx_ns": 78362
+                    },
+                    {
+                      "node": 143,
+                      "port": 2,
+                      "rx_ns": 79472,
+                      "tx_ns": 79472
+                    },
+                    {
+                      "node": 137,
+                      "port": 15,
+                      "rx_ns": 80582,
+                      "tx_ns": 80582
+                    }
+                  ]
+                },
+                "ack": {
+                  "source_ns": 81692,
+                  "destination_ns": 87972,
+                  "residence_ns": 274,
+                  "nonresidence_ns": 6006,
+                  "hops": [
+                    {
+                      "node": 137,
+                      "port": 17,
+                      "rx_ns": 82693,
+                      "tx_ns": 82693
+                    },
+                    {
+                      "node": 140,
+                      "port": 5,
+                      "rx_ns": 83694,
+                      "tx_ns": 83788
+                    },
+                    {
+                      "node": 144,
+                      "port": 1,
+                      "rx_ns": 84789,
+                      "tx_ns": 84969
+                    },
+                    {
+                      "node": 132,
+                      "port": 4,
+                      "rx_ns": 85970,
+                      "tx_ns": 85970
+                    },
+                    {
+                      "node": 131,
+                      "port": 3,
+                      "rx_ns": 86971,
+                      "tx_ns": 86971
+                    }
+                  ]
+                }
+              },
+              "treatment": {
+                "data": {
+                  "source_ns": 72821,
+                  "destination_ns": 81692,
+                  "residence_ns": 2211,
+                  "nonresidence_ns": 6660,
+                  "hops": [
+                    {
+                      "node": 131,
+                      "port": 20,
+                      "rx_ns": 73931,
+                      "tx_ns": 73931
+                    },
+                    {
+                      "node": 135,
+                      "port": 5,
+                      "rx_ns": 75041,
+                      "tx_ns": 77181
+                    },
+                    {
+                      "node": 147,
+                      "port": 2,
+                      "rx_ns": 78291,
+                      "tx_ns": 78362
+                    },
+                    {
+                      "node": 143,
+                      "port": 2,
+                      "rx_ns": 79472,
+                      "tx_ns": 79472
+                    },
+                    {
+                      "node": 137,
+                      "port": 15,
+                      "rx_ns": 80582,
+                      "tx_ns": 80582
+                    }
+                  ]
+                },
+                "ack": {
+                  "source_ns": 81692,
+                  "destination_ns": 87972,
+                  "residence_ns": 274,
+                  "nonresidence_ns": 6006,
+                  "hops": [
+                    {
+                      "node": 137,
+                      "port": 17,
+                      "rx_ns": 82693,
+                      "tx_ns": 82693
+                    },
+                    {
+                      "node": 140,
+                      "port": 5,
+                      "rx_ns": 83694,
+                      "tx_ns": 83788
+                    },
+                    {
+                      "node": 144,
+                      "port": 1,
+                      "rx_ns": 84789,
+                      "tx_ns": 84969
+                    },
+                    {
+                      "node": 132,
+                      "port": 4,
+                      "rx_ns": 85970,
+                      "tx_ns": 85970
+                    },
+                    {
+                      "node": 131,
+                      "port": 3,
+                      "rx_ns": 86971,
+                      "tx_ns": 86971
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "graph": "g2.w1",
+        "phase": "L1.combine",
+        "baseline_release_ns": 139106,
+        "treatment_release_ns": 139106,
+        "change_ns": 0,
+        "tight_predecessors": [
+          {
+            "rank": 70,
+            "node": 26,
+            "kind": "SEND",
+            "name": "L1.combine.70-34.send",
+            "baseline_dependency_complete_ns": 139106,
+            "treatment_dependency_complete_ns": 139106,
+            "completion_change_ns": 0,
+            "baseline_gate_slack_ns": 0,
+            "message": 27319,
+            "source_ready_change_ns": 0,
+            "packet_paths": {
+              "baseline": {
+                "data": {
+                  "source_ns": 125480,
+                  "destination_ns": 133100,
+                  "residence_ns": 966,
+                  "nonresidence_ns": 6654,
+                  "hops": [
+                    {
+                      "node": 136,
+                      "port": 19,
+                      "rx_ns": 126589,
+                      "tx_ns": 126589
+                    },
+                    {
+                      "node": 142,
+                      "port": 5,
+                      "rx_ns": 127698,
+                      "tx_ns": 128592
+                    },
+                    {
+                      "node": 146,
+                      "port": 1,
+                      "rx_ns": 129701,
+                      "tx_ns": 129773
+                    },
+                    {
+                      "node": 134,
+                      "port": 1,
+                      "rx_ns": 130882,
+                      "tx_ns": 130882
+                    },
+                    {
+                      "node": 128,
+                      "port": 11,
+                      "rx_ns": 131991,
+                      "tx_ns": 131991
+                    }
+                  ]
+                },
+                "ack": {
+                  "source_ns": 133100,
+                  "destination_ns": 139106,
+                  "residence_ns": 0,
+                  "nonresidence_ns": 6006,
+                  "hops": [
+                    {
+                      "node": 128,
+                      "port": 18,
+                      "rx_ns": 134101,
+                      "tx_ns": 134101
+                    },
+                    {
+                      "node": 133,
+                      "port": 5,
+                      "rx_ns": 135102,
+                      "tx_ns": 135102
+                    },
+                    {
+                      "node": 145,
+                      "port": 2,
+                      "rx_ns": 136103,
+                      "tx_ns": 136103
+                    },
+                    {
+                      "node": 141,
+                      "port": 1,
+                      "rx_ns": 137104,
+                      "tx_ns": 137104
+                    },
+                    {
+                      "node": 136,
+                      "port": 7,
+                      "rx_ns": 138105,
+                      "tx_ns": 138105
+                    }
+                  ]
+                }
+              },
+              "treatment": {
+                "data": {
+                  "source_ns": 125480,
+                  "destination_ns": 133100,
+                  "residence_ns": 966,
+                  "nonresidence_ns": 6654,
+                  "hops": [
+                    {
+                      "node": 136,
+                      "port": 19,
+                      "rx_ns": 126589,
+                      "tx_ns": 126589
+                    },
+                    {
+                      "node": 142,
+                      "port": 5,
+                      "rx_ns": 127698,
+                      "tx_ns": 128592
+                    },
+                    {
+                      "node": 146,
+                      "port": 1,
+                      "rx_ns": 129701,
+                      "tx_ns": 129773
+                    },
+                    {
+                      "node": 134,
+                      "port": 1,
+                      "rx_ns": 130882,
+                      "tx_ns": 130882
+                    },
+                    {
+                      "node": 128,
+                      "port": 11,
+                      "rx_ns": 131991,
+                      "tx_ns": 131991
+                    }
+                  ]
+                },
+                "ack": {
+                  "source_ns": 133100,
+                  "destination_ns": 139106,
+                  "residence_ns": 0,
+                  "nonresidence_ns": 6006,
+                  "hops": [
+                    {
+                      "node": 128,
+                      "port": 18,
+                      "rx_ns": 134101,
+                      "tx_ns": 134101
+                    },
+                    {
+                      "node": 133,
+                      "port": 5,
+                      "rx_ns": 135102,
+                      "tx_ns": 135102
+                    },
+                    {
+                      "node": 145,
+                      "port": 2,
+                      "rx_ns": 136103,
+                      "tx_ns": 136103
+                    },
+                    {
+                      "node": 141,
+                      "port": 1,
+                      "rx_ns": 137104,
+                      "tx_ns": 137104
+                    },
+                    {
+                      "node": 136,
+                      "port": 7,
+                      "rx_ns": 138105,
+                      "tx_ns": 138105
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "graph": "g2.w1",
+        "phase": "L1.dispatch",
+        "baseline_release_ns": 123049,
+        "treatment_release_ns": 123049,
+        "change_ns": 0,
+        "tight_predecessors": [
+          {
+            "rank": 6,
+            "node": 33,
+            "kind": "SEND",
+            "name": "L1.dispatch.6-126.send",
+            "baseline_dependency_complete_ns": 123049,
+            "treatment_dependency_complete_ns": 123049,
+            "completion_change_ns": 0,
+            "baseline_gate_slack_ns": 0,
+            "message": 25853,
+            "source_ready_change_ns": 0,
+            "packet_paths": {
+              "baseline": {
+                "data": {
+                  "source_ns": 109336,
+                  "destination_ns": 117043,
+                  "residence_ns": 1047,
+                  "nonresidence_ns": 6660,
+                  "hops": [
+                    {
+                      "node": 128,
+                      "port": 19,
+                      "rx_ns": 110446,
+                      "tx_ns": 110989
+                    },
+                    {
+                      "node": 134,
+                      "port": 5,
+                      "rx_ns": 112099,
+                      "tx_ns": 112532
+                    },
+                    {
+                      "node": 146,
+                      "port": 2,
+                      "rx_ns": 113642,
+                      "tx_ns": 113713
+                    },
+                    {
+                      "node": 142,
+                      "port": 4,
+                      "rx_ns": 114823,
+                      "tx_ns": 114823
+                    },
+                    {
+                      "node": 139,
+                      "port": 15,
+                      "rx_ns": 115933,
+                      "tx_ns": 115933
+                    }
+                  ]
+                },
+                "ack": {
+                  "source_ns": 117043,
+                  "destination_ns": 123049,
+                  "residence_ns": 0,
+                  "nonresidence_ns": 6006,
+                  "hops": [
+                    {
+                      "node": 139,
+                      "port": 20,
+                      "rx_ns": 118044,
+                      "tx_ns": 118044
+                    },
+                    {
+                      "node": 143,
+                      "port": 5,
+                      "rx_ns": 119045,
+                      "tx_ns": 119045
+                    },
+                    {
+                      "node": 147,
+                      "port": 1,
+                      "rx_ns": 120046,
+                      "tx_ns": 120046
+                    },
+                    {
+                      "node": 135,
+                      "port": 1,
+                      "rx_ns": 121047,
+                      "tx_ns": 121047
+                    },
+                    {
+                      "node": 128,
+                      "port": 7,
+                      "rx_ns": 122048,
+                      "tx_ns": 122048
+                    }
+                  ]
+                }
+              },
+              "treatment": {
+                "data": {
+                  "source_ns": 109336,
+                  "destination_ns": 117043,
+                  "residence_ns": 1047,
+                  "nonresidence_ns": 6660,
+                  "hops": [
+                    {
+                      "node": 128,
+                      "port": 19,
+                      "rx_ns": 110446,
+                      "tx_ns": 110989
+                    },
+                    {
+                      "node": 134,
+                      "port": 5,
+                      "rx_ns": 112099,
+                      "tx_ns": 112532
+                    },
+                    {
+                      "node": 146,
+                      "port": 2,
+                      "rx_ns": 113642,
+                      "tx_ns": 113713
+                    },
+                    {
+                      "node": 142,
+                      "port": 4,
+                      "rx_ns": 114823,
+                      "tx_ns": 114823
+                    },
+                    {
+                      "node": 139,
+                      "port": 15,
+                      "rx_ns": 115933,
+                      "tx_ns": 115933
+                    }
+                  ]
+                },
+                "ack": {
+                  "source_ns": 117043,
+                  "destination_ns": 123049,
+                  "residence_ns": 0,
+                  "nonresidence_ns": 6006,
+                  "hops": [
+                    {
+                      "node": 139,
+                      "port": 20,
+                      "rx_ns": 118044,
+                      "tx_ns": 118044
+                    },
+                    {
+                      "node": 143,
+                      "port": 5,
+                      "rx_ns": 119045,
+                      "tx_ns": 119045
+                    },
+                    {
+                      "node": 147,
+                      "port": 1,
+                      "rx_ns": 120046,
+                      "tx_ns": 120046
+                    },
+                    {
+                      "node": 135,
+                      "port": 1,
+                      "rx_ns": 121047,
+                      "tx_ns": 121047
+                    },
+                    {
+                      "node": 128,
+                      "port": 7,
+                      "rx_ns": 122048,
+                      "tx_ns": 122048
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "local": [
+      {
+        "graph": "g2.w0",
+        "phase": "L0.combine",
+        "baseline_release_ns": 35164,
+        "treatment_release_ns": 35164,
+        "change_ns": 0,
+        "tight_predecessors": [
+          {
+            "rank": 70,
+            "node": 13,
+            "kind": "SEND",
+            "name": "L0.combine.70-42.send",
+            "baseline_dependency_complete_ns": 35164,
+            "treatment_dependency_complete_ns": 35164,
+            "completion_change_ns": 0,
+            "baseline_gate_slack_ns": 0,
+            "message": 9465,
+            "source_ready_change_ns": 0,
+            "packet_paths": {
+              "baseline": {
+                "data": {
+                  "source_ns": 20268,
+                  "destination_ns": 29158,
+                  "residence_ns": 2236,
+                  "nonresidence_ns": 6654,
+                  "hops": [
+                    {
+                      "node": 136,
+                      "port": 17,
+                      "rx_ns": 21377,
+                      "tx_ns": 21720
+                    },
+                    {
+                      "node": 140,
+                      "port": 5,
+                      "rx_ns": 22829,
+                      "tx_ns": 24650
+                    },
+                    {
+                      "node": 144,
+                      "port": 1,
+                      "rx_ns": 25759,
+                      "tx_ns": 25831
+                    },
+                    {
+                      "node": 132,
+                      "port": 2,
+                      "rx_ns": 26940,
+                      "tx_ns": 26940
+                    },
+                    {
+                      "node": 129,
+                      "port": 11,
+                      "rx_ns": 28049,
+                      "tx_ns": 28049
+                    }
+                  ]
+                },
+                "ack": {
+                  "source_ns": 29158,
+                  "destination_ns": 35164,
+                  "residence_ns": 0,
+                  "nonresidence_ns": 6006,
+                  "hops": [
+                    {
+                      "node": 129,
+                      "port": 20,
+                      "rx_ns": 30159,
+                      "tx_ns": 30159
+                    },
+                    {
+                      "node": 135,
+                      "port": 5,
+                      "rx_ns": 31160,
+                      "tx_ns": 31160
+                    },
+                    {
+                      "node": 147,
+                      "port": 2,
+                      "rx_ns": 32161,
+                      "tx_ns": 32161
+                    },
+                    {
+                      "node": 143,
+                      "port": 1,
+                      "rx_ns": 33162,
+                      "tx_ns": 33162
+                    },
+                    {
+                      "node": 136,
+                      "port": 7,
+                      "rx_ns": 34163,
+                      "tx_ns": 34163
+                    }
+                  ]
+                }
+              },
+              "treatment": {
+                "data": {
+                  "source_ns": 20268,
+                  "destination_ns": 29158,
+                  "residence_ns": 2236,
+                  "nonresidence_ns": 6654,
+                  "hops": [
+                    {
+                      "node": 136,
+                      "port": 17,
+                      "rx_ns": 21377,
+                      "tx_ns": 21720
+                    },
+                    {
+                      "node": 140,
+                      "port": 5,
+                      "rx_ns": 22829,
+                      "tx_ns": 24650
+                    },
+                    {
+                      "node": 144,
+                      "port": 1,
+                      "rx_ns": 25759,
+                      "tx_ns": 25831
+                    },
+                    {
+                      "node": 132,
+                      "port": 2,
+                      "rx_ns": 26940,
+                      "tx_ns": 26940
+                    },
+                    {
+                      "node": 129,
+                      "port": 11,
+                      "rx_ns": 28049,
+                      "tx_ns": 28049
+                    }
+                  ]
+                },
+                "ack": {
+                  "source_ns": 29158,
+                  "destination_ns": 35164,
+                  "residence_ns": 0,
+                  "nonresidence_ns": 6006,
+                  "hops": [
+                    {
+                      "node": 129,
+                      "port": 20,
+                      "rx_ns": 30159,
+                      "tx_ns": 30159
+                    },
+                    {
+                      "node": 135,
+                      "port": 5,
+                      "rx_ns": 31160,
+                      "tx_ns": 31160
+                    },
+                    {
+                      "node": 147,
+                      "port": 2,
+                      "rx_ns": 32161,
+                      "tx_ns": 32161
+                    },
+                    {
+                      "node": 143,
+                      "port": 1,
+                      "rx_ns": 33162,
+                      "tx_ns": 33162
+                    },
+                    {
+                      "node": 136,
+                      "port": 7,
+                      "rx_ns": 34163,
+                      "tx_ns": 34163
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "graph": "g2.w0",
+        "phase": "L0.dispatch",
+        "baseline_release_ns": 18817,
+        "treatment_release_ns": 18817,
+        "change_ns": 0,
+        "tight_predecessors": [
+          {
+            "rank": 6,
+            "node": 8,
+            "kind": "SEND",
+            "name": "L0.dispatch.6-122.send",
+            "baseline_dependency_complete_ns": 18817,
+            "treatment_dependency_complete_ns": 18817,
+            "completion_change_ns": 0,
+            "baseline_gate_slack_ns": 0,
+            "message": 7996,
+            "source_ready_change_ns": 0,
+            "packet_paths": {
+              "baseline": {
+                "data": {
+                  "source_ns": 2847,
+                  "destination_ns": 12811,
+                  "residence_ns": 3304,
+                  "nonresidence_ns": 6660,
+                  "hops": [
+                    {
+                      "node": 128,
+                      "port": 20,
+                      "rx_ns": 3957,
+                      "tx_ns": 5884
+                    },
+                    {
+                      "node": 135,
+                      "port": 5,
+                      "rx_ns": 6994,
+                      "tx_ns": 8300
+                    },
+                    {
+                      "node": 147,
+                      "port": 2,
+                      "rx_ns": 9410,
+                      "tx_ns": 9481
+                    },
+                    {
+                      "node": 143,
+                      "port": 4,
+                      "rx_ns": 10591,
+                      "tx_ns": 10591
+                    },
+                    {
+                      "node": 139,
+                      "port": 11,
+                      "rx_ns": 11701,
+                      "tx_ns": 11701
+                    }
+                  ]
+                },
+                "ack": {
+                  "source_ns": 12811,
+                  "destination_ns": 18817,
+                  "residence_ns": 0,
+                  "nonresidence_ns": 6006,
+                  "hops": [
+                    {
+                      "node": 139,
+                      "port": 17,
+                      "rx_ns": 13812,
+                      "tx_ns": 13812
+                    },
+                    {
+                      "node": 140,
+                      "port": 5,
+                      "rx_ns": 14813,
+                      "tx_ns": 14813
+                    },
+                    {
+                      "node": 144,
+                      "port": 1,
+                      "rx_ns": 15814,
+                      "tx_ns": 15814
+                    },
+                    {
+                      "node": 132,
+                      "port": 1,
+                      "rx_ns": 16815,
+                      "tx_ns": 16815
+                    },
+                    {
+                      "node": 128,
+                      "port": 7,
+                      "rx_ns": 17816,
+                      "tx_ns": 17816
+                    }
+                  ]
+                }
+              },
+              "treatment": {
+                "data": {
+                  "source_ns": 2847,
+                  "destination_ns": 12811,
+                  "residence_ns": 3304,
+                  "nonresidence_ns": 6660,
+                  "hops": [
+                    {
+                      "node": 128,
+                      "port": 20,
+                      "rx_ns": 3957,
+                      "tx_ns": 5884
+                    },
+                    {
+                      "node": 135,
+                      "port": 5,
+                      "rx_ns": 6994,
+                      "tx_ns": 8300
+                    },
+                    {
+                      "node": 147,
+                      "port": 2,
+                      "rx_ns": 9410,
+                      "tx_ns": 9481
+                    },
+                    {
+                      "node": 143,
+                      "port": 4,
+                      "rx_ns": 10591,
+                      "tx_ns": 10591
+                    },
+                    {
+                      "node": 139,
+                      "port": 11,
+                      "rx_ns": 11701,
+                      "tx_ns": 11701
+                    }
+                  ]
+                },
+                "ack": {
+                  "source_ns": 12811,
+                  "destination_ns": 18817,
+                  "residence_ns": 0,
+                  "nonresidence_ns": 6006,
+                  "hops": [
+                    {
+                      "node": 139,
+                      "port": 17,
+                      "rx_ns": 13812,
+                      "tx_ns": 13812
+                    },
+                    {
+                      "node": 140,
+                      "port": 5,
+                      "rx_ns": 14813,
+                      "tx_ns": 14813
+                    },
+                    {
+                      "node": 144,
+                      "port": 1,
+                      "rx_ns": 15814,
+                      "tx_ns": 15814
+                    },
+                    {
+                      "node": 132,
+                      "port": 1,
+                      "rx_ns": 16815,
+                      "tx_ns": 16815
+                    },
+                    {
+                      "node": 128,
+                      "port": 7,
+                      "rx_ns": 17816,
+                      "tx_ns": 17816
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "graph": "g2.w0",
+        "phase": "L1.combine",
+        "baseline_release_ns": 69684,
+        "treatment_release_ns": 69684,
+        "change_ns": 0,
+        "tight_predecessors": [
+          {
+            "rank": 82,
+            "node": 28,
+            "kind": "SEND",
+            "name": "L1.combine.82-42.send",
+            "baseline_dependency_complete_ns": 69684,
+            "treatment_dependency_complete_ns": 69684,
+            "completion_change_ns": 0,
+            "baseline_gate_slack_ns": 0,
+            "message": 11542,
+            "source_ready_change_ns": 0,
+            "packet_paths": {
+              "baseline": {
+                "data": {
+                  "source_ns": 55288,
+                  "destination_ns": 63678,
+                  "residence_ns": 1736,
+                  "nonresidence_ns": 6654,
+                  "hops": [
+                    {
+                      "node": 138,
+                      "port": 18,
+                      "rx_ns": 56397,
+                      "tx_ns": 56540
+                    },
+                    {
+                      "node": 141,
+                      "port": 5,
+                      "rx_ns": 57649,
+                      "tx_ns": 59170
+                    },
+                    {
+                      "node": 145,
+                      "port": 1,
+                      "rx_ns": 60279,
+                      "tx_ns": 60351
+                    },
+                    {
+                      "node": 133,
+                      "port": 2,
+                      "rx_ns": 61460,
+                      "tx_ns": 61460
+                    },
+                    {
+                      "node": 129,
+                      "port": 11,
+                      "rx_ns": 62569,
+                      "tx_ns": 62569
+                    }
+                  ]
+                },
+                "ack": {
+                  "source_ns": 63678,
+                  "destination_ns": 69684,
+                  "residence_ns": 0,
+                  "nonresidence_ns": 6006,
+                  "hops": [
+                    {
+                      "node": 129,
+                      "port": 18,
+                      "rx_ns": 64679,
+                      "tx_ns": 64679
+                    },
+                    {
+                      "node": 133,
+                      "port": 5,
+                      "rx_ns": 65680,
+                      "tx_ns": 65680
+                    },
+                    {
+                      "node": 145,
+                      "port": 2,
+                      "rx_ns": 66681,
+                      "tx_ns": 66681
+                    },
+                    {
+                      "node": 141,
+                      "port": 3,
+                      "rx_ns": 67682,
+                      "tx_ns": 67682
+                    },
+                    {
+                      "node": 138,
+                      "port": 3,
+                      "rx_ns": 68683,
+                      "tx_ns": 68683
+                    }
+                  ]
+                }
+              },
+              "treatment": {
+                "data": {
+                  "source_ns": 55288,
+                  "destination_ns": 63678,
+                  "residence_ns": 1736,
+                  "nonresidence_ns": 6654,
+                  "hops": [
+                    {
+                      "node": 138,
+                      "port": 18,
+                      "rx_ns": 56397,
+                      "tx_ns": 56540
+                    },
+                    {
+                      "node": 141,
+                      "port": 5,
+                      "rx_ns": 57649,
+                      "tx_ns": 59170
+                    },
+                    {
+                      "node": 145,
+                      "port": 1,
+                      "rx_ns": 60279,
+                      "tx_ns": 60351
+                    },
+                    {
+                      "node": 133,
+                      "port": 2,
+                      "rx_ns": 61460,
+                      "tx_ns": 61460
+                    },
+                    {
+                      "node": 129,
+                      "port": 11,
+                      "rx_ns": 62569,
+                      "tx_ns": 62569
+                    }
+                  ]
+                },
+                "ack": {
+                  "source_ns": 63678,
+                  "destination_ns": 69684,
+                  "residence_ns": 0,
+                  "nonresidence_ns": 6006,
+                  "hops": [
+                    {
+                      "node": 129,
+                      "port": 18,
+                      "rx_ns": 64679,
+                      "tx_ns": 64679
+                    },
+                    {
+                      "node": 133,
+                      "port": 5,
+                      "rx_ns": 65680,
+                      "tx_ns": 65680
+                    },
+                    {
+                      "node": 145,
+                      "port": 2,
+                      "rx_ns": 66681,
+                      "tx_ns": 66681
+                    },
+                    {
+                      "node": 141,
+                      "port": 3,
+                      "rx_ns": 67682,
+                      "tx_ns": 67682
+                    },
+                    {
+                      "node": 138,
+                      "port": 3,
+                      "rx_ns": 68683,
+                      "tx_ns": 68683
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "graph": "g2.w0",
+        "phase": "L1.dispatch",
+        "baseline_release_ns": 52847,
+        "treatment_release_ns": 52847,
+        "change_ns": 0,
+        "tight_predecessors": [
+          {
+            "rank": 18,
+            "node": 28,
+            "kind": "SEND",
+            "name": "L1.dispatch.18-114.send",
+            "baseline_dependency_complete_ns": 52847,
+            "treatment_dependency_complete_ns": 52847,
+            "completion_change_ns": 0,
+            "baseline_gate_slack_ns": 0,
+            "message": 10071,
+            "source_ready_change_ns": 0,
+            "packet_paths": {
+              "baseline": {
+                "data": {
+                  "source_ns": 38332,
+                  "destination_ns": 46841,
+                  "residence_ns": 1849,
+                  "nonresidence_ns": 6660,
+                  "hops": [
+                    {
+                      "node": 130,
+                      "port": 18,
+                      "rx_ns": 39442,
+                      "tx_ns": 39442
+                    },
+                    {
+                      "node": 133,
+                      "port": 5,
+                      "rx_ns": 40552,
+                      "tx_ns": 42330
+                    },
+                    {
+                      "node": 145,
+                      "port": 2,
+                      "rx_ns": 43440,
+                      "tx_ns": 43511
+                    },
+                    {
+                      "node": 141,
+                      "port": 3,
+                      "rx_ns": 44621,
+                      "tx_ns": 44621
+                    },
+                    {
+                      "node": 138,
+                      "port": 11,
+                      "rx_ns": 45731,
+                      "tx_ns": 45731
+                    }
+                  ]
+                },
+                "ack": {
+                  "source_ns": 46841,
+                  "destination_ns": 52847,
+                  "residence_ns": 0,
+                  "nonresidence_ns": 6006,
+                  "hops": [
+                    {
+                      "node": 138,
+                      "port": 18,
+                      "rx_ns": 47842,
+                      "tx_ns": 47842
+                    },
+                    {
+                      "node": 141,
+                      "port": 5,
+                      "rx_ns": 48843,
+                      "tx_ns": 48843
+                    },
+                    {
+                      "node": 145,
+                      "port": 1,
+                      "rx_ns": 49844,
+                      "tx_ns": 49844
+                    },
+                    {
+                      "node": 133,
+                      "port": 3,
+                      "rx_ns": 50845,
+                      "tx_ns": 50845
+                    },
+                    {
+                      "node": 130,
+                      "port": 3,
+                      "rx_ns": 51846,
+                      "tx_ns": 51846
+                    }
+                  ]
+                }
+              },
+              "treatment": {
+                "data": {
+                  "source_ns": 38332,
+                  "destination_ns": 46841,
+                  "residence_ns": 1849,
+                  "nonresidence_ns": 6660,
+                  "hops": [
+                    {
+                      "node": 130,
+                      "port": 18,
+                      "rx_ns": 39442,
+                      "tx_ns": 39442
+                    },
+                    {
+                      "node": 133,
+                      "port": 5,
+                      "rx_ns": 40552,
+                      "tx_ns": 42330
+                    },
+                    {
+                      "node": 145,
+                      "port": 2,
+                      "rx_ns": 43440,
+                      "tx_ns": 43511
+                    },
+                    {
+                      "node": 141,
+                      "port": 3,
+                      "rx_ns": 44621,
+                      "tx_ns": 44621
+                    },
+                    {
+                      "node": 138,
+                      "port": 11,
+                      "rx_ns": 45731,
+                      "tx_ns": 45731
+                    }
+                  ]
+                },
+                "ack": {
+                  "source_ns": 46841,
+                  "destination_ns": 52847,
+                  "residence_ns": 0,
+                  "nonresidence_ns": 6006,
+                  "hops": [
+                    {
+                      "node": 138,
+                      "port": 18,
+                      "rx_ns": 47842,
+                      "tx_ns": 47842
+                    },
+                    {
+                      "node": 141,
+                      "port": 5,
+                      "rx_ns": 48843,
+                      "tx_ns": 48843
+                    },
+                    {
+                      "node": 145,
+                      "port": 1,
+                      "rx_ns": 49844,
+                      "tx_ns": 49844
+                    },
+                    {
+                      "node": 133,
+                      "port": 3,
+                      "rx_ns": 50845,
+                      "tx_ns": 50845
+                    },
+                    {
+                      "node": 130,
+                      "port": 3,
+                      "rx_ns": 51846,
+                      "tx_ns": 51846
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "graph": "g2.w1",
+        "phase": "L0.combine",
+        "baseline_release_ns": 106035,
+        "treatment_release_ns": 106049,
+        "change_ns": 14,
+        "tight_predecessors": [
+          {
+            "rank": 106,
+            "node": 19,
+            "kind": "SEND",
+            "name": "L0.combine.106-38.send",
+            "baseline_dependency_complete_ns": 106035,
+            "treatment_dependency_complete_ns": 106049,
+            "completion_change_ns": 14,
+            "baseline_gate_slack_ns": 0,
+            "message": 25615,
+            "source_ready_change_ns": 10,
+            "packet_paths": {
+              "baseline": {
+                "data": {
+                  "source_ns": 90879,
+                  "destination_ns": 100029,
+                  "residence_ns": 2496,
+                  "nonresidence_ns": 6654,
+                  "hops": [
+                    {
+                      "node": 137,
+                      "port": 17,
+                      "rx_ns": 91988,
+                      "tx_ns": 91988
+                    },
+                    {
+                      "node": 140,
+                      "port": 5,
+                      "rx_ns": 93097,
+                      "tx_ns": 95521
+                    },
+                    {
+                      "node": 144,
+                      "port": 1,
+                      "rx_ns": 96630,
+                      "tx_ns": 96702
+                    },
+                    {
+                      "node": 132,
+                      "port": 1,
+                      "rx_ns": 97811,
+                      "tx_ns": 97811
+                    },
+                    {
+                      "node": 128,
+                      "port": 15,
+                      "rx_ns": 98920,
+                      "tx_ns": 98920
+                    }
+                  ]
+                },
+                "ack": {
+                  "source_ns": 100029,
+                  "destination_ns": 106035,
+                  "residence_ns": 0,
+                  "nonresidence_ns": 6006,
+                  "hops": [
+                    {
+                      "node": 128,
+                      "port": 18,
+                      "rx_ns": 101030,
+                      "tx_ns": 101030
+                    },
+                    {
+                      "node": 133,
+                      "port": 5,
+                      "rx_ns": 102031,
+                      "tx_ns": 102031
+                    },
+                    {
+                      "node": 145,
+                      "port": 2,
+                      "rx_ns": 103032,
+                      "tx_ns": 103032
+                    },
+                    {
+                      "node": 141,
+                      "port": 2,
+                      "rx_ns": 104033,
+                      "tx_ns": 104033
+                    },
+                    {
+                      "node": 137,
+                      "port": 11,
+                      "rx_ns": 105034,
+                      "tx_ns": 105034
+                    }
+                  ]
+                }
+              },
+              "treatment": {
+                "data": {
+                  "source_ns": 90889,
+                  "destination_ns": 100043,
+                  "residence_ns": 2500,
+                  "nonresidence_ns": 6654,
+                  "hops": [
+                    {
+                      "node": 137,
+                      "port": 17,
+                      "rx_ns": 91998,
+                      "tx_ns": 91998
+                    },
+                    {
+                      "node": 140,
+                      "port": 5,
+                      "rx_ns": 93107,
+                      "tx_ns": 95535
+                    },
+                    {
+                      "node": 144,
+                      "port": 1,
+                      "rx_ns": 96644,
+                      "tx_ns": 96716
+                    },
+                    {
+                      "node": 132,
+                      "port": 1,
+                      "rx_ns": 97825,
+                      "tx_ns": 97825
+                    },
+                    {
+                      "node": 128,
+                      "port": 15,
+                      "rx_ns": 98934,
+                      "tx_ns": 98934
+                    }
+                  ]
+                },
+                "ack": {
+                  "source_ns": 100043,
+                  "destination_ns": 106049,
+                  "residence_ns": 0,
+                  "nonresidence_ns": 6006,
+                  "hops": [
+                    {
+                      "node": 128,
+                      "port": 18,
+                      "rx_ns": 101044,
+                      "tx_ns": 101044
+                    },
+                    {
+                      "node": 133,
+                      "port": 5,
+                      "rx_ns": 102045,
+                      "tx_ns": 102045
+                    },
+                    {
+                      "node": 145,
+                      "port": 2,
+                      "rx_ns": 103046,
+                      "tx_ns": 103046
+                    },
+                    {
+                      "node": 141,
+                      "port": 2,
+                      "rx_ns": 104047,
+                      "tx_ns": 104047
+                    },
+                    {
+                      "node": 137,
+                      "port": 11,
+                      "rx_ns": 105048,
+                      "tx_ns": 105048
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "graph": "g2.w1",
+        "phase": "L0.dispatch",
+        "baseline_release_ns": 87658,
+        "treatment_release_ns": 87668,
+        "change_ns": 10,
+        "tight_predecessors": [
+          {
+            "rank": 18,
+            "node": 10,
+            "kind": "SEND",
+            "name": "L0.dispatch.18-126.send",
+            "baseline_dependency_complete_ns": 87658,
+            "treatment_dependency_complete_ns": 87668,
+            "completion_change_ns": 10,
+            "baseline_gate_slack_ns": 0,
+            "message": 23962,
+            "source_ready_change_ns": 0,
+            "packet_paths": {
+              "baseline": {
+                "data": {
+                  "source_ns": 72671,
+                  "destination_ns": 81652,
+                  "residence_ns": 2321,
+                  "nonresidence_ns": 6660,
+                  "hops": [
+                    {
+                      "node": 130,
+                      "port": 20,
+                      "rx_ns": 73781,
+                      "tx_ns": 73781
+                    },
+                    {
+                      "node": 135,
+                      "port": 5,
+                      "rx_ns": 74891,
+                      "tx_ns": 77141
+                    },
+                    {
+                      "node": 147,
+                      "port": 2,
+                      "rx_ns": 78251,
+                      "tx_ns": 78322
+                    },
+                    {
+                      "node": 143,
+                      "port": 4,
+                      "rx_ns": 79432,
+                      "tx_ns": 79432
+                    },
+                    {
+                      "node": 139,
+                      "port": 15,
+                      "rx_ns": 80542,
+                      "tx_ns": 80542
+                    }
+                  ]
+                },
+                "ack": {
+                  "source_ns": 81652,
+                  "destination_ns": 87658,
+                  "residence_ns": 0,
+                  "nonresidence_ns": 6006,
+                  "hops": [
+                    {
+                      "node": 139,
+                      "port": 18,
+                      "rx_ns": 82653,
+                      "tx_ns": 82653
+                    },
+                    {
+                      "node": 141,
+                      "port": 5,
+                      "rx_ns": 83654,
+                      "tx_ns": 83654
+                    },
+                    {
+                      "node": 145,
+                      "port": 1,
+                      "rx_ns": 84655,
+                      "tx_ns": 84655
+                    },
+                    {
+                      "node": 133,
+                      "port": 3,
+                      "rx_ns": 85656,
+                      "tx_ns": 85656
+                    },
+                    {
+                      "node": 130,
+                      "port": 3,
+                      "rx_ns": 86657,
+                      "tx_ns": 86657
+                    }
+                  ]
+                }
+              },
+              "treatment": {
+                "data": {
+                  "source_ns": 72671,
+                  "destination_ns": 81662,
+                  "residence_ns": 2331,
+                  "nonresidence_ns": 6660,
+                  "hops": [
+                    {
+                      "node": 130,
+                      "port": 20,
+                      "rx_ns": 73781,
+                      "tx_ns": 73781
+                    },
+                    {
+                      "node": 135,
+                      "port": 5,
+                      "rx_ns": 74891,
+                      "tx_ns": 77151
+                    },
+                    {
+                      "node": 147,
+                      "port": 2,
+                      "rx_ns": 78261,
+                      "tx_ns": 78332
+                    },
+                    {
+                      "node": 143,
+                      "port": 4,
+                      "rx_ns": 79442,
+                      "tx_ns": 79442
+                    },
+                    {
+                      "node": 139,
+                      "port": 15,
+                      "rx_ns": 80552,
+                      "tx_ns": 80552
+                    }
+                  ]
+                },
+                "ack": {
+                  "source_ns": 81662,
+                  "destination_ns": 87668,
+                  "residence_ns": 0,
+                  "nonresidence_ns": 6006,
+                  "hops": [
+                    {
+                      "node": 139,
+                      "port": 18,
+                      "rx_ns": 82663,
+                      "tx_ns": 82663
+                    },
+                    {
+                      "node": 141,
+                      "port": 5,
+                      "rx_ns": 83664,
+                      "tx_ns": 83664
+                    },
+                    {
+                      "node": 145,
+                      "port": 1,
+                      "rx_ns": 84665,
+                      "tx_ns": 84665
+                    },
+                    {
+                      "node": 133,
+                      "port": 3,
+                      "rx_ns": 85666,
+                      "tx_ns": 85666
+                    },
+                    {
+                      "node": 130,
+                      "port": 3,
+                      "rx_ns": 86667,
+                      "tx_ns": 86667
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "graph": "g2.w1",
+        "phase": "L1.combine",
+        "baseline_release_ns": 141144,
+        "treatment_release_ns": 141158,
+        "change_ns": 14,
+        "tight_predecessors": [
+          {
+            "rank": 70,
+            "node": 24,
+            "kind": "SEND",
+            "name": "L1.combine.70-26.send",
+            "baseline_dependency_complete_ns": 141144,
+            "treatment_dependency_complete_ns": 141158,
+            "completion_change_ns": 14,
+            "baseline_gate_slack_ns": 0,
+            "message": 27317,
+            "source_ready_change_ns": 14,
+            "packet_paths": {
+              "baseline": {
+                "data": {
+                  "source_ns": 126475,
+                  "destination_ns": 135138,
+                  "residence_ns": 2009,
+                  "nonresidence_ns": 6654,
+                  "hops": [
+                    {
+                      "node": 136,
+                      "port": 20,
+                      "rx_ns": 127584,
+                      "tx_ns": 127584
+                    },
+                    {
+                      "node": 143,
+                      "port": 5,
+                      "rx_ns": 128693,
+                      "tx_ns": 130485
+                    },
+                    {
+                      "node": 147,
+                      "port": 1,
+                      "rx_ns": 131594,
+                      "tx_ns": 131666
+                    },
+                    {
+                      "node": 135,
+                      "port": 4,
+                      "rx_ns": 132775,
+                      "tx_ns": 132848
+                    },
+                    {
+                      "node": 131,
+                      "port": 3,
+                      "rx_ns": 133957,
+                      "tx_ns": 134029
+                    }
+                  ]
+                },
+                "ack": {
+                  "source_ns": 135138,
+                  "destination_ns": 141144,
+                  "residence_ns": 0,
+                  "nonresidence_ns": 6006,
+                  "hops": [
+                    {
+                      "node": 131,
+                      "port": 18,
+                      "rx_ns": 136139,
+                      "tx_ns": 136139
+                    },
+                    {
+                      "node": 133,
+                      "port": 5,
+                      "rx_ns": 137140,
+                      "tx_ns": 137140
+                    },
+                    {
+                      "node": 145,
+                      "port": 2,
+                      "rx_ns": 138141,
+                      "tx_ns": 138141
+                    },
+                    {
+                      "node": 141,
+                      "port": 1,
+                      "rx_ns": 139142,
+                      "tx_ns": 139142
+                    },
+                    {
+                      "node": 136,
+                      "port": 7,
+                      "rx_ns": 140143,
+                      "tx_ns": 140143
+                    }
+                  ]
+                }
+              },
+              "treatment": {
+                "data": {
+                  "source_ns": 126489,
+                  "destination_ns": 135152,
+                  "residence_ns": 2009,
+                  "nonresidence_ns": 6654,
+                  "hops": [
+                    {
+                      "node": 136,
+                      "port": 20,
+                      "rx_ns": 127598,
+                      "tx_ns": 127598
+                    },
+                    {
+                      "node": 143,
+                      "port": 5,
+                      "rx_ns": 128707,
+                      "tx_ns": 130499
+                    },
+                    {
+                      "node": 147,
+                      "port": 1,
+                      "rx_ns": 131608,
+                      "tx_ns": 131680
+                    },
+                    {
+                      "node": 135,
+                      "port": 4,
+                      "rx_ns": 132789,
+                      "tx_ns": 132862
+                    },
+                    {
+                      "node": 131,
+                      "port": 3,
+                      "rx_ns": 133971,
+                      "tx_ns": 134043
+                    }
+                  ]
+                },
+                "ack": {
+                  "source_ns": 135152,
+                  "destination_ns": 141158,
+                  "residence_ns": 0,
+                  "nonresidence_ns": 6006,
+                  "hops": [
+                    {
+                      "node": 131,
+                      "port": 18,
+                      "rx_ns": 136153,
+                      "tx_ns": 136153
+                    },
+                    {
+                      "node": 133,
+                      "port": 5,
+                      "rx_ns": 137154,
+                      "tx_ns": 137154
+                    },
+                    {
+                      "node": 145,
+                      "port": 2,
+                      "rx_ns": 138155,
+                      "tx_ns": 138155
+                    },
+                    {
+                      "node": 141,
+                      "port": 1,
+                      "rx_ns": 139156,
+                      "tx_ns": 139156
+                    },
+                    {
+                      "node": 136,
+                      "port": 7,
+                      "rx_ns": 140157,
+                      "tx_ns": 140157
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "graph": "g2.w1",
+        "phase": "L1.dispatch",
+        "baseline_release_ns": 124262,
+        "treatment_release_ns": 124276,
+        "change_ns": 14,
+        "tight_predecessors": [
+          {
+            "rank": 6,
+            "node": 32,
+            "kind": "SEND",
+            "name": "L1.dispatch.6-114.send",
+            "baseline_dependency_complete_ns": 124262,
+            "treatment_dependency_complete_ns": 124276,
+            "completion_change_ns": 14,
+            "baseline_gate_slack_ns": 0,
+            "message": 25850,
+            "source_ready_change_ns": 14,
+            "packet_paths": {
+              "baseline": {
+                "data": {
+                  "source_ns": 108912,
+                  "destination_ns": 118256,
+                  "residence_ns": 2684,
+                  "nonresidence_ns": 6660,
+                  "hops": [
+                    {
+                      "node": 128,
+                      "port": 20,
+                      "rx_ns": 110022,
+                      "tx_ns": 111218
+                    },
+                    {
+                      "node": 135,
+                      "port": 5,
+                      "rx_ns": 112328,
+                      "tx_ns": 113744
+                    },
+                    {
+                      "node": 147,
+                      "port": 2,
+                      "rx_ns": 114854,
+                      "tx_ns": 114926
+                    },
+                    {
+                      "node": 143,
+                      "port": 3,
+                      "rx_ns": 116036,
+                      "tx_ns": 116036
+                    },
+                    {
+                      "node": 138,
+                      "port": 11,
+                      "rx_ns": 117146,
+                      "tx_ns": 117146
+                    }
+                  ]
+                },
+                "ack": {
+                  "source_ns": 118256,
+                  "destination_ns": 124262,
+                  "residence_ns": 0,
+                  "nonresidence_ns": 6006,
+                  "hops": [
+                    {
+                      "node": 138,
+                      "port": 20,
+                      "rx_ns": 119257,
+                      "tx_ns": 119257
+                    },
+                    {
+                      "node": 143,
+                      "port": 5,
+                      "rx_ns": 120258,
+                      "tx_ns": 120258
+                    },
+                    {
+                      "node": 147,
+                      "port": 1,
+                      "rx_ns": 121259,
+                      "tx_ns": 121259
+                    },
+                    {
+                      "node": 135,
+                      "port": 1,
+                      "rx_ns": 122260,
+                      "tx_ns": 122260
+                    },
+                    {
+                      "node": 128,
+                      "port": 7,
+                      "rx_ns": 123261,
+                      "tx_ns": 123261
+                    }
+                  ]
+                }
+              },
+              "treatment": {
+                "data": {
+                  "source_ns": 108926,
+                  "destination_ns": 118270,
+                  "residence_ns": 2684,
+                  "nonresidence_ns": 6660,
+                  "hops": [
+                    {
+                      "node": 128,
+                      "port": 20,
+                      "rx_ns": 110036,
+                      "tx_ns": 111232
+                    },
+                    {
+                      "node": 135,
+                      "port": 5,
+                      "rx_ns": 112342,
+                      "tx_ns": 113758
+                    },
+                    {
+                      "node": 147,
+                      "port": 2,
+                      "rx_ns": 114868,
+                      "tx_ns": 114940
+                    },
+                    {
+                      "node": 143,
+                      "port": 3,
+                      "rx_ns": 116050,
+                      "tx_ns": 116050
+                    },
+                    {
+                      "node": 138,
+                      "port": 11,
+                      "rx_ns": 117160,
+                      "tx_ns": 117160
+                    }
+                  ]
+                },
+                "ack": {
+                  "source_ns": 118270,
+                  "destination_ns": 124276,
+                  "residence_ns": 0,
+                  "nonresidence_ns": 6006,
+                  "hops": [
+                    {
+                      "node": 138,
+                      "port": 20,
+                      "rx_ns": 119271,
+                      "tx_ns": 119271
+                    },
+                    {
+                      "node": 143,
+                      "port": 5,
+                      "rx_ns": 120272,
+                      "tx_ns": 120272
+                    },
+                    {
+                      "node": 147,
+                      "port": 1,
+                      "rx_ns": 121273,
+                      "tx_ns": 121273
+                    },
+                    {
+                      "node": 135,
+                      "port": 1,
+                      "rx_ns": 122274,
+                      "tx_ns": 122274
+                    },
+                    {
+                      "node": 128,
+                      "port": 7,
+                      "rx_ns": 123275,
+                      "tx_ns": 123275
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "actual_races": {
+    "normal": {
+      "winner": "primary",
+      "result_ready_ns": 126626,
+      "primary": {
+        "group_index": 0,
+        "graph_id": "g0.w0",
+        "submitted_ns": 0,
+        "finished_ns": 126626,
+        "waves": [
+          {
+            "graph_id": "g0.w0",
+            "step": 0,
+            "submitted_ns": 0,
+            "finished_ns": 65048
+          },
+          {
+            "graph_id": "g0.w1",
+            "step": 1,
+            "submitted_ns": 65048,
+            "finished_ns": 126626
+          }
+        ]
+      },
+      "replica": {
+        "group_index": 1,
+        "graph_id": "g1.w0",
+        "submitted_ns": null,
+        "finished_ns": null,
+        "skipped_ns": 126626,
+        "waves": []
+      }
+    },
+    "local": {
+      "winner": "replica",
+      "result_ready_ns": 142428,
+      "primary": {
+        "group_index": 0,
+        "graph_id": "g0.w0",
+        "submitted_ns": 0,
+        "finished_ns": 201880,
+        "waves": [
+          {
+            "graph_id": "g0.w0",
+            "step": 0,
+            "submitted_ns": 0,
+            "finished_ns": 140354
+          },
+          {
+            "graph_id": "g0.w1",
+            "step": 1,
+            "submitted_ns": 140354,
+            "finished_ns": 201880
+          }
+        ]
+      },
+      "replica": {
+        "group_index": 1,
+        "graph_id": "g1.w0",
+        "submitted_ns": 19030,
+        "finished_ns": 142428,
+        "skipped_ns": null,
+        "waves": [
+          {
+            "graph_id": "g1.w0",
+            "step": 0,
+            "submitted_ns": 19030,
+            "finished_ns": 80159
+          },
+          {
+            "graph_id": "g1.w1",
+            "step": 1,
+            "submitted_ns": 80159,
+            "finished_ns": 142428
+          }
+        ]
+      }
+    }
+  },
+  "fixed_guarded_network_comparison": {
+    "normal": {
+      "fixed_and_guarded_packets_exact": false,
+      "fixed_and_guarded_queue_events_exact": false
+    },
+    "local": {
+      "fixed_and_guarded_packets_exact": true,
+      "fixed_and_guarded_queue_events_exact": true
+    }
+  },
+  "new_network_executions": 0,
+  "analyzer_sha256": "1fbc71b6593034bdf830ea4d9a954259043a0a608a6571ea1a9c88429bb31267",
+  "scope": "Retrospective actual tight predecessors and final DATA/ACK paths. All ties retained. Posthoc remaining times and paths never enter online guard; packet residence totals are not business savings."
+}

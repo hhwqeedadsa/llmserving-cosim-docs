@@ -1,0 +1,7267 @@
+{
+  "passed": true,
+  "cases": {
+    "control-normal": {
+      "passed": true,
+      "source_files": 15,
+      "logical_requests": {
+        "target": 4,
+        "healthy": 11
+      },
+      "inventory_requests": 30,
+      "execution_requests": 15,
+      "active_data_ranks": 62,
+      "result_ready_ns": {
+        "target": 126626,
+        "healthy": 139136
+      },
+      "call_winners": {
+        "target": "primary",
+        "healthy": "primary"
+      },
+      "attempts_finished_ns": 139136,
+      "network_drained_ns": 168210,
+      "groups_executed": [
+        0,
+        2
+      ],
+      "unique_payload_bytes": 11228096,
+      "payload_by_group": {
+        "0": 3088448,
+        "2": 8139648
+      },
+      "source_payload_bytes": 11228096,
+      "source_packets": 1556,
+      "declared_compute_work_ns": 119300,
+      "phase_member_arrivals": 512,
+      "verified_nodes": 3348,
+      "messages": 778,
+      "packet_events": 54736,
+      "queue_events": 24196,
+      "fault_drops": 0,
+      "standby_memory": {
+        "initial_reserved_bytes": 46792704,
+        "releases": [
+          {
+            "group_index": 1,
+            "time_ns": 126626,
+            "kind": "skipped_release",
+            "bytes": 10092544
+          },
+          {
+            "group_index": 3,
+            "time_ns": 139136,
+            "kind": "skipped_release",
+            "bytes": 36700160
+          }
+        ],
+        "final_used_bytes": 0
+      },
+      "first_backup_source_tx_ns": null,
+      "healthy_finish_vs_backup_source_ns": null,
+      "first_backup_switch_rx_ns": null,
+      "healthy_finish_vs_backup_switch_ns": null,
+      "shared_backup_healthy_ports": [],
+      "healthy_switch_residence_ns": 647257,
+      "queue_area_byte_ns": 5321602956,
+      "queue_peak_bytes": 157428,
+      "queue_scope": "Switch post-change occupancy, normalized enqueue-after/dequeue-before hooks; all protocols; excludes serialization",
+      "sha256": {
+        "input.json": "b9f5ac9cba7efbb907fd52774430d610bb2fff9034b4a96bf4c00f0113904ee5",
+        "rdma.json": "820061c5c70934e8b5371ec4db37d4ab6a1a62ad6588033043715e2dbf020e0e",
+        "topology.json": "5389993e9aa1dfc148b4713b0a2b0c0521de24b41b74060e2db7eb9f048c444f",
+        "frontend.json": "ec73a8465b866a2dd3a13216ce436a7f19416a5795aacdd8aeeeebb3a3a8c306",
+        "result.json": "4c79494f9869f2ea3ef5be8435c796919e1796c98f95dc46f24afe83da512abf",
+        "verification.json": "82b8f3a4ec8717c2878cc590665507cf515e6d030e09242bee53f524e30bfed5"
+      },
+      "calls": {
+        "target": {
+          "input_identity": {
+            "kind": "declared_route_and_ready_kv_lineage/1",
+            "sha256": "ea9c8c638905b7a124b14fdd9ce4d060ef0c764f4be3de80246ce6be40780543"
+          },
+          "request_pairs": [
+            {
+              "primary_request": 0,
+              "replica_request": 1
+            },
+            {
+              "primary_request": 4,
+              "replica_request": 5
+            },
+            {
+              "primary_request": 8,
+              "replica_request": 9
+            },
+            {
+              "primary_request": 12,
+              "replica_request": 13
+            }
+          ],
+          "attempts": {
+            "primary": {
+              "group_index": 0,
+              "graph_id": "g0.w0",
+              "submitted_ns": 0,
+              "finished_ns": 126626,
+              "waves": [
+                {
+                  "graph_id": "g0.w0",
+                  "step": 0,
+                  "submitted_ns": 0,
+                  "finished_ns": 65048
+                },
+                {
+                  "graph_id": "g0.w1",
+                  "step": 1,
+                  "submitted_ns": 65048,
+                  "finished_ns": 126626
+                }
+              ]
+            },
+            "replica": {
+              "group_index": 1,
+              "graph_id": "g1.w0",
+              "submitted_ns": null,
+              "finished_ns": null,
+              "skipped_ns": 126626,
+              "waves": []
+            }
+          },
+          "winner": "primary",
+          "result_ready_ns": 126626
+        },
+        "healthy": {
+          "input_identity": {
+            "kind": "declared_route_and_ready_kv_lineage/1",
+            "sha256": "32e022e5e0c407584b61a827b71fd7a771679180693184970010a610192c98ef"
+          },
+          "request_pairs": [
+            {
+              "primary_request": 2,
+              "replica_request": 3
+            },
+            {
+              "primary_request": 6,
+              "replica_request": 7
+            },
+            {
+              "primary_request": 10,
+              "replica_request": 11
+            },
+            {
+              "primary_request": 14,
+              "replica_request": 15
+            },
+            {
+              "primary_request": 18,
+              "replica_request": 19
+            },
+            {
+              "primary_request": 22,
+              "replica_request": 23
+            },
+            {
+              "primary_request": 26,
+              "replica_request": 27
+            },
+            {
+              "primary_request": 30,
+              "replica_request": 31
+            },
+            {
+              "primary_request": 34,
+              "replica_request": 35
+            },
+            {
+              "primary_request": 38,
+              "replica_request": 39
+            },
+            {
+              "primary_request": 42,
+              "replica_request": 43
+            }
+          ],
+          "attempts": {
+            "primary": {
+              "group_index": 2,
+              "graph_id": "g2.w0",
+              "submitted_ns": 0,
+              "finished_ns": 139136,
+              "waves": [
+                {
+                  "graph_id": "g2.w0",
+                  "step": 0,
+                  "submitted_ns": 0,
+                  "finished_ns": 69864
+                },
+                {
+                  "graph_id": "g2.w1",
+                  "step": 1,
+                  "submitted_ns": 69864,
+                  "finished_ns": 139136
+                }
+              ]
+            },
+            "replica": {
+              "group_index": 3,
+              "graph_id": "g3.w0",
+              "submitted_ns": null,
+              "finished_ns": null,
+              "skipped_ns": 139136,
+              "waves": []
+            }
+          },
+          "winner": "primary",
+          "result_ready_ns": 139136
+        }
+      },
+      "source_retransmitted_payload_bytes": 0,
+      "guard": null,
+      "native_timer_events": [
+        {
+          "deadline_ns": 4000000,
+          "kind": "armed",
+          "sequence": 0,
+          "ticket": 0,
+          "time_ns": 0
+        },
+        {
+          "deadline_ns": 4000000,
+          "kind": "cancelled",
+          "sequence": 1,
+          "ticket": 0,
+          "time_ns": 139136
+        }
+      ]
+    },
+    "fixed-normal": {
+      "passed": true,
+      "source_files": 15,
+      "logical_requests": {
+        "target": 4,
+        "healthy": 11
+      },
+      "inventory_requests": 30,
+      "execution_requests": 19,
+      "active_data_ranks": 92,
+      "result_ready_ns": {
+        "target": 126745,
+        "healthy": 139287
+      },
+      "call_winners": {
+        "target": "primary",
+        "healthy": "primary"
+      },
+      "attempts_finished_ns": 142379,
+      "network_drained_ns": 184070,
+      "groups_executed": [
+        0,
+        1,
+        2
+      ],
+      "unique_payload_bytes": 14316544,
+      "payload_by_group": {
+        "0": 3088448,
+        "2": 8139648,
+        "1": 3088448
+      },
+      "source_payload_bytes": 14316544,
+      "source_packets": 1984,
+      "declared_compute_work_ns": 150760,
+      "phase_member_arrivals": 768,
+      "verified_nodes": 4672,
+      "messages": 992,
+      "packet_events": 69646,
+      "queue_events": 30790,
+      "fault_drops": 0,
+      "standby_memory": {
+        "initial_reserved_bytes": 46792704,
+        "releases": [
+          {
+            "group_index": 3,
+            "time_ns": 139287,
+            "kind": "skipped_release",
+            "bytes": 36700160
+          },
+          {
+            "group_index": 1,
+            "time_ns": 142379,
+            "kind": "executed_release",
+            "bytes": 10092544
+          }
+        ],
+        "final_used_bytes": 0
+      },
+      "first_backup_source_tx_ns": 20060,
+      "healthy_finish_vs_backup_source_ns": -119227,
+      "first_backup_switch_rx_ns": 21241,
+      "healthy_finish_vs_backup_switch_ns": -118046,
+      "shared_backup_healthy_ports": [
+        [
+          128,
+          20
+        ],
+        [
+          129,
+          19
+        ],
+        [
+          129,
+          20
+        ],
+        [
+          128,
+          19
+        ],
+        [
+          128,
+          18
+        ],
+        [
+          129,
+          18
+        ],
+        [
+          130,
+          17
+        ],
+        [
+          131,
+          20
+        ],
+        [
+          131,
+          17
+        ],
+        [
+          129,
+          17
+        ],
+        [
+          128,
+          17
+        ],
+        [
+          130,
+          20
+        ],
+        [
+          130,
+          19
+        ],
+        [
+          131,
+          18
+        ],
+        [
+          134,
+          1
+        ],
+        [
+          135,
+          1
+        ],
+        [
+          134,
+          4
+        ],
+        [
+          133,
+          2
+        ],
+        [
+          133,
+          1
+        ],
+        [
+          132,
+          1
+        ],
+        [
+          132,
+          4
+        ],
+        [
+          135,
+          2
+        ],
+        [
+          134,
+          3
+        ],
+        [
+          133,
+          4
+        ],
+        [
+          132,
+          5
+        ],
+        [
+          132,
+          3
+        ],
+        [
+          135,
+          5
+        ],
+        [
+          133,
+          5
+        ],
+        [
+          135,
+          4
+        ],
+        [
+          134,
+          5
+        ],
+        [
+          132,
+          2
+        ],
+        [
+          144,
+          2
+        ],
+        [
+          147,
+          2
+        ],
+        [
+          145,
+          2
+        ],
+        [
+          146,
+          2
+        ],
+        [
+          140,
+          1
+        ],
+        [
+          143,
+          3
+        ],
+        [
+          141,
+          1
+        ],
+        [
+          142,
+          1
+        ],
+        [
+          143,
+          1
+        ],
+        [
+          141,
+          2
+        ],
+        [
+          140,
+          3
+        ],
+        [
+          142,
+          3
+        ],
+        [
+          140,
+          2
+        ],
+        [
+          142,
+          4
+        ],
+        [
+          143,
+          2
+        ],
+        [
+          141,
+          4
+        ],
+        [
+          143,
+          4
+        ],
+        [
+          141,
+          3
+        ],
+        [
+          137,
+          19
+        ],
+        [
+          138,
+          19
+        ],
+        [
+          137,
+          20
+        ],
+        [
+          131,
+          19
+        ],
+        [
+          130,
+          18
+        ],
+        [
+          136,
+          17
+        ],
+        [
+          138,
+          20
+        ],
+        [
+          136,
+          19
+        ],
+        [
+          137,
+          18
+        ],
+        [
+          138,
+          17
+        ],
+        [
+          139,
+          17
+        ],
+        [
+          139,
+          19
+        ],
+        [
+          138,
+          18
+        ],
+        [
+          136,
+          18
+        ],
+        [
+          137,
+          17
+        ],
+        [
+          134,
+          2
+        ],
+        [
+          142,
+          5
+        ],
+        [
+          143,
+          5
+        ],
+        [
+          140,
+          5
+        ],
+        [
+          141,
+          5
+        ],
+        [
+          133,
+          3
+        ],
+        [
+          146,
+          1
+        ],
+        [
+          147,
+          1
+        ],
+        [
+          144,
+          1
+        ],
+        [
+          145,
+          1
+        ],
+        [
+          140,
+          4
+        ],
+        [
+          139,
+          20
+        ],
+        [
+          142,
+          2
+        ]
+      ],
+      "healthy_switch_residence_ns": 650274,
+      "queue_area_byte_ns": 6123263918,
+      "queue_peak_bytes": 157478,
+      "queue_scope": "Switch post-change occupancy, normalized enqueue-after/dequeue-before hooks; all protocols; excludes serialization",
+      "sha256": {
+        "input.json": "b16e1670dcfadd5124c365ee6b74e0892474b7c92ab980ca48585c1ed48a261f",
+        "rdma.json": "820061c5c70934e8b5371ec4db37d4ab6a1a62ad6588033043715e2dbf020e0e",
+        "topology.json": "5389993e9aa1dfc148b4713b0a2b0c0521de24b41b74060e2db7eb9f048c444f",
+        "frontend.json": "96f2c737a5c014ffdc8c4ad2c9026ff705a7d2e55dd7b4237023167c13844f6a",
+        "result.json": "fbf10638e749b8dc085fdc7753801dc9df709a01792ebf771c517e3bd653195d",
+        "verification.json": "46f8d7b1ddc2edca97b0ba97fe456a9fefd53b91aee70478951d718225001590"
+      },
+      "calls": {
+        "target": {
+          "input_identity": {
+            "kind": "declared_route_and_ready_kv_lineage/1",
+            "sha256": "ea9c8c638905b7a124b14fdd9ce4d060ef0c764f4be3de80246ce6be40780543"
+          },
+          "request_pairs": [
+            {
+              "primary_request": 0,
+              "replica_request": 1
+            },
+            {
+              "primary_request": 4,
+              "replica_request": 5
+            },
+            {
+              "primary_request": 8,
+              "replica_request": 9
+            },
+            {
+              "primary_request": 12,
+              "replica_request": 13
+            }
+          ],
+          "attempts": {
+            "primary": {
+              "group_index": 0,
+              "graph_id": "g0.w0",
+              "submitted_ns": 0,
+              "finished_ns": 126745,
+              "waves": [
+                {
+                  "graph_id": "g0.w0",
+                  "step": 0,
+                  "submitted_ns": 0,
+                  "finished_ns": 65163
+                },
+                {
+                  "graph_id": "g0.w1",
+                  "step": 1,
+                  "submitted_ns": 65163,
+                  "finished_ns": 126745
+                }
+              ]
+            },
+            "replica": {
+              "group_index": 1,
+              "graph_id": "g1.w0",
+              "submitted_ns": 19030,
+              "finished_ns": 142379,
+              "skipped_ns": null,
+              "waves": [
+                {
+                  "graph_id": "g1.w0",
+                  "step": 0,
+                  "submitted_ns": 19030,
+                  "finished_ns": 80308
+                },
+                {
+                  "graph_id": "g1.w1",
+                  "step": 1,
+                  "submitted_ns": 80308,
+                  "finished_ns": 142379
+                }
+              ]
+            }
+          },
+          "winner": "primary",
+          "result_ready_ns": 126745
+        },
+        "healthy": {
+          "input_identity": {
+            "kind": "declared_route_and_ready_kv_lineage/1",
+            "sha256": "32e022e5e0c407584b61a827b71fd7a771679180693184970010a610192c98ef"
+          },
+          "request_pairs": [
+            {
+              "primary_request": 2,
+              "replica_request": 3
+            },
+            {
+              "primary_request": 6,
+              "replica_request": 7
+            },
+            {
+              "primary_request": 10,
+              "replica_request": 11
+            },
+            {
+              "primary_request": 14,
+              "replica_request": 15
+            },
+            {
+              "primary_request": 18,
+              "replica_request": 19
+            },
+            {
+              "primary_request": 22,
+              "replica_request": 23
+            },
+            {
+              "primary_request": 26,
+              "replica_request": 27
+            },
+            {
+              "primary_request": 30,
+              "replica_request": 31
+            },
+            {
+              "primary_request": 34,
+              "replica_request": 35
+            },
+            {
+              "primary_request": 38,
+              "replica_request": 39
+            },
+            {
+              "primary_request": 42,
+              "replica_request": 43
+            }
+          ],
+          "attempts": {
+            "primary": {
+              "group_index": 2,
+              "graph_id": "g2.w0",
+              "submitted_ns": 0,
+              "finished_ns": 139287,
+              "waves": [
+                {
+                  "graph_id": "g2.w0",
+                  "step": 0,
+                  "submitted_ns": 0,
+                  "finished_ns": 69864
+                },
+                {
+                  "graph_id": "g2.w1",
+                  "step": 1,
+                  "submitted_ns": 69864,
+                  "finished_ns": 139287
+                }
+              ]
+            },
+            "replica": {
+              "group_index": 3,
+              "graph_id": "g3.w0",
+              "submitted_ns": null,
+              "finished_ns": null,
+              "skipped_ns": 139287,
+              "waves": []
+            }
+          },
+          "winner": "primary",
+          "result_ready_ns": 139287
+        }
+      },
+      "source_retransmitted_payload_bytes": 0,
+      "guard": null,
+      "native_timer_events": [
+        {
+          "deadline_ns": 19030,
+          "kind": "armed",
+          "sequence": 0,
+          "ticket": 0,
+          "time_ns": 0
+        },
+        {
+          "deadline_ns": 19030,
+          "kind": "fired",
+          "sequence": 1,
+          "ticket": 0,
+          "time_ns": 19030
+        },
+        {
+          "deadline_ns": 4000000,
+          "kind": "armed",
+          "sequence": 2,
+          "ticket": 1,
+          "time_ns": 19030
+        },
+        {
+          "deadline_ns": 4000000,
+          "kind": "cancelled",
+          "sequence": 3,
+          "ticket": 1,
+          "time_ns": 139287
+        }
+      ]
+    },
+    "guarded-normal": {
+      "passed": true,
+      "source_files": 15,
+      "logical_requests": {
+        "target": 4,
+        "healthy": 11
+      },
+      "inventory_requests": 30,
+      "execution_requests": 15,
+      "active_data_ranks": 62,
+      "result_ready_ns": {
+        "target": 126626,
+        "healthy": 139136
+      },
+      "call_winners": {
+        "target": "primary",
+        "healthy": "primary"
+      },
+      "attempts_finished_ns": 139136,
+      "network_drained_ns": 168210,
+      "groups_executed": [
+        0,
+        2
+      ],
+      "unique_payload_bytes": 11228096,
+      "payload_by_group": {
+        "0": 3088448,
+        "2": 8139648
+      },
+      "source_payload_bytes": 11228096,
+      "source_packets": 1556,
+      "declared_compute_work_ns": 119300,
+      "phase_member_arrivals": 512,
+      "verified_nodes": 3348,
+      "messages": 778,
+      "packet_events": 54736,
+      "queue_events": 24196,
+      "fault_drops": 0,
+      "standby_memory": {
+        "initial_reserved_bytes": 46792704,
+        "releases": [
+          {
+            "group_index": 1,
+            "time_ns": 126626,
+            "kind": "skipped_release",
+            "bytes": 10092544
+          },
+          {
+            "group_index": 3,
+            "time_ns": 139136,
+            "kind": "skipped_release",
+            "bytes": 36700160
+          }
+        ],
+        "final_used_bytes": 0
+      },
+      "first_backup_source_tx_ns": null,
+      "healthy_finish_vs_backup_source_ns": null,
+      "first_backup_switch_rx_ns": null,
+      "healthy_finish_vs_backup_switch_ns": null,
+      "shared_backup_healthy_ports": [],
+      "healthy_switch_residence_ns": 647257,
+      "queue_area_byte_ns": 5321602956,
+      "queue_peak_bytes": 157428,
+      "queue_scope": "Switch post-change occupancy, normalized enqueue-after/dequeue-before hooks; all protocols; excludes serialization",
+      "sha256": {
+        "input.json": "992596c265a1871ce897b10146cc6c20fe1c0c7c509f215ae73409841502a114",
+        "rdma.json": "820061c5c70934e8b5371ec4db37d4ab6a1a62ad6588033043715e2dbf020e0e",
+        "topology.json": "5389993e9aa1dfc148b4713b0a2b0c0521de24b41b74060e2db7eb9f048c444f",
+        "frontend.json": "d216f5a980048e6b4e5e5b3f3412f8d93831b2030fb77d27d1c31d63758e5f06",
+        "result.json": "fa5e95173320f25c3def78df6c31e60edeb537d1985baf3ff65c892156c4bcdf",
+        "verification.json": "82b8f3a4ec8717c2878cc590665507cf515e6d030e09242bee53f524e30bfed5"
+      },
+      "calls": {
+        "target": {
+          "input_identity": {
+            "kind": "declared_route_and_ready_kv_lineage/1",
+            "sha256": "ea9c8c638905b7a124b14fdd9ce4d060ef0c764f4be3de80246ce6be40780543"
+          },
+          "request_pairs": [
+            {
+              "primary_request": 0,
+              "replica_request": 1
+            },
+            {
+              "primary_request": 4,
+              "replica_request": 5
+            },
+            {
+              "primary_request": 8,
+              "replica_request": 9
+            },
+            {
+              "primary_request": 12,
+              "replica_request": 13
+            }
+          ],
+          "attempts": {
+            "primary": {
+              "group_index": 0,
+              "graph_id": "g0.w0",
+              "submitted_ns": 0,
+              "finished_ns": 126626,
+              "waves": [
+                {
+                  "graph_id": "g0.w0",
+                  "step": 0,
+                  "submitted_ns": 0,
+                  "finished_ns": 65048
+                },
+                {
+                  "graph_id": "g0.w1",
+                  "step": 1,
+                  "submitted_ns": 65048,
+                  "finished_ns": 126626
+                }
+              ]
+            },
+            "replica": {
+              "group_index": 1,
+              "graph_id": "g1.w0",
+              "submitted_ns": null,
+              "finished_ns": null,
+              "skipped_ns": 126626,
+              "waves": []
+            }
+          },
+          "winner": "primary",
+          "result_ready_ns": 126626
+        },
+        "healthy": {
+          "input_identity": {
+            "kind": "declared_route_and_ready_kv_lineage/1",
+            "sha256": "32e022e5e0c407584b61a827b71fd7a771679180693184970010a610192c98ef"
+          },
+          "request_pairs": [
+            {
+              "primary_request": 2,
+              "replica_request": 3
+            },
+            {
+              "primary_request": 6,
+              "replica_request": 7
+            },
+            {
+              "primary_request": 10,
+              "replica_request": 11
+            },
+            {
+              "primary_request": 14,
+              "replica_request": 15
+            },
+            {
+              "primary_request": 18,
+              "replica_request": 19
+            },
+            {
+              "primary_request": 22,
+              "replica_request": 23
+            },
+            {
+              "primary_request": 26,
+              "replica_request": 27
+            },
+            {
+              "primary_request": 30,
+              "replica_request": 31
+            },
+            {
+              "primary_request": 34,
+              "replica_request": 35
+            },
+            {
+              "primary_request": 38,
+              "replica_request": 39
+            },
+            {
+              "primary_request": 42,
+              "replica_request": 43
+            }
+          ],
+          "attempts": {
+            "primary": {
+              "group_index": 2,
+              "graph_id": "g2.w0",
+              "submitted_ns": 0,
+              "finished_ns": 139136,
+              "waves": [
+                {
+                  "graph_id": "g2.w0",
+                  "step": 0,
+                  "submitted_ns": 0,
+                  "finished_ns": 69864
+                },
+                {
+                  "graph_id": "g2.w1",
+                  "step": 1,
+                  "submitted_ns": 69864,
+                  "finished_ns": 139136
+                }
+              ]
+            },
+            "replica": {
+              "group_index": 3,
+              "graph_id": "g3.w0",
+              "submitted_ns": null,
+              "finished_ns": null,
+              "skipped_ns": 139136,
+              "waves": []
+            }
+          },
+          "winner": "primary",
+          "result_ready_ns": 139136
+        }
+      },
+      "source_retransmitted_payload_bytes": 0,
+      "guard": {
+        "schema_version": "moe-source-ack-guard-report/1",
+        "decisions": [
+          {
+            "sequence": 0,
+            "time_ns": 0,
+            "call": "target",
+            "reason": "poll",
+            "observed_sequence": -1,
+            "pending_messages": [],
+            "overdue_messages": [],
+            "next_deadline_ns": 18000
+          },
+          {
+            "sequence": 1,
+            "time_ns": 18000,
+            "call": "target",
+            "reason": "poll",
+            "observed_sequence": 1657,
+            "pending_messages": [
+              46,
+              118
+            ],
+            "overdue_messages": [],
+            "next_deadline_ns": 19030
+          },
+          {
+            "sequence": 2,
+            "time_ns": 19030,
+            "call": "target",
+            "reason": "poll",
+            "observed_sequence": 2074,
+            "pending_messages": [
+              1024,
+              1025,
+              1119,
+              1148,
+              1150,
+              1180,
+              1210,
+              1211,
+              1212,
+              1240,
+              1241,
+              1303,
+              1426,
+              1428,
+              1488,
+              1489,
+              1490,
+              1519,
+              1521,
+              1550,
+              1581,
+              1613,
+              1615,
+              1644,
+              1770,
+              1801
+            ],
+            "overdue_messages": [],
+            "next_deadline_ns": 36477
+          },
+          {
+            "sequence": 3,
+            "time_ns": 36477,
+            "call": "target",
+            "reason": "poll",
+            "observed_sequence": 3303,
+            "pending_messages": [
+              1985,
+              1986,
+              1988,
+              1989,
+              1990,
+              2005,
+              2014,
+              2015,
+              2018,
+              2022,
+              2023,
+              2030,
+              2033,
+              2051,
+              2053,
+              2065,
+              2066,
+              2068,
+              2070,
+              2084,
+              2085,
+              2092,
+              2093,
+              2096,
+              2099,
+              2104,
+              2105
+            ],
+            "overdue_messages": [],
+            "next_deadline_ns": 52587
+          },
+          {
+            "sequence": 4,
+            "time_ns": 52587,
+            "call": "target",
+            "reason": "poll",
+            "observed_sequence": 3948,
+            "pending_messages": [
+              2976,
+              3038,
+              3069,
+              3101,
+              3131,
+              3162,
+              3164,
+              3193,
+              3225,
+              3226,
+              3227,
+              3256,
+              3258,
+              3473,
+              3475,
+              3506,
+              3566,
+              3598,
+              3599,
+              3629,
+              3658,
+              3691,
+              3692,
+              3753,
+              3847,
+              3878,
+              3937
+            ],
+            "overdue_messages": [],
+            "next_deadline_ns": 67896
+          },
+          {
+            "sequence": 5,
+            "time_ns": 65048,
+            "call": "target",
+            "reason": "poll",
+            "observed_sequence": 4690,
+            "pending_messages": [],
+            "overdue_messages": [],
+            "next_deadline_ns": 83048
+          },
+          {
+            "sequence": 6,
+            "time_ns": 69864,
+            "call": "target",
+            "reason": "poll",
+            "observed_sequence": 5291,
+            "pending_messages": [
+              15886,
+              15889,
+              15891,
+              15892,
+              15894,
+              15895,
+              15904,
+              15905,
+              15907,
+              15917,
+              15933,
+              15934,
+              15935,
+              15936,
+              15938,
+              15939,
+              15944,
+              15949,
+              15951,
+              15965,
+              15980,
+              15988,
+              15991,
+              15992,
+              15993,
+              15995
+            ],
+            "overdue_messages": [],
+            "next_deadline_ns": 84078
+          },
+          {
+            "sequence": 7,
+            "time_ns": 84078,
+            "call": "target",
+            "reason": "poll",
+            "observed_sequence": 6724,
+            "pending_messages": [
+              16865,
+              16866,
+              16896,
+              16927,
+              16958,
+              16959,
+              17020,
+              17021,
+              17052,
+              17207,
+              17329,
+              17330,
+              17362,
+              17363,
+              17422,
+              17424,
+              17484,
+              17515,
+              17577,
+              17608,
+              17611,
+              17704,
+              17735,
+              17766,
+              17826,
+              17828
+            ],
+            "overdue_messages": [],
+            "next_deadline_ns": 99062
+          },
+          {
+            "sequence": 8,
+            "time_ns": 99062,
+            "call": "target",
+            "reason": "poll",
+            "observed_sequence": 7737,
+            "pending_messages": [
+              17857,
+              17864,
+              17875,
+              17876,
+              17877,
+              17885,
+              17886,
+              17887,
+              17889,
+              17894,
+              17896,
+              17905,
+              17911,
+              17912,
+              17919,
+              17920,
+              17922,
+              17931,
+              17941,
+              17942,
+              17944,
+              17953,
+              17954,
+              17963,
+              17964,
+              17965,
+              17966,
+              17978
+            ],
+            "overdue_messages": [],
+            "next_deadline_ns": 114776
+          },
+          {
+            "sequence": 9,
+            "time_ns": 114776,
+            "call": "target",
+            "reason": "poll",
+            "observed_sequence": 8673,
+            "pending_messages": [
+              18848,
+              18880,
+              18910,
+              18942,
+              18943,
+              19005,
+              19006,
+              19037,
+              19097,
+              19127,
+              19159,
+              19284,
+              19316,
+              19347,
+              19378,
+              19409,
+              19438,
+              19468,
+              19499,
+              19530,
+              19594,
+              19624,
+              19625,
+              19655,
+              19687,
+              19778,
+              19781,
+              19809
+            ],
+            "overdue_messages": [],
+            "next_deadline_ns": 127000
+          },
+          {
+            "sequence": 10,
+            "time_ns": 126626,
+            "call": "target",
+            "reason": "primary_complete",
+            "observed_sequence": 9419,
+            "pending_messages": [],
+            "overdue_messages": [],
+            "next_deadline_ns": null
+          },
+          {
+            "sequence": 11,
+            "time_ns": 139136,
+            "call": "target",
+            "reason": "primary_complete",
+            "observed_sequence": 9811,
+            "pending_messages": [],
+            "overdue_messages": [],
+            "next_deadline_ns": null
+          }
+        ],
+        "messages": {
+          "7": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 0,
+            "post_ns": 1030,
+            "ack_ns": 6338
+          },
+          "13": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 0,
+            "post_ns": 1030,
+            "ack_ns": 11355
+          },
+          "15": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 0,
+            "post_ns": 1030,
+            "ack_ns": 17607
+          },
+          "16": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 0,
+            "post_ns": 1030,
+            "ack_ns": 17937
+          },
+          "17": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 0,
+            "post_ns": 1030,
+            "ack_ns": 16851
+          },
+          "18": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 0,
+            "post_ns": 1030,
+            "ack_ns": 17032
+          },
+          "35": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 4,
+            "post_ns": 1030,
+            "ack_ns": 11905
+          },
+          "37": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 4,
+            "post_ns": 1030,
+            "ack_ns": 11465
+          },
+          "38": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 4,
+            "post_ns": 1030,
+            "ack_ns": 6739
+          },
+          "40": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 4,
+            "post_ns": 1030,
+            "ack_ns": 12015
+          },
+          "46": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 4,
+            "post_ns": 1030,
+            "ack_ns": 18377
+          },
+          "50": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 4,
+            "post_ns": 1030,
+            "ack_ns": 17142
+          },
+          "51": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 4,
+            "post_ns": 1030,
+            "ack_ns": 17252
+          },
+          "63": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 8,
+            "post_ns": 1030,
+            "ack_ns": 10702
+          },
+          "67": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 8,
+            "post_ns": 1030,
+            "ack_ns": 11426
+          },
+          "68": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 8,
+            "post_ns": 1030,
+            "ack_ns": 11103
+          },
+          "75": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 8,
+            "post_ns": 1030,
+            "ack_ns": 11685
+          },
+          "77": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 8,
+            "post_ns": 1030,
+            "ack_ns": 16521
+          },
+          "78": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 8,
+            "post_ns": 1030,
+            "ack_ns": 15829
+          },
+          "94": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 12,
+            "post_ns": 1030,
+            "ack_ns": 11465
+          },
+          "96": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 12,
+            "post_ns": 1030,
+            "ack_ns": 11323
+          },
+          "97": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 12,
+            "post_ns": 1030,
+            "ack_ns": 11433
+          },
+          "99": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 12,
+            "post_ns": 1030,
+            "ack_ns": 11245
+          },
+          "112": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 12,
+            "post_ns": 1030,
+            "ack_ns": 15939
+          },
+          "117": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 12,
+            "post_ns": 1030,
+            "ack_ns": 17717
+          },
+          "118": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 12,
+            "post_ns": 1030,
+            "ack_ns": 18047
+          },
+          "1024": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 4,
+            "post_ns": 18577,
+            "ack_ns": 28175
+          },
+          "1025": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 4,
+            "post_ns": 18577,
+            "ack_ns": 27996
+          },
+          "1119": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 16,
+            "post_ns": 18477,
+            "ack_ns": 27351
+          },
+          "1148": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 20,
+            "post_ns": 18577,
+            "ack_ns": 27967
+          },
+          "1150": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 20,
+            "post_ns": 18577,
+            "ack_ns": 27822
+          },
+          "1180": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 24,
+            "post_ns": 18677,
+            "ack_ns": 27957
+          },
+          "1210": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 28,
+            "post_ns": 18677,
+            "ack_ns": 28184
+          },
+          "1211": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 28,
+            "post_ns": 18677,
+            "ack_ns": 28285
+          },
+          "1212": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 28,
+            "post_ns": 18677,
+            "ack_ns": 28284
+          },
+          "1240": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 32,
+            "post_ns": 18577,
+            "ack_ns": 23159
+          },
+          "1241": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 32,
+            "post_ns": 18577,
+            "ack_ns": 23268
+          },
+          "1303": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 40,
+            "post_ns": 18677,
+            "ack_ns": 27857
+          },
+          "1426": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 56,
+            "post_ns": 18577,
+            "ack_ns": 27551
+          },
+          "1428": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 56,
+            "post_ns": 18577,
+            "ack_ns": 28066
+          },
+          "1488": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 64,
+            "post_ns": 18877,
+            "ack_ns": 33455
+          },
+          "1489": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 64,
+            "post_ns": 18877,
+            "ack_ns": 33056
+          },
+          "1490": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 64,
+            "post_ns": 18877,
+            "ack_ns": 33527
+          },
+          "1519": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 68,
+            "post_ns": 18777,
+            "ack_ns": 32377
+          },
+          "1521": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 68,
+            "post_ns": 18777,
+            "ack_ns": 33309
+          },
+          "1550": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 72,
+            "post_ns": 18477,
+            "ack_ns": 32159
+          },
+          "1581": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 76,
+            "post_ns": 18477,
+            "ack_ns": 32268
+          },
+          "1613": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 80,
+            "post_ns": 18777,
+            "ack_ns": 32258
+          },
+          "1615": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 80,
+            "post_ns": 18777,
+            "ack_ns": 32735
+          },
+          "1644": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 84,
+            "post_ns": 18477,
+            "ack_ns": 31859
+          },
+          "1770": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 100,
+            "post_ns": 18477,
+            "ack_ns": 31860
+          },
+          "1801": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 104,
+            "post_ns": 18477,
+            "ack_ns": 31968
+          },
+          "1985": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 0,
+            "post_ns": 34587,
+            "ack_ns": 44337
+          },
+          "1986": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 0,
+            "post_ns": 34587,
+            "ack_ns": 44447
+          },
+          "1988": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 0,
+            "post_ns": 34587,
+            "ack_ns": 44518
+          },
+          "1989": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 0,
+            "post_ns": 34587,
+            "ack_ns": 44628
+          },
+          "1990": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 0,
+            "post_ns": 34587,
+            "ack_ns": 44777
+          },
+          "2005": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 0,
+            "post_ns": 34587,
+            "ack_ns": 49070
+          },
+          "2014": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 0,
+            "post_ns": 34587,
+            "ack_ns": 49535
+          },
+          "2015": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 4,
+            "post_ns": 34587,
+            "ack_ns": 39895
+          },
+          "2018": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 4,
+            "post_ns": 34587,
+            "ack_ns": 44227
+          },
+          "2022": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 4,
+            "post_ns": 34587,
+            "ack_ns": 40115
+          },
+          "2023": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 4,
+            "post_ns": 34587,
+            "ack_ns": 40225
+          },
+          "2030": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 4,
+            "post_ns": 34587,
+            "ack_ns": 49205
+          },
+          "2033": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 4,
+            "post_ns": 34587,
+            "ack_ns": 48889
+          },
+          "2051": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 8,
+            "post_ns": 34587,
+            "ack_ns": 44188
+          },
+          "2053": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 8,
+            "post_ns": 34587,
+            "ack_ns": 44298
+          },
+          "2065": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 8,
+            "post_ns": 34587,
+            "ack_ns": 48914
+          },
+          "2066": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 8,
+            "post_ns": 34587,
+            "ack_ns": 49315
+          },
+          "2068": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 8,
+            "post_ns": 34587,
+            "ack_ns": 48875
+          },
+          "2070": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 8,
+            "post_ns": 34587,
+            "ack_ns": 48999
+          },
+          "2084": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 12,
+            "post_ns": 34587,
+            "ack_ns": 44479
+          },
+          "2085": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 12,
+            "post_ns": 34587,
+            "ack_ns": 44667
+          },
+          "2092": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 12,
+            "post_ns": 34587,
+            "ack_ns": 49425
+          },
+          "2093": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 12,
+            "post_ns": 34587,
+            "ack_ns": 49031
+          },
+          "2096": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 12,
+            "post_ns": 34587,
+            "ack_ns": 49141
+          },
+          "2099": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 12,
+            "post_ns": 34587,
+            "ack_ns": 49645
+          },
+          "2104": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 12,
+            "post_ns": 34587,
+            "ack_ns": 49796
+          },
+          "2105": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 12,
+            "post_ns": 34587,
+            "ack_ns": 49755
+          },
+          "2976": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 0,
+            "post_ns": 49896,
+            "ack_ns": 54369
+          },
+          "3038": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 8,
+            "post_ns": 50096,
+            "ack_ns": 59784
+          },
+          "3069": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 12,
+            "post_ns": 49896,
+            "ack_ns": 59494
+          },
+          "3101": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 16,
+            "post_ns": 49896,
+            "ack_ns": 59132
+          },
+          "3131": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 20,
+            "post_ns": 49896,
+            "ack_ns": 59095
+          },
+          "3162": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 24,
+            "post_ns": 49996,
+            "ack_ns": 59893
+          },
+          "3164": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 24,
+            "post_ns": 49996,
+            "ack_ns": 59195
+          },
+          "3193": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 28,
+            "post_ns": 49896,
+            "ack_ns": 59385
+          },
+          "3225": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 32,
+            "post_ns": 50096,
+            "ack_ns": 54949
+          },
+          "3226": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 32,
+            "post_ns": 50096,
+            "ack_ns": 59304
+          },
+          "3227": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 32,
+            "post_ns": 50096,
+            "ack_ns": 59504
+          },
+          "3256": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 36,
+            "post_ns": 50196,
+            "ack_ns": 54840
+          },
+          "3258": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 36,
+            "post_ns": 50196,
+            "ack_ns": 59395
+          },
+          "3473": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 64,
+            "post_ns": 49996,
+            "ack_ns": 64145
+          },
+          "3475": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 64,
+            "post_ns": 49996,
+            "ack_ns": 63750
+          },
+          "3506": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 68,
+            "post_ns": 49896,
+            "ack_ns": 64329
+          },
+          "3566": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 76,
+            "post_ns": 49896,
+            "ack_ns": 63097
+          },
+          "3598": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 80,
+            "post_ns": 50196,
+            "ack_ns": 63749
+          },
+          "3599": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 80,
+            "post_ns": 50196,
+            "ack_ns": 64039
+          },
+          "3629": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 84,
+            "post_ns": 50096,
+            "ack_ns": 65018
+          },
+          "3658": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 88,
+            "post_ns": 49896,
+            "ack_ns": 63387
+          },
+          "3691": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 92,
+            "post_ns": 49996,
+            "ack_ns": 64438
+          },
+          "3692": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 92,
+            "post_ns": 49996,
+            "ack_ns": 63640
+          },
+          "3753": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 100,
+            "post_ns": 49896,
+            "ack_ns": 63278
+          },
+          "3847": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 112,
+            "post_ns": 49896,
+            "ack_ns": 64438
+          },
+          "3878": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 116,
+            "post_ns": 49896,
+            "ack_ns": 64547
+          },
+          "3937": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 124,
+            "post_ns": 49896,
+            "ack_ns": 63279
+          },
+          "15886": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 0,
+            "post_ns": 66078,
+            "ack_ns": 75802
+          },
+          "15889": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 0,
+            "post_ns": 66078,
+            "ack_ns": 79940
+          },
+          "15891": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 0,
+            "post_ns": 66078,
+            "ack_ns": 80302
+          },
+          "15892": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 0,
+            "post_ns": 66078,
+            "ack_ns": 80224
+          },
+          "15894": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 0,
+            "post_ns": 66078,
+            "ack_ns": 80452
+          },
+          "15895": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 0,
+            "post_ns": 66078,
+            "ack_ns": 80444
+          },
+          "15904": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 4,
+            "post_ns": 66078,
+            "ack_ns": 75801
+          },
+          "15905": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 4,
+            "post_ns": 66078,
+            "ack_ns": 75621
+          },
+          "15907": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 4,
+            "post_ns": 66078,
+            "ack_ns": 75679
+          },
+          "15917": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 4,
+            "post_ns": 66078,
+            "ack_ns": 75828
+          },
+          "15933": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 4,
+            "post_ns": 66078,
+            "ack_ns": 80185
+          },
+          "15934": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 8,
+            "post_ns": 66078,
+            "ack_ns": 76009
+          },
+          "15935": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 8,
+            "post_ns": 66078,
+            "ack_ns": 76164
+          },
+          "15936": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 8,
+            "post_ns": 66078,
+            "ack_ns": 71968
+          },
+          "15938": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 8,
+            "post_ns": 66078,
+            "ack_ns": 76384
+          },
+          "15939": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 8,
+            "post_ns": 66078,
+            "ack_ns": 76533
+          },
+          "15944": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 8,
+            "post_ns": 66078,
+            "ack_ns": 72298
+          },
+          "15949": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 8,
+            "post_ns": 66078,
+            "ack_ns": 80852
+          },
+          "15951": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 8,
+            "post_ns": 66078,
+            "ack_ns": 80962
+          },
+          "15965": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 12,
+            "post_ns": 66078,
+            "ack_ns": 75983
+          },
+          "15980": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 12,
+            "post_ns": 66078,
+            "ack_ns": 80224
+          },
+          "15988": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 12,
+            "post_ns": 66078,
+            "ack_ns": 80334
+          },
+          "15991": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 12,
+            "post_ns": 66078,
+            "ack_ns": 80444
+          },
+          "15992": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 12,
+            "post_ns": 66078,
+            "ack_ns": 80451
+          },
+          "15993": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 12,
+            "post_ns": 66078,
+            "ack_ns": 80561
+          },
+          "15995": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 12,
+            "post_ns": 66078,
+            "ack_ns": 80671
+          },
+          "16865": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 0,
+            "post_ns": 81162,
+            "ack_ns": 90662
+          },
+          "16866": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 0,
+            "post_ns": 81162,
+            "ack_ns": 90701
+          },
+          "16896": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 4,
+            "post_ns": 81362,
+            "ack_ns": 90771
+          },
+          "16927": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 8,
+            "post_ns": 81062,
+            "ack_ns": 90370
+          },
+          "16958": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 12,
+            "post_ns": 81162,
+            "ack_ns": 90261
+          },
+          "16959": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 12,
+            "post_ns": 81162,
+            "ack_ns": 85853
+          },
+          "17020": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 20,
+            "post_ns": 81162,
+            "ack_ns": 90479
+          },
+          "17021": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 20,
+            "post_ns": 81162,
+            "ack_ns": 90372
+          },
+          "17052": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 24,
+            "post_ns": 81062,
+            "ack_ns": 90263
+          },
+          "17207": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 44,
+            "post_ns": 81062,
+            "ack_ns": 85535
+          },
+          "17329": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 60,
+            "post_ns": 81562,
+            "ack_ns": 90399
+          },
+          "17330": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 60,
+            "post_ns": 81562,
+            "ack_ns": 90769
+          },
+          "17362": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 64,
+            "post_ns": 81162,
+            "ack_ns": 94953
+          },
+          "17363": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 64,
+            "post_ns": 81162,
+            "ack_ns": 95208
+          },
+          "17422": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 72,
+            "post_ns": 81362,
+            "ack_ns": 95423
+          },
+          "17424": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 72,
+            "post_ns": 81362,
+            "ack_ns": 94807
+          },
+          "17484": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 80,
+            "post_ns": 81062,
+            "ack_ns": 94915
+          },
+          "17515": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 84,
+            "post_ns": 81062,
+            "ack_ns": 95314
+          },
+          "17577": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 92,
+            "post_ns": 81062,
+            "ack_ns": 94866
+          },
+          "17608": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 96,
+            "post_ns": 81162,
+            "ack_ns": 95312
+          },
+          "17611": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 96,
+            "post_ns": 81162,
+            "ack_ns": 95347
+          },
+          "17704": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 108,
+            "post_ns": 81062,
+            "ack_ns": 94809
+          },
+          "17735": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 112,
+            "post_ns": 81062,
+            "ack_ns": 95099
+          },
+          "17766": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 116,
+            "post_ns": 81062,
+            "ack_ns": 95426
+          },
+          "17826": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 124,
+            "post_ns": 81362,
+            "ack_ns": 95202
+          },
+          "17828": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 124,
+            "post_ns": 81362,
+            "ack_ns": 95716
+          },
+          "17857": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 0,
+            "post_ns": 96776,
+            "ack_ns": 106487
+          },
+          "17864": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 0,
+            "post_ns": 96776,
+            "ack_ns": 102375
+          },
+          "17875": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 0,
+            "post_ns": 96776,
+            "ack_ns": 110929
+          },
+          "17876": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 0,
+            "post_ns": 96776,
+            "ack_ns": 111039
+          },
+          "17877": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 0,
+            "post_ns": 96776,
+            "ack_ns": 111149
+          },
+          "17885": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 0,
+            "post_ns": 96776,
+            "ack_ns": 111259
+          },
+          "17886": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 0,
+            "post_ns": 96776,
+            "ack_ns": 111577
+          },
+          "17887": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 4,
+            "post_ns": 96776,
+            "ack_ns": 102265
+          },
+          "17889": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 4,
+            "post_ns": 96776,
+            "ack_ns": 106597
+          },
+          "17894": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 4,
+            "post_ns": 96776,
+            "ack_ns": 102556
+          },
+          "17896": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 4,
+            "post_ns": 96776,
+            "ack_ns": 106817
+          },
+          "17905": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 4,
+            "post_ns": 96776,
+            "ack_ns": 111259
+          },
+          "17911": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 4,
+            "post_ns": 96776,
+            "ack_ns": 111369
+          },
+          "17912": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 4,
+            "post_ns": 96776,
+            "ack_ns": 111954
+          },
+          "17919": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 8,
+            "post_ns": 96776,
+            "ack_ns": 106559
+          },
+          "17920": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 8,
+            "post_ns": 96776,
+            "ack_ns": 102484
+          },
+          "17922": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 8,
+            "post_ns": 96776,
+            "ack_ns": 106707
+          },
+          "17931": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 8,
+            "post_ns": 96776,
+            "ack_ns": 106817
+          },
+          "17941": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 8,
+            "post_ns": 96776,
+            "ack_ns": 111149
+          },
+          "17942": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 8,
+            "post_ns": 96776,
+            "ack_ns": 111259
+          },
+          "17944": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 8,
+            "post_ns": 96776,
+            "ack_ns": 111687
+          },
+          "17953": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 12,
+            "post_ns": 96776,
+            "ack_ns": 106487
+          },
+          "17954": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 12,
+            "post_ns": 96776,
+            "ack_ns": 106669
+          },
+          "17963": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 12,
+            "post_ns": 96776,
+            "ack_ns": 106707
+          },
+          "17964": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 12,
+            "post_ns": 96776,
+            "ack_ns": 111467
+          },
+          "17965": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 12,
+            "post_ns": 96776,
+            "ack_ns": 111149
+          },
+          "17966": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 12,
+            "post_ns": 96776,
+            "ack_ns": 111370
+          },
+          "17978": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 12,
+            "post_ns": 96776,
+            "ack_ns": 111908
+          },
+          "18848": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 0,
+            "post_ns": 112054,
+            "ack_ns": 116879
+          },
+          "18880": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 4,
+            "post_ns": 112054,
+            "ack_ns": 120891
+          },
+          "18910": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 8,
+            "post_ns": 112154,
+            "ack_ns": 121101
+          },
+          "18942": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 12,
+            "post_ns": 112154,
+            "ack_ns": 121210
+          },
+          "18943": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 12,
+            "post_ns": 112154,
+            "ack_ns": 116961
+          },
+          "19005": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 20,
+            "post_ns": 112154,
+            "ack_ns": 121473
+          },
+          "19006": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 20,
+            "post_ns": 112154,
+            "ack_ns": 121692
+          },
+          "19037": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 24,
+            "post_ns": 112054,
+            "ack_ns": 121435
+          },
+          "19097": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 32,
+            "post_ns": 112054,
+            "ack_ns": 116817
+          },
+          "19127": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 36,
+            "post_ns": 112054,
+            "ack_ns": 116527
+          },
+          "19159": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 40,
+            "post_ns": 112054,
+            "ack_ns": 120891
+          },
+          "19284": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 56,
+            "post_ns": 112054,
+            "ack_ns": 121583
+          },
+          "19316": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 60,
+            "post_ns": 112054,
+            "ack_ns": 121074
+          },
+          "19347": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 64,
+            "post_ns": 112054,
+            "ack_ns": 125726
+          },
+          "19378": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 68,
+            "post_ns": 112254,
+            "ack_ns": 125835
+          },
+          "19409": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 72,
+            "post_ns": 112054,
+            "ack_ns": 125436
+          },
+          "19438": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 76,
+            "post_ns": 112054,
+            "ack_ns": 125617
+          },
+          "19468": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 80,
+            "post_ns": 112054,
+            "ack_ns": 126197
+          },
+          "19499": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 84,
+            "post_ns": 112054,
+            "ack_ns": 126415
+          },
+          "19530": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 88,
+            "post_ns": 112254,
+            "ack_ns": 126306
+          },
+          "19594": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 96,
+            "post_ns": 112054,
+            "ack_ns": 125617
+          },
+          "19624": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 100,
+            "post_ns": 112354,
+            "ack_ns": 126452
+          },
+          "19625": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 100,
+            "post_ns": 112354,
+            "ack_ns": 126596
+          },
+          "19655": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 104,
+            "post_ns": 112054,
+            "ack_ns": 125763
+          },
+          "19687": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 108,
+            "post_ns": 112054,
+            "ack_ns": 125726
+          },
+          "19778": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 120,
+            "post_ns": 112154,
+            "ack_ns": 125798
+          },
+          "19781": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 120,
+            "post_ns": 112154,
+            "ack_ns": 126125
+          },
+          "19809": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 124,
+            "post_ns": 112054,
+            "ack_ns": 125907
+          }
+        }
+      },
+      "guard_launches": [],
+      "native_timer_events": [
+        {
+          "deadline_ns": 18000,
+          "kind": "armed",
+          "sequence": 0,
+          "ticket": 0,
+          "time_ns": 0
+        },
+        {
+          "deadline_ns": 18000,
+          "kind": "fired",
+          "sequence": 1,
+          "ticket": 0,
+          "time_ns": 18000
+        },
+        {
+          "deadline_ns": 19030,
+          "kind": "armed",
+          "sequence": 2,
+          "ticket": 1,
+          "time_ns": 18000
+        },
+        {
+          "deadline_ns": 19030,
+          "kind": "fired",
+          "sequence": 3,
+          "ticket": 1,
+          "time_ns": 19030
+        },
+        {
+          "deadline_ns": 36477,
+          "kind": "armed",
+          "sequence": 4,
+          "ticket": 2,
+          "time_ns": 19030
+        },
+        {
+          "deadline_ns": 36477,
+          "kind": "fired",
+          "sequence": 5,
+          "ticket": 2,
+          "time_ns": 36477
+        },
+        {
+          "deadline_ns": 52587,
+          "kind": "armed",
+          "sequence": 6,
+          "ticket": 3,
+          "time_ns": 36477
+        },
+        {
+          "deadline_ns": 52587,
+          "kind": "fired",
+          "sequence": 7,
+          "ticket": 3,
+          "time_ns": 52587
+        },
+        {
+          "deadline_ns": 67896,
+          "kind": "armed",
+          "sequence": 8,
+          "ticket": 4,
+          "time_ns": 52587
+        },
+        {
+          "deadline_ns": 67896,
+          "kind": "cancelled",
+          "sequence": 9,
+          "ticket": 4,
+          "time_ns": 65048
+        },
+        {
+          "deadline_ns": 83048,
+          "kind": "armed",
+          "sequence": 10,
+          "ticket": 5,
+          "time_ns": 65048
+        },
+        {
+          "deadline_ns": 83048,
+          "kind": "cancelled",
+          "sequence": 11,
+          "ticket": 5,
+          "time_ns": 69864
+        },
+        {
+          "deadline_ns": 84078,
+          "kind": "armed",
+          "sequence": 12,
+          "ticket": 6,
+          "time_ns": 69864
+        },
+        {
+          "deadline_ns": 84078,
+          "kind": "fired",
+          "sequence": 13,
+          "ticket": 6,
+          "time_ns": 84078
+        },
+        {
+          "deadline_ns": 99062,
+          "kind": "armed",
+          "sequence": 14,
+          "ticket": 7,
+          "time_ns": 84078
+        },
+        {
+          "deadline_ns": 99062,
+          "kind": "fired",
+          "sequence": 15,
+          "ticket": 7,
+          "time_ns": 99062
+        },
+        {
+          "deadline_ns": 114776,
+          "kind": "armed",
+          "sequence": 16,
+          "ticket": 8,
+          "time_ns": 99062
+        },
+        {
+          "deadline_ns": 114776,
+          "kind": "fired",
+          "sequence": 17,
+          "ticket": 8,
+          "time_ns": 114776
+        },
+        {
+          "deadline_ns": 127000,
+          "kind": "armed",
+          "sequence": 18,
+          "ticket": 9,
+          "time_ns": 114776
+        },
+        {
+          "deadline_ns": 127000,
+          "kind": "cancelled",
+          "sequence": 19,
+          "ticket": 9,
+          "time_ns": 126626
+        },
+        {
+          "deadline_ns": 4000000,
+          "kind": "armed",
+          "sequence": 20,
+          "ticket": 10,
+          "time_ns": 126626
+        },
+        {
+          "deadline_ns": 4000000,
+          "kind": "cancelled",
+          "sequence": 21,
+          "ticket": 10,
+          "time_ns": 139136
+        }
+      ]
+    },
+    "control-local": {
+      "passed": true,
+      "source_files": 15,
+      "logical_requests": {
+        "target": 4,
+        "healthy": 11
+      },
+      "inventory_requests": 30,
+      "execution_requests": 15,
+      "active_data_ranks": 62,
+      "result_ready_ns": {
+        "target": 201866,
+        "healthy": 141174
+      },
+      "call_winners": {
+        "target": "primary",
+        "healthy": "primary"
+      },
+      "attempts_finished_ns": 201866,
+      "network_drained_ns": 201866,
+      "groups_executed": [
+        0,
+        2
+      ],
+      "unique_payload_bytes": 11228096,
+      "payload_by_group": {
+        "2": 8139648,
+        "0": 3088448
+      },
+      "source_payload_bytes": 11271488,
+      "source_packets": 1562,
+      "declared_compute_work_ns": 119300,
+      "phase_member_arrivals": 512,
+      "verified_nodes": 3348,
+      "messages": 778,
+      "packet_events": 55054,
+      "queue_events": 24338,
+      "fault_drops": 6,
+      "standby_memory": {
+        "initial_reserved_bytes": 46792704,
+        "releases": [
+          {
+            "group_index": 3,
+            "time_ns": 141174,
+            "kind": "skipped_release",
+            "bytes": 36700160
+          },
+          {
+            "group_index": 1,
+            "time_ns": 201866,
+            "kind": "skipped_release",
+            "bytes": 10092544
+          }
+        ],
+        "final_used_bytes": 0
+      },
+      "first_backup_source_tx_ns": null,
+      "healthy_finish_vs_backup_source_ns": null,
+      "first_backup_switch_rx_ns": null,
+      "healthy_finish_vs_backup_switch_ns": null,
+      "shared_backup_healthy_ports": [],
+      "healthy_switch_residence_ns": 689902,
+      "queue_area_byte_ns": 5914138832,
+      "queue_peak_bytes": 157428,
+      "queue_scope": "Switch post-change occupancy, normalized enqueue-after/dequeue-before hooks; all protocols; excludes serialization",
+      "sha256": {
+        "input.json": "b9f5ac9cba7efbb907fd52774430d610bb2fff9034b4a96bf4c00f0113904ee5",
+        "rdma.json": "7a1038ae099368f84ce549fc09f7dbf0387049ec71eec273325515cad652e51a",
+        "topology.json": "5389993e9aa1dfc148b4713b0a2b0c0521de24b41b74060e2db7eb9f048c444f",
+        "frontend.json": "c14e798c41b5491288db3bc3f49dd9212ae80b164c141f523401b1494060f531",
+        "result.json": "c33d6717107a4619ac2570e1b0010b7e81ba669eafcf068475a7d15494e2be1b",
+        "verification.json": "c2c9a1d9ff0abe09a6ce3c4594f7c975b49417363533a92b40a19ec6f33d45cf"
+      },
+      "calls": {
+        "target": {
+          "input_identity": {
+            "kind": "declared_route_and_ready_kv_lineage/1",
+            "sha256": "ea9c8c638905b7a124b14fdd9ce4d060ef0c764f4be3de80246ce6be40780543"
+          },
+          "request_pairs": [
+            {
+              "primary_request": 0,
+              "replica_request": 1
+            },
+            {
+              "primary_request": 4,
+              "replica_request": 5
+            },
+            {
+              "primary_request": 8,
+              "replica_request": 9
+            },
+            {
+              "primary_request": 12,
+              "replica_request": 13
+            }
+          ],
+          "attempts": {
+            "primary": {
+              "group_index": 0,
+              "graph_id": "g0.w0",
+              "submitted_ns": 0,
+              "finished_ns": 201866,
+              "waves": [
+                {
+                  "graph_id": "g0.w0",
+                  "step": 0,
+                  "submitted_ns": 0,
+                  "finished_ns": 140340
+                },
+                {
+                  "graph_id": "g0.w1",
+                  "step": 1,
+                  "submitted_ns": 140340,
+                  "finished_ns": 201866
+                }
+              ]
+            },
+            "replica": {
+              "group_index": 1,
+              "graph_id": "g1.w0",
+              "submitted_ns": null,
+              "finished_ns": null,
+              "skipped_ns": 201866,
+              "waves": []
+            }
+          },
+          "winner": "primary",
+          "result_ready_ns": 201866
+        },
+        "healthy": {
+          "input_identity": {
+            "kind": "declared_route_and_ready_kv_lineage/1",
+            "sha256": "32e022e5e0c407584b61a827b71fd7a771679180693184970010a610192c98ef"
+          },
+          "request_pairs": [
+            {
+              "primary_request": 2,
+              "replica_request": 3
+            },
+            {
+              "primary_request": 6,
+              "replica_request": 7
+            },
+            {
+              "primary_request": 10,
+              "replica_request": 11
+            },
+            {
+              "primary_request": 14,
+              "replica_request": 15
+            },
+            {
+              "primary_request": 18,
+              "replica_request": 19
+            },
+            {
+              "primary_request": 22,
+              "replica_request": 23
+            },
+            {
+              "primary_request": 26,
+              "replica_request": 27
+            },
+            {
+              "primary_request": 30,
+              "replica_request": 31
+            },
+            {
+              "primary_request": 34,
+              "replica_request": 35
+            },
+            {
+              "primary_request": 38,
+              "replica_request": 39
+            },
+            {
+              "primary_request": 42,
+              "replica_request": 43
+            }
+          ],
+          "attempts": {
+            "primary": {
+              "group_index": 2,
+              "graph_id": "g2.w0",
+              "submitted_ns": 0,
+              "finished_ns": 141174,
+              "waves": [
+                {
+                  "graph_id": "g2.w0",
+                  "step": 0,
+                  "submitted_ns": 0,
+                  "finished_ns": 69714
+                },
+                {
+                  "graph_id": "g2.w1",
+                  "step": 1,
+                  "submitted_ns": 69714,
+                  "finished_ns": 141174
+                }
+              ]
+            },
+            "replica": {
+              "group_index": 3,
+              "graph_id": "g3.w0",
+              "submitted_ns": null,
+              "finished_ns": null,
+              "skipped_ns": 141174,
+              "waves": []
+            }
+          },
+          "winner": "primary",
+          "result_ready_ns": 141174
+        }
+      },
+      "source_retransmitted_payload_bytes": 43392,
+      "guard": null,
+      "native_timer_events": [
+        {
+          "deadline_ns": 4000000,
+          "kind": "armed",
+          "sequence": 0,
+          "ticket": 0,
+          "time_ns": 0
+        },
+        {
+          "deadline_ns": 4000000,
+          "kind": "cancelled",
+          "sequence": 1,
+          "ticket": 0,
+          "time_ns": 201866
+        }
+      ]
+    },
+    "fixed-local": {
+      "passed": true,
+      "source_files": 15,
+      "logical_requests": {
+        "target": 4,
+        "healthy": 11
+      },
+      "inventory_requests": 30,
+      "execution_requests": 19,
+      "active_data_ranks": 92,
+      "result_ready_ns": {
+        "target": 142428,
+        "healthy": 141188
+      },
+      "call_winners": {
+        "target": "replica",
+        "healthy": "primary"
+      },
+      "attempts_finished_ns": 201880,
+      "network_drained_ns": 201880,
+      "groups_executed": [
+        0,
+        1,
+        2
+      ],
+      "unique_payload_bytes": 14316544,
+      "payload_by_group": {
+        "2": 8139648,
+        "1": 3088448,
+        "0": 3088448
+      },
+      "source_payload_bytes": 14359936,
+      "source_packets": 1990,
+      "declared_compute_work_ns": 150760,
+      "phase_member_arrivals": 768,
+      "verified_nodes": 4672,
+      "messages": 992,
+      "packet_events": 69956,
+      "queue_events": 30928,
+      "fault_drops": 6,
+      "standby_memory": {
+        "initial_reserved_bytes": 46792704,
+        "releases": [
+          {
+            "group_index": 3,
+            "time_ns": 141188,
+            "kind": "skipped_release",
+            "bytes": 36700160
+          },
+          {
+            "group_index": 1,
+            "time_ns": 142428,
+            "kind": "executed_release",
+            "bytes": 10092544
+          }
+        ],
+        "final_used_bytes": 0
+      },
+      "first_backup_source_tx_ns": 20060,
+      "healthy_finish_vs_backup_source_ns": -121128,
+      "first_backup_switch_rx_ns": 21241,
+      "healthy_finish_vs_backup_switch_ns": -119947,
+      "shared_backup_healthy_ports": [
+        [
+          128,
+          20
+        ],
+        [
+          129,
+          19
+        ],
+        [
+          129,
+          20
+        ],
+        [
+          128,
+          19
+        ],
+        [
+          128,
+          18
+        ],
+        [
+          129,
+          18
+        ],
+        [
+          130,
+          17
+        ],
+        [
+          131,
+          20
+        ],
+        [
+          131,
+          17
+        ],
+        [
+          129,
+          17
+        ],
+        [
+          128,
+          17
+        ],
+        [
+          130,
+          20
+        ],
+        [
+          130,
+          19
+        ],
+        [
+          131,
+          18
+        ],
+        [
+          134,
+          1
+        ],
+        [
+          135,
+          1
+        ],
+        [
+          134,
+          4
+        ],
+        [
+          133,
+          2
+        ],
+        [
+          133,
+          1
+        ],
+        [
+          132,
+          1
+        ],
+        [
+          132,
+          4
+        ],
+        [
+          135,
+          2
+        ],
+        [
+          134,
+          3
+        ],
+        [
+          133,
+          4
+        ],
+        [
+          132,
+          5
+        ],
+        [
+          132,
+          3
+        ],
+        [
+          135,
+          5
+        ],
+        [
+          133,
+          5
+        ],
+        [
+          135,
+          4
+        ],
+        [
+          134,
+          5
+        ],
+        [
+          132,
+          2
+        ],
+        [
+          144,
+          2
+        ],
+        [
+          147,
+          2
+        ],
+        [
+          145,
+          2
+        ],
+        [
+          146,
+          2
+        ],
+        [
+          140,
+          1
+        ],
+        [
+          143,
+          3
+        ],
+        [
+          141,
+          1
+        ],
+        [
+          142,
+          1
+        ],
+        [
+          143,
+          1
+        ],
+        [
+          141,
+          2
+        ],
+        [
+          140,
+          3
+        ],
+        [
+          142,
+          3
+        ],
+        [
+          140,
+          2
+        ],
+        [
+          142,
+          4
+        ],
+        [
+          143,
+          2
+        ],
+        [
+          141,
+          4
+        ],
+        [
+          143,
+          4
+        ],
+        [
+          141,
+          3
+        ],
+        [
+          137,
+          18
+        ],
+        [
+          138,
+          17
+        ],
+        [
+          139,
+          17
+        ],
+        [
+          139,
+          19
+        ],
+        [
+          138,
+          19
+        ],
+        [
+          136,
+          18
+        ],
+        [
+          137,
+          17
+        ],
+        [
+          136,
+          17
+        ],
+        [
+          137,
+          19
+        ],
+        [
+          138,
+          18
+        ],
+        [
+          138,
+          20
+        ],
+        [
+          131,
+          19
+        ],
+        [
+          141,
+          5
+        ],
+        [
+          140,
+          5
+        ],
+        [
+          142,
+          5
+        ],
+        [
+          143,
+          5
+        ],
+        [
+          134,
+          2
+        ],
+        [
+          133,
+          3
+        ],
+        [
+          145,
+          1
+        ],
+        [
+          144,
+          1
+        ],
+        [
+          146,
+          1
+        ],
+        [
+          147,
+          1
+        ],
+        [
+          130,
+          18
+        ],
+        [
+          136,
+          19
+        ],
+        [
+          140,
+          4
+        ],
+        [
+          139,
+          20
+        ],
+        [
+          137,
+          20
+        ],
+        [
+          142,
+          2
+        ]
+      ],
+      "healthy_switch_residence_ns": 692264,
+      "queue_area_byte_ns": 6761010366,
+      "queue_peak_bytes": 157478,
+      "queue_scope": "Switch post-change occupancy, normalized enqueue-after/dequeue-before hooks; all protocols; excludes serialization",
+      "sha256": {
+        "input.json": "b16e1670dcfadd5124c365ee6b74e0892474b7c92ab980ca48585c1ed48a261f",
+        "rdma.json": "7a1038ae099368f84ce549fc09f7dbf0387049ec71eec273325515cad652e51a",
+        "topology.json": "5389993e9aa1dfc148b4713b0a2b0c0521de24b41b74060e2db7eb9f048c444f",
+        "frontend.json": "d80268f1b33adba92ca2c3057fd92ac728079f5f7b11fad041a009756975d9ef",
+        "result.json": "a0880e9dad22c02f4e6ba99bf70068c454cd777ed21eca9ae05a0613bf20a749",
+        "verification.json": "a46834e509a3df547c63d1d6dd45bfab4d5feb3945a54473b7ce5f9b07752a2e"
+      },
+      "calls": {
+        "target": {
+          "input_identity": {
+            "kind": "declared_route_and_ready_kv_lineage/1",
+            "sha256": "ea9c8c638905b7a124b14fdd9ce4d060ef0c764f4be3de80246ce6be40780543"
+          },
+          "request_pairs": [
+            {
+              "primary_request": 0,
+              "replica_request": 1
+            },
+            {
+              "primary_request": 4,
+              "replica_request": 5
+            },
+            {
+              "primary_request": 8,
+              "replica_request": 9
+            },
+            {
+              "primary_request": 12,
+              "replica_request": 13
+            }
+          ],
+          "attempts": {
+            "primary": {
+              "group_index": 0,
+              "graph_id": "g0.w0",
+              "submitted_ns": 0,
+              "finished_ns": 201880,
+              "waves": [
+                {
+                  "graph_id": "g0.w0",
+                  "step": 0,
+                  "submitted_ns": 0,
+                  "finished_ns": 140354
+                },
+                {
+                  "graph_id": "g0.w1",
+                  "step": 1,
+                  "submitted_ns": 140354,
+                  "finished_ns": 201880
+                }
+              ]
+            },
+            "replica": {
+              "group_index": 1,
+              "graph_id": "g1.w0",
+              "submitted_ns": 19030,
+              "finished_ns": 142428,
+              "skipped_ns": null,
+              "waves": [
+                {
+                  "graph_id": "g1.w0",
+                  "step": 0,
+                  "submitted_ns": 19030,
+                  "finished_ns": 80159
+                },
+                {
+                  "graph_id": "g1.w1",
+                  "step": 1,
+                  "submitted_ns": 80159,
+                  "finished_ns": 142428
+                }
+              ]
+            }
+          },
+          "winner": "replica",
+          "result_ready_ns": 142428
+        },
+        "healthy": {
+          "input_identity": {
+            "kind": "declared_route_and_ready_kv_lineage/1",
+            "sha256": "32e022e5e0c407584b61a827b71fd7a771679180693184970010a610192c98ef"
+          },
+          "request_pairs": [
+            {
+              "primary_request": 2,
+              "replica_request": 3
+            },
+            {
+              "primary_request": 6,
+              "replica_request": 7
+            },
+            {
+              "primary_request": 10,
+              "replica_request": 11
+            },
+            {
+              "primary_request": 14,
+              "replica_request": 15
+            },
+            {
+              "primary_request": 18,
+              "replica_request": 19
+            },
+            {
+              "primary_request": 22,
+              "replica_request": 23
+            },
+            {
+              "primary_request": 26,
+              "replica_request": 27
+            },
+            {
+              "primary_request": 30,
+              "replica_request": 31
+            },
+            {
+              "primary_request": 34,
+              "replica_request": 35
+            },
+            {
+              "primary_request": 38,
+              "replica_request": 39
+            },
+            {
+              "primary_request": 42,
+              "replica_request": 43
+            }
+          ],
+          "attempts": {
+            "primary": {
+              "group_index": 2,
+              "graph_id": "g2.w0",
+              "submitted_ns": 0,
+              "finished_ns": 141188,
+              "waves": [
+                {
+                  "graph_id": "g2.w0",
+                  "step": 0,
+                  "submitted_ns": 0,
+                  "finished_ns": 69714
+                },
+                {
+                  "graph_id": "g2.w1",
+                  "step": 1,
+                  "submitted_ns": 69714,
+                  "finished_ns": 141188
+                }
+              ]
+            },
+            "replica": {
+              "group_index": 3,
+              "graph_id": "g3.w0",
+              "submitted_ns": null,
+              "finished_ns": null,
+              "skipped_ns": 141188,
+              "waves": []
+            }
+          },
+          "winner": "primary",
+          "result_ready_ns": 141188
+        }
+      },
+      "source_retransmitted_payload_bytes": 43392,
+      "guard": null,
+      "native_timer_events": [
+        {
+          "deadline_ns": 19030,
+          "kind": "armed",
+          "sequence": 0,
+          "ticket": 0,
+          "time_ns": 0
+        },
+        {
+          "deadline_ns": 19030,
+          "kind": "fired",
+          "sequence": 1,
+          "ticket": 0,
+          "time_ns": 19030
+        },
+        {
+          "deadline_ns": 4000000,
+          "kind": "armed",
+          "sequence": 2,
+          "ticket": 1,
+          "time_ns": 19030
+        },
+        {
+          "deadline_ns": 4000000,
+          "kind": "cancelled",
+          "sequence": 3,
+          "ticket": 1,
+          "time_ns": 141188
+        }
+      ]
+    },
+    "guarded-local": {
+      "passed": true,
+      "source_files": 15,
+      "logical_requests": {
+        "target": 4,
+        "healthy": 11
+      },
+      "inventory_requests": 30,
+      "execution_requests": 19,
+      "active_data_ranks": 92,
+      "result_ready_ns": {
+        "target": 142428,
+        "healthy": 141188
+      },
+      "call_winners": {
+        "target": "replica",
+        "healthy": "primary"
+      },
+      "attempts_finished_ns": 201880,
+      "network_drained_ns": 201880,
+      "groups_executed": [
+        0,
+        1,
+        2
+      ],
+      "unique_payload_bytes": 14316544,
+      "payload_by_group": {
+        "2": 8139648,
+        "1": 3088448,
+        "0": 3088448
+      },
+      "source_payload_bytes": 14359936,
+      "source_packets": 1990,
+      "declared_compute_work_ns": 150760,
+      "phase_member_arrivals": 768,
+      "verified_nodes": 4672,
+      "messages": 992,
+      "packet_events": 69956,
+      "queue_events": 30928,
+      "fault_drops": 6,
+      "standby_memory": {
+        "initial_reserved_bytes": 46792704,
+        "releases": [
+          {
+            "group_index": 3,
+            "time_ns": 141188,
+            "kind": "skipped_release",
+            "bytes": 36700160
+          },
+          {
+            "group_index": 1,
+            "time_ns": 142428,
+            "kind": "executed_release",
+            "bytes": 10092544
+          }
+        ],
+        "final_used_bytes": 0
+      },
+      "first_backup_source_tx_ns": 20060,
+      "healthy_finish_vs_backup_source_ns": -121128,
+      "first_backup_switch_rx_ns": 21241,
+      "healthy_finish_vs_backup_switch_ns": -119947,
+      "shared_backup_healthy_ports": [
+        [
+          128,
+          20
+        ],
+        [
+          129,
+          19
+        ],
+        [
+          129,
+          20
+        ],
+        [
+          128,
+          19
+        ],
+        [
+          128,
+          18
+        ],
+        [
+          129,
+          18
+        ],
+        [
+          130,
+          17
+        ],
+        [
+          131,
+          20
+        ],
+        [
+          131,
+          17
+        ],
+        [
+          129,
+          17
+        ],
+        [
+          128,
+          17
+        ],
+        [
+          130,
+          20
+        ],
+        [
+          130,
+          19
+        ],
+        [
+          131,
+          18
+        ],
+        [
+          134,
+          1
+        ],
+        [
+          135,
+          1
+        ],
+        [
+          134,
+          4
+        ],
+        [
+          133,
+          2
+        ],
+        [
+          133,
+          1
+        ],
+        [
+          132,
+          1
+        ],
+        [
+          132,
+          4
+        ],
+        [
+          135,
+          2
+        ],
+        [
+          134,
+          3
+        ],
+        [
+          133,
+          4
+        ],
+        [
+          132,
+          5
+        ],
+        [
+          132,
+          3
+        ],
+        [
+          135,
+          5
+        ],
+        [
+          133,
+          5
+        ],
+        [
+          135,
+          4
+        ],
+        [
+          134,
+          5
+        ],
+        [
+          132,
+          2
+        ],
+        [
+          144,
+          2
+        ],
+        [
+          147,
+          2
+        ],
+        [
+          145,
+          2
+        ],
+        [
+          146,
+          2
+        ],
+        [
+          140,
+          1
+        ],
+        [
+          143,
+          3
+        ],
+        [
+          141,
+          1
+        ],
+        [
+          142,
+          1
+        ],
+        [
+          143,
+          1
+        ],
+        [
+          141,
+          2
+        ],
+        [
+          140,
+          3
+        ],
+        [
+          142,
+          3
+        ],
+        [
+          140,
+          2
+        ],
+        [
+          142,
+          4
+        ],
+        [
+          143,
+          2
+        ],
+        [
+          141,
+          4
+        ],
+        [
+          143,
+          4
+        ],
+        [
+          141,
+          3
+        ],
+        [
+          137,
+          18
+        ],
+        [
+          138,
+          17
+        ],
+        [
+          139,
+          17
+        ],
+        [
+          139,
+          19
+        ],
+        [
+          138,
+          19
+        ],
+        [
+          136,
+          18
+        ],
+        [
+          137,
+          17
+        ],
+        [
+          136,
+          17
+        ],
+        [
+          137,
+          19
+        ],
+        [
+          138,
+          18
+        ],
+        [
+          138,
+          20
+        ],
+        [
+          131,
+          19
+        ],
+        [
+          141,
+          5
+        ],
+        [
+          140,
+          5
+        ],
+        [
+          142,
+          5
+        ],
+        [
+          143,
+          5
+        ],
+        [
+          134,
+          2
+        ],
+        [
+          133,
+          3
+        ],
+        [
+          145,
+          1
+        ],
+        [
+          144,
+          1
+        ],
+        [
+          146,
+          1
+        ],
+        [
+          147,
+          1
+        ],
+        [
+          130,
+          18
+        ],
+        [
+          136,
+          19
+        ],
+        [
+          140,
+          4
+        ],
+        [
+          139,
+          20
+        ],
+        [
+          137,
+          20
+        ],
+        [
+          142,
+          2
+        ]
+      ],
+      "healthy_switch_residence_ns": 692264,
+      "queue_area_byte_ns": 6761010366,
+      "queue_peak_bytes": 157478,
+      "queue_scope": "Switch post-change occupancy, normalized enqueue-after/dequeue-before hooks; all protocols; excludes serialization",
+      "sha256": {
+        "input.json": "992596c265a1871ce897b10146cc6c20fe1c0c7c509f215ae73409841502a114",
+        "rdma.json": "7a1038ae099368f84ce549fc09f7dbf0387049ec71eec273325515cad652e51a",
+        "topology.json": "5389993e9aa1dfc148b4713b0a2b0c0521de24b41b74060e2db7eb9f048c444f",
+        "frontend.json": "67d02043b54c05c67f95559b05fb14ab68334f2874d56f33aa42d5a4f028f91e",
+        "result.json": "051c4c6f3c57730d4817eb80e6415cb32b0162d7437cc3095c62351631975463",
+        "verification.json": "a46834e509a3df547c63d1d6dd45bfab4d5feb3945a54473b7ce5f9b07752a2e"
+      },
+      "calls": {
+        "target": {
+          "input_identity": {
+            "kind": "declared_route_and_ready_kv_lineage/1",
+            "sha256": "ea9c8c638905b7a124b14fdd9ce4d060ef0c764f4be3de80246ce6be40780543"
+          },
+          "request_pairs": [
+            {
+              "primary_request": 0,
+              "replica_request": 1
+            },
+            {
+              "primary_request": 4,
+              "replica_request": 5
+            },
+            {
+              "primary_request": 8,
+              "replica_request": 9
+            },
+            {
+              "primary_request": 12,
+              "replica_request": 13
+            }
+          ],
+          "attempts": {
+            "primary": {
+              "group_index": 0,
+              "graph_id": "g0.w0",
+              "submitted_ns": 0,
+              "finished_ns": 201880,
+              "waves": [
+                {
+                  "graph_id": "g0.w0",
+                  "step": 0,
+                  "submitted_ns": 0,
+                  "finished_ns": 140354
+                },
+                {
+                  "graph_id": "g0.w1",
+                  "step": 1,
+                  "submitted_ns": 140354,
+                  "finished_ns": 201880
+                }
+              ]
+            },
+            "replica": {
+              "group_index": 1,
+              "graph_id": "g1.w0",
+              "submitted_ns": 19030,
+              "finished_ns": 142428,
+              "skipped_ns": null,
+              "waves": [
+                {
+                  "graph_id": "g1.w0",
+                  "step": 0,
+                  "submitted_ns": 19030,
+                  "finished_ns": 80159
+                },
+                {
+                  "graph_id": "g1.w1",
+                  "step": 1,
+                  "submitted_ns": 80159,
+                  "finished_ns": 142428
+                }
+              ]
+            }
+          },
+          "winner": "replica",
+          "result_ready_ns": 142428
+        },
+        "healthy": {
+          "input_identity": {
+            "kind": "declared_route_and_ready_kv_lineage/1",
+            "sha256": "32e022e5e0c407584b61a827b71fd7a771679180693184970010a610192c98ef"
+          },
+          "request_pairs": [
+            {
+              "primary_request": 2,
+              "replica_request": 3
+            },
+            {
+              "primary_request": 6,
+              "replica_request": 7
+            },
+            {
+              "primary_request": 10,
+              "replica_request": 11
+            },
+            {
+              "primary_request": 14,
+              "replica_request": 15
+            },
+            {
+              "primary_request": 18,
+              "replica_request": 19
+            },
+            {
+              "primary_request": 22,
+              "replica_request": 23
+            },
+            {
+              "primary_request": 26,
+              "replica_request": 27
+            },
+            {
+              "primary_request": 30,
+              "replica_request": 31
+            },
+            {
+              "primary_request": 34,
+              "replica_request": 35
+            },
+            {
+              "primary_request": 38,
+              "replica_request": 39
+            },
+            {
+              "primary_request": 42,
+              "replica_request": 43
+            }
+          ],
+          "attempts": {
+            "primary": {
+              "group_index": 2,
+              "graph_id": "g2.w0",
+              "submitted_ns": 0,
+              "finished_ns": 141188,
+              "waves": [
+                {
+                  "graph_id": "g2.w0",
+                  "step": 0,
+                  "submitted_ns": 0,
+                  "finished_ns": 69714
+                },
+                {
+                  "graph_id": "g2.w1",
+                  "step": 1,
+                  "submitted_ns": 69714,
+                  "finished_ns": 141188
+                }
+              ]
+            },
+            "replica": {
+              "group_index": 3,
+              "graph_id": "g3.w0",
+              "submitted_ns": null,
+              "finished_ns": null,
+              "skipped_ns": 141188,
+              "waves": []
+            }
+          },
+          "winner": "primary",
+          "result_ready_ns": 141188
+        }
+      },
+      "source_retransmitted_payload_bytes": 43392,
+      "guard": {
+        "schema_version": "moe-source-ack-guard-report/1",
+        "decisions": [
+          {
+            "sequence": 0,
+            "time_ns": 0,
+            "call": "target",
+            "reason": "poll",
+            "observed_sequence": -1,
+            "pending_messages": [],
+            "overdue_messages": [],
+            "next_deadline_ns": 18000
+          },
+          {
+            "sequence": 1,
+            "time_ns": 18000,
+            "call": "target",
+            "reason": "poll",
+            "observed_sequence": 1643,
+            "pending_messages": [
+              37,
+              46,
+              68,
+              99,
+              118
+            ],
+            "overdue_messages": [],
+            "next_deadline_ns": 19030
+          },
+          {
+            "sequence": 2,
+            "time_ns": 19030,
+            "call": "target",
+            "reason": "source_timeout",
+            "observed_sequence": 1833,
+            "pending_messages": [
+              37,
+              68,
+              99
+            ],
+            "overdue_messages": [
+              37,
+              68,
+              99
+            ],
+            "next_deadline_ns": null
+          },
+          {
+            "sequence": 3,
+            "time_ns": 69714,
+            "call": "target",
+            "reason": "already_started",
+            "observed_sequence": 5173,
+            "pending_messages": [
+              37,
+              68,
+              99
+            ],
+            "overdue_messages": [
+              37,
+              68,
+              99
+            ],
+            "next_deadline_ns": null
+          },
+          {
+            "sequence": 4,
+            "time_ns": 80159,
+            "call": "target",
+            "reason": "already_started",
+            "observed_sequence": 6356,
+            "pending_messages": [
+              37,
+              68,
+              99
+            ],
+            "overdue_messages": [
+              37,
+              68,
+              99
+            ],
+            "next_deadline_ns": null
+          },
+          {
+            "sequence": 5,
+            "time_ns": 140354,
+            "call": "target",
+            "reason": "already_started",
+            "observed_sequence": 11289,
+            "pending_messages": [],
+            "overdue_messages": [],
+            "next_deadline_ns": null
+          },
+          {
+            "sequence": 6,
+            "time_ns": 141188,
+            "call": "target",
+            "reason": "already_started",
+            "observed_sequence": 11768,
+            "pending_messages": [],
+            "overdue_messages": [],
+            "next_deadline_ns": null
+          },
+          {
+            "sequence": 7,
+            "time_ns": 142428,
+            "call": "target",
+            "reason": "already_started",
+            "observed_sequence": 11966,
+            "pending_messages": [
+              15886,
+              15889,
+              15891,
+              15892,
+              15894,
+              15895,
+              15904,
+              15905,
+              15907,
+              15917,
+              15933,
+              15934,
+              15935,
+              15936,
+              15938,
+              15939,
+              15944,
+              15949,
+              15951,
+              15965,
+              15980,
+              15988,
+              15991,
+              15992,
+              15993,
+              15995
+            ],
+            "overdue_messages": [],
+            "next_deadline_ns": null
+          },
+          {
+            "sequence": 8,
+            "time_ns": 201880,
+            "call": "target",
+            "reason": "already_started",
+            "observed_sequence": 13317,
+            "pending_messages": [],
+            "overdue_messages": [],
+            "next_deadline_ns": null
+          }
+        ],
+        "messages": {
+          "7": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 0,
+            "post_ns": 1030,
+            "ack_ns": 6338
+          },
+          "13": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 0,
+            "post_ns": 1030,
+            "ack_ns": 11355
+          },
+          "15": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 0,
+            "post_ns": 1030,
+            "ack_ns": 17607
+          },
+          "16": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 0,
+            "post_ns": 1030,
+            "ack_ns": 17937
+          },
+          "17": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 0,
+            "post_ns": 1030,
+            "ack_ns": 16851
+          },
+          "18": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 0,
+            "post_ns": 1030,
+            "ack_ns": 17032
+          },
+          "35": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 4,
+            "post_ns": 1030,
+            "ack_ns": 11905
+          },
+          "37": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 4,
+            "post_ns": 1030,
+            "ack_ns": 90049
+          },
+          "38": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 4,
+            "post_ns": 1030,
+            "ack_ns": 6739
+          },
+          "40": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 4,
+            "post_ns": 1030,
+            "ack_ns": 12015
+          },
+          "46": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 4,
+            "post_ns": 1030,
+            "ack_ns": 18377
+          },
+          "50": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 4,
+            "post_ns": 1030,
+            "ack_ns": 17142
+          },
+          "51": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 4,
+            "post_ns": 1030,
+            "ack_ns": 17252
+          },
+          "63": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 8,
+            "post_ns": 1030,
+            "ack_ns": 10702
+          },
+          "67": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 8,
+            "post_ns": 1030,
+            "ack_ns": 11426
+          },
+          "68": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 8,
+            "post_ns": 1030,
+            "ack_ns": 90570
+          },
+          "75": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 8,
+            "post_ns": 1030,
+            "ack_ns": 11685
+          },
+          "77": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 8,
+            "post_ns": 1030,
+            "ack_ns": 16521
+          },
+          "78": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 8,
+            "post_ns": 1030,
+            "ack_ns": 15829
+          },
+          "94": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 12,
+            "post_ns": 1030,
+            "ack_ns": 11465
+          },
+          "96": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 12,
+            "post_ns": 1030,
+            "ack_ns": 11323
+          },
+          "97": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 12,
+            "post_ns": 1030,
+            "ack_ns": 11433
+          },
+          "99": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 12,
+            "post_ns": 1030,
+            "ack_ns": 90680
+          },
+          "112": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 12,
+            "post_ns": 1030,
+            "ack_ns": 15939
+          },
+          "117": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 12,
+            "post_ns": 1030,
+            "ack_ns": 17717
+          },
+          "118": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 12,
+            "post_ns": 1030,
+            "ack_ns": 18047
+          },
+          "1024": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 4,
+            "post_ns": 90880,
+            "ack_ns": 100671
+          },
+          "1025": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 4,
+            "post_ns": 90880,
+            "ack_ns": 100310
+          },
+          "1119": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 16,
+            "post_ns": 90780,
+            "ack_ns": 99654
+          },
+          "1148": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 20,
+            "post_ns": 90880,
+            "ack_ns": 100306
+          },
+          "1150": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 20,
+            "post_ns": 90880,
+            "ack_ns": 100163
+          },
+          "1180": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 24,
+            "post_ns": 90980,
+            "ack_ns": 100453
+          },
+          "1210": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 28,
+            "post_ns": 90980,
+            "ack_ns": 100415
+          },
+          "1211": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 28,
+            "post_ns": 90980,
+            "ack_ns": 100344
+          },
+          "1212": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 28,
+            "post_ns": 90980,
+            "ack_ns": 100672
+          },
+          "1240": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 32,
+            "post_ns": 90880,
+            "ack_ns": 95462
+          },
+          "1241": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 32,
+            "post_ns": 90880,
+            "ack_ns": 95571
+          },
+          "1303": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 40,
+            "post_ns": 90980,
+            "ack_ns": 100160
+          },
+          "1426": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 56,
+            "post_ns": 90880,
+            "ack_ns": 99854
+          },
+          "1428": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 56,
+            "post_ns": 90880,
+            "ack_ns": 100562
+          },
+          "1488": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 64,
+            "post_ns": 91180,
+            "ack_ns": 104997
+          },
+          "1489": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 64,
+            "post_ns": 91180,
+            "ack_ns": 104888
+          },
+          "1490": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 64,
+            "post_ns": 91180,
+            "ack_ns": 105322
+          },
+          "1519": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 68,
+            "post_ns": 91080,
+            "ack_ns": 106483
+          },
+          "1521": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 68,
+            "post_ns": 91080,
+            "ack_ns": 105213
+          },
+          "1550": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 72,
+            "post_ns": 90780,
+            "ack_ns": 104453
+          },
+          "1581": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 76,
+            "post_ns": 90780,
+            "ack_ns": 104562
+          },
+          "1613": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 80,
+            "post_ns": 91080,
+            "ack_ns": 104561
+          },
+          "1615": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 80,
+            "post_ns": 91080,
+            "ack_ns": 104562
+          },
+          "1644": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 84,
+            "post_ns": 90780,
+            "ack_ns": 104162
+          },
+          "1770": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 100,
+            "post_ns": 90780,
+            "ack_ns": 104163
+          },
+          "1801": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 104,
+            "post_ns": 90780,
+            "ack_ns": 104271
+          },
+          "1985": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 0,
+            "post_ns": 107543,
+            "ack_ns": 117512
+          },
+          "1986": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 0,
+            "post_ns": 107543,
+            "ack_ns": 117694
+          },
+          "1988": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 0,
+            "post_ns": 107543,
+            "ack_ns": 118676
+          },
+          "1989": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 0,
+            "post_ns": 107543,
+            "ack_ns": 118314
+          },
+          "1990": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 0,
+            "post_ns": 107543,
+            "ack_ns": 117733
+          },
+          "2005": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 0,
+            "post_ns": 107543,
+            "ack_ns": 122821
+          },
+          "2014": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 0,
+            "post_ns": 107543,
+            "ack_ns": 124496
+          },
+          "2015": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 4,
+            "post_ns": 107543,
+            "ack_ns": 112851
+          },
+          "2018": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 4,
+            "post_ns": 107543,
+            "ack_ns": 117364
+          },
+          "2022": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 4,
+            "post_ns": 107543,
+            "ack_ns": 113071
+          },
+          "2023": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 4,
+            "post_ns": 107543,
+            "ack_ns": 113181
+          },
+          "2030": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 4,
+            "post_ns": 107543,
+            "ack_ns": 124386
+          },
+          "2033": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 4,
+            "post_ns": 107543,
+            "ack_ns": 123040
+          },
+          "2051": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 8,
+            "post_ns": 107543,
+            "ack_ns": 117395
+          },
+          "2053": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 8,
+            "post_ns": 107543,
+            "ack_ns": 117681
+          },
+          "2065": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 8,
+            "post_ns": 107543,
+            "ack_ns": 122852
+          },
+          "2066": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 8,
+            "post_ns": 107543,
+            "ack_ns": 123395
+          },
+          "2068": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 8,
+            "post_ns": 107543,
+            "ack_ns": 123292
+          },
+          "2070": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 8,
+            "post_ns": 107543,
+            "ack_ns": 123512
+          },
+          "2084": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 12,
+            "post_ns": 107543,
+            "ack_ns": 117435
+          },
+          "2085": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 12,
+            "post_ns": 107543,
+            "ack_ns": 118443
+          },
+          "2092": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 12,
+            "post_ns": 107543,
+            "ack_ns": 123544
+          },
+          "2093": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 12,
+            "post_ns": 107543,
+            "ack_ns": 123150
+          },
+          "2096": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 12,
+            "post_ns": 107543,
+            "ack_ns": 123622
+          },
+          "2099": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 12,
+            "post_ns": 107543,
+            "ack_ns": 123654
+          },
+          "2104": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 12,
+            "post_ns": 107543,
+            "ack_ns": 122931
+          },
+          "2105": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 12,
+            "post_ns": 107543,
+            "ack_ns": 123764
+          },
+          "2976": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 0,
+            "post_ns": 124596,
+            "ack_ns": 129069
+          },
+          "3038": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 8,
+            "post_ns": 124796,
+            "ack_ns": 134593
+          },
+          "3069": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 12,
+            "post_ns": 124596,
+            "ack_ns": 134147
+          },
+          "3101": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 16,
+            "post_ns": 124596,
+            "ack_ns": 133832
+          },
+          "3131": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 20,
+            "post_ns": 124596,
+            "ack_ns": 134375
+          },
+          "3162": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 24,
+            "post_ns": 124696,
+            "ack_ns": 134484
+          },
+          "3164": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 24,
+            "post_ns": 124696,
+            "ack_ns": 134076
+          },
+          "3193": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 28,
+            "post_ns": 124596,
+            "ack_ns": 133976
+          },
+          "3225": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 32,
+            "post_ns": 124796,
+            "ack_ns": 129649
+          },
+          "3226": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 32,
+            "post_ns": 124796,
+            "ack_ns": 134211
+          },
+          "3227": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 32,
+            "post_ns": 124796,
+            "ack_ns": 134394
+          },
+          "3256": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 36,
+            "post_ns": 124896,
+            "ack_ns": 129540
+          },
+          "3258": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 36,
+            "post_ns": 124896,
+            "ack_ns": 134095
+          },
+          "3473": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 64,
+            "post_ns": 124696,
+            "ack_ns": 140324
+          },
+          "3475": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 64,
+            "post_ns": 124696,
+            "ack_ns": 138872
+          },
+          "3506": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 68,
+            "post_ns": 124596,
+            "ack_ns": 139496
+          },
+          "3566": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 76,
+            "post_ns": 124596,
+            "ack_ns": 137867
+          },
+          "3598": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 80,
+            "post_ns": 124896,
+            "ack_ns": 139450
+          },
+          "3599": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 80,
+            "post_ns": 124896,
+            "ack_ns": 138981
+          },
+          "3629": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 84,
+            "post_ns": 124796,
+            "ack_ns": 140077
+          },
+          "3658": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 88,
+            "post_ns": 124596,
+            "ack_ns": 138809
+          },
+          "3691": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 92,
+            "post_ns": 124696,
+            "ack_ns": 139968
+          },
+          "3692": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 92,
+            "post_ns": 124696,
+            "ack_ns": 138220
+          },
+          "3753": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 100,
+            "post_ns": 124596,
+            "ack_ns": 139341
+          },
+          "3847": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 112,
+            "post_ns": 124596,
+            "ack_ns": 139097
+          },
+          "3878": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 116,
+            "post_ns": 124596,
+            "ack_ns": 139206
+          },
+          "3937": {
+            "call": "target",
+            "graph": "g0.w0",
+            "rank": 124,
+            "post_ns": 124596,
+            "ack_ns": 138375
+          },
+          "15886": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 0,
+            "post_ns": 141384,
+            "ack_ns": 150946
+          },
+          "15889": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 0,
+            "post_ns": 141384,
+            "ack_ns": 155246
+          },
+          "15891": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 0,
+            "post_ns": 141384,
+            "ack_ns": 155608
+          },
+          "15892": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 0,
+            "post_ns": 141384,
+            "ack_ns": 155530
+          },
+          "15894": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 0,
+            "post_ns": 141384,
+            "ack_ns": 155758
+          },
+          "15895": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 0,
+            "post_ns": 141384,
+            "ack_ns": 155750
+          },
+          "15904": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 4,
+            "post_ns": 141384,
+            "ack_ns": 150804
+          },
+          "15905": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 4,
+            "post_ns": 141384,
+            "ack_ns": 150914
+          },
+          "15907": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 4,
+            "post_ns": 141384,
+            "ack_ns": 150985
+          },
+          "15917": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 4,
+            "post_ns": 141384,
+            "ack_ns": 151134
+          },
+          "15933": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 4,
+            "post_ns": 141384,
+            "ack_ns": 155491
+          },
+          "15934": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 8,
+            "post_ns": 141384,
+            "ack_ns": 151315
+          },
+          "15935": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 8,
+            "post_ns": 141384,
+            "ack_ns": 151386
+          },
+          "15936": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 8,
+            "post_ns": 141384,
+            "ack_ns": 147274
+          },
+          "15938": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 8,
+            "post_ns": 141384,
+            "ack_ns": 151645
+          },
+          "15939": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 8,
+            "post_ns": 141384,
+            "ack_ns": 151755
+          },
+          "15944": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 8,
+            "post_ns": 141384,
+            "ack_ns": 147604
+          },
+          "15949": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 8,
+            "post_ns": 141384,
+            "ack_ns": 156158
+          },
+          "15951": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 8,
+            "post_ns": 141384,
+            "ack_ns": 156268
+          },
+          "15965": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 12,
+            "post_ns": 141384,
+            "ack_ns": 151166
+          },
+          "15980": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 12,
+            "post_ns": 141384,
+            "ack_ns": 155530
+          },
+          "15988": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 12,
+            "post_ns": 141384,
+            "ack_ns": 155640
+          },
+          "15991": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 12,
+            "post_ns": 141384,
+            "ack_ns": 155750
+          },
+          "15992": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 12,
+            "post_ns": 141384,
+            "ack_ns": 155757
+          },
+          "15993": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 12,
+            "post_ns": 141384,
+            "ack_ns": 155867
+          },
+          "15995": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 12,
+            "post_ns": 141384,
+            "ack_ns": 155977
+          },
+          "16865": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 0,
+            "post_ns": 156468,
+            "ack_ns": 165966
+          },
+          "16866": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 0,
+            "post_ns": 156468,
+            "ack_ns": 166003
+          },
+          "16896": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 4,
+            "post_ns": 156668,
+            "ack_ns": 166075
+          },
+          "16927": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 8,
+            "post_ns": 156368,
+            "ack_ns": 165676
+          },
+          "16958": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 12,
+            "post_ns": 156468,
+            "ack_ns": 165567
+          },
+          "16959": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 12,
+            "post_ns": 156468,
+            "ack_ns": 161159
+          },
+          "17020": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 20,
+            "post_ns": 156468,
+            "ack_ns": 165785
+          },
+          "17021": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 20,
+            "post_ns": 156468,
+            "ack_ns": 165676
+          },
+          "17052": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 24,
+            "post_ns": 156368,
+            "ack_ns": 165567
+          },
+          "17207": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 44,
+            "post_ns": 156368,
+            "ack_ns": 160841
+          },
+          "17329": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 60,
+            "post_ns": 156868,
+            "ack_ns": 165705
+          },
+          "17330": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 60,
+            "post_ns": 156868,
+            "ack_ns": 166075
+          },
+          "17362": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 64,
+            "post_ns": 156468,
+            "ack_ns": 170258
+          },
+          "17363": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 64,
+            "post_ns": 156468,
+            "ack_ns": 170511
+          },
+          "17422": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 72,
+            "post_ns": 156668,
+            "ack_ns": 170729
+          },
+          "17424": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 72,
+            "post_ns": 156668,
+            "ack_ns": 170112
+          },
+          "17484": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 80,
+            "post_ns": 156368,
+            "ack_ns": 170221
+          },
+          "17515": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 84,
+            "post_ns": 156368,
+            "ack_ns": 170620
+          },
+          "17577": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 92,
+            "post_ns": 156368,
+            "ack_ns": 170113
+          },
+          "17608": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 96,
+            "post_ns": 156468,
+            "ack_ns": 170511
+          },
+          "17611": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 96,
+            "post_ns": 156468,
+            "ack_ns": 170621
+          },
+          "17704": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 108,
+            "post_ns": 156368,
+            "ack_ns": 170113
+          },
+          "17735": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 112,
+            "post_ns": 156368,
+            "ack_ns": 170402
+          },
+          "17766": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 116,
+            "post_ns": 156368,
+            "ack_ns": 170729
+          },
+          "17826": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 124,
+            "post_ns": 156668,
+            "ack_ns": 170476
+          },
+          "17828": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 124,
+            "post_ns": 156668,
+            "ack_ns": 171019
+          },
+          "17857": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 0,
+            "post_ns": 172079,
+            "ack_ns": 181790
+          },
+          "17864": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 0,
+            "post_ns": 172079,
+            "ack_ns": 177678
+          },
+          "17875": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 0,
+            "post_ns": 172079,
+            "ack_ns": 186232
+          },
+          "17876": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 0,
+            "post_ns": 172079,
+            "ack_ns": 186342
+          },
+          "17877": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 0,
+            "post_ns": 172079,
+            "ack_ns": 186452
+          },
+          "17885": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 0,
+            "post_ns": 172079,
+            "ack_ns": 186562
+          },
+          "17886": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 0,
+            "post_ns": 172079,
+            "ack_ns": 186878
+          },
+          "17887": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 4,
+            "post_ns": 172079,
+            "ack_ns": 177568
+          },
+          "17889": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 4,
+            "post_ns": 172079,
+            "ack_ns": 181900
+          },
+          "17894": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 4,
+            "post_ns": 172079,
+            "ack_ns": 177858
+          },
+          "17896": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 4,
+            "post_ns": 172079,
+            "ack_ns": 182120
+          },
+          "17905": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 4,
+            "post_ns": 172079,
+            "ack_ns": 186562
+          },
+          "17911": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 4,
+            "post_ns": 172079,
+            "ack_ns": 186672
+          },
+          "17912": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 4,
+            "post_ns": 172079,
+            "ack_ns": 187098
+          },
+          "17919": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 8,
+            "post_ns": 172079,
+            "ack_ns": 181861
+          },
+          "17920": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 8,
+            "post_ns": 172079,
+            "ack_ns": 177787
+          },
+          "17922": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 8,
+            "post_ns": 172079,
+            "ack_ns": 182010
+          },
+          "17931": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 8,
+            "post_ns": 172079,
+            "ack_ns": 182120
+          },
+          "17941": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 8,
+            "post_ns": 172079,
+            "ack_ns": 186452
+          },
+          "17942": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 8,
+            "post_ns": 172079,
+            "ack_ns": 186562
+          },
+          "17944": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 8,
+            "post_ns": 172079,
+            "ack_ns": 186988
+          },
+          "17953": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 12,
+            "post_ns": 172079,
+            "ack_ns": 181790
+          },
+          "17954": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 12,
+            "post_ns": 172079,
+            "ack_ns": 181971
+          },
+          "17963": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 12,
+            "post_ns": 172079,
+            "ack_ns": 182010
+          },
+          "17964": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 12,
+            "post_ns": 172079,
+            "ack_ns": 186768
+          },
+          "17965": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 12,
+            "post_ns": 172079,
+            "ack_ns": 186452
+          },
+          "17966": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 12,
+            "post_ns": 172079,
+            "ack_ns": 186672
+          },
+          "17978": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 12,
+            "post_ns": 172079,
+            "ack_ns": 187208
+          },
+          "18848": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 0,
+            "post_ns": 187308,
+            "ack_ns": 192133
+          },
+          "18880": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 4,
+            "post_ns": 187308,
+            "ack_ns": 196145
+          },
+          "18910": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 8,
+            "post_ns": 187408,
+            "ack_ns": 196354
+          },
+          "18942": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 12,
+            "post_ns": 187408,
+            "ack_ns": 196463
+          },
+          "18943": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 12,
+            "post_ns": 187408,
+            "ack_ns": 192215
+          },
+          "19005": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 20,
+            "post_ns": 187408,
+            "ack_ns": 196725
+          },
+          "19006": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 20,
+            "post_ns": 187408,
+            "ack_ns": 196943
+          },
+          "19037": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 24,
+            "post_ns": 187308,
+            "ack_ns": 196688
+          },
+          "19097": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 32,
+            "post_ns": 187308,
+            "ack_ns": 192071
+          },
+          "19127": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 36,
+            "post_ns": 187308,
+            "ack_ns": 191781
+          },
+          "19159": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 40,
+            "post_ns": 187308,
+            "ack_ns": 196145
+          },
+          "19284": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 56,
+            "post_ns": 187308,
+            "ack_ns": 196834
+          },
+          "19316": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 60,
+            "post_ns": 187308,
+            "ack_ns": 196328
+          },
+          "19347": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 64,
+            "post_ns": 187308,
+            "ack_ns": 200980
+          },
+          "19378": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 68,
+            "post_ns": 187508,
+            "ack_ns": 201089
+          },
+          "19409": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 72,
+            "post_ns": 187308,
+            "ack_ns": 200690
+          },
+          "19438": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 76,
+            "post_ns": 187308,
+            "ack_ns": 200871
+          },
+          "19468": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 80,
+            "post_ns": 187308,
+            "ack_ns": 201451
+          },
+          "19499": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 84,
+            "post_ns": 187308,
+            "ack_ns": 201669
+          },
+          "19530": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 88,
+            "post_ns": 187508,
+            "ack_ns": 201560
+          },
+          "19594": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 96,
+            "post_ns": 187308,
+            "ack_ns": 200871
+          },
+          "19624": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 100,
+            "post_ns": 187608,
+            "ack_ns": 201706
+          },
+          "19625": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 100,
+            "post_ns": 187608,
+            "ack_ns": 201850
+          },
+          "19655": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 104,
+            "post_ns": 187308,
+            "ack_ns": 201017
+          },
+          "19687": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 108,
+            "post_ns": 187308,
+            "ack_ns": 200980
+          },
+          "19778": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 120,
+            "post_ns": 187408,
+            "ack_ns": 201052
+          },
+          "19781": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 120,
+            "post_ns": 187408,
+            "ack_ns": 201379
+          },
+          "19809": {
+            "call": "target",
+            "graph": "g0.w1",
+            "rank": 124,
+            "post_ns": 187308,
+            "ack_ns": 201161
+          }
+        }
+      },
+      "guard_launches": [
+        {
+          "actual_ns": 19030,
+          "reason": "source_timeout",
+          "nominal": [
+            {
+              "message": 37,
+              "deadline_ns": 19030,
+              "delay_to_actual_check_ns": 0
+            },
+            {
+              "message": 68,
+              "deadline_ns": 19030,
+              "delay_to_actual_check_ns": 0
+            },
+            {
+              "message": 99,
+              "deadline_ns": 19030,
+              "delay_to_actual_check_ns": 0
+            }
+          ]
+        }
+      ],
+      "native_timer_events": [
+        {
+          "deadline_ns": 18000,
+          "kind": "armed",
+          "sequence": 0,
+          "ticket": 0,
+          "time_ns": 0
+        },
+        {
+          "deadline_ns": 18000,
+          "kind": "fired",
+          "sequence": 1,
+          "ticket": 0,
+          "time_ns": 18000
+        },
+        {
+          "deadline_ns": 19030,
+          "kind": "armed",
+          "sequence": 2,
+          "ticket": 1,
+          "time_ns": 18000
+        },
+        {
+          "deadline_ns": 19030,
+          "kind": "fired",
+          "sequence": 3,
+          "ticket": 1,
+          "time_ns": 19030
+        },
+        {
+          "deadline_ns": 4000000,
+          "kind": "armed",
+          "sequence": 4,
+          "ticket": 2,
+          "time_ns": 19030
+        },
+        {
+          "deadline_ns": 4000000,
+          "kind": "cancelled",
+          "sequence": 5,
+          "ticket": 2,
+          "time_ns": 141188
+        }
+      ]
+    }
+  },
+  "effects": {
+    "fixed-normal": {
+      "target_saved_ns": -119,
+      "target_saved_percent": -0.09397754015762956,
+      "healthy_change_ns": 151,
+      "network_drain_change_ns": 15860,
+      "extra_effective_bytes": 3088448,
+      "extra_source_payload_bytes": 3088448,
+      "extra_declared_compute_ns": 31460,
+      "all_packets_exact": false,
+      "all_queue_events_exact": false,
+      "healthy_hops_matched": 4264,
+      "healthy_hops_unmatched": 0,
+      "healthy_residence_change_sum_ns": 3017,
+      "healthy_phase_changes": [
+        {
+          "graph": "g2.w0",
+          "phase": "L0.combine",
+          "baseline_ns": 35314,
+          "treatment_ns": 35314,
+          "change_ns": 0
+        },
+        {
+          "graph": "g2.w0",
+          "phase": "L0.dispatch",
+          "baseline_ns": 18817,
+          "treatment_ns": 18817,
+          "change_ns": 0
+        },
+        {
+          "graph": "g2.w0",
+          "phase": "L1.combine",
+          "baseline_ns": 69834,
+          "treatment_ns": 69834,
+          "change_ns": 0
+        },
+        {
+          "graph": "g2.w0",
+          "phase": "L1.dispatch",
+          "baseline_ns": 52997,
+          "treatment_ns": 52997,
+          "change_ns": 0
+        },
+        {
+          "graph": "g2.w1",
+          "phase": "L0.combine",
+          "baseline_ns": 106349,
+          "treatment_ns": 106287,
+          "change_ns": -62
+        },
+        {
+          "graph": "g2.w1",
+          "phase": "L0.dispatch",
+          "baseline_ns": 87972,
+          "treatment_ns": 87906,
+          "change_ns": -66
+        },
+        {
+          "graph": "g2.w1",
+          "phase": "L1.combine",
+          "baseline_ns": 139106,
+          "treatment_ns": 139257,
+          "change_ns": 151
+        },
+        {
+          "graph": "g2.w1",
+          "phase": "L1.dispatch",
+          "baseline_ns": 123049,
+          "treatment_ns": 122987,
+          "change_ns": -62
+        }
+      ]
+    },
+    "guarded-normal": {
+      "target_saved_ns": 0,
+      "target_saved_percent": 0.0,
+      "healthy_change_ns": 0,
+      "network_drain_change_ns": 0,
+      "extra_effective_bytes": 0,
+      "extra_source_payload_bytes": 0,
+      "extra_declared_compute_ns": 0,
+      "all_packets_exact": true,
+      "all_queue_events_exact": true,
+      "healthy_hops_matched": 4264,
+      "healthy_hops_unmatched": 0,
+      "healthy_residence_change_sum_ns": 0,
+      "healthy_phase_changes": [
+        {
+          "graph": "g2.w0",
+          "phase": "L0.combine",
+          "baseline_ns": 35314,
+          "treatment_ns": 35314,
+          "change_ns": 0
+        },
+        {
+          "graph": "g2.w0",
+          "phase": "L0.dispatch",
+          "baseline_ns": 18817,
+          "treatment_ns": 18817,
+          "change_ns": 0
+        },
+        {
+          "graph": "g2.w0",
+          "phase": "L1.combine",
+          "baseline_ns": 69834,
+          "treatment_ns": 69834,
+          "change_ns": 0
+        },
+        {
+          "graph": "g2.w0",
+          "phase": "L1.dispatch",
+          "baseline_ns": 52997,
+          "treatment_ns": 52997,
+          "change_ns": 0
+        },
+        {
+          "graph": "g2.w1",
+          "phase": "L0.combine",
+          "baseline_ns": 106349,
+          "treatment_ns": 106349,
+          "change_ns": 0
+        },
+        {
+          "graph": "g2.w1",
+          "phase": "L0.dispatch",
+          "baseline_ns": 87972,
+          "treatment_ns": 87972,
+          "change_ns": 0
+        },
+        {
+          "graph": "g2.w1",
+          "phase": "L1.combine",
+          "baseline_ns": 139106,
+          "treatment_ns": 139106,
+          "change_ns": 0
+        },
+        {
+          "graph": "g2.w1",
+          "phase": "L1.dispatch",
+          "baseline_ns": 123049,
+          "treatment_ns": 123049,
+          "change_ns": 0
+        }
+      ]
+    },
+    "fixed-local": {
+      "target_saved_ns": 59438,
+      "target_saved_percent": 29.444284822605095,
+      "healthy_change_ns": 14,
+      "network_drain_change_ns": 14,
+      "extra_effective_bytes": 3088448,
+      "extra_source_payload_bytes": 3088448,
+      "extra_declared_compute_ns": 31460,
+      "all_packets_exact": false,
+      "all_queue_events_exact": false,
+      "healthy_hops_matched": 4264,
+      "healthy_hops_unmatched": 0,
+      "healthy_residence_change_sum_ns": 2362,
+      "healthy_phase_changes": [
+        {
+          "graph": "g2.w0",
+          "phase": "L0.combine",
+          "baseline_ns": 35164,
+          "treatment_ns": 35164,
+          "change_ns": 0
+        },
+        {
+          "graph": "g2.w0",
+          "phase": "L0.dispatch",
+          "baseline_ns": 18817,
+          "treatment_ns": 18817,
+          "change_ns": 0
+        },
+        {
+          "graph": "g2.w0",
+          "phase": "L1.combine",
+          "baseline_ns": 69684,
+          "treatment_ns": 69684,
+          "change_ns": 0
+        },
+        {
+          "graph": "g2.w0",
+          "phase": "L1.dispatch",
+          "baseline_ns": 52847,
+          "treatment_ns": 52847,
+          "change_ns": 0
+        },
+        {
+          "graph": "g2.w1",
+          "phase": "L0.combine",
+          "baseline_ns": 106035,
+          "treatment_ns": 106049,
+          "change_ns": 14
+        },
+        {
+          "graph": "g2.w1",
+          "phase": "L0.dispatch",
+          "baseline_ns": 87658,
+          "treatment_ns": 87668,
+          "change_ns": 10
+        },
+        {
+          "graph": "g2.w1",
+          "phase": "L1.combine",
+          "baseline_ns": 141144,
+          "treatment_ns": 141158,
+          "change_ns": 14
+        },
+        {
+          "graph": "g2.w1",
+          "phase": "L1.dispatch",
+          "baseline_ns": 124262,
+          "treatment_ns": 124276,
+          "change_ns": 14
+        }
+      ]
+    },
+    "guarded-local": {
+      "target_saved_ns": 59438,
+      "target_saved_percent": 29.444284822605095,
+      "healthy_change_ns": 14,
+      "network_drain_change_ns": 14,
+      "extra_effective_bytes": 3088448,
+      "extra_source_payload_bytes": 3088448,
+      "extra_declared_compute_ns": 31460,
+      "all_packets_exact": false,
+      "all_queue_events_exact": false,
+      "healthy_hops_matched": 4264,
+      "healthy_hops_unmatched": 0,
+      "healthy_residence_change_sum_ns": 2362,
+      "healthy_phase_changes": [
+        {
+          "graph": "g2.w0",
+          "phase": "L0.combine",
+          "baseline_ns": 35164,
+          "treatment_ns": 35164,
+          "change_ns": 0
+        },
+        {
+          "graph": "g2.w0",
+          "phase": "L0.dispatch",
+          "baseline_ns": 18817,
+          "treatment_ns": 18817,
+          "change_ns": 0
+        },
+        {
+          "graph": "g2.w0",
+          "phase": "L1.combine",
+          "baseline_ns": 69684,
+          "treatment_ns": 69684,
+          "change_ns": 0
+        },
+        {
+          "graph": "g2.w0",
+          "phase": "L1.dispatch",
+          "baseline_ns": 52847,
+          "treatment_ns": 52847,
+          "change_ns": 0
+        },
+        {
+          "graph": "g2.w1",
+          "phase": "L0.combine",
+          "baseline_ns": 106035,
+          "treatment_ns": 106049,
+          "change_ns": 14
+        },
+        {
+          "graph": "g2.w1",
+          "phase": "L0.dispatch",
+          "baseline_ns": 87658,
+          "treatment_ns": 87668,
+          "change_ns": 10
+        },
+        {
+          "graph": "g2.w1",
+          "phase": "L1.combine",
+          "baseline_ns": 141144,
+          "treatment_ns": 141158,
+          "change_ns": 14
+        },
+        {
+          "graph": "g2.w1",
+          "phase": "L1.dispatch",
+          "baseline_ns": 124262,
+          "treatment_ns": 124276,
+          "change_ns": 14
+        }
+      ]
+    }
+  },
+  "attribution": {
+    "normal": {
+      "fixed_start_ns": 19030,
+      "guarded_start_ns": null,
+      "same_start": false,
+      "same_target_result": false,
+      "same_healthy_result": false,
+      "same_source_payload": false,
+      "guarded_minus_fixed_effective_bytes": -3088448,
+      "guarded_minus_fixed_compute_ns": -31460
+    },
+    "local": {
+      "fixed_start_ns": 19030,
+      "guarded_start_ns": 19030,
+      "same_start": true,
+      "same_target_result": true,
+      "same_healthy_result": true,
+      "same_source_payload": true,
+      "guarded_minus_fixed_effective_bytes": 0,
+      "guarded_minus_fixed_compute_ns": 0
+    }
+  },
+  "calibration": {
+    "rule": "ceil_all_normal_target_post_ack_max_to_1000ns/1",
+    "normal_messages": 214,
+    "normal_max_post_ack_ns": 17347,
+    "source_ack_timeout_ns": 18000,
+    "first_normal_post_ns": 1030,
+    "fixed_early_deadline_ns": 19030,
+    "full_fallback_ns": 127000,
+    "normal_samples": 1,
+    "normal_only": true,
+    "result_tuned": false,
+    "independent_holdout": false,
+    "messages": {
+      "7": {
+        "post_ns": 1030,
+        "ack_ns": 6338
+      },
+      "13": {
+        "post_ns": 1030,
+        "ack_ns": 11355
+      },
+      "15": {
+        "post_ns": 1030,
+        "ack_ns": 17607
+      },
+      "16": {
+        "post_ns": 1030,
+        "ack_ns": 17937
+      },
+      "17": {
+        "post_ns": 1030,
+        "ack_ns": 16851
+      },
+      "18": {
+        "post_ns": 1030,
+        "ack_ns": 17032
+      },
+      "35": {
+        "post_ns": 1030,
+        "ack_ns": 11905
+      },
+      "37": {
+        "post_ns": 1030,
+        "ack_ns": 11465
+      },
+      "38": {
+        "post_ns": 1030,
+        "ack_ns": 6739
+      },
+      "40": {
+        "post_ns": 1030,
+        "ack_ns": 12015
+      },
+      "46": {
+        "post_ns": 1030,
+        "ack_ns": 18377
+      },
+      "50": {
+        "post_ns": 1030,
+        "ack_ns": 17142
+      },
+      "51": {
+        "post_ns": 1030,
+        "ack_ns": 17252
+      },
+      "63": {
+        "post_ns": 1030,
+        "ack_ns": 10702
+      },
+      "67": {
+        "post_ns": 1030,
+        "ack_ns": 11426
+      },
+      "68": {
+        "post_ns": 1030,
+        "ack_ns": 11103
+      },
+      "75": {
+        "post_ns": 1030,
+        "ack_ns": 11685
+      },
+      "77": {
+        "post_ns": 1030,
+        "ack_ns": 16521
+      },
+      "78": {
+        "post_ns": 1030,
+        "ack_ns": 15829
+      },
+      "94": {
+        "post_ns": 1030,
+        "ack_ns": 11465
+      },
+      "96": {
+        "post_ns": 1030,
+        "ack_ns": 11323
+      },
+      "97": {
+        "post_ns": 1030,
+        "ack_ns": 11433
+      },
+      "99": {
+        "post_ns": 1030,
+        "ack_ns": 11245
+      },
+      "112": {
+        "post_ns": 1030,
+        "ack_ns": 15939
+      },
+      "117": {
+        "post_ns": 1030,
+        "ack_ns": 17717
+      },
+      "118": {
+        "post_ns": 1030,
+        "ack_ns": 18047
+      },
+      "1024": {
+        "post_ns": 18577,
+        "ack_ns": 28175
+      },
+      "1025": {
+        "post_ns": 18577,
+        "ack_ns": 27996
+      },
+      "1119": {
+        "post_ns": 18477,
+        "ack_ns": 27351
+      },
+      "1148": {
+        "post_ns": 18577,
+        "ack_ns": 27967
+      },
+      "1150": {
+        "post_ns": 18577,
+        "ack_ns": 27822
+      },
+      "1180": {
+        "post_ns": 18677,
+        "ack_ns": 27957
+      },
+      "1210": {
+        "post_ns": 18677,
+        "ack_ns": 28184
+      },
+      "1211": {
+        "post_ns": 18677,
+        "ack_ns": 28285
+      },
+      "1212": {
+        "post_ns": 18677,
+        "ack_ns": 28284
+      },
+      "1240": {
+        "post_ns": 18577,
+        "ack_ns": 23159
+      },
+      "1241": {
+        "post_ns": 18577,
+        "ack_ns": 23268
+      },
+      "1303": {
+        "post_ns": 18677,
+        "ack_ns": 27857
+      },
+      "1426": {
+        "post_ns": 18577,
+        "ack_ns": 27551
+      },
+      "1428": {
+        "post_ns": 18577,
+        "ack_ns": 28066
+      },
+      "1488": {
+        "post_ns": 18877,
+        "ack_ns": 33455
+      },
+      "1489": {
+        "post_ns": 18877,
+        "ack_ns": 33056
+      },
+      "1490": {
+        "post_ns": 18877,
+        "ack_ns": 33527
+      },
+      "1519": {
+        "post_ns": 18777,
+        "ack_ns": 32377
+      },
+      "1521": {
+        "post_ns": 18777,
+        "ack_ns": 33309
+      },
+      "1550": {
+        "post_ns": 18477,
+        "ack_ns": 32159
+      },
+      "1581": {
+        "post_ns": 18477,
+        "ack_ns": 32268
+      },
+      "1613": {
+        "post_ns": 18777,
+        "ack_ns": 32258
+      },
+      "1615": {
+        "post_ns": 18777,
+        "ack_ns": 32735
+      },
+      "1644": {
+        "post_ns": 18477,
+        "ack_ns": 31859
+      },
+      "1770": {
+        "post_ns": 18477,
+        "ack_ns": 31860
+      },
+      "1801": {
+        "post_ns": 18477,
+        "ack_ns": 31968
+      },
+      "1985": {
+        "post_ns": 34587,
+        "ack_ns": 44337
+      },
+      "1986": {
+        "post_ns": 34587,
+        "ack_ns": 44447
+      },
+      "1988": {
+        "post_ns": 34587,
+        "ack_ns": 44518
+      },
+      "1989": {
+        "post_ns": 34587,
+        "ack_ns": 44628
+      },
+      "1990": {
+        "post_ns": 34587,
+        "ack_ns": 44777
+      },
+      "2005": {
+        "post_ns": 34587,
+        "ack_ns": 49070
+      },
+      "2014": {
+        "post_ns": 34587,
+        "ack_ns": 49535
+      },
+      "2015": {
+        "post_ns": 34587,
+        "ack_ns": 39895
+      },
+      "2018": {
+        "post_ns": 34587,
+        "ack_ns": 44227
+      },
+      "2022": {
+        "post_ns": 34587,
+        "ack_ns": 40115
+      },
+      "2023": {
+        "post_ns": 34587,
+        "ack_ns": 40225
+      },
+      "2030": {
+        "post_ns": 34587,
+        "ack_ns": 49205
+      },
+      "2033": {
+        "post_ns": 34587,
+        "ack_ns": 48889
+      },
+      "2051": {
+        "post_ns": 34587,
+        "ack_ns": 44188
+      },
+      "2053": {
+        "post_ns": 34587,
+        "ack_ns": 44298
+      },
+      "2065": {
+        "post_ns": 34587,
+        "ack_ns": 48914
+      },
+      "2066": {
+        "post_ns": 34587,
+        "ack_ns": 49315
+      },
+      "2068": {
+        "post_ns": 34587,
+        "ack_ns": 48875
+      },
+      "2070": {
+        "post_ns": 34587,
+        "ack_ns": 48999
+      },
+      "2084": {
+        "post_ns": 34587,
+        "ack_ns": 44479
+      },
+      "2085": {
+        "post_ns": 34587,
+        "ack_ns": 44667
+      },
+      "2092": {
+        "post_ns": 34587,
+        "ack_ns": 49425
+      },
+      "2093": {
+        "post_ns": 34587,
+        "ack_ns": 49031
+      },
+      "2096": {
+        "post_ns": 34587,
+        "ack_ns": 49141
+      },
+      "2099": {
+        "post_ns": 34587,
+        "ack_ns": 49645
+      },
+      "2104": {
+        "post_ns": 34587,
+        "ack_ns": 49796
+      },
+      "2105": {
+        "post_ns": 34587,
+        "ack_ns": 49755
+      },
+      "2976": {
+        "post_ns": 49896,
+        "ack_ns": 54369
+      },
+      "3038": {
+        "post_ns": 50096,
+        "ack_ns": 59784
+      },
+      "3069": {
+        "post_ns": 49896,
+        "ack_ns": 59494
+      },
+      "3101": {
+        "post_ns": 49896,
+        "ack_ns": 59132
+      },
+      "3131": {
+        "post_ns": 49896,
+        "ack_ns": 59095
+      },
+      "3162": {
+        "post_ns": 49996,
+        "ack_ns": 59893
+      },
+      "3164": {
+        "post_ns": 49996,
+        "ack_ns": 59195
+      },
+      "3193": {
+        "post_ns": 49896,
+        "ack_ns": 59385
+      },
+      "3225": {
+        "post_ns": 50096,
+        "ack_ns": 54949
+      },
+      "3226": {
+        "post_ns": 50096,
+        "ack_ns": 59304
+      },
+      "3227": {
+        "post_ns": 50096,
+        "ack_ns": 59504
+      },
+      "3256": {
+        "post_ns": 50196,
+        "ack_ns": 54840
+      },
+      "3258": {
+        "post_ns": 50196,
+        "ack_ns": 59395
+      },
+      "3473": {
+        "post_ns": 49996,
+        "ack_ns": 64145
+      },
+      "3475": {
+        "post_ns": 49996,
+        "ack_ns": 63750
+      },
+      "3506": {
+        "post_ns": 49896,
+        "ack_ns": 64329
+      },
+      "3566": {
+        "post_ns": 49896,
+        "ack_ns": 63097
+      },
+      "3598": {
+        "post_ns": 50196,
+        "ack_ns": 63749
+      },
+      "3599": {
+        "post_ns": 50196,
+        "ack_ns": 64039
+      },
+      "3629": {
+        "post_ns": 50096,
+        "ack_ns": 65018
+      },
+      "3658": {
+        "post_ns": 49896,
+        "ack_ns": 63387
+      },
+      "3691": {
+        "post_ns": 49996,
+        "ack_ns": 64438
+      },
+      "3692": {
+        "post_ns": 49996,
+        "ack_ns": 63640
+      },
+      "3753": {
+        "post_ns": 49896,
+        "ack_ns": 63278
+      },
+      "3847": {
+        "post_ns": 49896,
+        "ack_ns": 64438
+      },
+      "3878": {
+        "post_ns": 49896,
+        "ack_ns": 64547
+      },
+      "3937": {
+        "post_ns": 49896,
+        "ack_ns": 63279
+      },
+      "15886": {
+        "post_ns": 66078,
+        "ack_ns": 75802
+      },
+      "15889": {
+        "post_ns": 66078,
+        "ack_ns": 79940
+      },
+      "15891": {
+        "post_ns": 66078,
+        "ack_ns": 80302
+      },
+      "15892": {
+        "post_ns": 66078,
+        "ack_ns": 80224
+      },
+      "15894": {
+        "post_ns": 66078,
+        "ack_ns": 80452
+      },
+      "15895": {
+        "post_ns": 66078,
+        "ack_ns": 80444
+      },
+      "15904": {
+        "post_ns": 66078,
+        "ack_ns": 75801
+      },
+      "15905": {
+        "post_ns": 66078,
+        "ack_ns": 75621
+      },
+      "15907": {
+        "post_ns": 66078,
+        "ack_ns": 75679
+      },
+      "15917": {
+        "post_ns": 66078,
+        "ack_ns": 75828
+      },
+      "15933": {
+        "post_ns": 66078,
+        "ack_ns": 80185
+      },
+      "15934": {
+        "post_ns": 66078,
+        "ack_ns": 76009
+      },
+      "15935": {
+        "post_ns": 66078,
+        "ack_ns": 76164
+      },
+      "15936": {
+        "post_ns": 66078,
+        "ack_ns": 71968
+      },
+      "15938": {
+        "post_ns": 66078,
+        "ack_ns": 76384
+      },
+      "15939": {
+        "post_ns": 66078,
+        "ack_ns": 76533
+      },
+      "15944": {
+        "post_ns": 66078,
+        "ack_ns": 72298
+      },
+      "15949": {
+        "post_ns": 66078,
+        "ack_ns": 80852
+      },
+      "15951": {
+        "post_ns": 66078,
+        "ack_ns": 80962
+      },
+      "15965": {
+        "post_ns": 66078,
+        "ack_ns": 75983
+      },
+      "15980": {
+        "post_ns": 66078,
+        "ack_ns": 80224
+      },
+      "15988": {
+        "post_ns": 66078,
+        "ack_ns": 80334
+      },
+      "15991": {
+        "post_ns": 66078,
+        "ack_ns": 80444
+      },
+      "15992": {
+        "post_ns": 66078,
+        "ack_ns": 80451
+      },
+      "15993": {
+        "post_ns": 66078,
+        "ack_ns": 80561
+      },
+      "15995": {
+        "post_ns": 66078,
+        "ack_ns": 80671
+      },
+      "16865": {
+        "post_ns": 81162,
+        "ack_ns": 90662
+      },
+      "16866": {
+        "post_ns": 81162,
+        "ack_ns": 90701
+      },
+      "16896": {
+        "post_ns": 81362,
+        "ack_ns": 90771
+      },
+      "16927": {
+        "post_ns": 81062,
+        "ack_ns": 90370
+      },
+      "16958": {
+        "post_ns": 81162,
+        "ack_ns": 90261
+      },
+      "16959": {
+        "post_ns": 81162,
+        "ack_ns": 85853
+      },
+      "17020": {
+        "post_ns": 81162,
+        "ack_ns": 90479
+      },
+      "17021": {
+        "post_ns": 81162,
+        "ack_ns": 90372
+      },
+      "17052": {
+        "post_ns": 81062,
+        "ack_ns": 90263
+      },
+      "17207": {
+        "post_ns": 81062,
+        "ack_ns": 85535
+      },
+      "17329": {
+        "post_ns": 81562,
+        "ack_ns": 90399
+      },
+      "17330": {
+        "post_ns": 81562,
+        "ack_ns": 90769
+      },
+      "17362": {
+        "post_ns": 81162,
+        "ack_ns": 94953
+      },
+      "17363": {
+        "post_ns": 81162,
+        "ack_ns": 95208
+      },
+      "17422": {
+        "post_ns": 81362,
+        "ack_ns": 95423
+      },
+      "17424": {
+        "post_ns": 81362,
+        "ack_ns": 94807
+      },
+      "17484": {
+        "post_ns": 81062,
+        "ack_ns": 94915
+      },
+      "17515": {
+        "post_ns": 81062,
+        "ack_ns": 95314
+      },
+      "17577": {
+        "post_ns": 81062,
+        "ack_ns": 94866
+      },
+      "17608": {
+        "post_ns": 81162,
+        "ack_ns": 95312
+      },
+      "17611": {
+        "post_ns": 81162,
+        "ack_ns": 95347
+      },
+      "17704": {
+        "post_ns": 81062,
+        "ack_ns": 94809
+      },
+      "17735": {
+        "post_ns": 81062,
+        "ack_ns": 95099
+      },
+      "17766": {
+        "post_ns": 81062,
+        "ack_ns": 95426
+      },
+      "17826": {
+        "post_ns": 81362,
+        "ack_ns": 95202
+      },
+      "17828": {
+        "post_ns": 81362,
+        "ack_ns": 95716
+      },
+      "17857": {
+        "post_ns": 96776,
+        "ack_ns": 106487
+      },
+      "17864": {
+        "post_ns": 96776,
+        "ack_ns": 102375
+      },
+      "17875": {
+        "post_ns": 96776,
+        "ack_ns": 110929
+      },
+      "17876": {
+        "post_ns": 96776,
+        "ack_ns": 111039
+      },
+      "17877": {
+        "post_ns": 96776,
+        "ack_ns": 111149
+      },
+      "17885": {
+        "post_ns": 96776,
+        "ack_ns": 111259
+      },
+      "17886": {
+        "post_ns": 96776,
+        "ack_ns": 111577
+      },
+      "17887": {
+        "post_ns": 96776,
+        "ack_ns": 102265
+      },
+      "17889": {
+        "post_ns": 96776,
+        "ack_ns": 106597
+      },
+      "17894": {
+        "post_ns": 96776,
+        "ack_ns": 102556
+      },
+      "17896": {
+        "post_ns": 96776,
+        "ack_ns": 106817
+      },
+      "17905": {
+        "post_ns": 96776,
+        "ack_ns": 111259
+      },
+      "17911": {
+        "post_ns": 96776,
+        "ack_ns": 111369
+      },
+      "17912": {
+        "post_ns": 96776,
+        "ack_ns": 111954
+      },
+      "17919": {
+        "post_ns": 96776,
+        "ack_ns": 106559
+      },
+      "17920": {
+        "post_ns": 96776,
+        "ack_ns": 102484
+      },
+      "17922": {
+        "post_ns": 96776,
+        "ack_ns": 106707
+      },
+      "17931": {
+        "post_ns": 96776,
+        "ack_ns": 106817
+      },
+      "17941": {
+        "post_ns": 96776,
+        "ack_ns": 111149
+      },
+      "17942": {
+        "post_ns": 96776,
+        "ack_ns": 111259
+      },
+      "17944": {
+        "post_ns": 96776,
+        "ack_ns": 111687
+      },
+      "17953": {
+        "post_ns": 96776,
+        "ack_ns": 106487
+      },
+      "17954": {
+        "post_ns": 96776,
+        "ack_ns": 106669
+      },
+      "17963": {
+        "post_ns": 96776,
+        "ack_ns": 106707
+      },
+      "17964": {
+        "post_ns": 96776,
+        "ack_ns": 111467
+      },
+      "17965": {
+        "post_ns": 96776,
+        "ack_ns": 111149
+      },
+      "17966": {
+        "post_ns": 96776,
+        "ack_ns": 111370
+      },
+      "17978": {
+        "post_ns": 96776,
+        "ack_ns": 111908
+      },
+      "18848": {
+        "post_ns": 112054,
+        "ack_ns": 116879
+      },
+      "18880": {
+        "post_ns": 112054,
+        "ack_ns": 120891
+      },
+      "18910": {
+        "post_ns": 112154,
+        "ack_ns": 121101
+      },
+      "18942": {
+        "post_ns": 112154,
+        "ack_ns": 121210
+      },
+      "18943": {
+        "post_ns": 112154,
+        "ack_ns": 116961
+      },
+      "19005": {
+        "post_ns": 112154,
+        "ack_ns": 121473
+      },
+      "19006": {
+        "post_ns": 112154,
+        "ack_ns": 121692
+      },
+      "19037": {
+        "post_ns": 112054,
+        "ack_ns": 121435
+      },
+      "19097": {
+        "post_ns": 112054,
+        "ack_ns": 116817
+      },
+      "19127": {
+        "post_ns": 112054,
+        "ack_ns": 116527
+      },
+      "19159": {
+        "post_ns": 112054,
+        "ack_ns": 120891
+      },
+      "19284": {
+        "post_ns": 112054,
+        "ack_ns": 121583
+      },
+      "19316": {
+        "post_ns": 112054,
+        "ack_ns": 121074
+      },
+      "19347": {
+        "post_ns": 112054,
+        "ack_ns": 125726
+      },
+      "19378": {
+        "post_ns": 112254,
+        "ack_ns": 125835
+      },
+      "19409": {
+        "post_ns": 112054,
+        "ack_ns": 125436
+      },
+      "19438": {
+        "post_ns": 112054,
+        "ack_ns": 125617
+      },
+      "19468": {
+        "post_ns": 112054,
+        "ack_ns": 126197
+      },
+      "19499": {
+        "post_ns": 112054,
+        "ack_ns": 126415
+      },
+      "19530": {
+        "post_ns": 112254,
+        "ack_ns": 126306
+      },
+      "19594": {
+        "post_ns": 112054,
+        "ack_ns": 125617
+      },
+      "19624": {
+        "post_ns": 112354,
+        "ack_ns": 126452
+      },
+      "19625": {
+        "post_ns": 112354,
+        "ack_ns": 126596
+      },
+      "19655": {
+        "post_ns": 112054,
+        "ack_ns": 125763
+      },
+      "19687": {
+        "post_ns": 112054,
+        "ack_ns": 125726
+      },
+      "19778": {
+        "post_ns": 112154,
+        "ack_ns": 125798
+      },
+      "19781": {
+        "post_ns": 112154,
+        "ack_ns": 126125
+      },
+      "19809": {
+        "post_ns": 112054,
+        "ack_ns": 125907
+      }
+    },
+    "source": "/home/lry/moe-ub-cosim/runs/sequential_whole_20261030/study/control-normal/execution_events.jsonl",
+    "source_sha256": "bd1e473b37823720e551ae7ffb6dd042f2e5abe7e9eaeef1d2c8dae2b6846bcc",
+    "full_result_sha256": "80546308f24c2f826a2745f359c2b00052d4cac5040541a66a703bc045a25f7c"
+  },
+  "analyzer_sha256": "254c5bb0ceea00bea6f4fe565868e98cd2f68717a2f27ae2ea0884f2faf2fdd2",
+  "new_network_executions": 4,
+  "inherited_networks_read_only": 2,
+  "network_reruns": 0,
+  "new_algorithm_benefit_proven": false,
+  "overall_goal_complete": false,
+  "scope": "Finite two-layer two-Decode true expert choices; declared compute/layout and preexisting equivalent model/KV. One normal and known local fault, no holdout/p99/full671B/production throughput/hardware calibration."
+}

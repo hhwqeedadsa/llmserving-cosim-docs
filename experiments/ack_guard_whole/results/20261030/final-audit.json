@@ -1,0 +1,282 @@
+{
+  "passed": true,
+  "new_networks_exactly_once": 4,
+  "inherited_networks_unchanged": 2,
+  "platform_cpu_tests_unique": 77,
+  "prefix_corruptions_rejected": 16,
+  "healthy_gates_independently_traced": 16,
+  "all_sources_matrices_computes_dependencies_gates_packets_queues_source_confirmations_timers_and_kv_checked": true,
+  "healthy_hops_each_comparison": 4264,
+  "healthy_hops_unmatched": 0,
+  "links_checked": 54,
+  "links": [
+    {
+      "file": "experiments/ack_guard_whole/results/20261030/report.html",
+      "target": "figures/comparison.png"
+    },
+    {
+      "file": "experiments/ack_guard_whole/results/20261030/report.html",
+      "target": "figures/race.png"
+    },
+    {
+      "file": "experiments/ack_guard_whole/results/20261030/report.html",
+      "target": "analysis.json"
+    },
+    {
+      "file": "experiments/ack_guard_whole/results/20261030/report.html",
+      "target": "mechanism.json"
+    },
+    {
+      "file": "experiments/ack_guard_whole/results/20261030/report.html",
+      "target": "prefix-checks.json"
+    },
+    {
+      "file": "experiments/ack_guard_whole/results/20261030/report.html",
+      "target": "frozen.json"
+    },
+    {
+      "file": "experiments/ack_guard_whole/results/20261030/report.html",
+      "target": "receipt.json"
+    },
+    {
+      "file": "experiments/ack_guard_whole/results/20261030/report.html",
+      "target": "resources.json"
+    },
+    {
+      "file": "experiments/ack_guard_whole/results/20261030/report.html",
+      "target": "final-audit.json"
+    },
+    {
+      "file": "experiments/ack_guard_whole/results/20261030/report.html",
+      "target": "README.md"
+    },
+    {
+      "file": "experiments/ack_guard_whole/results/20261030/report.html",
+      "target": "../../README.md"
+    },
+    {
+      "file": "experiments/ack_guard_whole/results/20261030/report.html",
+      "target": "../../protocol.md"
+    },
+    {
+      "file": "experiments/ack_guard_whole/results/20261030/report.html",
+      "target": "metrics/control-local-queue-integrals.csv"
+    },
+    {
+      "file": "experiments/ack_guard_whole/results/20261030/report.html",
+      "target": "metrics/control-local-switch-residence.csv"
+    },
+    {
+      "file": "experiments/ack_guard_whole/results/20261030/report.html",
+      "target": "metrics/control-normal-queue-integrals.csv"
+    },
+    {
+      "file": "experiments/ack_guard_whole/results/20261030/report.html",
+      "target": "metrics/control-normal-switch-residence.csv"
+    },
+    {
+      "file": "experiments/ack_guard_whole/results/20261030/report.html",
+      "target": "metrics/fixed-local-healthy-gates.csv"
+    },
+    {
+      "file": "experiments/ack_guard_whole/results/20261030/report.html",
+      "target": "metrics/fixed-local-healthy-matched.csv"
+    },
+    {
+      "file": "experiments/ack_guard_whole/results/20261030/report.html",
+      "target": "metrics/fixed-local-healthy-messages.csv"
+    },
+    {
+      "file": "experiments/ack_guard_whole/results/20261030/report.html",
+      "target": "metrics/fixed-local-queue-integrals.csv"
+    },
+    {
+      "file": "experiments/ack_guard_whole/results/20261030/report.html",
+      "target": "metrics/fixed-local-switch-residence.csv"
+    },
+    {
+      "file": "experiments/ack_guard_whole/results/20261030/report.html",
+      "target": "metrics/fixed-normal-healthy-gates.csv"
+    },
+    {
+      "file": "experiments/ack_guard_whole/results/20261030/report.html",
+      "target": "metrics/fixed-normal-healthy-matched.csv"
+    },
+    {
+      "file": "experiments/ack_guard_whole/results/20261030/report.html",
+      "target": "metrics/fixed-normal-healthy-messages.csv"
+    },
+    {
+      "file": "experiments/ack_guard_whole/results/20261030/report.html",
+      "target": "metrics/fixed-normal-queue-integrals.csv"
+    },
+    {
+      "file": "experiments/ack_guard_whole/results/20261030/report.html",
+      "target": "metrics/fixed-normal-switch-residence.csv"
+    },
+    {
+      "file": "experiments/ack_guard_whole/results/20261030/report.html",
+      "target": "metrics/guarded-local-healthy-gates.csv"
+    },
+    {
+      "file": "experiments/ack_guard_whole/results/20261030/report.html",
+      "target": "metrics/guarded-local-healthy-matched.csv"
+    },
+    {
+      "file": "experiments/ack_guard_whole/results/20261030/report.html",
+      "target": "metrics/guarded-local-healthy-messages.csv"
+    },
+    {
+      "file": "experiments/ack_guard_whole/results/20261030/report.html",
+      "target": "metrics/guarded-local-queue-integrals.csv"
+    },
+    {
+      "file": "experiments/ack_guard_whole/results/20261030/report.html",
+      "target": "metrics/guarded-local-switch-residence.csv"
+    },
+    {
+      "file": "experiments/ack_guard_whole/results/20261030/report.html",
+      "target": "metrics/guarded-normal-healthy-gates.csv"
+    },
+    {
+      "file": "experiments/ack_guard_whole/results/20261030/report.html",
+      "target": "metrics/guarded-normal-healthy-matched.csv"
+    },
+    {
+      "file": "experiments/ack_guard_whole/results/20261030/report.html",
+      "target": "metrics/guarded-normal-healthy-messages.csv"
+    },
+    {
+      "file": "experiments/ack_guard_whole/results/20261030/report.html",
+      "target": "metrics/guarded-normal-queue-integrals.csv"
+    },
+    {
+      "file": "experiments/ack_guard_whole/results/20261030/report.html",
+      "target": "metrics/guarded-normal-switch-residence.csv"
+    },
+    {
+      "file": "experiments/ack_guard_whole/results/20261030/report.html",
+      "target": "metrics/summary.csv"
+    },
+    {
+      "file": "experiments/ack_guard_whole/results/20261030/README.md",
+      "target": "report.html"
+    },
+    {
+      "file": "experiments/ack_guard_whole/results/20261030/README.md",
+      "target": "analysis.json"
+    },
+    {
+      "file": "experiments/ack_guard_whole/results/20261030/README.md",
+      "target": "mechanism.json"
+    },
+    {
+      "file": "experiments/ack_guard_whole/results/20261030/README.md",
+      "target": "prefix-checks.json"
+    },
+    {
+      "file": "experiments/ack_guard_whole/results/20261030/README.md",
+      "target": "frozen.json"
+    },
+    {
+      "file": "experiments/ack_guard_whole/results/20261030/README.md",
+      "target": "receipt.json"
+    },
+    {
+      "file": "experiments/ack_guard_whole/results/20261030/README.md",
+      "target": "resources.json"
+    },
+    {
+      "file": "experiments/ack_guard_whole/results/20261030/README.md",
+      "target": "final-audit.json"
+    },
+    {
+      "file": "experiments/ack_guard_whole/README.md",
+      "target": "../../fixtures/ack_guard_whole/README.md"
+    },
+    {
+      "file": "experiments/ack_guard_whole/README.md",
+      "target": "protocol.md"
+    },
+    {
+      "file": "experiments/ack_guard_whole/README.md",
+      "target": "results/20261030/report.html"
+    },
+    {
+      "file": "experiments/ack_guard_whole/README.md",
+      "target": "results/20261030/README.md"
+    },
+    {
+      "file": "docs/tasks/current.md",
+      "target": "../../fixtures/ack_guard_whole/README.md"
+    },
+    {
+      "file": "docs/tasks/current.md",
+      "target": "../../experiments/ack_guard_whole/results/20261030/report.html"
+    },
+    {
+      "file": "docs/tasks/current.md",
+      "target": "../../experiments/ack_guard_whole/results/20261030/README.md"
+    },
+    {
+      "file": "docs/tasks/current.md",
+      "target": "../../experiments/ack_guard_whole/results/20261030/analysis.json"
+    },
+    {
+      "file": "docs/tasks/current.md",
+      "target": "../../experiments/ack_guard_whole/results/20261030/mechanism.json"
+    }
+  ],
+  "csv_files": 25,
+  "plots": 2,
+  "images_visually_inspected": 2,
+  "browser_rendering_checked": false,
+  "browser_executables": {
+    "chromium": null,
+    "chromium-browser": null,
+    "google-chrome": null,
+    "firefox": null,
+    "playwright": null
+  },
+  "new_algorithm_benefit_proven": false,
+  "overall_goal_complete": false,
+  "artifact_sha256": {
+    "README.md": "d920b384fd8806995919b0e93d374bf4471d92f6e901e02a18f8a56b22260fe9",
+    "analysis.json": "e07cd31a8eb1be1355c4fd36e3a1cfbe09f913908844bb01d325e73d8099e977",
+    "figures/comparison.png": "f452572744821ed5c65f663100eff3965559c160cb2743b78653a8bc08e4f8bc",
+    "figures/comparison.svg": "df60c1424664fb4df84c6be57d9430e53b95ce5fe53dd456f7b97e3d1644e8bc",
+    "figures/race.png": "ac086dd5747a0059aae5c3a9b6f5b5c09039d2702b4570fa80e979e953465d89",
+    "figures/race.svg": "ef942dcf751820d8f2c8c41a95a8052853f9f80b976a81d3e2815fea7e8136e0",
+    "frozen.json": "d67290872eb33222ea9816b2cbbfc1dbdf35bbdbe7c19fd0b919d09327a3bb88",
+    "mechanism.json": "6f3e1847bba5e7582d042c1adafa8f5152efaa4bef29db0a18d5967139ca5c63",
+    "metrics/control-local-queue-integrals.csv": "de06476d4599c8b17f39e33ac53f17e6319db5a853b37cdc961457e02d9aeeb0",
+    "metrics/control-local-switch-residence.csv": "40bc3ddfbd9219b4dd0be4cdf347244f38d48d7332281edaf426d769f572d1c0",
+    "metrics/control-normal-queue-integrals.csv": "5672fbea84439db75c3b6ca995de02c38adf0bb024778233ea609e70d0cddf8b",
+    "metrics/control-normal-switch-residence.csv": "133eb78d341afb1c8aded6ec106797ba65487cf781ccfad5ab5cb98bbc060c3b",
+    "metrics/fixed-local-healthy-gates.csv": "0fdb7e2c28ebb6646c8f5b95445cb333cc0b4c46b802f5d7b09ff91ea9b31b46",
+    "metrics/fixed-local-healthy-matched.csv": "631c4751a990fdf794a831a8e962375910a4afa8cea0b1c6391589ebf4b598a9",
+    "metrics/fixed-local-healthy-messages.csv": "65e1209bd0d2b897f91850f29ec45d0f641df6e2d25c99db4b33b204e9d1770d",
+    "metrics/fixed-local-queue-integrals.csv": "0d058ba8ddec2611a382af35721327faa86ff5c6e45e92a4c5645b7a9c859690",
+    "metrics/fixed-local-switch-residence.csv": "ad97b4b001bda523a722cd9d24675716bca7c8c25601725c7b211c2747977212",
+    "metrics/fixed-normal-healthy-gates.csv": "15617f56faf2a73750033dde9a2896ec1b6c1aa466727acad741bacd6a5ce0e1",
+    "metrics/fixed-normal-healthy-matched.csv": "29c2a976e69d59dfb0b357618d26980c4df4408fc5d42096d6cfcf0b2cb87efd",
+    "metrics/fixed-normal-healthy-messages.csv": "529db011f4ff0a033edda08e6dd08e25ba0a6202e4362bef21148bc32793c44a",
+    "metrics/fixed-normal-queue-integrals.csv": "ca9ec2c56cfb4c7d980da5ba0b8860162e6583b964a91f2ca002dad1e64b16e7",
+    "metrics/fixed-normal-switch-residence.csv": "49e24cd3065e009e08e13b93f5dedc8812f6c390c969b1e8bb8de47005e06f01",
+    "metrics/guarded-local-healthy-gates.csv": "0fdb7e2c28ebb6646c8f5b95445cb333cc0b4c46b802f5d7b09ff91ea9b31b46",
+    "metrics/guarded-local-healthy-matched.csv": "631c4751a990fdf794a831a8e962375910a4afa8cea0b1c6391589ebf4b598a9",
+    "metrics/guarded-local-healthy-messages.csv": "65e1209bd0d2b897f91850f29ec45d0f641df6e2d25c99db4b33b204e9d1770d",
+    "metrics/guarded-local-queue-integrals.csv": "0d058ba8ddec2611a382af35721327faa86ff5c6e45e92a4c5645b7a9c859690",
+    "metrics/guarded-local-switch-residence.csv": "ad97b4b001bda523a722cd9d24675716bca7c8c25601725c7b211c2747977212",
+    "metrics/guarded-normal-healthy-gates.csv": "c5ef4f84228f7a876e00452deae4a1ab55d4631ba51f599187a839a76f0a4026",
+    "metrics/guarded-normal-healthy-matched.csv": "05022562860256bf71d4637ef714d95f904a7b5b73c79fee98bb8f768cf8ec71",
+    "metrics/guarded-normal-healthy-messages.csv": "8f5c518b981b1fbf01d4f3a580534e3a656d5d4f8a18b118e6faed3f33a45123",
+    "metrics/guarded-normal-queue-integrals.csv": "5672fbea84439db75c3b6ca995de02c38adf0bb024778233ea609e70d0cddf8b",
+    "metrics/guarded-normal-switch-residence.csv": "133eb78d341afb1c8aded6ec106797ba65487cf781ccfad5ab5cb98bbc060c3b",
+    "metrics/summary.csv": "ceb53a0544148a73a6203d47b6eb56758c984d9c76e9c1f9f51fa203dc28c929",
+    "prefix-checks.json": "348f98c8c4d3ab22d1b0a5dc353130217028d35945c594dbcba4ab0d75619814",
+    "receipt.json": "2c21e5218dc6159ef80f0c28bcd98c2acb8b5f4f3300eded5e197e712be175c1",
+    "report.html": "382c6df6918cd4f125a90e6b9e1414415d8bd1ee7970cd72872bfd9b9c885fbb",
+    "resources.json": "1c5ceb54bddc208f11777ba32c4d547a7217379fac5962a20923aba9aee74593"
+  }
+}

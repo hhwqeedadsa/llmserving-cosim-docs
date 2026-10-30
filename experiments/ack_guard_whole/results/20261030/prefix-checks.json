@@ -1,0 +1,86 @@
+{
+  "passed": true,
+  "negative_cases": [
+    {
+      "condition": "normal",
+      "mutation": "timer",
+      "rejected": true
+    },
+    {
+      "condition": "normal",
+      "mutation": "deadline",
+      "rejected": true
+    },
+    {
+      "condition": "normal",
+      "mutation": "missing_post",
+      "rejected": true
+    },
+    {
+      "condition": "normal",
+      "mutation": "unknown_post",
+      "rejected": true
+    },
+    {
+      "condition": "normal",
+      "mutation": "report_ack",
+      "rejected": true
+    },
+    {
+      "condition": "normal",
+      "mutation": "drop_decision",
+      "rejected": true
+    },
+    {
+      "condition": "normal",
+      "mutation": "first_step_result",
+      "rejected": true
+    },
+    {
+      "condition": "normal",
+      "mutation": "step_count",
+      "rejected": true
+    },
+    {
+      "condition": "local",
+      "mutation": "timer",
+      "rejected": true
+    },
+    {
+      "condition": "local",
+      "mutation": "deadline",
+      "rejected": true
+    },
+    {
+      "condition": "local",
+      "mutation": "missing_post",
+      "rejected": true
+    },
+    {
+      "condition": "local",
+      "mutation": "unknown_post",
+      "rejected": true
+    },
+    {
+      "condition": "local",
+      "mutation": "report_ack",
+      "rejected": true
+    },
+    {
+      "condition": "local",
+      "mutation": "drop_decision",
+      "rejected": true
+    },
+    {
+      "condition": "local",
+      "mutation": "first_step_result",
+      "rejected": true
+    },
+    {
+      "condition": "local",
+      "mutation": "step_count",
+      "rejected": true
+    }
+  ],
+  "new_network_executions": 0
+}

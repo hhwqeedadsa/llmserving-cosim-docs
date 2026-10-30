@@ -16,3 +16,5 @@ PYTHONPATH=python:tests/unit OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 \
 ```
 
 公开输入准备见[共享网络示例](../../examples/scaleout_multicall/README.md)，配置与报告语义见[完整备用说明](../../docs/whole_call.md)。真实路由研究独立验收；平台通过不代表任何新算法或性能收益。
+
+四份新128端点Clos网络的公开运行、全图/源确认/原生定时/KV与独立前缀验收见[网络收据入口](post-network.json)及[研究结果](../../experiments/ack_guard_whole/results/20261030/README.md)。目标收益与成本属于该单样本对照，不作为平台测试通过条件。

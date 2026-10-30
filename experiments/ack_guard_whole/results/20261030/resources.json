@@ -1,0 +1,38 @@
+{
+  "passed": true,
+  "completed_stage_wall_seconds": 53.14150239317678,
+  "nested_native_wall_seconds": 8.781960219959728,
+  "native_time_already_inside_outer_stage": true,
+  "seal_stage_reserved_seconds": 120,
+  "conservative_wall_upper_bound_seconds": 181.9234626131365,
+  "cumulative_wall_budget_seconds": 1200,
+  "artifact_usage_before_final_receipts": {
+    "runs/ack_guard_whole_20261030": {
+      "apparent_bytes": 194470326,
+      "allocated_bytes": 199057408
+    },
+    "experiments/ack_guard_whole": {
+      "apparent_bytes": 3324267,
+      "allocated_bytes": 3420160
+    },
+    "fixtures/ack_guard_whole": {
+      "apparent_bytes": 153471,
+      "allocated_bytes": 155648
+    }
+  },
+  "artifact_bytes_before_final_receipts": 202633216,
+  "final_receipts_and_small_fixture_reserve_bytes": 4194304,
+  "artifact_budget_bytes": 1073741824,
+  "peak_sampled_prior_group_rss_bytes": 337223680,
+  "free_bytes": 30936477696,
+  "min_free_bytes": 8589934592,
+  "new_network_executions": 4,
+  "network_reruns": 0,
+  "builds": 0,
+  "dependencies_modified": false,
+  "downloads": 0,
+  "gpu_used": false,
+  "failures_retained": [
+    "cpu-regression"
+  ]
+}

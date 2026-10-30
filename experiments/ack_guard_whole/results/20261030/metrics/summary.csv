@@ -1,0 +1,7 @@
+case,target_ns,healthy_ns,drain_ns,unique_payload_bytes,source_payload_bytes,retransmitted_payload_bytes,declared_compute_ns,backup_start_ns,target_winner
+control-normal,126626,139136,168210,11228096,11228096,0,119300,,primary
+fixed-normal,126745,139287,184070,14316544,14316544,0,150760,19030,primary
+guarded-normal,126626,139136,168210,11228096,11228096,0,119300,,primary
+control-local,201866,141174,201866,11228096,11271488,43392,119300,,primary
+fixed-local,142428,141188,201880,14316544,14359936,43392,150760,19030,replica
+guarded-local,142428,141188,201880,14316544,14359936,43392,150760,19030,replica

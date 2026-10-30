@@ -141,6 +141,12 @@ void Workload::notify_send_state() const {
         send_state_observer_(ready_send_count_, hw_resource->active_p2p_sends(), hw_resource->p2p_send_capacity());
 }
 
+void Workload::set_node_observer(NodeObserver observer) {
+    if (!can_load_graph())
+        throw std::logic_error("Node observer requires an idle managed workload");
+    node_observer_ = std::move(observer);
+}
+
 void Workload::set_external_events(std::unordered_set<uint64_t> nodes, ExternalEventHandler handler) {
     if (!can_load_graph() || (!nodes.empty() && !handler))
         throw std::logic_error("External events require an idle managed workload and handler");
@@ -156,6 +162,7 @@ void Workload::issue(shared_ptr<Chakra::ETFeederNode> node) {
             !active_nodes_.insert(node->id()).second) {
             throw std::logic_error("Invalid node issue in managed graph " + graph_id_);
         }
+        if (node_observer_) node_observer_(node->id(), false);
     }
     if (external_events_.count(node->id())) {
         if (node->type() != ChakraNodeType::COMP_NODE || node->runtime() != 0 || node->num_ops() != 0)
@@ -509,6 +516,8 @@ void Workload::call(EventType event, CallData* data) {
             WorkloadLayerHandlerData* wlhd = (WorkloadLayerHandlerData*)data;
             shared_ptr<Chakra::ETFeederNode> node =
                 et_feeder->lookupNode(wlhd->node_id);
+
+            if (node_observer_) node_observer_(node->id(), true);
 
             if (sys->trace_enabled) {
                 LoggerFactory::get_logger("workload")

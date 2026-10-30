@@ -62,6 +62,10 @@ class Workload : public Callable {
     using SendStateObserver = std::function<void(uint64_t, uint32_t, uint32_t)>;
     void set_send_state_observer(SendStateObserver observer);
     void notify_send_state() const;
+    // Passive managed-node notification. Called before dispatch and before
+    // releasing a completed node; observers must not mutate or schedule work.
+    using NodeObserver = std::function<void(uint64_t, bool)>;
+    void set_node_observer(NodeObserver observer);
     // Explicit managed event nodes use COMP encoding with zero runtime; their
     // completion comes from an execution object, never from a guessed delay.
     using ExternalEventHandler = std::function<void(uint64_t, std::function<void()>)>;
@@ -90,6 +94,7 @@ class Workload : public Callable {
     bool graph_active_ = false;
     uint64_t stale_callbacks_ = 0;
     SendStateObserver send_state_observer_;
+    NodeObserver node_observer_;
     uint64_t ready_send_count_ = 0;
     std::unordered_set<uint64_t> external_events_;
     ExternalEventHandler external_event_handler_;

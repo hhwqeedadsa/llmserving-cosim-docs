@@ -8,6 +8,8 @@
 
 平台前置子项：`completed`。新增显式`user_provided_model_routes`来源及未知revision约束，保留published/captured严格规则及全部原始结构/hash核验，不伪填catalog版本。36项不同的route/replay CPU检查通过（27+9，另5项定向检查包含在27项中），覆盖未知/固定revision、来源升级拒绝、原件篡改和可迁移快照；13项固定依赖一致。日志和监控在根的`monitors/source-cpu,route-regression,replay-regression`。不改依赖或网络程序，实验尚未执行。
 
+研究准备通过：前8份合格原件900/901/905/1003/1004/1007/1008/1011，两组实际前端任务共144消息/5,361,664有效字节；最大连接全部计划329,728B，小于SR1MiB窗口。由原件独立枚举全部4图贡献矩阵，热点rank0在执行前固定；源记录/输入hash和方法见[独立方法](../../experiments/local_transient_real/protocol.md)。持久GBN/SR均先计超时请求再请求重发；同一独立参考DCQCN不沿用旧native控制器故障解释。正式四条件未开始。
+
 根`runs/local_transient_real_20261030`，累计900受监控秒/新增512MiB、卷保留8GiB。单CPU命令120秒/RSS1GiB/地址2GiB；复用现有程序及固定依赖，零编译、下载、安装、GPU。最多四个新的研究网络（GBN/SR×无故障/局部短窗），每个最多一次，native60秒/RSS1GiB/地址2GiB/模拟5ms/64MiB产物/完整包100000条；未准备就绪不运行。失败保留并停止相应执行，离线修正不重跑网络，不提高预算。平台缺陷先独立修复验收；实验只用公开CLI/读取器，不导入tests/fixture/历史驱动。交付可复现准备/分析、独立字节与逐包核对及面向用户结果说明，整体论文目标继续active。
 
 ## 2026-10-30 自然丢弃后恢复请求与实际发送的调度核查

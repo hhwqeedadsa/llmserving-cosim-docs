@@ -112,6 +112,24 @@ class HelperChecks(unittest.TestCase):
         helper.accept(row)
         with self.assertRaises(ValueError):helper.accept(dict(row,sequence=1))
 
+    def test_admission_cannot_be_backdated_or_delayed_from_sync_commit(self):
+        for now in (2,4):
+            binding,helper,decision=self.runtime();id=helper.decide(decision)['attempts'][0]
+            before=binding.calls[helper.catalog[id]['call']]['runtime'].snapshot()
+            row=dict(type='HELPER_OBSERVE',schema_version='moe-helper-event/1',sequence=0,
+                observed_events=binding.observer.count,time_ns=now,id=id,kind='accepted')
+            with self.subTest(now=now),self.assertRaises(ValueError):helper.accept(row)
+            self.assertFalse(helper.states)
+            self.assertEqual(before,binding.calls[helper.catalog[id]['call']]['runtime'].snapshot())
+
+    def test_input_post_is_immediate_after_declared_zero_cost_admission(self):
+        binding,helper,decision=self.runtime();id=helper.decide(decision)['attempts'][0]
+        row=dict(type='HELPER_OBSERVE',schema_version='moe-helper-event/1',sequence=0,
+            observed_events=binding.observer.count,time_ns=3,id=id,kind='accepted')
+        helper.accept(row)
+        with self.assertRaises(ValueError):helper.accept(dict(row,sequence=1,time_ns=4,kind='input_post'))
+        self.assertEqual(helper.states[id],dict(accepted=3))
+
     def test_tampered_candidate_cover_provider_and_cost_rejected(self):
         for field,value in [('experts',[3]),('provider',2),('compute_ns',0),('input_bytes',1)]:
             c=config();b=ContributionBinding(c,Routes(),ExecutionObserver(c['execution_events']));w=wave(c)

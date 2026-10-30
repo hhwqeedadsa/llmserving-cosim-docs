@@ -46,4 +46,6 @@
 
 每次备用包含accepted、input_post、input_ready、input_ack、compute_begin/done、reduce_begin/done、result_post、result_ready、result_ack和retired共12种事件。输入ACK与接收分开，结果到达与结果ACK分开；只有全部实际资源关闭后退休。原结果迟到可以被判为冗余，但仍须履行原消息与图退出义务。
 
+当前声明没有准入处理耗时，故`accepted`和`input_post`必须等于选择该候选的`HELPER_COMMIT.now_ns`。观察器在修改贡献状态前核对，既拒绝回填过去，也拒绝无声明的延后；若以后建模非零控制处理成本，需要显式改变模型与检查规则。
+
 `rdma-check`从原始交错帧重放可见前缀和确定策略，检查同刻身份与回复、共享FIFO无重叠/空转、完整原COMP覆盖、备用事件与实际传输post/receive/ACK逐项相等、实际逐包接收、贡献一次提交与资源退休。检查通过只证明这些执行事实，不能代替业务收益或硬件准确性。

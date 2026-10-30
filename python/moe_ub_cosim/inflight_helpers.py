@@ -98,6 +98,7 @@ class HelperObserver:
         self.config, self.option, self.binding = config, configuration(config), binding
         self.execution = binding.observer
         self.catalog, self.selected, self.states = {}, set(), {}
+        self.admitted_ns = {}
         self.events = self.decisions = 0
         self.now = -1
         self.notice = None
@@ -139,6 +140,7 @@ class HelperObserver:
                 chosen = [id];break
         reply = dict(type='HELPER_COMMIT',decision_id=self.decisions,now_ns=event['now_ns'],attempts=chosen)
         self.selected.update(chosen);self.decisions += 1;self.notice = None
+        self.admitted_ns.update((id,event['now_ns']) for id in chosen)
         self.transcript.append(dict(event=event,reply=reply))
         return reply
 
@@ -158,6 +160,10 @@ class HelperObserver:
                          'reduce_begin','reduce_done','result_post','result_ack','result_ready','retired'), 'unknown helper lifecycle event')
         state = self.states.get(id,{})
         require(kind not in state, 'duplicate helper lifecycle event')
+        if kind=='accepted':
+            require(now==self.admitted_ns[id], 'helper admission differs from synchronous commit time')
+        if kind=='input_post':
+            require(now==state.get('accepted'), 'helper input post differs from immediate admission')
         dependencies = dict(accepted=(),input_post=('accepted',),input_ack=('input_post',),input_ready=('input_post',),
             compute_begin=('input_ready',),compute_done=('compute_begin',),reduce_begin=('compute_done',),
             reduce_done=('reduce_begin',),result_post=('reduce_done',),result_ack=('result_post',),

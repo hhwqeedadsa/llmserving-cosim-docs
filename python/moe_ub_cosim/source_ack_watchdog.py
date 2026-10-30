@@ -127,14 +127,14 @@ def audit(directory, result, frontend):
             (directory/'execution_events.jsonl').open() as events:
         for line in raw:
             require(len(line.encode()) <= 1048592, 'oversized native control log line')
-            frame = control_event(line, observations=True, source_ack_timeouts=True)
+            frame = control_event(line, observations=True, source_ack_timeouts=True, helpers='inflight_helpers' in config)
             if frame is None or frame['type'] == 'DECIDE':
                 continue
             if frame['type'] == 'OBSERVE':
                 require(json.loads(events.readline()) == frame, 'watchdog raw execution stream differs')
                 observer.accept(frame)
                 watchdog.observe(frame)
-            else:
+            elif frame['type']=='SOURCE_ACK_TIMEOUT':
                 require(json.loads(notices.readline()) == frame, 'watchdog saved notice differs from raw frame')
                 watchdog.accept(frame)
                 count += 1

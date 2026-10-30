@@ -48,6 +48,7 @@ def preflight(config, replay):
                     owners = {replay.owner(group, layer, e) for e in token['experts']}
                     calls += 1;bundles += len(owners)
                     lifecycle += sum(8 if owner == token['rank'] else 12 for owner in owners)
+    if 'inflight_helpers' in config:lifecycle += 12*config['inflight_helpers']['max_attempts']
     require(calls <= option['max_invocations'] and bundles <= option['max_bundles'] and
             lifecycle <= option['max_lifecycle_events'], 'contribution tracking input exceeds cumulative budget')
     return dict(invocations=calls, bundles=bundles, lifecycle_events=lifecycle)
@@ -62,6 +63,7 @@ class ContributionBinding:
         self.replay, self.observer = replay, observer
         self.calls, self.actions = {}, defaultdict(list)
         self.bundles = self.lifecycle_events = self.reserved_events = 0
+        if 'inflight_helpers' in config:self.reserved_events = 12*config['inflight_helpers']['max_attempts']
         self.execution_sha256 = fingerprint(dict(schema_version='moe-declared-execution/1',
             model=config['model'], compute=config['compute'], token_transport=config['token_transport']))
 
@@ -100,12 +102,19 @@ class ContributionBinding:
                     routing_sha256=fingerprint(dict(experts=token['experts'], source_layer=source['source_layer_id'])))
                 owners = defaultdict(list)
                 for expert in token['experts']:owners[self.replay.owner(group, lid, expert)].append(expert)
+                providers = set(owners)
+                if 'inflight_helpers' in self.config:
+                    for candidate in wave['helper_candidates']:
+                        if candidate['call']==call:providers.add(candidate['provider'])
                 spec = dict(schema_version='moe-contribution-attempts/2', invocation=invocation,
                     expected_experts=sorted(token['experts']),
                     bundles=[dict(id=f'r{rank}', experts=sorted(es)) for rank, es in sorted(owners.items())],
                     replicas=[dict(rank=rank, execution_sha256=self.execution_sha256,
-                        experts=[e for e in range(self.config['model']['experts']) if self.replay.owner(group, lid, e) == rank]) for rank in sorted(owners)],
-                    limits=dict(max_attempts_per_bundle=1, max_resources=3*len(owners), max_events=96))
+                        experts=[e for e in range(self.config['model']['experts']) if self.replay.owner(
+                            next(g for g in self.config['parallel']['groups'] if rank in g), lid, e) == rank]) for rank in sorted(providers)],
+                    limits=dict(max_attempts_per_bundle=2 if 'inflight_helpers' in self.config else 1,
+                                max_resources=(6 if 'inflight_helpers' in self.config else 3)*len(owners),
+                                max_events=192 if 'inflight_helpers' in self.config else 96))
                 runtime = ContributionAttempts(spec)
                 binding = dict(graph_id=graph, source_rank=src, slot=token['slot'], logical_layer=lid,
                                source=dict(source), bundles=[])

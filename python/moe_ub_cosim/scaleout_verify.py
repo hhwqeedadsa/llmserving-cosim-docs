@@ -70,7 +70,13 @@ def verify(directory):
     from .execution_events import audit as audit_events
     observations=audit_events(directory,result,checked_json(directory/'frontend.json',4194304))
     from .contribution_binding import audit as audit_binding
-    contributions=audit_binding(directory,checked_json(directory/'frontend.json',4194304))
+    config=checked_json(directory/'input.json',1048576)
+    helper_audit=None
+    if 'inflight_helpers' in config:
+        from .inflight_helpers import audit as audit_helpers
+        helper_audit=audit_helpers(directory,result,checked_json(directory/'frontend.json',4194304))
+        contributions=helper_audit['contribution_binding']
+    else:contributions=audit_binding(directory,checked_json(directory/'frontend.json',4194304))
     from .source_ack_watchdog import audit as audit_watchdog
     watchdog=audit_watchdog(directory,result,checked_json(directory/'frontend.json',4194304))
     if 'service_transport' in result:
@@ -79,6 +85,7 @@ def verify(directory):
         if observations:verified['execution_observation']=observations
         if contributions:verified['contribution_binding']=contributions
         if watchdog:verified['source_ack_watchdog']=watchdog
+        if helper_audit:verified.update(helper_audit)
         return verified
     frontend=checked_json(directory/'frontend.json',4194304)
     require(result['passed'] and result['drained'] and result['service']['service_finished'] and

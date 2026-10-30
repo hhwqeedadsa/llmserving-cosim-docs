@@ -34,6 +34,7 @@ class SourceAckWatchdog {
     control_(control),events_(events),option_(option) {
     Require(!option_.enabled || events_.Enabled(),"source ACK watchdog requires execution events");
   }
+  std::function<void(const Json&)> on_timeout;
   void Observe(const std::string& kind,const std::string& graph,uint64_t message,int rank) {
     if(!option_.enabled)return;
     if(kind=="message_send_post") {
@@ -50,6 +51,7 @@ class SourceAckWatchdog {
           {"observed_events",events_.Count()},{"graph_id",state.graph},{"rank",state.rank},
           {"message",message},{"send_post_ns",state.post},{"deadline_ns",state.deadline}};
         control_.Send(notice.dump());state.notified=true;++notifications_;
+        if(on_timeout)on_timeout(notice);
       });
     } else if(kind=="message_send_complete") {
       Require(states_.count(message),"source ACK watchdog confirmation without post");

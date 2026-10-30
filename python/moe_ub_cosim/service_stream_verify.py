@@ -46,7 +46,10 @@ def verify(directory):
     for stream in declared['streams']:
         require(all(observed[stream['id']][k]==v for k,v in stream.items()),'physical stream binding differs')
     callbacks={m['id']:m for m in r['service']['message_callbacks']};messages={m['id']:m for m in a['messages']}
-    require(len(callbacks)==len(r['service']['message_callbacks'])==len(messages)==len(a['messages']),
+    helper_messages={mid for attempt in r['service'].get('inflight_helpers',{}).get('attempts',[])
+                     for mid in (attempt['candidate']['input_message'],attempt['candidate']['result_message'])}
+    require(len(callbacks)==len(r['service']['message_callbacks']) and len(messages)==len(a['messages']) and
+            set(callbacks)==set(messages)-helper_messages and helper_messages<=set(messages),
             'duplicate or missing ASTRA callbacks')
     checker=message_preflight(t,p,service);events=node_events(directory);waves=[];ids=set();count=0
     for history in f['history']:
@@ -74,13 +77,16 @@ def verify(directory):
                 require(history['start_ns']<=start<=end<=history['finished_ns'],'node escaped actual wave')
                 for dep in task['deps']:
                     require(start>=event_time(events,wave['graph_id'],rank,dep,'callback'),'ASTRA dependency violated')
-                if task['kind']=='COMP':require(end-start==task['duration_ns'],'declared compute did not execute')
+                if task['kind']=='COMP':
+                    require(end-start>=task['duration_ns'] if 'inflight_helpers' in service else end-start==task['duration_ns'],
+                            'declared compute did not execute')
                 elif task['kind']=='GATE':pass  # Waiting time is checked by the full EP join below.
                 else:
                     cb=callbacks[task['message']['id']];prefix='send' if task['kind']=='SEND' else 'recv'
                     require(start==cb[prefix+'_post_ns'] and end==cb[prefix+'_callback_ns'],'ASTRA issue/callback differs')
                 count+=1
-    require(ids==set(messages)==set(callbacks) and len(ids)==a['registered_messages'],'extra/missing actual service work')
+    require(ids==set(callbacks)==set(messages)-helper_messages and len(ids)+len(helper_messages)==a['registered_messages'],
+            'extra/missing actual service work')
     from .phase_completion import actual as verify_phases
     verify_phases(waves,service,r,events)
     for index in range(len(service['parallel']['groups'])):

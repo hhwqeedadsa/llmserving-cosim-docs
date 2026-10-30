@@ -37,6 +37,19 @@ def reconstruct(result, waves, graph, layer, phase, src=None, dst=None):
             metadata[identity]=dict(m,graph_id=wave['graph_id'],group_index=wave['group_index'],decode_step=wave['decode_step'])
             if wave['graph_id']==graph and m['layer']==layer and m['phase']==phase and (
                     src is None or m['src']==src) and (dst is None or m['dst']==dst):chosen.add(identity)
+    original_ids=set(metadata)
+    catalog={row['id']:(wave,row) for wave in waves for row in wave.get('helper_candidates',[])}
+    for attempt in result.get('service',{}).get('inflight_helpers',{}).get('attempts',[]):
+        require(attempt['id'] in catalog,'helper packet association lacks declared candidate')
+        wave,row=catalog[attempt['id']]
+        require(row==attempt['candidate'],'helper packet association candidate differs')
+        for is_result in (False,True):
+            identity=row['result_message' if is_result else 'input_message']
+            require(identity not in metadata,'helper message identity reused')
+            metadata[identity]=dict(id=identity,src=row['provider' if is_result else 'source'],
+                dst=row['source' if is_result else 'provider'],bytes=row['result_bytes' if is_result else 'input_bytes'],
+                plane=row['plane'],phase='helper_result' if is_result else 'helper_input',layer=row['logical_layer'],
+                graph_id=wave['graph_id'],group_index=wave['group_index'],decode_step=wave['decode_step'])
     require(chosen and set(actual)<=set(metadata),'missing collective or extra submitted message')
     rows={};ranges_tx=defaultdict(list);ranges_rx=defaultdict(list);by_stream=defaultdict(list)
     for identity,m in metadata.items():
@@ -160,8 +173,8 @@ def reconstruct(result, waves, graph, layer, phase, src=None, dst=None):
     summary=dict(schema_version='moe-rdma-arrival-audit/2',transport_kind='astra_persistent_streams/1',
         simulation_finished_ns=result['finish_ns'],
         service_passed=result['passed'],capture_complete=True,gpu_count=result['gpu_count'],generated_graphs=len(waves),
-        generated_graph_message_count=len(metadata),submitted_message_count=len(actual),
-        generated_graph_logical_bytes=sum(m['bytes'] for m in metadata.values()),
+        generated_graph_message_count=len(original_ids),submitted_message_count=len(actual),
+        generated_graph_logical_bytes=sum(metadata[mid]['bytes'] for mid in original_ids),
         submitted_logical_bytes=sum(m['bytes'] for m in actual.values()),
         source_tx_payload_bytes=sum(r['tx_payload_bytes'] for r in rows.values()),
         destination_rx_payload_bytes=sum(r['rx_payload_bytes'] for r in rows.values()),
@@ -174,4 +187,8 @@ def reconstruct(result, waves, graph, layer, phase, src=None, dst=None):
             packet_export='full captured network; semantic_message_ids is an evaluation association, not a wire field',
             accepted='contiguous accepted byte prefixes; selective mode independently replays finite reordering capacity',
             timestamps='simulated ns, not GPU visibility or calibrated hardware',scope='generated graphs only; evaluation association'))
+    if set(metadata)-original_ids:
+        summary['helper_message_count']=len(metadata)-len(original_ids)
+        summary['helper_logical_bytes']=sum(metadata[mid]['bytes'] for mid in set(metadata)-original_ids)
+        summary['semantics']['scope']='original graphs plus admitted helper attempts; helpers share actual connection byte intervals; evaluation association only'
     return summary,list(rows.values()),list(endpoints.values()),packets,curve

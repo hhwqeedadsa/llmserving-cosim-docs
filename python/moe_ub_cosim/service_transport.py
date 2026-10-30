@@ -71,6 +71,16 @@ def native_arguments(config, output):
         from .scaleout_rdma import save
         watchdog_path=output/'source-ack-watchdog-config.json';save(watchdog_path,watchdog)
         args+=['--source-ack-watchdog',str(watchdog_path)]
+    from .inflight_helpers import configuration as helper_configuration
+    helpers=helper_configuration(config)
+    if helpers:
+        from .token_transport import payload_sizes
+        path=output/'inflight-helpers-config.json'
+        save(path,dict(configuration=helpers,groups=config['parallel']['groups'],experts=config['model']['experts'],
+            expert_to_group_rank=config['route_replay'].get('expert_to_group_rank'),
+            expert_ns_per_contribution=config['compute']['expert_ns_per_contribution'],
+            local_reduce_ns_per_extra=config['token_transport']['local_reduce_ns_per_extra'],payload_sizes=payload_sizes(config)))
+        args+=['--inflight-helpers',str(path)]
     if 'transport' not in config:return args
     from .scaleout_rdma import save
     path=output/'service-transport.json';save(path,config['transport'])

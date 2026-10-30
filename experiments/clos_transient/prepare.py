@@ -43,6 +43,7 @@ def prepare(intake_path, routes, output):
     if len(selected) != 15 or len({r['sha256'] for r in selected}) != 15:
         raise ValueError('this registered study requires the 15 distinct eligible originals')
     manifest = load(ROOT / 'experiments/moe_trace_hotspots/results/four_requests_20261018/manifest.json')
+    previous_sources = {(row['file']['sha256'], row['original_path']) for row in manifest['files']}
     manifest['source'].update(kind='user_provided_model_routes', dataset_revision=None,
         source_url='https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/tree/main/cognitivecomputations/DeepSeek-R1-AWQ/mmlu',
         usage_terms='User confirmed model/task directory; local SHA-256 verified; remote revision/license not independently verified.')
@@ -52,7 +53,11 @@ def prepare(intake_path, routes, output):
     requests = []
     for i, row in enumerate(selected):
         name = row['name']
-        if Path(name).name != name or not row['origin_directory_user_confirmed']:
+        # Intake's flag covers the eleven additions. The original four have
+        # their earlier user-confirmed identity in the existing manifest.
+        confirmed = row['origin_directory_user_confirmed'] or (
+            row['sha256'], row['original_path']) in previous_sources
+        if Path(name).name != name or not confirmed:
             raise ValueError('unconfirmed or invalid source identity')
         path = routes / name
         if sha(path) != row['sha256']:

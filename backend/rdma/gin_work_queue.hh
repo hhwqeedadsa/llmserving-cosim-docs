@@ -25,8 +25,9 @@ inline GinContextAssignment ResolveGinContext(uint32_t index, uint32_t requested
           local_devices[connection % local_devices.size()], allocated};
 }
 
-// Untimed resource core for ONE persistent peer/context work queue. Not linked
-// into Fabric yet. No packet, atomic, remote visibility or CQE format is modeled.
+// Untimed resource core for ONE persistent peer/context work queue, used by
+// persistent byte and transaction adapters. The core itself models no packet,
+// atomic operation, remote visibility or CQE format.
 // Explicit-prefix publication model, not CPU_PROXY_FREE_FLOW or SKIP_AVAILABILITY_CHECK.
 // Batch reservations cover contiguous WQE entries, NOT descriptor bytes or
 // packets. A caller may reserve ONLY when dependencies have actually fired;

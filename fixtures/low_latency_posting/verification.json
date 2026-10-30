@@ -1,0 +1,894 @@
+{
+  "passed": true,
+  "policy": {
+    "state": "passed",
+    "commands": [
+      {
+        "label": "compiler",
+        "argv": [
+          "/usr/bin/c++",
+          "--version"
+        ],
+        "exit_code": 0,
+        "expected_exit_code": 0,
+        "seconds": 0.0028474180144257843
+      },
+      {
+        "label": "build-unit",
+        "argv": [
+          "/usr/bin/c++",
+          "-std=c++17",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic",
+          "-I/home/lry/moe-ub-cosim/backend",
+          "/home/lry/moe-ub-cosim/tests/unit/low_latency_posting_test.cc",
+          "-o",
+          "/home/lry/moe-ub-cosim/runs/ll_posting_core_20261030/policy/unit"
+        ],
+        "exit_code": 0,
+        "expected_exit_code": 0,
+        "seconds": 1.1679313039639965
+      },
+      {
+        "label": "unit",
+        "argv": [
+          "/home/lry/moe-ub-cosim/runs/ll_posting_core_20261030/policy/unit"
+        ],
+        "exit_code": 0,
+        "expected_exit_code": 0,
+        "seconds": 0.012075564009137452
+      },
+      {
+        "label": "build-demo",
+        "argv": [
+          "/usr/bin/c++",
+          "-std=c++17",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic",
+          "-I/home/lry/moe-ub-cosim/backend",
+          "/home/lry/moe-ub-cosim/examples/low_latency_posting/demo.cc",
+          "-o",
+          "/home/lry/moe-ub-cosim/runs/ll_posting_core_20261030/policy/demo"
+        ],
+        "exit_code": 0,
+        "expected_exit_code": 0,
+        "seconds": 0.8196494409930892
+      },
+      {
+        "label": "demo-0-1",
+        "argv": [
+          "/home/lry/moe-ub-cosim/runs/ll_posting_core_20261030/policy/demo",
+          "0",
+          "1"
+        ],
+        "exit_code": 0,
+        "expected_exit_code": 0,
+        "seconds": 0.007094066007994115
+      },
+      {
+        "label": "demo-0-2",
+        "argv": [
+          "/home/lry/moe-ub-cosim/runs/ll_posting_core_20261030/policy/demo",
+          "0",
+          "2"
+        ],
+        "exit_code": 0,
+        "expected_exit_code": 0,
+        "seconds": 0.006953853997401893
+      },
+      {
+        "label": "demo-0-3",
+        "argv": [
+          "/home/lry/moe-ub-cosim/runs/ll_posting_core_20261030/policy/demo",
+          "0",
+          "3"
+        ],
+        "exit_code": 0,
+        "expected_exit_code": 0,
+        "seconds": 0.003421504981815815
+      },
+      {
+        "label": "demo-1-1",
+        "argv": [
+          "/home/lry/moe-ub-cosim/runs/ll_posting_core_20261030/policy/demo",
+          "1",
+          "1"
+        ],
+        "exit_code": 0,
+        "expected_exit_code": 0,
+        "seconds": 0.0033729089773260057
+      },
+      {
+        "label": "demo-1-2",
+        "argv": [
+          "/home/lry/moe-ub-cosim/runs/ll_posting_core_20261030/policy/demo",
+          "1",
+          "2"
+        ],
+        "exit_code": 0,
+        "expected_exit_code": 0,
+        "seconds": 0.00339735095622018
+      },
+      {
+        "label": "demo-1-3",
+        "argv": [
+          "/home/lry/moe-ub-cosim/runs/ll_posting_core_20261030/policy/demo",
+          "1",
+          "3"
+        ],
+        "exit_code": 0,
+        "expected_exit_code": 0,
+        "seconds": 0.003444963018409908
+      },
+      {
+        "label": "demo-3-1",
+        "argv": [
+          "/home/lry/moe-ub-cosim/runs/ll_posting_core_20261030/policy/demo",
+          "3",
+          "1"
+        ],
+        "exit_code": 0,
+        "expected_exit_code": 0,
+        "seconds": 0.003374911961145699
+      },
+      {
+        "label": "demo-3-2",
+        "argv": [
+          "/home/lry/moe-ub-cosim/runs/ll_posting_core_20261030/policy/demo",
+          "3",
+          "2"
+        ],
+        "exit_code": 0,
+        "expected_exit_code": 0,
+        "seconds": 0.007127604971174151
+      },
+      {
+        "label": "demo-3-3",
+        "argv": [
+          "/home/lry/moe-ub-cosim/runs/ll_posting_core_20261030/policy/demo",
+          "3",
+          "3"
+        ],
+        "exit_code": 0,
+        "expected_exit_code": 0,
+        "seconds": 0.0034399369615130126
+      },
+      {
+        "label": "demo-4-1",
+        "argv": [
+          "/home/lry/moe-ub-cosim/runs/ll_posting_core_20261030/policy/demo",
+          "4",
+          "1"
+        ],
+        "exit_code": 0,
+        "expected_exit_code": 0,
+        "seconds": 0.0077435949933715165
+      },
+      {
+        "label": "demo-4-2",
+        "argv": [
+          "/home/lry/moe-ub-cosim/runs/ll_posting_core_20261030/policy/demo",
+          "4",
+          "2"
+        ],
+        "exit_code": 0,
+        "expected_exit_code": 0,
+        "seconds": 0.004048864007927477
+      },
+      {
+        "label": "demo-4-3",
+        "argv": [
+          "/home/lry/moe-ub-cosim/runs/ll_posting_core_20261030/policy/demo",
+          "4",
+          "3"
+        ],
+        "exit_code": 0,
+        "expected_exit_code": 0,
+        "seconds": 0.0033761619706638157
+      },
+      {
+        "label": "demo-5-1",
+        "argv": [
+          "/home/lry/moe-ub-cosim/runs/ll_posting_core_20261030/policy/demo",
+          "5",
+          "1"
+        ],
+        "exit_code": 0,
+        "expected_exit_code": 0,
+        "seconds": 0.0033858829992823303
+      },
+      {
+        "label": "demo-5-2",
+        "argv": [
+          "/home/lry/moe-ub-cosim/runs/ll_posting_core_20261030/policy/demo",
+          "5",
+          "2"
+        ],
+        "exit_code": 0,
+        "expected_exit_code": 0,
+        "seconds": 0.003377982007805258
+      },
+      {
+        "label": "demo-5-3",
+        "argv": [
+          "/home/lry/moe-ub-cosim/runs/ll_posting_core_20261030/policy/demo",
+          "5",
+          "3"
+        ],
+        "exit_code": 0,
+        "expected_exit_code": 0,
+        "seconds": 0.003414125007111579
+      },
+      {
+        "label": "demo-8-1",
+        "argv": [
+          "/home/lry/moe-ub-cosim/runs/ll_posting_core_20261030/policy/demo",
+          "8",
+          "1"
+        ],
+        "exit_code": 0,
+        "expected_exit_code": 0,
+        "seconds": 0.007356036978308111
+      },
+      {
+        "label": "demo-8-2",
+        "argv": [
+          "/home/lry/moe-ub-cosim/runs/ll_posting_core_20261030/policy/demo",
+          "8",
+          "2"
+        ],
+        "exit_code": 0,
+        "expected_exit_code": 0,
+        "seconds": 0.0035356510197743773
+      },
+      {
+        "label": "demo-8-3",
+        "argv": [
+          "/home/lry/moe-ub-cosim/runs/ll_posting_core_20261030/policy/demo",
+          "8",
+          "3"
+        ],
+        "exit_code": 0,
+        "expected_exit_code": 0,
+        "seconds": 0.003300473967101425
+      },
+      {
+        "label": "demo-9-1",
+        "argv": [
+          "/home/lry/moe-ub-cosim/runs/ll_posting_core_20261030/policy/demo",
+          "9",
+          "1"
+        ],
+        "exit_code": 0,
+        "expected_exit_code": 0,
+        "seconds": 0.003963922034017742
+      },
+      {
+        "label": "demo-9-2",
+        "argv": [
+          "/home/lry/moe-ub-cosim/runs/ll_posting_core_20261030/policy/demo",
+          "9",
+          "2"
+        ],
+        "exit_code": 0,
+        "expected_exit_code": 0,
+        "seconds": 0.0032516280189156532
+      },
+      {
+        "label": "demo-9-3",
+        "argv": [
+          "/home/lry/moe-ub-cosim/runs/ll_posting_core_20261030/policy/demo",
+          "9",
+          "3"
+        ],
+        "exit_code": 0,
+        "expected_exit_code": 0,
+        "seconds": 0.003234272007830441
+      },
+      {
+        "label": "reject-negative",
+        "argv": [
+          "/home/lry/moe-ub-cosim/runs/ll_posting_core_20261030/policy/demo",
+          "-1",
+          "1"
+        ],
+        "exit_code": 1,
+        "expected_exit_code": 1,
+        "seconds": 0.0031325080199167132
+      },
+      {
+        "label": "reject-large",
+        "argv": [
+          "/home/lry/moe-ub-cosim/runs/ll_posting_core_20261030/policy/demo",
+          "64",
+          "1"
+        ],
+        "exit_code": 1,
+        "expected_exit_code": 1,
+        "seconds": 0.003117357031442225
+      },
+      {
+        "label": "reject-layout",
+        "argv": [
+          "/home/lry/moe-ub-cosim/runs/ll_posting_core_20261030/policy/demo",
+          "1",
+          "4"
+        ],
+        "exit_code": 1,
+        "expected_exit_code": 1,
+        "seconds": 0.0031313049839809537
+      }
+    ],
+    "cwd": "/home/lry/moe-ub-cosim",
+    "network_execution": false,
+    "hardware_calibrated": false,
+    "GPU_execution": false,
+    "sources": {
+      "backend/rdma/gin_work_queue.hh": "8b56c7ca749c9fcc400ceb4e9f1ce6b830336daab910b4158fb0a27f27b81c37",
+      "backend/rdma/low_latency_posting.hh": "bcbde0f3da4d3e2ce02bf7a573f5607c6cb4cef374058cf07d9546786e46b4ab",
+      "tests/unit/low_latency_posting_test.cc": "2619012d37eee1a437658d6ec28b0e3603ccd293b311a72be41d9195b7ff7c6e",
+      "examples/low_latency_posting/demo.cc": "8a500d9e282ff817d189ad8cda0db10a9a0c54fe391f291a30788f0dbdcb31bd",
+      "tests/integration/check_low_latency_posting.py": "fcd5855be522238a7a6e494a64eb4084801230697719face11d0904f0c2ec13e"
+    },
+    "unit": {
+      "passed": true,
+      "checks": 1461,
+      "oracle_states": 108,
+      "network_execution": false,
+      "hardware_calibrated": false
+    },
+    "workflow_cases": [
+      {
+        "passed": true,
+        "mode": "deepep_v1.2.1_sync_batch4_reference",
+        "puts": 0,
+        "WQEs_per_put": 1,
+        "before_notification": {
+          "reserved": 0,
+          "ready": 0,
+          "published": 0
+        },
+        "after_notification": {
+          "reserved": 1,
+          "published": 1
+        },
+        "consumed_before_completion": 1,
+        "completed_before_supplied_callback": 0,
+        "closed": true,
+        "completion_supplied_by_demo": true,
+        "network_execution": false,
+        "hardware_calibrated": false
+      },
+      {
+        "passed": true,
+        "mode": "deepep_v1.2.1_sync_batch4_reference",
+        "puts": 0,
+        "WQEs_per_put": 2,
+        "before_notification": {
+          "reserved": 0,
+          "ready": 0,
+          "published": 0
+        },
+        "after_notification": {
+          "reserved": 1,
+          "published": 1
+        },
+        "consumed_before_completion": 1,
+        "completed_before_supplied_callback": 0,
+        "closed": true,
+        "completion_supplied_by_demo": true,
+        "network_execution": false,
+        "hardware_calibrated": false
+      },
+      {
+        "passed": true,
+        "mode": "deepep_v1.2.1_sync_batch4_reference",
+        "puts": 0,
+        "WQEs_per_put": 3,
+        "before_notification": {
+          "reserved": 0,
+          "ready": 0,
+          "published": 0
+        },
+        "after_notification": {
+          "reserved": 1,
+          "published": 1
+        },
+        "consumed_before_completion": 1,
+        "completed_before_supplied_callback": 0,
+        "closed": true,
+        "completion_supplied_by_demo": true,
+        "network_execution": false,
+        "hardware_calibrated": false
+      },
+      {
+        "passed": true,
+        "mode": "deepep_v1.2.1_sync_batch4_reference",
+        "puts": 1,
+        "WQEs_per_put": 1,
+        "before_notification": {
+          "reserved": 1,
+          "ready": 1,
+          "published": 0
+        },
+        "after_notification": {
+          "reserved": 2,
+          "published": 2
+        },
+        "consumed_before_completion": 2,
+        "completed_before_supplied_callback": 0,
+        "closed": true,
+        "completion_supplied_by_demo": true,
+        "network_execution": false,
+        "hardware_calibrated": false
+      },
+      {
+        "passed": true,
+        "mode": "deepep_v1.2.1_sync_batch4_reference",
+        "puts": 1,
+        "WQEs_per_put": 2,
+        "before_notification": {
+          "reserved": 2,
+          "ready": 2,
+          "published": 0
+        },
+        "after_notification": {
+          "reserved": 3,
+          "published": 3
+        },
+        "consumed_before_completion": 3,
+        "completed_before_supplied_callback": 0,
+        "closed": true,
+        "completion_supplied_by_demo": true,
+        "network_execution": false,
+        "hardware_calibrated": false
+      },
+      {
+        "passed": true,
+        "mode": "deepep_v1.2.1_sync_batch4_reference",
+        "puts": 1,
+        "WQEs_per_put": 3,
+        "before_notification": {
+          "reserved": 3,
+          "ready": 3,
+          "published": 0
+        },
+        "after_notification": {
+          "reserved": 4,
+          "published": 4
+        },
+        "consumed_before_completion": 4,
+        "completed_before_supplied_callback": 0,
+        "closed": true,
+        "completion_supplied_by_demo": true,
+        "network_execution": false,
+        "hardware_calibrated": false
+      },
+      {
+        "passed": true,
+        "mode": "deepep_v1.2.1_sync_batch4_reference",
+        "puts": 3,
+        "WQEs_per_put": 1,
+        "before_notification": {
+          "reserved": 3,
+          "ready": 3,
+          "published": 0
+        },
+        "after_notification": {
+          "reserved": 4,
+          "published": 4
+        },
+        "consumed_before_completion": 4,
+        "completed_before_supplied_callback": 0,
+        "closed": true,
+        "completion_supplied_by_demo": true,
+        "network_execution": false,
+        "hardware_calibrated": false
+      },
+      {
+        "passed": true,
+        "mode": "deepep_v1.2.1_sync_batch4_reference",
+        "puts": 3,
+        "WQEs_per_put": 2,
+        "before_notification": {
+          "reserved": 6,
+          "ready": 6,
+          "published": 0
+        },
+        "after_notification": {
+          "reserved": 7,
+          "published": 7
+        },
+        "consumed_before_completion": 7,
+        "completed_before_supplied_callback": 0,
+        "closed": true,
+        "completion_supplied_by_demo": true,
+        "network_execution": false,
+        "hardware_calibrated": false
+      },
+      {
+        "passed": true,
+        "mode": "deepep_v1.2.1_sync_batch4_reference",
+        "puts": 3,
+        "WQEs_per_put": 3,
+        "before_notification": {
+          "reserved": 9,
+          "ready": 9,
+          "published": 0
+        },
+        "after_notification": {
+          "reserved": 10,
+          "published": 10
+        },
+        "consumed_before_completion": 10,
+        "completed_before_supplied_callback": 0,
+        "closed": true,
+        "completion_supplied_by_demo": true,
+        "network_execution": false,
+        "hardware_calibrated": false
+      },
+      {
+        "passed": true,
+        "mode": "deepep_v1.2.1_sync_batch4_reference",
+        "puts": 4,
+        "WQEs_per_put": 1,
+        "before_notification": {
+          "reserved": 4,
+          "ready": 4,
+          "published": 4
+        },
+        "after_notification": {
+          "reserved": 5,
+          "published": 5
+        },
+        "consumed_before_completion": 5,
+        "completed_before_supplied_callback": 0,
+        "closed": true,
+        "completion_supplied_by_demo": true,
+        "network_execution": false,
+        "hardware_calibrated": false
+      },
+      {
+        "passed": true,
+        "mode": "deepep_v1.2.1_sync_batch4_reference",
+        "puts": 4,
+        "WQEs_per_put": 2,
+        "before_notification": {
+          "reserved": 8,
+          "ready": 8,
+          "published": 8
+        },
+        "after_notification": {
+          "reserved": 9,
+          "published": 9
+        },
+        "consumed_before_completion": 9,
+        "completed_before_supplied_callback": 0,
+        "closed": true,
+        "completion_supplied_by_demo": true,
+        "network_execution": false,
+        "hardware_calibrated": false
+      },
+      {
+        "passed": true,
+        "mode": "deepep_v1.2.1_sync_batch4_reference",
+        "puts": 4,
+        "WQEs_per_put": 3,
+        "before_notification": {
+          "reserved": 12,
+          "ready": 12,
+          "published": 12
+        },
+        "after_notification": {
+          "reserved": 13,
+          "published": 13
+        },
+        "consumed_before_completion": 13,
+        "completed_before_supplied_callback": 0,
+        "closed": true,
+        "completion_supplied_by_demo": true,
+        "network_execution": false,
+        "hardware_calibrated": false
+      },
+      {
+        "passed": true,
+        "mode": "deepep_v1.2.1_sync_batch4_reference",
+        "puts": 5,
+        "WQEs_per_put": 1,
+        "before_notification": {
+          "reserved": 5,
+          "ready": 5,
+          "published": 4
+        },
+        "after_notification": {
+          "reserved": 6,
+          "published": 6
+        },
+        "consumed_before_completion": 6,
+        "completed_before_supplied_callback": 0,
+        "closed": true,
+        "completion_supplied_by_demo": true,
+        "network_execution": false,
+        "hardware_calibrated": false
+      },
+      {
+        "passed": true,
+        "mode": "deepep_v1.2.1_sync_batch4_reference",
+        "puts": 5,
+        "WQEs_per_put": 2,
+        "before_notification": {
+          "reserved": 10,
+          "ready": 10,
+          "published": 8
+        },
+        "after_notification": {
+          "reserved": 11,
+          "published": 11
+        },
+        "consumed_before_completion": 11,
+        "completed_before_supplied_callback": 0,
+        "closed": true,
+        "completion_supplied_by_demo": true,
+        "network_execution": false,
+        "hardware_calibrated": false
+      },
+      {
+        "passed": true,
+        "mode": "deepep_v1.2.1_sync_batch4_reference",
+        "puts": 5,
+        "WQEs_per_put": 3,
+        "before_notification": {
+          "reserved": 15,
+          "ready": 15,
+          "published": 12
+        },
+        "after_notification": {
+          "reserved": 16,
+          "published": 16
+        },
+        "consumed_before_completion": 16,
+        "completed_before_supplied_callback": 0,
+        "closed": true,
+        "completion_supplied_by_demo": true,
+        "network_execution": false,
+        "hardware_calibrated": false
+      },
+      {
+        "passed": true,
+        "mode": "deepep_v1.2.1_sync_batch4_reference",
+        "puts": 8,
+        "WQEs_per_put": 1,
+        "before_notification": {
+          "reserved": 8,
+          "ready": 8,
+          "published": 8
+        },
+        "after_notification": {
+          "reserved": 9,
+          "published": 9
+        },
+        "consumed_before_completion": 9,
+        "completed_before_supplied_callback": 0,
+        "closed": true,
+        "completion_supplied_by_demo": true,
+        "network_execution": false,
+        "hardware_calibrated": false
+      },
+      {
+        "passed": true,
+        "mode": "deepep_v1.2.1_sync_batch4_reference",
+        "puts": 8,
+        "WQEs_per_put": 2,
+        "before_notification": {
+          "reserved": 16,
+          "ready": 16,
+          "published": 16
+        },
+        "after_notification": {
+          "reserved": 17,
+          "published": 17
+        },
+        "consumed_before_completion": 17,
+        "completed_before_supplied_callback": 0,
+        "closed": true,
+        "completion_supplied_by_demo": true,
+        "network_execution": false,
+        "hardware_calibrated": false
+      },
+      {
+        "passed": true,
+        "mode": "deepep_v1.2.1_sync_batch4_reference",
+        "puts": 8,
+        "WQEs_per_put": 3,
+        "before_notification": {
+          "reserved": 24,
+          "ready": 24,
+          "published": 24
+        },
+        "after_notification": {
+          "reserved": 25,
+          "published": 25
+        },
+        "consumed_before_completion": 25,
+        "completed_before_supplied_callback": 0,
+        "closed": true,
+        "completion_supplied_by_demo": true,
+        "network_execution": false,
+        "hardware_calibrated": false
+      },
+      {
+        "passed": true,
+        "mode": "deepep_v1.2.1_sync_batch4_reference",
+        "puts": 9,
+        "WQEs_per_put": 1,
+        "before_notification": {
+          "reserved": 9,
+          "ready": 9,
+          "published": 8
+        },
+        "after_notification": {
+          "reserved": 10,
+          "published": 10
+        },
+        "consumed_before_completion": 10,
+        "completed_before_supplied_callback": 0,
+        "closed": true,
+        "completion_supplied_by_demo": true,
+        "network_execution": false,
+        "hardware_calibrated": false
+      },
+      {
+        "passed": true,
+        "mode": "deepep_v1.2.1_sync_batch4_reference",
+        "puts": 9,
+        "WQEs_per_put": 2,
+        "before_notification": {
+          "reserved": 18,
+          "ready": 18,
+          "published": 16
+        },
+        "after_notification": {
+          "reserved": 19,
+          "published": 19
+        },
+        "consumed_before_completion": 19,
+        "completed_before_supplied_callback": 0,
+        "closed": true,
+        "completion_supplied_by_demo": true,
+        "network_execution": false,
+        "hardware_calibrated": false
+      },
+      {
+        "passed": true,
+        "mode": "deepep_v1.2.1_sync_batch4_reference",
+        "puts": 9,
+        "WQEs_per_put": 3,
+        "before_notification": {
+          "reserved": 27,
+          "ready": 27,
+          "published": 24
+        },
+        "after_notification": {
+          "reserved": 28,
+          "published": 28
+        },
+        "consumed_before_completion": 28,
+        "completed_before_supplied_callback": 0,
+        "closed": true,
+        "completion_supplied_by_demo": true,
+        "network_execution": false,
+        "hardware_calibrated": false
+      }
+    ],
+    "invalid_workflows_rejected": 3,
+    "peak_child_rss_kib": 143600,
+    "wall_seconds": 2.173103708017152
+  },
+  "legacy_queue": {
+    "state": "passed",
+    "cwd": "/home/lry/moe-ub-cosim",
+    "commands": [
+      {
+        "argv": [
+          "/usr/bin/c++",
+          "--version"
+        ],
+        "exitcode": 0,
+        "wall_seconds": 0.0038255510153248906
+      },
+      {
+        "argv": [
+          "/usr/bin/c++",
+          "-std=c++17",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-pedantic",
+          "-I/home/lry/moe-ub-cosim/backend",
+          "/home/lry/moe-ub-cosim/tests/unit/gin_work_queue_test.cc",
+          "-o",
+          "/home/lry/moe-ub-cosim/runs/ll_posting_core_20261030/legacy-queue/gin-work-queue-test"
+        ],
+        "exitcode": 0,
+        "wall_seconds": 0.9670763550093397
+      },
+      {
+        "argv": [
+          "/home/lry/moe-ub-cosim/runs/ll_posting_core_20261030/legacy-queue/gin-work-queue-test"
+        ],
+        "exitcode": 0,
+        "wall_seconds": 0.013642859004903585
+      }
+    ],
+    "network_execution": false,
+    "timed": false,
+    "hardware_calibrated": false,
+    "budgets": {
+      "wall_seconds": 60,
+      "rss_bytes": 1073741824,
+      "address_bytes": 2147483648,
+      "output_bytes": 8388608
+    },
+    "sources": {
+      "backend/rdma/gin_work_queue.hh": "8b56c7ca749c9fcc400ceb4e9f1ce6b830336daab910b4158fb0a27f27b81c37",
+      "tests/unit/gin_work_queue_test.cc": "d7958ac8b5b9f267c3e5b473075f8a9e1d2c10b8117c0bffbe5c8d3b09d9d9c2"
+    },
+    "checks": {
+      "passed": true,
+      "checks": 4976,
+      "explored_states": 49,
+      "batch_explored_states": 122,
+      "appended_work": 1024,
+      "network_execution": false,
+      "timed": false
+    },
+    "wall_seconds": 0.9898339390056208,
+    "peak_child_rss_kib": 121072,
+    "output_bytes_before_manifest": 219487
+  },
+  "monitored_stages": {
+    "policy": {
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "tests/integration/check_low_latency_posting.py",
+        "--output",
+        "runs/ll_posting_core_20261030/policy"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "seconds": 2.3503283460158855,
+      "peak_sampled_group_rss_bytes": 163192832
+    },
+    "legacy-queue": {
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "tests/integration/check_gin_work_queue.py",
+        "--output",
+        "runs/ll_posting_core_20261030/legacy-queue"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "seconds": 1.1798927380004898,
+      "peak_sampled_group_rss_bytes": 142213120
+    }
+  },
+  "monitored_seconds": 3.5302210840163752,
+  "peak_sampled_artifact_bytes": 835584,
+  "peak_sampled_group_rss_bytes": 163192832,
+  "budget": {
+    "monitored_seconds": 600,
+    "artifact_bytes": 134217728,
+    "min_free_bytes": 8589934592
+  },
+  "network_execution": false,
+  "full_simulator_build": false,
+  "GPU_execution": false,
+  "hardware_calibrated": false,
+  "observation_scope": "CPU policy and old queue checks only; preflight and closeout outside monitor"
+}

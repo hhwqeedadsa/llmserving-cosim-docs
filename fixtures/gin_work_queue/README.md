@@ -1,6 +1,6 @@
 # 持久工作队列的功能检查
 
-对象是[无时间C++核心](../../backend/rdma/gin_work_queue.hh)，尚未接入ns-3。检查不加载模型、真实路由或研究输入，不表示现代DeepEP、NCCL或物理QP运行成功。源码语义依据见[固定GIN/GDAKI核查](../../docs/review_artifacts/nccl_gin_20261022/report.html)，完整后端尚待实现的范围见[实施规范](../../experiments/paper_readiness/modern_backend_contract.md)。本例没有前端任务生成或性能结果。
+对象是[无时间C++核心](../../backend/rdma/gin_work_queue.hh)，本检查独立于ns-3。当前持久字节与事务适配器已使用该核心，不能把早期“尚未接入”描述当作整个当前平台状态。检查不加载模型、真实路由或研究输入，不表示现代DeepEP、NCCL或物理QP运行成功。源码语义依据见[固定GIN/GDAKI核查](../../docs/review_artifacts/nccl_gin_20261022/report.html)，完整后端尚待实现的范围见[实施规范](../../experiments/paper_readiness/modern_backend_contract.md)。本例没有前端任务生成或性能结果。
 
 从仓库根使用已有C++17编译器：
 

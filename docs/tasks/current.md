@@ -1,5 +1,15 @@
 # 当前任务与交接
 
+## 2026-10-30 旧低延迟同步发布策略核心
+
+状态：`completed`（旧低延迟条件同步策略CPU验收；网络接入及整体目标active）。上一目标轮为progress：`e4f6943898`发布发送边界核查。本轮确认既有GinWorkQueue、现代事务staged_prefix和迟到发布取max已经实现，复用而不重做；新增[low_latency_posting.hh](../../backend/rdma/low_latency_posting.hh)表达旧DeepEP v1.2.1同步put的多WQE关联、按调用方message index的四条发布、通知强制发布、准备空洞及迟到旧发布。注册边界明确输入；生产者返回与本地完成分别检查，未发布尾部不自动补齐，发布/消费不释放槽。另更正旧核心“未接入”的过时注释，没有更改旧核心行为或两个网络适配器。
+
+交付[独立可运行示例](../../examples/low_latency_posting/README.md)、[功能验收](../../fixtures/low_latency_posting/README.md)及[命令/源码/输出摘要](../../fixtures/low_latency_posting/verification.json)。严格C++17编译通过；新增1,461项断言、独立108合法状态、21组公开参数组合及3个非法输入拒绝通过。旧核心4,976项回归、49/122单条及批量状态枚举通过。两阶段3.530秒、峰值采样组RSS163,192,832B、监控产物峰值835,584B；Python解析、新文档链接、源码hash和13项固定依赖检查通过。没有新网络、完整模拟器构建、安装、下载、依赖修改或GPU，不以CPU检查表示网络速度或论文创新。
+
+后续先明确旧低延迟EP32/E256完整操作的有界表示与QP/通知绑定，再决定原生接入；既有现代staged_prefix和当前direct任务不能套用旧同步规则。实际网络仍限定一种128/256/512端点Clos，须检查未发布零TX、跨QP共享和原ACK/重试/释放；本轮未完成这些网络项。正常availability和单reservation不超过深度是功能支持条件，不声称复刻旧库跳过槽检查或GPU并发内存序。整体目标继续。
+
+预算根`runs/ll_posting_core_20261030`：累计600受监控秒/128MiB/卷留8GiB，编译与CPU阶段各120秒/RSS1GiB/地址2GiB；只用现有C++17/Python，不安装、下载、改依赖或构建完整模拟器，不重跑旧网络。功能C++核心与独立oracle、旧队列回归、独立新目录示例分别检查；实际网络仍限定128/256/512端点Clos，后续接入另按字段/预算准入。仅发布既有用户分支，整体目标active。
+
 ## 2026-10-30 通信库发送发布与反馈边界
 
 状态：`completed`（本轮发送发布核查交付；新状态机与网络接入尚未实现，整体目标active）。上一目标轮为progress：`9f9465d8c9`交付恢复计时/ACK核查。本轮方法`17ea4ed80e`固定后，只读核验6份DeepEP低延迟、现代DeepEP及NCCL/DOCA本地源码身份；独立枚举262,144个source/expert项，核查原128Clos/四EP32组/15真实请求的16个组/层/步窗口（60个token输入、480个选择），266份原始网络文件hash保持。交付[网页](../../experiments/library_posting_audit/results/20261030/report.html)、[结果](../../experiments/library_posting_audit/RESULTS.md)、[独立验证](../../experiments/library_posting_audit/results/20261030/verification.json)、[源码](../../experiments/library_posting_audit/results/20261030/sources.json)和[收据](../../experiments/library_posting_audit/results/20261030/receipt.json)。

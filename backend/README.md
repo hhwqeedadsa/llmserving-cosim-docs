@@ -63,6 +63,8 @@ transactions/3的put可从注册源窗口读取实际字节。`RemoteMemory`按o
 
 深度显式取1—4096内的2的幂，单对象最多记录65,536个工作；每次reservation长度1—depth，超出明确拒绝。后一限制是当前支持边界，避免整段等待自身尚未发布前缀；不是provider或硬件上限的声明。`Reserve`等价单条`ReserveBatch`，旧调用保持其行为。`ResolveGinContext`按声明的连接数分解应用索引，并用传入设备表映射本地设备；它不探测NIC、验证拓扑或创建物理QP。在线QP和字节进度由`PersistentStreams`等调用方负责，原子协议由独立事务层负责；这个资源核心本身不实现现代DeepEP。接口阶段与功能复核见[独立检查](../fixtures/gin_work_queue/README.md)。
 
+另有[low_latency_posting.hh](rdma/low_latency_posting.hh)，在上述核心上表达固定DeepEP v1.2.1的条件同步发布策略。`ReservePut`显式接收一条逻辑put的1—32条WQE及message index；`Post`在完整就绪前缀可用后，按`(message_index+1)%4==0`判断发布，通知则强制发布。较后工作已发布时，迟到请求取max，不倒退或再次消费。`SplitRegisteredPut`只按调用方声明的注册区边界拆分，不从真实路由推测地址。正常availability检查仍是有界功能约束；不是低延迟库跳过槽检查、物理门铃、异步代理或现代GIN实现。该独立核心尚未接入两个网络适配器，公开CPU操作与范围见[示例](../examples/low_latency_posting/README.md)。
+
 ## 现有原生服务扩展
 
 持久入口v4支持显式4096连接/65536节点/2000000全网链路发送事件上限，沿用协议已验证的宿主预算；旧v1—v3的计数和宿主夹限保留。该入口独占一个Fabric，不拆组求和。全部消费者按新Limits布局构建；公开输入、千端点EP4短合成容量及限制见[显式容量](../examples/scaleout_rdma_streams/README.md#较大集群的显式容量)。这不是完整千卡MoE或GIN性能复现。

@@ -111,6 +111,8 @@ transactions/3在同一持久网络中串接“实际接收窗口→后续put”
 
 `backend/rdma/gin_work_queue.hh`是独立的无时间资源核心，验证持久工作队列的槽复用、提交前缀和累计完成；`PersistentStreams`已将它用于实际工作发布并按累计ACK推进。这个接入不提供现代GIN provider、GPU可见性或源buffer安全复用保证，不能以功能队列代替现代库性能依据，详见[后端接口](../backend/README.md#gin工作队列功能核心)。
 
+`LowLatencyPostingQueue`复用该资源核心，增加旧DeepEP v1.2.1同步put的多WQE关联、四次put条件发布及通知强制发布。它保留准备空洞，允许较后的完整前缀先发布、较早生产者随后返回；完成仍由外部累计回调提供。它仅用于独立CPU功能检查，尚未加入`PersistentStreams`/`RemoteTransactions`，不会改变现代GIN或服务网络默认路径，见[同步策略示例](../examples/low_latency_posting/README.md)。
+
 离线的`scaleout deepep-plan`由`deepep_plan.py`生成固定DeepEP低延迟路径的应用部分顺序，区分逐专家数据、零token通知、逻辑QP上下文和计算流事件。`deepep-check`检查保存表示并计算无时间依赖闭包；它不调用前端调度、ASTRA或网络，不改变下述在线服务。接口与尚未建模的队列、完成和缓冲语义见[操作计划示例](../examples/deepep_partial_order/README.md)。
 
 非 UB Scale-Out 的可选 `recovery.mode=go_back_n` 在原生 NIC 协议回调上维护源端 ACK 进展计时，超时经原生发送调度重传，接收端重复数据用真实反向 ACK 响应。数据就绪、完整确认、QP 清理和软件额度释放保持分开；全部图完成后等待尾部网络流量排空。重试耗尽停止整个共享仿真，保留业务与资源状态供离线诊断，不返回正常完成。默认原生模式与依赖保持原行为；详细机制与参数见[恢复示例](../examples/scaleout_rdma_recovery/README.md)。

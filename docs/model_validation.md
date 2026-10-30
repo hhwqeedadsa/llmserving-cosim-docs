@@ -114,7 +114,7 @@ stream-work/3的本地阶段使用输入显式声明的ns耗时，每GPU单个�
 
 当前独立持久适配器要求逐包ACK配置，选择性接收路径对每次DATA处理生成实际ACK/NACK反馈。固定RXE普通成功RC SEND/WRITE的ACK受请求位控制，重复和错误另有处理。因此，部分ACK推动计时的现象依赖实际WQE拆分和ACK节奏，真实专家选择JSON不足以校准这两项。条件算例及两端源码见[ACK语义核查](../experiments/recovery_timer_audit/results/20261030/ack_policy_explanation.md)；软件RXE不代表mlx5或现代DeepEP的已验证执行，本轮没有改变协议默认值。
 
-发送发布也是单独的建模条件：固定DeepEP v1.2.1低延迟put会按注册key拆WQE，在同步postsend条件下按四条逻辑put或末尾原子通知触发发布；这不是当前现代direct抽象的既定规则。CQ update标记表示本地完成请求，不是网络ACK请求位。现代GIN参考的发布、QP超时参数及硬件ACK应分开核验；静态调用数不能换算为包数或时延。真实选择投影、来源及后续准入见[发送发布核查](../experiments/library_posting_audit/results/20261030/report.html)；当前平台尚未新增这些库模式的门铃执行。
+发送发布也是单独的建模条件：固定DeepEP v1.2.1低延迟put会按注册key拆WQE，在同步postsend条件下按四条逻辑put或末尾原子通知触发发布；这不是当前现代direct抽象的既定规则。CQ update标记表示本地完成请求，不是网络ACK请求位。现代GIN参考的发布、QP超时参数及硬件ACK应分开核验；静态调用数不能换算为包数或时延。真实选择投影、来源及后续准入见[发送发布核查](../experiments/library_posting_audit/results/20261030/report.html)。旧低延迟同步策略现有[独立CPU核心与示例](../examples/low_latency_posting/README.md)，使用显式注册边界及有界正常availability，不模拟GPU并发内存序、异步postsend或硬件CQ；尚未把该库规则接入网络执行。
 
 功能验证覆盖尾包、最终 ACK、NACK、连续丢失、过短超时、同刻 ACK/超时、双 plane、资源释放和真实前端推进；覆盖范围见[验收](../fixtures/scaleout_recovery/README.md)。重试耗尽采用整个共享运行终止，保留资源到诊断/销毁，不模拟单 QP 错误向应用传播后的继续执行。默认原生模式逐字段兼容、记录截断不改变协议，均已单独检查。显式可选Karn RTT估计已加入：每QP单个待测原始包，重传/NACK/超时作废歧义样本，采用平滑RTT与偏差生成有界基准RTO；无配置仍固定超时。精确更新与条件证明见[推理通信脆弱性](communication_fragility.md)。这不是完整RFC6298/TCP或RoCE实现；本节早期入口没有真实通信库分块或跨消息QP复用，其他入口的QP保留见前文，硬件RTO与完整库恢复精度仍未校准。
 

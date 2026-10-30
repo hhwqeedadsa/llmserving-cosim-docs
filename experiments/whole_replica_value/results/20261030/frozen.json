@@ -1,0 +1,487 @@
+{
+  "passed": true,
+  "network_executed": false,
+  "platform_commit": "8f5b3d74cfe9d13ca4d136191421adfc0c436505",
+  "simulated_endpoints": 128,
+  "ep_sizes": [
+    64,
+    64
+  ],
+  "logical_requests": 4,
+  "control_execution_attempts": 4,
+  "eager_execution_attempts": 8,
+  "control_active_groups": [
+    0
+  ],
+  "control_dormant_groups": [
+    1
+  ],
+  "raw_source_identity": {
+    "schema_version": "moe-ub-route-manifest/1",
+    "source": {
+      "kind": "published_model_trace",
+      "dataset_id": "core12345/MoE_expert_selection_trace",
+      "dataset_revision": "27febb7b2d24169560a9f6f83d38eb53f94916cf",
+      "collector_model_id": "cognitivecomputations/DeepSeek-R1-AWQ",
+      "collector_model_revision": null,
+      "runtime_revision": null,
+      "precision": "awq_4bit",
+      "usage_terms": "Files downloaded by the user from the published dataset and supplied locally for analysis. No access terms accepted or credentials used by the agent; original dataset citation/access conditions apply; license not independently verified.",
+      "source_url": "https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/tree/27febb7b2d24169560a9f6f83d38eb53f94916cf",
+      "unknown_fields": [
+        "collector_model_revision",
+        "runtime_revision",
+        "license",
+        "collector_hardware",
+        "activation_dtype",
+        "request_eos_reason"
+      ]
+    },
+    "model": {
+      "name": "deepseek-ai/DeepSeek-R1",
+      "hidden_dim": 7168,
+      "num_layers": 61,
+      "routing_precision": "awq_4bit"
+    },
+    "layers": [
+      {
+        "layer_id": 0,
+        "kind": "dense",
+        "num_experts": 0,
+        "top_k": 0
+      },
+      {
+        "layer_id": 1,
+        "kind": "dense",
+        "num_experts": 0,
+        "top_k": 0
+      },
+      {
+        "layer_id": 2,
+        "kind": "dense",
+        "num_experts": 0,
+        "top_k": 0
+      },
+      {
+        "layer_id": 3,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 4,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 5,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 6,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 7,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 8,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 9,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 10,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 11,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 12,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 13,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 14,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 15,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 16,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 17,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 18,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 19,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 20,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 21,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 22,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 23,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 24,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 25,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 26,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 27,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 28,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 29,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 30,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 31,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 32,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 33,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 34,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 35,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 36,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 37,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 38,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 39,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 40,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 41,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 42,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 43,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 44,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 45,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 46,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 47,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 48,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 49,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 50,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 51,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 52,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 53,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 54,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 55,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 56,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 57,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 58,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 59,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 60,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      }
+    ],
+    "files": [
+      {
+        "file_id": "local-1472",
+        "original_path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/computer_security/1472.json",
+        "file": {
+          "sha256": "3085c39e9b9950a7e68f30eed8517eaecbfe3d0ad75d813925ff788a1c164255"
+        },
+        "format": "token_layer_map_v1"
+      },
+      {
+        "file_id": "local-1808",
+        "original_path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/econometrics/1808.json",
+        "file": {
+          "sha256": "c8c9cf4917498a2195960dbd9c65e9efe027af6606db098d40b0db8f7c266092"
+        },
+        "format": "token_layer_map_v1"
+      },
+      {
+        "file_id": "local-2675",
+        "original_path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/high_school_biology/2675.json",
+        "file": {
+          "sha256": "848633cf8afa1c9247d9cdaf5968bb09a5f2e2d409387f4a333ce7a6e35390cd"
+        },
+        "format": "token_layer_map_v1"
+      },
+      {
+        "file_id": "local-6447",
+        "original_path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/international_law/6447.json",
+        "file": {
+          "sha256": "265c8e66cfb49da12be0d8037cd7a8be6997f4207bcb0a48ca3c616bbe253b96"
+        },
+        "format": "token_layer_map_v1"
+      }
+    ]
+  },
+  "references": {
+    "normal": {
+      "directory": "/home/lry/moe-ub-cosim/runs/whole_call_20261030/normal",
+      "sha256": {
+        "input.json": "fd2ae045e995fedee37e72c4ab9aefd126876ced110aaedf5fbef41c7c4dd181",
+        "result.json": "c4f0e98e7816582c23079bb088413060f47d7593baa13bc475ed7170545a4fdb",
+        "frontend.json": "de45660bc9fe6dc1b38c0c3bd257012d10ac9bebdf29ea47353d0164bff80412",
+        "topology.json": "5389993e9aa1dfc148b4713b0a2b0c0521de24b41b74060e2db7eb9f048c444f",
+        "rdma.json": "2e96b611d1985507bf3eda5816c1cd4595a0c120b4ef5b460ab74c1e0d20b3db",
+        "verification.json": "9b70665aeb0bfe0323c8e50ec3e547964a76629093ba5ca26c3e38a293bbbc7e"
+      }
+    },
+    "local": {
+      "directory": "/home/lry/moe-ub-cosim/runs/whole_call_20261030/local",
+      "sha256": {
+        "input.json": "fd2ae045e995fedee37e72c4ab9aefd126876ced110aaedf5fbef41c7c4dd181",
+        "result.json": "e47d489f12a7d7cca5336a4dfea3ece3d00591b729711085f7cd2379fb616115",
+        "frontend.json": "ccba86869f48add1edd9630c3126734d6705cfab3bb1d1ab81ade0e25c882048",
+        "topology.json": "5389993e9aa1dfc148b4713b0a2b0c0521de24b41b74060e2db7eb9f048c444f",
+        "rdma.json": "d92c3cab638c4baf7d1f5229ca9e7acc302149051cc36caccd8cd81402231f6e",
+        "verification.json": "70fbb090ededa3bf09ee4139e8b6f135a887765f1851a78a16e40b8eb7184751"
+      }
+    }
+  },
+  "backend": {
+    "path": "/home/lry/moe-ub-cosim/runs/compute_start_20261030/build/ns3.42-moe-rdma-service",
+    "sha256": "49cbc071754f1635596f789025e2a6e75d843e768730cef994b828129a1bb95a"
+  },
+  "prepared": "/home/lry/moe-ub-cosim/runs/whole_control_20261030/input",
+  "prepared_sha256": {
+    "service-whole.json": "5fa8a8699c3fbe2145f7ffb54513d15de0e87ca26daefc1ebcef7b26693cf349",
+    "service-primary.json": "3f1861e1e5af1c009bbd601ec6858edb942359fe0d75411b69638f7b409272e2",
+    "rdma.json": "2e96b611d1985507bf3eda5816c1cd4595a0c120b4ef5b460ab74c1e0d20b3db",
+    "rdma-whole-local.json": "d92c3cab638c4baf7d1f5229ca9e7acc302149051cc36caccd8cd81402231f6e",
+    "topology/topology.json": "5389993e9aa1dfc148b4713b0a2b0c0521de24b41b74060e2db7eb9f048c444f"
+  },
+  "method_sha256": "533177de045557a7e6a6aa28b6c2110a12ab0b183409604fc2bbd260985e55c2",
+  "scope": "pre-execution matched logical input and deployment; no outcome optimization"
+}

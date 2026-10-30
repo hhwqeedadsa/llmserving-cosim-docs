@@ -591,9 +591,12 @@ def run(config, topology, protocol, backend, output, protoc='protoc', *, host_ti
         provenance['hashes'][str(module)]=digest(module)
         if c['whole_call_replication']['policy']=='delayed_complete_segment/1':
             for name in (('delayed_whole.py','service_wakeup.py','sequential_whole.py') if
-                         c['whole_call_replication']['schema_version']=='moe-whole-call-replication/4' else
+                         c['whole_call_replication']['schema_version'] in ('moe-whole-call-replication/4','moe-whole-call-replication/5') else
                          ('delayed_whole.py','service_wakeup.py')):
                 module=ROOT/'python/moe_ub_cosim'/name
+                provenance['hashes'][str(module)]=digest(module)
+            if c['whole_call_replication']['schema_version']=='moe-whole-call-replication/5':
+                module=ROOT/'python/moe_ub_cosim/guarded_whole.py'
                 provenance['hashes'][str(module)]=digest(module)
         save(output/'provenance.json',provenance)
     command=[sys.executable,'-m','moe_ub_cosim.scaleout_service','--worker',str(output/'input.json'),str(output),str(output/'rdma.json'),

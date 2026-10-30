@@ -7,7 +7,7 @@ from .scaleout_topology import fields,integer,require
 class SequentialWholeConsumer(DelayedWholeConsumer):
     def __init__(self,config,replay):
         super().__init__(config,replay)
-        require(self.option['schema_version']=='moe-whole-call-replication/4','missing sequential format')
+        require(self.option['schema_version'] in ('moe-whole-call-replication/4','moe-whole-call-replication/5'),'missing sequential format')
         self.steps=config['workload']['decode_steps']
         for name,call in self.calls.items():
             for role,a in call['attempts'].items():
@@ -48,13 +48,16 @@ class SequentialWholeConsumer(DelayedWholeConsumer):
                 len(wave['routes'])==self.config['model']['layers'] and a.get('skipped_ns') is None and a['finished_ns'] is None,
                 'sequential graph scope/order differs')
         if step==0:
-            require(a['submitted_ns'] is None and now==(0 if role=='primary' else self.deadlines[name]) and
+            require(a['submitted_ns'] is None and (now==0 if role=='primary' else self.replica_allowed_time(name,now)) and
                     (role=='primary' or (call['attempts']['primary']['submitted_ns']==0 and call['winner'] is None)),
                     'sequential initial submission outside legal decision')
             self.emit('attempt_submitted',name,role,now);a['submitted_ns']=now
         else:
             require(a['waves'][-1]['finished_ns']==now and now>=self.now,'next graph before previous actual completion')
         a['waves'].append(dict(graph_id=graph,step=step,submitted_ns=now,finished_ns=None))
+
+    def replica_allowed_time(self,name,now):
+        return now==self.deadlines[name]
 
     def next_graphs(self,groups):
         """Names of the actual next graphs, before registering these submissions."""
@@ -86,10 +89,11 @@ class SequentialWholeConsumer(DelayedWholeConsumer):
 
 
 def logical_finish(report,history):
-    require(report.get('schema_version')=='moe-whole-call-report/3' and report.get('all_attempts_retired') is True,
+    guarded=report.get('schema_version')=='moe-whole-call-report/4'
+    require(report.get('schema_version') in ('moe-whole-call-report/3','moe-whole-call-report/4') and report.get('all_attempts_retired') is True,
             'incomplete sequential whole report')
     option=report['configuration'];by_call=deadlines(option);steps=report['decode_steps'];integer(steps,'Decode steps',1,128)
-    require(option['schema_version']=='moe-whole-call-replication/4' and set(report['calls'])==set(by_call),
+    require(option['schema_version']==('moe-whole-call-replication/5' if guarded else 'moe-whole-call-replication/4') and set(report['calls'])==set(by_call),
             'sequential call coverage differs')
     specs={c['id']:c for c in option['calls']};graphs=set();ends=[]
     for name,call in report['calls'].items():
@@ -101,7 +105,8 @@ def logical_finish(report,history):
                         a['skipped_ns']==attempts['primary']['finished_ns']<=by_call[name], 'skipped sequence executed')
                 continue
             require(type(a['submitted_ns']) is int and type(a['finished_ns']) is int and len(a['waves'])==steps and
-                    a['submitted_ns']==(0 if role=='primary' else by_call[name]), 'incomplete sequential lifetime')
+                    ((a['submitted_ns']==0) if role=='primary' else
+                     (0<=a['submitted_ns']<=by_call[name] if guarded else a['submitted_ns']==by_call[name])), 'incomplete sequential lifetime')
             previous=a['submitted_ns']
             for step,wave in enumerate(a['waves']):
                 g=f'g{index}.w{step}'

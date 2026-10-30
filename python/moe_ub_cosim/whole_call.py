@@ -20,11 +20,16 @@ def configuration(config):
     if 'whole_call_replication' not in config:return None
     value=config['whole_call_replication']
     require(isinstance(value,dict),'invalid whole call replication object')
-    sequential=value.get('schema_version')=='moe-whole-call-replication/4'
-    per_call=value.get('schema_version') in ('moe-whole-call-replication/3','moe-whole-call-replication/4')
-    delayed=value.get('schema_version') in ('moe-whole-call-replication/2','moe-whole-call-replication/3','moe-whole-call-replication/4')
+    guarded=value.get('schema_version')=='moe-whole-call-replication/5'
+    sequential=value.get('schema_version') in ('moe-whole-call-replication/4','moe-whole-call-replication/5')
+    per_call=sequential or value.get('schema_version')=='moe-whole-call-replication/3'
+    delayed=per_call or value.get('schema_version')=='moe-whole-call-replication/2'
     fields(value,'schema_version policy initial_state max_events calls'+
-           (' max_wakeup_events' if per_call else ' hedge_after_ns max_wakeup_events' if delayed else ''),'whole call replication')
+           (' max_wakeup_events' if per_call else ' hedge_after_ns max_wakeup_events' if delayed else '')+
+           (' max_guard_events max_guard_messages' if guarded else ''),'whole call replication')
+    if guarded:
+        integer(value['max_guard_events'],'guard decision budget',1,65536)
+        integer(value['max_guard_messages'],'guard message budget',1,65536)
     require(((value['schema_version']=='moe-whole-call-replication/1' and value['policy']=='eager_complete_segment/1') or
              (delayed and value['policy']=='delayed_complete_segment/1')) and
             value['initial_state']=='declared_equivalent_ready_kv/1','unsupported whole call replication semantics')
@@ -41,7 +46,7 @@ def configuration(config):
             config.get('token_transport',{}).get('combine')=='rank_reduced/1' and
             config.get('execution_events',{}).get('schema_version')=='moe-execution-events/1' and
             'transport' in config and 'inflight_helpers' not in config,
-            'whole replicas require explicit finite replay steps (multiple only in /4), full EP completion, rank-reduced transport and events/1; no partial helpers')
+            'whole replicas require explicit finite replay steps (multiple only in /4 or /5), full EP completion, rank-reduced transport and events/1; no partial helpers')
     integer(value['max_events'],'whole call max events',1,65536)
     calls=value['calls'];groups=config['parallel']['groups'];used=set();names=set()
     require(isinstance(groups,list) and 2<=len(groups)<=64,'invalid whole EP groups')
@@ -54,8 +59,11 @@ def configuration(config):
     require(sorted(flat)==list(range(len(flat))),'whole EP groups must partition physical ranks')
     require(isinstance(calls,list) and 1<=len(calls)<=32,'invalid whole call count')
     for call in calls:
-        fields(call,'id primary_group replica_group'+(' hedge_after_ns' if per_call else ''),'whole call')
+        fields(call,'id primary_group replica_group'+(' hedge_after_ns' if per_call else '')+
+               (' source_ack_timeout_ns' if guarded else ''),'whole call')
         if per_call:integer(call['hedge_after_ns'],'call hedge deadline',1,4999999)
+        if guarded and call['source_ack_timeout_ns'] is not None:
+            integer(call['source_ack_timeout_ns'],'source confirmation timeout',1,4999999)
         require(isinstance(call['id'],str) and re.fullmatch(r'[A-Za-z0-9_.-]{1,64}',call['id']) and
                 call['id'] not in names,'invalid or duplicate whole call identity')
         names.add(call['id'])
@@ -65,13 +73,14 @@ def configuration(config):
         require(len(groups[call['primary_group']])==len(groups[call['replica_group']]),'whole replica EP sizes differ')
     require(used==set(range(len(groups))) and 7*len(calls)<=value['max_events'],
             'whole calls must partition groups and fit lifecycle budget')
+    if guarded:require(any(c['source_ack_timeout_ns'] is not None for c in calls),'guard format requires a guarded call')
     return value
 
 
 def deadlines(option):
     """Absolute native deadlines, keeping the original global schema intact."""
     require(option['policy']=='delayed_complete_segment/1','deadlines require delayed whole calls')
-    return {call['id']:(call['hedge_after_ns'] if option['schema_version'] in ('moe-whole-call-replication/3','moe-whole-call-replication/4')
+    return {call['id']:(call['hedge_after_ns'] if option['schema_version'] in ('moe-whole-call-replication/3','moe-whole-call-replication/4','moe-whole-call-replication/5')
                         else option['hedge_after_ns']) for call in option['calls']}
 
 
@@ -121,7 +130,7 @@ class WholeCallConsumer:
                     first_decode_entry=row['first_decode_entry'],context_tokens=row['context_tokens']))
             key=fingerprint(dict(model=config['model'],compute=config['compute'],token_transport=config['token_transport'],
                 source_layers=replay.layers,requests=inputs,initial_state=self.option['initial_state']))
-            if self.option['schema_version']=='moe-whole-call-replication/4':
+            if self.option['schema_version'] in ('moe-whole-call-replication/4','moe-whole-call-replication/5'):
                 key=fingerprint(dict(route_and_initial_state=key,decode_steps=config['workload']['decode_steps']))
             attempts={role:dict(group_index=call[role+'_group'],graph_id=f'g{call[role+"_group"]}.w0',
                 submitted_ns=None,finished_ns=None) for role in ('primary','replica')}
@@ -184,6 +193,9 @@ class WholeCallConsumer:
 
 def logical_finish(report,history):
     """Timing interpretation only; public run audit also rebuilds source bindings."""
+    if report.get('schema_version')=='moe-whole-call-report/4':
+        from .guarded_whole import logical_finish as guarded_finish
+        return guarded_finish(report,history)
     if report.get('schema_version')=='moe-whole-call-report/3':
         from .sequential_whole import logical_finish as sequential_finish
         return sequential_finish(report,history)
@@ -242,6 +254,9 @@ def audit(directory,config,result,frontend):
 
 def consumer(config,replay):
     option=configuration(config)
+    if option['schema_version']=='moe-whole-call-replication/5':
+        from .guarded_whole import GuardedWholeConsumer
+        return GuardedWholeConsumer(config,replay)
     if option['schema_version']=='moe-whole-call-replication/4':
         from .sequential_whole import SequentialWholeConsumer
         return SequentialWholeConsumer(config,replay)

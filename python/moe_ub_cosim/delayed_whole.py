@@ -131,8 +131,8 @@ def audit(directory,config,result,frontend):
                     reply['decision_id']==event['decision_id'] and reply['type']=='COMMIT',
                     'delayed decision identity/deadline differs')
             graphs=[Path(s).name for s in reply['submissions']]
-            expected_graphs=(consumer.next_graphs(groups) if config['whole_call_replication']['schema_version']==
-                             'moe-whole-call-replication/4' else [f'g{i}.w0' for i in groups])
+            expected_graphs=(consumer.next_graphs(groups) if config['whole_call_replication']['schema_version'] in
+                             ('moe-whole-call-replication/4','moe-whole-call-replication/5') else [f'g{i}.w0' for i in groups])
             require(graphs==expected_graphs,'delayed submission differs from actual prefix policy')
             for graph in graphs:consumer.register(checked_json(directory/'graphs'/graph/'wave.json',16*2**20),event['now_ns'])
             decisions+=1

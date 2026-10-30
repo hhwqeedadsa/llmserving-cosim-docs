@@ -28,11 +28,15 @@ def main():
     p.add_argument('--target-deadline-ns',type=int,default=70000)
     p.add_argument('--healthy-deadline-ns',type=int,default=4000000)
     p.add_argument('--control-deadline-ns',type=int,default=4000000)
+    p.add_argument('--target-source-ack-timeout-ns',type=int,
+        help='optional polled source-confirmation timeout; uses replication/5 and retains target deadline as fallback')
     p.add_argument('--decode-steps',type=int,default=1,choices=(1,2,3,4),
         help='finite actual-completion-driven Decode steps; multiple steps use explicit replication/4')
     a=p.parse_args();out=a.output.resolve()
     for t in (a.target_deadline_ns,a.healthy_deadline_ns,a.control_deadline_ns):
         if not 1<=t<=4999999:raise ValueError('deadline must be1..4999999ns')
+    if a.target_source_ack_timeout_ns is not None and not 1<=a.target_source_ack_timeout_ns<=4999999:
+        raise ValueError('source-confirmation timeout must be1..4999999ns')
     count=a.target_files if a.target_files is not None else (4 if a.source_manifest else 1)
     if not 1<=count<=32:raise ValueError('target requests must be1..32')
     subprocess.run([sys.executable,'-B',str(ROOT/'examples/scaleout_whole_call/prepare.py'),
@@ -81,6 +85,11 @@ def main():
     save(out/'rdma-multicall-normal.json',normal);save(out/'rdma-multicall-local.json',local)
     control=deepcopy(c)
     for call in control['whole_call_replication']['calls']:call['hedge_after_ns']=a.control_deadline_ns
+    if a.target_source_ack_timeout_ns is not None:
+        c['whole_call_replication'].update(schema_version='moe-whole-call-replication/5',max_guard_events=64,
+            max_guard_messages=maximum_work,max_wakeup_events=64)
+        for i,call in enumerate(c['whole_call_replication']['calls']):
+            call['source_ack_timeout_ns']=a.target_source_ack_timeout_ns if i==0 else None
     topology=load(out/'topology/topology.json')
     for service in (c,control):
         for protocol in (normal,local):

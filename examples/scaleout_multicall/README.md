@@ -18,3 +18,7 @@ PYTHONPATH=python .venv/frontend/bin/python -B examples/scaleout_multicall/prepa
 运行仍使用[公开完整副本示例](../scaleout_whole_call/README.md)中的`scaleout rdma-run/rdma-check`：替换config、protocol、topology与新输出目录，后端需支持`--control-wakeup`。完整逐包和队列事件开启；原生预算为60秒/RSS1GiB/地址2GiB/模拟5ms/128MiB/完整包200000条。先登记累计实验预算，超限或失败保留，不自动扩限或重跑。
 
 检查`whole_call_report.json`的每call结果、实际尝试与跳过状态，`frontend.standby_memory`的预留/释放，以及`result.service.control_wakeup`的最早期限替换。原始文件数、逻辑请求数、实际执行数、活跃rank与模拟端点数分开报告。
+
+可选增加`--target-source-ack-timeout-ns 18000 --target-deadline-ns 127000`，为目标启用源确认超时检查，完整任务127µs门槛仍是兜底。脚本生成显式replication/5、64条guard决策/64条原生定时事件及与已有工作量相同的消息跟踪预算；只有目标启用，健康call为null。control输入保留原/3或/4无guard格式，默认不变。18000只是参数示例，研究时须依据正常负载校准，不是GPU实测、默认超时或新算法。
+
+新模式只使用实际SEND post及源完成回调，通过已有原生控制定时器轮询，不生成`SOURCE_ACK_TIMEOUT`通知，也不直接启用`source_ack_watchdog`。无待确认消息时继续以该期限轮询，防止后续阶段缺少保护；某次poll可能晚于单条消息自己的期限。检查时已观察确认则不触发；同纳秒按实际OBSERVE/DECIDE前缀顺序。详见[完整备用接口](../../docs/whole_call.md)。

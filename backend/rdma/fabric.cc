@@ -19,8 +19,7 @@ Json ReadJson(const std::string& path) {
 }
 static int64_t Now() { return Simulator::Now().GetNanoSeconds(); }
 static CustomHeader Header(Ptr<const Packet> p) {
-  CustomHeader h(CustomHeader::L2_Header | CustomHeader::L3_Header | CustomHeader::L4_Header);
-  h.getInt = 1; p->PeekHeader(h); return h;
+  return LogicalHeader(p);
 }
 class FaultModel final: public ErrorModel {
  public:
@@ -111,6 +110,13 @@ Fabric::Fabric(const Json& topology, const Json& config): topology_(topology), c
   Require(counter_mode=="legacy_dense" || counter_mode=="port_dense","invalid switch_counter_storage");
   const auto link_failures=LinkFailureEvents(config,topology,MaxSimNs());
   local_failover_=config.contains("local_failover");
+  explicit_repair_=local_failover_ && config.at("local_failover").at("mode")=="explicit_prefix/1";
+  RepairPlans repair_plans;
+  if(explicit_repair_) {
+    repair_limit_=config.at("local_failover").at("max_events");
+    const auto& event=link_failures.at(0);
+    repair_plans=BuildRepairPlans(topology,event.at("src"),event.at("dst"));
+  }
   const auto limit=[&](const char* key,unsigned fallback){return config.contains("limits")?config.at("limits").at(key).get<unsigned>():fallback;};
   const unsigned gpu_limit=limit("max_gpus",32),sw_limit=limit("max_switches",16),link_limit=limit("max_links",256);
   Require(gpu_limit<=1024 && sw_limit<=256 && link_limit<=16384 && MaxMessages()<=1000000 && MaxSimNs()<=1000000000,
@@ -161,6 +167,16 @@ Fabric::Fabric(const Json& topology, const Json& config): topology_(topology), c
       ++switches;
       planes_ = std::max(planes_, n.at("plane").get<unsigned>() + 1);
       auto sw = CreateObject<CnpSwitch>();
+      if(explicit_repair_) {
+        const unsigned node=n.at("id");
+        sw->EnableRepair(repair_plans[node],[this,node](unsigned action,unsigned port,const RepairHeader& route,
+          Ptr<const Packet> packet,unsigned overhead) {
+          ++repair_observations_;if(repair_events_.size()>=repair_limit_)return;
+          const auto h=Header(packet);
+          repair_events_.push_back({Now(),node,action,port,static_cast<int64_t>(packet->GetUid()),h.dip,
+            route.next,route.path.merge,overhead,packet->GetSize(),h.l3Prot});
+        });
+      }
       if(switch_drop_limit_)Require(sw->TraceConnectWithoutContext("SwitchDrop",
         MakeBoundCallback(&Fabric::SwitchDropTrace,this,n.at("id").get<unsigned>())),"missing native SwitchDrop trace");
       sw->SetAttribute("EcnEnabled", BooleanValue(true));
@@ -403,6 +419,8 @@ void Fabric::InstallLocalRoutes(unsigned node,bool record,unsigned event_index,c
   // Candidates only reflect globally converged failures. IsLinkUp is read
   // for this switch's own ports, never used in another node's reverse BFS.
   const auto sw=DynamicCast<SwitchNode>(nodes_.Get(node));sw->ClearTable();
+  const auto repair_sw=DynamicCast<CnpSwitch>(nodes_.Get(node));
+  if(explicit_repair_)repair_sw->ClearActiveRepairs();
   std::map<unsigned,uint64_t> removed;
   uint64_t installed=0,empty=0,candidates=0;
   const auto& table=route_candidates_[node];
@@ -415,8 +433,9 @@ void Fabric::InstallLocalRoutes(unsigned node,bool record,unsigned event_index,c
         sw->AddTableEntry(address,port);++live;++installed;
       } else ++removed[port];
     }
-    if(!live)++empty;
+    if(!live) {++empty;if(explicit_repair_)repair_sw->ActivateRepair(entry.first);}
   }
+  if(explicit_repair_)repair_sw->InstallOutputAliases();
   if(record) {
     Json losses=Json::array();
     for(const auto& item:removed)losses.push_back({{"port",item.first},{"destination_entries",item.second}});
@@ -517,12 +536,13 @@ void Fabric::PacketEvent(unsigned event,unsigned node,unsigned port,Ptr<const Pa
       (!capture_nodes_.empty() && !capture_nodes_.count(node)))return;
   ++packet_observations_;
   if(packet_events_.size()>=capture_limit_)return;
-  const auto h=Header(p);
+  unsigned repair_bytes=0;const auto h=LogicalHeader(p,&repair_bytes);
   const int64_t sequence=h.l3Prot==0x11?h.udp.seq:(h.l3Prot==0xfc || h.l3Prot==0xfd)?int64_t(h.ack.seq):-1;
   packet_events_.push_back({Now(),node,port,event,static_cast<int64_t>(p->GetUid()),PacketFlow(p),
       h.l3Prot,sequence,p->GetSize(),h.GetIpv4EcnBits(),
       ports_.at(node).at(port).device->GetQueue()->GetNBytesTotal(),
-      h.l3Prot==0x11?static_cast<int64_t>(p->GetSize()-h.GetSerializedSize()-(h.roce.present?h.roce.pad+4:0)):0});
+      h.l3Prot==0x11?static_cast<int64_t>(p->GetSize()-repair_bytes-h.GetSerializedSize()-(h.roce.present?h.roce.pad+4:0)):0});
+  if(explicit_repair_)packet_repair_metadata_.push_back({repair_bytes,repair_bytes?kRepairProtocol:int64_t(h.l3Prot)});
   if(capture_wire_headers_) {
     const bool data=h.l3Prot==0x11;
     const bool ack=h.l3Prot==0xfc || h.l3Prot==0xfd;
@@ -819,6 +839,15 @@ Json Fabric::Report() {
   if(local_failover_)r["link_failures"]["local_failover"]={{"configuration",config_.at("local_failover")},
     {"events",local_route_updates_},
     {"scope","immediate local pruning of existing equal-cost candidates using own actual link state; no new paths, remote notification, control cost or hardware calibration"}};
+  if(explicit_repair_) {
+    r["link_failures"]["local_failover"]["scope"]="local live ECMP pruning plus precomputed explicit repair when no primary survives; project-local IPv4 protocol250, real encapsulated bytes, native queues/MMU and wire service; no hardware processing/detection calibration";
+    r["explicit_repair"]={{"schema_version","moe-explicit-repair/1"},{"observations",repair_observations_},
+      {"complete",repair_observations_==repair_events_.size()},{"event_codes",{{"encapsulate",1},{"forward",2},{"merge",3}}},
+      {"columns",{"time_ns","node","action","output_port","packet_uid","original_destination_ip","next_step",
+        "merge","encapsulation_bytes","model_bytes","inner_ip_protocol"}},{"events",repair_events_},
+      {"packet_metadata_columns",{"encapsulation_bytes","wire_ip_protocol"}},{"packet_metadata",packet_repair_metadata_},
+      {"scope","packet capture retains inner protocol/flow/payload and actual outer model_bytes; metadata aligns with retained packet events; event intent is not proof of physical TX; merge transfers CE to original IP; no standard RoCE/MPLS/TI-LFA implementation"}};
+  }
   if(recovery_) {
     r["recovery"]=recovery_->Report();r["recovery"]["inflight_packets"]=inflight_packets_;
     r["recovery"]["finish_waiting_for_drain"]=bool(finish_);

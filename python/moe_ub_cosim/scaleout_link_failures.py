@@ -5,9 +5,11 @@ from .scaleout_topology import fields, integer, require
 def validate_options(config):
     if 'local_failover' in config:
         policy = config['local_failover']
-        fields(policy, 'mode', 'local failover')
-        require(policy['mode'] == 'live_ecmp/1' and 'link_failures' in config,
-                'local failover requires live_ecmp/1 and an explicit link failure schedule')
+        fields(policy, 'mode'+(' max_events' if isinstance(policy, dict) and policy.get('mode') == 'explicit_prefix/1' else ''), 'local failover')
+        require(policy['mode'] in ('live_ecmp/1', 'explicit_prefix/1') and 'link_failures' in config,
+                'local failover requires a supported mode and an explicit link failure schedule')
+        if policy['mode'] == 'explicit_prefix/1':
+            integer(policy['max_events'], 'repair event budget', 1, 100000)
     if 'link_failures' not in config:
         return
     from .scaleout_limits import limits
@@ -33,6 +35,8 @@ def validate_options(config):
         pair = event['src'], event['dst']
         require(pair not in seen, 'duplicate link failure')
         seen.add(pair)
+    if config.get('local_failover', {}).get('mode') == 'explicit_prefix/1':
+        require(len(events) == 1, 'explicit repair protects exactly one switch link')
 
 
 def validate_topology(topology, config):
@@ -44,3 +48,9 @@ def validate_topology(topology, config):
         require((a, b) in edges and nodes[a]['kind'] != 'gpu' and nodes[b]['kind'] != 'gpu',
                 'link failure must select an actual switch-switch edge')
         require(nodes[a]['plane'] == nodes[b]['plane'], 'failure edge must stay in one plane')
+    if config.get('local_failover', {}).get('mode') == 'explicit_prefix/1':
+        from .scaleout_repair_plan import plan
+        event = config['link_failures']['events'][0]
+        result, _ = plan(topology, event['src'], event['dst'])
+        require(all(len(row.get('repair_prefix_edges', [])) <= 16 for row in result['destinations']),
+                'explicit repair prefix exceeds16 hops')

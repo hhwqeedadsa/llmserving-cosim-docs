@@ -47,6 +47,8 @@
 
 需要对照交换机利用本地端口状态避开失效出口时，可显式增加`local_failover: {"mode": "live_ecmp/1"}`，配合上述故障日程使用。它只过滤已有等价候选，无候选仍丢包，本地动作额外耗时为零；配置、公开运行命令和解释见[本地剔除示例](../examples/scaleout_live_ecmp/README.md)。
 
+旧候选全失效时，可用`local_failover: {"mode":"explicit_prefix/1","max_events":100000}`执行预先规划的显式修复段；只支持单边故障、单plane/单NIC的128/256/512端点Clos。封装在线上传输、计入原生队列和链路，合流后拆封，原ACK/重传继续生效。它是项目自定义功能模型，示例及处理成本边界见[显式修复执行](../examples/scaleout_explicit_prefix/README.md)。
+
 事务功能小例新增[应用窗口引用与关闭](../examples/scaleout_rdma_transactions/README.md#应用窗口关闭与底层注册分开)：在v4/v5中检查本地使用寿命，区分视图关闭和底层MR退出；沿用公开probe/session命令。
 
 原生事务还可用[queue-fences.json](../examples/scaleout_rdma_transactions/queue-fences.json)验证多连接固定前缀等待，沿用`rdma-transaction-probe`，详见[输入与边界](../examples/scaleout_rdma_transactions/README.md#等待调用时已有的工作前缀)。它等待已预留工作，不自动等待未来提交或提供真实GIN flush代价。

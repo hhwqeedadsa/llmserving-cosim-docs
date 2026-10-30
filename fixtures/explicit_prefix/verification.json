@@ -1,0 +1,255 @@
+{
+  "passed": true,
+  "actual_Clos128_networks": 6,
+  "default_result_identical_except_loaded_libraries": true,
+  "cases": {
+    "normal-old": {
+      "transport": {
+        "passed": true,
+        "source_packets": 320,
+        "source_payload_bytes": 320000,
+        "peak_reorder_bytes": {},
+        "physical": {
+          "tx": 2592,
+          "rx": 2592
+        },
+        "actual_feedback_received": 320,
+        "fast_retransmits": 0,
+        "ack_extension_model_bytes": [
+          50
+        ]
+      },
+      "counts": {
+        "serialized_tx": 2592,
+        "encapsulation_wire_bytes": 0,
+        "ordinary_enqueues": 1944,
+        "ordinary_CNP_enqueues": 24
+      },
+      "wrapped_data_and_control": [],
+      "first_round_ACK_ns": 18919,
+      "last_ACK_ns": 110791,
+      "finish_ns": 110791,
+      "wrapped_queue_enqueued_model_bytes": 0
+    },
+    "normal-new": {
+      "transport": {
+        "passed": true,
+        "source_packets": 320,
+        "source_payload_bytes": 320000,
+        "peak_reorder_bytes": {},
+        "physical": {
+          "tx": 2592,
+          "rx": 2592
+        },
+        "actual_feedback_received": 320,
+        "fast_retransmits": 0,
+        "ack_extension_model_bytes": [
+          50
+        ]
+      },
+      "counts": {
+        "serialized_tx": 2592,
+        "encapsulation_wire_bytes": 0,
+        "ordinary_enqueues": 1944,
+        "ordinary_CNP_enqueues": 24
+      },
+      "wrapped_data_and_control": [],
+      "first_round_ACK_ns": 18919,
+      "last_ACK_ns": 110791,
+      "finish_ns": 110791,
+      "wrapped_queue_enqueued_model_bytes": 0
+    },
+    "live": {
+      "transport": {
+        "passed": true,
+        "source_packets": 913,
+        "source_payload_bytes": 913000,
+        "peak_reorder_bytes": {
+          "2": 42000,
+          "3": 52000
+        },
+        "physical": {
+          "tx": 4981,
+          "rx": 4955,
+          "physical_drop": 26
+        },
+        "actual_feedback_received": 409,
+        "fast_retransmits": 2,
+        "ack_extension_model_bytes": [
+          50
+        ]
+      },
+      "counts": {
+        "serialized_tx": 4981,
+        "encapsulation_wire_bytes": 0,
+        "ordinary_enqueues": 3602,
+        "ordinary_CNP_enqueues": 26
+      },
+      "wrapped_data_and_control": [],
+      "first_round_ACK_ns": 127218,
+      "last_ACK_ns": 136681,
+      "finish_ns": 136681,
+      "wrapped_queue_enqueued_model_bytes": 0
+    },
+    "prefix": {
+      "transport": {
+        "passed": true,
+        "source_packets": 540,
+        "source_payload_bytes": 540000,
+        "peak_reorder_bytes": {
+          "3": 53000,
+          "2": 52000
+        },
+        "physical": {
+          "tx": 4137,
+          "rx": 4111,
+          "physical_drop": 26
+        },
+        "actual_feedback_received": 422,
+        "fast_retransmits": 2,
+        "ack_extension_model_bytes": [
+          50
+        ]
+      },
+      "counts": {
+        "repair_1": 286,
+        "repair_2": 286,
+        "repair_3": 286,
+        "serialized_tx": 4137,
+        "encapsulation_wire_bytes": 21736,
+        "ordinary_enqueues": 2687,
+        "wrapped_packet_events": 2288,
+        "explicit_enqueues": 572,
+        "ordinary_CNP_enqueues": 24,
+        "merge_enqueues": 286
+      },
+      "wrapped_data_and_control": [
+        17,
+        252,
+        255
+      ],
+      "first_round_ACK_ns": 43768,
+      "last_ACK_ns": 109463,
+      "finish_ns": 109463,
+      "wrapped_queue_enqueued_model_bytes": 484168
+    },
+    "restore": {
+      "transport": {
+        "passed": true,
+        "source_packets": 540,
+        "source_payload_bytes": 540000,
+        "peak_reorder_bytes": {
+          "3": 53000,
+          "2": 52000
+        },
+        "physical": {
+          "tx": 3781,
+          "rx": 3755,
+          "physical_drop": 26
+        },
+        "actual_feedback_received": 422,
+        "fast_retransmits": 2,
+        "ack_extension_model_bytes": [
+          50
+        ]
+      },
+      "counts": {
+        "repair_1": 108,
+        "repair_2": 108,
+        "repair_3": 108,
+        "serialized_tx": 3781,
+        "encapsulation_wire_bytes": 8208,
+        "ordinary_enqueues": 2687,
+        "wrapped_packet_events": 864,
+        "explicit_enqueues": 216,
+        "ordinary_CNP_enqueues": 24,
+        "merge_enqueues": 108
+      },
+      "wrapped_data_and_control": [
+        17,
+        252,
+        255
+      ],
+      "first_round_ACK_ns": 43894,
+      "last_ACK_ns": 110791,
+      "finish_ns": 110791,
+      "wrapped_queue_enqueued_model_bytes": 208316
+    },
+    "instant": {
+      "transport": {
+        "passed": true,
+        "source_packets": 552,
+        "source_payload_bytes": 552000,
+        "peak_reorder_bytes": {
+          "3": 51000,
+          "2": 52000
+        },
+        "physical": {
+          "tx": 3871,
+          "rx": 3845,
+          "physical_drop": 26
+        },
+        "actual_feedback_received": 434,
+        "fast_retransmits": 5,
+        "ack_extension_model_bytes": [
+          50
+        ]
+      },
+      "counts": {
+        "serialized_tx": 3871,
+        "encapsulation_wire_bytes": 0,
+        "ordinary_enqueues": 2969,
+        "ordinary_CNP_enqueues": 24
+      },
+      "wrapped_data_and_control": [],
+      "first_round_ACK_ns": 39526,
+      "last_ACK_ns": 109463,
+      "finish_ns": 109463,
+      "wrapped_queue_enqueued_model_bytes": 0
+    }
+  },
+  "tamper_checks": [
+    {
+      "mutation": "missing wire overhead",
+      "rejected": true
+    },
+    {
+      "mutation": "wrong physical repair port",
+      "rejected": true
+    },
+    {
+      "mutation": "missing merge",
+      "rejected": true
+    },
+    {
+      "mutation": "fabricated work ACK",
+      "rejected": true
+    }
+  ],
+  "restore_late_merges": 29,
+  "inputs_sha256": {
+    "topology-config.json": "295c5d0d47aefded9a6f65211cee588caf4dc31ac36c0c5b028367869f32a5bd",
+    "work.json": "b709af78f97c3eafbd02871719c36edb1c575fd78101954ac533e33a538c1171",
+    "normal.json": "23aabd50d3bf31c0b4428d3ce0e35779268903904da639d4c1aa0be836d1196d",
+    "live.json": "045756fa00c17640617a9e87fd0f20362fdf152b6e1818cc22a7d1993ae9a8ce",
+    "prefix.json": "4d8441d7004e286db2301b09d1bb83a8707560574edaf46eb4fcd9a79cb08dee",
+    "restore.json": "235680cde46dbb5fe8968ee7ca3449d75b7f0a40d9a4763e54eef5ca7c70ac8a",
+    "instant.json": "e051cf6e85ebeda1b011f9ef06b384479a951dabb337605cc8969728fc9dc614",
+    "topology/config.json": "295c5d0d47aefded9a6f65211cee588caf4dc31ac36c0c5b028367869f32a5bd",
+    "topology/topology.json": "601eceac37b558653e83270dfa076d421967d8d1469014e94739115a3bd15748",
+    "topology/audit.json": "e2ad6f72ee8600dfab988d1aa6a73315bd636f63d4c39ab39de04a59a21b9acd",
+    "topology/topology.astra.txt": "2057bbd6783c3de6ad815d2144de2c38281337cafb72ba3561223a854029fee3",
+    "topology/topology.simai.txt": "a2e8419ca9da7dec08354008553ca2f25bac1ba4bae947006ddf35f1b91ac824",
+    "topology/gpu_nic_ports.csv": "af330824a4f135c4d9ebfeb6585243088ff34adee2804f8dd32bc5acf7cf8bbd",
+    "topology/manifest.json": "79cdfe08a8d7bd2aa96169eee1186da9544aaf6d9f7cb58bb344364b95e42261"
+  },
+  "results_sha256": {
+    "normal-old": "e3757385b4c1c6c9658aa19fea7e91a939ab30fa5c91e92e8248509dab2b0600",
+    "normal-new": "86b3455d49a99d45446f5c4ed9b21ee7577269760f070a7c1adc9f6603e4a343",
+    "live": "1db27377b3e700be9dee6c614387788fcf117e3f5ddd52c1ec61bfa4f1296844",
+    "prefix": "e788f6d6d66218857d88536ac3526cf472f8c7b85b4981f4e06d189880c453bc",
+    "restore": "a4602c595fce337cfe6f3ef245745d0ab19a6a64ef195769e362e8debb63de4d",
+    "instant": "94b972e8285918dc574c1d31c530ce0cbf8855935706d3a32f22c368afd5ba58"
+  },
+  "verifier_sha256": "2e3bbd5cb22aa4da7baeb6d957310015ff8094df0ca45c803072d1835ce125cf"
+}

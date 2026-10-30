@@ -1,5 +1,6 @@
 #include "fabric.hh"
 #include "ns3/custom-header.h"
+#include "repair_wire.hh"
 
 namespace moe_rdma {
 void Fabric::ConfigureSwitchDrops() {
@@ -28,10 +29,9 @@ void Fabric::SwitchDropTrace(Fabric* f,unsigned node,ns3::Ptr<const ns3::Packet>
     (!f->switch_drop_nodes_.empty() && !f->switch_drop_nodes_.count(node)))return;
   ++f->switch_drop_observations_;
   if(f->switch_drop_events_.size()>=f->switch_drop_limit_)return;
-  ns3::CustomHeader h(ns3::CustomHeader::L2_Header|ns3::CustomHeader::L3_Header|ns3::CustomHeader::L4_Header);
-  h.getInt=1;p->PeekHeader(h);
+  unsigned repair_bytes=0;const auto h=LogicalHeader(p,&repair_bytes);
   const auto sequence=h.l3Prot==0x11?int64_t(h.udp.seq):(h.l3Prot==0xfc || h.l3Prot==0xfd)?int64_t(h.ack.seq):-1;
-  const int64_t payload=h.l3Prot==0x11?p->GetSize()-h.GetSerializedSize()-(h.roce.present?h.roce.pad+4:0):0;
+  const int64_t payload=h.l3Prot==0x11?p->GetSize()-repair_bytes-h.GetSerializedSize()-(h.roce.present?h.roce.pad+4:0):0;
   f->switch_drop_events_.push_back({now,node,ingress,egress,priority,reason,static_cast<int64_t>(p->GetUid()),
     f->PacketFlow(p),h.l3Prot,sequence,p->GetSize(),payload});
   // No queue operation, packet event, in-flight decrement, or drain scheduling.

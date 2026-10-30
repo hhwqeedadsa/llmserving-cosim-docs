@@ -17,3 +17,5 @@ export PYTHONPATH=python
 普通LFA使用故障前拓扑的严格条件`D(N,D) < D(N,S)+D(S,D)`。等号也不安全：邻居可能有一条旧最短路经过S。显式段使用删边图找路，到达合流点后，所有旧最短路都必须避开坏边和保护点S；只挑一条好后缀不够。参考[RFC5286 §3.1](https://www.rfc-editor.org/rfc/rfc5286.html#section-3.1)和[RFC7490 §2](https://www.rfc-editor.org/rfc/rfc7490.html#section-2)，本命令不是完整Remote-LFA、MPLS或TI-LFA实现。
 
 在此输入中，Agg132到GPU1的原出口只有ToR128。普通LFA不覆盖；规划的显式段为132→129→133，到133后按旧表133→128→1转发。**不能仅在132把包送给129就称为成功修复**：129仍可能送回132，必须实际携带并执行显式段。后续接入还需计算真实线上头部、队列和序列化成本，保留原QP/ACK及丢包恢复；本例没有执行或声称性能收益。功能核验见[独立检查](../../fixtures/link_repair_plan/README.md)。
+
+需要实际执行时，另用[显式修复段执行例](../scaleout_explicit_prefix/README.md)的可选后端模式；本命令及本页的静态结果仍不提供网络执行或收益证据。

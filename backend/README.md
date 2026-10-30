@@ -99,7 +99,9 @@ Fabric在初始化时从实际`RdmaHw`对象读回拥塞/传输属性，统一�
 
 可选`local_failover.mode=live_ecmp/1`只允许故障边两端交换机根据自己的`IsLinkUp()`剔除原全局表中的失效出口，保留候选顺序和原生ECMP哈希；空候选仍丢弃。全局重建也只按各交换机自己的实际端口状态过滤，不能把另一尚未收敛故障传播到远端表。默认行为不变；本地动作没有额外检测/编程耗时，是经典理想参考，不是生产快速重路由。见[配置和边界](../examples/scaleout_live_ecmp/README.md)。
 
-另有离线`scaleout repair-plan`用于核查空候选能否由普通LFA覆盖，并规划必要的显式段；它不改本后端路由、不插入线上头部或执行故障恢复。不能把生成计划误认为已支持隧道或非等价绕路，见[修复规划示例](../examples/scaleout_repair_plan/README.md)。
+另有离线`scaleout repair-plan`用于核查空候选能否由普通LFA覆盖，并规划必要的显式段；该命令不改本后端路由或执行故障恢复。不能把生成计划误认为执行证据，见[修复规划示例](../examples/scaleout_repair_plan/README.md)。
+
+显式`local_failover.mode=explicit_prefix/1`另启原生修复：`repair_plan.hh`在旧图预计算，`CnpSwitch`在本端空候选时封装MRP1，按实际节点/端口逐跳执行，合流后拆封。协议号250为项目自定义，原ACK/NACK/CNP/PFC未更改；封装大小真实参与SwitchNode准入/队列/Qbb序列化，CE在拆封时合并回内层。`repair_wire.hh`将记录投影到内层身份与有效字节，保留真实model_bytes。单故障/单plane/单NIC、16跳及成本限制见[执行示例](../examples/scaleout_explicit_prefix/README.md)，不是标准RoCE/MPLS实现或新的重传协议。
 
 `Fabric::Report`可选读取有界交换机MMU/BEgressQueue终态，选择及端口预算在分配网络前检查。没有新增仿真事件或drop修复，省略配置时保持旧结果。离线`scaleout_mmu.py`区分合法未排空与守恒不一致，详见[终态缓冲示例](../examples/scaleout_rdma_mmu/README.md)与[字段](../docs/record_storage.md)。
 

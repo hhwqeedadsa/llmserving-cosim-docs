@@ -179,5 +179,11 @@ class Fabric {
   bool local_failover_=false;
   std::map<unsigned,std::map<uint32_t,std::vector<unsigned>>> route_candidates_;
   Json local_route_updates_=Json::array();
+  bool explicit_repair_=false;
+  uint64_t repair_limit_=0,repair_observations_=0;
+  std::vector<std::array<int64_t,11>> repair_events_;
+  // Only repair mode adds these wire observations; existing records keep their
+  // actual model_bytes and logical protocol/payload interpretation.
+  std::vector<std::array<int64_t,2>> packet_repair_metadata_;
 };
 }

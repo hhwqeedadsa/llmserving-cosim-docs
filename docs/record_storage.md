@@ -1,5 +1,7 @@
 # 观测记录与存储格式
 
+可选`explicit_prefix/1`在`result.json.explicit_repair`保存`moe-explicit-repair/1`。`events`按`columns`给出纳秒时刻、交换机、动作（1封装/2转发/3合流）、物理出口、包UID、原目的IP、下一个段序号、合流点、封装字节、当前model_bytes和内层协议；合流记录的model_bytes已拆封，encapsulation_bytes表示刚移除的字节。它记录转发意图，需实际TX/RX佐证。`complete`只表示该数组未超max_events；`packet_metadata`与保留的`packet_capture.events`逐行对齐，给出封装字节与实际外层协议。原逐包/线头记录的ip_protocol及地址/端口仍指内层，model_bytes指实际包大小；data_payload_bytes已扣外层，不把封装计入业务字节。无封装元数据为0/原协议，原模式不新增这些字段，见[执行示例](../examples/scaleout_explicit_prefix/README.md)。
+
 `scaleout repair-plan`另存`plan.json/summary.json/topology.json/manifest.json`，状态恒为`planned_not_executed`、`network_executed=false`。summary覆盖计数单位为“故障两端交换机×目的GPU”，不是卡数或包数；plan的`original_hops/failed_graph_hops`为hop距离，`LFA_candidates`是不等式两侧与严格判断，`repair_prefix_nodes/edges/merge`为待执行修复段，`all_old_suffix_edges`覆盖合流后的全部旧ECMP分支。SHA-256用于输入和结果身份，不提供网络时延/恢复成功的执行证据。范围见[修复规划](../examples/scaleout_repair_plan/README.md)。
 
 `scaleout contribution-frontier`从已核验服务生成`summary.json`、逐调用`calls.json`及`bundles.csv`，分别记录全部贡献就绪前沿、所有并列末贡献、实际共享计算与赢家缓冲在汇合时的存活情况。它不写原运行目录，字段单位及同纳秒未知规则见[诊断说明](contribution_frontier.md)。

@@ -30,6 +30,8 @@ context连接规划沿用[固定provider共享范围核查](reviews/现代连接
 
 `repair-plan`只检查单链路、旧转发表下的普通LFA覆盖和到安全合流点的显式前缀，依据RFC5286严格不等式并核对所有旧ECMP后缀。独立128Clos规划验收不等于ns-3修复运行；没有MPLS/Remote-LFA协议、线上标签或隧道成本、控制报文或硬件校准，不能把静态路径的存在当成已取得的MoE收益。见[规划与边界](../examples/scaleout_repair_plan/README.md)。
 
+另启`explicit_prefix/1`会实际执行项目定义的IPv4/MRP1封装，外层字节通过原生队列和链路，保留内层协议/确认/恢复。两跳段增加38B；控制流仍遵守原高优先级队列不计数据MMU的行为。单边故障、预分发静态段及瞬时本地检测/封装处理属于声明假设，没有真实路径分发协议、线速处理、MTU碎片或硬件校准；功能字节流验证不能外推真实MoE收益、生产RoCE或完整Remote-LFA/TI-LFA，见[执行范围](../examples/scaleout_explicit_prefix/README.md)。
+
 固定NCCL官方文档要求窗口注销前保证对应buffer无NCCL访问；已有Revoke（保留资源）及SHRINK_ABORT（新通信域不与父域共享资源）必须作为恢复强基线。外部devComm的abort指针选择、GIN等待分支与DeepEP用户内核终止的区别，见[恢复适用性核查](reviews/通信域恢复与外部GIN内核边界_20261024.md)。该研究只执行精确CPU片段及记录替身，未实现真实恢复、证明用户CUDA生产者退出或校准成本。
 
 `local_views/1`依据固定NCCL窗口/底层分配引用关系，只实现输入声明的本地视图和使用寿命：多个视图共享现有存储/注册。未执行可复用flags/handles/跨rank协商，未模拟provider退出、DMA fence或真实注销。最后视图关闭后真实MRT1包仍可通过静态权限写入，这是功能边界，不是上游漏洞。依据见[生命周期核查](reviews/窗口注销合法边界与底层注册复用_20261024.md)，功能验收见[本地窗口](../fixtures/application_windows/README.md)。

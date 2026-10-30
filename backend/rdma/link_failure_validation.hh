@@ -6,8 +6,12 @@ namespace moe_rdma {
 inline Json LinkFailureEvents(const Json& config,const Json& topology,int64_t maximum) {
   if(config.contains("local_failover")) {
     const auto& p=config.at("local_failover");
-    Require(p.is_object() && p.size()==1 && p.contains("mode") && p.at("mode")=="live_ecmp/1" &&
-            config.contains("link_failures"),"local failover requires live_ecmp/1 and an explicit link failure schedule");
+    Require(p.is_object() && p.contains("mode") && config.contains("link_failures"),"local failover requires mode and an explicit link failure schedule");
+    const bool repair=p.at("mode")=="explicit_prefix/1";
+    Require((repair && p.size()==2 && p.contains("max_events")) ||
+            (p.at("mode")=="live_ecmp/1" && p.size()==1),"unsupported local failover policy");
+    if(repair)Require(p.at("max_events").is_number_integer() && p.at("max_events")>=1 && p.at("max_events")<=100000,
+                      "invalid repair event budget");
   }
   if(!config.contains("link_failures"))return Json::array();
   const auto& model=config.at("link_failures");
@@ -16,6 +20,8 @@ inline Json LinkFailureEvents(const Json& config,const Json& topology,int64_t ma
   const bool temporary=model.at("mode")=="switch_links/2";
   const auto& events=model.at("events");
   Require(events.is_array() && !events.empty() && events.size()<=8,"require 1..8 switch link failures");
+  if(config.contains("local_failover") && config.at("local_failover").at("mode")=="explicit_prefix/1")
+    Require(events.size()==1,"explicit repair protects exactly one switch link");
   auto integer=[](const Json& v,uint64_t bound) {
     Require(v.is_number_integer() && (v.is_number_unsigned() || v.get<int64_t>()>=0),"invalid link failure integer");
     auto n=v.get<uint64_t>();Require(n<=bound,"link failure integer exceeds bound");return n;

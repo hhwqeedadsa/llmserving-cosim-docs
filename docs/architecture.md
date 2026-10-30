@@ -59,7 +59,9 @@ transactions/5的可选`declared_service_fifo/1`为每个self连接调度独立s
 
 显式`live_ecmp/1`在上述机制上增加交换机本地候选过滤：实际关闭端口后，两端只安装原全局候选中的存活端口；下一次全局重建继续过滤本地坏端口，远端仍等待各故障自己的更新时间。不创建非等价绕路、不通知源、不迁移排队包；没有模拟额外本地检测/编程成本。配置见[本地失效端口剔除](../examples/scaleout_live_ecmp/README.md)。
 
-离线`scaleout_repair_plan.py`使用同样的hop距离和GPU不作中转规则，检查单边失效后原ECMP及RFC5286普通LFA的覆盖，再规划到安全合流点的显式段。它独立于Fabric、包和故障事件，不把删边后的距离误用为未收敛邻居的旧行为；所有旧ECMP后缀都必须避开坏边和保护点。输出仍为静态计划，尚未增加原生修复模式或线上头部，见[公开操作](../examples/scaleout_repair_plan/README.md)。
+离线`scaleout_repair_plan.py`使用同样的hop距离和GPU不作中转规则，检查单边失效后原ECMP及RFC5286普通LFA的覆盖，再规划到安全合流点的显式段。它独立于Fabric、包和故障事件，不把删边后的距离误用为未收敛邻居的旧行为；所有旧ECMP后缀都必须避开坏边和保护点。此命令仍只输出静态计划，见[公开操作](../examples/scaleout_repair_plan/README.md)。
+
+原生可选`explicit_prefix/1`由`repair_plan.hh`在旧物理图预计算同类路径，`CnpSwitch`仅在本端无存活旧候选时封装实际MRP1路径；中间交换机读取包中的节点/端口/游标，通过本端单出口别名调用原生SwitchNode服务。别名只用于本地查表，不写入包的原始地址。真实封装字节走原队列/MMU及链路，合流交换机拆封并合并CE。`repair_wire.hh`为观测提供内层投影及外层字节数，不用内部评估身份改变选路。范围与非标准协议边界见[执行示例](../examples/scaleout_explicit_prefix/README.md)。
 
 v4/v5的可选`local_views/1`在物理存储和静态NIC注册之上维护应用子窗口；操作准入/实际完成之间持有本地使用，local节点完成才释放视图引用。最后引用为0只进入provider待处理状态，包接收不查询应用视图；发送方不读取目标关闭状态。见[窗口使用与关闭](../examples/scaleout_rdma_transactions/README.md#应用窗口关闭与底层注册分开)。
 

@@ -1,5 +1,15 @@
 # 当前任务与交接
 
+## 2026-10-30 原生显式修复段执行
+
+状态：`completed`（原生显式段功能已验收，真实MoE收益研究及整体目标仍active）。上一目标轮为progress：`7e71381b3c`交付无环规划并发布用户分支。本轮按[规范](explicit_prefix_execution_spec.md)新增可选`explicit_prefix/1`：旧图预计算，仅本地空候选激活；实际IPv4/MRP1封装通过原生队列/MMU/Qbb，到合流点拆封并传回CE，保留原QP、ACK/SACK、选择性重传及确认/退出语义。两跳修复段真实增加38B，不是标准RoCE/MPLS/TI-LFA，也没有硬件检测/处理/路径分发成本校准。公开操作见[独立128Clos示例](../../examples/scaleout_explicit_prefix/README.md)，结果见[网页](../../fixtures/explicit_prefix/report.html)、[独立检查](../../fixtures/explicit_prefix/verification.json)和[资源身份](../../fixtures/explicit_prefix/receipt.json)。
+
+一次公开全新完整构建、六个128Clos功能网络各一次完成。4条人工持久流/320,000B唯一数据，旧/新正常完整记录除库路径外相同。显式故障实际封装286包（220 DATA、64 ACK、2 CNP），逐两跳额外21,736B；全部286包经132→129→133真实转发/合流。恢复条件108包绕路，其中29包在物理上线后合流，按携带段继续，不因恢复重置QP。独立逐物理TX/RX、包长/串行化、普通ECMP哈希、DATA/SACK/源ACK、队列积分及MMU终态核验通过，拒绝4类结果篡改。26项Python方法、4类协议真实字节往返/CE、8类非法包头/拓扑、16个C++/Python计划对应、9项原生输入拒绝和13项固定依赖检查通过。
+
+功能例首轮全ACK：live127.218µs、prefix43.768µs；末业务ACK136.681→109.463µs。该输入专为覆盖选择端口、含100µs声明等待，不是MoE任务或研究收益；不把此差距当论文贡献。更强现成绕路已能消除一部分旧候选空洞，下一步须单独冻结真实专家选择任务，比较相同资源/重传/门限下剩余故障等待、其他组拖累和额外网络开销，再判断任务进度感知恢复的额外价值。
+
+预算根`runs/explicit_prefix_execution_20261030`：累计1800外层监控秒/2GiB/留8GiB；构建compile600秒/外层900秒/RSS2GiB/地址4GiB，其他120秒/RSS1GiB/地址2GiB，native60秒/模拟5ms/包及队列200000行。实际16阶段451.197秒、峰值组RSS1,827,643,392B、产物113,418,240B。首次CPU断言误用14B L2而非本后端2B PPP；首版独立检查漏统计CNP合流，两项失败及原代码保留，修正检查后通过，平台/输入未按结果修改、成功网络未重跑。网页和内联SVG仅静态/本地链接检查，不声称浏览器渲染。无依赖修改、安装、下载、模型或GPU；只发布既有用户分支，整体目标不完成。
+
 ## 2026-10-30 唯一坏出口的无环修复覆盖检查
 
 状态：`completed`（静态规划及独立核验已验收，原生执行与整体研究目标仍active）。上一目标轮只解释normal/local命名，没有项目状态变化，分类no progress；本轮继续并完成已有规划实现。按[规范](link_repair_plan_spec.md)补现成改路基线的前置覆盖检查及显式路径规划；普通LFA不能在不核查邻居旧表时直接替换空候选。交付[公开128Clos示例](../../examples/scaleout_repair_plan/README.md)、[网页](../../fixtures/link_repair_plan/report.html)、[独立核验](../../fixtures/link_repair_plan/verification.json)及[来源与资源收据](../../fixtures/link_repair_plan/receipt.json)。

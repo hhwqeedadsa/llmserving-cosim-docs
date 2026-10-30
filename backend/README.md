@@ -99,6 +99,8 @@ Fabric在初始化时从实际`RdmaHw`对象读回拥塞/传输属性，统一�
 
 可选`local_failover.mode=live_ecmp/1`只允许故障边两端交换机根据自己的`IsLinkUp()`剔除原全局表中的失效出口，保留候选顺序和原生ECMP哈希；空候选仍丢弃。全局重建也只按各交换机自己的实际端口状态过滤，不能把另一尚未收敛故障传播到远端表。默认行为不变；本地动作没有额外检测/编程耗时，是经典理想参考，不是生产快速重路由。见[配置和边界](../examples/scaleout_live_ecmp/README.md)。
 
+另有离线`scaleout repair-plan`用于核查空候选能否由普通LFA覆盖，并规划必要的显式段；它不改本后端路由、不插入线上头部或执行故障恢复。不能把生成计划误认为已支持隧道或非等价绕路，见[修复规划示例](../examples/scaleout_repair_plan/README.md)。
+
 `Fabric::Report`可选读取有界交换机MMU/BEgressQueue终态，选择及端口预算在分配网络前检查。没有新增仿真事件或drop修复，省略配置时保持旧结果。离线`scaleout_mmu.py`区分合法未排空与守恒不一致，详见[终态缓冲示例](../examples/scaleout_rdma_mmu/README.md)与[字段](../docs/record_storage.md)。
 
 可选每源软件准入由纯C++17的`communication_admission.hh`管理当前就绪任务与额度所有者，RDMA适配负责真实注入和完整ACK后确认发送QP映射移除，再归还额度。数据就绪只放行接收消费者。同机crossbar排除；默认不开启时保留原路径。它没有模拟有限硬件QP槽或GPU缓冲寿命，具体配置和事件见[软件准入示例](../examples/scaleout_rdma_admission/README.md)。

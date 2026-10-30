@@ -54,6 +54,11 @@ def parser():
     topology = sc.add_parser('topology', help='Generate flexible Clos/Agg/multi-rail/plane fabrics and native RDMA topology files')
     topology.add_argument('--config', type=Path, required=True, help='Topology JSON; counts, NIC rail map, layer rates and port limits')
     topology.add_argument('--output', type=Path, required=True, help='New directory for physical graph, NIC map, audit and ASTRA/SimAI text inputs')
+    repair = sc.add_parser('repair-plan', help='Plan single-link ECMP/LFA coverage and explicit repair prefixes; no network execution')
+    repair.add_argument('--topology', type=Path, required=True, help='Generated single-plane Clos with one NIC per GPU,128/256/512 endpoints')
+    repair.add_argument('--src', type=int, required=True, help='Protected switch edge source; src<dst')
+    repair.add_argument('--dst', type=int, required=True, help='Protected switch edge destination')
+    repair.add_argument('--output', type=Path, required=True, help='New plan directory; paths are offline plans, not simulated packet forwarding')
     pf = sc.add_parser('rdma-preflight', help='Check physical per-switch headroom/reserve and optional transaction input; no network execution or backend required')
     pf.add_argument('--topology',type=Path,required=True,help='Generated physical topology directory')
     pf.add_argument('--protocol',type=Path,required=True,help='Explicit native RDMA protocol JSON')
@@ -350,6 +355,9 @@ def main(argv=None):
             elif args.scaleout_command == 'topology':
                 from .scaleout_topology import execute
                 value = execute(args.config, args.output)
+            elif args.scaleout_command == 'repair-plan':
+                from .scaleout_repair_plan import execute
+                value = execute(args.topology, args.src, args.dst, args.output)
             elif args.scaleout_command == 'capacity':
                 from .scaleout_capacity import execute
                 value = execute(args.config, args.output)

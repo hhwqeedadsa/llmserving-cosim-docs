@@ -59,6 +59,8 @@ transactions/5的可选`declared_service_fifo/1`为每个self连接调度独立s
 
 显式`live_ecmp/1`在上述机制上增加交换机本地候选过滤：实际关闭端口后，两端只安装原全局候选中的存活端口；下一次全局重建继续过滤本地坏端口，远端仍等待各故障自己的更新时间。不创建非等价绕路、不通知源、不迁移排队包；没有模拟额外本地检测/编程成本。配置见[本地失效端口剔除](../examples/scaleout_live_ecmp/README.md)。
 
+离线`scaleout_repair_plan.py`使用同样的hop距离和GPU不作中转规则，检查单边失效后原ECMP及RFC5286普通LFA的覆盖，再规划到安全合流点的显式段。它独立于Fabric、包和故障事件，不把删边后的距离误用为未收敛邻居的旧行为；所有旧ECMP后缀都必须避开坏边和保护点。输出仍为静态计划，尚未增加原生修复模式或线上头部，见[公开操作](../examples/scaleout_repair_plan/README.md)。
+
 v4/v5的可选`local_views/1`在物理存储和静态NIC注册之上维护应用子窗口；操作准入/实际完成之间持有本地使用，local节点完成才释放视图引用。最后引用为0只进入provider待处理状态，包接收不查询应用视图；发送方不读取目标关闭状态。见[窗口使用与关闭](../examples/scaleout_rdma_transactions/README.md#应用窗口关闭与底层注册分开)。
 
 原生事务可显式分开物理存储和NIC注册权限：同一窗口承载一次实际字节，多个owner/NIC/rkey注册映射到子范围；接收载体检查实际端口匹配连接绑定，事务按该目标NIC解析权限。源读与本地copy继续使用存储key，跨别名重叠写和lease按物理范围保护。接口与范围见[多NIC共享存储](../examples/scaleout_rdma_transactions/README.md#多nic的权限共享同一份存储)；当前仅静态权限，尚无动态MR退出或provider成本。

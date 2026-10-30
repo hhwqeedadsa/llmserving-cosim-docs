@@ -1,0 +1,13 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Clos唯一坏出口：为什么普通LFA不够</title>
+<style>body{font:16px/1.8 system-ui,sans-serif;max-width:1020px;margin:32px auto;padding:0 24px;background:#f5f8fc;color:#173047}img{width:100%;height:auto}table{border-collapse:collapse;width:100%;background:white}td,th{padding:10px;text-align:left;border-bottom:1px solid #ddd}.box{padding:18px;background:#e2edf8;border-left:5px solid #2873b8}code{background:#e9edf3;padding:2px 4px}a{color:#2465a7}</style>
+<h1>有物理备用路径，也不能随便换一个邻居</h1><p>128端点Clos · 20交换机 · 保护128–132边 · 静态规划，不执行网络或预测收益</p>
+<div class="box">故障两端×128个GPU目的，共256个转发组合。240个已有出口可用；其余16个没有普通单跳LFA，需要显式修复段。普通LFA不覆盖，并不意味着网络分区。</div>
+<h2>本轮检查结果</h2><table><tr><th>覆盖情况</th><th>组合数</th></tr><tr><td>不受此出口影响</td><td>128</td></tr><tr><td>原ECMP仍有存活出口</td><td>112</td></tr><tr><td>普通LFA可以新增保护</td><td>0</td></tr><tr><td>需要显式修复段</td><td>16</td></tr></table>
+<p>256是源/目的组合数，不是256卡实验，也不是故障丢包数。规划不读取真实路由或未来恢复事件，结果仅由物理图和保护边决定。</p>
+<h2>为什么直接选别的出口可能绕回来</h2><p>普通LFA要求故障前距离满足严格不等式：<code>D(N,D) &lt; D(N,S)+D(S,D)</code>。等号不能接受，因为邻居可能有一条旧最短路经过S。Agg132至GPU1的原出口只有ToR128；改送ToR129时，129按旧ECMP仍可能送回132。</p>
+<img src="repair_path.png" alt="静态显式修复段132到129到133，再按旧路由133到128到GPU1；坏边128到132，129可能按旧表送回132">
+<p>安全计划：先明确执行132→129→133，到133后再使用旧路由133→128→GPU1。首段两个跳分别需要132 port2→129 port17、129 port18→133 port2。所有旧后缀都已核查，不能只挑一条好路径。</p>
+<h2>这对当前研究意味着什么</h2><p>上一轮长故障发现ACK在Agg132被丢弃。本轮进一步说明，不能把“普通LFA”当成已足够强的绕路基线；该位置需要有显式中间节点的修复转发。下一步在同一原生网络中实际执行修复段，真实计算头部、队列和序列化成本，再比较MoE任务等待。</p>
+<p>当前交付公开命令<code>scaleout repair-plan</code>、可修改输入和逐目的计划。它没有新增ns-3恢复模式，没有实现MPLS/Remote-LFA/TI-LFA，没有取得新性能收益，也不证明现有live_ecmp会产生环路；环路风险针对“直接改送任意邻居”的候选实现。</p>
+<h2>证据与来源</h2><p>9项新单位检查和独立Floyd-Warshall核查全部256个组合、16个修复段及所有旧ECMP后缀；4类篡改被拒绝。没有新网络运行、构建、GPU执行或依赖修改。首版测试中的一条后缀排序断言失败已保留，修正为边集合比较；没有放宽严格不等式。</p>
+<p><a href="README.md">验收与边界</a> · <a href="../../examples/scaleout_repair_plan/README.md">公开操作</a> · <a href="plan.json">全部计划</a> · <a href="verification.json">独立核验</a> · <a href="receipt.json">来源和资源</a> · <a href="https://www.rfc-editor.org/rfc/rfc5286.html#section-3.1">RFC5286</a> · <a href="https://www.rfc-editor.org/rfc/rfc7490.html#section-2">RFC7490</a></p></html>

@@ -1,0 +1,8030 @@
+{
+  "schema_version": "moe-scaleout-repair-plan/1",
+  "summary": {
+    "schema_version": "moe-scaleout-repair-plan-summary/1",
+    "state": "planned_not_executed",
+    "network_executed": false,
+    "gpu_endpoints": 128,
+    "switches": 20,
+    "protected_edge": [
+      128,
+      132
+    ],
+    "endpoint_destination_pairs": 256,
+    "coverage": {
+      "explicit_repair_required": 16,
+      "primary_survives": 112,
+      "unaffected": 128
+    },
+    "ordinary_LFA_rule": "D(N,D) < D(N,S) + D(S,D), old hop graph, strict inequality",
+    "assumptions": [
+      "single bidirectional switch-link failure",
+      "single plane and one NIC per GPU",
+      "unit hop metrics as native Fabric, GPU nodes never transit",
+      "explicit prefix requires future native steering and wire overhead; not executed"
+    ],
+    "scope": "link protection only; no node protection, controller timing, packet repair or latency prediction"
+  },
+  "destinations": [
+    {
+      "source": 128,
+      "destination": 0,
+      "original_hops": 1,
+      "primary_next_hops": [
+        {
+          "peer": 0,
+          "port": 1
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 0,
+          "port": 1
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 128,
+      "destination": 1,
+      "original_hops": 1,
+      "primary_next_hops": [
+        {
+          "peer": 1,
+          "port": 2
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 1,
+          "port": 2
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 128,
+      "destination": 2,
+      "original_hops": 1,
+      "primary_next_hops": [
+        {
+          "peer": 2,
+          "port": 3
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 2,
+          "port": 3
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 128,
+      "destination": 3,
+      "original_hops": 1,
+      "primary_next_hops": [
+        {
+          "peer": 3,
+          "port": 4
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 3,
+          "port": 4
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 128,
+      "destination": 4,
+      "original_hops": 1,
+      "primary_next_hops": [
+        {
+          "peer": 4,
+          "port": 5
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 4,
+          "port": 5
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 128,
+      "destination": 5,
+      "original_hops": 1,
+      "primary_next_hops": [
+        {
+          "peer": 5,
+          "port": 6
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 5,
+          "port": 6
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 128,
+      "destination": 6,
+      "original_hops": 1,
+      "primary_next_hops": [
+        {
+          "peer": 6,
+          "port": 7
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 6,
+          "port": 7
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 128,
+      "destination": 7,
+      "original_hops": 1,
+      "primary_next_hops": [
+        {
+          "peer": 7,
+          "port": 8
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 7,
+          "port": 8
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 128,
+      "destination": 8,
+      "original_hops": 3,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 9,
+      "original_hops": 3,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 10,
+      "original_hops": 3,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 11,
+      "original_hops": 3,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 12,
+      "original_hops": 3,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 13,
+      "original_hops": 3,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 14,
+      "original_hops": 3,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 15,
+      "original_hops": 3,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 16,
+      "original_hops": 3,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 17,
+      "original_hops": 3,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 18,
+      "original_hops": 3,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 19,
+      "original_hops": 3,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 20,
+      "original_hops": 3,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 21,
+      "original_hops": 3,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 22,
+      "original_hops": 3,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 23,
+      "original_hops": 3,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 24,
+      "original_hops": 3,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 25,
+      "original_hops": 3,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 26,
+      "original_hops": 3,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 27,
+      "original_hops": 3,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 28,
+      "original_hops": 3,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 29,
+      "original_hops": 3,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 30,
+      "original_hops": 3,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 31,
+      "original_hops": 3,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 32,
+      "original_hops": 1,
+      "primary_next_hops": [
+        {
+          "peer": 32,
+          "port": 9
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 32,
+          "port": 9
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 128,
+      "destination": 33,
+      "original_hops": 1,
+      "primary_next_hops": [
+        {
+          "peer": 33,
+          "port": 10
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 33,
+          "port": 10
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 128,
+      "destination": 34,
+      "original_hops": 1,
+      "primary_next_hops": [
+        {
+          "peer": 34,
+          "port": 11
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 34,
+          "port": 11
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 128,
+      "destination": 35,
+      "original_hops": 1,
+      "primary_next_hops": [
+        {
+          "peer": 35,
+          "port": 12
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 35,
+          "port": 12
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 128,
+      "destination": 36,
+      "original_hops": 1,
+      "primary_next_hops": [
+        {
+          "peer": 36,
+          "port": 13
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 36,
+          "port": 13
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 128,
+      "destination": 37,
+      "original_hops": 1,
+      "primary_next_hops": [
+        {
+          "peer": 37,
+          "port": 14
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 37,
+          "port": 14
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 128,
+      "destination": 38,
+      "original_hops": 1,
+      "primary_next_hops": [
+        {
+          "peer": 38,
+          "port": 15
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 38,
+          "port": 15
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 128,
+      "destination": 39,
+      "original_hops": 1,
+      "primary_next_hops": [
+        {
+          "peer": 39,
+          "port": 16
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 39,
+          "port": 16
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 128,
+      "destination": 40,
+      "original_hops": 3,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 41,
+      "original_hops": 3,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 42,
+      "original_hops": 3,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 43,
+      "original_hops": 3,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 44,
+      "original_hops": 3,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 45,
+      "original_hops": 3,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 46,
+      "original_hops": 3,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 47,
+      "original_hops": 3,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 48,
+      "original_hops": 3,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 49,
+      "original_hops": 3,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 50,
+      "original_hops": 3,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 51,
+      "original_hops": 3,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 52,
+      "original_hops": 3,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 53,
+      "original_hops": 3,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 54,
+      "original_hops": 3,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 55,
+      "original_hops": 3,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 56,
+      "original_hops": 3,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 57,
+      "original_hops": 3,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 58,
+      "original_hops": 3,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 59,
+      "original_hops": 3,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 60,
+      "original_hops": 3,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 61,
+      "original_hops": 3,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 62,
+      "original_hops": 3,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 63,
+      "original_hops": 3,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 64,
+      "original_hops": 5,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 65,
+      "original_hops": 5,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 66,
+      "original_hops": 5,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 67,
+      "original_hops": 5,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 68,
+      "original_hops": 5,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 69,
+      "original_hops": 5,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 70,
+      "original_hops": 5,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 71,
+      "original_hops": 5,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 72,
+      "original_hops": 5,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 73,
+      "original_hops": 5,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 74,
+      "original_hops": 5,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 75,
+      "original_hops": 5,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 76,
+      "original_hops": 5,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 77,
+      "original_hops": 5,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 78,
+      "original_hops": 5,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 79,
+      "original_hops": 5,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 80,
+      "original_hops": 5,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 81,
+      "original_hops": 5,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 82,
+      "original_hops": 5,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 83,
+      "original_hops": 5,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 84,
+      "original_hops": 5,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 85,
+      "original_hops": 5,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 86,
+      "original_hops": 5,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 87,
+      "original_hops": 5,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 88,
+      "original_hops": 5,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 89,
+      "original_hops": 5,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 90,
+      "original_hops": 5,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 91,
+      "original_hops": 5,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 92,
+      "original_hops": 5,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 93,
+      "original_hops": 5,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 94,
+      "original_hops": 5,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 95,
+      "original_hops": 5,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 96,
+      "original_hops": 5,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 97,
+      "original_hops": 5,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 98,
+      "original_hops": 5,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 99,
+      "original_hops": 5,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 100,
+      "original_hops": 5,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 101,
+      "original_hops": 5,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 102,
+      "original_hops": 5,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 103,
+      "original_hops": 5,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 104,
+      "original_hops": 5,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 105,
+      "original_hops": 5,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 106,
+      "original_hops": 5,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 107,
+      "original_hops": 5,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 108,
+      "original_hops": 5,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 109,
+      "original_hops": 5,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 110,
+      "original_hops": 5,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 111,
+      "original_hops": 5,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 112,
+      "original_hops": 5,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 113,
+      "original_hops": 5,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 114,
+      "original_hops": 5,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 115,
+      "original_hops": 5,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 116,
+      "original_hops": 5,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 117,
+      "original_hops": 5,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 118,
+      "original_hops": 5,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 119,
+      "original_hops": 5,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 120,
+      "original_hops": 5,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 121,
+      "original_hops": 5,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 122,
+      "original_hops": 5,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 123,
+      "original_hops": 5,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 124,
+      "original_hops": 5,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 125,
+      "original_hops": 5,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 126,
+      "original_hops": 5,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 128,
+      "destination": 127,
+      "original_hops": 5,
+      "primary_next_hops": [
+        {
+          "peer": 132,
+          "port": 17
+        },
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 133,
+          "port": 18
+        },
+        {
+          "peer": 134,
+          "port": 19
+        },
+        {
+          "peer": 135,
+          "port": 20
+        }
+      ],
+      "state": "primary_survives"
+    },
+    {
+      "source": 132,
+      "destination": 0,
+      "original_hops": 2,
+      "primary_next_hops": [
+        {
+          "peer": 128,
+          "port": 1
+        }
+      ],
+      "surviving_primary_next_hops": [],
+      "LFA_candidates": [
+        {
+          "peer": 129,
+          "port": 2,
+          "neighbor_to_destination_hops": 3,
+          "neighbor_to_source_hops": 1,
+          "via_source_hops": 3,
+          "loop_free": false
+        },
+        {
+          "peer": 130,
+          "port": 3,
+          "neighbor_to_destination_hops": 3,
+          "neighbor_to_source_hops": 1,
+          "via_source_hops": 3,
+          "loop_free": false
+        },
+        {
+          "peer": 131,
+          "port": 4,
+          "neighbor_to_destination_hops": 3,
+          "neighbor_to_source_hops": 1,
+          "via_source_hops": 3,
+          "loop_free": false
+        },
+        {
+          "peer": 144,
+          "port": 5,
+          "neighbor_to_destination_hops": 3,
+          "neighbor_to_source_hops": 1,
+          "via_source_hops": 3,
+          "loop_free": false
+        }
+      ],
+      "failed_graph_hops": 4,
+      "state": "explicit_repair_required",
+      "failed_graph_path": [
+        132,
+        129,
+        133,
+        128,
+        0
+      ],
+      "repair_prefix_nodes": [
+        132,
+        129,
+        133
+      ],
+      "repair_prefix_edges": [
+        {
+          "src": 132,
+          "src_port": 2,
+          "dst": 129,
+          "dst_port": 17
+        },
+        {
+          "src": 129,
+          "src_port": 18,
+          "dst": 133,
+          "dst_port": 2
+        }
+      ],
+      "merge": 133,
+      "all_old_suffix_edges": [
+        {
+          "src": 128,
+          "src_port": 1,
+          "dst": 0,
+          "dst_port": 1
+        },
+        {
+          "src": 133,
+          "src_port": 1,
+          "dst": 128,
+          "dst_port": 18
+        }
+      ],
+      "all_old_suffixes_avoid_failed_edge_and_source": true
+    },
+    {
+      "source": 132,
+      "destination": 1,
+      "original_hops": 2,
+      "primary_next_hops": [
+        {
+          "peer": 128,
+          "port": 1
+        }
+      ],
+      "surviving_primary_next_hops": [],
+      "LFA_candidates": [
+        {
+          "peer": 129,
+          "port": 2,
+          "neighbor_to_destination_hops": 3,
+          "neighbor_to_source_hops": 1,
+          "via_source_hops": 3,
+          "loop_free": false
+        },
+        {
+          "peer": 130,
+          "port": 3,
+          "neighbor_to_destination_hops": 3,
+          "neighbor_to_source_hops": 1,
+          "via_source_hops": 3,
+          "loop_free": false
+        },
+        {
+          "peer": 131,
+          "port": 4,
+          "neighbor_to_destination_hops": 3,
+          "neighbor_to_source_hops": 1,
+          "via_source_hops": 3,
+          "loop_free": false
+        },
+        {
+          "peer": 144,
+          "port": 5,
+          "neighbor_to_destination_hops": 3,
+          "neighbor_to_source_hops": 1,
+          "via_source_hops": 3,
+          "loop_free": false
+        }
+      ],
+      "failed_graph_hops": 4,
+      "state": "explicit_repair_required",
+      "failed_graph_path": [
+        132,
+        129,
+        133,
+        128,
+        1
+      ],
+      "repair_prefix_nodes": [
+        132,
+        129,
+        133
+      ],
+      "repair_prefix_edges": [
+        {
+          "src": 132,
+          "src_port": 2,
+          "dst": 129,
+          "dst_port": 17
+        },
+        {
+          "src": 129,
+          "src_port": 18,
+          "dst": 133,
+          "dst_port": 2
+        }
+      ],
+      "merge": 133,
+      "all_old_suffix_edges": [
+        {
+          "src": 128,
+          "src_port": 2,
+          "dst": 1,
+          "dst_port": 1
+        },
+        {
+          "src": 133,
+          "src_port": 1,
+          "dst": 128,
+          "dst_port": 18
+        }
+      ],
+      "all_old_suffixes_avoid_failed_edge_and_source": true
+    },
+    {
+      "source": 132,
+      "destination": 2,
+      "original_hops": 2,
+      "primary_next_hops": [
+        {
+          "peer": 128,
+          "port": 1
+        }
+      ],
+      "surviving_primary_next_hops": [],
+      "LFA_candidates": [
+        {
+          "peer": 129,
+          "port": 2,
+          "neighbor_to_destination_hops": 3,
+          "neighbor_to_source_hops": 1,
+          "via_source_hops": 3,
+          "loop_free": false
+        },
+        {
+          "peer": 130,
+          "port": 3,
+          "neighbor_to_destination_hops": 3,
+          "neighbor_to_source_hops": 1,
+          "via_source_hops": 3,
+          "loop_free": false
+        },
+        {
+          "peer": 131,
+          "port": 4,
+          "neighbor_to_destination_hops": 3,
+          "neighbor_to_source_hops": 1,
+          "via_source_hops": 3,
+          "loop_free": false
+        },
+        {
+          "peer": 144,
+          "port": 5,
+          "neighbor_to_destination_hops": 3,
+          "neighbor_to_source_hops": 1,
+          "via_source_hops": 3,
+          "loop_free": false
+        }
+      ],
+      "failed_graph_hops": 4,
+      "state": "explicit_repair_required",
+      "failed_graph_path": [
+        132,
+        129,
+        133,
+        128,
+        2
+      ],
+      "repair_prefix_nodes": [
+        132,
+        129,
+        133
+      ],
+      "repair_prefix_edges": [
+        {
+          "src": 132,
+          "src_port": 2,
+          "dst": 129,
+          "dst_port": 17
+        },
+        {
+          "src": 129,
+          "src_port": 18,
+          "dst": 133,
+          "dst_port": 2
+        }
+      ],
+      "merge": 133,
+      "all_old_suffix_edges": [
+        {
+          "src": 128,
+          "src_port": 3,
+          "dst": 2,
+          "dst_port": 1
+        },
+        {
+          "src": 133,
+          "src_port": 1,
+          "dst": 128,
+          "dst_port": 18
+        }
+      ],
+      "all_old_suffixes_avoid_failed_edge_and_source": true
+    },
+    {
+      "source": 132,
+      "destination": 3,
+      "original_hops": 2,
+      "primary_next_hops": [
+        {
+          "peer": 128,
+          "port": 1
+        }
+      ],
+      "surviving_primary_next_hops": [],
+      "LFA_candidates": [
+        {
+          "peer": 129,
+          "port": 2,
+          "neighbor_to_destination_hops": 3,
+          "neighbor_to_source_hops": 1,
+          "via_source_hops": 3,
+          "loop_free": false
+        },
+        {
+          "peer": 130,
+          "port": 3,
+          "neighbor_to_destination_hops": 3,
+          "neighbor_to_source_hops": 1,
+          "via_source_hops": 3,
+          "loop_free": false
+        },
+        {
+          "peer": 131,
+          "port": 4,
+          "neighbor_to_destination_hops": 3,
+          "neighbor_to_source_hops": 1,
+          "via_source_hops": 3,
+          "loop_free": false
+        },
+        {
+          "peer": 144,
+          "port": 5,
+          "neighbor_to_destination_hops": 3,
+          "neighbor_to_source_hops": 1,
+          "via_source_hops": 3,
+          "loop_free": false
+        }
+      ],
+      "failed_graph_hops": 4,
+      "state": "explicit_repair_required",
+      "failed_graph_path": [
+        132,
+        129,
+        133,
+        128,
+        3
+      ],
+      "repair_prefix_nodes": [
+        132,
+        129,
+        133
+      ],
+      "repair_prefix_edges": [
+        {
+          "src": 132,
+          "src_port": 2,
+          "dst": 129,
+          "dst_port": 17
+        },
+        {
+          "src": 129,
+          "src_port": 18,
+          "dst": 133,
+          "dst_port": 2
+        }
+      ],
+      "merge": 133,
+      "all_old_suffix_edges": [
+        {
+          "src": 128,
+          "src_port": 4,
+          "dst": 3,
+          "dst_port": 1
+        },
+        {
+          "src": 133,
+          "src_port": 1,
+          "dst": 128,
+          "dst_port": 18
+        }
+      ],
+      "all_old_suffixes_avoid_failed_edge_and_source": true
+    },
+    {
+      "source": 132,
+      "destination": 4,
+      "original_hops": 2,
+      "primary_next_hops": [
+        {
+          "peer": 128,
+          "port": 1
+        }
+      ],
+      "surviving_primary_next_hops": [],
+      "LFA_candidates": [
+        {
+          "peer": 129,
+          "port": 2,
+          "neighbor_to_destination_hops": 3,
+          "neighbor_to_source_hops": 1,
+          "via_source_hops": 3,
+          "loop_free": false
+        },
+        {
+          "peer": 130,
+          "port": 3,
+          "neighbor_to_destination_hops": 3,
+          "neighbor_to_source_hops": 1,
+          "via_source_hops": 3,
+          "loop_free": false
+        },
+        {
+          "peer": 131,
+          "port": 4,
+          "neighbor_to_destination_hops": 3,
+          "neighbor_to_source_hops": 1,
+          "via_source_hops": 3,
+          "loop_free": false
+        },
+        {
+          "peer": 144,
+          "port": 5,
+          "neighbor_to_destination_hops": 3,
+          "neighbor_to_source_hops": 1,
+          "via_source_hops": 3,
+          "loop_free": false
+        }
+      ],
+      "failed_graph_hops": 4,
+      "state": "explicit_repair_required",
+      "failed_graph_path": [
+        132,
+        129,
+        133,
+        128,
+        4
+      ],
+      "repair_prefix_nodes": [
+        132,
+        129,
+        133
+      ],
+      "repair_prefix_edges": [
+        {
+          "src": 132,
+          "src_port": 2,
+          "dst": 129,
+          "dst_port": 17
+        },
+        {
+          "src": 129,
+          "src_port": 18,
+          "dst": 133,
+          "dst_port": 2
+        }
+      ],
+      "merge": 133,
+      "all_old_suffix_edges": [
+        {
+          "src": 128,
+          "src_port": 5,
+          "dst": 4,
+          "dst_port": 1
+        },
+        {
+          "src": 133,
+          "src_port": 1,
+          "dst": 128,
+          "dst_port": 18
+        }
+      ],
+      "all_old_suffixes_avoid_failed_edge_and_source": true
+    },
+    {
+      "source": 132,
+      "destination": 5,
+      "original_hops": 2,
+      "primary_next_hops": [
+        {
+          "peer": 128,
+          "port": 1
+        }
+      ],
+      "surviving_primary_next_hops": [],
+      "LFA_candidates": [
+        {
+          "peer": 129,
+          "port": 2,
+          "neighbor_to_destination_hops": 3,
+          "neighbor_to_source_hops": 1,
+          "via_source_hops": 3,
+          "loop_free": false
+        },
+        {
+          "peer": 130,
+          "port": 3,
+          "neighbor_to_destination_hops": 3,
+          "neighbor_to_source_hops": 1,
+          "via_source_hops": 3,
+          "loop_free": false
+        },
+        {
+          "peer": 131,
+          "port": 4,
+          "neighbor_to_destination_hops": 3,
+          "neighbor_to_source_hops": 1,
+          "via_source_hops": 3,
+          "loop_free": false
+        },
+        {
+          "peer": 144,
+          "port": 5,
+          "neighbor_to_destination_hops": 3,
+          "neighbor_to_source_hops": 1,
+          "via_source_hops": 3,
+          "loop_free": false
+        }
+      ],
+      "failed_graph_hops": 4,
+      "state": "explicit_repair_required",
+      "failed_graph_path": [
+        132,
+        129,
+        133,
+        128,
+        5
+      ],
+      "repair_prefix_nodes": [
+        132,
+        129,
+        133
+      ],
+      "repair_prefix_edges": [
+        {
+          "src": 132,
+          "src_port": 2,
+          "dst": 129,
+          "dst_port": 17
+        },
+        {
+          "src": 129,
+          "src_port": 18,
+          "dst": 133,
+          "dst_port": 2
+        }
+      ],
+      "merge": 133,
+      "all_old_suffix_edges": [
+        {
+          "src": 128,
+          "src_port": 6,
+          "dst": 5,
+          "dst_port": 1
+        },
+        {
+          "src": 133,
+          "src_port": 1,
+          "dst": 128,
+          "dst_port": 18
+        }
+      ],
+      "all_old_suffixes_avoid_failed_edge_and_source": true
+    },
+    {
+      "source": 132,
+      "destination": 6,
+      "original_hops": 2,
+      "primary_next_hops": [
+        {
+          "peer": 128,
+          "port": 1
+        }
+      ],
+      "surviving_primary_next_hops": [],
+      "LFA_candidates": [
+        {
+          "peer": 129,
+          "port": 2,
+          "neighbor_to_destination_hops": 3,
+          "neighbor_to_source_hops": 1,
+          "via_source_hops": 3,
+          "loop_free": false
+        },
+        {
+          "peer": 130,
+          "port": 3,
+          "neighbor_to_destination_hops": 3,
+          "neighbor_to_source_hops": 1,
+          "via_source_hops": 3,
+          "loop_free": false
+        },
+        {
+          "peer": 131,
+          "port": 4,
+          "neighbor_to_destination_hops": 3,
+          "neighbor_to_source_hops": 1,
+          "via_source_hops": 3,
+          "loop_free": false
+        },
+        {
+          "peer": 144,
+          "port": 5,
+          "neighbor_to_destination_hops": 3,
+          "neighbor_to_source_hops": 1,
+          "via_source_hops": 3,
+          "loop_free": false
+        }
+      ],
+      "failed_graph_hops": 4,
+      "state": "explicit_repair_required",
+      "failed_graph_path": [
+        132,
+        129,
+        133,
+        128,
+        6
+      ],
+      "repair_prefix_nodes": [
+        132,
+        129,
+        133
+      ],
+      "repair_prefix_edges": [
+        {
+          "src": 132,
+          "src_port": 2,
+          "dst": 129,
+          "dst_port": 17
+        },
+        {
+          "src": 129,
+          "src_port": 18,
+          "dst": 133,
+          "dst_port": 2
+        }
+      ],
+      "merge": 133,
+      "all_old_suffix_edges": [
+        {
+          "src": 128,
+          "src_port": 7,
+          "dst": 6,
+          "dst_port": 1
+        },
+        {
+          "src": 133,
+          "src_port": 1,
+          "dst": 128,
+          "dst_port": 18
+        }
+      ],
+      "all_old_suffixes_avoid_failed_edge_and_source": true
+    },
+    {
+      "source": 132,
+      "destination": 7,
+      "original_hops": 2,
+      "primary_next_hops": [
+        {
+          "peer": 128,
+          "port": 1
+        }
+      ],
+      "surviving_primary_next_hops": [],
+      "LFA_candidates": [
+        {
+          "peer": 129,
+          "port": 2,
+          "neighbor_to_destination_hops": 3,
+          "neighbor_to_source_hops": 1,
+          "via_source_hops": 3,
+          "loop_free": false
+        },
+        {
+          "peer": 130,
+          "port": 3,
+          "neighbor_to_destination_hops": 3,
+          "neighbor_to_source_hops": 1,
+          "via_source_hops": 3,
+          "loop_free": false
+        },
+        {
+          "peer": 131,
+          "port": 4,
+          "neighbor_to_destination_hops": 3,
+          "neighbor_to_source_hops": 1,
+          "via_source_hops": 3,
+          "loop_free": false
+        },
+        {
+          "peer": 144,
+          "port": 5,
+          "neighbor_to_destination_hops": 3,
+          "neighbor_to_source_hops": 1,
+          "via_source_hops": 3,
+          "loop_free": false
+        }
+      ],
+      "failed_graph_hops": 4,
+      "state": "explicit_repair_required",
+      "failed_graph_path": [
+        132,
+        129,
+        133,
+        128,
+        7
+      ],
+      "repair_prefix_nodes": [
+        132,
+        129,
+        133
+      ],
+      "repair_prefix_edges": [
+        {
+          "src": 132,
+          "src_port": 2,
+          "dst": 129,
+          "dst_port": 17
+        },
+        {
+          "src": 129,
+          "src_port": 18,
+          "dst": 133,
+          "dst_port": 2
+        }
+      ],
+      "merge": 133,
+      "all_old_suffix_edges": [
+        {
+          "src": 128,
+          "src_port": 8,
+          "dst": 7,
+          "dst_port": 1
+        },
+        {
+          "src": 133,
+          "src_port": 1,
+          "dst": 128,
+          "dst_port": 18
+        }
+      ],
+      "all_old_suffixes_avoid_failed_edge_and_source": true
+    },
+    {
+      "source": 132,
+      "destination": 8,
+      "original_hops": 2,
+      "primary_next_hops": [
+        {
+          "peer": 129,
+          "port": 2
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 129,
+          "port": 2
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 9,
+      "original_hops": 2,
+      "primary_next_hops": [
+        {
+          "peer": 129,
+          "port": 2
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 129,
+          "port": 2
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 10,
+      "original_hops": 2,
+      "primary_next_hops": [
+        {
+          "peer": 129,
+          "port": 2
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 129,
+          "port": 2
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 11,
+      "original_hops": 2,
+      "primary_next_hops": [
+        {
+          "peer": 129,
+          "port": 2
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 129,
+          "port": 2
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 12,
+      "original_hops": 2,
+      "primary_next_hops": [
+        {
+          "peer": 129,
+          "port": 2
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 129,
+          "port": 2
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 13,
+      "original_hops": 2,
+      "primary_next_hops": [
+        {
+          "peer": 129,
+          "port": 2
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 129,
+          "port": 2
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 14,
+      "original_hops": 2,
+      "primary_next_hops": [
+        {
+          "peer": 129,
+          "port": 2
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 129,
+          "port": 2
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 15,
+      "original_hops": 2,
+      "primary_next_hops": [
+        {
+          "peer": 129,
+          "port": 2
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 129,
+          "port": 2
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 16,
+      "original_hops": 2,
+      "primary_next_hops": [
+        {
+          "peer": 130,
+          "port": 3
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 130,
+          "port": 3
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 17,
+      "original_hops": 2,
+      "primary_next_hops": [
+        {
+          "peer": 130,
+          "port": 3
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 130,
+          "port": 3
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 18,
+      "original_hops": 2,
+      "primary_next_hops": [
+        {
+          "peer": 130,
+          "port": 3
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 130,
+          "port": 3
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 19,
+      "original_hops": 2,
+      "primary_next_hops": [
+        {
+          "peer": 130,
+          "port": 3
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 130,
+          "port": 3
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 20,
+      "original_hops": 2,
+      "primary_next_hops": [
+        {
+          "peer": 130,
+          "port": 3
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 130,
+          "port": 3
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 21,
+      "original_hops": 2,
+      "primary_next_hops": [
+        {
+          "peer": 130,
+          "port": 3
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 130,
+          "port": 3
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 22,
+      "original_hops": 2,
+      "primary_next_hops": [
+        {
+          "peer": 130,
+          "port": 3
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 130,
+          "port": 3
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 23,
+      "original_hops": 2,
+      "primary_next_hops": [
+        {
+          "peer": 130,
+          "port": 3
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 130,
+          "port": 3
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 24,
+      "original_hops": 2,
+      "primary_next_hops": [
+        {
+          "peer": 131,
+          "port": 4
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 131,
+          "port": 4
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 25,
+      "original_hops": 2,
+      "primary_next_hops": [
+        {
+          "peer": 131,
+          "port": 4
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 131,
+          "port": 4
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 26,
+      "original_hops": 2,
+      "primary_next_hops": [
+        {
+          "peer": 131,
+          "port": 4
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 131,
+          "port": 4
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 27,
+      "original_hops": 2,
+      "primary_next_hops": [
+        {
+          "peer": 131,
+          "port": 4
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 131,
+          "port": 4
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 28,
+      "original_hops": 2,
+      "primary_next_hops": [
+        {
+          "peer": 131,
+          "port": 4
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 131,
+          "port": 4
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 29,
+      "original_hops": 2,
+      "primary_next_hops": [
+        {
+          "peer": 131,
+          "port": 4
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 131,
+          "port": 4
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 30,
+      "original_hops": 2,
+      "primary_next_hops": [
+        {
+          "peer": 131,
+          "port": 4
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 131,
+          "port": 4
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 31,
+      "original_hops": 2,
+      "primary_next_hops": [
+        {
+          "peer": 131,
+          "port": 4
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 131,
+          "port": 4
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 32,
+      "original_hops": 2,
+      "primary_next_hops": [
+        {
+          "peer": 128,
+          "port": 1
+        }
+      ],
+      "surviving_primary_next_hops": [],
+      "LFA_candidates": [
+        {
+          "peer": 129,
+          "port": 2,
+          "neighbor_to_destination_hops": 3,
+          "neighbor_to_source_hops": 1,
+          "via_source_hops": 3,
+          "loop_free": false
+        },
+        {
+          "peer": 130,
+          "port": 3,
+          "neighbor_to_destination_hops": 3,
+          "neighbor_to_source_hops": 1,
+          "via_source_hops": 3,
+          "loop_free": false
+        },
+        {
+          "peer": 131,
+          "port": 4,
+          "neighbor_to_destination_hops": 3,
+          "neighbor_to_source_hops": 1,
+          "via_source_hops": 3,
+          "loop_free": false
+        },
+        {
+          "peer": 144,
+          "port": 5,
+          "neighbor_to_destination_hops": 3,
+          "neighbor_to_source_hops": 1,
+          "via_source_hops": 3,
+          "loop_free": false
+        }
+      ],
+      "failed_graph_hops": 4,
+      "state": "explicit_repair_required",
+      "failed_graph_path": [
+        132,
+        129,
+        133,
+        128,
+        32
+      ],
+      "repair_prefix_nodes": [
+        132,
+        129,
+        133
+      ],
+      "repair_prefix_edges": [
+        {
+          "src": 132,
+          "src_port": 2,
+          "dst": 129,
+          "dst_port": 17
+        },
+        {
+          "src": 129,
+          "src_port": 18,
+          "dst": 133,
+          "dst_port": 2
+        }
+      ],
+      "merge": 133,
+      "all_old_suffix_edges": [
+        {
+          "src": 128,
+          "src_port": 9,
+          "dst": 32,
+          "dst_port": 1
+        },
+        {
+          "src": 133,
+          "src_port": 1,
+          "dst": 128,
+          "dst_port": 18
+        }
+      ],
+      "all_old_suffixes_avoid_failed_edge_and_source": true
+    },
+    {
+      "source": 132,
+      "destination": 33,
+      "original_hops": 2,
+      "primary_next_hops": [
+        {
+          "peer": 128,
+          "port": 1
+        }
+      ],
+      "surviving_primary_next_hops": [],
+      "LFA_candidates": [
+        {
+          "peer": 129,
+          "port": 2,
+          "neighbor_to_destination_hops": 3,
+          "neighbor_to_source_hops": 1,
+          "via_source_hops": 3,
+          "loop_free": false
+        },
+        {
+          "peer": 130,
+          "port": 3,
+          "neighbor_to_destination_hops": 3,
+          "neighbor_to_source_hops": 1,
+          "via_source_hops": 3,
+          "loop_free": false
+        },
+        {
+          "peer": 131,
+          "port": 4,
+          "neighbor_to_destination_hops": 3,
+          "neighbor_to_source_hops": 1,
+          "via_source_hops": 3,
+          "loop_free": false
+        },
+        {
+          "peer": 144,
+          "port": 5,
+          "neighbor_to_destination_hops": 3,
+          "neighbor_to_source_hops": 1,
+          "via_source_hops": 3,
+          "loop_free": false
+        }
+      ],
+      "failed_graph_hops": 4,
+      "state": "explicit_repair_required",
+      "failed_graph_path": [
+        132,
+        129,
+        133,
+        128,
+        33
+      ],
+      "repair_prefix_nodes": [
+        132,
+        129,
+        133
+      ],
+      "repair_prefix_edges": [
+        {
+          "src": 132,
+          "src_port": 2,
+          "dst": 129,
+          "dst_port": 17
+        },
+        {
+          "src": 129,
+          "src_port": 18,
+          "dst": 133,
+          "dst_port": 2
+        }
+      ],
+      "merge": 133,
+      "all_old_suffix_edges": [
+        {
+          "src": 128,
+          "src_port": 10,
+          "dst": 33,
+          "dst_port": 1
+        },
+        {
+          "src": 133,
+          "src_port": 1,
+          "dst": 128,
+          "dst_port": 18
+        }
+      ],
+      "all_old_suffixes_avoid_failed_edge_and_source": true
+    },
+    {
+      "source": 132,
+      "destination": 34,
+      "original_hops": 2,
+      "primary_next_hops": [
+        {
+          "peer": 128,
+          "port": 1
+        }
+      ],
+      "surviving_primary_next_hops": [],
+      "LFA_candidates": [
+        {
+          "peer": 129,
+          "port": 2,
+          "neighbor_to_destination_hops": 3,
+          "neighbor_to_source_hops": 1,
+          "via_source_hops": 3,
+          "loop_free": false
+        },
+        {
+          "peer": 130,
+          "port": 3,
+          "neighbor_to_destination_hops": 3,
+          "neighbor_to_source_hops": 1,
+          "via_source_hops": 3,
+          "loop_free": false
+        },
+        {
+          "peer": 131,
+          "port": 4,
+          "neighbor_to_destination_hops": 3,
+          "neighbor_to_source_hops": 1,
+          "via_source_hops": 3,
+          "loop_free": false
+        },
+        {
+          "peer": 144,
+          "port": 5,
+          "neighbor_to_destination_hops": 3,
+          "neighbor_to_source_hops": 1,
+          "via_source_hops": 3,
+          "loop_free": false
+        }
+      ],
+      "failed_graph_hops": 4,
+      "state": "explicit_repair_required",
+      "failed_graph_path": [
+        132,
+        129,
+        133,
+        128,
+        34
+      ],
+      "repair_prefix_nodes": [
+        132,
+        129,
+        133
+      ],
+      "repair_prefix_edges": [
+        {
+          "src": 132,
+          "src_port": 2,
+          "dst": 129,
+          "dst_port": 17
+        },
+        {
+          "src": 129,
+          "src_port": 18,
+          "dst": 133,
+          "dst_port": 2
+        }
+      ],
+      "merge": 133,
+      "all_old_suffix_edges": [
+        {
+          "src": 128,
+          "src_port": 11,
+          "dst": 34,
+          "dst_port": 1
+        },
+        {
+          "src": 133,
+          "src_port": 1,
+          "dst": 128,
+          "dst_port": 18
+        }
+      ],
+      "all_old_suffixes_avoid_failed_edge_and_source": true
+    },
+    {
+      "source": 132,
+      "destination": 35,
+      "original_hops": 2,
+      "primary_next_hops": [
+        {
+          "peer": 128,
+          "port": 1
+        }
+      ],
+      "surviving_primary_next_hops": [],
+      "LFA_candidates": [
+        {
+          "peer": 129,
+          "port": 2,
+          "neighbor_to_destination_hops": 3,
+          "neighbor_to_source_hops": 1,
+          "via_source_hops": 3,
+          "loop_free": false
+        },
+        {
+          "peer": 130,
+          "port": 3,
+          "neighbor_to_destination_hops": 3,
+          "neighbor_to_source_hops": 1,
+          "via_source_hops": 3,
+          "loop_free": false
+        },
+        {
+          "peer": 131,
+          "port": 4,
+          "neighbor_to_destination_hops": 3,
+          "neighbor_to_source_hops": 1,
+          "via_source_hops": 3,
+          "loop_free": false
+        },
+        {
+          "peer": 144,
+          "port": 5,
+          "neighbor_to_destination_hops": 3,
+          "neighbor_to_source_hops": 1,
+          "via_source_hops": 3,
+          "loop_free": false
+        }
+      ],
+      "failed_graph_hops": 4,
+      "state": "explicit_repair_required",
+      "failed_graph_path": [
+        132,
+        129,
+        133,
+        128,
+        35
+      ],
+      "repair_prefix_nodes": [
+        132,
+        129,
+        133
+      ],
+      "repair_prefix_edges": [
+        {
+          "src": 132,
+          "src_port": 2,
+          "dst": 129,
+          "dst_port": 17
+        },
+        {
+          "src": 129,
+          "src_port": 18,
+          "dst": 133,
+          "dst_port": 2
+        }
+      ],
+      "merge": 133,
+      "all_old_suffix_edges": [
+        {
+          "src": 128,
+          "src_port": 12,
+          "dst": 35,
+          "dst_port": 1
+        },
+        {
+          "src": 133,
+          "src_port": 1,
+          "dst": 128,
+          "dst_port": 18
+        }
+      ],
+      "all_old_suffixes_avoid_failed_edge_and_source": true
+    },
+    {
+      "source": 132,
+      "destination": 36,
+      "original_hops": 2,
+      "primary_next_hops": [
+        {
+          "peer": 128,
+          "port": 1
+        }
+      ],
+      "surviving_primary_next_hops": [],
+      "LFA_candidates": [
+        {
+          "peer": 129,
+          "port": 2,
+          "neighbor_to_destination_hops": 3,
+          "neighbor_to_source_hops": 1,
+          "via_source_hops": 3,
+          "loop_free": false
+        },
+        {
+          "peer": 130,
+          "port": 3,
+          "neighbor_to_destination_hops": 3,
+          "neighbor_to_source_hops": 1,
+          "via_source_hops": 3,
+          "loop_free": false
+        },
+        {
+          "peer": 131,
+          "port": 4,
+          "neighbor_to_destination_hops": 3,
+          "neighbor_to_source_hops": 1,
+          "via_source_hops": 3,
+          "loop_free": false
+        },
+        {
+          "peer": 144,
+          "port": 5,
+          "neighbor_to_destination_hops": 3,
+          "neighbor_to_source_hops": 1,
+          "via_source_hops": 3,
+          "loop_free": false
+        }
+      ],
+      "failed_graph_hops": 4,
+      "state": "explicit_repair_required",
+      "failed_graph_path": [
+        132,
+        129,
+        133,
+        128,
+        36
+      ],
+      "repair_prefix_nodes": [
+        132,
+        129,
+        133
+      ],
+      "repair_prefix_edges": [
+        {
+          "src": 132,
+          "src_port": 2,
+          "dst": 129,
+          "dst_port": 17
+        },
+        {
+          "src": 129,
+          "src_port": 18,
+          "dst": 133,
+          "dst_port": 2
+        }
+      ],
+      "merge": 133,
+      "all_old_suffix_edges": [
+        {
+          "src": 128,
+          "src_port": 13,
+          "dst": 36,
+          "dst_port": 1
+        },
+        {
+          "src": 133,
+          "src_port": 1,
+          "dst": 128,
+          "dst_port": 18
+        }
+      ],
+      "all_old_suffixes_avoid_failed_edge_and_source": true
+    },
+    {
+      "source": 132,
+      "destination": 37,
+      "original_hops": 2,
+      "primary_next_hops": [
+        {
+          "peer": 128,
+          "port": 1
+        }
+      ],
+      "surviving_primary_next_hops": [],
+      "LFA_candidates": [
+        {
+          "peer": 129,
+          "port": 2,
+          "neighbor_to_destination_hops": 3,
+          "neighbor_to_source_hops": 1,
+          "via_source_hops": 3,
+          "loop_free": false
+        },
+        {
+          "peer": 130,
+          "port": 3,
+          "neighbor_to_destination_hops": 3,
+          "neighbor_to_source_hops": 1,
+          "via_source_hops": 3,
+          "loop_free": false
+        },
+        {
+          "peer": 131,
+          "port": 4,
+          "neighbor_to_destination_hops": 3,
+          "neighbor_to_source_hops": 1,
+          "via_source_hops": 3,
+          "loop_free": false
+        },
+        {
+          "peer": 144,
+          "port": 5,
+          "neighbor_to_destination_hops": 3,
+          "neighbor_to_source_hops": 1,
+          "via_source_hops": 3,
+          "loop_free": false
+        }
+      ],
+      "failed_graph_hops": 4,
+      "state": "explicit_repair_required",
+      "failed_graph_path": [
+        132,
+        129,
+        133,
+        128,
+        37
+      ],
+      "repair_prefix_nodes": [
+        132,
+        129,
+        133
+      ],
+      "repair_prefix_edges": [
+        {
+          "src": 132,
+          "src_port": 2,
+          "dst": 129,
+          "dst_port": 17
+        },
+        {
+          "src": 129,
+          "src_port": 18,
+          "dst": 133,
+          "dst_port": 2
+        }
+      ],
+      "merge": 133,
+      "all_old_suffix_edges": [
+        {
+          "src": 128,
+          "src_port": 14,
+          "dst": 37,
+          "dst_port": 1
+        },
+        {
+          "src": 133,
+          "src_port": 1,
+          "dst": 128,
+          "dst_port": 18
+        }
+      ],
+      "all_old_suffixes_avoid_failed_edge_and_source": true
+    },
+    {
+      "source": 132,
+      "destination": 38,
+      "original_hops": 2,
+      "primary_next_hops": [
+        {
+          "peer": 128,
+          "port": 1
+        }
+      ],
+      "surviving_primary_next_hops": [],
+      "LFA_candidates": [
+        {
+          "peer": 129,
+          "port": 2,
+          "neighbor_to_destination_hops": 3,
+          "neighbor_to_source_hops": 1,
+          "via_source_hops": 3,
+          "loop_free": false
+        },
+        {
+          "peer": 130,
+          "port": 3,
+          "neighbor_to_destination_hops": 3,
+          "neighbor_to_source_hops": 1,
+          "via_source_hops": 3,
+          "loop_free": false
+        },
+        {
+          "peer": 131,
+          "port": 4,
+          "neighbor_to_destination_hops": 3,
+          "neighbor_to_source_hops": 1,
+          "via_source_hops": 3,
+          "loop_free": false
+        },
+        {
+          "peer": 144,
+          "port": 5,
+          "neighbor_to_destination_hops": 3,
+          "neighbor_to_source_hops": 1,
+          "via_source_hops": 3,
+          "loop_free": false
+        }
+      ],
+      "failed_graph_hops": 4,
+      "state": "explicit_repair_required",
+      "failed_graph_path": [
+        132,
+        129,
+        133,
+        128,
+        38
+      ],
+      "repair_prefix_nodes": [
+        132,
+        129,
+        133
+      ],
+      "repair_prefix_edges": [
+        {
+          "src": 132,
+          "src_port": 2,
+          "dst": 129,
+          "dst_port": 17
+        },
+        {
+          "src": 129,
+          "src_port": 18,
+          "dst": 133,
+          "dst_port": 2
+        }
+      ],
+      "merge": 133,
+      "all_old_suffix_edges": [
+        {
+          "src": 128,
+          "src_port": 15,
+          "dst": 38,
+          "dst_port": 1
+        },
+        {
+          "src": 133,
+          "src_port": 1,
+          "dst": 128,
+          "dst_port": 18
+        }
+      ],
+      "all_old_suffixes_avoid_failed_edge_and_source": true
+    },
+    {
+      "source": 132,
+      "destination": 39,
+      "original_hops": 2,
+      "primary_next_hops": [
+        {
+          "peer": 128,
+          "port": 1
+        }
+      ],
+      "surviving_primary_next_hops": [],
+      "LFA_candidates": [
+        {
+          "peer": 129,
+          "port": 2,
+          "neighbor_to_destination_hops": 3,
+          "neighbor_to_source_hops": 1,
+          "via_source_hops": 3,
+          "loop_free": false
+        },
+        {
+          "peer": 130,
+          "port": 3,
+          "neighbor_to_destination_hops": 3,
+          "neighbor_to_source_hops": 1,
+          "via_source_hops": 3,
+          "loop_free": false
+        },
+        {
+          "peer": 131,
+          "port": 4,
+          "neighbor_to_destination_hops": 3,
+          "neighbor_to_source_hops": 1,
+          "via_source_hops": 3,
+          "loop_free": false
+        },
+        {
+          "peer": 144,
+          "port": 5,
+          "neighbor_to_destination_hops": 3,
+          "neighbor_to_source_hops": 1,
+          "via_source_hops": 3,
+          "loop_free": false
+        }
+      ],
+      "failed_graph_hops": 4,
+      "state": "explicit_repair_required",
+      "failed_graph_path": [
+        132,
+        129,
+        133,
+        128,
+        39
+      ],
+      "repair_prefix_nodes": [
+        132,
+        129,
+        133
+      ],
+      "repair_prefix_edges": [
+        {
+          "src": 132,
+          "src_port": 2,
+          "dst": 129,
+          "dst_port": 17
+        },
+        {
+          "src": 129,
+          "src_port": 18,
+          "dst": 133,
+          "dst_port": 2
+        }
+      ],
+      "merge": 133,
+      "all_old_suffix_edges": [
+        {
+          "src": 128,
+          "src_port": 16,
+          "dst": 39,
+          "dst_port": 1
+        },
+        {
+          "src": 133,
+          "src_port": 1,
+          "dst": 128,
+          "dst_port": 18
+        }
+      ],
+      "all_old_suffixes_avoid_failed_edge_and_source": true
+    },
+    {
+      "source": 132,
+      "destination": 40,
+      "original_hops": 2,
+      "primary_next_hops": [
+        {
+          "peer": 129,
+          "port": 2
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 129,
+          "port": 2
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 41,
+      "original_hops": 2,
+      "primary_next_hops": [
+        {
+          "peer": 129,
+          "port": 2
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 129,
+          "port": 2
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 42,
+      "original_hops": 2,
+      "primary_next_hops": [
+        {
+          "peer": 129,
+          "port": 2
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 129,
+          "port": 2
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 43,
+      "original_hops": 2,
+      "primary_next_hops": [
+        {
+          "peer": 129,
+          "port": 2
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 129,
+          "port": 2
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 44,
+      "original_hops": 2,
+      "primary_next_hops": [
+        {
+          "peer": 129,
+          "port": 2
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 129,
+          "port": 2
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 45,
+      "original_hops": 2,
+      "primary_next_hops": [
+        {
+          "peer": 129,
+          "port": 2
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 129,
+          "port": 2
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 46,
+      "original_hops": 2,
+      "primary_next_hops": [
+        {
+          "peer": 129,
+          "port": 2
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 129,
+          "port": 2
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 47,
+      "original_hops": 2,
+      "primary_next_hops": [
+        {
+          "peer": 129,
+          "port": 2
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 129,
+          "port": 2
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 48,
+      "original_hops": 2,
+      "primary_next_hops": [
+        {
+          "peer": 130,
+          "port": 3
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 130,
+          "port": 3
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 49,
+      "original_hops": 2,
+      "primary_next_hops": [
+        {
+          "peer": 130,
+          "port": 3
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 130,
+          "port": 3
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 50,
+      "original_hops": 2,
+      "primary_next_hops": [
+        {
+          "peer": 130,
+          "port": 3
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 130,
+          "port": 3
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 51,
+      "original_hops": 2,
+      "primary_next_hops": [
+        {
+          "peer": 130,
+          "port": 3
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 130,
+          "port": 3
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 52,
+      "original_hops": 2,
+      "primary_next_hops": [
+        {
+          "peer": 130,
+          "port": 3
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 130,
+          "port": 3
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 53,
+      "original_hops": 2,
+      "primary_next_hops": [
+        {
+          "peer": 130,
+          "port": 3
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 130,
+          "port": 3
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 54,
+      "original_hops": 2,
+      "primary_next_hops": [
+        {
+          "peer": 130,
+          "port": 3
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 130,
+          "port": 3
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 55,
+      "original_hops": 2,
+      "primary_next_hops": [
+        {
+          "peer": 130,
+          "port": 3
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 130,
+          "port": 3
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 56,
+      "original_hops": 2,
+      "primary_next_hops": [
+        {
+          "peer": 131,
+          "port": 4
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 131,
+          "port": 4
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 57,
+      "original_hops": 2,
+      "primary_next_hops": [
+        {
+          "peer": 131,
+          "port": 4
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 131,
+          "port": 4
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 58,
+      "original_hops": 2,
+      "primary_next_hops": [
+        {
+          "peer": 131,
+          "port": 4
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 131,
+          "port": 4
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 59,
+      "original_hops": 2,
+      "primary_next_hops": [
+        {
+          "peer": 131,
+          "port": 4
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 131,
+          "port": 4
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 60,
+      "original_hops": 2,
+      "primary_next_hops": [
+        {
+          "peer": 131,
+          "port": 4
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 131,
+          "port": 4
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 61,
+      "original_hops": 2,
+      "primary_next_hops": [
+        {
+          "peer": 131,
+          "port": 4
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 131,
+          "port": 4
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 62,
+      "original_hops": 2,
+      "primary_next_hops": [
+        {
+          "peer": 131,
+          "port": 4
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 131,
+          "port": 4
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 63,
+      "original_hops": 2,
+      "primary_next_hops": [
+        {
+          "peer": 131,
+          "port": 4
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 131,
+          "port": 4
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 64,
+      "original_hops": 4,
+      "primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 65,
+      "original_hops": 4,
+      "primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 66,
+      "original_hops": 4,
+      "primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 67,
+      "original_hops": 4,
+      "primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 68,
+      "original_hops": 4,
+      "primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 69,
+      "original_hops": 4,
+      "primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 70,
+      "original_hops": 4,
+      "primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 71,
+      "original_hops": 4,
+      "primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 72,
+      "original_hops": 4,
+      "primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 73,
+      "original_hops": 4,
+      "primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 74,
+      "original_hops": 4,
+      "primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 75,
+      "original_hops": 4,
+      "primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 76,
+      "original_hops": 4,
+      "primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 77,
+      "original_hops": 4,
+      "primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 78,
+      "original_hops": 4,
+      "primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 79,
+      "original_hops": 4,
+      "primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 80,
+      "original_hops": 4,
+      "primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 81,
+      "original_hops": 4,
+      "primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 82,
+      "original_hops": 4,
+      "primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 83,
+      "original_hops": 4,
+      "primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 84,
+      "original_hops": 4,
+      "primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 85,
+      "original_hops": 4,
+      "primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 86,
+      "original_hops": 4,
+      "primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 87,
+      "original_hops": 4,
+      "primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 88,
+      "original_hops": 4,
+      "primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 89,
+      "original_hops": 4,
+      "primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 90,
+      "original_hops": 4,
+      "primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 91,
+      "original_hops": 4,
+      "primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 92,
+      "original_hops": 4,
+      "primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 93,
+      "original_hops": 4,
+      "primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 94,
+      "original_hops": 4,
+      "primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 95,
+      "original_hops": 4,
+      "primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 96,
+      "original_hops": 4,
+      "primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 97,
+      "original_hops": 4,
+      "primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 98,
+      "original_hops": 4,
+      "primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 99,
+      "original_hops": 4,
+      "primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 100,
+      "original_hops": 4,
+      "primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 101,
+      "original_hops": 4,
+      "primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 102,
+      "original_hops": 4,
+      "primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 103,
+      "original_hops": 4,
+      "primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 104,
+      "original_hops": 4,
+      "primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 105,
+      "original_hops": 4,
+      "primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 106,
+      "original_hops": 4,
+      "primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 107,
+      "original_hops": 4,
+      "primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 108,
+      "original_hops": 4,
+      "primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 109,
+      "original_hops": 4,
+      "primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 110,
+      "original_hops": 4,
+      "primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 111,
+      "original_hops": 4,
+      "primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 112,
+      "original_hops": 4,
+      "primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 113,
+      "original_hops": 4,
+      "primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 114,
+      "original_hops": 4,
+      "primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 115,
+      "original_hops": 4,
+      "primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 116,
+      "original_hops": 4,
+      "primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 117,
+      "original_hops": 4,
+      "primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 118,
+      "original_hops": 4,
+      "primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 119,
+      "original_hops": 4,
+      "primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 120,
+      "original_hops": 4,
+      "primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 121,
+      "original_hops": 4,
+      "primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 122,
+      "original_hops": 4,
+      "primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 123,
+      "original_hops": 4,
+      "primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 124,
+      "original_hops": 4,
+      "primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 125,
+      "original_hops": 4,
+      "primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 126,
+      "original_hops": 4,
+      "primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "state": "unaffected"
+    },
+    {
+      "source": 132,
+      "destination": 127,
+      "original_hops": 4,
+      "primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "surviving_primary_next_hops": [
+        {
+          "peer": 144,
+          "port": 5
+        }
+      ],
+      "state": "unaffected"
+    }
+  ]
+}

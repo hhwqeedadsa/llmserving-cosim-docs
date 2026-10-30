@@ -1,5 +1,15 @@
 # 当前任务与交接
 
+## 2026-10-30 唯一坏出口的无环修复覆盖检查
+
+状态：`completed`（静态规划及独立核验已验收，原生执行与整体研究目标仍active）。上一目标轮只解释normal/local命名，没有项目状态变化，分类no progress；本轮继续并完成已有规划实现。按[规范](link_repair_plan_spec.md)补现成改路基线的前置覆盖检查及显式路径规划；普通LFA不能在不核查邻居旧表时直接替换空候选。交付[公开128Clos示例](../../examples/scaleout_repair_plan/README.md)、[网页](../../fixtures/link_repair_plan/report.html)、[独立核验](../../fixtures/link_repair_plan/verification.json)及[来源与资源收据](../../fixtures/link_repair_plan/receipt.json)。
+
+公开repair-plan独立生成128Clos输入；256个端点/目的组合中128个不受影响、112个保留原ECMP出口、16个原出口全失效且普通LFA不覆盖。显式段132→129→133之后，全部旧ECMP后缀均安全，例如到GPU1沿133→128→1。9项新增及21项相关回归方法通过；独立Floyd-Warshall检查全部256组合、16显式段、物理端口和首个安全合流点，拒绝4类篡改。13项固定依赖检查通过。首次单位断言误将边集合当顺序、首次制图遇OpenBLAS线程初始化限制，失败及修正均保留；未改无环规则、增加预算或重跑网络。
+
+根`runs/link_repair_planning_20261030`：300受监控秒/128MiB/留8GiB，阶段60秒/RSS512MiB/地址1GiB；实际七阶段累计2.103秒、峰值RSS76,005,376B、产物626,688B。无新网络、构建、依赖修改、安装或GPU；只下载RFC5286/7490两份有限资料，不取大型数据。PNG已查看，HTML仅静态检查。测试小图仅CPU，用户指定的实际网络规模边界保持。仅提交本任务，发布既有用户分支。
+
+后续须让原生后端真正执行显式修复段，计入实际线上头部、队列/MMU及序列化开销；只由本地故障激活，保持原QP/ACK和确认/释放语义。功能验收后再独立比较真实MoE任务。当前没有新修复执行模式或时延收益，不称完整Remote-LFA/TI-LFA，不把规划交付当整体目标完成。
+
 ## 2026-10-30 真实路由下的短时共享上行故障
 
 状态：`completed`（本轮短时共享上行对照及ACK瓶颈核查已验收，整体研究目标仍active）。上一目标轮为progress：`c8c4e24ece`完成并发布临时断链恢复平台。本轮按[独立方法](../../experiments/transient_uplink_recovery/README.md)执行七个真实选择驱动的128Clos网络，平台行为不改；方法先提交，故障运行前冻结修订来源。交付[网页](../../experiments/transient_uplink_recovery/results/20261030/report.html)、[详细解释](../../experiments/transient_uplink_recovery/results/20261030/README.md)、[复核入口](../../experiments/transient_uplink_recovery/RESULTS.md)和[资源身份](../../experiments/transient_uplink_recovery/results/20261030/receipt.json)。

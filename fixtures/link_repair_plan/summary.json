@@ -1,0 +1,25 @@
+{
+  "schema_version": "moe-scaleout-repair-plan-summary/1",
+  "state": "planned_not_executed",
+  "network_executed": false,
+  "gpu_endpoints": 128,
+  "switches": 20,
+  "protected_edge": [
+    128,
+    132
+  ],
+  "endpoint_destination_pairs": 256,
+  "coverage": {
+    "explicit_repair_required": 16,
+    "primary_survives": 112,
+    "unaffected": 128
+  },
+  "ordinary_LFA_rule": "D(N,D) < D(N,S) + D(S,D), old hop graph, strict inequality",
+  "assumptions": [
+    "single bidirectional switch-link failure",
+    "single plane and one NIC per GPU",
+    "unit hop metrics as native Fabric, GPU nodes never transit",
+    "explicit prefix requires future native steering and wire overhead; not executed"
+  ],
+  "scope": "link protection only; no node protection, controller timing, packet repair or latency prediction"
+}

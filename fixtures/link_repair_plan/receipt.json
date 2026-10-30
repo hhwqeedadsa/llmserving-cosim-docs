@@ -1,0 +1,77 @@
+{
+  "passed": true,
+  "network_executed": false,
+  "native_builds": 0,
+  "GPU_execution": false,
+  "dependency_changes": 0,
+  "actual_static_endpoints": 128,
+  "source_destination_combinations": 256,
+  "explicit_repair_prefixes": 16,
+  "passed_unit_methods": 30,
+  "tests": {
+    "unit-corrected": 9,
+    "regression": 21
+  },
+  "rejected_mutations": 4,
+  "monitored_stages": 7,
+  "successful_stages": 5,
+  "monitored_seconds": 2.103308539954014,
+  "peak_group_rss_bytes": 76005376,
+  "peak_artifact_bytes": 626688,
+  "current_free_bytes": 27622313984,
+  "failed_stages": {
+    "unit": {
+      "exit_code": 1,
+      "stderr_sha256": "ed070908cbd2c8b0deebf0c7033d597aeb01412de5ff4ec1777d2f34c773c588"
+    },
+    "publish": {
+      "exit_code": 1,
+      "stderr_sha256": "3a62245e44692949bb3f5abbfb43b2340c8b07d6d88758937e45480622dcb256"
+    }
+  },
+  "public_RFC_sources": [
+    {
+      "url": "https://www.rfc-editor.org/rfc/rfc5286.txt",
+      "bytes": 71027,
+      "sha256": "7c612d458dbe0e6730ee38b43b75205acd24c967a2ec209cb8f40f5bc2b72c8b",
+      "status": "downloaded"
+    },
+    {
+      "url": "https://www.rfc-editor.org/rfc/rfc7490.txt",
+      "bytes": 66207,
+      "sha256": "da2e8bf3e279d4c7d3d08d99cf1d23ed489eeb464b3b8193a803924e567fe82a",
+      "status": "downloaded"
+    }
+  ],
+  "min_free_bytes": 8589934592,
+  "seconds_budget": 300,
+  "artifact_budget_bytes": 134217728,
+  "local_links_checked": 1361,
+  "figure_visually_inspected": true,
+  "browser_rendering_verified": false,
+  "sources_sha256": {
+    "python/moe_ub_cosim/scaleout_repair_plan.py": "dc58a72e0ec83c3f2ca5b3e9e3cf3db80196cf00e4a8fbe2870e5bbc9be620d1",
+    "python/moe_ub_cosim/cli.py": "42ba1b95ca4e94efbb5c8de8e315edde42bb3bf6f3c4826006dc933c6c4fc614",
+    "tests/unit/scaleout_repair_plan_test.py": "326e2a80203f5d5904819eceb688de1546fcef14a3b4bf86eb8fa4cc715c7eb8",
+    "fixtures/link_repair_plan/audit.py": "c6712003a70a4063012aec34a10f12488b48c1856f28710d8b8ae00a669fa663",
+    "fixtures/link_repair_plan/closeout.py": "213d5aa8ed4d9a502c18e64994a0fe9eaa3912a39f9760388e996fafa6eabfe8",
+    "fixtures/link_repair_plan/monitor.py": "582447558fc74bbf6e41359c577eab19d8bbbdb08f856e168fb5b229228ab94a",
+    "fixtures/link_repair_plan/publish.py": "9a0e6f7f0eb7e057c474e439f8dc6f9541e013232ef1dd634776afe6d6ed3a82",
+    "fixtures/link_repair_plan/regression.py": "87b5ecf5ec86bda88c671c5f6f6216e04568aa3af8559421efd6f1ecac96118a",
+    "fixtures/link_repair_plan/run.py": "944e51aaec6460d63c493f19667712179fdff0d53cbe245a421ae464367f85b7",
+    "examples/scaleout_repair_plan/clos-128.json": "126d85b9320aba4e9368d643777798166269eab06edef5bf90d37ca112c35ce0",
+    "docs/tasks/link_repair_plan_spec.md": "802453c706cf8694a5136214c7b961d89521cb3ed8fdf20a7bee3d2b69de944c"
+  },
+  "artifacts_sha256": {
+    "verification.json": "92305307b5360a297637d2546cd6b2a54512b157813b6520985cd38c7257f3ae",
+    "plan.json": "b595d8034ef1b854c20e9b970f3871da57ad7f586951d0cb1734f7fe322005e1",
+    "summary.json": "673e756f706221c638fd1a58268d0ad46e69d454d9507db9e61a96b5717ed4fc",
+    "repair_path.png": "9bc31d6571684c60b644ee3efffdb61a6ce2672757d2af7d72d38097bad8bb1d",
+    "report.html": "e2c87e70b6999f6c068d2a156aa3483f30b860f4aff7e02bafe4f1f6af8c97c6"
+  },
+  "boundaries": [
+    "static plan, no packet execution or timing benefit",
+    "single switch link, unit hop metrics",
+    "explicit repair prefixes still require native steering and wire overhead"
+  ]
+}

@@ -28,6 +28,8 @@ context连接规划沿用[固定provider共享范围核查](reviews/现代连接
 
 `switch_links/2`支持每条交换机边一轮临时关闭/恢复，项目派生端口保留固定原生数据路径和在途发送状态；控制面只按显式到达的版本化通知知晓状态。恢复可能先于断链通知，不能从物理真值提前改路。它是[功能模型](../examples/scaleout_link_restore/README.md)，接收仍按到达瞬间端口状态判断，未模拟发送中途信号中断对比特/CRC的影响、光模块训练、真实路由协议与控制报文；极短窗口只能检查状态寿命，不校准物理丢包率，也不增加现代GIN/GPU或硬件性能可信度。
 
+`repair-plan`只检查单链路、旧转发表下的普通LFA覆盖和到安全合流点的显式前缀，依据RFC5286严格不等式并核对所有旧ECMP后缀。独立128Clos规划验收不等于ns-3修复运行；没有MPLS/Remote-LFA协议、线上标签或隧道成本、控制报文或硬件校准，不能把静态路径的存在当成已取得的MoE收益。见[规划与边界](../examples/scaleout_repair_plan/README.md)。
+
 固定NCCL官方文档要求窗口注销前保证对应buffer无NCCL访问；已有Revoke（保留资源）及SHRINK_ABORT（新通信域不与父域共享资源）必须作为恢复强基线。外部devComm的abort指针选择、GIN等待分支与DeepEP用户内核终止的区别，见[恢复适用性核查](reviews/通信域恢复与外部GIN内核边界_20261024.md)。该研究只执行精确CPU片段及记录替身，未实现真实恢复、证明用户CUDA生产者退出或校准成本。
 
 `local_views/1`依据固定NCCL窗口/底层分配引用关系，只实现输入声明的本地视图和使用寿命：多个视图共享现有存储/注册。未执行可复用flags/handles/跨rank协商，未模拟provider退出、DMA fence或真实注销。最后视图关闭后真实MRT1包仍可通过静态权限写入，这是功能边界，不是上游漏洞。依据见[生命周期核查](reviews/窗口注销合法边界与底层注册复用_20261024.md)，功能验收见[本地窗口](../fixtures/application_windows/README.md)。

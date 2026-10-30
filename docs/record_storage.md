@@ -1,5 +1,7 @@
 # 观测记录与存储格式
 
+`scaleout repair-plan`另存`plan.json/summary.json/topology.json/manifest.json`，状态恒为`planned_not_executed`、`network_executed=false`。summary覆盖计数单位为“故障两端交换机×目的GPU”，不是卡数或包数；plan的`original_hops/failed_graph_hops`为hop距离，`LFA_candidates`是不等式两侧与严格判断，`repair_prefix_nodes/edges/merge`为待执行修复段，`all_old_suffix_edges`覆盖合流后的全部旧ECMP分支。SHA-256用于输入和结果身份，不提供网络时延/恢复成功的执行证据。范围见[修复规划](../examples/scaleout_repair_plan/README.md)。
+
 `scaleout contribution-frontier`从已核验服务生成`summary.json`、逐调用`calls.json`及`bundles.csv`，分别记录全部贡献就绪前沿、所有并列末贡献、实际共享计算与赢家缓冲在汇合时的存活情况。它不写原运行目录，字段单位及同纳秒未知规则见[诊断说明](contribution_frontier.md)。
 
 可选主服务消息缓冲在`result.json.service_transport.message_buffers`记录实际片段写入、源/目标arena偏移、FNV摘要、post/receive/ACK/scope/release纳秒时间及当前/峰值字节。传输副本另存`native.message_payload`，源包内容存`native.source_payload_packets`。默认不产生这些缓冲字段；`rdma-check`的独立字节与范围核查见[格式和语义](message_buffers.md)。

@@ -1,0 +1,34 @@
+{
+  "passed": true,
+  "network_executed": false,
+  "endpoint_destination_pairs": 256,
+  "explicit_prefixes": 16,
+  "states": {
+    "unaffected": 128,
+    "primary_survives": 112,
+    "explicit_repair_required": 16
+  },
+  "all_old_ECMP_suffixes_checked": true,
+  "independent_metric": "Floyd-Warshall with switch-only intermediate vertices",
+  "tamper_checks": [
+    {
+      "mutation": "equal-distance accepted as LFA",
+      "rejected": true
+    },
+    {
+      "mutation": "unsafe old ECMP merge",
+      "rejected": true
+    },
+    {
+      "mutation": "wrong physical port",
+      "rejected": true
+    },
+    {
+      "mutation": "invented coverage",
+      "rejected": true
+    }
+  ],
+  "plan_sha256": "b595d8034ef1b854c20e9b970f3871da57ad7f586951d0cb1734f7fe322005e1",
+  "topology_sha256": "7f4a7ce9e306cf8610a0c9bb0a6ff2e26c217d68cd3b21a7427f485879878307",
+  "verifier_sha256": "c6712003a70a4063012aec34a10f12488b48c1856f28710d8b8ae00a669fa663"
+}

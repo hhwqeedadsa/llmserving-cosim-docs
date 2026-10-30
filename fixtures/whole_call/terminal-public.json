@@ -1,0 +1,56 @@
+{
+  "schema_version": "moe-service-terminal-audit/1",
+  "new_network_runs": 0,
+  "cases": [
+    {
+      "run": "runs/whole_call_20261030/normal",
+      "passed": true,
+      "original_passed": true,
+      "timing_status": "complete",
+      "timing_reason": null,
+      "application_finished_ns": 67594,
+      "network_drained_ns": 117091,
+      "network_stopped_ns": 117091,
+      "post_application_drain_ns": 49497,
+      "timing_scope": "eager_whole_finite_segment/1",
+      "attempts_finished_ns": 68863,
+      "public_summary_checked": false,
+      "full_public_verifier_checked": true,
+      "rejected_mutations": [
+        "native_wave",
+        "final_commit",
+        "history"
+      ],
+      "input_sha256": {
+        "input.json": "fd2ae045e995fedee37e72c4ab9aefd126876ced110aaedf5fbef41c7c4dd181",
+        "result.json": "c4f0e98e7816582c23079bb088413060f47d7593baa13bc475ed7170545a4fdb",
+        "frontend.json": "de45660bc9fe6dc1b38c0c3bd257012d10ac9bebdf29ea47353d0164bff80412"
+      }
+    },
+    {
+      "run": "runs/whole_call_20261030/local",
+      "passed": true,
+      "original_passed": true,
+      "timing_status": "complete",
+      "timing_reason": null,
+      "application_finished_ns": 64659,
+      "network_drained_ns": 136829,
+      "network_stopped_ns": 136829,
+      "post_application_drain_ns": 72170,
+      "timing_scope": "eager_whole_finite_segment/1",
+      "attempts_finished_ns": 136829,
+      "public_summary_checked": false,
+      "full_public_verifier_checked": true,
+      "rejected_mutations": [
+        "native_wave",
+        "final_commit",
+        "history"
+      ],
+      "input_sha256": {
+        "input.json": "fd2ae045e995fedee37e72c4ab9aefd126876ced110aaedf5fbef41c7c4dd181",
+        "result.json": "e47d489f12a7d7cca5336a4dfea3ece3d00591b729711085f7cd2379fb616115",
+        "frontend.json": "ccba86869f48add1edd9630c3126734d6705cfab3bb1d1ab81ade0e25c882048"
+      }
+    }
+  ]
+}

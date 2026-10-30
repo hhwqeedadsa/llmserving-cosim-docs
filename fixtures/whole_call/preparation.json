@@ -1,0 +1,28 @@
+{
+  "passed": true,
+  "network_executed": false,
+  "simulated_endpoints": 128,
+  "expert_parallel_groups": [
+    64,
+    64
+  ],
+  "source_kind": "published_model_trace",
+  "unique_source_files": 4,
+  "logical_requests": 4,
+  "execution_attempt_requests": 8,
+  "decode_steps": 1,
+  "source_layers": [
+    3,
+    4
+  ],
+  "preexisting_complete_replicas": 2,
+  "equivalent_ready_kv": "declared, not numerical verification",
+  "shared_streams": 232,
+  "fault_target": 28,
+  "source_bytes": 8193641,
+  "conditions": [
+    "eager normal",
+    "same eager local DATA fault [0,20us)"
+  ],
+  "scope": "complete finite MoE segment result consumer; not full R1, delayed retry or net recovery benefit"
+}

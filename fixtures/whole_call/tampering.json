@@ -1,0 +1,114 @@
+{
+  "passed": true,
+  "new_network_executions": 0,
+  "relocated_public_check": {
+    "passed": true,
+    "transport": "astra_persistent_streams/1",
+    "frontend": "actual_LLMServingSim",
+    "gpu_count": 128,
+    "messages": 244,
+    "remote_payload_bytes": 3521408,
+    "verified_nodes": 2280,
+    "waves": 2,
+    "finish_ns": 136829,
+    "packet_events_checked": 16434,
+    "source_payload_bytes": 3564800,
+    "receiver_accepted_bytes": 3521408,
+    "hardware_calibrated": false,
+    "scope": "actual ASTRA scheduling and persistent message intervals; finite service; not calibrated hardware",
+    "timing_status": "complete",
+    "timing_reason": null,
+    "application_finished_ns": 64659,
+    "network_drained_ns": 136829,
+    "network_stopped_ns": 136829,
+    "post_application_drain_ns": 72170,
+    "timing_scope": "eager_whole_finite_segment/1",
+    "attempts_finished_ns": 136829,
+    "execution_observation": {
+      "schema_version": "moe-execution-observation/1",
+      "events": 5539,
+      "last_time_ns": 136829,
+      "service_drained_ns": 136829,
+      "registered_graphs": 2,
+      "retired_graphs": 2,
+      "nodes": 2280,
+      "node_completions": 2280,
+      "messages": 244,
+      "receiver_completions": 244,
+      "sender_completions": 244,
+      "scope": "passive_actual_callbacks_no_recovery_or_tensor_validation"
+    }
+  },
+  "rejected_mutations": [
+    {
+      "case": "early_result",
+      "error": "Scale-Out topology: whole call state differs from actual complete attempt callbacks",
+      "changed_sha256": {
+        "frontend.json": "9b7cad9b2f337c0d0eafc65c9253f24a4991db3212105a80a839c4f67b06766b",
+        "whole_call_report.json": "597b171d3f98c91bdf377cbc8a12fe6859ea701ed96901f3513818ad55f073ef"
+      }
+    },
+    {
+      "case": "wrong_winner",
+      "error": "Scale-Out topology: whole call state differs from actual complete attempt callbacks",
+      "changed_sha256": {
+        "frontend.json": "f2e7fcecc304f26d26214693c20e622d97097638f3b4be0adbdca94b07e32db6",
+        "whole_call_report.json": "24d6e850cd2a42f110a0cbbab093af105d3b2df89438393ea21f455cbdffd227"
+      }
+    },
+    {
+      "case": "missing_loser",
+      "error": "Scale-Out topology: whole call state differs from actual complete attempt callbacks",
+      "changed_sha256": {
+        "frontend.json": "805d2c5d7543c5677cde65b25e43befcc188e1aa37a4e25cc18ac4ab135ba81d",
+        "whole_call_report.json": "23e44c5a872f90ddbcb38219a709353d1c471a01fe76c4ef29ad074ae0386a84"
+      }
+    },
+    {
+      "case": "foreign_graph",
+      "error": "Scale-Out topology: whole call state differs from actual complete attempt callbacks",
+      "changed_sha256": {
+        "frontend.json": "37846f8e7023639ba184e3ed2363b76decf39a696d02a9bc28af715ffda08403",
+        "whole_call_report.json": "e390c37b3333c7bc7443cf6ad869d9d73d5d7011fcc86f1489e908646b715329"
+      }
+    },
+    {
+      "case": "source_identity",
+      "error": "Scale-Out topology: whole call state differs from actual complete attempt callbacks",
+      "changed_sha256": {
+        "frontend.json": "297159ff7d272f82bf87aafba17435549c1ad4b6b99a0703b802a216c1545813",
+        "whole_call_report.json": "8e77d0fda613e8746c8493e5f3cf7abfde419b3faa4f188c46caa89ab404cc34"
+      }
+    },
+    {
+      "case": "foreign_source_sequence",
+      "error": "Scale-Out topology: whole call lifecycle differs",
+      "changed_sha256": {
+        "whole_call_events.jsonl": "fc2e5365c9702922f2c057030610c812fa123694d882a46515797f2f9e6537b7"
+      }
+    },
+    {
+      "case": "missing_lifecycle",
+      "error": "Scale-Out topology: whole call lifecycle differs",
+      "changed_sha256": {
+        "whole_call_events.jsonl": "1ef446d0ddb87de95a7c86bffc5602b161ad25792951b16fa90708a043b5dba0"
+      }
+    },
+    {
+      "case": "forged_graph_retirement",
+      "error": "Scale-Out topology: execution event order/budget/drain violation",
+      "changed_sha256": {
+        "execution_events.jsonl": "5e7381058da9d34a2a84f0984f06b25ccdc27ea8e490692c4bf1f6d49033dfc5"
+      }
+    },
+    {
+      "case": "raw_source_change",
+      "error": "Input SHA256 mismatch: /home/lry/moe-ub-cosim/runs/whole_call_20261030/tampering/relocated/routes/source-0000.json",
+      "changed_sha256": {
+        "routes/source-0000.json": "bf8b248b722b41a3e8208d756e00e20ee297a12a60db39940908ab714f9c05f7"
+      }
+    }
+  ],
+  "original_files_unchanged": true,
+  "restored_copy_identical": true
+}

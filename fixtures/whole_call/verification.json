@@ -1,0 +1,135 @@
+{
+  "passed": true,
+  "normal": {
+    "passed": true,
+    "source_kind": "published_model_trace",
+    "unique_sources": 4,
+    "logical_requests": 4,
+    "execution_attempt_requests": 8,
+    "messages": 244,
+    "packet_events": 16780,
+    "fault_drops": 0,
+    "winner": "primary",
+    "result_ready_ns": 67594,
+    "topology_node_counts": {
+      "gpu": 128,
+      "tor": 8,
+      "agg": 8,
+      "core": 4
+    },
+    "servers": 16,
+    "active_data_ranks": 70,
+    "source_data_packets": 488,
+    "source_payload_bytes_including_retransmits": 3521408,
+    "unique_source_payload_bytes": 3521408,
+    "extra_source_payload_bytes": 0,
+    "fault_window_arrivals": 0,
+    "target_all_time_arrivals": 0,
+    "primary_finished_ns": 67594,
+    "replica_finished_ns": 68863,
+    "attempts_finished_ns": 68863,
+    "network_drained_ns": 117091,
+    "payload_bytes_by_attempt": {
+      "primary": 1760704,
+      "replica": 1760704
+    },
+    "declared_compute_ns_by_attempt": {
+      "primary": 15080,
+      "replica": 15080
+    },
+    "ecn_data_received_by_attempt": {
+      "primary": 14,
+      "replica": 20
+    },
+    "cnp_received_by_attempt": {
+      "primary": 14,
+      "replica": 20
+    },
+    "phase_release_ns": {
+      "g0.w0/L0.combine": 33533,
+      "g0.w0/L0.dispatch": 17803,
+      "g0.w0/L1.combine": 67564,
+      "g0.w0/L1.dispatch": 51544,
+      "g1.w0/L0.combine": 33932,
+      "g1.w0/L0.dispatch": 18022,
+      "g1.w0/L1.combine": 68833,
+      "g1.w0/L1.dispatch": 52094
+    },
+    "scope": "same-run complete-attempt timing, not net gain versus no redundancy",
+    "sources_sha256": {
+      "input.json": "fd2ae045e995fedee37e72c4ab9aefd126876ced110aaedf5fbef41c7c4dd181",
+      "topology.json": "5389993e9aa1dfc148b4713b0a2b0c0521de24b41b74060e2db7eb9f048c444f",
+      "rdma.json": "2e96b611d1985507bf3eda5816c1cd4595a0c120b4ef5b460ab74c1e0d20b3db",
+      "result.json": "c4f0e98e7816582c23079bb088413060f47d7593baa13bc475ed7170545a4fdb",
+      "whole_call_report.json": "1a2f809325c1f2a5ac4a6faefcf6b0bbf54179884d6aad51bc64cdf27be01ff7",
+      "whole_call_events.jsonl": "aa211ac5ca3572345c77b00dcde507432343f47d13f4f83fa34799612f85ae8c"
+    }
+  },
+  "local": {
+    "passed": true,
+    "source_kind": "published_model_trace",
+    "unique_sources": 4,
+    "logical_requests": 4,
+    "execution_attempt_requests": 8,
+    "messages": 244,
+    "packet_events": 16434,
+    "fault_drops": 6,
+    "winner": "replica",
+    "result_ready_ns": 64659,
+    "topology_node_counts": {
+      "gpu": 128,
+      "tor": 8,
+      "agg": 8,
+      "core": 4
+    },
+    "servers": 16,
+    "active_data_ranks": 70,
+    "source_data_packets": 494,
+    "source_payload_bytes_including_retransmits": 3564800,
+    "unique_source_payload_bytes": 3521408,
+    "extra_source_payload_bytes": 43392,
+    "fault_window_arrivals": 6,
+    "target_all_time_arrivals": 14,
+    "primary_finished_ns": 136829,
+    "replica_finished_ns": 64659,
+    "attempts_finished_ns": 136829,
+    "network_drained_ns": 136829,
+    "payload_bytes_by_attempt": {
+      "primary": 1760704,
+      "replica": 1760704
+    },
+    "declared_compute_ns_by_attempt": {
+      "primary": 15080,
+      "replica": 15080
+    },
+    "ecn_data_received_by_attempt": {
+      "primary": 6,
+      "replica": 7
+    },
+    "cnp_received_by_attempt": {
+      "primary": 6,
+      "replica": 7
+    },
+    "phase_release_ns": {
+      "g0.w0/L0.combine": 105453,
+      "g0.w0/L0.dispatch": 90702,
+      "g0.w0/L1.combine": 136799,
+      "g0.w0/L1.dispatch": 121830,
+      "g1.w0/L0.combine": 32773,
+      "g1.w0/L0.dispatch": 18022,
+      "g1.w0/L1.combine": 64629,
+      "g1.w0/L1.dispatch": 49370
+    },
+    "scope": "same-run complete-attempt timing, not net gain versus no redundancy",
+    "sources_sha256": {
+      "input.json": "fd2ae045e995fedee37e72c4ab9aefd126876ced110aaedf5fbef41c7c4dd181",
+      "topology.json": "5389993e9aa1dfc148b4713b0a2b0c0521de24b41b74060e2db7eb9f048c444f",
+      "rdma.json": "d92c3cab638c4baf7d1f5229ca9e7acc302149051cc36caccd8cd81402231f6e",
+      "result.json": "e47d489f12a7d7cca5336a4dfea3ece3d00591b729711085f7cd2379fb616115",
+      "whole_call_report.json": "4bae300d98dfe4a0758dc9c302e09f66ded83f04fce8928841e505a43d1fb2c7",
+      "whole_call_events.jsonl": "45e23b26ebd1c3931640372876bda5fa103216bf941b6a3ba73de80eb1884f3f"
+    }
+  },
+  "network_reexecuted": false,
+  "conclusion": "whole client readiness and physical attempt cleanup separated; no no-redundancy control or net recovery-benefit claim"
+}

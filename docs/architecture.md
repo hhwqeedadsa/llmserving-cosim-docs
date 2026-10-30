@@ -1,5 +1,7 @@
 # 系统架构与执行过程
 
+主服务可显式启用[消息字节缓冲](message_buffers.md)：`ServiceTransport`在实际SEND时为原/备用分配独立范围，`PersistentStreams`携带标记字节，接收端只写入实际接受的Packet片段。源在完整ACK后释放，目标在接收、ACK及graph/helper实际退休后释放；不替换原图消费依赖，默认路径不分配此缓冲。
+
 可选[完整片段副本](whole_call.md)分开逻辑call与两个物理请求尝试。唯一来源显式派生，LLMServingSim/ASTRA图分别真实执行，控制层消费者只接受实际整图退休的首个结果。较晚图继续真实确认并退出，终态COMMIT仍等全部尝试；没有修改原屏障。默认独立请求和时间口径保持不变。
 
 可选[源端确认watchdog](source_ack_watchdog.md)在同一Simulator中按实际SEND post启动一次性定时器，真实源确认取消，超时以独立单向帧在线交付。原执行事件保持原身份、顺序和回调；通知不成为调度DECIDE，不生成ACK或恢复任务。

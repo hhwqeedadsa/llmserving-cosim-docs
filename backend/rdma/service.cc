@@ -67,6 +67,7 @@ class Service {
       auto& w=it->second;
       if(w.finished.size()!=w.ranks.size()) {++it;continue;}
       Require(messages_.Complete(w.messages),"graph finished before matched message callbacks");
+      transport_.FinishMessageScopes(w.messages);
       for(int rank:w.ranks) {
         Require(systems_[rank]->workload->can_load_graph(),"rank finished with live ASTRA resources");
         owners_[rank].clear();

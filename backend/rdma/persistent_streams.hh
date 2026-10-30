@@ -35,6 +35,9 @@ class PersistentStreams {
   // packet bytes, never source Work metadata or a lookup of a remote operation.
   void SetReceiver(uint64_t stream, std::function<void(Bytes)> receiver);
   void SubmitPayload(uint64_t stream, uint64_t work, Bytes payload, Done acked);
+  // Service marker buffers explicitly bound payload capture and release the
+  // transport's separate retransmission copy only after full cumulative ACK.
+  void ConfigureMessagePayload(uint64_t capture_bytes);
   void ConfigurePayloadPool(uint64_t bytes_per_source,bool release_on_isolation=false);
   bool CanSubmitPayload(uint64_t stream,uint64_t bytes) const;
   bool Drained() const;
@@ -140,6 +143,8 @@ class PersistentStreams {
   std::vector<std::array<int64_t,8>> source_packets_;
   Json payload_packets_=Json::array();
   uint64_t captured_payload_bytes_=0;
+  uint64_t payload_capture_limit_=2*1024*1024;
+  bool message_payload_=false;
   uint64_t rate_limit_=0;
   int64_t rate_start_=0,rate_end_=0;
   std::vector<RateSample> rate_samples_;

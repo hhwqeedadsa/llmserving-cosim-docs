@@ -124,5 +124,20 @@ def verify(directory):
         waves=len(waves),finish_ns=r['finish_ns'],packet_events_checked=len(r['packet_capture']['events']),
         source_payload_bytes=audit['source_tx_payload_bytes'],receiver_accepted_bytes=audit['accepted_bytes'],
         hardware_calibrated=False,scope='actual ASTRA scheduling and persistent message intervals; finite service; not calibrated hardware',**terminal)
+    from .message_buffers import audit as audit_buffers
+    scopes={m['id']:h['finished_ns'] for h,w in zip(f['history'],waves) for m in w['messages']}
+    if 'message_buffers' in declared and helper_messages:
+        helper_times={}
+        with (directory/'helper_events.jsonl').open() as stream:
+            for line in stream:
+                event=json.loads(line)
+                if event['kind']=='retired':
+                    require(event['id'] not in helper_times,'duplicate helper buffer retirement')
+                    helper_times[event['id']]=event['time_ns']
+        for attempt in r['service']['inflight_helpers']['attempts']:
+            for field in ('input_message','result_message'):
+                scopes[attempt['candidate'][field]]=helper_times[attempt['id']]
+    buffer_audit=audit_buffers(r,declared,scopes)
+    if buffer_audit is not None:report['message_buffers']=buffer_audit
     from .scaleout_switch_drops import attach
     return attach(report,r,t,p)

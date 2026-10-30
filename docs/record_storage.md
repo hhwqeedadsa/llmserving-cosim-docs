@@ -1,5 +1,7 @@
 # 观测记录与存储格式
 
+可选主服务消息缓冲在`result.json.service_transport.message_buffers`记录实际片段写入、源/目标arena偏移、FNV摘要、post/receive/ACK/scope/release纳秒时间及当前/峰值字节。传输副本另存`native.message_payload`，源包内容存`native.source_payload_packets`。默认不产生这些缓冲字段；`rdma-check`的独立字节与范围核查见[格式和语义](message_buffers.md)。
+
 有限片段持久服务显式选择`sparse_active_groups/1`时，`frontend.admitted_group_indices`保存实际准入组索引；`route_evidence`另含`inactive_group_indices`及空闲组范围说明。无源整组没有图、请求或KV，`parallel.groups`和物理端点仍完整保留。默认及旧稀疏模式不新增此字段，接口见[空闲EP组](../examples/scaleout_sparse_clos/README.md#保留部署但让整个ep组空闲)。
 
 显式`whole_call_replication`新增`whole_call_events.jsonl`、`whole_call_report.json`及`frontend.whole_call_replication`，只取整图退休作为完整结果。公共时间增加`timing_scope=eager_whole_finite_segment/1`、`attempts_finished_ns`；此模式application取逻辑call完整赢家，终态COMMIT仍等全部物理图。默认口径不变；来源派生、三个时间和失败边界见[完整片段副本](whole_call.md)。

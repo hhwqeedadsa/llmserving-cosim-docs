@@ -157,6 +157,8 @@ class InflightHelpers {
   void Retire(const std::string& id) {
     auto& row=attempts_.at(id);
     if(!row.retired && row.input_ack && row.result_ack && row.result_ready) {
+      const auto& candidate=catalog_.at(id);
+      transport_.FinishMessageScopes({candidate.at("input_message").get<uint64_t>(),candidate.at("result_message").get<uint64_t>()});
       row.retired=true;++retired_;Emit(id,"retired");if(changed)changed();
     }
   }

@@ -10,12 +10,15 @@ from .scaleout_limits import limits
 
 def validate(config, topology, protocol):
     fields(config,'schema_version streams limits transport_recovery dcqcn_reference'+
-           (' source_rate_capture' if 'source_rate_capture' in config else ''),'ASTRA message transport')
+           ''.join(' '+key for key in ('source_rate_capture','message_buffers') if key in config),'ASTRA message transport')
     require(config['schema_version']=='moe-astra-message-transport/1','unsupported ASTRA transport schema')
     # Only the declarations are checked with the shared stream validator.
     # No synthetic work, local durations or saved-DAG executor is submitted.
     projection=dict(deepcopy(config),schema_version='moe-rdma-stream-work/4',work=[],
                     local_model=dict(mode='serial_per_gpu/1',duration_source='declared_ns'))
+    from .message_buffers import configuration
+    configuration(config)
+    projection.pop('message_buffers',None)
     counts=validate_transport(topology,protocol,projection)
     require(counts['max_work']<=limits(protocol)['max_messages'],'transport work exceeds native message budget')
     require(config['transport_recovery'].get('on_exhausted','stop_simulation')=='stop_simulation',

@@ -1,5 +1,7 @@
 # 用户指南
 
+检查原/备用消息的实际字节写入、迟到包与缓冲复用，可显式开启[主服务消息缓冲](message_buffers.md)，按[128端点Clos示例](../examples/scaleout_message_buffers/README.md)执行既有`rdma-run/rdma-check`。内容是标记字节，不是数值激活；源确认与graph/helper退出分别约束释放。
+
 比较同一片段的两个完整副本，可使用[完整片段副本](whole_call.md)及[128端点Clos示例](../examples/scaleout_whole_call/README.md)。只在一个整个尝试实际完成后提交逻辑结果，另一个继续清理；分列原始请求数和副本执行数，等价ready-KV为声明初态。
 
 需要在服务运行中发现“某次发送超过声明期限仍未确认”，可显式启用[源端确认超时通知](source_ack_watchdog.md)及[128端点Clos示例](../examples/scaleout_source_ack_watchdog/README.md)。它依赖实际post、同一ns-3定时器和真实确认，不读取故障真值，也不自动重传或重算。

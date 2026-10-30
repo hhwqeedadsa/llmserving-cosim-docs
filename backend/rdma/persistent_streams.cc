@@ -472,6 +472,11 @@ void PersistentStreams::SubmitPayload(uint64_t stream,uint64_t work,Bytes payloa
   Require(streams_.count(stream) && bool(streams_.at(stream).receiver),"payload stream has no receiver");
   Enqueue(stream,work,bytes,std::move(payload),{},std::move(acked));
 }
+void PersistentStreams::ConfigureMessagePayload(uint64_t capture_bytes) {
+  Require(streams_.empty() && !message_payload_ && !payload_capacity_ && capture_bytes>0 && capture_bytes<=64*1024*1024,
+          "invalid/repeated service payload capture budget");
+  message_payload_=true;payload_capture_limit_=capture_bytes;
+}
 void PersistentStreams::ConfigurePayloadPool(uint64_t bytes,bool release_on_isolation) {
   Require(!selective_mode_ && streams_.empty() && !payload_capacity_ && bytes>=33 && bytes<=2*1024*1024,
           "invalid payload pool configuration");
@@ -504,6 +509,10 @@ void PersistentStreams::Enqueue(uint64_t stream,uint64_t work,uint64_t bytes,Byt
     auto& used=payload_used_[s.src];used+=bytes;payload_peak_[s.src]=std::max(payload_peak_[s.src],used);
     payload_events_.push_back({{"kind","acquired"},{"time_ns",StreamNow()},{"source",s.src},
       {"stream",stream},{"work",work},{"bytes",bytes},{"used_bytes",used}});
+  }
+  if(message_payload_) {
+    Require(w.payload.size()==bytes,"buffered service requires actual payload bytes");
+    auto& used=payload_used_[s.src];used+=bytes;payload_peak_[s.src]=std::max(payload_peak_[s.src],used);
   }
   w.accepted_callback=std::move(accepted);w.acked_callback=std::move(acked);
   s.work.push_back(std::move(w));s.submitted_bytes+=bytes;work_ids_.insert(work);
@@ -612,6 +621,10 @@ int PersistentStreams::Receive(unsigned node,Ptr<Packet> packet,CustomHeader& h)
         payload_events_.push_back({{"kind","released"},{"time_ns",StreamNow()},{"source",s->src},
           {"stream",s->qp->GetTag()},{"work",w.id},{"bytes",w.bytes},{"used_bytes",payload_used_.at(s->src)}});
       }
+      if(message_payload_) {
+        Require(w.payload.size()==w.bytes && payload_used_.at(s->src)>=w.bytes,"message payload release mismatch");
+        payload_used_.at(s->src)-=w.bytes;Bytes().swap(w.payload);
+      }
       if(w.acked_callback)Simulator::ScheduleNow(w.acked_callback);
     }
     Pump(*s);hw->m_nic[s->source_nic].dev->TriggerTransmit();Notify();return 0;
@@ -702,7 +715,7 @@ void PersistentStreams::Tx(PersistentStreams* self,unsigned node,unsigned port,P
         h.udp.seq,static_cast<int64_t>(packet->GetSize()-h.GetSerializedSize()),static_cast<int64_t>(packet->GetUid())});
       if(s.receiver) {
         const auto size=packet->GetSize()-h.GetSerializedSize();self->captured_payload_bytes_+=size;
-        Require(self->captured_payload_bytes_<=2*1024*1024,"payload capture exceeds 2MiB");
+        Require(self->captured_payload_bytes_<=self->payload_capture_limit_,"payload capture exceeds explicit byte budget");
         Bytes bytes(size);packet->CreateFragment(h.GetSerializedSize(),size)->CopyData(bytes.data(),size);
         static const char digits[]="0123456789abcdef";std::string hex;hex.reserve(size*2);
         for(auto byte:bytes){hex+=digits[byte>>4];hex+=digits[byte&15];}
@@ -769,6 +782,15 @@ Json PersistentStreams::Report() const {
     {"streams",Json::array()},{"work",Json::array()},{"inflight_packets",inflight_},{"physical_drained",Drained()},
     {"closed",closed_},{"atomic_operations_supported",false},{"gpu_visibility_modeled",false},{"hardware_calibrated",false}};
   result["source_packets"]=source_packets_;
+  if(message_payload_) {
+    Json owners=Json::array();uint64_t retained=0;
+    for(const auto& [owner,used]:payload_used_) {
+      owners.push_back({{"owner",owner},{"retained_bytes",used},{"peak_bytes",payload_peak_.at(owner)}});retained+=used;
+    }
+    result["message_payload"]={{"release","full_cumulative_ack/1"},{"capture_limit_bytes",payload_capture_limit_},
+      {"captured_source_bytes",captured_payload_bytes_},{"retained_bytes",retained},{"owners",owners},
+      {"scope","separate actual retransmission byte copies; not CUDA source storage"}};
+  }
   if(grace_wait_) {
     Json states=Json::array();
     for(const auto& [id,s]:streams_) {

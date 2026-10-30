@@ -1,5 +1,7 @@
 # 联合后端接口与执行规则
 
+`ServiceTransport`可通过传输JSON的`message_buffers`启用功能字节缓冲。[纯核心](rdma/message_buffers.hh)管理同GPU共享的源/目标范围、实际片段写入、ACK和执行范围退休；`PersistentStreams`承载并独立核算重传副本。原图和helper分别在实际退休时结束范围，不提前释放原消息。配置、容量、输出及非RoCE寻址边界见[接口说明](../docs/message_buffers.md)。
+
 延迟完整副本可选`--control-wakeup MAX_EVENTS`：一个原生ns-3定时事件产生带`wakeup_ns`的DECIDE，COMMIT用`wake_at_ns`设置或取消下一期限。定时事件不制造消息/图完成；关闭时不增加事件。要求持久传输与执行观察，不与watchdog/helper控制混用；完整语义、资源与核验见[完整片段副本](../docs/whole_call.md)。
 
 原生服务可选`--source-ack-watchdog CONFIG.json`，`source_ack_watchdog.hh`只从SEND post和源确认维护同一Simulator上的一次性期限，不读取接收状态或故障定义。通知与OBSERVE分流，保留原传输回调和排空；格式及公开配置见[源确认通知](../docs/source_ack_watchdog.md)。

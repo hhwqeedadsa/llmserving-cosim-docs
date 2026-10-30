@@ -1,0 +1,567 @@
+{
+  "schema_version": "moe-message-buffer-build-evidence/1",
+  "native_commit": "69cb14764c0c5de2c7ad31599ee5b3999dddc154",
+  "build_platform_head": "0678871966e8bb8dafed70ec5fa235795bf4c48a",
+  "build_sources_sha256": {
+    "backend/ack_rtt_estimator.hh": "f957d8c54e7a5bc534b3b2966894eee4007d6e99753b0223e4071117a8494113",
+    "backend/communication_admission.hh": "5afc6a84570b253e4c2298ff2992f2b4ec542fd083f3aee717ee0c59935dcd0c",
+    "backend/queue_integral.hh": "5a020da9bc650b2294bcdcc41003989e8ca2a333395bac033ee1a6ebac166f0e",
+    "backend/rdma/application_window_validation.hh": "13733c0de33d5e4b877b945d8c4d9f86b764fb1a1d001702abe83ab62fb1d0f7",
+    "backend/rdma/application_windows.hh": "02ca231ac69c903904dcc760b304890eef0961a047b70ca31367651d65d311e5",
+    "backend/rdma/astra_adapter.cc": "4accd41263ca67ce79728b6dd02447b7e552e460d31a24bbdc658ec98b219763",
+    "backend/rdma/astra_adapter.hh": "7b13348498d34b7f246274244097311ec8e75e15573078999466ac76a8084477",
+    "backend/rdma/bounded_buffers.hh": "ff3bf7ed0014288db60862583259e01da3959afc5984087a61987826e25a950a",
+    "backend/rdma/cnp_switch.hh": "3f1166d5487c6c43b075ede4b4af96e0d30a3e93c43527e83ea61fbee63fefb5",
+    "backend/rdma/control_channel.hh": "cca54568ae579613c5f536d7d0897ee310854f0a1a41b511171607d98d11afc7",
+    "backend/rdma/dcqcn_reference.hh": "b80eac69407c3d1fd670bb2c5da9a27a04b67faa6a83b322f61673b84bbfc60c",
+    "backend/rdma/execution_events.hh": "41871a80348f713d6a59d137fe80f9966f29facf2273a8baf8e40ba284a1a2a5",
+    "backend/rdma/fabric.cc": "45798a401eabcae65c45bb5aab80cd16346e8324d78bc668208484248d2f2097",
+    "backend/rdma/fabric.hh": "7055a2d29c4606b260333b780a96579bcd91c669533b77129202591eca45a9f3",
+    "backend/rdma/gin_work_queue.hh": "2616252a1620bee3ebb89c603914d7476d904b9a9b9ec2a68e67fcc4f04c3b22",
+    "backend/rdma/host_timing.hh": "7114fcab1d671d7961a4fdfc33e3e19a1cedc5de3ca907e49097573a68ff7d8c",
+    "backend/rdma/inflight_helpers.hh": "3f51eb8e7b699376733d4f0f5f69bce8ac7c2ffc087a9fc8e12a4a20e3bd7bf1",
+    "backend/rdma/inject.cmake": "41eb6d214905d81b6c7da60ae29042ca2403a79f8375bb332f917974baf66546",
+    "backend/rdma/link_failure_validation.hh": "ba2e668987426e596011822b2a0f724bdfc3eced0a53cba0a73f702dea30d1c5",
+    "backend/rdma/logging.cc": "535806de03c3f2805022f9875c062d9091c94f9552692e6155fe9be1fc463db9",
+    "backend/rdma/memory_registrations.hh": "a02799fac561d8ed368576dfd75994c50659d4b3803fcbe332353c4f010ba738",
+    "backend/rdma/message_buffers.hh": "8d2241903931ee67b6fc5794a12d585ab87863718c20c067ff08ece79665adb1",
+    "backend/rdma/nack_grace.hh": "07b0dd90eeafebe3f7c84bb997736bfab5be8ac483d36e5f38fb54a8ca6c8ddc",
+    "backend/rdma/persistent_streams.cc": "b1a747fd72347f7be5e0207dab4240c40b583c00148e6891a2a225e3d2f73cf8",
+    "backend/rdma/persistent_streams.hh": "6ec8f111801a192f9e48343d2fe52261815ae20427ea562772980548d7f0acfb",
+    "backend/rdma/phase_gates.hh": "89c3b19fff179d21b807d0910118e39565d21c4e4c774fbc2bb15cf0ae868f06",
+    "backend/rdma/probe.cc": "6f2820c6b9f595d01349f1e00aa5d0c55e86c024f05790353077d18ee7692a71",
+    "backend/rdma/rc_concurrent_probe.cc": "1dd964b0d4541b640e0b49effc8dc437766d1367efde75b08323d0aaa25668e9",
+    "backend/rdma/rc_packet_probe.cc": "9f1b11f429c2e299c44d430e1c243146505ddb92c1c847242b916cfb18608242",
+    "backend/rdma/rc_wire.hh": "270307a59be1335773b8f49b93d7b5ccdb8f1797754a042f297fbe6a72fa593b",
+    "backend/rdma/recovery.cc": "25410da02725015347f82a86cddb60b04805c99af16e8514ad17fcafac4f477f",
+    "backend/rdma/recovery.hh": "51f15d2c463b729c357ec1845770e110194da9908372cbf567b4961549fd90f4",
+    "backend/rdma/recovery_records.hh": "864c8e7977876bf0759eef849124983f8b61fe84d7cbc8b2ebda9c3ad2cf392c",
+    "backend/rdma/remote_memory.hh": "2bfe997bf9151ef1aee7d7c45c6b79e8d3465f3d6dca6c7ec4b73436028dda33",
+    "backend/rdma/remote_transactions.cc": "fab7d142e2cb7d20b2aab1acec9e5e7afe597389b6c11ae6dfd599c448a1a1ac",
+    "backend/rdma/remote_transactions.hh": "ef6a49881538a7d37cfbe4547ab11b6c050c0ab6e75a13fc5e9fc04aaeb29d2a",
+    "backend/rdma/selective_repeat.hh": "b1fd43f06631511e45f8711886b9594edb957fa5c06158844c356999d72dbe21",
+    "backend/rdma/self_peer_service.hh": "2f7583dd7880935778bb239ed55ff93de50dc6794d224f90b5bf792aa5605b85",
+    "backend/rdma/serial_native.cmake": "a8c7a97dea061d58a2faf17f56a0f477b0fc704ec509be9a0180fd6b1ff2b344",
+    "backend/rdma/service.cc": "b5bf83a8c74601cf20e5bb8550143b15555418eff2523fd5190a3efb451cd47d",
+    "backend/rdma/service_transport.cc": "9bca20b0ce56cc813e413195bc05e5422a9c892eb07e2b4c8150cf25d0b6abcc",
+    "backend/rdma/service_transport.hh": "a338c45bbf4635bbf9fbb8a0f3e79b70a7c8e03ca27cef1c65e825192dbfe242",
+    "backend/rdma/service_wakeup.hh": "14c4194823193a17f8eb5148375e76dbb4bfdd76e7f41294e89bc5fc0a3f7e43",
+    "backend/rdma/session_callback_batches.hh": "dd911806b5025342d056c12e2af68023718df6bce1ddc5364e828b19a516d529",
+    "backend/rdma/session_wakeups.hh": "47f293cbf8069f5ca661366d3f6892227409b397928f3a7d20511816196b1a10",
+    "backend/rdma/shared_compute.hh": "512708588df3cd87b70ac4fd83167c29a14853512f98d6d8b0e4d1ec5c7b0093",
+    "backend/rdma/source_ack_watchdog.hh": "d67951515bbaea31f6ec714cf381751062b2365a7a1495dceb23eaae03e1242e",
+    "backend/rdma/stream_probe.cc": "4914bbf99d826923bf24f5b9878dacb1775a8a52bbc7407085eec4edccb07331",
+    "backend/rdma/switch_drop_capture.cc": "fb78f41a7d155435c6a1f5ff733fffaddbafe97f129bcc30db6ef459c2035430",
+    "backend/rdma/targets.cmake": "b024c143939265a33a7dabf514e76e202c723ecd2da510a20f298a2088d9ee8a",
+    "backend/rdma/transaction_effect_order.hh": "c78a8c2b3d3a905caae1853dc2b971c0ba63576ac63df93e454a13e88ede9b43",
+    "backend/rdma/transaction_limits.hh": "dfe0b38787283ff50bce0a0f3bdd8d355bfdac5fa9b7f4ddb29de6b0517280a5",
+    "backend/rdma/transaction_probe.cc": "df8a97b64656bdc1acc96534487576d7156f02bb361214a77d17be5876837231",
+    "backend/rdma/transaction_session.cc": "aff47a42c9599c6c62c4b6466fbcd4b31ae99224d7e817604ceef43d092165f5",
+    "backend/rdma/transaction_session_validation.hh": "5f1582ad4c43f0c264c45efb8c1b4f69fae21916fc9e718ae865c3d0138125a5",
+    "backend/rdma/transaction_transport.hh": "3ddad982f95e9f76f8ef46a51b9bd1ef1c90bc85685b1c08951af2fea33df901",
+    "backend/recovery_history.hh": "aaab3402c7922aad8187c32f0f2e77da73c69a06d60da2d2e8f3508429f1731e",
+    "backend/retransmission_timer.hh": "05f0a5e1f46dbf34d17977c4c425a8ea3612fecf572fe81f3f6bd309fbceb782",
+    "backend/source_recovery.hh": "cb2cc9e9bc8cf8c5f3cf4f5f854ef98e52337f0e4fc5f3c0b8c8d0247411fa08"
+  },
+  "build_identity": "one isolated public full build from working source; hashes above identify compiled inputs",
+  "service_sha256": "7ed862fccf3bf6f40d25f16ed7a25d1ca5ce40a25902cd99baa08b3c783e719b",
+  "libraries_sha256": {
+    "libns3.42-applications.so": "643cd37084f93c63e90791145bbe46384c83851119a6944b516f7290ec326c15",
+    "libns3.42-point-to-point.so": "b418b2564e4e195b9c6f1c5cf2b4f9459a15a0e3fb71edb9bb6f0532c4fed115",
+    "libns3.42-internet.so": "33604cff39a01c60db4e3277e6451e74e0b5983d7c8bde99c2f30e3170ea8961",
+    "libns3.42-network.so": "80cd2c29613155652fef2910ba2c7af27cbfe6fc71c9e983297921fc279675dc",
+    "libns3.42-core.so": "5c0fbbc10fae420967c7ef884f741391deca49f4c471c93c4e93d5fd011e0fa2",
+    "libns3.42-stats.so": "5f4df9f957a9f89a9910af16bac6d1f6ec527f3b92281b999112f1b709c67a8d",
+    "libns3.42-bridge.so": "37f07c1d5a17253d3c90a197914529ec5557268156e84b9954991a0181054df1",
+    "libns3.42-traffic-control.so": "396e15c8cc43afedf7a89e8364af3791a661639657b211991b0f684179f61b47"
+  },
+  "python_sha256": {
+    "python/moe_ub_cosim/message_buffers.py": "23e6b162ca117a1becd3a3b4708e5c803a06037acdd6bb7d46fd405b9900aa3e",
+    "python/moe_ub_cosim/service_transport.py": "e9185e43c83011e514ed6477d3a22d30be4ac579e40d19be207c9e33519073b1",
+    "python/moe_ub_cosim/service_stream_verify.py": "20b062403482b161609e62353cbaa251bc8c42e707e94a21cf59744405456cad"
+  },
+  "command_evidence": [
+    {
+      "stage": "acceptance",
+      "status": "completed",
+      "exit_code": 0,
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "fixtures/message_buffers/check.py",
+        "--synthetic-run",
+        "runs/message_buffers_20261030/independent-run",
+        "--real-run",
+        "runs/message_buffers_20261030/real-run",
+        "--legacy-run",
+        "runs/ack_guard_whole_20261030/study/guarded-local",
+        "--output",
+        "runs/message_buffers_20261030/acceptance"
+      ],
+      "wall_seconds": 13.739978777011856,
+      "peak_rss_bytes": 170766336
+    },
+    {
+      "stage": "acceptance-final",
+      "status": "completed",
+      "exit_code": 0,
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "fixtures/message_buffers/check.py",
+        "--synthetic-run",
+        "runs/message_buffers_20261030/independent-run",
+        "--real-run",
+        "runs/message_buffers_20261030/real-run",
+        "--legacy-run",
+        "runs/ack_guard_whole_20261030/study/guarded-local",
+        "--output",
+        "runs/message_buffers_20261030/acceptance-final"
+      ],
+      "wall_seconds": 13.625107229978312,
+      "peak_rss_bytes": 178790400
+    },
+    {
+      "stage": "core-check",
+      "status": "child_failed",
+      "exit_code": -6,
+      "command": [
+        "runs/message_buffers_20261030/message-buffers-test"
+      ],
+      "wall_seconds": 0.22109065804397687,
+      "peak_rss_bytes": 3264512
+    },
+    {
+      "stage": "core-check-fixed",
+      "status": "completed",
+      "exit_code": 0,
+      "command": [
+        "runs/message_buffers_20261030/message-buffers-test-fixed"
+      ],
+      "wall_seconds": 0.015451186976861209,
+      "peak_rss_bytes": 0
+    },
+    {
+      "stage": "core-compile",
+      "status": "completed",
+      "exit_code": 0,
+      "command": [
+        "c++",
+        "-std=c++20",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Ibackend",
+        "tests/unit/message_buffers_test.cc",
+        "-o",
+        "runs/message_buffers_20261030/message-buffers-test"
+      ],
+      "wall_seconds": 1.2817492000176571,
+      "peak_rss_bytes": 133529600
+    },
+    {
+      "stage": "core-compile-fixed",
+      "status": "completed",
+      "exit_code": 0,
+      "command": [
+        "c++",
+        "-std=c++20",
+        "-O2",
+        "-Wall",
+        "-Wextra",
+        "-Ibackend",
+        "tests/unit/message_buffers_test.cc",
+        "-o",
+        "runs/message_buffers_20261030/message-buffers-test-fixed"
+      ],
+      "wall_seconds": 1.2770189709845,
+      "peak_rss_bytes": 136654848
+    },
+    {
+      "stage": "dependency-check",
+      "status": "completed",
+      "exit_code": 0,
+      "command": [
+        "bash",
+        "scripts/check_deps.sh"
+      ],
+      "wall_seconds": 0.583050112996716,
+      "peak_rss_bytes": 21692416
+    },
+    {
+      "stage": "final-evidence",
+      "status": "child_failed",
+      "exit_code": 1,
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "runs/message_buffers_20261030/finalize.py"
+      ],
+      "wall_seconds": 0.26213854196248576,
+      "peak_rss_bytes": 5357568
+    },
+    {
+      "stage": "final-evidence-fixed",
+      "status": "completed",
+      "exit_code": 0,
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "runs/message_buffers_20261030/finalize.py"
+      ],
+      "wall_seconds": 0.3746300259954296,
+      "peak_rss_bytes": 51437568
+    },
+    {
+      "stage": "helper-regression",
+      "status": "completed",
+      "exit_code": 0,
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/unit",
+        "-p",
+        "*helpers_test.py",
+        "-v"
+      ],
+      "wall_seconds": 0.2616664089728147,
+      "peak_rss_bytes": 5308416
+    },
+    {
+      "stage": "independent-check",
+      "status": "completed",
+      "exit_code": 0,
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-check",
+        "--run",
+        "runs/message_buffers_20261030/independent-run"
+      ],
+      "wall_seconds": 0.7973063089884818,
+      "peak_rss_bytes": 34791424
+    },
+    {
+      "stage": "independent-final-check",
+      "status": "completed",
+      "exit_code": 0,
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-check",
+        "--run",
+        "runs/message_buffers_20261030/independent-run"
+      ],
+      "wall_seconds": 0.8126367899822071,
+      "peak_rss_bytes": 35012608
+    },
+    {
+      "stage": "independent-final-prepare",
+      "status": "completed",
+      "exit_code": 0,
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "examples/scaleout_message_buffers/prepare.py",
+        "--output",
+        "runs/message_buffers_20261030/independent-final-input"
+      ],
+      "wall_seconds": 0.6385590730351396,
+      "peak_rss_bytes": 92643328
+    },
+    {
+      "stage": "independent-run",
+      "status": "completed",
+      "exit_code": 0,
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--config",
+        "runs/message_buffers_20261030/independent-final-input/service-buffers.json",
+        "--protocol",
+        "runs/message_buffers_20261030/independent-final-input/rdma-buffers.json",
+        "--topology",
+        "runs/message_buffers_20261030/independent-final-input/topology",
+        "--backend",
+        "runs/message_buffers_20261030/build/output/moe-rdma/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "runs/message_buffers_20261030/independent-run"
+      ],
+      "wall_seconds": 2.1817136019817553,
+      "peak_rss_bytes": 217350144
+    },
+    {
+      "stage": "native-build",
+      "status": "child_failed",
+      "exit_code": 1,
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-build",
+        "--output",
+        "runs/message_buffers_20261030/build",
+        "--protobuf-prefix",
+        "/home/lry/tools/protobuf",
+        "--compile-wall-seconds",
+        "1800"
+      ],
+      "wall_seconds": 0.11812964599812403,
+      "peak_rss_bytes": 5308416
+    },
+    {
+      "stage": "native-build-tools",
+      "status": "completed",
+      "exit_code": 0,
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-build",
+        "--output",
+        "runs/message_buffers_20261030/build",
+        "--cmake",
+        "/home/lry/tools/venv/bin/cmake",
+        "--ninja",
+        "/home/lry/tools/venv/bin/ninja",
+        "--protobuf-prefix",
+        "/home/lry/tools/protobuf",
+        "--compile-wall-seconds",
+        "1800"
+      ],
+      "wall_seconds": 444.6270060510142,
+      "peak_rss_bytes": 1784041472
+    },
+    {
+      "stage": "public-prepare",
+      "status": "completed",
+      "exit_code": 0,
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "examples/scaleout_message_buffers/prepare.py",
+        "--output",
+        "runs/message_buffers_20261030/independent-input"
+      ],
+      "wall_seconds": 0.6308859530254267,
+      "peak_rss_bytes": 88461312
+    },
+    {
+      "stage": "python-unit",
+      "status": "completed",
+      "exit_code": 0,
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/unit",
+        "-p",
+        "message_buffers_test.py",
+        "-v"
+      ],
+      "wall_seconds": 0.19599547696998343,
+      "peak_rss_bytes": 6426624
+    },
+    {
+      "stage": "python-unit-copy-order",
+      "status": "completed",
+      "exit_code": 0,
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/unit",
+        "-p",
+        "message_buffers_test.py",
+        "-v"
+      ],
+      "wall_seconds": 0.2631663979846053,
+      "peak_rss_bytes": 5308416
+    },
+    {
+      "stage": "python-unit-delivery",
+      "status": "completed",
+      "exit_code": 0,
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/unit",
+        "-p",
+        "message_buffers_test.py",
+        "-v"
+      ],
+      "wall_seconds": 0.2671147169894539,
+      "peak_rss_bytes": 6426624
+    },
+    {
+      "stage": "python-unit-final",
+      "status": "completed",
+      "exit_code": 0,
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/unit",
+        "-p",
+        "message_buffers_test.py",
+        "-v"
+      ],
+      "wall_seconds": 0.21566391503438354,
+      "peak_rss_bytes": 5308416
+    },
+    {
+      "stage": "real-check",
+      "status": "completed",
+      "exit_code": 0,
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-check",
+        "--run",
+        "runs/message_buffers_20261030/real-run"
+      ],
+      "wall_seconds": 2.4705466990126297,
+      "peak_rss_bytes": 102481920
+    },
+    {
+      "stage": "real-final-check",
+      "status": "completed",
+      "exit_code": 0,
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-check",
+        "--run",
+        "runs/message_buffers_20261030/real-run"
+      ],
+      "wall_seconds": 2.488618762989063,
+      "peak_rss_bytes": 102481920
+    },
+    {
+      "stage": "real-prepare",
+      "status": "child_failed",
+      "exit_code": 1,
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "examples/scaleout_message_buffers/prepare.py",
+        "--output",
+        "runs/message_buffers_20261030/real-input",
+        "--source-manifest",
+        "runs/ack_guard_whole_20261030/study/guarded-local/routes/manifest.json",
+        "--source-base",
+        "runs/ack_guard_whole_20261030/study/guarded-local"
+      ],
+      "wall_seconds": 0.650217744987458,
+      "peak_rss_bytes": 91607040
+    },
+    {
+      "stage": "real-prepare-fixed",
+      "status": "completed",
+      "exit_code": 0,
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "examples/scaleout_message_buffers/prepare.py",
+        "--output",
+        "runs/message_buffers_20261030/real-final-input",
+        "--source-manifest",
+        "runs/ack_guard_whole_20261030/study/guarded-local/routes/manifest.json",
+        "--source-base",
+        "runs/ack_guard_whole_20261030/study/guarded-local"
+      ],
+      "wall_seconds": 0.9905123870121315,
+      "peak_rss_bytes": 90521600
+    },
+    {
+      "stage": "real-run",
+      "status": "completed",
+      "exit_code": 0,
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--config",
+        "runs/message_buffers_20261030/real-final-input/service-buffers.json",
+        "--protocol",
+        "runs/message_buffers_20261030/real-final-input/rdma-buffers.json",
+        "--topology",
+        "runs/message_buffers_20261030/real-final-input/topology",
+        "--backend",
+        "runs/message_buffers_20261030/build/output/moe-rdma/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "runs/message_buffers_20261030/real-run"
+      ],
+      "wall_seconds": 4.491012135986239,
+      "peak_rss_bytes": 295452672
+    },
+    {
+      "stage": "stream-regression",
+      "status": "completed",
+      "exit_code": 0,
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/unit",
+        "-p",
+        "*stream*test.py",
+        "-v"
+      ],
+      "wall_seconds": 0.30249511398142204,
+      "peak_rss_bytes": 26513408
+    }
+  ],
+  "html_links": 3,
+  "markdown_links": 6,
+  "total_monitored_wall_seconds": 493.7834618879133,
+  "budget_scope": "3000 monitored seconds; one complete build and two new128Clos networks; no expanded limits",
+  "browser_rendering_verified": false
+}

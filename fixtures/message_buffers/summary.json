@@ -1,0 +1,920 @@
+{
+  "schema_version": "moe-message-buffer-acceptance/1",
+  "created_utc": "2026-10-30T18:49:08.432942+00:00",
+  "legacy_read_only": {
+    "public_check_exit": 0,
+    "files": 369,
+    "unchanged": true,
+    "scope": "existing default-mode run read-only audit; not a new default-mode network"
+  },
+  "cases": {
+    "synthetic": {
+      "passed": true,
+      "network_runs": 1,
+      "simulated_endpoints": 128,
+      "ep_sizes": [
+        64,
+        64
+      ],
+      "requests": 4,
+      "model": {
+        "name": "synthetic/direct-token-H256-E256-K8",
+        "hidden_size": 256,
+        "ffn_hidden_size": 512,
+        "experts": 256,
+        "top_k": 8,
+        "activation_bytes": 2,
+        "layers": 2,
+        "gpu_type": "H100"
+      },
+      "source_layers": [
+        0,
+        1
+      ],
+      "decode_steps": 2,
+      "fault": {
+        "configuration": {
+          "denominator": 1,
+          "end_ns": 20000,
+          "kind": "periodic_destination_data/1",
+          "nodes": [
+            6
+          ],
+          "numerator": 1,
+          "offset": 0,
+          "start_ns": 0
+        },
+        "dropped_packets": 1,
+        "eligible_destination_data_packets": 2,
+        "scope": "periodic artificial destination data loss; ACK/NACK/PFC unaffected; half-open time window; ordinal counts actual eligible arrivals including retransmissions",
+        "window_packets": 1
+      },
+      "helpers_retired": 1,
+      "finish_ns": 175778,
+      "packet_events": 2150,
+      "queue_events": 946,
+      "verification": {
+        "passed": true,
+        "messages": 64,
+        "target_written_bytes": 38912,
+        "source_packet_payload_bytes": 39552,
+        "peak_arena_bytes": 19072,
+        "arena_bytes_at_drain": 0,
+        "scope": "functional marker bytes, packet acceptance, disjoint arenas and actual scope/ACK release; no numeric/GPU proof"
+      },
+      "corruption_rejections": {
+        "source_payload": "Scale-Out topology: source DATA differs from declared message marker",
+        "receive_payload": "Scale-Out topology: actual SR byte delivery differs from destination packet replay",
+        "source_alias_target": "Scale-Out topology: live source/target address ranges alias or exceed arena",
+        "early_release": "Scale-Out topology: unsafe buffer release time",
+        "fake_scope": "Scale-Out topology: buffer identity/lifecycle differs from real transport/scope",
+        "duplicate_write": "Scale-Out topology: buffer event differs from independent history",
+        "wrong_digest": "Scale-Out topology: buffer event differs from independent history",
+        "wrong_occupancy": "Scale-Out topology: buffer occupancy/budget differs",
+        "missing_release": "Scale-Out topology: missing buffer lifecycle events or live ranges at drain",
+        "retained_copy": "Scale-Out topology: transport byte copy accounting differs"
+      },
+      "example_buffer_lifetimes": {
+        "dispatch_message": {
+          "ack_ns": 85060,
+          "bytes": 640,
+          "dst": 6,
+          "id": 2,
+          "post_ns": 1030,
+          "receive_ready_ns": 83058,
+          "received_bytes": 640,
+          "scope_finished_ns": 123834,
+          "source_address": 0,
+          "source_digest_fnv64": "2220842a44a39aa5",
+          "source_live": false,
+          "src": 0,
+          "target_address": 0,
+          "target_digest_fnv64": "2220842a44a39aa5",
+          "target_live": false,
+          "target_released_ns": 123834
+        },
+        "combine_message": {
+          "ack_ns": 89786,
+          "bytes": 576,
+          "dst": 0,
+          "id": 4221,
+          "post_ns": 85760,
+          "receive_ready_ns": 87784,
+          "received_bytes": 576,
+          "scope_finished_ns": 123834,
+          "source_address": 640,
+          "source_digest_fnv64": "8d07c50fe31c96a5",
+          "source_live": false,
+          "src": 6,
+          "target_address": 0,
+          "target_digest_fnv64": "8d07c50fe31c96a5",
+          "target_live": false,
+          "target_released_ns": 123834
+        },
+        "input_message": {
+          "ack_ns": 25060,
+          "bytes": 640,
+          "dst": 7,
+          "id": 1099511627840,
+          "post_ns": 21030,
+          "receive_ready_ns": 23058,
+          "received_bytes": 640,
+          "scope_finished_ns": 27784,
+          "source_address": 640,
+          "source_digest_fnv64": "b4b0e2fc9d09e845",
+          "source_live": false,
+          "src": 0,
+          "target_address": 0,
+          "target_digest_fnv64": "b4b0e2fc9d09e845",
+          "target_live": false,
+          "target_released_ns": 27784
+        },
+        "result_message": {
+          "ack_ns": 27784,
+          "bytes": 576,
+          "dst": 0,
+          "id": 1099511627841,
+          "post_ns": 23758,
+          "receive_ready_ns": 25782,
+          "received_bytes": 576,
+          "scope_finished_ns": 27784,
+          "source_address": 640,
+          "source_digest_fnv64": "11d89c47ef0efa15",
+          "source_live": false,
+          "src": 7,
+          "target_address": 1280,
+          "target_digest_fnv64": "11d89c47ef0efa15",
+          "target_live": false,
+          "target_released_ns": 27784
+        }
+      },
+      "result_sha256": "21f3239ee94456618889ceb0c18d1842d64d2b9f3f1afd0a9435fe7ea758cbeb",
+      "input_sha256": "8db24dd591232a3b13697f9f2fe48759e8d39a3c5682d590c2e501632e53ba30",
+      "sources": [
+        {
+          "file_id": "synthetic-0",
+          "sha256": "8bb9dc2e205c4aeccf28d4a374c5aaa5743a16503a38c2d77aac411a5d85479a"
+        },
+        {
+          "file_id": "synthetic-1",
+          "sha256": "cb2358441490177e344dbd0823672dad75a4eecf0c9828dcf94e6f17125b9cb9"
+        },
+        {
+          "file_id": "synthetic-2",
+          "sha256": "0355c2b08b1d3d2ac7e762322dca6e2061a062afbdf3103967692c560f92a2e7"
+        },
+        {
+          "file_id": "synthetic-3",
+          "sha256": "fb46a1c64af569fe6e1805d1e869c077959882b43d1491fe0977c5e47db2e24b"
+        }
+      ],
+      "copied_payload": {
+        "capture_limit_bytes": 33554432,
+        "captured_source_bytes": 39552,
+        "owners": [
+          {
+            "owner": 0,
+            "peak_bytes": 1280,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 1,
+            "peak_bytes": 1280,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 6,
+            "peak_bytes": 576,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 7,
+            "peak_bytes": 576,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 8,
+            "peak_bytes": 576,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 12,
+            "peak_bytes": 576,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 14,
+            "peak_bytes": 576,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 16,
+            "peak_bytes": 576,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 20,
+            "peak_bytes": 576,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 21,
+            "peak_bytes": 576,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 22,
+            "peak_bytes": 576,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 23,
+            "peak_bytes": 576,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 27,
+            "peak_bytes": 576,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 29,
+            "peak_bytes": 576,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 31,
+            "peak_bytes": 576,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 34,
+            "peak_bytes": 576,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 35,
+            "peak_bytes": 576,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 36,
+            "peak_bytes": 576,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 37,
+            "peak_bytes": 576,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 40,
+            "peak_bytes": 576,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 42,
+            "peak_bytes": 576,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 44,
+            "peak_bytes": 576,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 48,
+            "peak_bytes": 576,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 49,
+            "peak_bytes": 576,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 50,
+            "peak_bytes": 576,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 51,
+            "peak_bytes": 576,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 55,
+            "peak_bytes": 576,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 57,
+            "peak_bytes": 576,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 59,
+            "peak_bytes": 576,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 63,
+            "peak_bytes": 576,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 64,
+            "peak_bytes": 1280,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 65,
+            "peak_bytes": 1280,
+            "retained_bytes": 0
+          }
+        ],
+        "release": "full_cumulative_ack/1",
+        "retained_bytes": 0,
+        "scope": "separate actual retransmission byte copies; not CUDA source storage"
+      }
+    },
+    "real_routes": {
+      "passed": true,
+      "network_runs": 1,
+      "simulated_endpoints": 128,
+      "ep_sizes": [
+        32,
+        32,
+        32,
+        32
+      ],
+      "requests": 4,
+      "model": {
+        "name": "deepseek-ai/DeepSeek-R1",
+        "hidden_size": 7168,
+        "ffn_hidden_size": 18432,
+        "experts": 256,
+        "top_k": 8,
+        "activation_bytes": 2,
+        "layers": 2,
+        "gpu_type": "H100"
+      },
+      "source_layers": [
+        3,
+        4
+      ],
+      "decode_steps": 2,
+      "fault": {
+        "configuration": {
+          "denominator": 1,
+          "end_ns": 20000,
+          "kind": "periodic_destination_data/1",
+          "nodes": [
+            32
+          ],
+          "numerator": 1,
+          "offset": 0,
+          "start_ns": 0
+        },
+        "dropped_packets": 2,
+        "eligible_destination_data_packets": 4,
+        "scope": "periodic artificial destination data loss; ACK/NACK/PFC unaffected; half-open time window; ordinal counts actual eligible arrivals including retransmissions",
+        "window_packets": 2
+      },
+      "helpers_retired": 1,
+      "finish_ns": 189208,
+      "packet_events": 14698,
+      "queue_events": 6478,
+      "verification": {
+        "passed": true,
+        "messages": 216,
+        "target_written_bytes": 3117312,
+        "source_packet_payload_bytes": 3131776,
+        "peak_arena_bytes": 1832640,
+        "arena_bytes_at_drain": 0,
+        "scope": "functional marker bytes, packet acceptance, disjoint arenas and actual scope/ACK release; no numeric/GPU proof"
+      },
+      "corruption_rejections": {
+        "source_payload": "Scale-Out topology: source DATA differs from declared message marker",
+        "receive_payload": "Scale-Out topology: actual SR byte delivery differs from destination packet replay",
+        "source_alias_target": "Scale-Out topology: live source/target address ranges alias or exceed arena",
+        "early_release": "Scale-Out topology: unsafe buffer release time",
+        "fake_scope": "Scale-Out topology: buffer identity/lifecycle differs from real transport/scope",
+        "duplicate_write": "Scale-Out topology: buffer event differs from independent history",
+        "wrong_digest": "Scale-Out topology: buffer event differs from independent history",
+        "wrong_occupancy": "Scale-Out topology: buffer occupancy/budget differs",
+        "missing_release": "Scale-Out topology: missing buffer lifecycle events or live ranges at drain",
+        "retained_copy": "Scale-Out topology: transport byte copy accounting differs"
+      },
+      "example_buffer_lifetimes": {
+        "dispatch_message": {
+          "ack_ns": 85504,
+          "bytes": 14464,
+          "dst": 32,
+          "id": 7,
+          "post_ns": 1030,
+          "receive_ready_ns": 83502,
+          "received_bytes": 14464,
+          "scope_finished_ns": 129271,
+          "source_address": 0,
+          "source_digest_fnv64": "5b263fe52029fde5",
+          "source_live": false,
+          "src": 0,
+          "target_address": 0,
+          "target_digest_fnv64": "5b263fe52029fde5",
+          "target_live": false,
+          "target_released_ns": 129271
+        },
+        "combine_message": {
+          "ack_ns": 90077,
+          "bytes": 14400,
+          "dst": 0,
+          "id": 1240,
+          "post_ns": 85604,
+          "receive_ready_ns": 88075,
+          "received_bytes": 14400,
+          "scope_finished_ns": 129271,
+          "source_address": 14464,
+          "source_digest_fnv64": "2d6d2d68c6945085",
+          "source_live": false,
+          "src": 32,
+          "target_address": 0,
+          "target_digest_fnv64": "2d6d2d68c6945085",
+          "target_live": false,
+          "target_released_ns": 129271
+        },
+        "input_message": {
+          "ack_ns": 25504,
+          "bytes": 14464,
+          "dst": 33,
+          "id": 1099511628000,
+          "post_ns": 21030,
+          "receive_ready_ns": 23502,
+          "received_bytes": 14464,
+          "scope_finished_ns": 28075,
+          "source_address": 14464,
+          "source_digest_fnv64": "f5d5ebf3ffc19805",
+          "source_live": false,
+          "src": 0,
+          "target_address": 28864,
+          "target_digest_fnv64": "f5d5ebf3ffc19805",
+          "target_live": false,
+          "target_released_ns": 28075
+        },
+        "result_message": {
+          "ack_ns": 28075,
+          "bytes": 14400,
+          "dst": 0,
+          "id": 1099511628001,
+          "post_ns": 23602,
+          "receive_ready_ns": 26073,
+          "received_bytes": 14400,
+          "scope_finished_ns": 28075,
+          "source_address": 14464,
+          "source_digest_fnv64": "be8f17c0414bbfd5",
+          "source_live": false,
+          "src": 33,
+          "target_address": 28928,
+          "target_digest_fnv64": "be8f17c0414bbfd5",
+          "target_live": false,
+          "target_released_ns": 28075
+        }
+      },
+      "result_sha256": "e2c9e22122bf698b27233aa02de9d09b1eed644479656bec3de1e7be3231d8f2",
+      "input_sha256": "91ce6acc4bb73f29e514ffe73115d3a2a5129171cbfc77b73c5b6a36fe4a7ed6",
+      "sources": [
+        {
+          "file_id": "local-1472",
+          "sha256": "3085c39e9b9950a7e68f30eed8517eaecbfe3d0ad75d813925ff788a1c164255"
+        },
+        {
+          "file_id": "local-1808",
+          "sha256": "c8c9cf4917498a2195960dbd9c65e9efe027af6606db098d40b0db8f7c266092"
+        },
+        {
+          "file_id": "local-2675",
+          "sha256": "848633cf8afa1c9247d9cdaf5968bb09a5f2e2d409387f4a333ce7a6e35390cd"
+        },
+        {
+          "file_id": "local-6447",
+          "sha256": "265c8e66cfb49da12be0d8037cd7a8be6997f4207bcb0a48ca3c616bbe253b96"
+        }
+      ],
+      "copied_payload": {
+        "capture_limit_bytes": 33554432,
+        "captured_source_bytes": 3131776,
+        "owners": [
+          {
+            "owner": 0,
+            "peak_bytes": 101248,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 1,
+            "peak_bytes": 101248,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 2,
+            "peak_bytes": 115712,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 3,
+            "peak_bytes": 115712,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 5,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 6,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 7,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 8,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 9,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 10,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 12,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 13,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 14,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 17,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 19,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 20,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 21,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 22,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 23,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 24,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 26,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 27,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 28,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 29,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 30,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 31,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 32,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 33,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 34,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 35,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 36,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 37,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 39,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 41,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 46,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 56,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 58,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 60,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 61,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 63,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 64,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 65,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 66,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 67,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 68,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 70,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 71,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 72,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 74,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 75,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 76,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 77,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 80,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 81,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 82,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 83,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 84,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 85,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 86,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 88,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 92,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 94,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 95,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 96,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 98,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 99,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 101,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 102,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 103,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 105,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 107,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 110,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 111,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 115,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 119,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 120,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 123,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 124,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 125,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          },
+          {
+            "owner": 127,
+            "peak_bytes": 14400,
+            "retained_bytes": 0
+          }
+        ],
+        "release": "full_cumulative_ack/1",
+        "retained_bytes": 0,
+        "scope": "separate actual retransmission byte copies; not CUDA source storage"
+      }
+    }
+  },
+  "limitations": [
+    "marker bytes, not activations or numerical experts",
+    "functional arena offsets, not CUDA/MR/rkey",
+    "original graph consumption gates retained; no application recovery gain",
+    "four real source requests are sparse, not full-cluster load"
+  ]
+}

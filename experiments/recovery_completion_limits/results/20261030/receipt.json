@@ -1,0 +1,414 @@
+{
+  "passed": true,
+  "platform_fix_commit": "8b32e07276",
+  "simulation_implementation_commit": "a7b736ec76",
+  "current_commit": "8b32e07276a1459807e8acb98d4413a0fa27469a",
+  "source_sha256": {
+    "experiments/recovery_completion_limits/analysis/analyze.py": "51b1b8aa427cbe834c20df667aa9df5ed224dea09ac2bb113178a7f388173230",
+    "experiments/recovery_completion_limits/tests/check.py": "a6a098f167e6f6ad141656c70a618e63f0a395b9623c96b51f72156c9660fcae",
+    "experiments/recovery_completion_limits/README.md": "576cc7f1c41ecedccb14c1012c6eb1d6b5e9de714dd7d9376c157c556f347e51"
+  },
+  "checks": {
+    "passed": true,
+    "unchanged_analysis_equal": true,
+    "rejected": [
+      "missing-recv-edge",
+      "early-gate",
+      "helper-in-original-graph",
+      "changed-source-sha"
+    ],
+    "source_analysis_sha256": "9f7fbfc8ba51b871e8f8d0438a68dee9f63ceac1b4129932a6bb79c0eceeb75c",
+    "new_network_executions": 0,
+    "scope": "analysis guard checks; not new network or application gain"
+  },
+  "guard_checked_analysis_sha256": "9f7fbfc8ba51b871e8f8d0438a68dee9f63ceac1b4129932a6bb79c0eceeb75c",
+  "current_analysis_sha256": "51b1b8aa427cbe834c20df667aa9df5ed224dea09ac2bb113178a7f388173230",
+  "post_check_change": "HTML explanation only; all numerical analysis and assertions unchanged",
+  "original_input_source_sha256": {
+    "normal": {
+      "input.json": "f3a85af1f438046d4fe74e7e13bc17ccd7aa6fe49cf07847a0ac8eca7cbec583",
+      "result.json": "eb9fc9cecf602eb294981b1f3241c41f37e2586d1530f34fa74e476204bd3e85",
+      "frontend.json": "8320248890db5837b32a1c416f1b1045bb481688718d7de9cd0ece2e97c88696",
+      "execution_events.jsonl": "946bfada313e8961fd27c5ec9c9bb81c7e6dd7b955a07e6ff123ad183b4a60de",
+      "contribution_calls.jsonl": "47d33392a9de662dbd3f0faf97d53df0fe8f8fe9bdfb0f4cc458fdb6f6ec39f1"
+    },
+    "local": {
+      "input.json": "f3a85af1f438046d4fe74e7e13bc17ccd7aa6fe49cf07847a0ac8eca7cbec583",
+      "result.json": "998ac6391686edeabe0abe270e50430eba9825a467e5e3cfb9865e1647501d13",
+      "frontend.json": "5a31df760cf4ed004737870e65d5ccd36e326f04749be44f8c2b4b78f61a64ce",
+      "execution_events.jsonl": "73b061f976572e48fdcef562c66a36834abe016ec35495eef82929f905ee4973",
+      "contribution_calls.jsonl": "a373af97f504d6c16f02df74d8313a66d70fd280384930048a5b6cdffa26fec8"
+    },
+    "helper": {
+      "input.json": "4403978df996190722d6ae22190123169df00bb04d9cbd5301a6c7d59447b5c0",
+      "result.json": "7d74abb523b09ec24b359d7009fbdd50f137ae6f6dcb26ab57e0d6ddea1caf6a",
+      "frontend.json": "e4baf8095bbfef244a45c96490ec5f3298cbd361bccf10f51384772b65b4f8b1",
+      "execution_events.jsonl": "73b061f976572e48fdcef562c66a36834abe016ec35495eef82929f905ee4973",
+      "contribution_calls.jsonl": "5ff1a0aa4edf0dc93543cadb33b0f54eb360134ebe1615522bfaaa5fd35ef3cc"
+    }
+  },
+  "source_contract_sha256": "399789d6463d4bbeb43addeddc139a53958ac15df332f2598cb27150ef581a44",
+  "monitors": {
+    "monitors/analysis/probe.json": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "experiments/recovery_completion_limits/analysis/analyze.py",
+        "--runs",
+        "runs/inflight_helpers_20261030",
+        "--deep-ep-sources",
+        "data/research/deepep_modern_20261022",
+        "--interface-sources",
+        "data/research/invocation_semantics_20261023",
+        "--output",
+        "runs/recovery_semantics_20261030/analysis"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-30T12:55:47.889739+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 268435456,
+        "wall_seconds": 120.0
+      },
+      "peak_sampled_group_rss_bytes": 28553216,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/runs/recovery_semantics_20261030"
+      ],
+      "peak_sampled_artifact_bytes": 7335936,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 5889447,
+      "peak_sampled_artifact_allocated_bytes": 7335936,
+      "process_group": 887527,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-30T12:55:48.137755+00:00",
+      "wall_seconds": 0.24801960302283987,
+      "max_waited_child_rss_kib": 27884,
+      "artifact_bytes_before_report": 856,
+      "aggregate_artifact_bytes_before_report": 7335936,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 5889447,
+        "allocated_bytes": 7335936
+      }
+    },
+    "monitors/analysis-final/probe.json": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "experiments/recovery_completion_limits/analysis/analyze.py",
+        "--runs",
+        "runs/inflight_helpers_20261030",
+        "--deep-ep-sources",
+        "data/research/deepep_modern_20261022",
+        "--interface-sources",
+        "data/research/invocation_semantics_20261023",
+        "--output",
+        "runs/recovery_semantics_20261030/analysis-final"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-30T12:57:13.797415+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 268435456,
+        "wall_seconds": 120.0
+      },
+      "peak_sampled_group_rss_bytes": 28954624,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/runs/recovery_semantics_20261030"
+      ],
+      "peak_sampled_artifact_bytes": 7503872,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 6043856,
+      "peak_sampled_artifact_allocated_bytes": 7503872,
+      "process_group": 887550,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-30T12:57:14.157731+00:00",
+      "wall_seconds": 0.360324140987359,
+      "max_waited_child_rss_kib": 28880,
+      "artifact_bytes_before_report": 1117,
+      "aggregate_artifact_bytes_before_report": 7503872,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 6043856,
+        "allocated_bytes": 7503872
+      }
+    },
+    "monitors/analysis-guards/probe.json": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "experiments/recovery_completion_limits/tests/check.py",
+        "--helper",
+        "runs/inflight_helpers_20261030/helper",
+        "--report",
+        "runs/recovery_semantics_20261030/portable-analysis/analysis.json",
+        "--sources",
+        "runs/recovery_semantics_20261030/source-bundle",
+        "--output",
+        "runs/recovery_semantics_20261030/analysis-guards"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-30T13:01:11.384664+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 268435456,
+        "wall_seconds": 120.0
+      },
+      "peak_sampled_group_rss_bytes": 31256576,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/runs/recovery_semantics_20261030"
+      ],
+      "peak_sampled_artifact_bytes": 14815232,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 11905360,
+      "peak_sampled_artifact_allocated_bytes": 14815232,
+      "process_group": 887868,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-30T13:01:11.877268+00:00",
+      "wall_seconds": 0.4926107039791532,
+      "max_waited_child_rss_kib": 31544,
+      "artifact_bytes_before_report": 1319,
+      "aggregate_artifact_bytes_before_report": 14815232,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 11905360,
+        "allocated_bytes": 14815232
+      }
+    },
+    "monitors/portable-analysis/probe.json": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "experiments/recovery_completion_limits/analysis/analyze.py",
+        "--runs",
+        "runs/inflight_helpers_20261030",
+        "--deep-ep-sources",
+        "runs/recovery_semantics_20261030/source-bundle",
+        "--interface-sources",
+        "runs/recovery_semantics_20261030/source-bundle",
+        "--output",
+        "runs/recovery_semantics_20261030/portable-analysis"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-30T12:59:18.478397+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 268435456,
+        "wall_seconds": 120.0
+      },
+      "peak_sampled_group_rss_bytes": 29581312,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/runs/recovery_semantics_20261030"
+      ],
+      "peak_sampled_artifact_bytes": 7786496,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 6304517,
+      "peak_sampled_artifact_allocated_bytes": 7786496,
+      "process_group": 887696,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-30T12:59:18.739298+00:00",
+      "wall_seconds": 0.2609070459729992,
+      "max_waited_child_rss_kib": 28888,
+      "artifact_bytes_before_report": 856,
+      "aggregate_artifact_bytes_before_report": 7786496,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 6304517,
+        "allocated_bytes": 7786496
+      }
+    },
+    "monitors/regression/probe.json": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-c",
+        "import unittest; names=(\"source_ack_watchdog_test.py\",\"execution_events_test.py\",\"contribution_binding_test.py\",\"contribution_attempts_test.py\",\"native_control_test.py\",\"phase_completion_test.py\",\"token_transport_test.py\",\"scaleout_messages_test.py\",\"inflight_helpers_test.py\",\"service_stream_test.py\"); suite=unittest.TestSuite(unittest.defaultTestLoader.discover(\"tests/unit\",pattern=n) for n in names); result=unittest.TextTestRunner(verbosity=2).run(suite); raise SystemExit(not result.wasSuccessful())"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-30T12:50:49.119669+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 268435456,
+        "wall_seconds": 120.0
+      },
+      "peak_sampled_group_rss_bytes": 77971456,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/runs/recovery_semantics_20261030"
+      ],
+      "peak_sampled_artifact_bytes": 36864,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 21466,
+      "peak_sampled_artifact_allocated_bytes": 36864,
+      "process_group": 887432,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-30T12:50:49.773552+00:00",
+      "wall_seconds": 0.6539119720109738,
+      "max_waited_child_rss_kib": 78272,
+      "artifact_bytes_before_report": 15379,
+      "aggregate_artifact_bytes_before_report": 36864,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 21466,
+        "allocated_bytes": 36864
+      }
+    },
+    "monitors/reproduce/probe.json": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/unit",
+        "-p",
+        "inflight_helpers_test.py",
+        "-v"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-30T12:50:23.720312+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 268435456,
+        "wall_seconds": 120.0
+      },
+      "peak_sampled_group_rss_bytes": 5337088,
+      "peak_sampled_processes": 1,
+      "status": "child_failed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/runs/recovery_semantics_20261030"
+      ],
+      "peak_sampled_artifact_bytes": 12288,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 4594,
+      "peak_sampled_artifact_allocated_bytes": 12288,
+      "process_group": 887284,
+      "child_exit_code": 1,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-30T12:50:23.839060+00:00",
+      "wall_seconds": 0.11875165102537721,
+      "max_waited_child_rss_kib": 19672,
+      "artifact_bytes_before_report": 4594,
+      "aggregate_artifact_bytes_before_report": 12288,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 4594,
+        "allocated_bytes": 12288
+      }
+    },
+    "monitors/saved-checks/probe.json": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "tests/integration/check_helper_admission_time.py",
+        "--runs",
+        "runs/inflight_helpers_20261030",
+        "--output",
+        "runs/recovery_semantics_20261030/admission-checks"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-30T12:51:41.741107+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 268435456,
+        "wall_seconds": 120.0
+      },
+      "peak_sampled_group_rss_bytes": 52715520,
+      "peak_sampled_processes": 2,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/runs/recovery_semantics_20261030"
+      ],
+      "peak_sampled_artifact_bytes": 7176192,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 5743561,
+      "peak_sampled_artifact_allocated_bytes": 7176192,
+      "process_group": 887457,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-30T12:51:44.918459+00:00",
+      "wall_seconds": 3.177365279989317,
+      "max_waited_child_rss_kib": 32892,
+      "artifact_bytes_before_report": 8705,
+      "aggregate_artifact_bytes_before_report": 7176192,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 5743561,
+        "allocated_bytes": 7176192
+      }
+    }
+  },
+  "cumulative_monitored_seconds": 5.311890396988019,
+  "peak_sampled_group_rss_bytes": 77971456,
+  "run_artifact_apparent_bytes": 11907101,
+  "new_network_executions": 0,
+  "native_builds": 0,
+  "downloads": 0,
+  "dependency_changes": false,
+  "gpu_executions": 0,
+  "remaining_live_group_pids": [],
+  "application_recovery_complete": false,
+  "scope": "fixed API source audit and saved-run dependency analysis; no new optimization or recovery benefit",
+  "run_artifact_allocated_bytes": 14819328,
+  "local_links_verified": [
+    "/home/lry/moe-ub-cosim/fixtures/helper_admission_time/verification.json",
+    "/home/lry/moe-ub-cosim/fixtures/helper_admission_time/receipt.json",
+    "/home/lry/moe-ub-cosim/docs/inflight_helpers.md",
+    "/home/lry/moe-ub-cosim/docs/contribution_binding.md",
+    "/home/lry/moe-ub-cosim/examples/scaleout_inflight_helpers/README.md",
+    "/home/lry/moe-ub-cosim/experiments/recovery_completion_limits/results/20261030/sources.json",
+    "/home/lry/moe-ub-cosim/experiments/recovery_completion_limits/results/20261030/report.html",
+    "/home/lry/moe-ub-cosim/experiments/recovery_completion_limits/results/20261030/analysis.json",
+    "/home/lry/moe-ub-cosim/experiments/recovery_completion_limits/results/20261030/sources.json"
+  ]
+}

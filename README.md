@@ -48,6 +48,7 @@ moe-ub run --config examples/first_round/run.json --output runs/demo-run
 
 | 我想了解 | 阅读入口 |
 |---|---|
+| 为什么备用结果先返回，推理任务仍没有更快 | [完成约束分析](experiments/recovery_completion_limits/README.md)、[全部调用与源码核查网页](experiments/recovery_completion_limits/results/20261030/report.html)；区分异步返回、贡献到齐与原调用完成 |
 | 检查备用专家是否实际占用同一GPU/NIC和网络 | [在途备用执行](docs/inflight_helpers.md)、[128端点Clos三条件示例](examples/scaleout_inflight_helpers/README.md)；保留原图门限，不能将贡献先到当业务恢复 |
 | 在任务运行中收到“发送超过期限仍未确认”的通知 | [源端确认期限](docs/source_ack_watchdog.md)、[128端点Clos示例](examples/scaleout_source_ack_watchdog/README.md)；不直接判定丢包或自动恢复 |
 | 在实际运行中读取节点完成、消息接收、发送确认及任务图退出 | [实时被动事件](docs/execution_events.md)，沿用LLMServingSim服务与原ns-3时钟，尚不调度恢复 |

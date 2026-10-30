@@ -6,6 +6,7 @@
 
 | 目录 | 研究内容与模型背景 | 阅读方式 |
 |---|---|---|
+| [recovery_completion_limits](recovery_completion_limits/README.md) | 备用贡献与整调用完成的必要依赖、固定DeepEP异步接口及收益边界 | 读取既有128端点Clos三组原件，全部16调用无提前；零新网络，不把删除门限当优化 |
 | [mapping_value](mapping_value/README.md) | 早期 v0.4 条件下，完全正确的端网关系能否帮助排查 | 历史实验，先看其结论和适用条件，不套用为当前 A3 结果 |
 | [scaleup_observability](scaleup_observability/README.md) | 早期发送槽、LOAD 响应及观测对照 | 历史实验，部分现象依赖旧资源和通信模型，不能直接当作真实硬件痛点 |
 | [scaleup_issue_screening](scaleup_issue_screening/README.md) | A3 修正后的现象筛选，三类网络机制的诊断与采集成本 | 已完成的研究与结论，保留适用范围 |

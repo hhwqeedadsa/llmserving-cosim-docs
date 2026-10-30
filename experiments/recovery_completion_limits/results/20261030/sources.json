@@ -1,0 +1,227 @@
+[
+  {
+    "path": "deep_ep/include/deep_ep/impls/ep/dispatch.cuh",
+    "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+    "sha256": "447ec0ef779bb2a74f7efa8ece04254c2036ab4000999f566356d6f94df9335a",
+    "git_blob_sha": "3bacfc60c10fb7e4b21e6d6c57e64cbdb6ae9a58",
+    "url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/impls/ep/dispatch.cuh#L393",
+    "excerpt": [
+      {
+        "line": 393,
+        "text": "    // Barrier to ensure data arrival"
+      },
+      {
+        "line": 394,
+        "text": "    comm::gpu_barrier<kIsScaleupNVLink, 1, kNumRanks,"
+      },
+      {
+        "line": 395,
+        "text": "                      kNumSMs, kNumThreads, kNumQPs, kNumTimeoutCycles, comm::kDispatchTag1, true, true, false>("
+      },
+      {
+        "line": 396,
+        "text": "        gin, workspace_layout.get_barrier_signals(), 0, rank_idx, sm_idx, thread_idx);"
+      }
+    ]
+  },
+  {
+    "path": "deep_ep/include/deep_ep/impls/ep/combine.cuh",
+    "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+    "sha256": "90d98b54151c854611b36f16757d7bca37d4d46a684ede5b1418f069218c2c93",
+    "git_blob_sha": "ba223750d3e8d3cb1623e4856becc36d4ab41eb1",
+    "url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/impls/ep/combine.cuh#L240",
+    "excerpt": [
+      {
+        "line": 240,
+        "text": "    // Final barrier to ensure data arrival"
+      },
+      {
+        "line": 241,
+        "text": "    comm::gpu_barrier<kIsScaleupNVLink, 1, kNumRanks,"
+      },
+      {
+        "line": 242,
+        "text": "                      kNumSMs, kNumThreads, kNumQPs, kNumTimeoutCycles, comm::kCombineTag1, true, true, false>("
+      },
+      {
+        "line": 243,
+        "text": "        gin, workspace_layout.get_barrier_signals(), 0, rank_idx, sm_idx, thread_idx);"
+      }
+    ]
+  },
+  {
+    "path": "deep_ep/include/deep_ep/comm/barrier.cuh",
+    "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+    "sha256": "e4361353f31a2f3a36e019bb2ef013991017a205c16ab92f76f9da2a2652260f",
+    "git_blob_sha": "732c598ca1986636c300036533141ebeb49a320e",
+    "url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/comm/barrier.cuh#L146",
+    "excerpt": [
+      {
+        "line": 146,
+        "text": "    // Flush all QPs by all SMs (only needed for release semantics)"
+      },
+      {
+        "line": 147,
+        "text": "    if constexpr (kFlushStores) {"
+      },
+      {
+        "line": 148,
+        "text": "        for (int i = global_warp_idx; i < num_qps; i += kNumSMs * kNumWarps) {"
+      },
+      {
+        "line": 149,
+        "text": "            ncclGin(nccl_dev_comm, i, NCCL_GIN_RESOURCE_SHARING_CTA).flush(ncclCoopWarp());"
+      },
+      {
+        "line": 150,
+        "text": "        }"
+      },
+      {
+        "line": 151,
+        "text": ""
+      },
+      {
+        "line": 152,
+        "text": "        // World-team barriers may mix direct NVLink writes with GIN signals, so a system-scope"
+      },
+      {
+        "line": 153,
+        "text": "        // threadfence is required to make the NVLink writes visible before publishing the barrier"
+      },
+      {
+        "line": 154,
+        "text": "        if constexpr (std::is_same_v<team_t, ncclTeamTagWorld>)"
+      },
+      {
+        "line": 155,
+        "text": "            ptx::fence_acq_rel_sys();"
+      },
+      {
+        "line": 156,
+        "text": ""
+      },
+      {
+        "line": 157,
+        "text": "        // NOTES: we can not use `kNumSMs` to judge, as maybe only part of the SMs will call this function"
+      },
+      {
+        "line": 158,
+        "text": "        (gridDim.x > 1) ? cooperative_groups::this_grid().sync() : __syncthreads();"
+      },
+      {
+        "line": 159,
+        "text": "    }"
+      },
+      {
+        "line": 160,
+        "text": ""
+      },
+      {
+        "line": 161,
+        "text": "    if (sm_idx == 0) {"
+      },
+      {
+        "line": 162,
+        "text": "        // Use QP 0 to do barrier: signal slot `rank_idx` on every rank, then wait for every rank's slot"
+      },
+      {
+        "line": 163,
+        "text": "        const NCCLGin barrier_gin(nccl_dev_comm, gin.nccl_window, 0, NCCL_GIN_RESOURCE_SHARING_CTA);"
+      },
+      {
+        "line": 164,
+        "text": "        for (int i = thread_idx; i < kNumRanks; i += kNumThreads)"
+      },
+      {
+        "line": 165,
+        "text": "            barrier_gin.signal<team_t>(i, ncclGin_SignalInc{static_cast<ncclGinSignal_t>(rank_idx)});"
+      },
+      {
+        "line": 166,
+        "text": "        for (int i = thread_idx; i < kNumRanks; i += kNumThreads)"
+      },
+      {
+        "line": 167,
+        "text": "            barrier_gin.wait_signal<team_t, kNumTimeoutCycles>(i, rank_idx);"
+      },
+      {
+        "line": 168,
+        "text": "    }"
+      },
+      {
+        "line": 169,
+        "text": "}"
+      }
+    ]
+  },
+  {
+    "path": "deep_ep/buffers/ep.py",
+    "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+    "sha256": "a8f72c3975bbf0433b7c2bad7574053c2b8b42296c2d692336beade92b4ed737",
+    "git_blob_sha": "9b8a95364413b3de0c3fd5061280088e5f58b272",
+    "url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/buffers/ep.py#L609",
+    "excerpt": [
+      {
+        "line": 609,
+        "text": "            async_with_compute_stream: the current stream will not wait for the communication kernels to be"
+      },
+      {
+        "line": 610,
+        "text": "                finished if set."
+      },
+      {
+        "line": 611,
+        "text": "            allocate_on_comm_stream: control whether all the allocated tensors' ownership to be on the"
+      }
+    ]
+  },
+  {
+    "path": "deep_ep/utils/event.py",
+    "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+    "sha256": "db7e5b40d6e401104a2bb72a2cd7859c9d4cc6d8225677073c56356c75d4def9",
+    "git_blob_sha": "f8aadf826afdb9ccf8a864d363037ea5f6f25f04",
+    "url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/utils/event.py#L47",
+    "excerpt": [
+      {
+        "line": 47,
+        "text": "        self.event.current_stream_wait()"
+      },
+      {
+        "line": 48,
+        "text": ""
+      },
+      {
+        "line": 49,
+        "text": "        # Call epilogue hook"
+      },
+      {
+        "line": 50,
+        "text": "        result = None"
+      },
+      {
+        "line": 51,
+        "text": "        if self.hook_after_wait is not None:"
+      },
+      {
+        "line": 52,
+        "text": "            result = self.hook_after_wait()"
+      },
+      {
+        "line": 53,
+        "text": "            self.hook_after_wait = None"
+      },
+      {
+        "line": 54,
+        "text": ""
+      },
+      {
+        "line": 55,
+        "text": "        # In `self.event`, we also have some V2 APIs storing tensors to record in it,"
+      },
+      {
+        "line": 56,
+        "text": "        # So, after waiting the current stream, those tensors can be released by deleting `self.event`"
+      }
+    ]
+  }
+]

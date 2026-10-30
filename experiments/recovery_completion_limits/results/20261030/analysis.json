@@ -1,0 +1,4571 @@
+{
+  "passed": true,
+  "new_network_executions": 0,
+  "source_contract": "fixed DeepEP direct f6aa38fe; not all libraries or versions",
+  "cases": {
+    "normal": {
+      "gpu_endpoints": 128,
+      "independent_requests": 4,
+      "groups": [
+        64,
+        64
+      ],
+      "calls": [
+        {
+          "call": "g0.w0.l0.r0.s0",
+          "graph_id": "g0.w0",
+          "layer": 0,
+          "source": 0,
+          "logical_complete_ns": 17882,
+          "bundles": [
+            {
+              "id": "r6",
+              "rank": 6,
+              "experts": [
+                12,
+                13,
+                14,
+                15
+              ],
+              "input_ready_ns": 3058,
+              "mandatory_gate_ns": 13134,
+              "compute_issue_ns": 13134,
+              "actual_compute_start_ns": 13134,
+              "compute_done_ns": 13534,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 10076,
+              "original_result_ns": 15858,
+              "winner": {
+                "attempt": "original.r6",
+                "time_ns": 15858
+              },
+              "required_original_consumer_node": 8,
+              "merge_node": 11,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            },
+            {
+              "id": "r8",
+              "rank": 8,
+              "experts": [
+                16,
+                17,
+                18,
+                19
+              ],
+              "input_ready_ns": 5100,
+              "mandatory_gate_ns": 13134,
+              "compute_issue_ns": 13134,
+              "actual_compute_start_ns": 13134,
+              "compute_done_ns": 13534,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 8034,
+              "original_result_ns": 17882,
+              "winner": {
+                "attempt": "original.r8",
+                "time_ns": 17882
+              },
+              "required_original_consumer_node": 9,
+              "merge_node": 11,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            }
+          ],
+          "original_graph_retired_ns": 51908
+        },
+        {
+          "call": "g0.w0.l0.r64.s0",
+          "graph_id": "g0.w0",
+          "layer": 0,
+          "source": 64,
+          "logical_complete_ns": 19918,
+          "bundles": [
+            {
+              "id": "r34",
+              "rank": 34,
+              "experts": [
+                68,
+                69,
+                70,
+                71
+              ],
+              "input_ready_ns": 7114,
+              "mandatory_gate_ns": 13134,
+              "compute_issue_ns": 13134,
+              "actual_compute_start_ns": 13134,
+              "compute_done_ns": 13534,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 6020,
+              "original_result_ns": 19906,
+              "winner": {
+                "attempt": "original.r34",
+                "time_ns": 19906
+              },
+              "required_original_consumer_node": 8,
+              "merge_node": 11,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            },
+            {
+              "id": "r36",
+              "rank": 36,
+              "experts": [
+                72,
+                73,
+                74,
+                75
+              ],
+              "input_ready_ns": 7128,
+              "mandatory_gate_ns": 13134,
+              "compute_issue_ns": 13134,
+              "actual_compute_start_ns": 13134,
+              "compute_done_ns": 13534,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 6006,
+              "original_result_ns": 19918,
+              "winner": {
+                "attempt": "original.r36",
+                "time_ns": 19918
+              },
+              "required_original_consumer_node": 9,
+              "merge_node": 11,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            }
+          ],
+          "original_graph_retired_ns": 51908
+        },
+        {
+          "call": "g0.w0.l1.r0.s0",
+          "graph_id": "g0.w0",
+          "layer": 1,
+          "source": 0,
+          "logical_complete_ns": 43848,
+          "bundles": [
+            {
+              "id": "r14",
+              "rank": 14,
+              "experts": [
+                28,
+                29,
+                30,
+                31
+              ],
+              "input_ready_ns": 31040,
+              "mandatory_gate_ns": 39088,
+              "compute_issue_ns": 39088,
+              "actual_compute_start_ns": 39088,
+              "compute_done_ns": 39488,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 8048,
+              "original_result_ns": 43836,
+              "winner": {
+                "attempt": "original.r14",
+                "time_ns": 43836
+              },
+              "required_original_consumer_node": 19,
+              "merge_node": 22,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            },
+            {
+              "id": "r16",
+              "rank": 16,
+              "experts": [
+                32,
+                33,
+                34,
+                35
+              ],
+              "input_ready_ns": 31054,
+              "mandatory_gate_ns": 39088,
+              "compute_issue_ns": 39088,
+              "actual_compute_start_ns": 39088,
+              "compute_done_ns": 39488,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 8034,
+              "original_result_ns": 43848,
+              "winner": {
+                "attempt": "original.r16",
+                "time_ns": 43848
+              },
+              "required_original_consumer_node": 20,
+              "merge_node": 22,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            }
+          ],
+          "original_graph_retired_ns": 51908
+        },
+        {
+          "call": "g0.w0.l1.r64.s0",
+          "graph_id": "g0.w0",
+          "layer": 1,
+          "source": 64,
+          "logical_complete_ns": 45872,
+          "bundles": [
+            {
+              "id": "r42",
+              "rank": 42,
+              "experts": [
+                84,
+                85,
+                86,
+                87
+              ],
+              "input_ready_ns": 33068,
+              "mandatory_gate_ns": 39088,
+              "compute_issue_ns": 39088,
+              "actual_compute_start_ns": 39088,
+              "compute_done_ns": 39488,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 6020,
+              "original_result_ns": 45860,
+              "winner": {
+                "attempt": "original.r42",
+                "time_ns": 45860
+              },
+              "required_original_consumer_node": 19,
+              "merge_node": 22,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            },
+            {
+              "id": "r44",
+              "rank": 44,
+              "experts": [
+                88,
+                89,
+                90,
+                91
+              ],
+              "input_ready_ns": 33082,
+              "mandatory_gate_ns": 39088,
+              "compute_issue_ns": 39088,
+              "actual_compute_start_ns": 39088,
+              "compute_done_ns": 39488,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 6006,
+              "original_result_ns": 45872,
+              "winner": {
+                "attempt": "original.r44",
+                "time_ns": 45872
+              },
+              "required_original_consumer_node": 20,
+              "merge_node": 22,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            }
+          ],
+          "original_graph_retired_ns": 51908
+        },
+        {
+          "call": "g0.w1.l0.r0.s0",
+          "graph_id": "g0.w1",
+          "layer": 0,
+          "source": 0,
+          "logical_complete_ns": 69802,
+          "bundles": [
+            {
+              "id": "r12",
+              "rank": 12,
+              "experts": [
+                24,
+                25,
+                26,
+                27
+              ],
+              "input_ready_ns": 56994,
+              "mandatory_gate_ns": 65042,
+              "compute_issue_ns": 65042,
+              "actual_compute_start_ns": 65042,
+              "compute_done_ns": 65442,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 8048,
+              "original_result_ns": 69790,
+              "winner": {
+                "attempt": "original.r12",
+                "time_ns": 69790
+              },
+              "required_original_consumer_node": 8,
+              "merge_node": 11,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            },
+            {
+              "id": "r14",
+              "rank": 14,
+              "experts": [
+                28,
+                29,
+                30,
+                31
+              ],
+              "input_ready_ns": 57008,
+              "mandatory_gate_ns": 65042,
+              "compute_issue_ns": 65042,
+              "actual_compute_start_ns": 65042,
+              "compute_done_ns": 65442,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 8034,
+              "original_result_ns": 69802,
+              "winner": {
+                "attempt": "original.r14",
+                "time_ns": 69802
+              },
+              "required_original_consumer_node": 9,
+              "merge_node": 11,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            }
+          ],
+          "original_graph_retired_ns": 103852
+        },
+        {
+          "call": "g0.w1.l0.r64.s0",
+          "graph_id": "g0.w1",
+          "layer": 0,
+          "source": 64,
+          "logical_complete_ns": 71838,
+          "bundles": [
+            {
+              "id": "r40",
+              "rank": 40,
+              "experts": [
+                80,
+                81,
+                82,
+                83
+              ],
+              "input_ready_ns": 59022,
+              "mandatory_gate_ns": 65042,
+              "compute_issue_ns": 65042,
+              "actual_compute_start_ns": 65042,
+              "compute_done_ns": 65442,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 6020,
+              "original_result_ns": 71838,
+              "winner": {
+                "attempt": "original.r40",
+                "time_ns": 71838
+              },
+              "required_original_consumer_node": 8,
+              "merge_node": 11,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            },
+            {
+              "id": "r42",
+              "rank": 42,
+              "experts": [
+                84,
+                85,
+                86,
+                87
+              ],
+              "input_ready_ns": 59036,
+              "mandatory_gate_ns": 65042,
+              "compute_issue_ns": 65042,
+              "actual_compute_start_ns": 65042,
+              "compute_done_ns": 65442,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 6006,
+              "original_result_ns": 71826,
+              "winner": {
+                "attempt": "original.r42",
+                "time_ns": 71826
+              },
+              "required_original_consumer_node": 9,
+              "merge_node": 11,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            }
+          ],
+          "original_graph_retired_ns": 103852
+        },
+        {
+          "call": "g0.w1.l1.r0.s0",
+          "graph_id": "g0.w1",
+          "layer": 1,
+          "source": 0,
+          "logical_complete_ns": 95768,
+          "bundles": [
+            {
+              "id": "r20",
+              "rank": 20,
+              "experts": [
+                40,
+                41,
+                42,
+                43
+              ],
+              "input_ready_ns": 82960,
+              "mandatory_gate_ns": 91008,
+              "compute_issue_ns": 91008,
+              "actual_compute_start_ns": 91008,
+              "compute_done_ns": 91408,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 8048,
+              "original_result_ns": 95756,
+              "winner": {
+                "attempt": "original.r20",
+                "time_ns": 95756
+              },
+              "required_original_consumer_node": 19,
+              "merge_node": 22,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            },
+            {
+              "id": "r22",
+              "rank": 22,
+              "experts": [
+                44,
+                45,
+                46,
+                47
+              ],
+              "input_ready_ns": 82974,
+              "mandatory_gate_ns": 91008,
+              "compute_issue_ns": 91008,
+              "actual_compute_start_ns": 91008,
+              "compute_done_ns": 91408,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 8034,
+              "original_result_ns": 95768,
+              "winner": {
+                "attempt": "original.r22",
+                "time_ns": 95768
+              },
+              "required_original_consumer_node": 20,
+              "merge_node": 22,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            }
+          ],
+          "original_graph_retired_ns": 103852
+        },
+        {
+          "call": "g0.w1.l1.r64.s0",
+          "graph_id": "g0.w1",
+          "layer": 1,
+          "source": 64,
+          "logical_complete_ns": 97816,
+          "bundles": [
+            {
+              "id": "r48",
+              "rank": 48,
+              "experts": [
+                96,
+                97,
+                98,
+                99
+              ],
+              "input_ready_ns": 84988,
+              "mandatory_gate_ns": 91008,
+              "compute_issue_ns": 91008,
+              "actual_compute_start_ns": 91008,
+              "compute_done_ns": 91408,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 6020,
+              "original_result_ns": 97804,
+              "winner": {
+                "attempt": "original.r48",
+                "time_ns": 97804
+              },
+              "required_original_consumer_node": 19,
+              "merge_node": 22,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            },
+            {
+              "id": "r50",
+              "rank": 50,
+              "experts": [
+                100,
+                101,
+                102,
+                103
+              ],
+              "input_ready_ns": 85002,
+              "mandatory_gate_ns": 91008,
+              "compute_issue_ns": 91008,
+              "actual_compute_start_ns": 91008,
+              "compute_done_ns": 91408,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 6006,
+              "original_result_ns": 97816,
+              "winner": {
+                "attempt": "original.r50",
+                "time_ns": 97816
+              },
+              "required_original_consumer_node": 20,
+              "merge_node": 22,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            }
+          ],
+          "original_graph_retired_ns": 103852
+        },
+        {
+          "call": "g1.w0.l0.r1.s0",
+          "graph_id": "g1.w0",
+          "layer": 0,
+          "source": 1,
+          "logical_complete_ns": 17908,
+          "bundles": [
+            {
+              "id": "r21",
+              "rank": 21,
+              "experts": [
+                40,
+                41,
+                42,
+                43
+              ],
+              "input_ready_ns": 5086,
+              "mandatory_gate_ns": 13148,
+              "compute_issue_ns": 13148,
+              "actual_compute_start_ns": 13148,
+              "compute_done_ns": 13548,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 8062,
+              "original_result_ns": 17896,
+              "winner": {
+                "attempt": "original.r21",
+                "time_ns": 17896
+              },
+              "required_original_consumer_node": 8,
+              "merge_node": 11,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            },
+            {
+              "id": "r23",
+              "rank": 23,
+              "experts": [
+                44,
+                45,
+                46,
+                47
+              ],
+              "input_ready_ns": 5100,
+              "mandatory_gate_ns": 13148,
+              "compute_issue_ns": 13148,
+              "actual_compute_start_ns": 13148,
+              "compute_done_ns": 13548,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 8048,
+              "original_result_ns": 17908,
+              "winner": {
+                "attempt": "original.r23",
+                "time_ns": 17908
+              },
+              "required_original_consumer_node": 9,
+              "merge_node": 11,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            }
+          ],
+          "original_graph_retired_ns": 51922
+        },
+        {
+          "call": "g1.w0.l0.r65.s0",
+          "graph_id": "g1.w0",
+          "layer": 0,
+          "source": 65,
+          "logical_complete_ns": 19932,
+          "bundles": [
+            {
+              "id": "r49",
+              "rank": 49,
+              "experts": [
+                96,
+                97,
+                98,
+                99
+              ],
+              "input_ready_ns": 7128,
+              "mandatory_gate_ns": 13148,
+              "compute_issue_ns": 13148,
+              "actual_compute_start_ns": 13148,
+              "compute_done_ns": 13548,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 6020,
+              "original_result_ns": 19920,
+              "winner": {
+                "attempt": "original.r49",
+                "time_ns": 19920
+              },
+              "required_original_consumer_node": 8,
+              "merge_node": 11,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            },
+            {
+              "id": "r51",
+              "rank": 51,
+              "experts": [
+                100,
+                101,
+                102,
+                103
+              ],
+              "input_ready_ns": 7142,
+              "mandatory_gate_ns": 13148,
+              "compute_issue_ns": 13148,
+              "actual_compute_start_ns": 13148,
+              "compute_done_ns": 13548,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 6006,
+              "original_result_ns": 19932,
+              "winner": {
+                "attempt": "original.r51",
+                "time_ns": 19932
+              },
+              "required_original_consumer_node": 9,
+              "merge_node": 11,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            }
+          ],
+          "original_graph_retired_ns": 51922
+        },
+        {
+          "call": "g1.w0.l1.r1.s0",
+          "graph_id": "g1.w0",
+          "layer": 1,
+          "source": 1,
+          "logical_complete_ns": 43862,
+          "bundles": [
+            {
+              "id": "r29",
+              "rank": 29,
+              "experts": [
+                56,
+                57,
+                58,
+                59
+              ],
+              "input_ready_ns": 31054,
+              "mandatory_gate_ns": 39102,
+              "compute_issue_ns": 39102,
+              "actual_compute_start_ns": 39102,
+              "compute_done_ns": 39502,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 8048,
+              "original_result_ns": 43850,
+              "winner": {
+                "attempt": "original.r29",
+                "time_ns": 43850
+              },
+              "required_original_consumer_node": 19,
+              "merge_node": 22,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            },
+            {
+              "id": "r31",
+              "rank": 31,
+              "experts": [
+                60,
+                61,
+                62,
+                63
+              ],
+              "input_ready_ns": 31068,
+              "mandatory_gate_ns": 39102,
+              "compute_issue_ns": 39102,
+              "actual_compute_start_ns": 39102,
+              "compute_done_ns": 39502,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 8034,
+              "original_result_ns": 43862,
+              "winner": {
+                "attempt": "original.r31",
+                "time_ns": 43862
+              },
+              "required_original_consumer_node": 20,
+              "merge_node": 22,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            }
+          ],
+          "original_graph_retired_ns": 51922
+        },
+        {
+          "call": "g1.w0.l1.r65.s0",
+          "graph_id": "g1.w0",
+          "layer": 1,
+          "source": 65,
+          "logical_complete_ns": 45886,
+          "bundles": [
+            {
+              "id": "r57",
+              "rank": 57,
+              "experts": [
+                112,
+                113,
+                114,
+                115
+              ],
+              "input_ready_ns": 33082,
+              "mandatory_gate_ns": 39102,
+              "compute_issue_ns": 39102,
+              "actual_compute_start_ns": 39102,
+              "compute_done_ns": 39502,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 6020,
+              "original_result_ns": 45874,
+              "winner": {
+                "attempt": "original.r57",
+                "time_ns": 45874
+              },
+              "required_original_consumer_node": 19,
+              "merge_node": 22,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            },
+            {
+              "id": "r59",
+              "rank": 59,
+              "experts": [
+                116,
+                117,
+                118,
+                119
+              ],
+              "input_ready_ns": 33096,
+              "mandatory_gate_ns": 39102,
+              "compute_issue_ns": 39102,
+              "actual_compute_start_ns": 39102,
+              "compute_done_ns": 39502,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 6006,
+              "original_result_ns": 45886,
+              "winner": {
+                "attempt": "original.r59",
+                "time_ns": 45886
+              },
+              "required_original_consumer_node": 20,
+              "merge_node": 22,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            }
+          ],
+          "original_graph_retired_ns": 51922
+        },
+        {
+          "call": "g1.w1.l0.r1.s0",
+          "graph_id": "g1.w1",
+          "layer": 0,
+          "source": 1,
+          "logical_complete_ns": 69816,
+          "bundles": [
+            {
+              "id": "r27",
+              "rank": 27,
+              "experts": [
+                52,
+                53,
+                54,
+                55
+              ],
+              "input_ready_ns": 57008,
+              "mandatory_gate_ns": 65056,
+              "compute_issue_ns": 65056,
+              "actual_compute_start_ns": 65056,
+              "compute_done_ns": 65456,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 8048,
+              "original_result_ns": 69804,
+              "winner": {
+                "attempt": "original.r27",
+                "time_ns": 69804
+              },
+              "required_original_consumer_node": 8,
+              "merge_node": 11,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            },
+            {
+              "id": "r29",
+              "rank": 29,
+              "experts": [
+                56,
+                57,
+                58,
+                59
+              ],
+              "input_ready_ns": 57022,
+              "mandatory_gate_ns": 65056,
+              "compute_issue_ns": 65056,
+              "actual_compute_start_ns": 65056,
+              "compute_done_ns": 65456,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 8034,
+              "original_result_ns": 69816,
+              "winner": {
+                "attempt": "original.r29",
+                "time_ns": 69816
+              },
+              "required_original_consumer_node": 9,
+              "merge_node": 11,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            }
+          ],
+          "original_graph_retired_ns": 103804
+        },
+        {
+          "call": "g1.w1.l0.r65.s0",
+          "graph_id": "g1.w1",
+          "layer": 0,
+          "source": 65,
+          "logical_complete_ns": 71840,
+          "bundles": [
+            {
+              "id": "r55",
+              "rank": 55,
+              "experts": [
+                108,
+                109,
+                110,
+                111
+              ],
+              "input_ready_ns": 59036,
+              "mandatory_gate_ns": 65056,
+              "compute_issue_ns": 65056,
+              "actual_compute_start_ns": 65056,
+              "compute_done_ns": 65456,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 6020,
+              "original_result_ns": 71840,
+              "winner": {
+                "attempt": "original.r55",
+                "time_ns": 71840
+              },
+              "required_original_consumer_node": 8,
+              "merge_node": 11,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            },
+            {
+              "id": "r57",
+              "rank": 57,
+              "experts": [
+                112,
+                113,
+                114,
+                115
+              ],
+              "input_ready_ns": 59050,
+              "mandatory_gate_ns": 65056,
+              "compute_issue_ns": 65056,
+              "actual_compute_start_ns": 65056,
+              "compute_done_ns": 65456,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 6006,
+              "original_result_ns": 71828,
+              "winner": {
+                "attempt": "original.r57",
+                "time_ns": 71828
+              },
+              "required_original_consumer_node": 9,
+              "merge_node": 11,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            }
+          ],
+          "original_graph_retired_ns": 103804
+        },
+        {
+          "call": "g1.w1.l1.r1.s0",
+          "graph_id": "g1.w1",
+          "layer": 1,
+          "source": 1,
+          "logical_complete_ns": 93732,
+          "bundles": [
+            {
+              "id": "r35",
+              "rank": 35,
+              "experts": [
+                68,
+                69,
+                70,
+                71
+              ],
+              "input_ready_ns": 80934,
+              "mandatory_gate_ns": 90996,
+              "compute_issue_ns": 90996,
+              "actual_compute_start_ns": 90996,
+              "compute_done_ns": 91396,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 10062,
+              "original_result_ns": 93720,
+              "winner": {
+                "attempt": "original.r35",
+                "time_ns": 93720
+              },
+              "required_original_consumer_node": 19,
+              "merge_node": 22,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            },
+            {
+              "id": "r37",
+              "rank": 37,
+              "experts": [
+                72,
+                73,
+                74,
+                75
+              ],
+              "input_ready_ns": 80948,
+              "mandatory_gate_ns": 90996,
+              "compute_issue_ns": 90996,
+              "actual_compute_start_ns": 90996,
+              "compute_done_ns": 91396,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 10048,
+              "original_result_ns": 93732,
+              "winner": {
+                "attempt": "original.r37",
+                "time_ns": 93732
+              },
+              "required_original_consumer_node": 20,
+              "merge_node": 22,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            }
+          ],
+          "original_graph_retired_ns": 103804
+        },
+        {
+          "call": "g1.w1.l1.r65.s0",
+          "graph_id": "g1.w1",
+          "layer": 1,
+          "source": 65,
+          "logical_complete_ns": 97768,
+          "bundles": [
+            {
+              "id": "r63",
+              "rank": 63,
+              "experts": [
+                124,
+                125,
+                126,
+                127
+              ],
+              "input_ready_ns": 84990,
+              "mandatory_gate_ns": 90996,
+              "compute_issue_ns": 90996,
+              "actual_compute_start_ns": 90996,
+              "compute_done_ns": 91396,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 6006,
+              "original_result_ns": 97768,
+              "winner": {
+                "attempt": "original.r63",
+                "time_ns": 97768
+              },
+              "required_original_consumer_node": 18,
+              "merge_node": 20,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            },
+            {
+              "id": "r65",
+              "rank": 65,
+              "experts": [
+                128,
+                129,
+                130,
+                131
+              ],
+              "input_ready_ns": 78906,
+              "mandatory_gate_ns": 90996,
+              "compute_issue_ns": 90996,
+              "actual_compute_start_ns": 90996,
+              "compute_done_ns": 91396,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 12090,
+              "original_result_ns": 91696,
+              "winner": {
+                "attempt": "original.r65",
+                "time_ns": 91696
+              },
+              "required_original_consumer_node": 16,
+              "merge_node": 20,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            }
+          ],
+          "original_graph_retired_ns": 103804
+        }
+      ],
+      "gates": [
+        {
+          "graph_id": "g0.w0",
+          "id": "L0.combine",
+          "released_ns": 25924,
+          "last_members": [
+            {
+              "rank": 36,
+              "gate_node": 8,
+              "last_predecessors": [
+                {
+                  "rank": 36,
+                  "node": 7,
+                  "name": "L0.combine.36-64.send",
+                  "kind": "SEND",
+                  "time_ns": 25924,
+                  "message": 5197,
+                  "src": 36,
+                  "dst": 64,
+                  "bytes": 576,
+                  "actual_ack_ns": 25924,
+                  "actual_receive_ns": 19918
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "graph_id": "g0.w0",
+          "id": "L0.dispatch",
+          "released_ns": 13134,
+          "last_members": [
+            {
+              "rank": 64,
+              "gate_node": 5,
+              "last_predecessors": [
+                {
+                  "rank": 64,
+                  "node": 4,
+                  "name": "L0.dispatch.64-36.send",
+                  "kind": "SEND",
+                  "time_ns": 13134,
+                  "message": 2034,
+                  "src": 64,
+                  "dst": 36,
+                  "bytes": 640,
+                  "actual_ack_ns": 13134,
+                  "actual_receive_ns": 7128
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "graph_id": "g0.w0",
+          "id": "L1.combine",
+          "released_ns": 51878,
+          "last_members": [
+            {
+              "rank": 44,
+              "gate_node": 15,
+              "last_predecessors": [
+                {
+                  "rank": 44,
+                  "node": 14,
+                  "name": "L1.combine.44-64.send",
+                  "kind": "SEND",
+                  "time_ns": 51878,
+                  "message": 13513,
+                  "src": 44,
+                  "dst": 64,
+                  "bytes": 576,
+                  "actual_ack_ns": 51878,
+                  "actual_receive_ns": 45872
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "graph_id": "g0.w0",
+          "id": "L1.dispatch",
+          "released_ns": 39088,
+          "last_members": [
+            {
+              "rank": 64,
+              "gate_node": 16,
+              "last_predecessors": [
+                {
+                  "rank": 64,
+                  "node": 15,
+                  "name": "L1.dispatch.64-44.send",
+                  "kind": "SEND",
+                  "time_ns": 39088,
+                  "message": 10102,
+                  "src": 64,
+                  "dst": 44,
+                  "bytes": 640,
+                  "actual_ack_ns": 39088,
+                  "actual_receive_ns": 33082
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "graph_id": "g0.w1",
+          "id": "L0.combine",
+          "released_ns": 77844,
+          "last_members": [
+            {
+              "rank": 40,
+              "gate_node": 8,
+              "last_predecessors": [
+                {
+                  "rank": 40,
+                  "node": 7,
+                  "name": "L0.combine.40-64.send",
+                  "kind": "SEND",
+                  "time_ns": 77844,
+                  "message": 37579,
+                  "src": 40,
+                  "dst": 64,
+                  "bytes": 576,
+                  "actual_ack_ns": 77844,
+                  "actual_receive_ns": 71838
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "graph_id": "g0.w1",
+          "id": "L0.dispatch",
+          "released_ns": 65042,
+          "last_members": [
+            {
+              "rank": 64,
+              "gate_node": 5,
+              "last_predecessors": [
+                {
+                  "rank": 64,
+                  "node": 4,
+                  "name": "L0.dispatch.64-42.send",
+                  "kind": "SEND",
+                  "time_ns": 65042,
+                  "message": 34293,
+                  "src": 64,
+                  "dst": 42,
+                  "bytes": 640,
+                  "actual_ack_ns": 65042,
+                  "actual_receive_ns": 59036
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "graph_id": "g0.w1",
+          "id": "L1.combine",
+          "released_ns": 103822,
+          "last_members": [
+            {
+              "rank": 50,
+              "gate_node": 15,
+              "last_predecessors": [
+                {
+                  "rank": 50,
+                  "node": 14,
+                  "name": "L1.combine.50-64.send",
+                  "kind": "SEND",
+                  "time_ns": 103822,
+                  "message": 45958,
+                  "src": 50,
+                  "dst": 64,
+                  "bytes": 576,
+                  "actual_ack_ns": 103822,
+                  "actual_receive_ns": 97816
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "graph_id": "g0.w1",
+          "id": "L1.dispatch",
+          "released_ns": 91008,
+          "last_members": [
+            {
+              "rank": 64,
+              "gate_node": 16,
+              "last_predecessors": [
+                {
+                  "rank": 64,
+                  "node": 15,
+                  "name": "L1.dispatch.64-50.send",
+                  "kind": "SEND",
+                  "time_ns": 91008,
+                  "message": 42361,
+                  "src": 64,
+                  "dst": 50,
+                  "bytes": 640,
+                  "actual_ack_ns": 91008,
+                  "actual_receive_ns": 85002
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "graph_id": "g1.w0",
+          "id": "L0.combine",
+          "released_ns": 25938,
+          "last_members": [
+            {
+              "rank": 51,
+              "gate_node": 8,
+              "last_predecessors": [
+                {
+                  "rank": 51,
+                  "node": 7,
+                  "name": "L0.combine.51-65.send",
+                  "kind": "SEND",
+                  "time_ns": 25938,
+                  "message": 21766,
+                  "src": 51,
+                  "dst": 65,
+                  "bytes": 576,
+                  "actual_ack_ns": 25938,
+                  "actual_receive_ns": 19932
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "graph_id": "g1.w0",
+          "id": "L0.dispatch",
+          "released_ns": 13148,
+          "last_members": [
+            {
+              "rank": 65,
+              "gate_node": 5,
+              "last_predecessors": [
+                {
+                  "rank": 65,
+                  "node": 4,
+                  "name": "L0.dispatch.65-51.send",
+                  "kind": "SEND",
+                  "time_ns": 13148,
+                  "message": 18169,
+                  "src": 65,
+                  "dst": 51,
+                  "bytes": 640,
+                  "actual_ack_ns": 13148,
+                  "actual_receive_ns": 7142
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "graph_id": "g1.w0",
+          "id": "L1.combine",
+          "released_ns": 51892,
+          "last_members": [
+            {
+              "rank": 59,
+              "gate_node": 15,
+              "last_predecessors": [
+                {
+                  "rank": 59,
+                  "node": 14,
+                  "name": "L1.combine.59-65.send",
+                  "kind": "SEND",
+                  "time_ns": 51892,
+                  "message": 30082,
+                  "src": 59,
+                  "dst": 65,
+                  "bytes": 576,
+                  "actual_ack_ns": 51892,
+                  "actual_receive_ns": 45886
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "graph_id": "g1.w0",
+          "id": "L1.dispatch",
+          "released_ns": 39102,
+          "last_members": [
+            {
+              "rank": 65,
+              "gate_node": 16,
+              "last_predecessors": [
+                {
+                  "rank": 65,
+                  "node": 15,
+                  "name": "L1.dispatch.65-59.send",
+                  "kind": "SEND",
+                  "time_ns": 39102,
+                  "message": 26237,
+                  "src": 65,
+                  "dst": 59,
+                  "bytes": 640,
+                  "actual_ack_ns": 39102,
+                  "actual_receive_ns": 33096
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "graph_id": "g1.w1",
+          "id": "L0.combine",
+          "released_ns": 77846,
+          "last_members": [
+            {
+              "rank": 55,
+              "gate_node": 8,
+              "last_predecessors": [
+                {
+                  "rank": 55,
+                  "node": 7,
+                  "name": "L0.combine.55-65.send",
+                  "kind": "SEND",
+                  "time_ns": 77846,
+                  "message": 54148,
+                  "src": 55,
+                  "dst": 65,
+                  "bytes": 576,
+                  "actual_ack_ns": 77846,
+                  "actual_receive_ns": 71840
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "graph_id": "g1.w1",
+          "id": "L0.dispatch",
+          "released_ns": 65056,
+          "last_members": [
+            {
+              "rank": 65,
+              "gate_node": 5,
+              "last_predecessors": [
+                {
+                  "rank": 65,
+                  "node": 4,
+                  "name": "L0.dispatch.65-57.send",
+                  "kind": "SEND",
+                  "time_ns": 65056,
+                  "message": 50428,
+                  "src": 65,
+                  "dst": 57,
+                  "bytes": 640,
+                  "actual_ack_ns": 65056,
+                  "actual_receive_ns": 59050
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "graph_id": "g1.w1",
+          "id": "L1.combine",
+          "released_ns": 103774,
+          "last_members": [
+            {
+              "rank": 63,
+              "gate_node": 15,
+              "last_predecessors": [
+                {
+                  "rank": 63,
+                  "node": 14,
+                  "name": "L1.combine.63-65.send",
+                  "kind": "SEND",
+                  "time_ns": 103774,
+                  "message": 62464,
+                  "src": 63,
+                  "dst": 65,
+                  "bytes": 576,
+                  "actual_ack_ns": 103774,
+                  "actual_receive_ns": 97768
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "graph_id": "g1.w1",
+          "id": "L1.dispatch",
+          "released_ns": 90996,
+          "last_members": [
+            {
+              "rank": 65,
+              "gate_node": 15,
+              "last_predecessors": [
+                {
+                  "rank": 65,
+                  "node": 14,
+                  "name": "L1.dispatch.65-63.send",
+                  "kind": "SEND",
+                  "time_ns": 90996,
+                  "message": 58495,
+                  "src": 65,
+                  "dst": 63,
+                  "bytes": 640,
+                  "actual_ack_ns": 90996,
+                  "actual_receive_ns": 84990
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "helpers": [],
+      "call_count": 16,
+      "bundle_count": 32,
+      "original_expert_queue_ns_max": 0,
+      "original_expert_queue_nonzero_bundles": 0,
+      "input_to_gate_ns_histogram": [
+        {
+          "ns": 6006,
+          "count": 8
+        },
+        {
+          "ns": 6020,
+          "count": 7
+        },
+        {
+          "ns": 8034,
+          "count": 6
+        },
+        {
+          "ns": 8048,
+          "count": 6
+        },
+        {
+          "ns": 8062,
+          "count": 1
+        },
+        {
+          "ns": 10048,
+          "count": 1
+        },
+        {
+          "ns": 10062,
+          "count": 1
+        },
+        {
+          "ns": 10076,
+          "count": 1
+        },
+        {
+          "ns": 12090,
+          "count": 1
+        }
+      ],
+      "application_finished_ns": 103852,
+      "network_drained_ns": 103852,
+      "source_hashes": {
+        "input.json": "f3a85af1f438046d4fe74e7e13bc17ccd7aa6fe49cf07847a0ac8eca7cbec583",
+        "result.json": "eb9fc9cecf602eb294981b1f3241c41f37e2586d1530f34fa74e476204bd3e85",
+        "frontend.json": "8320248890db5837b32a1c416f1b1045bb481688718d7de9cd0ece2e97c88696",
+        "execution_events.jsonl": "946bfada313e8961fd27c5ec9c9bb81c7e6dd7b955a07e6ff123ad183b4a60de",
+        "contribution_calls.jsonl": "47d33392a9de662dbd3f0faf97d53df0fe8f8fe9bdfb0f4cc458fdb6f6ec39f1"
+      },
+      "scope": "actual callbacks and declared graph dependencies; input-to-gate intervals are not removable business time"
+    },
+    "local": {
+      "gpu_endpoints": 128,
+      "independent_requests": 4,
+      "groups": [
+        64,
+        64
+      ],
+      "calls": [
+        {
+          "call": "g0.w0.l0.r0.s0",
+          "graph_id": "g0.w0",
+          "layer": 0,
+          "source": 0,
+          "logical_complete_ns": 89808,
+          "bundles": [
+            {
+              "id": "r6",
+              "rank": 6,
+              "experts": [
+                12,
+                13,
+                14,
+                15
+              ],
+              "input_ready_ns": 83058,
+              "mandatory_gate_ns": 85060,
+              "compute_issue_ns": 85060,
+              "actual_compute_start_ns": 85060,
+              "compute_done_ns": 85460,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 2002,
+              "original_result_ns": 87784,
+              "winner": {
+                "attempt": "original.r6",
+                "time_ns": 87784
+              },
+              "required_original_consumer_node": 8,
+              "merge_node": 11,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            },
+            {
+              "id": "r8",
+              "rank": 8,
+              "experts": [
+                16,
+                17,
+                18,
+                19
+              ],
+              "input_ready_ns": 5100,
+              "mandatory_gate_ns": 85060,
+              "compute_issue_ns": 85060,
+              "actual_compute_start_ns": 85060,
+              "compute_done_ns": 85460,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 79960,
+              "original_result_ns": 89808,
+              "winner": {
+                "attempt": "original.r8",
+                "time_ns": 89808
+              },
+              "required_original_consumer_node": 9,
+              "merge_node": 11,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            }
+          ],
+          "original_graph_retired_ns": 123834
+        },
+        {
+          "call": "g0.w0.l0.r64.s0",
+          "graph_id": "g0.w0",
+          "layer": 0,
+          "source": 64,
+          "logical_complete_ns": 91844,
+          "bundles": [
+            {
+              "id": "r34",
+              "rank": 34,
+              "experts": [
+                68,
+                69,
+                70,
+                71
+              ],
+              "input_ready_ns": 7114,
+              "mandatory_gate_ns": 85060,
+              "compute_issue_ns": 85060,
+              "actual_compute_start_ns": 85060,
+              "compute_done_ns": 85460,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 77946,
+              "original_result_ns": 91832,
+              "winner": {
+                "attempt": "original.r34",
+                "time_ns": 91832
+              },
+              "required_original_consumer_node": 8,
+              "merge_node": 11,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            },
+            {
+              "id": "r36",
+              "rank": 36,
+              "experts": [
+                72,
+                73,
+                74,
+                75
+              ],
+              "input_ready_ns": 7128,
+              "mandatory_gate_ns": 85060,
+              "compute_issue_ns": 85060,
+              "actual_compute_start_ns": 85060,
+              "compute_done_ns": 85460,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 77932,
+              "original_result_ns": 91844,
+              "winner": {
+                "attempt": "original.r36",
+                "time_ns": 91844
+              },
+              "required_original_consumer_node": 9,
+              "merge_node": 11,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            }
+          ],
+          "original_graph_retired_ns": 123834
+        },
+        {
+          "call": "g0.w0.l1.r0.s0",
+          "graph_id": "g0.w0",
+          "layer": 1,
+          "source": 0,
+          "logical_complete_ns": 115774,
+          "bundles": [
+            {
+              "id": "r14",
+              "rank": 14,
+              "experts": [
+                28,
+                29,
+                30,
+                31
+              ],
+              "input_ready_ns": 102966,
+              "mandatory_gate_ns": 111014,
+              "compute_issue_ns": 111014,
+              "actual_compute_start_ns": 111014,
+              "compute_done_ns": 111414,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 8048,
+              "original_result_ns": 115762,
+              "winner": {
+                "attempt": "original.r14",
+                "time_ns": 115762
+              },
+              "required_original_consumer_node": 19,
+              "merge_node": 22,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            },
+            {
+              "id": "r16",
+              "rank": 16,
+              "experts": [
+                32,
+                33,
+                34,
+                35
+              ],
+              "input_ready_ns": 102980,
+              "mandatory_gate_ns": 111014,
+              "compute_issue_ns": 111014,
+              "actual_compute_start_ns": 111014,
+              "compute_done_ns": 111414,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 8034,
+              "original_result_ns": 115774,
+              "winner": {
+                "attempt": "original.r16",
+                "time_ns": 115774
+              },
+              "required_original_consumer_node": 20,
+              "merge_node": 22,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            }
+          ],
+          "original_graph_retired_ns": 123834
+        },
+        {
+          "call": "g0.w0.l1.r64.s0",
+          "graph_id": "g0.w0",
+          "layer": 1,
+          "source": 64,
+          "logical_complete_ns": 117798,
+          "bundles": [
+            {
+              "id": "r42",
+              "rank": 42,
+              "experts": [
+                84,
+                85,
+                86,
+                87
+              ],
+              "input_ready_ns": 104994,
+              "mandatory_gate_ns": 111014,
+              "compute_issue_ns": 111014,
+              "actual_compute_start_ns": 111014,
+              "compute_done_ns": 111414,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 6020,
+              "original_result_ns": 117786,
+              "winner": {
+                "attempt": "original.r42",
+                "time_ns": 117786
+              },
+              "required_original_consumer_node": 19,
+              "merge_node": 22,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            },
+            {
+              "id": "r44",
+              "rank": 44,
+              "experts": [
+                88,
+                89,
+                90,
+                91
+              ],
+              "input_ready_ns": 105008,
+              "mandatory_gate_ns": 111014,
+              "compute_issue_ns": 111014,
+              "actual_compute_start_ns": 111014,
+              "compute_done_ns": 111414,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 6006,
+              "original_result_ns": 117798,
+              "winner": {
+                "attempt": "original.r44",
+                "time_ns": 117798
+              },
+              "required_original_consumer_node": 20,
+              "merge_node": 22,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            }
+          ],
+          "original_graph_retired_ns": 123834
+        },
+        {
+          "call": "g0.w1.l0.r0.s0",
+          "graph_id": "g0.w1",
+          "layer": 0,
+          "source": 0,
+          "logical_complete_ns": 141728,
+          "bundles": [
+            {
+              "id": "r12",
+              "rank": 12,
+              "experts": [
+                24,
+                25,
+                26,
+                27
+              ],
+              "input_ready_ns": 128920,
+              "mandatory_gate_ns": 136968,
+              "compute_issue_ns": 136968,
+              "actual_compute_start_ns": 136968,
+              "compute_done_ns": 137368,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 8048,
+              "original_result_ns": 141716,
+              "winner": {
+                "attempt": "original.r12",
+                "time_ns": 141716
+              },
+              "required_original_consumer_node": 8,
+              "merge_node": 11,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            },
+            {
+              "id": "r14",
+              "rank": 14,
+              "experts": [
+                28,
+                29,
+                30,
+                31
+              ],
+              "input_ready_ns": 128934,
+              "mandatory_gate_ns": 136968,
+              "compute_issue_ns": 136968,
+              "actual_compute_start_ns": 136968,
+              "compute_done_ns": 137368,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 8034,
+              "original_result_ns": 141728,
+              "winner": {
+                "attempt": "original.r14",
+                "time_ns": 141728
+              },
+              "required_original_consumer_node": 9,
+              "merge_node": 11,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            }
+          ],
+          "original_graph_retired_ns": 175778
+        },
+        {
+          "call": "g0.w1.l0.r64.s0",
+          "graph_id": "g0.w1",
+          "layer": 0,
+          "source": 64,
+          "logical_complete_ns": 143764,
+          "bundles": [
+            {
+              "id": "r40",
+              "rank": 40,
+              "experts": [
+                80,
+                81,
+                82,
+                83
+              ],
+              "input_ready_ns": 130948,
+              "mandatory_gate_ns": 136968,
+              "compute_issue_ns": 136968,
+              "actual_compute_start_ns": 136968,
+              "compute_done_ns": 137368,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 6020,
+              "original_result_ns": 143764,
+              "winner": {
+                "attempt": "original.r40",
+                "time_ns": 143764
+              },
+              "required_original_consumer_node": 8,
+              "merge_node": 11,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            },
+            {
+              "id": "r42",
+              "rank": 42,
+              "experts": [
+                84,
+                85,
+                86,
+                87
+              ],
+              "input_ready_ns": 130962,
+              "mandatory_gate_ns": 136968,
+              "compute_issue_ns": 136968,
+              "actual_compute_start_ns": 136968,
+              "compute_done_ns": 137368,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 6006,
+              "original_result_ns": 143752,
+              "winner": {
+                "attempt": "original.r42",
+                "time_ns": 143752
+              },
+              "required_original_consumer_node": 9,
+              "merge_node": 11,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            }
+          ],
+          "original_graph_retired_ns": 175778
+        },
+        {
+          "call": "g0.w1.l1.r0.s0",
+          "graph_id": "g0.w1",
+          "layer": 1,
+          "source": 0,
+          "logical_complete_ns": 167694,
+          "bundles": [
+            {
+              "id": "r20",
+              "rank": 20,
+              "experts": [
+                40,
+                41,
+                42,
+                43
+              ],
+              "input_ready_ns": 154886,
+              "mandatory_gate_ns": 162934,
+              "compute_issue_ns": 162934,
+              "actual_compute_start_ns": 162934,
+              "compute_done_ns": 163334,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 8048,
+              "original_result_ns": 167682,
+              "winner": {
+                "attempt": "original.r20",
+                "time_ns": 167682
+              },
+              "required_original_consumer_node": 19,
+              "merge_node": 22,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            },
+            {
+              "id": "r22",
+              "rank": 22,
+              "experts": [
+                44,
+                45,
+                46,
+                47
+              ],
+              "input_ready_ns": 154900,
+              "mandatory_gate_ns": 162934,
+              "compute_issue_ns": 162934,
+              "actual_compute_start_ns": 162934,
+              "compute_done_ns": 163334,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 8034,
+              "original_result_ns": 167694,
+              "winner": {
+                "attempt": "original.r22",
+                "time_ns": 167694
+              },
+              "required_original_consumer_node": 20,
+              "merge_node": 22,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            }
+          ],
+          "original_graph_retired_ns": 175778
+        },
+        {
+          "call": "g0.w1.l1.r64.s0",
+          "graph_id": "g0.w1",
+          "layer": 1,
+          "source": 64,
+          "logical_complete_ns": 169742,
+          "bundles": [
+            {
+              "id": "r48",
+              "rank": 48,
+              "experts": [
+                96,
+                97,
+                98,
+                99
+              ],
+              "input_ready_ns": 156914,
+              "mandatory_gate_ns": 162934,
+              "compute_issue_ns": 162934,
+              "actual_compute_start_ns": 162934,
+              "compute_done_ns": 163334,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 6020,
+              "original_result_ns": 169730,
+              "winner": {
+                "attempt": "original.r48",
+                "time_ns": 169730
+              },
+              "required_original_consumer_node": 19,
+              "merge_node": 22,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            },
+            {
+              "id": "r50",
+              "rank": 50,
+              "experts": [
+                100,
+                101,
+                102,
+                103
+              ],
+              "input_ready_ns": 156928,
+              "mandatory_gate_ns": 162934,
+              "compute_issue_ns": 162934,
+              "actual_compute_start_ns": 162934,
+              "compute_done_ns": 163334,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 6006,
+              "original_result_ns": 169742,
+              "winner": {
+                "attempt": "original.r50",
+                "time_ns": 169742
+              },
+              "required_original_consumer_node": 20,
+              "merge_node": 22,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            }
+          ],
+          "original_graph_retired_ns": 175778
+        },
+        {
+          "call": "g1.w0.l0.r1.s0",
+          "graph_id": "g1.w0",
+          "layer": 0,
+          "source": 1,
+          "logical_complete_ns": 17908,
+          "bundles": [
+            {
+              "id": "r21",
+              "rank": 21,
+              "experts": [
+                40,
+                41,
+                42,
+                43
+              ],
+              "input_ready_ns": 5086,
+              "mandatory_gate_ns": 13148,
+              "compute_issue_ns": 13148,
+              "actual_compute_start_ns": 13148,
+              "compute_done_ns": 13548,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 8062,
+              "original_result_ns": 17896,
+              "winner": {
+                "attempt": "original.r21",
+                "time_ns": 17896
+              },
+              "required_original_consumer_node": 8,
+              "merge_node": 11,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            },
+            {
+              "id": "r23",
+              "rank": 23,
+              "experts": [
+                44,
+                45,
+                46,
+                47
+              ],
+              "input_ready_ns": 5100,
+              "mandatory_gate_ns": 13148,
+              "compute_issue_ns": 13148,
+              "actual_compute_start_ns": 13148,
+              "compute_done_ns": 13548,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 8048,
+              "original_result_ns": 17908,
+              "winner": {
+                "attempt": "original.r23",
+                "time_ns": 17908
+              },
+              "required_original_consumer_node": 9,
+              "merge_node": 11,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            }
+          ],
+          "original_graph_retired_ns": 51922
+        },
+        {
+          "call": "g1.w0.l0.r65.s0",
+          "graph_id": "g1.w0",
+          "layer": 0,
+          "source": 65,
+          "logical_complete_ns": 19932,
+          "bundles": [
+            {
+              "id": "r49",
+              "rank": 49,
+              "experts": [
+                96,
+                97,
+                98,
+                99
+              ],
+              "input_ready_ns": 7128,
+              "mandatory_gate_ns": 13148,
+              "compute_issue_ns": 13148,
+              "actual_compute_start_ns": 13148,
+              "compute_done_ns": 13548,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 6020,
+              "original_result_ns": 19920,
+              "winner": {
+                "attempt": "original.r49",
+                "time_ns": 19920
+              },
+              "required_original_consumer_node": 8,
+              "merge_node": 11,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            },
+            {
+              "id": "r51",
+              "rank": 51,
+              "experts": [
+                100,
+                101,
+                102,
+                103
+              ],
+              "input_ready_ns": 7142,
+              "mandatory_gate_ns": 13148,
+              "compute_issue_ns": 13148,
+              "actual_compute_start_ns": 13148,
+              "compute_done_ns": 13548,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 6006,
+              "original_result_ns": 19932,
+              "winner": {
+                "attempt": "original.r51",
+                "time_ns": 19932
+              },
+              "required_original_consumer_node": 9,
+              "merge_node": 11,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            }
+          ],
+          "original_graph_retired_ns": 51922
+        },
+        {
+          "call": "g1.w0.l1.r1.s0",
+          "graph_id": "g1.w0",
+          "layer": 1,
+          "source": 1,
+          "logical_complete_ns": 43862,
+          "bundles": [
+            {
+              "id": "r29",
+              "rank": 29,
+              "experts": [
+                56,
+                57,
+                58,
+                59
+              ],
+              "input_ready_ns": 31054,
+              "mandatory_gate_ns": 39102,
+              "compute_issue_ns": 39102,
+              "actual_compute_start_ns": 39102,
+              "compute_done_ns": 39502,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 8048,
+              "original_result_ns": 43850,
+              "winner": {
+                "attempt": "original.r29",
+                "time_ns": 43850
+              },
+              "required_original_consumer_node": 19,
+              "merge_node": 22,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            },
+            {
+              "id": "r31",
+              "rank": 31,
+              "experts": [
+                60,
+                61,
+                62,
+                63
+              ],
+              "input_ready_ns": 31068,
+              "mandatory_gate_ns": 39102,
+              "compute_issue_ns": 39102,
+              "actual_compute_start_ns": 39102,
+              "compute_done_ns": 39502,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 8034,
+              "original_result_ns": 43862,
+              "winner": {
+                "attempt": "original.r31",
+                "time_ns": 43862
+              },
+              "required_original_consumer_node": 20,
+              "merge_node": 22,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            }
+          ],
+          "original_graph_retired_ns": 51922
+        },
+        {
+          "call": "g1.w0.l1.r65.s0",
+          "graph_id": "g1.w0",
+          "layer": 1,
+          "source": 65,
+          "logical_complete_ns": 45886,
+          "bundles": [
+            {
+              "id": "r57",
+              "rank": 57,
+              "experts": [
+                112,
+                113,
+                114,
+                115
+              ],
+              "input_ready_ns": 33082,
+              "mandatory_gate_ns": 39102,
+              "compute_issue_ns": 39102,
+              "actual_compute_start_ns": 39102,
+              "compute_done_ns": 39502,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 6020,
+              "original_result_ns": 45874,
+              "winner": {
+                "attempt": "original.r57",
+                "time_ns": 45874
+              },
+              "required_original_consumer_node": 19,
+              "merge_node": 22,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            },
+            {
+              "id": "r59",
+              "rank": 59,
+              "experts": [
+                116,
+                117,
+                118,
+                119
+              ],
+              "input_ready_ns": 33096,
+              "mandatory_gate_ns": 39102,
+              "compute_issue_ns": 39102,
+              "actual_compute_start_ns": 39102,
+              "compute_done_ns": 39502,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 6006,
+              "original_result_ns": 45886,
+              "winner": {
+                "attempt": "original.r59",
+                "time_ns": 45886
+              },
+              "required_original_consumer_node": 20,
+              "merge_node": 22,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            }
+          ],
+          "original_graph_retired_ns": 51922
+        },
+        {
+          "call": "g1.w1.l0.r1.s0",
+          "graph_id": "g1.w1",
+          "layer": 0,
+          "source": 1,
+          "logical_complete_ns": 69816,
+          "bundles": [
+            {
+              "id": "r27",
+              "rank": 27,
+              "experts": [
+                52,
+                53,
+                54,
+                55
+              ],
+              "input_ready_ns": 57008,
+              "mandatory_gate_ns": 65056,
+              "compute_issue_ns": 65056,
+              "actual_compute_start_ns": 65056,
+              "compute_done_ns": 65456,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 8048,
+              "original_result_ns": 69804,
+              "winner": {
+                "attempt": "original.r27",
+                "time_ns": 69804
+              },
+              "required_original_consumer_node": 8,
+              "merge_node": 11,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            },
+            {
+              "id": "r29",
+              "rank": 29,
+              "experts": [
+                56,
+                57,
+                58,
+                59
+              ],
+              "input_ready_ns": 57022,
+              "mandatory_gate_ns": 65056,
+              "compute_issue_ns": 65056,
+              "actual_compute_start_ns": 65056,
+              "compute_done_ns": 65456,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 8034,
+              "original_result_ns": 69816,
+              "winner": {
+                "attempt": "original.r29",
+                "time_ns": 69816
+              },
+              "required_original_consumer_node": 9,
+              "merge_node": 11,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            }
+          ],
+          "original_graph_retired_ns": 103804
+        },
+        {
+          "call": "g1.w1.l0.r65.s0",
+          "graph_id": "g1.w1",
+          "layer": 0,
+          "source": 65,
+          "logical_complete_ns": 71840,
+          "bundles": [
+            {
+              "id": "r55",
+              "rank": 55,
+              "experts": [
+                108,
+                109,
+                110,
+                111
+              ],
+              "input_ready_ns": 59036,
+              "mandatory_gate_ns": 65056,
+              "compute_issue_ns": 65056,
+              "actual_compute_start_ns": 65056,
+              "compute_done_ns": 65456,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 6020,
+              "original_result_ns": 71828,
+              "winner": {
+                "attempt": "original.r55",
+                "time_ns": 71828
+              },
+              "required_original_consumer_node": 8,
+              "merge_node": 11,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            },
+            {
+              "id": "r57",
+              "rank": 57,
+              "experts": [
+                112,
+                113,
+                114,
+                115
+              ],
+              "input_ready_ns": 59050,
+              "mandatory_gate_ns": 65056,
+              "compute_issue_ns": 65056,
+              "actual_compute_start_ns": 65056,
+              "compute_done_ns": 65456,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 6006,
+              "original_result_ns": 71840,
+              "winner": {
+                "attempt": "original.r57",
+                "time_ns": 71840
+              },
+              "required_original_consumer_node": 9,
+              "merge_node": 11,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            }
+          ],
+          "original_graph_retired_ns": 103804
+        },
+        {
+          "call": "g1.w1.l1.r1.s0",
+          "graph_id": "g1.w1",
+          "layer": 1,
+          "source": 1,
+          "logical_complete_ns": 93732,
+          "bundles": [
+            {
+              "id": "r35",
+              "rank": 35,
+              "experts": [
+                68,
+                69,
+                70,
+                71
+              ],
+              "input_ready_ns": 80934,
+              "mandatory_gate_ns": 90996,
+              "compute_issue_ns": 90996,
+              "actual_compute_start_ns": 90996,
+              "compute_done_ns": 91396,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 10062,
+              "original_result_ns": 93720,
+              "winner": {
+                "attempt": "original.r35",
+                "time_ns": 93720
+              },
+              "required_original_consumer_node": 19,
+              "merge_node": 22,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            },
+            {
+              "id": "r37",
+              "rank": 37,
+              "experts": [
+                72,
+                73,
+                74,
+                75
+              ],
+              "input_ready_ns": 80948,
+              "mandatory_gate_ns": 90996,
+              "compute_issue_ns": 90996,
+              "actual_compute_start_ns": 90996,
+              "compute_done_ns": 91396,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 10048,
+              "original_result_ns": 93732,
+              "winner": {
+                "attempt": "original.r37",
+                "time_ns": 93732
+              },
+              "required_original_consumer_node": 20,
+              "merge_node": 22,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            }
+          ],
+          "original_graph_retired_ns": 103804
+        },
+        {
+          "call": "g1.w1.l1.r65.s0",
+          "graph_id": "g1.w1",
+          "layer": 1,
+          "source": 65,
+          "logical_complete_ns": 97768,
+          "bundles": [
+            {
+              "id": "r63",
+              "rank": 63,
+              "experts": [
+                124,
+                125,
+                126,
+                127
+              ],
+              "input_ready_ns": 84990,
+              "mandatory_gate_ns": 90996,
+              "compute_issue_ns": 90996,
+              "actual_compute_start_ns": 90996,
+              "compute_done_ns": 91396,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 6006,
+              "original_result_ns": 97768,
+              "winner": {
+                "attempt": "original.r63",
+                "time_ns": 97768
+              },
+              "required_original_consumer_node": 18,
+              "merge_node": 20,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            },
+            {
+              "id": "r65",
+              "rank": 65,
+              "experts": [
+                128,
+                129,
+                130,
+                131
+              ],
+              "input_ready_ns": 78906,
+              "mandatory_gate_ns": 90996,
+              "compute_issue_ns": 90996,
+              "actual_compute_start_ns": 90996,
+              "compute_done_ns": 91396,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 12090,
+              "original_result_ns": 91696,
+              "winner": {
+                "attempt": "original.r65",
+                "time_ns": 91696
+              },
+              "required_original_consumer_node": 16,
+              "merge_node": 20,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            }
+          ],
+          "original_graph_retired_ns": 103804
+        }
+      ],
+      "gates": [
+        {
+          "graph_id": "g0.w0",
+          "id": "L0.combine",
+          "released_ns": 97850,
+          "last_members": [
+            {
+              "rank": 36,
+              "gate_node": 8,
+              "last_predecessors": [
+                {
+                  "rank": 36,
+                  "node": 7,
+                  "name": "L0.combine.36-64.send",
+                  "kind": "SEND",
+                  "time_ns": 97850,
+                  "message": 5197,
+                  "src": 36,
+                  "dst": 64,
+                  "bytes": 576,
+                  "actual_ack_ns": 97850,
+                  "actual_receive_ns": 91844
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "graph_id": "g0.w0",
+          "id": "L0.dispatch",
+          "released_ns": 85060,
+          "last_members": [
+            {
+              "rank": 0,
+              "gate_node": 5,
+              "last_predecessors": [
+                {
+                  "rank": 0,
+                  "node": 3,
+                  "name": "L0.dispatch.0-6.send",
+                  "kind": "SEND",
+                  "time_ns": 85060,
+                  "message": 2,
+                  "src": 0,
+                  "dst": 6,
+                  "bytes": 640,
+                  "actual_ack_ns": 85060,
+                  "actual_receive_ns": 83058
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "graph_id": "g0.w0",
+          "id": "L1.combine",
+          "released_ns": 123804,
+          "last_members": [
+            {
+              "rank": 44,
+              "gate_node": 15,
+              "last_predecessors": [
+                {
+                  "rank": 44,
+                  "node": 14,
+                  "name": "L1.combine.44-64.send",
+                  "kind": "SEND",
+                  "time_ns": 123804,
+                  "message": 13513,
+                  "src": 44,
+                  "dst": 64,
+                  "bytes": 576,
+                  "actual_ack_ns": 123804,
+                  "actual_receive_ns": 117798
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "graph_id": "g0.w0",
+          "id": "L1.dispatch",
+          "released_ns": 111014,
+          "last_members": [
+            {
+              "rank": 64,
+              "gate_node": 16,
+              "last_predecessors": [
+                {
+                  "rank": 64,
+                  "node": 15,
+                  "name": "L1.dispatch.64-44.send",
+                  "kind": "SEND",
+                  "time_ns": 111014,
+                  "message": 10102,
+                  "src": 64,
+                  "dst": 44,
+                  "bytes": 640,
+                  "actual_ack_ns": 111014,
+                  "actual_receive_ns": 105008
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "graph_id": "g0.w1",
+          "id": "L0.combine",
+          "released_ns": 149770,
+          "last_members": [
+            {
+              "rank": 40,
+              "gate_node": 8,
+              "last_predecessors": [
+                {
+                  "rank": 40,
+                  "node": 7,
+                  "name": "L0.combine.40-64.send",
+                  "kind": "SEND",
+                  "time_ns": 149770,
+                  "message": 37579,
+                  "src": 40,
+                  "dst": 64,
+                  "bytes": 576,
+                  "actual_ack_ns": 149770,
+                  "actual_receive_ns": 143764
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "graph_id": "g0.w1",
+          "id": "L0.dispatch",
+          "released_ns": 136968,
+          "last_members": [
+            {
+              "rank": 64,
+              "gate_node": 5,
+              "last_predecessors": [
+                {
+                  "rank": 64,
+                  "node": 4,
+                  "name": "L0.dispatch.64-42.send",
+                  "kind": "SEND",
+                  "time_ns": 136968,
+                  "message": 34293,
+                  "src": 64,
+                  "dst": 42,
+                  "bytes": 640,
+                  "actual_ack_ns": 136968,
+                  "actual_receive_ns": 130962
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "graph_id": "g0.w1",
+          "id": "L1.combine",
+          "released_ns": 175748,
+          "last_members": [
+            {
+              "rank": 50,
+              "gate_node": 15,
+              "last_predecessors": [
+                {
+                  "rank": 50,
+                  "node": 14,
+                  "name": "L1.combine.50-64.send",
+                  "kind": "SEND",
+                  "time_ns": 175748,
+                  "message": 45958,
+                  "src": 50,
+                  "dst": 64,
+                  "bytes": 576,
+                  "actual_ack_ns": 175748,
+                  "actual_receive_ns": 169742
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "graph_id": "g0.w1",
+          "id": "L1.dispatch",
+          "released_ns": 162934,
+          "last_members": [
+            {
+              "rank": 64,
+              "gate_node": 16,
+              "last_predecessors": [
+                {
+                  "rank": 64,
+                  "node": 15,
+                  "name": "L1.dispatch.64-50.send",
+                  "kind": "SEND",
+                  "time_ns": 162934,
+                  "message": 42361,
+                  "src": 64,
+                  "dst": 50,
+                  "bytes": 640,
+                  "actual_ack_ns": 162934,
+                  "actual_receive_ns": 156928
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "graph_id": "g1.w0",
+          "id": "L0.combine",
+          "released_ns": 25938,
+          "last_members": [
+            {
+              "rank": 51,
+              "gate_node": 8,
+              "last_predecessors": [
+                {
+                  "rank": 51,
+                  "node": 7,
+                  "name": "L0.combine.51-65.send",
+                  "kind": "SEND",
+                  "time_ns": 25938,
+                  "message": 21766,
+                  "src": 51,
+                  "dst": 65,
+                  "bytes": 576,
+                  "actual_ack_ns": 25938,
+                  "actual_receive_ns": 19932
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "graph_id": "g1.w0",
+          "id": "L0.dispatch",
+          "released_ns": 13148,
+          "last_members": [
+            {
+              "rank": 65,
+              "gate_node": 5,
+              "last_predecessors": [
+                {
+                  "rank": 65,
+                  "node": 4,
+                  "name": "L0.dispatch.65-51.send",
+                  "kind": "SEND",
+                  "time_ns": 13148,
+                  "message": 18169,
+                  "src": 65,
+                  "dst": 51,
+                  "bytes": 640,
+                  "actual_ack_ns": 13148,
+                  "actual_receive_ns": 7142
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "graph_id": "g1.w0",
+          "id": "L1.combine",
+          "released_ns": 51892,
+          "last_members": [
+            {
+              "rank": 59,
+              "gate_node": 15,
+              "last_predecessors": [
+                {
+                  "rank": 59,
+                  "node": 14,
+                  "name": "L1.combine.59-65.send",
+                  "kind": "SEND",
+                  "time_ns": 51892,
+                  "message": 30082,
+                  "src": 59,
+                  "dst": 65,
+                  "bytes": 576,
+                  "actual_ack_ns": 51892,
+                  "actual_receive_ns": 45886
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "graph_id": "g1.w0",
+          "id": "L1.dispatch",
+          "released_ns": 39102,
+          "last_members": [
+            {
+              "rank": 65,
+              "gate_node": 16,
+              "last_predecessors": [
+                {
+                  "rank": 65,
+                  "node": 15,
+                  "name": "L1.dispatch.65-59.send",
+                  "kind": "SEND",
+                  "time_ns": 39102,
+                  "message": 26237,
+                  "src": 65,
+                  "dst": 59,
+                  "bytes": 640,
+                  "actual_ack_ns": 39102,
+                  "actual_receive_ns": 33096
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "graph_id": "g1.w1",
+          "id": "L0.combine",
+          "released_ns": 77846,
+          "last_members": [
+            {
+              "rank": 57,
+              "gate_node": 8,
+              "last_predecessors": [
+                {
+                  "rank": 57,
+                  "node": 7,
+                  "name": "L0.combine.57-65.send",
+                  "kind": "SEND",
+                  "time_ns": 77846,
+                  "message": 54211,
+                  "src": 57,
+                  "dst": 65,
+                  "bytes": 576,
+                  "actual_ack_ns": 77846,
+                  "actual_receive_ns": 71840
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "graph_id": "g1.w1",
+          "id": "L0.dispatch",
+          "released_ns": 65056,
+          "last_members": [
+            {
+              "rank": 65,
+              "gate_node": 5,
+              "last_predecessors": [
+                {
+                  "rank": 65,
+                  "node": 4,
+                  "name": "L0.dispatch.65-57.send",
+                  "kind": "SEND",
+                  "time_ns": 65056,
+                  "message": 50428,
+                  "src": 65,
+                  "dst": 57,
+                  "bytes": 640,
+                  "actual_ack_ns": 65056,
+                  "actual_receive_ns": 59050
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "graph_id": "g1.w1",
+          "id": "L1.combine",
+          "released_ns": 103774,
+          "last_members": [
+            {
+              "rank": 63,
+              "gate_node": 15,
+              "last_predecessors": [
+                {
+                  "rank": 63,
+                  "node": 14,
+                  "name": "L1.combine.63-65.send",
+                  "kind": "SEND",
+                  "time_ns": 103774,
+                  "message": 62464,
+                  "src": 63,
+                  "dst": 65,
+                  "bytes": 576,
+                  "actual_ack_ns": 103774,
+                  "actual_receive_ns": 97768
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "graph_id": "g1.w1",
+          "id": "L1.dispatch",
+          "released_ns": 90996,
+          "last_members": [
+            {
+              "rank": 65,
+              "gate_node": 15,
+              "last_predecessors": [
+                {
+                  "rank": 65,
+                  "node": 14,
+                  "name": "L1.dispatch.65-63.send",
+                  "kind": "SEND",
+                  "time_ns": 90996,
+                  "message": 58495,
+                  "src": 65,
+                  "dst": 63,
+                  "bytes": 640,
+                  "actual_ack_ns": 90996,
+                  "actual_receive_ns": 84990
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "helpers": [],
+      "call_count": 16,
+      "bundle_count": 32,
+      "original_expert_queue_ns_max": 0,
+      "original_expert_queue_nonzero_bundles": 0,
+      "input_to_gate_ns_histogram": [
+        {
+          "ns": 2002,
+          "count": 1
+        },
+        {
+          "ns": 6006,
+          "count": 7
+        },
+        {
+          "ns": 6020,
+          "count": 6
+        },
+        {
+          "ns": 8034,
+          "count": 5
+        },
+        {
+          "ns": 8048,
+          "count": 6
+        },
+        {
+          "ns": 8062,
+          "count": 1
+        },
+        {
+          "ns": 10048,
+          "count": 1
+        },
+        {
+          "ns": 10062,
+          "count": 1
+        },
+        {
+          "ns": 12090,
+          "count": 1
+        },
+        {
+          "ns": 77932,
+          "count": 1
+        },
+        {
+          "ns": 77946,
+          "count": 1
+        },
+        {
+          "ns": 79960,
+          "count": 1
+        }
+      ],
+      "application_finished_ns": 175778,
+      "network_drained_ns": 175778,
+      "source_hashes": {
+        "input.json": "f3a85af1f438046d4fe74e7e13bc17ccd7aa6fe49cf07847a0ac8eca7cbec583",
+        "result.json": "998ac6391686edeabe0abe270e50430eba9825a467e5e3cfb9865e1647501d13",
+        "frontend.json": "5a31df760cf4ed004737870e65d5ccd36e326f04749be44f8c2b4b78f61a64ce",
+        "execution_events.jsonl": "73b061f976572e48fdcef562c66a36834abe016ec35495eef82929f905ee4973",
+        "contribution_calls.jsonl": "a373af97f504d6c16f02df74d8313a66d70fd280384930048a5b6cdffa26fec8"
+      },
+      "scope": "actual callbacks and declared graph dependencies; input-to-gate intervals are not removable business time"
+    },
+    "helper": {
+      "gpu_endpoints": 128,
+      "independent_requests": 4,
+      "groups": [
+        64,
+        64
+      ],
+      "calls": [
+        {
+          "call": "g0.w0.l0.r0.s0",
+          "graph_id": "g0.w0",
+          "layer": 0,
+          "source": 0,
+          "logical_complete_ns": 89808,
+          "bundles": [
+            {
+              "id": "r6",
+              "rank": 6,
+              "experts": [
+                12,
+                13,
+                14,
+                15
+              ],
+              "input_ready_ns": 83058,
+              "mandatory_gate_ns": 85060,
+              "compute_issue_ns": 85060,
+              "actual_compute_start_ns": 85060,
+              "compute_done_ns": 85460,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 2002,
+              "original_result_ns": 87784,
+              "winner": {
+                "attempt": "helper.r6",
+                "time_ns": 25782
+              },
+              "required_original_consumer_node": 8,
+              "merge_node": 11,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            },
+            {
+              "id": "r8",
+              "rank": 8,
+              "experts": [
+                16,
+                17,
+                18,
+                19
+              ],
+              "input_ready_ns": 5100,
+              "mandatory_gate_ns": 85060,
+              "compute_issue_ns": 85060,
+              "actual_compute_start_ns": 85060,
+              "compute_done_ns": 85460,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 79960,
+              "original_result_ns": 89808,
+              "winner": {
+                "attempt": "original.r8",
+                "time_ns": 89808
+              },
+              "required_original_consumer_node": 9,
+              "merge_node": 11,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            }
+          ],
+          "original_graph_retired_ns": 123834
+        },
+        {
+          "call": "g0.w0.l0.r64.s0",
+          "graph_id": "g0.w0",
+          "layer": 0,
+          "source": 64,
+          "logical_complete_ns": 91844,
+          "bundles": [
+            {
+              "id": "r34",
+              "rank": 34,
+              "experts": [
+                68,
+                69,
+                70,
+                71
+              ],
+              "input_ready_ns": 7114,
+              "mandatory_gate_ns": 85060,
+              "compute_issue_ns": 85060,
+              "actual_compute_start_ns": 85060,
+              "compute_done_ns": 85460,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 77946,
+              "original_result_ns": 91832,
+              "winner": {
+                "attempt": "original.r34",
+                "time_ns": 91832
+              },
+              "required_original_consumer_node": 8,
+              "merge_node": 11,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            },
+            {
+              "id": "r36",
+              "rank": 36,
+              "experts": [
+                72,
+                73,
+                74,
+                75
+              ],
+              "input_ready_ns": 7128,
+              "mandatory_gate_ns": 85060,
+              "compute_issue_ns": 85060,
+              "actual_compute_start_ns": 85060,
+              "compute_done_ns": 85460,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 77932,
+              "original_result_ns": 91844,
+              "winner": {
+                "attempt": "original.r36",
+                "time_ns": 91844
+              },
+              "required_original_consumer_node": 9,
+              "merge_node": 11,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            }
+          ],
+          "original_graph_retired_ns": 123834
+        },
+        {
+          "call": "g0.w0.l1.r0.s0",
+          "graph_id": "g0.w0",
+          "layer": 1,
+          "source": 0,
+          "logical_complete_ns": 115774,
+          "bundles": [
+            {
+              "id": "r14",
+              "rank": 14,
+              "experts": [
+                28,
+                29,
+                30,
+                31
+              ],
+              "input_ready_ns": 102966,
+              "mandatory_gate_ns": 111014,
+              "compute_issue_ns": 111014,
+              "actual_compute_start_ns": 111014,
+              "compute_done_ns": 111414,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 8048,
+              "original_result_ns": 115762,
+              "winner": {
+                "attempt": "original.r14",
+                "time_ns": 115762
+              },
+              "required_original_consumer_node": 19,
+              "merge_node": 22,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            },
+            {
+              "id": "r16",
+              "rank": 16,
+              "experts": [
+                32,
+                33,
+                34,
+                35
+              ],
+              "input_ready_ns": 102980,
+              "mandatory_gate_ns": 111014,
+              "compute_issue_ns": 111014,
+              "actual_compute_start_ns": 111014,
+              "compute_done_ns": 111414,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 8034,
+              "original_result_ns": 115774,
+              "winner": {
+                "attempt": "original.r16",
+                "time_ns": 115774
+              },
+              "required_original_consumer_node": 20,
+              "merge_node": 22,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            }
+          ],
+          "original_graph_retired_ns": 123834
+        },
+        {
+          "call": "g0.w0.l1.r64.s0",
+          "graph_id": "g0.w0",
+          "layer": 1,
+          "source": 64,
+          "logical_complete_ns": 117798,
+          "bundles": [
+            {
+              "id": "r42",
+              "rank": 42,
+              "experts": [
+                84,
+                85,
+                86,
+                87
+              ],
+              "input_ready_ns": 104994,
+              "mandatory_gate_ns": 111014,
+              "compute_issue_ns": 111014,
+              "actual_compute_start_ns": 111014,
+              "compute_done_ns": 111414,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 6020,
+              "original_result_ns": 117786,
+              "winner": {
+                "attempt": "original.r42",
+                "time_ns": 117786
+              },
+              "required_original_consumer_node": 19,
+              "merge_node": 22,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            },
+            {
+              "id": "r44",
+              "rank": 44,
+              "experts": [
+                88,
+                89,
+                90,
+                91
+              ],
+              "input_ready_ns": 105008,
+              "mandatory_gate_ns": 111014,
+              "compute_issue_ns": 111014,
+              "actual_compute_start_ns": 111014,
+              "compute_done_ns": 111414,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 6006,
+              "original_result_ns": 117798,
+              "winner": {
+                "attempt": "original.r44",
+                "time_ns": 117798
+              },
+              "required_original_consumer_node": 20,
+              "merge_node": 22,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            }
+          ],
+          "original_graph_retired_ns": 123834
+        },
+        {
+          "call": "g0.w1.l0.r0.s0",
+          "graph_id": "g0.w1",
+          "layer": 0,
+          "source": 0,
+          "logical_complete_ns": 141728,
+          "bundles": [
+            {
+              "id": "r12",
+              "rank": 12,
+              "experts": [
+                24,
+                25,
+                26,
+                27
+              ],
+              "input_ready_ns": 128920,
+              "mandatory_gate_ns": 136968,
+              "compute_issue_ns": 136968,
+              "actual_compute_start_ns": 136968,
+              "compute_done_ns": 137368,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 8048,
+              "original_result_ns": 141716,
+              "winner": {
+                "attempt": "original.r12",
+                "time_ns": 141716
+              },
+              "required_original_consumer_node": 8,
+              "merge_node": 11,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            },
+            {
+              "id": "r14",
+              "rank": 14,
+              "experts": [
+                28,
+                29,
+                30,
+                31
+              ],
+              "input_ready_ns": 128934,
+              "mandatory_gate_ns": 136968,
+              "compute_issue_ns": 136968,
+              "actual_compute_start_ns": 136968,
+              "compute_done_ns": 137368,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 8034,
+              "original_result_ns": 141728,
+              "winner": {
+                "attempt": "original.r14",
+                "time_ns": 141728
+              },
+              "required_original_consumer_node": 9,
+              "merge_node": 11,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            }
+          ],
+          "original_graph_retired_ns": 175778
+        },
+        {
+          "call": "g0.w1.l0.r64.s0",
+          "graph_id": "g0.w1",
+          "layer": 0,
+          "source": 64,
+          "logical_complete_ns": 143764,
+          "bundles": [
+            {
+              "id": "r40",
+              "rank": 40,
+              "experts": [
+                80,
+                81,
+                82,
+                83
+              ],
+              "input_ready_ns": 130948,
+              "mandatory_gate_ns": 136968,
+              "compute_issue_ns": 136968,
+              "actual_compute_start_ns": 136968,
+              "compute_done_ns": 137368,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 6020,
+              "original_result_ns": 143764,
+              "winner": {
+                "attempt": "original.r40",
+                "time_ns": 143764
+              },
+              "required_original_consumer_node": 8,
+              "merge_node": 11,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            },
+            {
+              "id": "r42",
+              "rank": 42,
+              "experts": [
+                84,
+                85,
+                86,
+                87
+              ],
+              "input_ready_ns": 130962,
+              "mandatory_gate_ns": 136968,
+              "compute_issue_ns": 136968,
+              "actual_compute_start_ns": 136968,
+              "compute_done_ns": 137368,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 6006,
+              "original_result_ns": 143752,
+              "winner": {
+                "attempt": "original.r42",
+                "time_ns": 143752
+              },
+              "required_original_consumer_node": 9,
+              "merge_node": 11,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            }
+          ],
+          "original_graph_retired_ns": 175778
+        },
+        {
+          "call": "g0.w1.l1.r0.s0",
+          "graph_id": "g0.w1",
+          "layer": 1,
+          "source": 0,
+          "logical_complete_ns": 167694,
+          "bundles": [
+            {
+              "id": "r20",
+              "rank": 20,
+              "experts": [
+                40,
+                41,
+                42,
+                43
+              ],
+              "input_ready_ns": 154886,
+              "mandatory_gate_ns": 162934,
+              "compute_issue_ns": 162934,
+              "actual_compute_start_ns": 162934,
+              "compute_done_ns": 163334,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 8048,
+              "original_result_ns": 167682,
+              "winner": {
+                "attempt": "original.r20",
+                "time_ns": 167682
+              },
+              "required_original_consumer_node": 19,
+              "merge_node": 22,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            },
+            {
+              "id": "r22",
+              "rank": 22,
+              "experts": [
+                44,
+                45,
+                46,
+                47
+              ],
+              "input_ready_ns": 154900,
+              "mandatory_gate_ns": 162934,
+              "compute_issue_ns": 162934,
+              "actual_compute_start_ns": 162934,
+              "compute_done_ns": 163334,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 8034,
+              "original_result_ns": 167694,
+              "winner": {
+                "attempt": "original.r22",
+                "time_ns": 167694
+              },
+              "required_original_consumer_node": 20,
+              "merge_node": 22,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            }
+          ],
+          "original_graph_retired_ns": 175778
+        },
+        {
+          "call": "g0.w1.l1.r64.s0",
+          "graph_id": "g0.w1",
+          "layer": 1,
+          "source": 64,
+          "logical_complete_ns": 169742,
+          "bundles": [
+            {
+              "id": "r48",
+              "rank": 48,
+              "experts": [
+                96,
+                97,
+                98,
+                99
+              ],
+              "input_ready_ns": 156914,
+              "mandatory_gate_ns": 162934,
+              "compute_issue_ns": 162934,
+              "actual_compute_start_ns": 162934,
+              "compute_done_ns": 163334,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 6020,
+              "original_result_ns": 169730,
+              "winner": {
+                "attempt": "original.r48",
+                "time_ns": 169730
+              },
+              "required_original_consumer_node": 19,
+              "merge_node": 22,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            },
+            {
+              "id": "r50",
+              "rank": 50,
+              "experts": [
+                100,
+                101,
+                102,
+                103
+              ],
+              "input_ready_ns": 156928,
+              "mandatory_gate_ns": 162934,
+              "compute_issue_ns": 162934,
+              "actual_compute_start_ns": 162934,
+              "compute_done_ns": 163334,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 6006,
+              "original_result_ns": 169742,
+              "winner": {
+                "attempt": "original.r50",
+                "time_ns": 169742
+              },
+              "required_original_consumer_node": 20,
+              "merge_node": 22,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            }
+          ],
+          "original_graph_retired_ns": 175778
+        },
+        {
+          "call": "g1.w0.l0.r1.s0",
+          "graph_id": "g1.w0",
+          "layer": 0,
+          "source": 1,
+          "logical_complete_ns": 17908,
+          "bundles": [
+            {
+              "id": "r21",
+              "rank": 21,
+              "experts": [
+                40,
+                41,
+                42,
+                43
+              ],
+              "input_ready_ns": 5086,
+              "mandatory_gate_ns": 13148,
+              "compute_issue_ns": 13148,
+              "actual_compute_start_ns": 13148,
+              "compute_done_ns": 13548,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 8062,
+              "original_result_ns": 17896,
+              "winner": {
+                "attempt": "original.r21",
+                "time_ns": 17896
+              },
+              "required_original_consumer_node": 8,
+              "merge_node": 11,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            },
+            {
+              "id": "r23",
+              "rank": 23,
+              "experts": [
+                44,
+                45,
+                46,
+                47
+              ],
+              "input_ready_ns": 5100,
+              "mandatory_gate_ns": 13148,
+              "compute_issue_ns": 13148,
+              "actual_compute_start_ns": 13148,
+              "compute_done_ns": 13548,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 8048,
+              "original_result_ns": 17908,
+              "winner": {
+                "attempt": "original.r23",
+                "time_ns": 17908
+              },
+              "required_original_consumer_node": 9,
+              "merge_node": 11,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            }
+          ],
+          "original_graph_retired_ns": 51922
+        },
+        {
+          "call": "g1.w0.l0.r65.s0",
+          "graph_id": "g1.w0",
+          "layer": 0,
+          "source": 65,
+          "logical_complete_ns": 19932,
+          "bundles": [
+            {
+              "id": "r49",
+              "rank": 49,
+              "experts": [
+                96,
+                97,
+                98,
+                99
+              ],
+              "input_ready_ns": 7128,
+              "mandatory_gate_ns": 13148,
+              "compute_issue_ns": 13148,
+              "actual_compute_start_ns": 13148,
+              "compute_done_ns": 13548,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 6020,
+              "original_result_ns": 19920,
+              "winner": {
+                "attempt": "original.r49",
+                "time_ns": 19920
+              },
+              "required_original_consumer_node": 8,
+              "merge_node": 11,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            },
+            {
+              "id": "r51",
+              "rank": 51,
+              "experts": [
+                100,
+                101,
+                102,
+                103
+              ],
+              "input_ready_ns": 7142,
+              "mandatory_gate_ns": 13148,
+              "compute_issue_ns": 13148,
+              "actual_compute_start_ns": 13148,
+              "compute_done_ns": 13548,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 6006,
+              "original_result_ns": 19932,
+              "winner": {
+                "attempt": "original.r51",
+                "time_ns": 19932
+              },
+              "required_original_consumer_node": 9,
+              "merge_node": 11,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            }
+          ],
+          "original_graph_retired_ns": 51922
+        },
+        {
+          "call": "g1.w0.l1.r1.s0",
+          "graph_id": "g1.w0",
+          "layer": 1,
+          "source": 1,
+          "logical_complete_ns": 43862,
+          "bundles": [
+            {
+              "id": "r29",
+              "rank": 29,
+              "experts": [
+                56,
+                57,
+                58,
+                59
+              ],
+              "input_ready_ns": 31054,
+              "mandatory_gate_ns": 39102,
+              "compute_issue_ns": 39102,
+              "actual_compute_start_ns": 39102,
+              "compute_done_ns": 39502,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 8048,
+              "original_result_ns": 43850,
+              "winner": {
+                "attempt": "original.r29",
+                "time_ns": 43850
+              },
+              "required_original_consumer_node": 19,
+              "merge_node": 22,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            },
+            {
+              "id": "r31",
+              "rank": 31,
+              "experts": [
+                60,
+                61,
+                62,
+                63
+              ],
+              "input_ready_ns": 31068,
+              "mandatory_gate_ns": 39102,
+              "compute_issue_ns": 39102,
+              "actual_compute_start_ns": 39102,
+              "compute_done_ns": 39502,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 8034,
+              "original_result_ns": 43862,
+              "winner": {
+                "attempt": "original.r31",
+                "time_ns": 43862
+              },
+              "required_original_consumer_node": 20,
+              "merge_node": 22,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            }
+          ],
+          "original_graph_retired_ns": 51922
+        },
+        {
+          "call": "g1.w0.l1.r65.s0",
+          "graph_id": "g1.w0",
+          "layer": 1,
+          "source": 65,
+          "logical_complete_ns": 45886,
+          "bundles": [
+            {
+              "id": "r57",
+              "rank": 57,
+              "experts": [
+                112,
+                113,
+                114,
+                115
+              ],
+              "input_ready_ns": 33082,
+              "mandatory_gate_ns": 39102,
+              "compute_issue_ns": 39102,
+              "actual_compute_start_ns": 39102,
+              "compute_done_ns": 39502,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 6020,
+              "original_result_ns": 45874,
+              "winner": {
+                "attempt": "original.r57",
+                "time_ns": 45874
+              },
+              "required_original_consumer_node": 19,
+              "merge_node": 22,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            },
+            {
+              "id": "r59",
+              "rank": 59,
+              "experts": [
+                116,
+                117,
+                118,
+                119
+              ],
+              "input_ready_ns": 33096,
+              "mandatory_gate_ns": 39102,
+              "compute_issue_ns": 39102,
+              "actual_compute_start_ns": 39102,
+              "compute_done_ns": 39502,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 6006,
+              "original_result_ns": 45886,
+              "winner": {
+                "attempt": "original.r59",
+                "time_ns": 45886
+              },
+              "required_original_consumer_node": 20,
+              "merge_node": 22,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            }
+          ],
+          "original_graph_retired_ns": 51922
+        },
+        {
+          "call": "g1.w1.l0.r1.s0",
+          "graph_id": "g1.w1",
+          "layer": 0,
+          "source": 1,
+          "logical_complete_ns": 69816,
+          "bundles": [
+            {
+              "id": "r27",
+              "rank": 27,
+              "experts": [
+                52,
+                53,
+                54,
+                55
+              ],
+              "input_ready_ns": 57008,
+              "mandatory_gate_ns": 65056,
+              "compute_issue_ns": 65056,
+              "actual_compute_start_ns": 65056,
+              "compute_done_ns": 65456,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 8048,
+              "original_result_ns": 69804,
+              "winner": {
+                "attempt": "original.r27",
+                "time_ns": 69804
+              },
+              "required_original_consumer_node": 8,
+              "merge_node": 11,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            },
+            {
+              "id": "r29",
+              "rank": 29,
+              "experts": [
+                56,
+                57,
+                58,
+                59
+              ],
+              "input_ready_ns": 57022,
+              "mandatory_gate_ns": 65056,
+              "compute_issue_ns": 65056,
+              "actual_compute_start_ns": 65056,
+              "compute_done_ns": 65456,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 8034,
+              "original_result_ns": 69816,
+              "winner": {
+                "attempt": "original.r29",
+                "time_ns": 69816
+              },
+              "required_original_consumer_node": 9,
+              "merge_node": 11,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            }
+          ],
+          "original_graph_retired_ns": 103804
+        },
+        {
+          "call": "g1.w1.l0.r65.s0",
+          "graph_id": "g1.w1",
+          "layer": 0,
+          "source": 65,
+          "logical_complete_ns": 71840,
+          "bundles": [
+            {
+              "id": "r55",
+              "rank": 55,
+              "experts": [
+                108,
+                109,
+                110,
+                111
+              ],
+              "input_ready_ns": 59036,
+              "mandatory_gate_ns": 65056,
+              "compute_issue_ns": 65056,
+              "actual_compute_start_ns": 65056,
+              "compute_done_ns": 65456,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 6020,
+              "original_result_ns": 71828,
+              "winner": {
+                "attempt": "original.r55",
+                "time_ns": 71828
+              },
+              "required_original_consumer_node": 8,
+              "merge_node": 11,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            },
+            {
+              "id": "r57",
+              "rank": 57,
+              "experts": [
+                112,
+                113,
+                114,
+                115
+              ],
+              "input_ready_ns": 59050,
+              "mandatory_gate_ns": 65056,
+              "compute_issue_ns": 65056,
+              "actual_compute_start_ns": 65056,
+              "compute_done_ns": 65456,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 6006,
+              "original_result_ns": 71840,
+              "winner": {
+                "attempt": "original.r57",
+                "time_ns": 71840
+              },
+              "required_original_consumer_node": 9,
+              "merge_node": 11,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            }
+          ],
+          "original_graph_retired_ns": 103804
+        },
+        {
+          "call": "g1.w1.l1.r1.s0",
+          "graph_id": "g1.w1",
+          "layer": 1,
+          "source": 1,
+          "logical_complete_ns": 93732,
+          "bundles": [
+            {
+              "id": "r35",
+              "rank": 35,
+              "experts": [
+                68,
+                69,
+                70,
+                71
+              ],
+              "input_ready_ns": 80934,
+              "mandatory_gate_ns": 90996,
+              "compute_issue_ns": 90996,
+              "actual_compute_start_ns": 90996,
+              "compute_done_ns": 91396,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 10062,
+              "original_result_ns": 93720,
+              "winner": {
+                "attempt": "original.r35",
+                "time_ns": 93720
+              },
+              "required_original_consumer_node": 19,
+              "merge_node": 22,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            },
+            {
+              "id": "r37",
+              "rank": 37,
+              "experts": [
+                72,
+                73,
+                74,
+                75
+              ],
+              "input_ready_ns": 80948,
+              "mandatory_gate_ns": 90996,
+              "compute_issue_ns": 90996,
+              "actual_compute_start_ns": 90996,
+              "compute_done_ns": 91396,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 10048,
+              "original_result_ns": 93732,
+              "winner": {
+                "attempt": "original.r37",
+                "time_ns": 93732
+              },
+              "required_original_consumer_node": 20,
+              "merge_node": 22,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            }
+          ],
+          "original_graph_retired_ns": 103804
+        },
+        {
+          "call": "g1.w1.l1.r65.s0",
+          "graph_id": "g1.w1",
+          "layer": 1,
+          "source": 65,
+          "logical_complete_ns": 97768,
+          "bundles": [
+            {
+              "id": "r63",
+              "rank": 63,
+              "experts": [
+                124,
+                125,
+                126,
+                127
+              ],
+              "input_ready_ns": 84990,
+              "mandatory_gate_ns": 90996,
+              "compute_issue_ns": 90996,
+              "actual_compute_start_ns": 90996,
+              "compute_done_ns": 91396,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 6006,
+              "original_result_ns": 97768,
+              "winner": {
+                "attempt": "original.r63",
+                "time_ns": 97768
+              },
+              "required_original_consumer_node": 18,
+              "merge_node": 20,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            },
+            {
+              "id": "r65",
+              "rank": 65,
+              "experts": [
+                128,
+                129,
+                130,
+                131
+              ],
+              "input_ready_ns": 78906,
+              "mandatory_gate_ns": 90996,
+              "compute_issue_ns": 90996,
+              "actual_compute_start_ns": 90996,
+              "compute_done_ns": 91396,
+              "declared_compute_ns": 400,
+              "queue_ns": 0,
+              "input_to_gate_ns": 12090,
+              "original_result_ns": 91696,
+              "winner": {
+                "attempt": "original.r65",
+                "time_ns": 91696
+              },
+              "required_original_consumer_node": 16,
+              "merge_node": 20,
+              "original_result_still_in_graph": true,
+              "alternative_result_node_in_graph": false
+            }
+          ],
+          "original_graph_retired_ns": 103804
+        }
+      ],
+      "gates": [
+        {
+          "graph_id": "g0.w0",
+          "id": "L0.combine",
+          "released_ns": 97850,
+          "last_members": [
+            {
+              "rank": 36,
+              "gate_node": 8,
+              "last_predecessors": [
+                {
+                  "rank": 36,
+                  "node": 7,
+                  "name": "L0.combine.36-64.send",
+                  "kind": "SEND",
+                  "time_ns": 97850,
+                  "message": 5197,
+                  "src": 36,
+                  "dst": 64,
+                  "bytes": 576,
+                  "actual_ack_ns": 97850,
+                  "actual_receive_ns": 91844
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "graph_id": "g0.w0",
+          "id": "L0.dispatch",
+          "released_ns": 85060,
+          "last_members": [
+            {
+              "rank": 0,
+              "gate_node": 5,
+              "last_predecessors": [
+                {
+                  "rank": 0,
+                  "node": 3,
+                  "name": "L0.dispatch.0-6.send",
+                  "kind": "SEND",
+                  "time_ns": 85060,
+                  "message": 2,
+                  "src": 0,
+                  "dst": 6,
+                  "bytes": 640,
+                  "actual_ack_ns": 85060,
+                  "actual_receive_ns": 83058
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "graph_id": "g0.w0",
+          "id": "L1.combine",
+          "released_ns": 123804,
+          "last_members": [
+            {
+              "rank": 44,
+              "gate_node": 15,
+              "last_predecessors": [
+                {
+                  "rank": 44,
+                  "node": 14,
+                  "name": "L1.combine.44-64.send",
+                  "kind": "SEND",
+                  "time_ns": 123804,
+                  "message": 13513,
+                  "src": 44,
+                  "dst": 64,
+                  "bytes": 576,
+                  "actual_ack_ns": 123804,
+                  "actual_receive_ns": 117798
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "graph_id": "g0.w0",
+          "id": "L1.dispatch",
+          "released_ns": 111014,
+          "last_members": [
+            {
+              "rank": 64,
+              "gate_node": 16,
+              "last_predecessors": [
+                {
+                  "rank": 64,
+                  "node": 15,
+                  "name": "L1.dispatch.64-44.send",
+                  "kind": "SEND",
+                  "time_ns": 111014,
+                  "message": 10102,
+                  "src": 64,
+                  "dst": 44,
+                  "bytes": 640,
+                  "actual_ack_ns": 111014,
+                  "actual_receive_ns": 105008
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "graph_id": "g0.w1",
+          "id": "L0.combine",
+          "released_ns": 149770,
+          "last_members": [
+            {
+              "rank": 40,
+              "gate_node": 8,
+              "last_predecessors": [
+                {
+                  "rank": 40,
+                  "node": 7,
+                  "name": "L0.combine.40-64.send",
+                  "kind": "SEND",
+                  "time_ns": 149770,
+                  "message": 37579,
+                  "src": 40,
+                  "dst": 64,
+                  "bytes": 576,
+                  "actual_ack_ns": 149770,
+                  "actual_receive_ns": 143764
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "graph_id": "g0.w1",
+          "id": "L0.dispatch",
+          "released_ns": 136968,
+          "last_members": [
+            {
+              "rank": 64,
+              "gate_node": 5,
+              "last_predecessors": [
+                {
+                  "rank": 64,
+                  "node": 4,
+                  "name": "L0.dispatch.64-42.send",
+                  "kind": "SEND",
+                  "time_ns": 136968,
+                  "message": 34293,
+                  "src": 64,
+                  "dst": 42,
+                  "bytes": 640,
+                  "actual_ack_ns": 136968,
+                  "actual_receive_ns": 130962
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "graph_id": "g0.w1",
+          "id": "L1.combine",
+          "released_ns": 175748,
+          "last_members": [
+            {
+              "rank": 50,
+              "gate_node": 15,
+              "last_predecessors": [
+                {
+                  "rank": 50,
+                  "node": 14,
+                  "name": "L1.combine.50-64.send",
+                  "kind": "SEND",
+                  "time_ns": 175748,
+                  "message": 45958,
+                  "src": 50,
+                  "dst": 64,
+                  "bytes": 576,
+                  "actual_ack_ns": 175748,
+                  "actual_receive_ns": 169742
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "graph_id": "g0.w1",
+          "id": "L1.dispatch",
+          "released_ns": 162934,
+          "last_members": [
+            {
+              "rank": 64,
+              "gate_node": 16,
+              "last_predecessors": [
+                {
+                  "rank": 64,
+                  "node": 15,
+                  "name": "L1.dispatch.64-50.send",
+                  "kind": "SEND",
+                  "time_ns": 162934,
+                  "message": 42361,
+                  "src": 64,
+                  "dst": 50,
+                  "bytes": 640,
+                  "actual_ack_ns": 162934,
+                  "actual_receive_ns": 156928
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "graph_id": "g1.w0",
+          "id": "L0.combine",
+          "released_ns": 25938,
+          "last_members": [
+            {
+              "rank": 51,
+              "gate_node": 8,
+              "last_predecessors": [
+                {
+                  "rank": 51,
+                  "node": 7,
+                  "name": "L0.combine.51-65.send",
+                  "kind": "SEND",
+                  "time_ns": 25938,
+                  "message": 21766,
+                  "src": 51,
+                  "dst": 65,
+                  "bytes": 576,
+                  "actual_ack_ns": 25938,
+                  "actual_receive_ns": 19932
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "graph_id": "g1.w0",
+          "id": "L0.dispatch",
+          "released_ns": 13148,
+          "last_members": [
+            {
+              "rank": 65,
+              "gate_node": 5,
+              "last_predecessors": [
+                {
+                  "rank": 65,
+                  "node": 4,
+                  "name": "L0.dispatch.65-51.send",
+                  "kind": "SEND",
+                  "time_ns": 13148,
+                  "message": 18169,
+                  "src": 65,
+                  "dst": 51,
+                  "bytes": 640,
+                  "actual_ack_ns": 13148,
+                  "actual_receive_ns": 7142
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "graph_id": "g1.w0",
+          "id": "L1.combine",
+          "released_ns": 51892,
+          "last_members": [
+            {
+              "rank": 59,
+              "gate_node": 15,
+              "last_predecessors": [
+                {
+                  "rank": 59,
+                  "node": 14,
+                  "name": "L1.combine.59-65.send",
+                  "kind": "SEND",
+                  "time_ns": 51892,
+                  "message": 30082,
+                  "src": 59,
+                  "dst": 65,
+                  "bytes": 576,
+                  "actual_ack_ns": 51892,
+                  "actual_receive_ns": 45886
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "graph_id": "g1.w0",
+          "id": "L1.dispatch",
+          "released_ns": 39102,
+          "last_members": [
+            {
+              "rank": 65,
+              "gate_node": 16,
+              "last_predecessors": [
+                {
+                  "rank": 65,
+                  "node": 15,
+                  "name": "L1.dispatch.65-59.send",
+                  "kind": "SEND",
+                  "time_ns": 39102,
+                  "message": 26237,
+                  "src": 65,
+                  "dst": 59,
+                  "bytes": 640,
+                  "actual_ack_ns": 39102,
+                  "actual_receive_ns": 33096
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "graph_id": "g1.w1",
+          "id": "L0.combine",
+          "released_ns": 77846,
+          "last_members": [
+            {
+              "rank": 57,
+              "gate_node": 8,
+              "last_predecessors": [
+                {
+                  "rank": 57,
+                  "node": 7,
+                  "name": "L0.combine.57-65.send",
+                  "kind": "SEND",
+                  "time_ns": 77846,
+                  "message": 54211,
+                  "src": 57,
+                  "dst": 65,
+                  "bytes": 576,
+                  "actual_ack_ns": 77846,
+                  "actual_receive_ns": 71840
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "graph_id": "g1.w1",
+          "id": "L0.dispatch",
+          "released_ns": 65056,
+          "last_members": [
+            {
+              "rank": 65,
+              "gate_node": 5,
+              "last_predecessors": [
+                {
+                  "rank": 65,
+                  "node": 4,
+                  "name": "L0.dispatch.65-57.send",
+                  "kind": "SEND",
+                  "time_ns": 65056,
+                  "message": 50428,
+                  "src": 65,
+                  "dst": 57,
+                  "bytes": 640,
+                  "actual_ack_ns": 65056,
+                  "actual_receive_ns": 59050
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "graph_id": "g1.w1",
+          "id": "L1.combine",
+          "released_ns": 103774,
+          "last_members": [
+            {
+              "rank": 63,
+              "gate_node": 15,
+              "last_predecessors": [
+                {
+                  "rank": 63,
+                  "node": 14,
+                  "name": "L1.combine.63-65.send",
+                  "kind": "SEND",
+                  "time_ns": 103774,
+                  "message": 62464,
+                  "src": 63,
+                  "dst": 65,
+                  "bytes": 576,
+                  "actual_ack_ns": 103774,
+                  "actual_receive_ns": 97768
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "graph_id": "g1.w1",
+          "id": "L1.dispatch",
+          "released_ns": 90996,
+          "last_members": [
+            {
+              "rank": 65,
+              "gate_node": 15,
+              "last_predecessors": [
+                {
+                  "rank": 65,
+                  "node": 14,
+                  "name": "L1.dispatch.65-63.send",
+                  "kind": "SEND",
+                  "time_ns": 90996,
+                  "message": 58495,
+                  "src": 65,
+                  "dst": 63,
+                  "bytes": 640,
+                  "actual_ack_ns": 90996,
+                  "actual_receive_ns": 84990
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "helpers": [
+        {
+          "id": "g0.w0.l0.r0.s0.r6.h7",
+          "call": "g0.w0.l0.r0.s0",
+          "bundle": "r6",
+          "result_ns": 25782,
+          "original_result_ns": 87784,
+          "contribution_lead_ns": 62002,
+          "call_logical_complete_ns": 89808,
+          "remaining_bundles": [
+            "r8"
+          ],
+          "direct_original_graph_substitution": false,
+          "changed_communication_completion_contract": false
+        }
+      ],
+      "call_count": 16,
+      "bundle_count": 32,
+      "original_expert_queue_ns_max": 0,
+      "original_expert_queue_nonzero_bundles": 0,
+      "input_to_gate_ns_histogram": [
+        {
+          "ns": 2002,
+          "count": 1
+        },
+        {
+          "ns": 6006,
+          "count": 7
+        },
+        {
+          "ns": 6020,
+          "count": 6
+        },
+        {
+          "ns": 8034,
+          "count": 5
+        },
+        {
+          "ns": 8048,
+          "count": 6
+        },
+        {
+          "ns": 8062,
+          "count": 1
+        },
+        {
+          "ns": 10048,
+          "count": 1
+        },
+        {
+          "ns": 10062,
+          "count": 1
+        },
+        {
+          "ns": 12090,
+          "count": 1
+        },
+        {
+          "ns": 77932,
+          "count": 1
+        },
+        {
+          "ns": 77946,
+          "count": 1
+        },
+        {
+          "ns": 79960,
+          "count": 1
+        }
+      ],
+      "application_finished_ns": 175778,
+      "network_drained_ns": 175778,
+      "source_hashes": {
+        "input.json": "4403978df996190722d6ae22190123169df00bb04d9cbd5301a6c7d59447b5c0",
+        "result.json": "7d74abb523b09ec24b359d7009fbdd50f137ae6f6dcb26ab57e0d6ddea1caf6a",
+        "frontend.json": "e4baf8095bbfef244a45c96490ec5f3298cbd361bccf10f51384772b65b4f8b1",
+        "execution_events.jsonl": "73b061f976572e48fdcef562c66a36834abe016ec35495eef82929f905ee4973",
+        "contribution_calls.jsonl": "5ff1a0aa4edf0dc93543cadb33b0f54eb360134ebe1615522bfaaa5fd35ef3cc"
+      },
+      "scope": "actual callbacks and declared graph dependencies; input-to-gate intervals are not removable business time"
+    }
+  },
+  "changed_calls": [],
+  "application_gain_ns": 0,
+  "findings": {
+    "result_alternative_not_connected_to_original_consumers": true,
+    "async_return_does_not_establish_tensor_readiness": true,
+    "deleting_original_flush_gate_is_not_valid_for_this_contract": true,
+    "original_compute_begin_currently_means_ASTRA_issue": true,
+    "physical_compute_start_source": "service.shared_compute.tasks.start_ns",
+    "general_optimal_recovery_gain_proven": false
+  }
+}

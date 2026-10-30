@@ -2,13 +2,17 @@
 
 ## 2026-10-30 备用贡献的准入时刻与收益约束
 
-状态：`in_progress`。上一目标轮为progress：实际共享资源备用路径、三个128端点Clos对照及负面结果已发布至`ff55b84ff3`，应用恢复仍未完成。本轮复核固定DeepEP direct的完成接口，明确异步返回与可消费输出的区别；从既有真实执行记录追踪全部调用的组门限、最后到达成员和结果消费依赖，不通过删除必要门限制造收益。
+状态：`completed`（本轮准入校验修复与完成约束诊断；应用恢复及整体研究仍active）。上一目标轮为progress，共享资源备用执行及零业务收益已发布至`ff55b84ff3`。本轮平台修复固定于`8b32e07276`：accepted必须等于选择候选的同步COMMIT时刻，input_post必须同刻；均在贡献状态修改前检查，拒绝回填和无声明延后。
 
-审查发现HelperObserver虽然检查事件单调及同步回复，尚未把accepted时刻与对应HELPER_COMMIT同刻绑定，可能接受回填或延后准入记录。先补最小反例和严格检查，再离线复验上一轮原件；不重跑成功网络，不将这个记录校验修复当作研究创新。进一步交付独立分析程序与报告，将单贡献、整token、原图完成、网络排空四种结果分列，并给出下一种执行方案的准入条件。
+先保留失败反例，再通过85项相关单元检查（新增2）。旧三组128端点Clos及迁移的公开离线检查通过，3类双流同步时间篡改被新规则拒绝，全部原件SHA保持。没有改变原生执行或已有完成时间；不将该记录校验修复当作研究创新。[平台范围](../../fixtures/helper_admission_time/README.md)、[核验](../../fixtures/helper_admission_time/verification.json)、[收据](../../fixtures/helper_admission_time/receipt.json)。
 
-预算：根`runs/recovery_semantics_20261030`累计600受监控秒/新增256MiB，保留8GiB；CPU每项120秒/RSS1GiB/地址2GiB。零新网络、编译、GPU、依赖修改/构建、下载与安装；128端点Clos只读取上轮冻结正常/故障/备用原件。固定来源只读本机已有源码与SHA清单，不推广至所有DeepEP版本或其他通信库。失败保留，不扩限或自动重试；平台修复与分析分别保存，按已有授权仅发布用户分支。
+复核固定DeepEP direct `f6aa38fe06cd`的Dispatch/Combine结束屏障、GIN flush与信号等待、Python异步返回及EventOverlap等五份源码，SHA-256/Git blob身份通过，保存45行短摘录。异步返回不等于输出可消费，不能删原屏障制造收益；结论不推广至所有库/版本。对既有正常/故障/备用三组各16调用/32包、16门限逐一核查限制成员和实际原Combine消费依赖；全部调用到齐时间无变化，仍仅一个贡献提前62.002us，应用收益0%。这是原依赖定义直接推出并由执行核对的事实，不当作新机制或DeepEP缺陷。
 
-平台准入时刻修复已通过：先复现回填/延后准入和延后input_post反例，再通过85项相关单元检查（新增2）。旧三组128端点Clos和迁移的公开离线检查通过，3类双流同步时间篡改被新规则拒绝，全部原件SHA保持；零新网络或编译。源码接口复核和全部调用的收益约束分析正在收尾，应用恢复仍未完成。
+分析独立于平台/测试驱动，读取公开图、回调与报告。可迁移的五文件固定源码清单入口已实际检查；重建相等及漏原接收依赖、提前门限、helper混原图、源码SHA变化四类分析拒绝通过。零新网络、编译、下载、依赖修改或GPU。交付[独立分析与复现](../../experiments/recovery_completion_limits/README.md)、[网页](../../experiments/recovery_completion_limits/results/20261030/report.html)、[全部调用](../../experiments/recovery_completion_limits/results/20261030/analysis.json)、[源码依据](../../experiments/recovery_completion_limits/results/20261030/sources.json)、[资源收据](../../experiments/recovery_completion_limits/results/20261030/receipt.json)。
+
+另明确待修的观测差异：原贡献compute_begin目前取ASTRA issue，在共享队列下是提交而非物理开始；实际开始应读取shared_compute.tasks.start_ns。三组全部原专家队列等待为0，已有结论不受影响，但未来竞争用例前须接入统一实际开始事件，不能称该问题已修复。下一步还须在真实通信完成约束下实现完整调用重执行强基线，或为分块/贡献消费提供实际接口/内核依据、一次归并与迟到写入隔离，再验证收益；不继续只增加单贡献备用来维持正收益预期。
+
+预算：根`runs/recovery_semantics_20261030`累计600受监控秒/新增256MiB，保留8GiB；CPU每项120秒/RSS1GiB/地址2GiB。零新网络/编译/GPU/依赖修改或下载；只读取上轮冻结128端点Clos原件。初始反例失败保留，未扩限；平台修复与研究分析分别保存，按已有授权仅发布用户分支。
 
 ## 2026-10-30 在线备用执行与共享物理资源
 

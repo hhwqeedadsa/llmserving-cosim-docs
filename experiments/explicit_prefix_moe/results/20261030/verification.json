@@ -1,0 +1,82 @@
+{
+  "passed": true,
+  "new_Clos128_networks": 4,
+  "reused_conditions": 5,
+  "per_case": {
+    "normal": {
+      "physical_hops": 15476,
+      "messages": 778,
+      "queue_rows": 24542,
+      "graph_files": 264,
+      "actual_source_ACK_witnesses": 778,
+      "encapsulation_wire_bytes": 0
+    },
+    "global-w20": {
+      "physical_hops": 15562,
+      "messages": 778,
+      "queue_rows": 24604,
+      "graph_files": 264,
+      "actual_source_ACK_witnesses": 778,
+      "encapsulation_wire_bytes": 0
+    },
+    "local-w20": {
+      "physical_hops": 15411,
+      "messages": 778,
+      "queue_rows": 24388,
+      "graph_files": 264,
+      "actual_source_ACK_witnesses": 778,
+      "encapsulation_wire_bytes": 0
+    },
+    "instant-w20": {
+      "physical_hops": 15237,
+      "messages": 778,
+      "queue_rows": 24140,
+      "graph_files": 264,
+      "actual_source_ACK_witnesses": 778,
+      "encapsulation_wire_bytes": 0
+    },
+    "global-w60": {
+      "physical_hops": 15838,
+      "messages": 778,
+      "queue_rows": 24938,
+      "graph_files": 264,
+      "actual_source_ACK_witnesses": 778,
+      "encapsulation_wire_bytes": 0
+    },
+    "local-w60": {
+      "physical_hops": 16005,
+      "messages": 778,
+      "queue_rows": 25292,
+      "graph_files": 264,
+      "actual_source_ACK_witnesses": 778,
+      "encapsulation_wire_bytes": 0
+    },
+    "instant-w60": {
+      "physical_hops": 15335,
+      "messages": 778,
+      "queue_rows": 24304,
+      "graph_files": 264,
+      "actual_source_ACK_witnesses": 778,
+      "encapsulation_wire_bytes": 0
+    },
+    "prefix-w20": {
+      "physical_hops": 15281,
+      "messages": 778,
+      "queue_rows": 24242,
+      "graph_files": 264,
+      "actual_source_ACK_witnesses": 778,
+      "encapsulation_wire_bytes": 2356
+    },
+    "prefix-w60": {
+      "physical_hops": 15747,
+      "messages": 778,
+      "queue_rows": 25050,
+      "graph_files": 264,
+      "actual_source_ACK_witnesses": 778,
+      "encapsulation_wire_bytes": 6536
+    }
+  },
+  "analysis_sha256": "a7662cde799f22320436bc88db7165a750c6304b279457767b8c19c33c0439ff",
+  "verifier_sha256": "2ba7226242f7a9238a37799f1fe7900332abbcfb7fd154ac2b7d0e0a6fd9ca5d",
+  "coverage": "all physical protocols, size and serialization; repair DATA/ACK/CNP hops; source DATA and ACK identity; no unobserved CNP ECMP hash claim"
+}

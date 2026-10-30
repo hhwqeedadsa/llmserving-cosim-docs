@@ -1,0 +1,29 @@
+{
+  "passed": true,
+  "unique_RX_increments_checked": 290,
+  "tamper_checks": [
+    "physical_RX_time",
+    "source_ACK_time",
+    "wire_encapsulation",
+    "source_payload"
+  ],
+  "static_HTML_links": 10,
+  "browser_rendering_verified": false,
+  "verifier_sha256": "a5537cd495e9fe8313dedfd9922b3dc53c0d5ffb1bcdc602772d6f1d6c25dba6",
+  "delivery_sha256": {
+    "analysis.json": "a7662cde799f22320436bc88db7165a750c6304b279457767b8c19c33c0439ff",
+    "verification.json": "6c3209cc170b74727fa015259d513b6670b17e717a79abd361b82dd4742fd526",
+    "mechanism.json": "3cb2ce74e6df29b33f190a8297ce76035ae9f6da3dc964e2e20a6bb53efc77d7",
+    "normal-compatible.json": "5a0b8c6b6d814a3e47f91830a6abdcc5100120ec845d81c1ba7b975ac34e64d2",
+    "local-w60-compatible.json": "4335b343c66c3d3cbbde2e3b72dd65172515eaf67351b21a2aa7c1b52566474b",
+    "comparison.png": "07cb8f333b7ebb4ef86485e39ea7266699a57161a4d9a58285b57c860fdc1c61",
+    "arrival_curves.png": "799fcb9f5a241a78e453e941c89f830d96d44e0fa96923e0d9a2deaa0e7fbc15",
+    "README.md": "66656b65312df3f1b224a59f0a2203dd4ea6ae4d37e0b4b16a2044fd3f6b9822",
+    "report.html": "f2862005a895da5c898b139a8053ac9ca88012a62063b2d935d013ebc535bc85",
+    "path_diagnosis.json": "8d65beaaeeb483cff07cb1092a41db2ef3bb78e1f41d2d146d12134e29e8b47c",
+    "diagnosis_explanation.md": "e102eb3ea09390dcaf0736d0e8ac8b622722ebda20f63373d8519c17660010df",
+    "postrun_sources.json": "3d2579655c4bff2c84be797048af23abad9732380644edccf821812f6a176cbf",
+    "delivery_verification-v1.json": "a18556bb616d7ef2639a63f9634b125911efab136402404f36ed85a975832e36",
+    "verification_revision.json": "4fd1d697d9d20b3f7bfbfaafc33f108740594f1a43c8eb8f93f960f12b3d5574"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "scope": "proof output location only; same independent raw/tamper/curve checks; zero network reruns",
+  "archived_failure": {
+    "file": "delivery_verification-v1.json",
+    "sha256": "a18556bb616d7ef2639a63f9634b125911efab136402404f36ed85a975832e36",
+    "error": "self hash computed while proof file was still empty; rejected by original closeout"
+  },
+  "wrapper_sha256": "01198baf14e58e469800441b1a2b57696bca4db445c84a8c98acb584dbc070c4",
+  "original_verifier_sha256": "a5537cd495e9fe8313dedfd9922b3dc53c0d5ffb1bcdc602772d6f1d6c25dba6"
+}

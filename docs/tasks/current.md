@@ -2,7 +2,15 @@
 
 ## 2026-10-30 真实MoE的显式绕路强基线
 
-状态：`in_progress`。上一目标轮为progress：`43a5dc08b8`交付实际显式修复段及六个128Clos功能验收。本轮按[独立研究方法](../../experiments/explicit_prefix_moe/README.md)，固定同一15真实选择/四EP32组/两层两步/17µs SR/20与60µs临时断链，新增normal、local-w60构建核对及两个prefix条件，各一次。旧七条件只读；先核验再冻结，比较实际源ACK、四组完成、其他组拖累、额外字节及排空，不预设创新或收益。根`runs/explicit_prefix_moe_20261030`预算1800秒/2GiB/留8GiB、每阶段120秒/RSS1GiB/地址2GiB；最多四新网络，零构建/下载/平台变更，方法先提交，只发布用户既有分支，整体目标active。
+状态：`completed`（真实MoE强基线对照已验收，整体目标仍active）。上一目标轮只解释normal/local，未改项目状态，分类no progress；本轮按[冻结方法](../../experiments/explicit_prefix_moe/README.md)完成四个新128Clos网络各一次，独立公开准备同一15真实选择/四EP32组/两层两步/17µs SR。normal与local-w60原始结果除库路径外与旧同条件一致，另复用五旧条件。交付[网页](../../experiments/explicit_prefix_moe/results/20261030/report.html)、[结果与复核](../../experiments/explicit_prefix_moe/RESULTS.md)、[逐包核验](../../experiments/explicit_prefix_moe/results/20261030/verification.json)及[资源身份](../../experiments/explicit_prefix_moe/results/20261030/receipt.json)。
+
+60µs中断时，成熟显式绕行使最晚任务244.806→157.628µs，提前35.61%，收回故障额外等待79.96%；20µs中断时重传少197,032B却晚1.322µs/0.90%。正常135.773µs，prefix-w60距正常21.855µs、距instant参考8.645µs，均不是已证明可消除收益。绕行不是创新；不预设同等收益推广到其他规模或生产硬件。
+
+事后逐包发现当前QP级计时器收到部分ACK会重启剩余缺口期限：消息4000尾段确实丢失，local-w20于18.030µs重试，prefix保住部分ACK后却等到29.124µs。保留原门限后首Dispatch只晚2.184µs，不把同消息差全当任务差。短故障最终组1差4.878µs=同消息ready晚4.560µs+末DATA驻留多0.318µs。长故障相对instant的组1最终差10.935µs=ready晚9.443µs+驻留多2.081µs−旧门限余量0.589µs；实际队列等待均由DATA占线覆盖，不归因于未经核实的重传。见[机制解释](../../experiments/explicit_prefix_moe/results/20261030/diagnosis_explanation.md)，事后脚本单独记录身份，没有修改平台、输入或重新跑网络。
+
+逐物理跳139,892次、源ACK7,002消息为九比较条件合计，全部图/来源/协议/QP/最终buffer核验通过；290个有效RX增量用独立bytearray重算，4类重算hash后的篡改仍被拒绝。PNG已查看，HTML仅静态资源检查。15监控阶段85.608秒、峰值组RSS509,054,976B，产物峰值443,994,112B；根预算1800秒/2GiB/留8GiB，各阶段120秒/RSS1GiB/地址2GiB。准备首次在监控启动前因模块路径遗漏失败，已保存并修正环境；未运行网络。首版交付收据含自身空文件hash，原收尾检查拒绝；保留旧收据及冻结原检查，改用目录外输出同一独立核验、写收据前计算快照，所有检查通过。无成功网络重跑、构建/安装/下载/依赖变更/GPU，只发布既有用户分支。
+
+下一步先核对目标RoCE设备与成熟基线的部分ACK/缺口计时，再检验基于MoE未完成贡献分配有限恢复机会能否带来独立增益；没有实现或承诺该策略。保持真实选择/声明计算/功能字节、非完整671B/现代DeepEP/128卡满载或硬件校准的边界，整体目标不完成。
 
 ## 2026-10-30 原生显式修复段执行
 

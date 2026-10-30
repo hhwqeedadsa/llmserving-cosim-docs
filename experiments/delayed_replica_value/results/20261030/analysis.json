@@ -1,0 +1,278 @@
+{
+  "passed": true,
+  "cases": {
+    "single_normal": {
+      "passed": true,
+      "simulated_endpoints": 128,
+      "active_data_ranks": 35,
+      "logical_requests": 4,
+      "inventory_requests": 4,
+      "execution_attempt_requests": 4,
+      "messages": 122,
+      "packet_events": 8070,
+      "result_ready_ns": 62506,
+      "attempts_finished_ns": 62506,
+      "network_drained_ns": 62506,
+      "unique_payload_bytes": 1760704,
+      "source_payload_bytes": 1760704,
+      "source_data_packets": 244,
+      "retransmit_payload_bytes": 0,
+      "declared_compute_work_ns": 15080,
+      "standby_memory": null,
+      "control_wakeup": null,
+      "fault_drops": 0,
+      "fault_window_arrivals": 0,
+      "phase_member_arrivals": 256,
+      "sha256": {
+        "input.json": "3ac4acc6b68fd8e477800af0e6301aefc09430ff16cdae416994e1d9da0d894e",
+        "topology.json": "5389993e9aa1dfc148b4713b0a2b0c0521de24b41b74060e2db7eb9f048c444f",
+        "rdma.json": "2e96b611d1985507bf3eda5816c1cd4595a0c120b4ef5b460ab74c1e0d20b3db",
+        "result.json": "791cd1f543c4b65869fc3e220f1662174b0fd1ac71be6714fcfd0a8e9ef182ac",
+        "frontend.json": "d17adb62977dcb2292c5b3e8dd109b91eae74473778cffca0210c2f05570db3a",
+        "verification.json": "0319156fbba982ed2cede4f2ddef891f28db3759177f50bdda0b635e14ac3cae"
+      }
+    },
+    "single_local": {
+      "passed": true,
+      "simulated_endpoints": 128,
+      "active_data_ranks": 35,
+      "logical_requests": 4,
+      "inventory_requests": 4,
+      "execution_attempt_requests": 4,
+      "messages": 122,
+      "packet_events": 8154,
+      "result_ready_ns": 136829,
+      "attempts_finished_ns": 136829,
+      "network_drained_ns": 136829,
+      "unique_payload_bytes": 1760704,
+      "source_payload_bytes": 1804096,
+      "source_data_packets": 250,
+      "retransmit_payload_bytes": 43392,
+      "declared_compute_work_ns": 15080,
+      "standby_memory": null,
+      "control_wakeup": null,
+      "fault_drops": 6,
+      "fault_window_arrivals": 6,
+      "phase_member_arrivals": 256,
+      "sha256": {
+        "input.json": "3ac4acc6b68fd8e477800af0e6301aefc09430ff16cdae416994e1d9da0d894e",
+        "topology.json": "5389993e9aa1dfc148b4713b0a2b0c0521de24b41b74060e2db7eb9f048c444f",
+        "rdma.json": "d92c3cab638c4baf7d1f5229ca9e7acc302149051cc36caccd8cd81402231f6e",
+        "result.json": "f4b23a6b5c61120dbd12f90f1f4331cb3ab123def97fa913973cee7cd00f8c1f",
+        "frontend.json": "67dba302df6af162573378661e3acfe7db62fc5110e0fe78641877018fc6a51b",
+        "verification.json": "31a43c66846e3f573d0adabe9dadbe9e5a6d3f9978fee7ac6f20aba8ad74aa6a"
+      }
+    },
+    "eager_normal": {
+      "passed": true,
+      "simulated_endpoints": 128,
+      "active_data_ranks": 70,
+      "logical_requests": 4,
+      "inventory_requests": 8,
+      "execution_attempt_requests": 8,
+      "messages": 244,
+      "packet_events": 16780,
+      "result_ready_ns": 67594,
+      "attempts_finished_ns": 68863,
+      "network_drained_ns": 117091,
+      "unique_payload_bytes": 3521408,
+      "source_payload_bytes": 3521408,
+      "source_data_packets": 488,
+      "retransmit_payload_bytes": 0,
+      "declared_compute_work_ns": 30160,
+      "standby_memory": null,
+      "control_wakeup": null,
+      "fault_drops": 0,
+      "fault_window_arrivals": 0,
+      "phase_member_arrivals": 512,
+      "sha256": {
+        "input.json": "fd2ae045e995fedee37e72c4ab9aefd126876ced110aaedf5fbef41c7c4dd181",
+        "topology.json": "5389993e9aa1dfc148b4713b0a2b0c0521de24b41b74060e2db7eb9f048c444f",
+        "rdma.json": "2e96b611d1985507bf3eda5816c1cd4595a0c120b4ef5b460ab74c1e0d20b3db",
+        "result.json": "c4f0e98e7816582c23079bb088413060f47d7593baa13bc475ed7170545a4fdb",
+        "frontend.json": "de45660bc9fe6dc1b38c0c3bd257012d10ac9bebdf29ea47353d0164bff80412",
+        "verification.json": "9b70665aeb0bfe0323c8e50ec3e547964a76629093ba5ca26c3e38a293bbbc7e"
+      }
+    },
+    "eager_local": {
+      "passed": true,
+      "simulated_endpoints": 128,
+      "active_data_ranks": 70,
+      "logical_requests": 4,
+      "inventory_requests": 8,
+      "execution_attempt_requests": 8,
+      "messages": 244,
+      "packet_events": 16434,
+      "result_ready_ns": 64659,
+      "attempts_finished_ns": 136829,
+      "network_drained_ns": 136829,
+      "unique_payload_bytes": 3521408,
+      "source_payload_bytes": 3564800,
+      "source_data_packets": 494,
+      "retransmit_payload_bytes": 43392,
+      "declared_compute_work_ns": 30160,
+      "standby_memory": null,
+      "control_wakeup": null,
+      "fault_drops": 6,
+      "fault_window_arrivals": 6,
+      "phase_member_arrivals": 512,
+      "sha256": {
+        "input.json": "fd2ae045e995fedee37e72c4ab9aefd126876ced110aaedf5fbef41c7c4dd181",
+        "topology.json": "5389993e9aa1dfc148b4713b0a2b0c0521de24b41b74060e2db7eb9f048c444f",
+        "rdma.json": "d92c3cab638c4baf7d1f5229ca9e7acc302149051cc36caccd8cd81402231f6e",
+        "result.json": "e47d489f12a7d7cca5336a4dfea3ece3d00591b729711085f7cd2379fb616115",
+        "frontend.json": "ccba86869f48add1edd9630c3126734d6705cfab3bb1d1ab81ade0e25c882048",
+        "verification.json": "70fbb090ededa3bf09ee4139e8b6f135a887765f1851a78a16e40b8eb7184751"
+      }
+    },
+    "delayed_normal": {
+      "passed": true,
+      "simulated_endpoints": 128,
+      "active_data_ranks": 35,
+      "logical_requests": 4,
+      "inventory_requests": 8,
+      "execution_attempt_requests": 4,
+      "messages": 122,
+      "packet_events": 8070,
+      "result_ready_ns": 62506,
+      "attempts_finished_ns": 62506,
+      "network_drained_ns": 62506,
+      "unique_payload_bytes": 1760704,
+      "source_payload_bytes": 1760704,
+      "source_data_packets": 244,
+      "retransmit_payload_bytes": 0,
+      "declared_compute_work_ns": 15080,
+      "standby_memory": {
+        "initial_reserved_bytes": 10092544,
+        "releases": [
+          {
+            "group_index": 1,
+            "time_ns": 62506,
+            "kind": "skipped_release",
+            "bytes": 10092544
+          }
+        ],
+        "final_used_bytes": 0
+      },
+      "control_wakeup": {
+        "events": [
+          {
+            "deadline_ns": 70000,
+            "kind": "armed",
+            "sequence": 0,
+            "ticket": 0,
+            "time_ns": 0
+          },
+          {
+            "deadline_ns": 70000,
+            "kind": "cancelled",
+            "sequence": 1,
+            "ticket": 0,
+            "time_ns": 62506
+          }
+        ],
+        "max_events": 4,
+        "pending_deadline_ns": null,
+        "schema_version": "moe-service-wakeup-report/1"
+      },
+      "fault_drops": 0,
+      "fault_window_arrivals": 0,
+      "phase_member_arrivals": 256,
+      "sha256": {
+        "input.json": "38684ef8071398786d6c597d016150e3e1585cd26d233da1ff9e513edde03f4f",
+        "topology.json": "5389993e9aa1dfc148b4713b0a2b0c0521de24b41b74060e2db7eb9f048c444f",
+        "rdma.json": "2e96b611d1985507bf3eda5816c1cd4595a0c120b4ef5b460ab74c1e0d20b3db",
+        "result.json": "c6d619b285b510763db6bda19bf55643b6362b9137eda625f991e9902d9a2064",
+        "frontend.json": "5e90f45c60add1c8190458d53d4fe1531e758604b2c4ae3d30dbd0078214e449",
+        "verification.json": "866c073675ba92021ff1c21cfcf0fed487c65781ef1ac664cf17ba167ba1120b"
+      }
+    },
+    "delayed_local": {
+      "passed": true,
+      "simulated_endpoints": 128,
+      "active_data_ranks": 70,
+      "logical_requests": 4,
+      "inventory_requests": 8,
+      "execution_attempt_requests": 8,
+      "messages": 244,
+      "packet_events": 16246,
+      "result_ready_ns": 133094,
+      "attempts_finished_ns": 137048,
+      "network_drained_ns": 137048,
+      "unique_payload_bytes": 3521408,
+      "source_payload_bytes": 3564800,
+      "source_data_packets": 494,
+      "retransmit_payload_bytes": 43392,
+      "declared_compute_work_ns": 30160,
+      "standby_memory": {
+        "initial_reserved_bytes": 10092544,
+        "releases": [
+          {
+            "group_index": 1,
+            "time_ns": 133094,
+            "kind": "executed_release",
+            "bytes": 10092544
+          }
+        ],
+        "final_used_bytes": 0
+      },
+      "control_wakeup": {
+        "events": [
+          {
+            "deadline_ns": 70000,
+            "kind": "armed",
+            "sequence": 0,
+            "ticket": 0,
+            "time_ns": 0
+          },
+          {
+            "deadline_ns": 70000,
+            "kind": "fired",
+            "sequence": 1,
+            "ticket": 0,
+            "time_ns": 70000
+          }
+        ],
+        "max_events": 4,
+        "pending_deadline_ns": null,
+        "schema_version": "moe-service-wakeup-report/1"
+      },
+      "fault_drops": 6,
+      "fault_window_arrivals": 6,
+      "phase_member_arrivals": 512,
+      "sha256": {
+        "input.json": "38684ef8071398786d6c597d016150e3e1585cd26d233da1ff9e513edde03f4f",
+        "topology.json": "5389993e9aa1dfc148b4713b0a2b0c0521de24b41b74060e2db7eb9f048c444f",
+        "rdma.json": "d92c3cab638c4baf7d1f5229ca9e7acc302149051cc36caccd8cd81402231f6e",
+        "result.json": "3892a4d80f53f6a0f194d11d9a9e668aa17880c1bc291640b10a6a6c79805398",
+        "frontend.json": "d23ed766aa682aeb7e4f49eb79efcc9860efef4090fb9d2ff12ae485672bb8ae",
+        "verification.json": "c398a178d11d4dc82ac4381042e858941d9787678736a0a772587d492b55cf82"
+      }
+    }
+  },
+  "effects": {
+    "normal_vs_single": {
+      "wait_change_ns": 0,
+      "wait_change_percent": 0.0
+    },
+    "normal_vs_eager": {
+      "wait_change_ns": -5088,
+      "wait_change_percent": -7.527295322070006
+    },
+    "local_vs_single": {
+      "wait_change_ns": -3735,
+      "wait_change_percent": -2.7296844967075695
+    },
+    "local_vs_eager": {
+      "wait_change_ns": 68435,
+      "wait_change_percent": 105.83986761317064
+    }
+  },
+  "normal_single_packets_exactly_equal": true,
+  "new_network_executions": 2,
+  "reused_network_executions": 4,
+  "hedge_after_ns": 70000,
+  "analyzer_sha256": "0e318a775ba319cbaf2f65e3502d24e061c3ff58079a75626d90726937972b0f",
+  "new_algorithm_benefit_proven": false,
+  "scope": "Four real routing files; two layers and one Decode step, declared compute and preexisting expert/ready-KV copies; no full request, calibration, throughput or economic claim"
+}

@@ -1,0 +1,495 @@
+{
+  "passed": true,
+  "network_executed": false,
+  "platform_commit": "69968efa171d5e4e41bdfda7119d0c0f43e55be0",
+  "hedge_after_ns": 70000,
+  "raw_source_identity": {
+    "schema_version": "moe-ub-route-manifest/1",
+    "source": {
+      "kind": "published_model_trace",
+      "dataset_id": "core12345/MoE_expert_selection_trace",
+      "dataset_revision": "27febb7b2d24169560a9f6f83d38eb53f94916cf",
+      "collector_model_id": "cognitivecomputations/DeepSeek-R1-AWQ",
+      "collector_model_revision": null,
+      "runtime_revision": null,
+      "precision": "awq_4bit",
+      "usage_terms": "Files downloaded by the user from the published dataset and supplied locally for analysis. No access terms accepted or credentials used by the agent; original dataset citation/access conditions apply; license not independently verified.",
+      "source_url": "https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/tree/27febb7b2d24169560a9f6f83d38eb53f94916cf",
+      "unknown_fields": [
+        "collector_model_revision",
+        "runtime_revision",
+        "license",
+        "collector_hardware",
+        "activation_dtype",
+        "request_eos_reason"
+      ]
+    },
+    "model": {
+      "name": "deepseek-ai/DeepSeek-R1",
+      "hidden_dim": 7168,
+      "num_layers": 61,
+      "routing_precision": "awq_4bit"
+    },
+    "layers": [
+      {
+        "layer_id": 0,
+        "kind": "dense",
+        "num_experts": 0,
+        "top_k": 0
+      },
+      {
+        "layer_id": 1,
+        "kind": "dense",
+        "num_experts": 0,
+        "top_k": 0
+      },
+      {
+        "layer_id": 2,
+        "kind": "dense",
+        "num_experts": 0,
+        "top_k": 0
+      },
+      {
+        "layer_id": 3,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 4,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 5,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 6,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 7,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 8,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 9,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 10,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 11,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 12,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 13,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 14,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 15,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 16,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 17,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 18,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 19,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 20,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 21,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 22,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 23,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 24,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 25,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 26,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 27,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 28,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 29,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 30,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 31,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 32,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 33,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 34,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 35,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 36,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 37,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 38,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 39,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 40,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 41,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 42,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 43,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 44,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 45,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 46,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 47,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 48,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 49,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 50,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 51,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 52,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 53,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 54,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 55,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 56,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 57,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 58,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 59,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      },
+      {
+        "layer_id": 60,
+        "kind": "moe",
+        "num_experts": 256,
+        "top_k": 8
+      }
+    ],
+    "files": [
+      {
+        "file_id": "local-1472",
+        "original_path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/computer_security/1472.json",
+        "file": {
+          "sha256": "3085c39e9b9950a7e68f30eed8517eaecbfe3d0ad75d813925ff788a1c164255"
+        },
+        "format": "token_layer_map_v1"
+      },
+      {
+        "file_id": "local-1808",
+        "original_path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/econometrics/1808.json",
+        "file": {
+          "sha256": "c8c9cf4917498a2195960dbd9c65e9efe027af6606db098d40b0db8f7c266092"
+        },
+        "format": "token_layer_map_v1"
+      },
+      {
+        "file_id": "local-2675",
+        "original_path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/high_school_biology/2675.json",
+        "file": {
+          "sha256": "848633cf8afa1c9247d9cdaf5968bb09a5f2e2d409387f4a333ce7a6e35390cd"
+        },
+        "format": "token_layer_map_v1"
+      },
+      {
+        "file_id": "local-6447",
+        "original_path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/international_law/6447.json",
+        "file": {
+          "sha256": "265c8e66cfb49da12be0d8037cd7a8be6997f4207bcb0a48ca3c616bbe253b96"
+        },
+        "format": "token_layer_map_v1"
+      }
+    ]
+  },
+  "references": {
+    "single_normal": {
+      "directory": "/home/lry/moe-ub-cosim/runs/whole_control_20261030/normal",
+      "sha256": {
+        "input.json": "3ac4acc6b68fd8e477800af0e6301aefc09430ff16cdae416994e1d9da0d894e",
+        "topology.json": "5389993e9aa1dfc148b4713b0a2b0c0521de24b41b74060e2db7eb9f048c444f",
+        "rdma.json": "2e96b611d1985507bf3eda5816c1cd4595a0c120b4ef5b460ab74c1e0d20b3db",
+        "frontend.json": "d17adb62977dcb2292c5b3e8dd109b91eae74473778cffca0210c2f05570db3a",
+        "result.json": "791cd1f543c4b65869fc3e220f1662174b0fd1ac71be6714fcfd0a8e9ef182ac",
+        "verification.json": "0319156fbba982ed2cede4f2ddef891f28db3759177f50bdda0b635e14ac3cae"
+      }
+    },
+    "single_local": {
+      "directory": "/home/lry/moe-ub-cosim/runs/whole_control_20261030/local",
+      "sha256": {
+        "input.json": "3ac4acc6b68fd8e477800af0e6301aefc09430ff16cdae416994e1d9da0d894e",
+        "topology.json": "5389993e9aa1dfc148b4713b0a2b0c0521de24b41b74060e2db7eb9f048c444f",
+        "rdma.json": "d92c3cab638c4baf7d1f5229ca9e7acc302149051cc36caccd8cd81402231f6e",
+        "frontend.json": "67dba302df6af162573378661e3acfe7db62fc5110e0fe78641877018fc6a51b",
+        "result.json": "f4b23a6b5c61120dbd12f90f1f4331cb3ab123def97fa913973cee7cd00f8c1f",
+        "verification.json": "31a43c66846e3f573d0adabe9dadbe9e5a6d3f9978fee7ac6f20aba8ad74aa6a"
+      }
+    },
+    "eager_normal": {
+      "directory": "/home/lry/moe-ub-cosim/runs/whole_call_20261030/normal",
+      "sha256": {
+        "input.json": "fd2ae045e995fedee37e72c4ab9aefd126876ced110aaedf5fbef41c7c4dd181",
+        "topology.json": "5389993e9aa1dfc148b4713b0a2b0c0521de24b41b74060e2db7eb9f048c444f",
+        "rdma.json": "2e96b611d1985507bf3eda5816c1cd4595a0c120b4ef5b460ab74c1e0d20b3db",
+        "frontend.json": "de45660bc9fe6dc1b38c0c3bd257012d10ac9bebdf29ea47353d0164bff80412",
+        "result.json": "c4f0e98e7816582c23079bb088413060f47d7593baa13bc475ed7170545a4fdb",
+        "verification.json": "9b70665aeb0bfe0323c8e50ec3e547964a76629093ba5ca26c3e38a293bbbc7e"
+      }
+    },
+    "eager_local": {
+      "directory": "/home/lry/moe-ub-cosim/runs/whole_call_20261030/local",
+      "sha256": {
+        "input.json": "fd2ae045e995fedee37e72c4ab9aefd126876ced110aaedf5fbef41c7c4dd181",
+        "topology.json": "5389993e9aa1dfc148b4713b0a2b0c0521de24b41b74060e2db7eb9f048c444f",
+        "rdma.json": "d92c3cab638c4baf7d1f5229ca9e7acc302149051cc36caccd8cd81402231f6e",
+        "frontend.json": "ccba86869f48add1edd9630c3126734d6705cfab3bb1d1ab81ade0e25c882048",
+        "result.json": "e47d489f12a7d7cca5336a4dfea3ece3d00591b729711085f7cd2379fb616115",
+        "verification.json": "70fbb090ededa3bf09ee4139e8b6f135a887765f1851a78a16e40b8eb7184751"
+      }
+    }
+  },
+  "backend": {
+    "path": "/home/lry/moe-ub-cosim/runs/delayed_whole_20261030/build/ns3.42-moe-rdma-service",
+    "sha256": "6d9680165ba06a7d1e8e15fd166ba2a28babba7902fbb7d761d3d6afafdf01a3"
+  },
+  "prepared": "/home/lry/moe-ub-cosim/runs/delayed_whole_20261030/input",
+  "prepared_sha256": {
+    "service-delayed.json": "d795c12d8a8b48d7fb4a18b2d3309d73fd8b4b88bc71ce25478ef08e1e249bf3",
+    "rdma.json": "2e96b611d1985507bf3eda5816c1cd4595a0c120b4ef5b460ab74c1e0d20b3db",
+    "rdma-whole-local.json": "d92c3cab638c4baf7d1f5229ca9e7acc302149051cc36caccd8cd81402231f6e",
+    "topology/topology.json": "5389993e9aa1dfc148b4713b0a2b0c0521de24b41b74060e2db7eb9f048c444f"
+  },
+  "method_sha256": "2cdb707dd79fb4390827da83a666ee426afa0ef5fff307a6e3e511c53253befc",
+  "preparer_sha256": "df042933bf9e6cec7829760b69082b2ae17e011cba3fb7f552d1fb1229ad8916"
+}

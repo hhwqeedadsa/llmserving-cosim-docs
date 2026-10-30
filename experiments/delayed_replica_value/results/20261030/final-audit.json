@@ -1,0 +1,40 @@
+{
+  "passed": true,
+  "local_html_resources_checked": [
+    "figures/latency-comparison.png",
+    "figures/dispatch-arrivals.png",
+    "analysis.json",
+    "frozen.json"
+  ],
+  "figures_visually_inspected": [
+    "figures/latency-comparison.png",
+    "figures/dispatch-arrivals.png"
+  ],
+  "browser_rendered": false,
+  "primary_packet_capture_exact_match_normal": true,
+  "normal_replica_never_started": true,
+  "local_replica_native_start_ns": 70000,
+  "standby_initial_KV_bytes": 10092544,
+  "new_algorithm_benefit_proven": false,
+  "overall_goal_complete": false,
+  "artifact_sha256": {
+    "analysis.json": "af75e9e47fc15eeb7b6986138bc14b4a3e0ece60a8f69d3c615b4211ad4e6689",
+    "frozen.json": "73fbf1b0e89238742f584e33578ffafb50790a53c33594c8343ca145d4fc0c7e",
+    "report.html": "50bc277ff238632b26e2414ed05c7a0983cb3e25a6fa3781f7ca686067771d2a",
+    "README.md": "bd484278e74fb855d96bcea230b9ed4194bade658dea714442a4a1a81e3411b9",
+    "receipt.json": "9b296b77b58815c6fc93f6cb374c6f0a97189fd61f8accef2b43de71a4794c3b",
+    "resources.json": "ed5249fa435a78ae50be3c9bda5c69d15c8f8d62fd8cfe7ce35e64a8fc4fb09f",
+    "figures/latency-comparison.png": "790ac3666fce2e74ab3736dcce2c9acd76f63acf89f0e4378a34e417ec31b9f6",
+    "figures/latency-comparison.svg": "e4d45121d8fde7c44302f1be213fdf42768cac1f486a673fbb5f9a3b39dd45e5",
+    "figures/dispatch-arrivals.png": "8f3678df1d1724fb2f9fb68b5ae3aef242295c59dc68bea362481aaa20cbe8e3",
+    "figures/dispatch-arrivals.svg": "723eb1aeb8b3ab83f55ab8a721e29aa4447ad28fd8e491faa9fff85260822295",
+    "figures/slice-summaries.json": "da7cb5830e8ccd13d6c155942628ba8a2b7fe22ffb58c7877f8abd33bc178436",
+    "figures/single-primary/arrival_curve.csv": "540df1986f7fb3eb529d970b4c4182cb9d45343a8e1129abdf1833a0824f2bf8",
+    "figures/single-primary/summary.json": "c8ad293638c4de7f58aadb54c4f6e3092205e091e1a342a5a942d6a0c35aba8f",
+    "figures/delayed-primary/arrival_curve.csv": "eac1232ff5eed92d491ceb371653b8dae7305851825dab578c1a28772bfb66ae",
+    "figures/delayed-primary/summary.json": "d934040cd0781ef90a6e729d0f4a1302a9785447b87a965a574d7346b70ebb73",
+    "figures/delayed-replica/arrival_curve.csv": "1c5fb5bdf61f341ce2263f743cddd08826bc12e50d0153dd5adeb98b6a7d23fc",
+    "figures/delayed-replica/summary.json": "19d01899c2d9162e65c6d935d7744a1fa15f883af333515ed2fddd2bc943f449"
+  },
+  "all_execution_monitors_terminal": true
+}

@@ -1,0 +1,19 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>固定70微秒延迟副本对照</title><style>body{font:17px/1.7 system-ui;max-width:1150px;margin:40px auto;padding:0 24px;background:#f5f7fb;color:#182238}h1,h2{line-height:1.3}table{border-collapse:collapse;width:100%;background:white}th,td{padding:12px;border:1px solid #ccd5e3;text-align:right}th:first-child,td:first-child{text-align:left}.card{padding:20px;background:white;border-radius:12px;margin:20px 0}.small{font-size:14px;color:#48566b}</style>
+    <h1>延迟启动副本，究竟换来了什么</h1><p>在同一128端点Clos上补齐成熟对照：先等正常任务；70微秒仍未完成，才启动完整备用。</p>
+    <div class="card"><h2>先看结果</h2><p>正常时延迟副本结果62.506微秒，与无副本相比变化+0.000微秒；原始逐包记录完全一致，备用没有执行，但它的模型和KV已预留。</p>
+    <p>局部故障时结果133.094微秒，相对无副本节省3.735微秒（2.73%）。正收益表示这次成熟备用更早提供了结果；这不是新算法贡献。</p></div>
+    <h2>六组实际结果</h2><p class="small">时间均为微秒。结果就绪、最后尝试完成和网络排空分开；物理执行请求数包括已启动副本。</p>
+    <div style="overflow:auto"><table><tr><th>网络条件</th><th>策略</th><th>结果就绪</th><th>尝试完成</th><th>网络排空</th><th>实际请求执行数</th><th>有效通信字节</th><th>故障丢包</th></tr><tr><td>正常</td><td>无副本</td><td>62.506</td><td>62.506</td><td>62.506</td><td>4</td><td>1,760,704</td><td>0</td></tr><tr><td>正常</td><td>立即副本</td><td>67.594</td><td>68.863</td><td>117.091</td><td>8</td><td>3,521,408</td><td>0</td></tr><tr><td>正常</td><td>70微秒延迟副本</td><td>62.506</td><td>62.506</td><td>62.506</td><td>4</td><td>1,760,704</td><td>0</td></tr><tr><td>局部故障</td><td>无副本</td><td>136.829</td><td>136.829</td><td>136.829</td><td>4</td><td>1,760,704</td><td>6</td></tr><tr><td>局部故障</td><td>立即副本</td><td>64.659</td><td>136.829</td><td>136.829</td><td>8</td><td>3,521,408</td><td>6</td></tr><tr><td>局部故障</td><td>70微秒延迟副本</td><td>133.094</td><td>137.048</td><td>137.048</td><td>8</td><td>3,521,408</td><td>6</td></tr></table></div>
+    <h2>结果与收尾要分开看</h2><img style="max-width:100%;height:auto" src="figures/latency-comparison.png" alt="正常和局部故障下，三种策略的结果、收尾和网络排空时间">
+    <p class="small">彩条到结果就绪；深灰实线到全部实际尝试完成；浅灰点线到网络排空。上述时间均由实际事件核对。</p>
+    <h2>逐包看：最后10%的数据拖住了什么</h2><img style="max-width:100%;height:auto" src="figures/dispatch-arrivals.png" alt="原始层3 Dispatch累计有效数据到达曲线">
+    <p>原始层3的Dispatch共433,920字节、30条消息。原尝试约10微秒已收到90%，剩余10%受局部丢包恢复影响，到86.698微秒才收齐。延迟备用在70微秒启动，到80.270微秒收齐该阶段数据。</p>
+    <p>这只是一个通信阶段的数据接收，后面还有确认、专家计算、Combine及下一层。它不能直接当作整段推理完成；完整结果只提前3.735微秒。蓝色与橙色接收曲线重叠，但原尝试源确认从90.702变为90.921微秒，晚219纳秒；最后原尝试也晚219纳秒。此处记录到确认拖延，尚未用独立端口/负载对照证明其具体成因。</p>
+    <p class="small">曲线由完整逐包记录重建，仅表示本切片唯一有效字节已被传输接收端接受的累计量，不表示原始R1运行时抓包或GPU消费。CSV与summary随图保存。</p><h2>这次究竟仿真了什么</h2><p>16模拟服务器、8接入/8汇聚/4核心交换机，各层400Gbps、每链路1微秒，两组EP64，每rank每层4专家。4份真实R1-AWQ/MMLU专家选择，原始层3/4、一个Decode步；计算为声明成本。原始路由被投影为BF16通信，不是实机抓包。</p>
+    <p>normal不额外注入故障；local只在前20微秒丢弃发往GPU28的数据包，实际6包，ACK等控制保留。所有策略都启用选择性重传和参考DCQCN，全部原始计算、门限和ACK保留。</p>
+    <h2>系统实现与资源</h2><p>截止时间由原生ns-3定时事件产生，不拼接两次仿真。正常primary先完成后取消定时器，备用保持NOT_STARTED且不生成ITL；局部故障到70微秒才进入真实LLMServingSim调度队列。已启动尝试继续收尾。</p>
+    <p>两条件副本初始KV均预留10,092,544字节，正常在62.506微秒释放，故障在133.094微秒释放。结束占用0。KV是资源声明，未校验数值等价，也未模拟初态建立成本。</p>
+    <h2>收益之外付出了什么</h2><p>故障下仍执行双份通信和声明计算，而整体收尾由136.829增至137.048微秒。正常虽然没有重复执行，仍为备用预留10,092,544字节KV及完整专家部署。当前没有吞吐或容量机会成本测量，不能把少等3.735微秒直接解释成经济收益。</p><h2>对创新方向的约束</h2><p>立即副本用更多工作换取故障时快速结果；延迟副本避免本次正常重复执行，但付出启动等待。新的方法需要在这两类成熟对照之上，同时证明结果等待、后台干扰或容量收益，不能把普通重传或普通延迟副本写成创新。</p>
+    <p>后续可研究多任务共享上行时，备用启动如何影响健康任务，以及只靠在线可见确认进度能否减少错误启动。需要事前固定指标与负载，再做对照，当前尚未验证这些新方法。</p>
+    <p class="small">两份新网络各一次，四份旧结果只读复用；固定门槛未寻优。没有完整671B推理、GPU校准、数值验证、吞吐、生产故障概率或经济收益结论。<a href="analysis.json">完整分析JSON</a> · <a href="frozen.json">执行前冻结</a></p></html>

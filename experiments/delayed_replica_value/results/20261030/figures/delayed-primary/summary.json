@@ -1,0 +1,41 @@
+{
+  "schema_version": "moe-rdma-arrival-audit/2",
+  "transport_kind": "astra_persistent_streams/1",
+  "simulation_finished_ns": 137048,
+  "service_passed": true,
+  "capture_complete": true,
+  "gpu_count": 128,
+  "generated_graphs": 2,
+  "generated_graph_message_count": 244,
+  "submitted_message_count": 244,
+  "generated_graph_logical_bytes": 3521408,
+  "submitted_logical_bytes": 3521408,
+  "source_tx_payload_bytes": 3564800,
+  "destination_rx_payload_bytes": 3521408,
+  "accepted_bytes": 3521408,
+  "slice": {
+    "graph_id": "g0.w0",
+    "layer": 0,
+    "source_layer_id": 3,
+    "phase": "dispatch",
+    "src": null,
+    "dst": null,
+    "messages": 30,
+    "logical_bytes": 433920,
+    "tx_payload_bytes": 477312,
+    "unique_arrival_bytes": 433920,
+    "accepted_bytes": 433920,
+    "source_confirmed_bytes": 433920,
+    "complete": true,
+    "data_ready_ns": 86698,
+    "source_confirmed_ns": 90921
+  },
+  "semantics": {
+    "receiver": "selective_repeat/1",
+    "identity": "original packets identify streams; message association uses published byte intervals",
+    "packet_export": "full captured network; semantic_message_ids is an evaluation association, not a wire field",
+    "accepted": "contiguous accepted byte prefixes; selective mode independently replays finite reordering capacity",
+    "timestamps": "simulated ns, not GPU visibility or calibrated hardware",
+    "scope": "generated graphs only; evaluation association"
+  }
+}

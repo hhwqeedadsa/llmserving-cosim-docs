@@ -21,12 +21,15 @@ from .scaleout_llm import EXTRA_COSTS, capacity, validate_llm
 from .host_timing import HostTiming
 from .native_control import event as control_event
 from .phase_completion import enabled as phase_enabled
+from .token_transport import configuration as token_configuration, payload_sizes
 
 
 def validate(c, topology, rdma, replay=None):
     fields(c, 'schema_version model workload parallel compute'+(' route_replay' if 'route_replay' in c else '')+
-           (' transport' if 'transport' in c else '')+(' phase_completion' if 'phase_completion' in c else ''), 'service')
+           (' transport' if 'transport' in c else '')+(' phase_completion' if 'phase_completion' in c else '')+
+           (' token_transport' if 'token_transport' in c else ''), 'service')
     phase_enabled(c)
+    token_configuration(c)
     extended=c['schema_version']=='moe-scaleout-service/2'
     require(c['schema_version'] in ('moe-scaleout-service/1','moe-scaleout-service/2'), 'unsupported service schema')
     budget=limits(rdma)
@@ -117,6 +120,7 @@ def make_wave(config, group, group_index, step, planes, replay=None):
     full=config['schema_version']=='moe-scaleout-service/2'
     local_batch={r:len(replay.contexts(r)) if full and replay else w['batch_per_rank'] for r in group}
     gated=phase_enabled(config);gates=[]
+    token_spec=token_configuration(config);sizes=payload_sizes(config)
     # Identity depends on logical work, never submission/completion order.
     pair_counts=[len(g)*(len(g)-1) for g in config['parallel']['groups']]
     pairs=len(group)*(len(group)-1)
@@ -130,7 +134,7 @@ def make_wave(config, group, group_index, step, planes, replay=None):
         nodes[rank].append(item)
         return identity
 
-    def leg(layer, name, matrix, dependencies, leg_index):
+    def leg(layer, name, matrix, dependencies, leg_index, contributions=None):
         incoming = {r: [] for r in group};outgoing={r:[] for r in group}
         for src in group:
             for dst in group:
@@ -142,8 +146,10 @@ def make_wave(config, group, group_index, step, planes, replay=None):
                 identity = base + layer*2*pairs + leg_index*pairs + pair_index
                 stable = f'{graph}:{layer}:{name}:{src}:{dst}:{w["route_seed"]}'.encode()
                 plane = int.from_bytes(hashlib.sha256(stable).digest()[:8], 'big') % planes
-                message = dict(id=identity, tag=identity, src=src, dst=dst, bytes=count*m['hidden_size']*m['activation_bytes'],
+                message = dict(id=identity, tag=identity, src=src, dst=dst, bytes=count*sizes[name],
                                plane=plane, layer=layer, phase=name, contributions=count)
+                if token_spec:
+                    message.update(contributions=contributions[src,dst],transport_tokens=count)
                 messages.append(message)
                 outgoing[src].append(node(src, 'SEND', f'L{layer}.{name}.{src}-{dst}.send', [dependencies[src]], message=message))
                 incoming[dst].append(node(dst, 'RECV', f'L{layer}.{name}.{src}-{dst}.recv', [], message=message))
@@ -162,10 +168,15 @@ def make_wave(config, group, group_index, step, planes, replay=None):
         selected = replay.routes(group,step,layer) if replay else routes(config, group, step, layer)
         source_tokens=Counter(token['rank'] for token in selected)
         matrix, expert_counts, received = Counter(), Counter(), Counter()
+        token_units, reduction_extras = Counter(), Counter()
         for token in selected:
+            destinations=Counter()
             for expert in token['experts']:
                 dst = replay.owner(group,layer,expert) if replay else group[expert // (m['experts']//len(group))]
                 matrix[token['rank'], dst] += 1; expert_counts[expert] += 1; received[dst] += 1
+                destinations[dst]+=1
+            for dst,count in destinations.items():
+                token_units[token['rank'],dst]+=1;reduction_extras[dst]+=count-1
         route_rows.append(dict(layer=layer, tokens=selected, expert_counts=dict(expert_counts),
             contributions=[dict(src=s,dst=d,count=n) for (s,d),n in sorted(matrix.items())]))
         if replay:route_rows[-1]['source_layer_id']=replay.layers[layer]
@@ -184,13 +195,18 @@ def make_wave(config, group, group_index, step, planes, replay=None):
                 residual=node(r,'COMP',f'L{layer}.attention_residual',deps,cost['residual_ns_per_token']*local_batch[r])
                 deps=[node(r,'COMP',f'L{layer}.ffn_norm',[residual],cost['norm_ns_per_token']*local_batch[r])]
             packed[r] = node(r,'COMP',f'L{layer}.pack',deps,cost['pack_ns_per_token']*(local_batch[r] if full else source_tokens[r]))
-        incoming,outgoing = leg(layer,'dispatch',matrix,packed,0)
+        incoming,outgoing = leg(layer,'dispatch',token_units if token_spec else matrix,packed,0,matrix)
         dispatched=completion(layer,'dispatch',incoming,outgoing,packed)
         experts = {r:node(r,'COMP',f'L{layer}.experts',incoming[r]+[packed[r],dispatched[r]],
                          cost['expert_ns_per_contribution']*received[r]) for r in group}
         combine = Counter({(dst,src):n for (src,dst),n in matrix.items()})
-        returned,outgoing = leg(layer,'combine',combine,experts,1)
-        combined=completion(layer,'combine',returned,outgoing,experts)
+        combine_units=combine;combine_producers=experts
+        if token_spec and token_spec['combine']=='rank_reduced/1':
+            combine_units=Counter({(dst,src):n for (src,dst),n in token_units.items()})
+            combine_producers={r:node(r,'COMP',f'L{layer}.combine_reduce',[experts[r]],
+                reduction_extras[r]*token_spec['local_reduce_ns_per_extra']) for r in group}
+        returned,outgoing = leg(layer,'combine',combine_units,combine_producers,1,combine)
+        combined=completion(layer,'combine',returned,outgoing,combine_producers)
         previous = {r:[node(r,'COMP',f'L{layer}.merge',returned[r]+[experts[r],combined[r]],
                            cost['merge_ns_per_token']*(local_batch[r] if full else source_tokens[r]))] for r in group}
         if full:
@@ -206,6 +222,7 @@ def make_wave(config, group, group_index, step, planes, replay=None):
                 group_index=group_index, decode_step=step, messages=messages, rank_nodes=nodes,
                 route_source=replay.manifest['source']['kind'] if replay else 'synthetic_balanced_or_explicit_hotspot', routes=route_rows)
     if gated:wave['phase_completion']=dict(config['phase_completion'],gates=gates)
+    if token_spec:wave['token_transport']=dict(token_spec,payload_bytes_per_token=sizes)
     return wave
 
 

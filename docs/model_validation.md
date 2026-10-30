@@ -1,5 +1,7 @@
 # 模型依据与适用范围
 
+服务的显式`deepep_direct_bf16/1`依据固定DeepEP direct源码投影按目的rank去重、两种Combine表示及BF16 TokenLayout元数据/对齐，保留全部专家计算并声明本rank归并成本。它不包含GIN计数/屏障流量、真实CQ/GPU可见性、FP8/SF或hybrid转发，也没有硬件校准；缺省旧逐贡献激活图仍保留。字节差异属于表示修正，不是新算法收益。来源和验证范围见[传输规范](tasks/token_transport_spec.md)。
+
 [多连接 RC 参考](../examples/rc_concurrent/README.md)在同一原生网络中核对独立 QP 序号、共享 NIC/目标字节及真实反馈完成；连接级丢包由实际接收事件触发。它继承单连接固定速率、每 QP 一项在途 WQE、ICRC 占位及 `atomic_return_required/1` 的适用边界，不代表完整 RoCE、现代 MoE 通信库或 GPU 校准。正确性与收益结论分开，见[独立核验](../fixtures/rc_concurrent_fabric/README.md)。
 
 新增[RC操作包小例](../examples/rc_packet_probe/README.md)将独立参考中的有限WRITE/fetch-add分支接入同一原生ns-3网络，用实际字节和Atomic ACK驱动目标效应/源完成。其适用范围为一个QP、一次一项WQE、固定速率、ICRC占位；不是完整RXE、RoCE硬件或现代MoE基线，不升级旧MRT1结果的证据等级。逐实际包重放独立Python参考的验收见[操作包核验](../fixtures/rc_packet_probe/README.md)。

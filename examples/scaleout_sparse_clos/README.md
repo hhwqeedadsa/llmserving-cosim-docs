@@ -42,7 +42,7 @@ PYTHONPATH=python python -m moe_ub_cosim scaleout rdma-check --run /path/to/new/
 
 沿用[来源路由输入说明](../scaleout_route_replay/README.md)，保留来源模型/E/K/层号、原件SHA和未知采集信息。明确真实请求的源rank与slot，设置稀疏模式，并重新计算连接集合与限额。15份独立原件只能说明15个请求，不能声称128/256/512卡各有一个独立请求。
 
-`frontend.json`记录实际活跃来源rank、逐轮batch请求ID和完成；`rdma-check`分别检查调度选择、原始专家选择、图依赖、逻辑字节、实际接收与源确认。既有逐专家贡献图不等于现代DeepEP的去重、flush或GPU流语义；需要先校准这些条件，才能将结果用于恢复优化研究。
+`frontend.json`记录实际活跃来源rank、逐轮batch请求ID和完成；`rdma-check`分别检查调度选择、原始专家选择、图依赖、逻辑字节、实际接收与源确认。缺省逐专家贡献图不等于现代DeepEP；可另显式使用[按目的卡去重示例](../scaleout_token_transport/README.md)及下述阶段完成模式，GPU流/可见性等边界仍保留。
 
 ## 可选的EP阶段传输完成依赖
 

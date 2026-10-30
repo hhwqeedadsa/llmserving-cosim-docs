@@ -39,7 +39,8 @@ def structure(wave,config):
             task=by_id[member['node']]
             require((rank,task['id']) not in members_seen,'node reused across phase gates')
             members_seen.add((rank,task['id']))
-            producer=by_name[f'L{layer}.'+('pack' if phase=='dispatch' else 'experts')]
+            combine_producer='combine_reduce' if config.get('token_transport',{}).get('combine')=='rank_reduced/1' else 'experts'
+            producer=by_name[f'L{layer}.'+('pack' if phase=='dispatch' else combine_producer)]
             required={n['id'] for n in nodes if n['kind'] in ('SEND','RECV') and
                       n['message']['layer']==layer and n['message']['phase']==phase}|{producer['id']}
             require(task['kind']=='GATE' and task['duration_ns']==0 and task['name']==f'L{layer}.{phase}.flush' and

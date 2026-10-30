@@ -1,5 +1,7 @@
 # 系统架构与执行过程
 
+服务可显式使用`deepep_direct_bf16/1`传输投影：同一token发往同一rank的Dispatch只传一次，专家工作量仍按全部专家贡献计算；Combine选择逐专家回传或在rank内归并后回传。归并是等待专家完成的独立COMP节点，发送和阶段门限等待其真实完成；耗时由输入声明。两种模式均使用已有持久传输和阶段完成机制，说明及公开示例见[传输规范](tasks/token_transport_spec.md)。
+
 原生ASTRA服务可选`ServiceTransport`只承接实际SEND，复用`PersistentStreams`而不替换Workload/资源调度。每消息在实际提交后映射到连接字节区间，接收前缀与源ACK分别触发原有回调；全部图完成后等待物理排空并关闭连接。配置及边界见[持久传输服务](../examples/astra_stream_service/README.md)。服务启动在日志初始化前保留独立控制输出描述符，将普通stdout诊断转stderr；控制写入不再与异步logger共享目标管道，不新增模拟事件。
 
 可选`periodic_destination_data/1`在目标GPU设备的实际ReceiveErrorModel中按到达顺序和半开时间窗口执行周期性故障。数据包含重传才参与分母，ACK/NACK/PFC不受影响；不依赖专家身份或未来记录，不改时钟/路径/协议。源端仍由真实ACK/NACK/可选RTO推进。自动场景摘要和离线逐包审核不参与控制；定义见[严重丢包示例](../examples/simai_severe_loss/README.md)。

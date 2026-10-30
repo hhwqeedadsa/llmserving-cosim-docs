@@ -54,6 +54,8 @@ def verify(directory):
         wave=checked_json(directory/'graphs'/history['graph_id']/'wave.json',16*2**20)
         expected=make_wave(service,group,index,step,planes,replay)
         require(json.loads(json.dumps(expected))==wave,'saved graph differs from selected source/declared template')
+        from .token_transport import verify_wave
+        verify_wave(wave,service)
         checker.accept_wave(wave,history['start_ns']);waves.append(wave)
         for m in wave['messages']:
             identity=m['id'];require(identity not in ids and identity in messages,'missing or duplicate submitted message')

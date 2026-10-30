@@ -1,5 +1,7 @@
 # 观测记录与存储格式
 
+显式`token_transport`在`wave.json`保存模式、Combine选择、声明归并单位成本及`payload_bytes_per_token`。消息的`contributions`仍是原专家贡献数，`transport_tokens`是本模式实际发送的token单元数；二者不能混用。`bytes`、接收累计曲线和远端payload统计在此模式下包含TokenLayout元数据及填充，既不全是激活张量，也不是包含网络包头的线上字节。rank合并的`L*.combine_reduce`是独立COMP节点，实际issue/callback与声明时长分别保存；缺省不添加这些字段或节点。输入与公式见[传输规范](tasks/token_transport_spec.md)。
+
 服务显式开启`ep_transport_flush/1`时，`result.service.phase_completion`保存有效`mode`和`gates`；每项包含`graph_id/id/members/released_ns`，成员包含`rank/node/arrived_ns`。时间为同一ns-3绝对纳秒，未发生到达/释放为null；失败不补造完成。GATE节点自身声明计算耗时为0，但issue到callback区间表示组内等待，不能按固定COMP耗时解释。缺省服务不新增该报告字段，边界见[公开说明](../examples/scaleout_sparse_clos/README.md#可选的ep阶段传输完成依赖)。
 
 ## ASTRA服务持久传输记录

@@ -1,0 +1,808 @@
+{
+  "passed": true,
+  "execution_commit": "14fc5713bdb04ab8a788a0f02c6f2bd60faaf98f",
+  "platform_source_sha256": {
+    "backend/rdma/service.cc": "b9aa7a5db93821715eb53612b06331260c1b8e1f7d20c4fb203bcf4cd9932e7a",
+    "backend/rdma/source_ack_watchdog.hh": "1a85c649eb9af75ac3e79aacbc88de1f458d507c702d7f63814dd66a1c5dd8f6",
+    "backend/rdma/execution_events.hh": "05741353d3f2801300fdd0ba4f24c5949f54aae4c924357c94a5b7b48fd157e6",
+    "python/moe_ub_cosim/source_ack_watchdog.py": "6946d60f176bd4482c988a733abd37aeea059b850b1aa56a50caf7d0d2a3aeda",
+    "python/moe_ub_cosim/native_control.py": "9141ef2dffe5343f558ba14f8c92d829ab358bff2158806a942d0a74b78ece7e",
+    "python/moe_ub_cosim/scaleout_service.py": "ba7f7dfa83796a9f929780125de837df03aace78630c8b22e9dc7c49d472bb04",
+    "python/moe_ub_cosim/scaleout_verify.py": "d37f2aa3c41eec9c8b6ba40948c6856d8a89c8ee39e72d4f0860002501174271",
+    "python/moe_ub_cosim/service_transport.py": "c2f38bc9aa6cd7f71272ca674a5749ae84732a27a006e82959216e55e8d85ff9",
+    "tests/unit/source_ack_watchdog_test.py": "f0f2608821e493fb93a17586148c1e07339ee2b7d530eeb0758e4e7134739865",
+    "tests/integration/check_source_ack_watchdog.py": "b28558bf8b2bbb66c84cf7cbbe570a0f297aa0d6c0c82061e7ae05669f5d9142",
+    "examples/scaleout_source_ack_watchdog/prepare.py": "fae879a4b68ca3bc531f95d37c7b26faa360578fa4fae0062b8f85294de4659f",
+    "fixtures/source_ack_watchdog/build.py": "2e2d9537db615ca7c491c03486f088ae20d412c949f51532056d3b86d79162ae",
+    "fixtures/source_ack_watchdog/evidence.py": "bcef44e1d6c9af6500dff455e2dd78fce23ea9208bf1d8c82d4dfcd7634bd51d"
+  },
+  "independent_verification_sha256": "eb22a50e2ccaf3335ec9c7f6dc1c33b35e495aef391b0b08de0879d0092e4f12",
+  "original_run_sha256": {
+    "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030/normal/result.json": "b70790166f5e0777336f185cd68d793e53ae874c05fac0c4093a6c05ab43090b",
+    "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030/normal/input.json": "6dbf0dfa792d66fcf3df4c1a8f41e22644a2814afa93ba58f3faec6b94964543",
+    "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030/normal/rdma.json": "2e96b611d1985507bf3eda5816c1cd4595a0c120b4ef5b460ab74c1e0d20b3db",
+    "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030/normal/native.stdout.log": "555a8365c756e740311012c9b1037c4c0ccdbb5f58175126692171e613feca67",
+    "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030/normal/execution_events.jsonl": "fab2439297d591b546e7b0475b7600703129521704cf467779d58068aede320a",
+    "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030/normal/contribution_calls.jsonl": "e72f227ec8b0b06aa963943f87d9ffe7107872f0dc376a66df6f63584e46d240",
+    "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030/normal/source_ack_timeouts.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030/normal/source_ack_watchdog.json": "7188048d31c9783d4c2b869e3c456cf22e05af4572dda79c76d64e8cca56813a",
+    "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030/local/result.json": "ffd63cf14ddbd1325819440941209e3bc6f0717c802b8383936fb8c9fc944d7e",
+    "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030/local/input.json": "6dbf0dfa792d66fcf3df4c1a8f41e22644a2814afa93ba58f3faec6b94964543",
+    "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030/local/rdma.json": "ce4380fe0443dfd8d3026f353f964832980d5ace0f5100fd4dba8c33f9114408",
+    "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030/local/native.stdout.log": "a34fe29f7a0df425a237b36a759ed3ae1614c736d1ef136671a67dbad6c1483f",
+    "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030/local/execution_events.jsonl": "664f16c59a08946029406054e52dde6d20b694ea3222bd71abb2d3f321dee49b",
+    "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030/local/contribution_calls.jsonl": "36e0a57db848fe78d19d852a020e1763b3d750182c573e86ccce847ef91c8fdf",
+    "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030/local/source_ack_timeouts.jsonl": "e38e95bae78d40bc1cc7dda739b2f756b6f75d69996135d978a9b52968915f3d",
+    "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030/local/source_ack_watchdog.json": "3ae2925a1aa4d27b29cce9b4e5a5c2d20b1fdab08f55074356aeffe26b07f0c8"
+  },
+  "backend": {
+    "passed": true,
+    "service_sha256": "0de8f072c94bf2c640da2a624c589d245f519697dda702e881388baa9b13a907",
+    "source_sha256": {
+      "backend/rdma/fabric.hh": "7055a2d29c4606b260333b780a96579bcd91c669533b77129202591eca45a9f3",
+      "backend/rdma/fabric.cc": "45798a401eabcae65c45bb5aab80cd16346e8324d78bc668208484248d2f2097",
+      "backend/rdma/probe.cc": "6f2820c6b9f595d01349f1e00aa5d0c55e86c024f05790353077d18ee7692a71",
+      "backend/rdma/astra_adapter.hh": "7b13348498d34b7f246274244097311ec8e75e15573078999466ac76a8084477",
+      "backend/rdma/astra_adapter.cc": "4accd41263ca67ce79728b6dd02447b7e552e460d31a24bbdc658ec98b219763",
+      "backend/rdma/service.cc": "b9aa7a5db93821715eb53612b06331260c1b8e1f7d20c4fb203bcf4cd9932e7a",
+      "backend/rdma/logging.cc": "535806de03c3f2805022f9875c062d9091c94f9552692e6155fe9be1fc463db9",
+      "backend/rdma/recovery.hh": "51f15d2c463b729c357ec1845770e110194da9908372cbf567b4961549fd90f4",
+      "backend/rdma/recovery.cc": "25410da02725015347f82a86cddb60b04805c99af16e8514ad17fcafac4f477f",
+      "backend/rdma/recovery_records.hh": "864c8e7977876bf0759eef849124983f8b61fe84d7cbc8b2ebda9c3ad2cf392c",
+      "backend/rdma/gin_work_queue.hh": "2616252a1620bee3ebb89c603914d7476d904b9a9b9ec2a68e67fcc4f04c3b22",
+      "backend/rdma/persistent_streams.hh": "2c95fb81b26cb135cbec38438087c73ea422aef4f4b20ff737dbd155deb4d57b",
+      "backend/rdma/persistent_streams.cc": "0ea6918392f6b65e4a5e135f01a0810cb7fa8e446a28b086d5ec00e85efe903c",
+      "backend/rdma/stream_probe.cc": "4914bbf99d826923bf24f5b9878dacb1775a8a52bbc7407085eec4edccb07331",
+      "backend/rdma/remote_memory.hh": "2bfe997bf9151ef1aee7d7c45c6b79e8d3465f3d6dca6c7ec4b73436028dda33",
+      "backend/rdma/remote_transactions.hh": "ef6a49881538a7d37cfbe4547ab11b6c050c0ab6e75a13fc5e9fc04aaeb29d2a",
+      "backend/rdma/remote_transactions.cc": "fab7d142e2cb7d20b2aab1acec9e5e7afe597389b6c11ae6dfd599c448a1a1ac",
+      "backend/rdma/transaction_probe.cc": "df8a97b64656bdc1acc96534487576d7156f02bb361214a77d17be5876837231",
+      "backend/rdma/host_timing.hh": "7114fcab1d671d7961a4fdfc33e3e19a1cedc5de3ca907e49097573a68ff7d8c",
+      "backend/rdma/dcqcn_reference.hh": "b80eac69407c3d1fd670bb2c5da9a27a04b67faa6a83b322f61673b84bbfc60c",
+      "backend/rdma/cnp_switch.hh": "3f1166d5487c6c43b075ede4b4af96e0d30a3e93c43527e83ea61fbee63fefb5",
+      "backend/rdma/transaction_session_validation.hh": "5f1582ad4c43f0c264c45efb8c1b4f69fae21916fc9e718ae865c3d0138125a5",
+      "backend/rdma/transaction_session.cc": "aff47a42c9599c6c62c4b6466fbcd4b31ae99224d7e817604ceef43d092165f5",
+      "backend/rdma/transaction_effect_order.hh": "c78a8c2b3d3a905caae1853dc2b971c0ba63576ac63df93e454a13e88ede9b43",
+      "backend/rdma/bounded_buffers.hh": "ff3bf7ed0014288db60862583259e01da3959afc5984087a61987826e25a950a",
+      "backend/rdma/memory_registrations.hh": "a02799fac561d8ed368576dfd75994c50659d4b3803fcbe332353c4f010ba738",
+      "backend/rdma/application_windows.hh": "02ca231ac69c903904dcc760b304890eef0961a047b70ca31367651d65d311e5",
+      "backend/rdma/application_window_validation.hh": "13733c0de33d5e4b877b945d8c4d9f86b764fb1a1d001702abe83ab62fb1d0f7",
+      "backend/rdma/link_failure_validation.hh": "ba2e668987426e596011822b2a0f724bdfc3eced0a53cba0a73f702dea30d1c5",
+      "backend/rdma/selective_repeat.hh": "b1fd43f06631511e45f8711886b9594edb957fa5c06158844c356999d72dbe21",
+      "backend/rdma/transaction_limits.hh": "dfe0b38787283ff50bce0a0f3bdd8d355bfdac5fa9b7f4ddb29de6b0517280a5",
+      "backend/rdma/transaction_transport.hh": "3ddad982f95e9f76f8ef46a51b9bd1ef1c90bc85685b1c08951af2fea33df901",
+      "backend/rdma/nack_grace.hh": "07b0dd90eeafebe3f7c84bb997736bfab5be8ac483d36e5f38fb54a8ca6c8ddc",
+      "backend/rdma/self_peer_service.hh": "2f7583dd7880935778bb239ed55ff93de50dc6794d224f90b5bf792aa5605b85",
+      "backend/rdma/session_wakeups.hh": "47f293cbf8069f5ca661366d3f6892227409b397928f3a7d20511816196b1a10",
+      "backend/rdma/session_callback_batches.hh": "dd911806b5025342d056c12e2af68023718df6bce1ddc5364e828b19a516d529",
+      "backend/rdma/rc_wire.hh": "270307a59be1335773b8f49b93d7b5ccdb8f1797754a042f297fbe6a72fa593b",
+      "backend/rdma/rc_packet_probe.cc": "9f1b11f429c2e299c44d430e1c243146505ddb92c1c847242b916cfb18608242",
+      "backend/rdma/rc_concurrent_probe.cc": "1dd964b0d4541b640e0b49effc8dc437766d1367efde75b08323d0aaa25668e9",
+      "backend/rdma/service_transport.hh": "afe1f00908cf74f66b3524dd86b4895ee6abd0e18faaaf27fc84669281e6d35e",
+      "backend/rdma/service_transport.cc": "0c8447e943d2a2b1f7a715dfdf901814a287b9e1165362c62af6e5c994e57d8e",
+      "backend/rdma/control_channel.hh": "cca54568ae579613c5f536d7d0897ee310854f0a1a41b511171607d98d11afc7",
+      "backend/rdma/switch_drop_capture.cc": "fb78f41a7d155435c6a1f5ff733fffaddbafe97f129bcc30db6ef459c2035430",
+      "backend/rdma/phase_gates.hh": "89c3b19fff179d21b807d0910118e39565d21c4e4c774fbc2bb15cf0ae868f06",
+      "backend/rdma/execution_events.hh": "05741353d3f2801300fdd0ba4f24c5949f54aae4c924357c94a5b7b48fd157e6",
+      "backend/rdma/source_ack_watchdog.hh": "1a85c649eb9af75ac3e79aacbc88de1f458d507c702d7f63814dd66a1c5dd8f6"
+    },
+    "old_outputs_unchanged": true,
+    "new_objects": 1,
+    "dependency_builds": 0,
+    "scope": "isolated service object/link using an explicit previous receipt; not a cold build"
+  },
+  "public_and_negative_commands": [
+    {
+      "argv": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-check",
+        "--run",
+        "/home/lry/moe-ub-cosim/runs/contribution_binding_20261030/normal"
+      ],
+      "exit_code": 0,
+      "stdout": "{\n  \"passed\": true,\n  \"transport\": \"astra_persistent_streams/1\",\n  \"frontend\": \"actual_LLMServingSim\",\n  \"gpu_count\": 128,\n  \"messages\": 62,\n  \"remote_payload_bytes\": 37696,\n  \"verified_nodes\": 3708,\n  \"waves\": 4,\n  \"finish_ns\": 103852,\n  \"packet_events_checked\": 2120,\n  \"source_payload_bytes\": 37696,\n  \"receiver_accepted_bytes\": 37696,\n  \"hardware_calibrated\": false,\n  \"scope\": \"actual ASTRA scheduling and persistent message intervals; finite service; not calibrated hardware\",\n  \"timing_status\": \"complete\",\n  \"timing_reason\": null,\n  \"application_finished_ns\": 103852,\n  \"network_drained_ns\": 103852,\n  \"network_stopped_ns\": 103852,\n  \"post_application_drain_ns\": 0,\n  \"execution_observation\": {\n    \"schema_version\": \"moe-execution-observation/1\",\n    \"events\": 7669,\n    \"last_time_ns\": 103852,\n    \"service_drained_ns\": 103852,\n    \"registered_graphs\": 4,\n    \"retired_graphs\": 4,\n    \"nodes\": 3708,\n    \"node_completions\": 3708,\n    \"messages\": 62,\n    \"receiver_completions\": 62,\n    \"sender_completions\": 62,\n    \"scope\": \"passive_actual_callbacks_no_recovery_or_tensor_validation\"\n  },\n  \"contribution_binding\": {\n    \"schema_version\": \"moe-contribution-binding-report/1\",\n    \"configuration\": {\n      \"schema_version\": \"moe-contribution-binding/1\",\n      \"namespace\": \"contribution-example-v1\",\n      \"max_invocations\": 64,\n      \"max_bundles\": 512,\n      \"max_lifecycle_events\": 6144,\n      \"max_report_bytes\": 4194304\n    },\n    \"invocations\": 16,\n    \"bundles\": 32,\n    \"lifecycle_events\": 380,\n    \"reserved_lifecycle_events\": 380,\n    \"logical_complete_calls\": 16,\n    \"retired_calls\": 16,\n    \"source_events\": 7669,\n    \"service_drained_ns\": 103852,\n    \"scope\": \"actual_service_callbacks_simulation_lineage_original_attempts_no_tensors_or_recovery\"\n  }\n}\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-check",
+        "--run",
+        "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030/independent/relocated"
+      ],
+      "exit_code": 0,
+      "stdout": "{\n  \"passed\": true,\n  \"transport\": \"astra_persistent_streams/1\",\n  \"frontend\": \"actual_LLMServingSim\",\n  \"gpu_count\": 128,\n  \"messages\": 62,\n  \"remote_payload_bytes\": 37696,\n  \"verified_nodes\": 3708,\n  \"waves\": 4,\n  \"finish_ns\": 175778,\n  \"packet_events_checked\": 2126,\n  \"source_payload_bytes\": 38336,\n  \"receiver_accepted_bytes\": 37696,\n  \"hardware_calibrated\": false,\n  \"scope\": \"actual ASTRA scheduling and persistent message intervals; finite service; not calibrated hardware\",\n  \"timing_status\": \"complete\",\n  \"timing_reason\": null,\n  \"application_finished_ns\": 175778,\n  \"network_drained_ns\": 175778,\n  \"network_stopped_ns\": 175778,\n  \"post_application_drain_ns\": 0,\n  \"execution_observation\": {\n    \"schema_version\": \"moe-execution-observation/1\",\n    \"events\": 7669,\n    \"last_time_ns\": 175778,\n    \"service_drained_ns\": 175778,\n    \"registered_graphs\": 4,\n    \"retired_graphs\": 4,\n    \"nodes\": 3708,\n    \"node_completions\": 3708,\n    \"messages\": 62,\n    \"receiver_completions\": 62,\n    \"sender_completions\": 62,\n    \"scope\": \"passive_actual_callbacks_no_recovery_or_tensor_validation\"\n  },\n  \"contribution_binding\": {\n    \"schema_version\": \"moe-contribution-binding-report/1\",\n    \"configuration\": {\n      \"schema_version\": \"moe-contribution-binding/1\",\n      \"namespace\": \"contribution-example-v1\",\n      \"max_invocations\": 64,\n      \"max_bundles\": 512,\n      \"max_lifecycle_events\": 6144,\n      \"max_report_bytes\": 4194304\n    },\n    \"invocations\": 16,\n    \"bundles\": 32,\n    \"lifecycle_events\": 380,\n    \"reserved_lifecycle_events\": 380,\n    \"logical_complete_calls\": 16,\n    \"retired_calls\": 16,\n    \"source_events\": 7669,\n    \"service_drained_ns\": 175778,\n    \"scope\": \"actual_service_callbacks_simulation_lineage_original_attempts_no_tensors_or_recovery\"\n  },\n  \"source_ack_watchdog\": {\n    \"schema_version\": \"moe-source-ack-watchdog-report/1\",\n    \"configuration\": {\n      \"schema_version\": \"moe-source-ack-watchdog/1\",\n      \"timeout_ns\": 20000,\n      \"max_messages\": 128,\n      \"max_notifications\": 128\n    },\n    \"messages\": 62,\n    \"source_completions\": 62,\n    \"cancelled_timers\": 61,\n    \"notifications\": 1,\n    \"pending_timers\": 0,\n    \"unconfirmed_messages\": 0\n  }\n}\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-check",
+        "--run",
+        "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030/independent/relocated"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "moe-ub: Scale-Out topology: source ACK timeout before post\n"
+    },
+    {
+      "argv": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-check",
+        "--run",
+        "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030/independent/relocated"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "moe-ub: Scale-Out topology: source ACK timeout identity/deadline/state violation\n"
+    },
+    {
+      "argv": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-check",
+        "--run",
+        "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030/independent/relocated"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "moe-ub: Scale-Out topology: source ACK timeout prefix/order/budget violation\n"
+    },
+    {
+      "argv": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-check",
+        "--run",
+        "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030/independent/relocated"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "moe-ub: Scale-Out topology: source ACK timeout prefix/order/budget violation\n"
+    },
+    {
+      "argv": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-check",
+        "--run",
+        "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030/independent/relocated"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "moe-ub: Scale-Out topology: source ACK deadline passed without online notification\n"
+    },
+    {
+      "argv": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-check",
+        "--run",
+        "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030/independent/relocated"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "moe-ub: Scale-Out topology: incomplete or mismatched source ACK watchdog\n"
+    },
+    {
+      "argv": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-check",
+        "--run",
+        "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030/independent/relocated"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "moe-ub: Scale-Out topology: invalid source ACK timeout fields\n"
+    },
+    {
+      "argv": [
+        "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030/build/ns3.42-moe-rdma-service",
+        "/missing-topology",
+        "/missing-rdma",
+        "/missing-system",
+        "/missing-bootstrap",
+        "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030/independent/bool-timeout-must-not-exist.json",
+        "--transport",
+        "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030/local/service-transport.json",
+        "--source-ack-watchdog",
+        "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030/independent/bool-timeout.json",
+        "--execution-events",
+        "32768"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "RDMA: invalid source ACK watchdog numeric limit\n"
+    },
+    {
+      "argv": [
+        "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030/build/ns3.42-moe-rdma-service",
+        "/missing-topology",
+        "/missing-rdma",
+        "/missing-system",
+        "/missing-bootstrap",
+        "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030/independent/zero-budget-must-not-exist.json",
+        "--transport",
+        "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030/local/service-transport.json",
+        "--source-ack-watchdog",
+        "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030/independent/zero-budget.json",
+        "--execution-events",
+        "32768"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "RDMA: invalid source ACK watchdog numeric limit\n"
+    },
+    {
+      "argv": [
+        "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030/build/ns3.42-moe-rdma-service",
+        "/missing-topology",
+        "/missing-rdma",
+        "/missing-system",
+        "/missing-bootstrap",
+        "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030/independent/extra-field-must-not-exist.json",
+        "--transport",
+        "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030/local/service-transport.json",
+        "--source-ack-watchdog",
+        "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030/independent/extra-field.json",
+        "--execution-events",
+        "32768"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "RDMA: invalid source ACK watchdog fields\n"
+    },
+    {
+      "argv": [
+        "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030/build/ns3.42-moe-rdma-service",
+        "/missing-topology",
+        "/missing-rdma",
+        "/missing-system",
+        "/missing-bootstrap",
+        "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030/independent/missing-events-must-not-exist.json",
+        "--transport",
+        "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030/local/service-transport.json",
+        "--source-ack-watchdog",
+        "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030/independent/missing-events.json"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "RDMA: source ACK watchdog requires execution events and persistent transport\n"
+    }
+  ],
+  "monitors_before_collector": {
+    "monitors/build/probe.json": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "fixtures/source_ack_watchdog/build.py",
+        "--commands",
+        "runs/execution_events_20261030/build/commands.json",
+        "--output",
+        "runs/source_ack_watchdog_20261030/build"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-30T12:01:28.049552+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1610612736,
+        "per_process_address_bytes": 3221225472,
+        "artifact_bytes": 536870912,
+        "wall_seconds": 180.0
+      },
+      "peak_sampled_group_rss_bytes": 928964608,
+      "peak_sampled_processes": 4,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030"
+      ],
+      "peak_sampled_artifact_bytes": 7749632,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 7708015,
+      "peak_sampled_artifact_allocated_bytes": 7749632,
+      "process_group": 882285,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-30T12:01:42.668047+00:00",
+      "wall_seconds": 14.618503166013397,
+      "max_waited_child_rss_kib": 884392,
+      "artifact_bytes_before_report": 43840,
+      "aggregate_artifact_bytes_before_report": 7749632,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 7708015,
+        "allocated_bytes": 7749632
+      }
+    },
+    "monitors/final-unit/probe.json": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-c",
+        "import unittest; names=(\"source_ack_watchdog_test.py\",\"execution_events_test.py\",\"contribution_binding_test.py\",\"contribution_attempts_test.py\",\"native_control_test.py\",\"phase_completion_test.py\",\"token_transport_test.py\",\"scaleout_messages_test.py\"); suite=unittest.TestSuite(unittest.defaultTestLoader.discover(\"tests/unit\",pattern=n) for n in names); result=unittest.TextTestRunner(verbosity=2).run(suite); raise SystemExit(not result.wasSuccessful())"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-30T12:03:44.232528+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 536870912,
+        "wall_seconds": 120.0
+      },
+      "peak_sampled_group_rss_bytes": 71798784,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030"
+      ],
+      "peak_sampled_artifact_bytes": 7983104,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 7887450,
+      "peak_sampled_artifact_allocated_bytes": 7983104,
+      "process_group": 882469,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-30T12:03:44.891361+00:00",
+      "wall_seconds": 0.6588414610014297,
+      "max_waited_child_rss_kib": 78412,
+      "artifact_bytes_before_report": 12759,
+      "aggregate_artifact_bytes_before_report": 7983104,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 7887450,
+        "allocated_bytes": 7983104
+      }
+    },
+    "monitors/independent/probe.json": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "tests/integration/check_source_ack_watchdog.py",
+        "--normal",
+        "runs/source_ack_watchdog_20261030/normal",
+        "--local",
+        "runs/source_ack_watchdog_20261030/local",
+        "--reference",
+        "runs/contribution_binding_20261030",
+        "--backend",
+        "runs/source_ack_watchdog_20261030/build/ns3.42-moe-rdma-service",
+        "--output",
+        "runs/source_ack_watchdog_20261030/independent"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-30T12:05:38.011388+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 536870912,
+        "wall_seconds": 120.0
+      },
+      "peak_sampled_group_rss_bytes": 63074304,
+      "peak_sampled_processes": 2,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030"
+      ],
+      "peak_sampled_artifact_bytes": 27164672,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 22846638,
+      "peak_sampled_artifact_allocated_bytes": 27164672,
+      "process_group": 882733,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-30T12:05:41.421399+00:00",
+      "wall_seconds": 3.4100153140025213,
+      "max_waited_child_rss_kib": 37640,
+      "artifact_bytes_before_report": 9197,
+      "aggregate_artifact_bytes_before_report": 27164672,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 22846638,
+        "allocated_bytes": 27164672
+      }
+    },
+    "monitors/local/probe.json": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--config",
+        "runs/source_ack_watchdog_20261030/input/service-watchdog.json",
+        "--protocol",
+        "runs/source_ack_watchdog_20261030/input/rdma-transient.json",
+        "--topology",
+        "runs/source_ack_watchdog_20261030/input/topology",
+        "--backend",
+        "runs/source_ack_watchdog_20261030/build/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "runs/source_ack_watchdog_20261030/local"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-30T12:04:21.022995+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 536870912,
+        "wall_seconds": 120.0
+      },
+      "peak_sampled_group_rss_bytes": 212508672,
+      "peak_sampled_processes": 4,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030"
+      ],
+      "peak_sampled_artifact_bytes": 20738048,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 17843258,
+      "peak_sampled_artifact_allocated_bytes": 20738048,
+      "process_group": 882651,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-30T12:04:22.890272+00:00",
+      "wall_seconds": 1.867281931976322,
+      "max_waited_child_rss_kib": 96708,
+      "artifact_bytes_before_report": 5880,
+      "aggregate_artifact_bytes_before_report": 20738048,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 17843258,
+        "allocated_bytes": 20738048
+      }
+    },
+    "monitors/normal/probe.json": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--config",
+        "runs/source_ack_watchdog_20261030/input/service-watchdog.json",
+        "--protocol",
+        "runs/source_ack_watchdog_20261030/input/rdma.json",
+        "--topology",
+        "runs/source_ack_watchdog_20261030/input/topology",
+        "--backend",
+        "runs/source_ack_watchdog_20261030/build/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "runs/source_ack_watchdog_20261030/normal"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-30T12:03:57.847252+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 536870912,
+        "wall_seconds": 120.0
+      },
+      "peak_sampled_group_rss_bytes": 213921792,
+      "peak_sampled_processes": 4,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030"
+      ],
+      "peak_sampled_artifact_bytes": 14352384,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 12859582,
+      "peak_sampled_artifact_allocated_bytes": 14352384,
+      "process_group": 882605,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-30T12:03:59.809736+00:00",
+      "wall_seconds": 1.9624915960012004,
+      "max_waited_child_rss_kib": 96796,
+      "artifact_bytes_before_report": 6148,
+      "aggregate_artifact_bytes_before_report": 14352384,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 12859582,
+        "allocated_bytes": 14352384
+      }
+    },
+    "monitors/prepare/probe.json": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "examples/scaleout_source_ack_watchdog/prepare.py",
+        "--output",
+        "runs/source_ack_watchdog_20261030/input"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-30T12:03:11.127789+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 536870912,
+        "wall_seconds": 120.0
+      },
+      "peak_sampled_group_rss_bytes": 47865856,
+      "peak_sampled_processes": 3,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030"
+      ],
+      "peak_sampled_artifact_bytes": 7962624,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 7873189,
+      "peak_sampled_artifact_allocated_bytes": 7962624,
+      "process_group": 882433,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-30T12:03:11.479760+00:00",
+      "wall_seconds": 0.3519781780196354,
+      "max_waited_child_rss_kib": 23864,
+      "artifact_bytes_before_report": 1988,
+      "aggregate_artifact_bytes_before_report": 7962624,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 7873189,
+        "allocated_bytes": 7962624
+      }
+    },
+    "monitors/related-unit/probe.json": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-c",
+        "import unittest; names=(\"source_ack_watchdog_test.py\",\"execution_events_test.py\",\"contribution_binding_test.py\",\"contribution_attempts_test.py\",\"native_control_test.py\",\"phase_completion_test.py\",\"token_transport_test.py\",\"scaleout_messages_test.py\"); suite=unittest.TestSuite(unittest.defaultTestLoader.discover(\"tests/unit\",pattern=n) for n in names); result=unittest.TextTestRunner(verbosity=2).run(suite); raise SystemExit(not result.wasSuccessful())"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-30T12:01:28.048860+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 536870912,
+        "wall_seconds": 120.0
+      },
+      "peak_sampled_group_rss_bytes": 77320192,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030"
+      ],
+      "peak_sampled_artifact_bytes": 57344,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 38660,
+      "peak_sampled_artifact_allocated_bytes": 57344,
+      "process_group": 882284,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-30T12:01:28.720966+00:00",
+      "wall_seconds": 0.6721132079837844,
+      "max_waited_child_rss_kib": 77648,
+      "artifact_bytes_before_report": 12568,
+      "aggregate_artifact_bytes_before_report": 57344,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 38660,
+        "allocated_bytes": 57344
+      }
+    },
+    "monitors/unit/probe.json": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/unit",
+        "-p",
+        "source_ack_watchdog_test.py",
+        "-v"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-30T12:01:15.904285+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 536870912,
+        "wall_seconds": 120.0
+      },
+      "peak_sampled_group_rss_bytes": 7479296,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030"
+      ],
+      "peak_sampled_artifact_bytes": 8192,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 2384,
+      "peak_sampled_artifact_allocated_bytes": 8192,
+      "process_group": 882255,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-30T12:01:16.034461+00:00",
+      "wall_seconds": 0.1301772380247712,
+      "max_waited_child_rss_kib": 20772,
+      "artifact_bytes_before_report": 2384,
+      "aggregate_artifact_bytes_before_report": 8192,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 2384,
+        "allocated_bytes": 8192
+      }
+    },
+    "normal/execution/probe.json": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-m",
+        "moe_ub_cosim.scaleout_service",
+        "--worker",
+        "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030/normal/input.json",
+        "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030/normal",
+        "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030/normal/rdma.json",
+        "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030/build/ns3.42-moe-rdma-service",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030/normal"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-30T12:03:57.991074+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 134217728,
+        "wall_seconds": 60.0
+      },
+      "peak_sampled_group_rss_bytes": 178192384,
+      "peak_sampled_processes": 2,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030/normal"
+      ],
+      "peak_sampled_artifact_bytes": 6344704,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 4960010,
+      "peak_sampled_artifact_allocated_bytes": 6344704,
+      "process_group": 882607,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-30T12:03:59.159638+00:00",
+      "wall_seconds": 1.1685718439985067,
+      "max_waited_child_rss_kib": 96796,
+      "artifact_bytes_before_report": 2968,
+      "aggregate_artifact_bytes_before_report": 6344704,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 4960010,
+        "allocated_bytes": 6344704
+      }
+    },
+    "local/execution/probe.json": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-m",
+        "moe_ub_cosim.scaleout_service",
+        "--worker",
+        "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030/local/input.json",
+        "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030/local",
+        "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030/local/rdma.json",
+        "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030/build/ns3.42-moe-rdma-service",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030/local"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-30T12:04:21.162393+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 134217728,
+        "wall_seconds": 60.0
+      },
+      "peak_sampled_group_rss_bytes": 178184192,
+      "peak_sampled_processes": 2,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030/local"
+      ],
+      "peak_sampled_artifact_bytes": 6361088,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 4971804,
+      "peak_sampled_artifact_allocated_bytes": 6361088,
+      "process_group": 882653,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-30T12:04:22.283948+00:00",
+      "wall_seconds": 1.1215589930070564,
+      "max_waited_child_rss_kib": 96708,
+      "artifact_bytes_before_report": 2970,
+      "aggregate_artifact_bytes_before_report": 6361088,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 4971804,
+        "allocated_bytes": 6361088
+      }
+    }
+  },
+  "dependency_check": "WARN: main repository has local file changes; review before committing\n   M README.md\n  ?? fixtures/source_ack_watchdog/README.md\n  ?? fixtures/source_ack_watchdog/evidence.py\n  ?? tests/integration/check_source_ack_watchdog.py\nREAD: . @ 14fc5713bdb04ab8a788a0f02c6f2bd60faaf98f\nREAD: third_party/LLMServingSim @ 77da4a67204789249994a6a6ca82aaa2b1c41fc7\nREAD: third_party/LLMServingSim/astra-sim @ 04948bc1dd8833201967560fd4ece0a57c642705\nREAD: third_party/LLMServingSim/astra-sim/extern/graph_frontend/chakra @ 30221ab8bfd9212aa9c063cd0b14a7d0a2ea6dd7\nREAD: third_party/LLMServingSim/astra-sim/extern/helper/fmt @ 7e73566ce7bd3617cd4b14a2e3a19a2a30b524c7\nREAD: third_party/LLMServingSim/astra-sim/extern/helper/spdlog @ 63f0875000bf90867aa7c76a831bd834cb7d4b5e\nREAD: third_party/LLMServingSim/astra-sim/extern/memory_backend/analytical @ 62313ef09abaf6a9764d13e2684ca61247def14b\nREAD: third_party/LLMServingSim/astra-sim/extern/network_backend/analytical @ 5dc02322f04ac42fcfbb5304d5f7f2fa20d25e3e\nINFO: checking transitive dependency against its parent: third_party/LLMServingSim/astra-sim/extern/network_backend/analytical/extern/googletest\nREAD: third_party/LLMServingSim/astra-sim/extern/network_backend/analytical/extern/googletest @ 1204d634444b0ba6da53201a8b6caf2a502d883c\nINFO: checking transitive dependency against its parent: third_party/LLMServingSim/astra-sim/extern/network_backend/analytical/extern/yaml-cpp\nREAD: third_party/LLMServingSim/astra-sim/extern/network_backend/analytical/extern/yaml-cpp @ 3d2888cc8a45da2f420454ad728cdfad01a3d54f\nREAD: third_party/LLMServingSim/astra-sim/extern/network_backend/csg-htsim @ 67cbbbb1cccdbddc400803414127d044ecd55290\nREAD: third_party/LLMServingSim/astra-sim/extern/network_backend/ns-3 @ 69cb14764c0c5de2c7ad31599ee5b3999dddc154\nREAD: third_party/ns-3-ub @ fee9fbf6e471f2e1db93db16fbbc44a115dda0b1\nREAD: third_party/ns-3-ub/scratch/ns-3-ub-tools @ 2afc7202f88c132b63c38e8c7dcfc08505b13bb2\nPASS: checked 13 dependency checkouts; versions and inspected states agree.\nThis result does not validate remote availability, compilation, or simulation.\n",
+  "distinct_unit_tests": 69,
+  "new_unit_tests": 13,
+  "related_unit_tests": 56,
+  "new_network_executions": 2,
+  "native_input_rejections": 4,
+  "new_service_objects": 1,
+  "dependency_builds": 0,
+  "dependency_changes": false,
+  "new_downloads": 0,
+  "gpu_executions": 0,
+  "scope": "actual source ACK deadlines and cancellation; synthetic functional inputs; no recovery gain"
+}

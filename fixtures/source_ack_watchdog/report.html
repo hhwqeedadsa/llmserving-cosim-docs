@@ -1,0 +1,20 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>源端确认超时：真实时钟上的在线信号</title><style>body{font:17px/1.8 system-ui,sans-serif;color:#193149;background:#eef3f8;margin:0;padding:28px}main{max-width:1080px;margin:auto;background:white;padding:32px;border-radius:12px}table{border-collapse:collapse;width:100%}td,th{border:1px solid #c9d5df;padding:10px;text-align:left}.note{background:#fff3d9;border-left:5px solid #c46a0b;padding:16px}svg{width:100%;height:auto}a{color:#245f9c}code{overflow-wrap:anywhere}</style>
+<main><h1>现在能在运行中知道“这条发送迟迟未确认”</h1>
+<p>原生ns-3按实际SEND提交启动一次性期限，Python在仿真运行中收到通知；不用事后丢包日志推断，不读取故障结束时间。</p>
+<p class="note">这不是新重传算法，也没有恢复加速收益。通知只说明尚未得到源确认，接收端可能已经得到数据。</p>
+<h2>同一128端点Clos的两组功能验证</h2><p>16服务器×8，8ToR/8Agg/4Core，单rail/plane、各层400G、每链路1us；两个EP64组、E256/Top8/H256、两层两步。四份不同人工路由，31数据活跃rank；计算为声明成本，无真实GPU或完整R1。</p>
+<table><tr><th>指标</th><th>normal 正常</th><th>local 局部短时故障</th></tr>
+<tr><td>实际消息 / 专家贡献</td><td>62 / 128</td><td>相同</td></tr>
+<tr><td>确认期限 / 在线通知</td><td>20us / 0次</td><td>20us / 1次</td></tr>
+<tr><td>定时器取消 / 最终未确认</td><td>62 / 0</td><td>61 / 0</td></tr>
+<tr><td>注入丢包</td><td>0</td><td>1个目的DATA包，前20us仅GPU6受损</td></tr>
+<tr><td>完整包事件 / 任务及排空</td><td>2120 / 103.852us</td><td>2126 / 175.778us</td></tr></table>
+<p>两组各只运行一次。去掉新增watchdog计数后，完整原生网络结果分别与上一轮对应原件一致；所有任务图、执行事件和贡献记录逐字节一致，没有重跑旧成功网络。</p>
+<h2>局部条件中0→6、消息2的实际时间线</h2>
+<svg viewBox="0 0 850 205" role="img" aria-label="消息2从1.030微秒提交，21.030微秒通知，83.058微秒接收，85.060微秒源确认"><line x1="42" y1="150" x2="810" y2="150" stroke="#b7c7d6"/><line x1="49.725" y1="150" x2="49.725" y2="52" stroke="#275eab"/><circle cx="49.725" cy="150" r="6" fill="#275eab"/><text x="49.725" y="42" text-anchor="middle" fill="#275eab">SEND post 1.030us</text><line x1="199.72500000000002" y1="150" x2="199.72500000000002" y2="92" stroke="#c46a0b"/><circle cx="199.72500000000002" cy="150" r="6" fill="#c46a0b"/><text x="199.72500000000002" y="82" text-anchor="middle" fill="#c46a0b">20us期限通知 21.030us</text><line x1="664.9350000000001" y1="150" x2="664.9350000000001" y2="52" stroke="#087c67"/><circle cx="664.9350000000001" cy="150" r="6" fill="#087c67"/><text x="664.9350000000001" y="42" text-anchor="middle" fill="#087c67">接收回调 83.058us</text><line x1="679.95" y1="150" x2="679.95" y2="132" stroke="#8f367d"/><circle cx="679.95" cy="150" r="6" fill="#8f367d"/><text x="679.95" y="122" text-anchor="middle" fill="#8f367d">真实源确认 85.060us</text><text x="42" y="190">0us</text><text x="775" y="190">100us</text></svg>
+<p>通知发生在21.030us，此前已在线交付1142条执行事件。故障注入实际20us已结束，但源端仍不知道本次发送何时确认；通知没有读取这一真值。其后64.030us才源确认，不能直接当作可消除收益。</p>
+<h2>检查了什么</h2><p>69项不同CPU检查通过（新增13、相关56）。独立核对原始控制流、post/接收/确认回调及两组原网络结果；迁移检查和旧默认关闭检查通过。7类通知/计数篡改被拒绝，4类原生非法选项在创建网络前拒绝。同纳秒先确认则取消、先期限则通知两种顺序均保留。</p>
+<p>新增1个服务对象并隔离链接，复用固定ASTRA archive与原生库；旧对象和程序hash不变。零依赖构建/升级、下载、安装或GPU执行。</p>
+<h2>下一步还有什么</h2><p>缺少可以响应通知的在途恢复决策与合法备用执行。须让原/备用任务共享同一GPU/NIC资源，并处理贡献一次提交、迟到结果和原连接退出；之后才能比较成熟备用请求与候选机制的净收益。</p>
+<p><a href="README.md">方法与边界</a> · <a href="verification.json">独立核验</a> · <a href="receipt.json">源码和命令</a> · <a href="resources.json">资源</a> · <a href="final-audit.json">收尾检查</a> · <a href="../../docs/source_ack_watchdog.md">公开接口</a></p></main></html>

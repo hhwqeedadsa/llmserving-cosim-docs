@@ -37,6 +37,8 @@
 
 通知schema为`moe-source-ack-timeout/1`，含`type=SOURCE_ACK_TIMEOUT`、连续`sequence`、绝对纳秒`time_ns`、此前执行事件数`observed_events`，以及`graph_id/rank/message/send_post_ns/deadline_ns`。每条最多1024B，总文件受`max_notifications×1024B`约束。身份对应实际消息，不冒充专家或张量身份。原始帧保留在`native.stdout.log`，不是`DECIDE`，Python不回复COMMIT。
 
+这是单向采集，不暂停Simulator等待Python。`time_ns`表示原生发出通知的时刻，不保证Python消费时后端仍停在该时刻；不能用它回填过去的恢复调度。后续若允许Python提交恢复动作，必须另建同一仿真时刻的同步决策入口，明确验证回复及资源准入。
+
 `SourceAckObserver`按已验证执行事件与通知的原始交错顺序核对。`rdma-check`将两个保存流逐行与原生帧对应，重放post、确认及期限，拒绝提前、迟到、重复、错误身份/前缀、遗漏通知与伪造计数。执行事件另与独立ASTRA日志/实际消息回调核对。跨流同纳秒顺序保留；真实确认先于同刻期限时允许没有通知，不从事后时刻猜另一种顺序。
 
 尚无在途恢复响应、备用图插入、共享GPU帮助执行或净收益；仍须实现这些语义，再与相同观测、资源和副本预算的普通备用请求比较。

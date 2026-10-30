@@ -1,0 +1,109 @@
+{
+  "passed": true,
+  "execution_commit": "14fc5713bdb04ab8a788a0f02c6f2bd60faaf98f",
+  "cases": {
+    "normal": {
+      "native_result_except_watchdog_equal": true,
+      "byte_identical": [
+        "execution_events.jsonl",
+        "contribution_calls.jsonl",
+        "contribution_summary.json"
+      ],
+      "graph_files_equal": 260,
+      "application_and_drain_ns": 103852,
+      "packet_events": 2120,
+      "watchdog": {
+        "cancelled_timers": 62,
+        "configuration": {
+          "max_messages": 128,
+          "max_notifications": 128,
+          "schema_version": "moe-source-ack-watchdog/1",
+          "timeout_ns": 20000
+        },
+        "messages": 62,
+        "notifications": 0,
+        "pending_timers": 0,
+        "schema_version": "moe-source-ack-watchdog-report/1",
+        "source_completions": 62,
+        "unconfirmed_messages": 0
+      },
+      "notices": []
+    },
+    "local": {
+      "native_result_except_watchdog_equal": true,
+      "byte_identical": [
+        "execution_events.jsonl",
+        "contribution_calls.jsonl",
+        "contribution_summary.json"
+      ],
+      "graph_files_equal": 260,
+      "application_and_drain_ns": 175778,
+      "packet_events": 2126,
+      "watchdog": {
+        "cancelled_timers": 61,
+        "configuration": {
+          "max_messages": 128,
+          "max_notifications": 128,
+          "schema_version": "moe-source-ack-watchdog/1",
+          "timeout_ns": 20000
+        },
+        "messages": 62,
+        "notifications": 1,
+        "pending_timers": 0,
+        "schema_version": "moe-source-ack-watchdog-report/1",
+        "source_completions": 62,
+        "unconfirmed_messages": 0
+      },
+      "notices": [
+        {
+          "message": 2,
+          "source": 0,
+          "destination": 6,
+          "send_post_ns": 1030,
+          "notification_ns": 21030,
+          "receiver_callback_ns": 83058,
+          "sender_callback_ns": 85060,
+          "observed_events": 1142
+        }
+      ]
+    }
+  },
+  "negative_checks": {
+    "wrong-message": true,
+    "early-notice": true,
+    "wrong-prefix": true,
+    "duplicate": true,
+    "missing": true,
+    "wrong-summary": true,
+    "truth-field": true
+  },
+  "native_pre_fabric_rejections": {
+    "bool-timeout": true,
+    "zero-budget": true,
+    "extra-field": true,
+    "missing-events": true
+  },
+  "relocation_passed": true,
+  "legacy_default_disabled_check_passed": true,
+  "original_hashes": {
+    "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030/normal/result.json": "b70790166f5e0777336f185cd68d793e53ae874c05fac0c4093a6c05ab43090b",
+    "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030/normal/input.json": "6dbf0dfa792d66fcf3df4c1a8f41e22644a2814afa93ba58f3faec6b94964543",
+    "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030/normal/rdma.json": "2e96b611d1985507bf3eda5816c1cd4595a0c120b4ef5b460ab74c1e0d20b3db",
+    "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030/normal/native.stdout.log": "555a8365c756e740311012c9b1037c4c0ccdbb5f58175126692171e613feca67",
+    "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030/normal/execution_events.jsonl": "fab2439297d591b546e7b0475b7600703129521704cf467779d58068aede320a",
+    "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030/normal/contribution_calls.jsonl": "e72f227ec8b0b06aa963943f87d9ffe7107872f0dc376a66df6f63584e46d240",
+    "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030/normal/source_ack_timeouts.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030/normal/source_ack_watchdog.json": "7188048d31c9783d4c2b869e3c456cf22e05af4572dda79c76d64e8cca56813a",
+    "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030/local/result.json": "ffd63cf14ddbd1325819440941209e3bc6f0717c802b8383936fb8c9fc944d7e",
+    "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030/local/input.json": "6dbf0dfa792d66fcf3df4c1a8f41e22644a2814afa93ba58f3faec6b94964543",
+    "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030/local/rdma.json": "ce4380fe0443dfd8d3026f353f964832980d5ace0f5100fd4dba8c33f9114408",
+    "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030/local/native.stdout.log": "a34fe29f7a0df425a237b36a759ed3ae1614c736d1ef136671a67dbad6c1483f",
+    "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030/local/execution_events.jsonl": "664f16c59a08946029406054e52dde6d20b694ea3222bd71abb2d3f321dee49b",
+    "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030/local/contribution_calls.jsonl": "36e0a57db848fe78d19d852a020e1763b3d750182c573e86ccce847ef91c8fdf",
+    "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030/local/source_ack_timeouts.jsonl": "e38e95bae78d40bc1cc7dda739b2f756b6f75d69996135d978a9b52968915f3d",
+    "/home/lry/moe-ub-cosim/runs/source_ack_watchdog_20261030/local/source_ack_watchdog.json": "3ae2925a1aa4d27b29cce9b4e5a5c2d20b1fdab08f55074356aeffe26b07f0c8"
+  },
+  "raw_callbacks_and_deadlines_independently_checked": true,
+  "new_network_executions": 0,
+  "scope": "online source ACK deadline correctness; no recovery policy or gain"
+}

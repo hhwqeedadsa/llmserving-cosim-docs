@@ -1,0 +1,76 @@
+{
+  "passed": true,
+  "native_runs": 1,
+  "native_gpu_endpoints": 128,
+  "native_source_kind": "synthetic_test",
+  "native_requests": 4,
+  "messages": 252,
+  "logical_bytes": 129024,
+  "packet_events": 8496,
+  "verified_nodes": 2552,
+  "application_finished_ns": 65696,
+  "expert_receiver_ranks": 72,
+  "expert_only_receivers": 69,
+  "zero_cost_local_token_nodes_checked": 1488,
+  "real_source_offline_scales": [
+    {
+      "gpu_endpoints": 128,
+      "ep_sizes": [
+        128
+      ],
+      "experts_per_rank": [
+        2
+      ],
+      "independent_requests": 15,
+      "network_participant_ranks": 114,
+      "expert_only_network_ranks": 99,
+      "messages": 926,
+      "logical_bytes": 13676544,
+      "persistent_streams": 804,
+      "max_planned_stream_bytes": 43008,
+      "network_executed": false,
+      "independent_original_matrix_verified": true
+    },
+    {
+      "gpu_endpoints": 256,
+      "ep_sizes": [
+        256
+      ],
+      "experts_per_rank": [
+        1
+      ],
+      "independent_requests": 15,
+      "network_participant_ranks": 181,
+      "expert_only_network_ranks": 166,
+      "messages": 958,
+      "logical_bytes": 13733888,
+      "persistent_streams": 894,
+      "max_planned_stream_bytes": 28672,
+      "network_executed": false,
+      "independent_original_matrix_verified": true
+    },
+    {
+      "gpu_endpoints": 512,
+      "ep_sizes": [
+        256,
+        256
+      ],
+      "experts_per_rank": [
+        1,
+        1
+      ],
+      "independent_requests": 15,
+      "network_participant_ranks": 264,
+      "expert_only_network_ranks": 249,
+      "messages": 956,
+      "logical_bytes": 13705216,
+      "persistent_streams": 892,
+      "max_planned_stream_bytes": 28672,
+      "network_executed": false,
+      "independent_original_matrix_verified": true
+    }
+  ],
+  "real_source_network_runs": 0,
+  "new_algorithm_gain_measured": false,
+  "hardware_calibrated": false
+}

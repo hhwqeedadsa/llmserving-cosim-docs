@@ -55,7 +55,7 @@ def route_identity(c, base):
     assert sha(path) == ref['sha256']
     manifest = load(path)
     for row in manifest['files']:
-        assert sha(path.parent/row['file']['path']) == row['file']['sha256']
+        assert sha(base/row['file']['path']) == row['file']['sha256']
         row['file']['path'] = '<content-addressed>'
     return manifest
 

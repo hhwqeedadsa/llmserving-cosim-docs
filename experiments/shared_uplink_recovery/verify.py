@@ -46,7 +46,7 @@ def main():
         assert sha(route_path) == ref['sha256']
         manifest = load(route_path)
         for file in manifest['files']:
-            assert sha(route_path.parent/file['file']['path']) == file['file']['sha256']
+            assert sha(d/file['file']['path']) == file['file']['sha256']
             file['file']['path'] = '<same-verified-content>'
         if normal_manifest is None:
             normal_manifest = manifest

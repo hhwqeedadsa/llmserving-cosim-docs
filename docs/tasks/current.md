@@ -1,5 +1,11 @@
 # 当前任务与交接
 
+## 2026-10-30 通信库发送发布与反馈边界
+
+状态：`in_progress`。上一目标轮为progress：`9f9465d8c9`交付恢复计时/ACK核查并发布用户分支。本轮只读固定DeepEP低延迟、现代DeepEP及NCCL/DOCA本地源码，核对QP索引、WQE拆分、发送发布、CQ与网络ACK的区别；对既有128Clos/四EP32组/15真实选择的两层两步做独立操作核算，确定具体建模改进及准入条件。旧库投影与当前direct抽象分开，不把数据准备、门铃发布或CQ标记等同实际发包/ACK，不从逻辑数量推出时延收益。
+
+根`runs/library_posting_audit_20261030`：300受监控秒/64MiB/卷留8GiB，阶段60秒/RSS512MiB/地址1GiB；零新网络、构建、下载、安装、依赖变更或GPU，不重跑旧网络。先固定方法/来源，再核算、独立验证、发布解释及下一项实现规范。只发布既有用户分支，整体目标保持active。
+
 ## 2026-10-30 恢复计时语义与调度机会核查
 
 状态：`completed`（本轮只读审计交付；整体研究目标仍active）。上一目标轮仅解释normal/local，没有项目状态变化，分类no progress；本轮继续`006f8f1ee0`事前方法，补足恢复语义及真实施力位置的证据。四份128端点Clos原件逐项hash保持；零新网络、构建、安装、依赖修改或GPU。交付[网页](../../experiments/recovery_timer_audit/results/20261030/report.html)、[结果与复核方法](../../experiments/recovery_timer_audit/RESULTS.md)、[源码身份](../../experiments/recovery_timer_audit/results/20261030/sources.json)及[执行收据](../../experiments/recovery_timer_audit/results/20261030/receipt.json)。

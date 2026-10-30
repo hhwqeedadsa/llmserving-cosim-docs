@@ -1,0 +1,75 @@
+"""Publish the posting audit without presenting logical counts as network results."""
+import argparse
+import hashlib
+import html
+import json
+from pathlib import Path
+import shutil
+
+
+def load(path):
+    return json.loads(path.read_bytes())
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--stage', type=Path, required=True)
+    parser.add_argument('--output', type=Path, required=True)
+    args = parser.parse_args()
+    stage, out = args.stage.resolve(), args.output.resolve()
+    a, v = load(stage/'analysis.json'), load(stage/'verification.json')
+    assert a['passed'] and v['passed']
+    assert hashlib.sha256((stage/'analysis.json').read_bytes()).hexdigest() == v['analysis_sha256']
+    out.mkdir(parents=True, exist_ok=False)
+    for name in ('analysis.json', 'verification.json'):
+        shutil.copyfile(stage/name, out/name)
+    for name in ('sources.json', 'projections.json', 'frozen.json'):
+        shutil.copyfile(stage/'input'/name, out/name)
+    totals = a['totals']
+    summary = f"""# 数据准备好，为什么不一定立刻发包
+
+本轮补齐发送侧的具体建模条件：WQE准备、门铃发布、本地完成与网络ACK是不同事件。既有128端点Clos的15真实请求、两层两个Decode步形成16个组/层/步窗口，含{totals['tokens']}个token输入、{totals['selections']}个专家选择。以下旧低延迟投影重新使用这些选择，不是执行了旧低延迟网络。
+
+## 核查到的三件事
+
+1. **一次put不是一条WQE，更不是一个包。** 低延迟路径按本地和远端注册key的边界拆分WQE。14352B的说明性BF16 Dispatch put，在显式假设的地址布局下分别拆为1、2、3条WQE，数据字节不变；真实地址和key布局不在专家选择文件中。不能据此计算真实包数或ACK数。
+2. **准备好WQE不等于网卡立即获知。** 固定低延迟同步路径默认每四条逻辑put触发postsend，最后的count/flag原子操作强制触发。异步postsend分支由代理负责，实际运行模式未知，不能给代理假定零延迟。本投影所有非空source/expert上下文只有一条数据put，因而没有从该数据put自身触发四条批次发布；后续原子通知仍会推动发布。
+3. **CQ标记不是网络ACK请求位。** 旧库写入CQ update标记；固定NCCL/DOCA参考区分CQ格式与CQE请求。它们说明本地完成记录，不能据此推出每包ACK。NCCL参考另有QP超时/重试配置；调用参数来自配置函数，尚未取得实际值，也未证明与此现代DeepEP版本联合构建。
+
+## 同一选择，库模式不同，工作形态也不同
+
+| 指标 | 旧低延迟投影Dispatch | 旧低延迟投影Combine |
+|---|---:|---:|
+| 远端数据put调用 | {totals['dispatch_data_puts']} | {totals['combine_data_puts']} |
+| count/flag原子通知操作 | {totals['dispatch_marker_operations']} | {totals['combine_marker_operations']} |
+| 其中零token通知 | {totals['dispatch_zero_token_markers']} | {totals['combine_zero_token_markers']} |
+| 条件同步路径由数据put触发postsend的次数 | {totals['dispatch_synchronous_data_postsend_calls']} | {totals['combine_synchronous_data_postsend_calls']} |
+| 处于末批、未由自身数据put触发发布的put | {totals['dispatch_puts_in_final_unrung_batch']} | {totals['combine_puts_in_final_unrung_batch']} |
+
+原有direct抽象共{totals['current_direct_messages']}条逻辑消息、{totals['current_direct_payload_bytes']:,}B有效数据，沿用rank-reduced Combine与该模式打包。它不是上述v1.2.1低延迟执行；不能把两者的计数差说成已经测得的漏包、时延误差或修复收益。旧库的通知即使没有token也存在，但操作数不等于线上数据包或额外完成时延。
+
+现代DeepEP direct源码调用GIN，不能继承旧低延迟的“每四条put发布”规则。当前网络仍是声明的direct抽象，不是已经校准的完整现代GIN/NCCL/网卡组合。
+
+## 下一项应怎样改
+
+先分开数据就绪、WQE写就绪、provider发布、实际TX/RX、应用可见和源完成。使用每QP连续前缀，未发布工作不能提前注入网络，保留QP历史和原确认/资源退出。针对低延迟和现代direct分别指定策略；不能用一种规则混跑，或把CQ信号当ACK。
+
+这属于仿真系统忠实度建设，收益尚未测得。候选研究仍是利用任务进度减少共享网络干扰；应在匹配的操作/发布模型和同信息成熟基线之上验证。实现要求与功能准入见[发送发布规范](../../../../docs/tasks/posting_boundary_spec.md)。本轮不改变平台默认，不产生新协议创新结论。
+
+## 证据与边界
+
+[逐窗口核算](analysis.json)、[真实选择投影](projections.json)、[独立验证](verification.json)、[固定来源与摘录](sources.json)、[冻结身份](frozen.json)。四类统计/拆分篡改被拒绝；来源Git blob和SHA256分别核验。原网络文件保持不变，无新网络、构建、安装、下载或GPU执行。计算仍为原声明成本，真实选择不含激活、寄存器地址、WQE时间戳或硬件ACK策略。网页只检查静态链接，未做浏览器视觉验收。
+"""
+    (out/'README.md').write_text(summary)
+    references = ''.join('<li><a href="'+html.escape(s['public_url'], quote=True)+'">'+
+        html.escape(s['family']+' · '+Path(s['path']).name)+'</a></li>' for s in load(out/'sources.json'))
+    page = '<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'
+    page += '<title>发送发布、WQE与ACK边界</title><style>body{font:16px/1.85 system-ui,sans-serif;max-width:1050px;margin:36px auto;padding:0 22px;color:#183650;background:#f5f8fc}pre{white-space:pre-wrap;font:inherit;background:white;padding:24px}aside{background:#e4effb;padding:20px;border-left:5px solid #2879b3}a{color:#1c629d}</style>'
+    page += '<h1>数据准备好，还要经过哪些步骤才进入网络？</h1><aside>准备数据 → 写就绪工作条目 → 发布给网卡 → 物理发送/接收。<br>本地CQ完成、网络ACK、应用可见分别核对；当前没有新时延收益。</aside>'
+    page += '<p><a href="README.md">详细报告</a> · <a href="analysis.json">逐窗口数据</a> · <a href="verification.json">独立核查</a> · <a href="sources.json">源码证据</a></p><pre>'+html.escape(summary)+'</pre><h2>固定源码</h2><ul>'+references+'</ul></html>'
+    (out/'report.html').write_text(page)
+    print(json.dumps(dict(published=str(out), new_networks=0, latency_predicted=False)))
+
+
+if __name__ == '__main__':
+    main()

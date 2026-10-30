@@ -28,7 +28,7 @@ PYTHONPATH=python .venv/frontend/bin/python -B examples/scaleout_whole_call/prep
 
 清单沿用route replay格式，原始路径相对仓库根解析或用绝对路径。脚本不下载、不改来源身份。真实模式限定R1原层3/4、第一个Decode入口、H7168/E256/Top8；4份原件是4个逻辑请求和8次执行，不是8份独立数据、完整671B推理或满载128卡。计算仍为声明成本，完整权重/等价ready-KV为显式初态假设。
 
-查看`whole-preparation.json`、`route_evidence.json`、`whole_call_events.jsonl`及`whole_call_report.json`，区分源文件数、逻辑请求、物理尝试、结果、全部尝试退出和网络排空。准备不执行网络；新机器继续用公开`rdma-build`。本功能没有新原生选项，不要求重编已有支持执行事件的后端。
+查看`whole-preparation.json`、`route_evidence.json`、`whole_call_events.jsonl`及`whole_call_report.json`，区分源文件数、逻辑请求、物理尝试、结果、全部尝试退出和网络排空。准备不执行网络；新机器继续用公开`rdma-build`。立即副本不要求重编已有支持执行事件的后端；延迟副本需要支持原生定时控制的新后端。
 
 接口和成本边界见[完整说明](../../docs/whole_call.md)。完整副本是成熟基线；没有原地SR和延迟备用对照时，不将两次尝试的时间差当成净恢复收益。
 
@@ -36,4 +36,10 @@ PYTHONPATH=python .venv/frontend/bin/python -B examples/scaleout_whole_call/prep
 
 给上面的准备命令增加`--include-primary-control`，会另生成`service-primary.json`。它保留相同128端点、两组EP64、全部连接绑定、专家部署、原始请求和原尝试图，只取消副本执行；显式使用`sparse_active_groups/1`允许第二组没有请求。仍用相同的`rdma-run/rdma-check`，将`--config`换为`service-primary.json`，输出使用新目录。
 
-此控制不删除网络节点或改变EP大小，也不为备用组虚构请求/KV。normal仍用`rdma.json`，local仍用准备时已固定的`rdma-whole-local.json`。这是无副本控制，不是延迟备用；副本初态建立、延迟启动和其他请求负载须另研究。
+此控制不删除网络节点或改变EP大小，也不为备用组虚构请求/KV。normal仍用`rdma.json`，local仍用准备时已固定的`rdma-whole-local.json`。这是无副本控制；副本初态建立和其他请求负载须另研究。
+
+## 延迟启动副本
+
+准备命令增加`--hedge-after-ns 70000`，会另生成`service-delayed.json`。把公开运行命令的`--config`换成该文件，使用支持`--control-wakeup`的后端和新输出目录；normal/local仍用同两份protocol。70微秒是示例的固定门槛，可按明确实验方法修改，不能把故障结束时间作为策略输入。
+
+主尝试在0启动；到原生70微秒决策仍没有完整结果才启动备用。提前有结果时，备用保持`NOT_STARTED`并释放实际预留KV；已启动的较慢尝试继续实际收尾。公开检查同时核对定时器、原始完成前缀、原始请求和KV释放。两个模型副本与等价ready-KV仍是预先存在的声明条件。

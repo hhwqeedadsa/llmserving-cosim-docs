@@ -1,5 +1,7 @@
 # 联合后端接口与执行规则
 
+延迟完整副本可选`--control-wakeup MAX_EVENTS`：一个原生ns-3定时事件产生带`wakeup_ns`的DECIDE，COMMIT用`wake_at_ns`设置或取消下一期限。定时事件不制造消息/图完成；关闭时不增加事件。要求持久传输与执行观察，不与watchdog/helper控制混用；完整语义、资源与核验见[完整片段副本](../docs/whole_call.md)。
+
 原生服务可选`--source-ack-watchdog CONFIG.json`，`source_ack_watchdog.hh`只从SEND post和源确认维护同一Simulator上的一次性期限，不读取接收状态或故障定义。通知与OBSERVE分流，保留原传输回调和排空；格式及公开配置见[源确认通知](../docs/source_ack_watchdog.md)。
 
 原生服务可显式传入`--execution-events MAX_EVENTS`，由ASTRA被动节点观察器和`Messages`在实际回调位置发出单向`OBSERVE`帧。它不接受恢复命令、不改变现有调度；默认关闭。公开服务JSON、格式、边界和核验见[实时执行事件](../docs/execution_events.md)。

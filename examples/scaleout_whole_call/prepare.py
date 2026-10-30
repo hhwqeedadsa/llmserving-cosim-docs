@@ -28,8 +28,11 @@ def main():
     p.add_argument('--source-manifest',type=Path)
     p.add_argument('--max-source-files',type=int,default=4)
     p.add_argument('--include-primary-control',action='store_true',help='Also prepare a no-redundancy control on the identical deployment')
+    p.add_argument('--hedge-after-ns',type=int,help='Also prepare delayed full replicas with this native deadline')
     a=p.parse_args();out=a.output.resolve()
     if not 1<=a.max_source_files<=16:raise ValueError('max source files must be 1..16')
+    if a.hedge_after_ns is not None and not 1<=a.hedge_after_ns<=4999999:
+        raise ValueError('hedge deadline must be 1..4999999 ns')
     subprocess.run([sys.executable,'-B',str(ROOT/'examples/scaleout_source_ack_watchdog/prepare.py'),
                     '--output',str(out)],cwd=ROOT,check=True)
     c=load(out/'service-watchdog.json');c.pop('source_ack_watchdog');c.pop('contribution_tracking')
@@ -63,6 +66,12 @@ def main():
     topology=load(out/'topology/topology.json')
     for protocol in (normal,local):validate(c,topology,protocol,Replay(c,ROOT))
     save(out/'service-whole.json',c)
+    if a.hedge_after_ns is not None:
+        delayed=deepcopy(c)
+        delayed['whole_call_replication'].update(schema_version='moe-whole-call-replication/2',
+            policy='delayed_complete_segment/1',hedge_after_ns=a.hedge_after_ns,max_wakeup_events=4)
+        for protocol in (normal,local):validate(delayed,topology,protocol,Replay(delayed,ROOT))
+        save(out/'service-delayed.json',delayed)
     if a.include_primary_control:
         primary=deepcopy(c);primary.pop('whole_call_replication')
         primary['route_replay']['request_layout']='sparse_active_groups/1'

@@ -5,6 +5,7 @@
 #include "execution_events.hh"
 #include "source_ack_watchdog.hh"
 #include "inflight_helpers.hh"
+#include "service_wakeup.hh"
 #include "astra-sim/system/Sys.hh"
 #include <filesystem>
 #include <fstream>
@@ -18,10 +19,13 @@ namespace moe_rdma { void InitializeLogging(); void ShutdownLogging(); }
 namespace fs=std::filesystem;
 class Service {
  public:
-  Service(Fabric& fabric,ServiceTransport& transport,ControlChannel& control,int ranks,const std::string& bootstrap,const std::string& system,HostTiming& timing,bool phase_completion,uint64_t event_limit,bool compute_starts,const SourceAckWatchdogOptions& watchdog,const Json& helpers):
+  Service(Fabric& fabric,ServiceTransport& transport,ControlChannel& control,int ranks,const std::string& bootstrap,const std::string& system,HostTiming& timing,bool phase_completion,uint64_t event_limit,bool compute_starts,const SourceAckWatchdogOptions& watchdog,const Json& helpers,uint64_t wake_limit):
     fabric_(fabric),transport_(transport),control_(control),events_(control,event_limit,compute_starts),watchdog_(control,events_,watchdog),
     compute_(ranks,helpers.is_null()?1:helpers.at("configuration").at("max_compute_tasks").get<uint64_t>()),helpers_(transport,compute_,control,events_,helpers),
-    messages_(fabric,transport),owners_(ranks),boot_done_(ranks,false),timing_(timing),phase_completion_(phase_completion),watchdog_enabled_(watchdog.enabled) {
+    wakeup_(wake_limit,fabric.MaxSimNs(),[this](int64_t when){
+      Require(wakeup_pending_<0 && !finishing_,"service wakeup after finish or duplicate pending control");
+      wakeup_pending_=when;RequestPump();
+    }),messages_(fabric,transport),owners_(ranks),boot_done_(ranks,false),timing_(timing),phase_completion_(phase_completion),watchdog_enabled_(watchdog.enabled) {
     if(helpers_.Enabled()) {
       watchdog_.on_timeout=[this](const Json& notice){helpers_.Decide(notice);};
       helpers_.changed=[this](){TryFinish();};
@@ -49,6 +53,9 @@ class Service {
     } else {
       Require(waves_.at(owners_[rank]).finished.insert(rank).second,"rank completed graph twice");
     }
+    RequestPump();
+  }
+  void RequestPump() {
     if(!pump_pending_) {
       pump_pending_=true;ns3::Simulator::ScheduleNow([this](){pump_pending_=false;Pump();});
     }
@@ -72,11 +79,13 @@ class Service {
     // Partial rank completions do not make an EP group schedulable. Suppress
     // empty control round trips, preserving the initial decision and all
     // actual group completions in this finite, no-new-arrivals service.
-    if(completed.empty() && decision_>0)return;
+    if(completed.empty() && decision_>0 && wakeup_pending_<0)return;
     Json available=Json::array();
     for(unsigned r=0;r<owners_.size();++r)if(owners_[r].empty())available.push_back(r);
     Json request={{"type","DECIDE"},{"decision_id",decision_},{"now_ns",Now()},
                   {"completed",completed},{"available_rank_ids",available}};
+    if(wakeup_.Enabled())request["wakeup_ns"]=wakeup_pending_<0?Json(nullptr):Json(wakeup_pending_);
+    wakeup_pending_=-1;
     std::string line;
     {
       auto exchange=timing_.Span("control_exchange");
@@ -89,12 +98,16 @@ class Service {
     Require(commit.at("type")=="COMMIT" && commit.at("decision_id")==decision_ && commit.at("now_ns")==Now(),
             "frontend commit identity/time mismatch");
     ++decision_;Require(decision_<=4096,"service decision budget exceeded");
+    if(wakeup_.Enabled()) {
+      Require(commit.contains("wake_at_ns"),"missing service control wakeup decision");
+      wakeup_.Update(commit.at("wake_at_ns"));
+    } else Require(!commit.contains("wake_at_ns"),"undeclared service control wakeup decision");
     const auto& submissions=commit.at("submissions");
     if(commit.at("service_finished")==true) {
-      Require(submissions.empty() && waves_.empty(),"premature service termination");
+      Require(submissions.empty() && waves_.empty() && !wakeup_.Pending(),"premature service termination");
       finishing_=true;TryFinish();return;
     }
-    Require(!submissions.empty() || !waves_.empty(),"frontend and network made no progress");
+    Require(!submissions.empty() || !waves_.empty() || wakeup_.Pending(),"frontend and network made no progress");
     std::vector<int> activate;
     {
     auto phase=timing_.Span("graph_load");
@@ -192,6 +205,7 @@ class Service {
     if(events_.Enabled())report["execution_events"]=events_.Report();
     if(watchdog_enabled_)report["source_ack_watchdog"]=watchdog_.Report();
     if(helpers_.Enabled()){report["inflight_helpers"]=helpers_.Report();report["shared_compute"]=compute_.Report();}
+    if(wakeup_.Enabled())report["control_wakeup"]=wakeup_.Report();
     if(phase_completion_) {
       Json gates=Json::array();
       for(const auto& [key,group]:phase_gates_.Groups()) {
@@ -215,7 +229,7 @@ class Service {
   static int64_t Now(){return ns3::Simulator::Now().GetNanoSeconds();}
   struct Wave { std::vector<uint64_t> messages;std::vector<int> ranks;std::set<int> finished;int64_t start; };
   Fabric& fabric_;ServiceTransport& transport_;ControlChannel& control_;ExecutionEvents events_;SourceAckWatchdog watchdog_;
-  SharedCompute compute_;InflightHelpers helpers_;Messages messages_;
+  SharedCompute compute_;InflightHelpers helpers_;ServiceWakeup wakeup_;Messages messages_;
   std::vector<std::string> owners_;
   std::vector<bool> boot_done_;
   std::vector<std::unique_ptr<Adapter>> adapters_;
@@ -224,6 +238,7 @@ class Service {
   std::set<std::string> used_;
   Json history_=Json::array();
   unsigned decision_=0;bool pump_pending_=false,finished_=false;
+  int64_t wakeup_pending_=-1;
   HostTiming& timing_;
   bool phase_completion_,watchdog_enabled_;
   bool finishing_=false,finish_requested_=false;
@@ -232,7 +247,7 @@ class Service {
 static int Libraries(dl_phdr_info* info,std::size_t,void* data) {
   if(info->dlpi_name && info->dlpi_name[0])static_cast<Json*>(data)->push_back(info->dlpi_name);return 0;
 }
-static void Execute(char** argv,HostTiming& timing,const Json& transport_config,ControlChannel& control,bool phase_completion,uint64_t event_limit,bool compute_starts,const SourceAckWatchdogOptions& watchdog,const Json& helpers) {
+static void Execute(char** argv,HostTiming& timing,const Json& transport_config,ControlChannel& control,bool phase_completion,uint64_t event_limit,bool compute_starts,const SourceAckWatchdogOptions& watchdog,const Json& helpers,uint64_t wake_limit) {
     auto total=timing.Span("native_total");
     Require(!fs::exists(argv[5]),"result already exists");
     ns3::Time::SetResolution(ns3::Time::NS);Json topology,config;
@@ -249,7 +264,7 @@ static void Execute(char** argv,HostTiming& timing,const Json& transport_config,
       Require(declared==unsigned(ranks),"helper replica groups do not partition physical simulated GPUs");
     }
     std::unique_ptr<Service> service_owner;
-    {auto phase=timing.Span("astra_init");service_owner=std::make_unique<Service>(fabric,transport,control,ranks,argv[4],argv[3],timing,phase_completion,event_limit,compute_starts,watchdog,helpers);}
+    {auto phase=timing.Span("astra_init");service_owner=std::make_unique<Service>(fabric,transport,control,ranks,argv[4],argv[3],timing,phase_completion,event_limit,compute_starts,watchdog,helpers,wake_limit);}
     auto& service=*service_owner;
     ns3::Simulator::Stop(ns3::NanoSeconds(fabric.MaxSimNs()));
     {auto phase=timing.Span("simulator_run");ns3::Simulator::Run();}
@@ -281,8 +296,8 @@ static void Execute(char** argv,HostTiming& timing,const Json& transport_config,
 int main(int argc,char** argv) {
   try {
     ControlChannel control;
-    Require(argc>=6 && argc<=17,"usage: moe-rdma-service TOPOLOGY RDMA SYSTEM BOOTSTRAP_PREFIX NEW_RESULT [NEW_HOST_TIMING.jsonl] [--phase-completion ep_transport_flush/1] [--transport CONFIG.json] [--execution-events MAX_EVENTS | --execution-events-v2 MAX_EVENTS] [--source-ack-watchdog CONFIG.json] [--inflight-helpers CONFIG.json]");
-    int next=6;std::string host;Json transport,watchdog_json,helpers;bool phase_completion=false,has_transport=false,compute_starts=false;uint64_t event_limit=0;
+    Require(argc>=6 && argc<=19,"usage: moe-rdma-service TOPOLOGY RDMA SYSTEM BOOTSTRAP_PREFIX NEW_RESULT [NEW_HOST_TIMING.jsonl] [--phase-completion ep_transport_flush/1] [--transport CONFIG.json] [--execution-events MAX_EVENTS | --execution-events-v2 MAX_EVENTS] [--source-ack-watchdog CONFIG.json] [--inflight-helpers CONFIG.json] [--control-wakeup MAX_EVENTS]");
+    int next=6;std::string host;Json transport,watchdog_json,helpers;bool phase_completion=false,has_transport=false,compute_starts=false;uint64_t event_limit=0,wake_limit=0;
     if(next<argc && std::string(argv[next]).rfind("--",0)!=0)host=argv[next++];
     while(next<argc) {
       Require(next+1<argc,"missing service option value");const std::string option=argv[next++],value=argv[next++];
@@ -292,6 +307,10 @@ int main(int argc,char** argv) {
         compute_starts=(option=="--execution-events-v2");
         Require(event_limit==0 && !value.empty() && value.find_first_not_of("0123456789")==std::string::npos,"invalid execution event option");
         event_limit=std::stoull(value);Require(event_limit>0 && event_limit<=262144,"invalid execution event limit");
+      }
+      else if(option=="--control-wakeup") {
+        Require(wake_limit==0 && !value.empty() && value.find_first_not_of("0123456789")==std::string::npos,"invalid control wakeup option");
+        wake_limit=std::stoull(value);Require(wake_limit>=2 && wake_limit<=65536,"invalid control wakeup event limit");
       }
       else if(option=="--source-ack-watchdog") {
         Require(watchdog_json.is_null(),"repeated source ACK watchdog option");watchdog_json=ReadJson(value);
@@ -348,7 +367,9 @@ int main(int argc,char** argv) {
     Require(!watchdog.enabled || (event_limit>0 && has_transport),"source ACK watchdog requires execution events and persistent transport");
     Require(helpers.is_null() || (watchdog.enabled && phase_completion),"inflight helpers require watchdog and phase completion");
     Require(!compute_starts || !helpers.is_null(),"actual compute start events require shared inflight compute");
-    HostTiming timing(host);Execute(argv,timing,transport,control,phase_completion,event_limit,compute_starts,watchdog,helpers);timing.Complete();return 0;
+    Require(wake_limit==0 || (event_limit>0 && has_transport && helpers.is_null() && !watchdog.enabled),
+      "control wakeup requires observations and persistent transport without helper/watchdog control");
+    HostTiming timing(host);Execute(argv,timing,transport,control,phase_completion,event_limit,compute_starts,watchdog,helpers,wake_limit);timing.Complete();return 0;
   } catch(const std::exception& error) {
     std::cerr<<error.what()<<'\n';ns3::Simulator::Destroy();ShutdownLogging();return 1;
   }

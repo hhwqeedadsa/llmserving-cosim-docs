@@ -86,7 +86,8 @@ def service_terminal(result, frontend=None, *, require_complete=False, config=No
         from .whole_call import logical_finish
         logical=logical_finish(frontend['whole_call_replication'],history)
         require(logical<=finish,'whole client result after attempts')
-        timing.update(timing_scope='eager_whole_finite_segment/1',attempts_finished_ns=finish)
+        timing.update(timing_scope=('delayed_whole_finite_segment/1' if whole['policy']=='delayed_complete_segment/1'
+                                   else 'eager_whole_finite_segment/1'),attempts_finished_ns=finish)
         finish=logical
     timing.update(timing_status='complete', timing_reason=None, application_finished_ns=finish,
                   post_application_drain_ns=stop-finish)

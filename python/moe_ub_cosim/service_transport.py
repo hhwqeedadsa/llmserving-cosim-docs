@@ -65,6 +65,9 @@ def native_arguments(config, output):
     from .execution_events import configuration
     option=configuration(config)
     if option:args+=['--execution-events-v2' if option['schema_version']=='moe-execution-events/2' else '--execution-events',str(option['max_events'])]
+    from .whole_call import configuration as whole_configuration
+    whole=whole_configuration(config)
+    if whole and whole['policy']=='delayed_complete_segment/1':args+=['--control-wakeup',str(whole['max_wakeup_events'])]
     from .source_ack_watchdog import configuration as watchdog_configuration
     watchdog=watchdog_configuration(config)
     if watchdog:

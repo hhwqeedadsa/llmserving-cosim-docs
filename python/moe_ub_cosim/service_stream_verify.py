@@ -91,13 +91,30 @@ def verify(directory):
     verify_phases(waves,service,r,events)
     for index in range(len(service['parallel']['groups'])):
         history=sorted((h for h in f['history'] if h['group_index']==index),key=lambda h:h['step'])
+        option=service.get('whole_call_replication',{})
+        if not simai and option.get('policy')=='delayed_complete_segment/1':
+            attempt=next(a for call in f['whole_call_replication']['calls'].values()
+                         for a in call['attempts'].values() if a['group_index']==index)
+            if attempt.get('skipped_ns') is not None:
+                require(not history,'skipped replica has an actual graph')
+            else:
+                require(len(history)==1 and history[0]['step']==0 and
+                        history[0]['graph_id']==attempt['graph_id'] and
+                        history[0]['start_ns']==attempt['submitted_ns'] and
+                        history[0]['finished_ns']==attempt['finished_ns'],
+                        'delayed graph differs from actual attempt lifetime')
+            continue
         if not simai and replay and replay.request_layout=='sparse_active_groups/1' and index not in replay.active_group_indices:
             require(not history,'inactive EP group executed undeclared work')
             continue
         require([h['step'] for h in history]==list(range(service['workload']['decode_steps'])) and
                 history[0]['start_ns']==0 and all(b['start_ns']==a['finished_ns'] for a,b in zip(history,history[1:])),
                 'next batch did not follow actual preceding completion')
-    require(all(q['state'] in ('FINISHED','OBSERVATION_ENDED') for q in f['requests']),'frontend requests did not finish')
+    from .delayed_whole import skipped_requests
+    skipped=skipped_requests(service,f) if not simai else {}
+    require(all(q['state'] in ('FINISHED','OBSERVATION_ENDED') or
+                (q['id'] in skipped and q['state']=='NOT_STARTED') for q in f['requests']),
+            'frontend requests did not finish or legally skip')
     chosen=next((w,m) for w in waves for m in w['messages'] if m['phase']=='dispatch')
     audit,*_=reconstruct(r,waves,chosen[0]['graph_id'],chosen[1]['layer'],'dispatch')
     report=dict(passed=True,transport='astra_persistent_streams/1',frontend='actual_SimAI_Vidur' if simai else 'actual_LLMServingSim',

@@ -46,9 +46,20 @@ def verify_replay_requests(config, replay, frontend):
         require(all(h['group_index'] in replay.active_group_indices for h in frontend['history']),
                 'inactive EP group executed undeclared work')
     requests=frontend['requests']
+    from .delayed_whole import skipped_requests
+    skipped=skipped_requests(config,frontend)
+    require(set(skipped)<=ids,'skipped request is outside replay inventory')
     require({q['id'] for q in requests}==ids and len(requests)==len(ids),
             'missing/duplicate replay request')
     for q in requests:
+        if q['id'] in skipped:
+            context=replay.records[q['id']]['context_tokens']
+            require(q['state']=='NOT_STARTED' and q['scheduler_state']=='WAITING' and
+                    q['initial_context_tokens']==context and q['computed_tokens']==context-1 and
+                    q['reached_tokens']==context and q['intertoken_ns']==[] and
+                    q['skipped_before_execution_ns']==skipped[q['id']],
+                    'skipped replica must remain unexecuted with no fabricated completion')
+            continue
         require(q['state']=='OBSERVATION_ENDED' and q['scheduler_state']=='FINISHED' and
                 q['initial_context_tokens']==replay.records[q['id']]['context_tokens'] and
                 len(q['intertoken_ns'])==config['workload']['decode_steps'],
@@ -58,6 +69,8 @@ def verify_replay_requests(config, replay, frontend):
         group=config['parallel']['groups'][history['group_index']]
         expected={str(r):replay.request_ids(r) for r in group if replay.request_ids(r)}
         batches=history['batch_request_ids']
+        require(not any(identity in skipped for batch in batches.values() for identity in batch),
+                'skipped request was submitted to scheduler')
         require(set(batches)==set(expected) and all(
             len(batches[r])==len(expected[r]) and set(batches[r])==set(expected[r]) for r in expected),
             'scheduler batch differs from explicit replay requests')

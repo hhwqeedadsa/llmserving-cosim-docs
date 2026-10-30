@@ -1,4 +1,4 @@
-"""Explicit eager whole-segment replicas and a first-complete client consumer.
+"""Explicit whole-segment replicas and a first-complete client consumer.
 
 No partial result replaces a collective dependency. Numerical tensors and
 equivalent initial KV are declarations, not verified by routing records.
@@ -19,9 +19,18 @@ def fingerprint(value):
 def configuration(config):
     if 'whole_call_replication' not in config:return None
     value=config['whole_call_replication']
-    fields(value,'schema_version policy initial_state max_events calls','whole call replication')
-    require(value['schema_version']=='moe-whole-call-replication/1' and value['policy']=='eager_complete_segment/1' and
+    require(isinstance(value,dict),'invalid whole call replication object')
+    delayed=value.get('schema_version')=='moe-whole-call-replication/2'
+    fields(value,'schema_version policy initial_state max_events calls'+
+           (' hedge_after_ns max_wakeup_events' if delayed else ''),'whole call replication')
+    require(((value['schema_version']=='moe-whole-call-replication/1' and value['policy']=='eager_complete_segment/1') or
+             (delayed and value['policy']=='delayed_complete_segment/1')) and
             value['initial_state']=='declared_equivalent_ready_kv/1','unsupported whole call replication semantics')
+    if delayed:
+        integer(value['hedge_after_ns'],'hedge deadline',1,4999999)
+        integer(value['max_wakeup_events'],'wakeup event budget',2,65536)
+        require('source_ack_watchdog' not in config and 'contribution_tracking' not in config,
+                'delayed whole replicas do not combine watchdog or contribution observers')
     require(config.get('schema_version')=='moe-scaleout-service/1' and
             type(config.get('workload',{}).get('decode_steps')) is int and config['workload']['decode_steps']==1 and
             config.get('route_replay',{}).get('request_layout')=='sparse_explicit/1' and
@@ -162,6 +171,9 @@ class WholeCallConsumer:
 
 def logical_finish(report,history):
     """Timing interpretation only; public run audit also rebuilds source bindings."""
+    if report.get('schema_version')=='moe-whole-call-report/2':
+        from .delayed_whole import logical_finish as delayed_finish
+        return delayed_finish(report,history)
     require(report.get('schema_version')=='moe-whole-call-report/1' and report.get('all_attempts_retired') is True,
             'incomplete whole call report')
     graphs=set();ends=[]
@@ -191,6 +203,9 @@ def audit(directory,config,result,frontend):
                 not (directory/'whole_call_events.jsonl').exists(),'undeclared whole call results')
         return None
     require(present,'missing whole call frontend results')
+    if option['policy']=='delayed_complete_segment/1':
+        from .delayed_whole import audit as audit_delayed
+        return audit_delayed(directory,config,result,frontend)
     consumer=WholeCallConsumer(config,Replay(config,directory))
     for h in frontend['history']:
         consumer.register(checked_json(directory/'graphs'/h['graph_id']/'wave.json',16*2**20),h['start_ns'])
@@ -207,3 +222,11 @@ def audit(directory,config,result,frontend):
     native={w['graph_id']:(w['start_ns'],w['finished_ns']) for w in result['service']['waves']}
     logical_finish(expected,native)
     return expected
+
+
+def consumer(config,replay):
+    option=configuration(config)
+    if option['policy']=='delayed_complete_segment/1':
+        from .delayed_whole import DelayedWholeConsumer
+        return DelayedWholeConsumer(config,replay)
+    return WholeCallConsumer(config,replay)

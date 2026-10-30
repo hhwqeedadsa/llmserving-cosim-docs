@@ -46,7 +46,19 @@ call代表一批请求的完整声明片段，两个group是`parallel.groups`索
 
 `rdma-check`检查实际节点、阶段门限、完整专家工作、真实接收/ACK，再从唯一源文件重建显式副本与整个结果消费者，核对全部事件、报告和赢家。原尝试必须真实退出，不伪造ACK、提前释放原KV或删除图。相对来源快照支持目录迁移。
 
-目前立即启动冗余，尚无延迟触发、取消、后续请求抢占或数值验证。某副本早于同次执行的原尝试，不等于相对无冗余控制的净收益；仍须同资源原地SR、成熟延迟备用、正常开销和误判/失败对照。真实路由不使声明GPU成本成为实测。
+某副本早于同次执行的原尝试，不等于相对无冗余控制的净收益；仍须同资源原地SR、成熟延迟备用、正常开销和误判/失败对照。真实路由不使声明GPU成本成为实测。目前没有取消已启动尝试、后续请求抢占或数值验证。
+
+## 延迟启动完整副本
+
+除上述立即副本外，还支持延迟启动。把配置的`schema_version`改为`moe-whole-call-replication/2`、`policy`改为`delayed_complete_segment/1`，再增加`hedge_after_ns`（1～4,999,999ns的绝对启动门槛）和`max_wakeup_events`（2～65,536）。其余范围与立即副本相同，不与watchdog或贡献观察器混用。准备脚本的`--hedge-after-ns 70000`会另生成`service-delayed.json`，不改变立即副本及无副本输入。
+
+primary在0提交，replica先持有实际预留KV，但不进入LLMServingSim的运行/等待队列。一个可取消、可替换的原生ns-3定时事件唤醒控制层，所有图与网络共用这一个时钟。截止决策时若已有实际完整primary结果，则释放未启动副本KV并记录`attempt_skipped`；否则在门槛时刻通过实际`add_decode`和`schedule`启动副本。不能读取未来丢包或队列。同刻事件以该次原生DECIDE之前实际收到的完成前缀为准；已启动者继续完成。
+
+新后端需支持`--control-wakeup MAX_EVENTS`，公开run从配置自动添加。该原生选项要求持久传输和执行观察，不与helper/watchdog控制混用；旧后端明确拒绝。默认模式不创建定时事件或额外报告。预算包含arm/cancel/fire，替换前预留后续触发事件的记录空间，超预算在改变定时状态前拒绝。
+
+输出`moe-whole-call-report/2`区分`reserved_attempt_requests`与实际提交的`execution_attempt_requests`。未启动请求为`NOT_STARTED`，保留原始`scheduler_state=WAITING`、原始token计数和空ITL；不生成执行结束时间。`frontend.standby_memory`记录初始副本KV、实际跳过/完成时的释放及最终占用。模型与等价ready-KV仍为预先存在的声明初态，未模拟建立成本。`all_attempts_retired`表示所有尝试已完成或未启动即释放，不表示每份都执行过。
+
+`result.service.control_wakeup`记录有序arm/cancel/fire及待触发时间，原始DECIDE含`wakeup_ns`，COMMIT含`wake_at_ns`。公共核验按原始OBSERVE/DECIDE顺序重建策略，核对整图覆盖、跳过状态、原生定时事件和按原始上下文计算的KV释放。时间口径为`delayed_whole_finite_segment/1`；仍分列逻辑就绪、已启动尝试结束和网络排空。
 
 准备与公开命令见[128端点Clos示例](../examples/scaleout_whole_call/README.md)。
 

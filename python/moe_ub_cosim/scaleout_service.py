@@ -26,7 +26,7 @@ from .execution_events import configuration as event_configuration, ExecutionObs
 from .contribution_binding import configuration as binding_configuration, ContributionBinding
 from .source_ack_watchdog import configuration as watchdog_configuration, SourceAckObserver
 from .inflight_helpers import configuration as helper_configuration, HelperObserver
-from .whole_call import configuration as whole_configuration, WholeCallConsumer
+from .whole_call import configuration as whole_configuration, consumer as whole_consumer
 
 
 def validate(c, topology, rdma, replay=None):
@@ -46,10 +46,13 @@ def validate(c, topology, rdma, replay=None):
     binding_configuration(c)
     watchdog_configuration(c)
     helper_configuration(c)
-    whole_configuration(c)
+    whole_option=whole_configuration(c)
     extended=c['schema_version']=='moe-scaleout-service/2'
     require(c['schema_version'] in ('moe-scaleout-service/1','moe-scaleout-service/2'), 'unsupported service schema')
     budget=limits(rdma)
+    if whole_option and whole_option['policy']=='delayed_complete_segment/1':
+        require(whole_option['hedge_after_ns']<budget['max_sim_ns'],
+                'whole replica deadline must precede simulation stop')
     m, w, p, cost = (c[k] for k in ('model', 'workload', 'parallel', 'compute'))
     fields(m, 'name hidden_size ffn_hidden_size experts top_k activation_bytes layers gpu_type'+(' llm' if extended else ''), 'model')
     require(isinstance(m['name'], str) and 0 < len(m['name']) <= 128, 'invalid model name')
@@ -292,6 +295,10 @@ class Frontend:
         self.groups = config['parallel']['groups']; self.active = {}; self.steps = [0]*len(self.groups)
         self.admitted_groups=(replay.active_group_indices if replay and replay.request_layout=='sparse_active_groups/1'
                               else list(range(len(self.groups))))
+        whole=whole_configuration(config)
+        self.delayed=whole is not None and whole['policy']=='delayed_complete_segment/1'
+        self.held_groups={call['replica_group']:{} for call in whole['calls']} if self.delayed else {}
+        self.skipped_groups=set();self.skipped_requests={};self.standby_releases=[]
         self.history = []; self.calls = 0
         # Explicit local KV reservation for a finite ready-KV segment. This is a
         # resource model declaration, not full-model A100 capacity validation.
@@ -321,22 +328,46 @@ class Frontend:
                 request.num_tokens_reached=context;request.recent_end=0
                 require(scheduler.kv.allocate_slots(request, blocks[position]*block_size-request.num_computed_tokens) is not None,
                         'ready-KV reservation failed')
-                scheduler.add_decode(request); self.requests.append(request)
+                index=self.groups.index(group)
+                if index in self.held_groups:self.held_groups[index].setdefault(rank,[]).append(request)
+                else:scheduler.add_decode(request)
+                self.requests.append(request)
             self.schedulers[rank]=scheduler
+        self.standby_initial_bytes=sum(self.schedulers[r].kv.npu_pool.used_bytes()
+            for held in self.held_groups.values() for r in held)
 
     def decide(self, event, output, proto):
         now=event['now_ns']
         for completed in event['completed']:
             graph=completed['graph_id']; index,batches,history = self.active.pop(graph)
             require(completed['finished_ns']==now, 'completion clock mismatch')
+            reserved=sum(self.schedulers[r].kv.npu_pool.used_bytes() for r in batches)
             for rank,batch in batches.items():
                 prompt,generated,_=self.schedulers[rank].add_done(batch.batch_id+1,rank,now)
                 require(prompt==0 and generated==len(batch.requests) and not self.schedulers[rank].inflight,
                         'LLMServingSim completion mismatch')
             history['finished_ns']=now; self.steps[index]+=1
+            if self.delayed and any(call['replica_group']==index for call in self.config['whole_call_replication']['calls']):
+                self.standby_releases.append(dict(group_index=index,time_ns=now,kind='executed_release',bytes=reserved))
+        permitted=set(self.admitted_groups);wake=None
+        if self.delayed:
+            chosen,wake=self.whole.choose(event);permitted=set(chosen)
+            for call in self.whole.calls.values():
+                attempt=call['attempts']['replica'];index=attempt['group_index']
+                if attempt['skipped_ns'] is not None and index not in self.skipped_groups:
+                    held=self.held_groups.pop(index);reserved=sum(self.schedulers[r].kv.npu_pool.used_bytes() for r in held)
+                    for rank,requests in held.items():
+                        for request in requests:
+                            self.schedulers[rank].kv.free(request);self.skipped_requests[request.id]=now
+                    self.skipped_groups.add(index)
+                    self.standby_releases.append(dict(group_index=index,time_ns=now,kind='skipped_release',bytes=reserved))
+            for index in chosen:
+                if index in self.held_groups:
+                    for rank,requests in self.held_groups.pop(index).items():
+                        for request in requests:self.schedulers[rank].add_decode(request)
         submissions=[]
         for index,group in enumerate(self.groups):
-            if index not in self.admitted_groups:continue
+            if index not in permitted:continue
             if self.steps[index]>=self.config['workload']['decode_steps'] or any(i==index for i,_,_ in self.active.values()):
                 continue
             require(all(r in event['available_rank_ids'] for r in group), 'backend group unavailable')
@@ -359,11 +390,13 @@ class Frontend:
                 batch_ids={str(r):b.batch_id for r,b in batches.items()})
             self.history.append(history); self.active[wave['graph_id']]=(index,batches,history)
             submissions.append(str(directory))
-        finished=not self.active and all(self.steps[i]==self.config['workload']['decode_steps'] for i in self.admitted_groups)
+        finished=not self.active and all(self.steps[i]==self.config['workload']['decode_steps'] or i in self.skipped_groups for i in self.admitted_groups)
         if finished:
-            require(all(s.is_request_empty() and s.kv.npu_pool.used_bytes()==0 for s in self.schedulers.values()),
+            require(not self.held_groups and all(s.is_request_empty() and s.kv.npu_pool.used_bytes()==0 for s in self.schedulers.values()),
                     'final scheduler/KV state is not empty')
-        return dict(type='COMMIT',decision_id=event['decision_id'],now_ns=now,submissions=submissions,service_finished=finished)
+        reply=dict(type='COMMIT',decision_id=event['decision_id'],now_ns=now,submissions=submissions,service_finished=finished)
+        if self.delayed:reply['wake_at_ns']=wake
+        return reply
 
 
 def worker(config_path, topology_path, protocol_path, backend, protoc, output, host_timing=False):
@@ -406,7 +439,8 @@ def _worker(config_path,topology_path,protocol_path,backend,protoc,output,timing
     binding=ContributionBinding(c,replay,observation) if binding_configuration(c) else None
     watchdog=SourceAckObserver(c,observation) if watchdog_configuration(c) else None
     helpers=HelperObserver(c,binding) if helper_configuration(c) else None
-    whole=WholeCallConsumer(c,replay) if whole_configuration(c) else None
+    whole=whole_consumer(c,replay) if whole_configuration(c) else None
+    frontend.whole=whole
     event_file=(output/'execution_events.jsonl').open('x',buffering=1) if observation else None
     timeout_file=(output/'source_ack_timeouts.jsonl').open('x',buffering=1) if watchdog else None
     helper_file=(output/'helper_events.jsonl').open('x',buffering=1) if helpers else None
@@ -472,13 +506,21 @@ def _worker(config_path,topology_path,protocol_path,backend,protoc,output,timing
             requests=[dict(id=q.id,state=q.status.name,computed_tokens=q.num_computed_tokens,
                            reached_tokens=q.num_tokens_reached,intertoken_ns=q.itl) for q in frontend.requests])
         if whole:report['whole_call_replication']=whole.snapshot()
+        if frontend.delayed:
+            report['standby_memory']=dict(initial_reserved_bytes=frontend.standby_initial_bytes,
+                releases=frontend.standby_releases,
+                final_used_bytes=sum(frontend.schedulers[r].kv.npu_pool.used_bytes()
+                    for call in c['whole_call_replication']['calls']
+                    for r in c['parallel']['groups'][call['replica_group']] if r in frontend.schedulers))
         if replay and replay.request_layout=='sparse_active_groups/1':
             report['admitted_group_indices']=list(frontend.admitted_groups)
         if replay:
             report.update(route_source=replay.manifest['source']['kind'],completion_semantics='observation_window_ended_not_EOS')
             for q in report['requests']:
                 q['scheduler_state']=q['state']
-                if q['state']=='FINISHED':q['state']='OBSERVATION_ENDED'
+                if q['id'] in frontend.skipped_requests:
+                    q['state']='NOT_STARTED';q['skipped_before_execution_ns']=frontend.skipped_requests[q['id']]
+                elif q['state']=='FINISHED':q['state']='OBSERVATION_ENDED'
                 q['initial_context_tokens']=replay.records[q['id']]['context_tokens']
         with timing.span('frontend_report_write'):save(output/'frontend.json',report)
     with timing.span('native_result_read'):result=checked_json(output/'result.json',limits(rdma)['result_json_bytes'])
@@ -545,6 +587,10 @@ def run(config, topology, protocol, backend, output, protoc='protoc', *, host_ti
         provenance['whole_call_replication']=dict(c['whole_call_replication'])
         module=ROOT/'python/moe_ub_cosim/whole_call.py'
         provenance['hashes'][str(module)]=digest(module)
+        if c['whole_call_replication']['policy']=='delayed_complete_segment/1':
+            for name in ('delayed_whole.py','service_wakeup.py'):
+                module=ROOT/'python/moe_ub_cosim'/name
+                provenance['hashes'][str(module)]=digest(module)
         save(output/'provenance.json',provenance)
     command=[sys.executable,'-m','moe_ub_cosim.scaleout_service','--worker',str(output/'input.json'),str(output),str(output/'rdma.json'),
              str(backend),str(protoc),str(output)]

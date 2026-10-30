@@ -1,0 +1,1577 @@
+{
+  "schema_version": "moe-replica-feasibility-audit/1",
+  "passed": true,
+  "source_checkout": "dff2f4a14a07f8134e0c0da8f7c8ad24094bf580",
+  "network_executions": 0,
+  "builds": 0,
+  "gpu_executions": 0,
+  "sources": [
+    {
+      "id": "paper-fastermoe",
+      "requested_url": "https://dl.acm.org/doi/pdf/10.1145/3503221.3508418",
+      "status": "failed",
+      "started_utc": "2026-10-30T10:27:13.836113+00:00",
+      "timeout_seconds": 20,
+      "response_limit_bytes": 4194304,
+      "attempt_limit": 1,
+      "external_code_executed": false,
+      "error_type": "HTTPError",
+      "error": "HTTP Error 403: Forbidden",
+      "http_status": 403,
+      "ended_utc": "2026-10-30T10:27:14.146768+00:00",
+      "effective_status": "failed",
+      "host_monitor": {
+        "status": "child_failed",
+        "wall_seconds": 0.4537101470050402,
+        "peak_rss_bytes": 23371776,
+        "receipt": "runs/replica_feasibility_20261030/monitors/paper-fastermoe/probe.json",
+        "sha256": "09cd6c15074b6114519993e04304217af223a617bd9fb1cd1136af3cc1d5f4d1"
+      }
+    },
+    {
+      "id": "paper-lazarus",
+      "requested_url": "https://arxiv.org/pdf/2407.04656v2",
+      "status": "retrieved",
+      "started_utc": "2026-10-30T10:27:12.750484+00:00",
+      "timeout_seconds": 20,
+      "response_limit_bytes": 4194304,
+      "attempt_limit": 1,
+      "external_code_executed": false,
+      "http_status": 200,
+      "final_url": "https://arxiv.org/pdf/2407.04656v2",
+      "content_type": "application/pdf",
+      "etag": "\"sha256:f1bb253b8d7c8de6c37df44ee781d8a16a730276be57500073a5e9311a98b1d8\"",
+      "last_modified": "Mon, 27 Oct 2025 00:37:14 GMT",
+      "captured_bytes": 1686993,
+      "sha256": "dd359dd5135b6325f110b257f11c89fe9d9739332342a0781ddd8ec7f74b196c",
+      "local_path": "data/research/replica_feasibility_20261030/paper-lazarus.pdf",
+      "ended_utc": "2026-10-30T10:27:13.556350+00:00",
+      "effective_status": "retrieved",
+      "host_monitor": {
+        "status": "completed",
+        "wall_seconds": 1.0000514920102432,
+        "peak_rss_bytes": 24412160,
+        "receipt": "runs/replica_feasibility_20261030/monitors/paper-lazarus/probe.json",
+        "sha256": "9609b0ae9b354e26dfddb18b018b7f29a1fcc7c1396e2dc11dd0433230b3e0e2"
+      }
+    },
+    {
+      "id": "paper-tail",
+      "requested_url": "https://research.google.com/pubs/archive/40801.pdf",
+      "status": "started",
+      "started_utc": "2026-10-30T10:27:14.359745+00:00",
+      "timeout_seconds": 20,
+      "response_limit_bytes": 4194304,
+      "attempt_limit": 1,
+      "external_code_executed": false,
+      "effective_status": "interrupted_by_host_wall_limit",
+      "host_monitor": {
+        "status": "wall_limit",
+        "wall_seconds": 120.2736076109577,
+        "peak_rss_bytes": 22261760,
+        "receipt": "runs/replica_feasibility_20261030/monitors/paper-tail/probe.json",
+        "sha256": "70e8980d712424202e641d14468f33082e454a095696bddf33d99273c4c948f1"
+      }
+    },
+    {
+      "id": "primary-fastermoe-readme",
+      "requested_url": "https://api.github.com/repos/thu-pacman/FasterMoE/readme",
+      "status": "retrieved",
+      "started_utc": "2026-10-30T10:27:29.169786+00:00",
+      "timeout_seconds": 20,
+      "response_limit_bytes": 2097152,
+      "attempt_limit": 1,
+      "external_code_executed": false,
+      "http_status": 200,
+      "final_url": "https://api.github.com/repos/thu-pacman/FasterMoE/readme",
+      "content_type": "application/json; charset=utf-8",
+      "etag": "W/\"55736f40105d1597ecb714289bb2d70484a79d27\"",
+      "last_modified": "Sat, 02 Apr 2022 06:58:56 GMT",
+      "captured_bytes": 2404,
+      "sha256": "c6f81aa43e30a9105db3ab61ade4a3eca2764d231f8a097b453d5ab890bba481",
+      "local_path": "data/research/replica_feasibility_20261030/primary-fastermoe-readme.body",
+      "ended_utc": "2026-10-30T10:27:30.173872+00:00",
+      "effective_status": "retrieved",
+      "host_monitor": {
+        "status": "completed",
+        "wall_seconds": 1.1215294600115158,
+        "peak_rss_bytes": 23367680,
+        "receipt": "runs/replica_feasibility_20261030/monitors/primary-fastermoe-readme/probe.json",
+        "sha256": "99f09d74ac454111d4a9b334f29ca324a2b38db012bad3b6a1e0bd21f9b3f066"
+      }
+    },
+    {
+      "id": "primary-fastermoe-repo",
+      "requested_url": "https://api.github.com/repos/thu-pacman/FasterMoE",
+      "status": "retrieved",
+      "started_utc": "2026-10-30T10:26:31.131418+00:00",
+      "timeout_seconds": 20,
+      "response_limit_bytes": 2097152,
+      "attempt_limit": 1,
+      "external_code_executed": false,
+      "http_status": 200,
+      "final_url": "https://api.github.com/repos/thu-pacman/FasterMoE",
+      "content_type": "application/json; charset=utf-8",
+      "etag": "W/\"f96652ce884337cb04f01caf385b0c9a8221b0be9a3fe53881784ebb205ec091\"",
+      "last_modified": "Mon, 25 May 2026 02:30:20 GMT",
+      "captured_bytes": 6317,
+      "sha256": "f96652ce884337cb04f01caf385b0c9a8221b0be9a3fe53881784ebb205ec091",
+      "local_path": "data/research/replica_feasibility_20261030/primary-fastermoe-repo.body",
+      "ended_utc": "2026-10-30T10:26:32.366811+00:00",
+      "effective_status": "retrieved",
+      "host_monitor": {
+        "status": "completed",
+        "wall_seconds": 1.4302883569616824,
+        "peak_rss_bytes": 23449600,
+        "receipt": "runs/replica_feasibility_20261030/monitors/primary-fastermoe-repo/probe.json",
+        "sha256": "b14fefbfd88eb976a0b5ab90f128ab4b723270904bc4aeaf45e730123847dbfa"
+      }
+    },
+    {
+      "id": "primary-megaflux",
+      "requested_url": "https://arxiv.org/html/2610.00671v1",
+      "status": "retrieved",
+      "started_utc": "2026-10-30T10:29:02.492535+00:00",
+      "timeout_seconds": 20,
+      "response_limit_bytes": 2097152,
+      "attempt_limit": 1,
+      "external_code_executed": false,
+      "http_status": 200,
+      "final_url": "https://arxiv.org/html/2610.00671v1",
+      "content_type": "text/html; charset=utf-8",
+      "etag": "\"CMS9nbCHmpcDEAE=\"",
+      "last_modified": "Fri, 02 Oct 2026 00:17:43 GMT",
+      "captured_bytes": 226210,
+      "sha256": "372b7e8330c744205766b9131491a5a79fb0e6791ca6d74778f8556122943b6c",
+      "local_path": "data/research/replica_feasibility_20261030/primary-megaflux.body",
+      "ended_utc": "2026-10-30T10:29:02.736129+00:00",
+      "effective_status": "retrieved",
+      "host_monitor": {
+        "status": "completed",
+        "wall_seconds": 0.3617642419994809,
+        "peak_rss_bytes": 22372352,
+        "receipt": "runs/replica_feasibility_20261030/monitors/primary-megaflux/probe.json",
+        "sha256": "bcafb30c7b253ebaaa5c7b3e31e4b6bb09dc0b100dec474625ec7dfd4f80ac3f"
+      }
+    },
+    {
+      "id": "primary-partial-rank-html",
+      "requested_url": "https://arxiv.org/html/2605.10670",
+      "status": "retrieved",
+      "started_utc": "2026-10-30T10:29:34.390397+00:00",
+      "timeout_seconds": 20,
+      "response_limit_bytes": 2097152,
+      "attempt_limit": 1,
+      "external_code_executed": false,
+      "http_status": 200,
+      "final_url": "https://arxiv.org/html/2605.10670",
+      "content_type": "text/html; charset=utf-8",
+      "etag": "\"CIjf/O2BupYDEAE=\"",
+      "last_modified": "Mon, 24 Aug 2026 19:37:27 GMT",
+      "captured_bytes": 450094,
+      "sha256": "5d42002e6cc1704ce574d062b9bee3abc9f9e918835f048ab1cae4a11946c0a7",
+      "local_path": "data/research/replica_feasibility_20261030/primary-partial-rank-html.body",
+      "ended_utc": "2026-10-30T10:29:35.453485+00:00",
+      "effective_status": "retrieved",
+      "host_monitor": {
+        "status": "completed",
+        "wall_seconds": 1.2738273050053976,
+        "peak_rss_bytes": 23429120,
+        "receipt": "runs/replica_feasibility_20261030/monitors/primary-partial-rank-html/probe.json",
+        "sha256": "4b48a5de2f1792ddd2a8d4a3ed430628242175f360d6063fb7207c74ab64b821"
+      }
+    },
+    {
+      "id": "primary-partial-rank-metadata",
+      "requested_url": "https://export.arxiv.org/api/query?id_list=2605.10670",
+      "status": "retrieved",
+      "started_utc": "2026-10-30T10:29:33.208596+00:00",
+      "timeout_seconds": 20,
+      "response_limit_bytes": 2097152,
+      "attempt_limit": 1,
+      "external_code_executed": false,
+      "http_status": 200,
+      "final_url": "https://export.arxiv.org/api/query?id_list=2605.10670",
+      "content_type": "application/atom+xml; charset=utf-8",
+      "etag": null,
+      "last_modified": null,
+      "captured_bytes": 4354,
+      "sha256": "7c1fdc2d665d908b8801471fdf0435b8c1b6dc46e38a1a0081f5c1b8151cc3a3",
+      "local_path": "data/research/replica_feasibility_20261030/primary-partial-rank-metadata.body",
+      "ended_utc": "2026-10-30T10:29:34.262535+00:00",
+      "effective_status": "retrieved",
+      "host_monitor": {
+        "status": "completed",
+        "wall_seconds": 1.2623934309813194,
+        "peak_rss_bytes": 23396352,
+        "receipt": "runs/replica_feasibility_20261030/monitors/primary-partial-rank-metadata/probe.json",
+        "sha256": "e3d2011946a9235fbe16b35266d9570ca0ed142e67e67cc0e6231aa2d835ea4a"
+      }
+    },
+    {
+      "id": "primary-tail-author",
+      "requested_url": "https://www.barroso.org/publications/TheTailAtScale.pdf",
+      "status": "failed",
+      "started_utc": "2026-10-30T10:29:00.152193+00:00",
+      "timeout_seconds": 20,
+      "response_limit_bytes": 4194304,
+      "attempt_limit": 1,
+      "external_code_executed": false,
+      "http_status": 200,
+      "final_url": "https://www.barroso.org/publications/TheTailAtScale.pdf",
+      "content_type": "application/pdf",
+      "etag": null,
+      "last_modified": "Fri, 24 Feb 2023 18:16:59 GMT",
+      "captured_bytes": 4194305,
+      "sha256": "cce648f18ea89da7ddcee322d502d97805d6e61d05f1e6e0a42700ff024df8e7",
+      "local_path": "data/research/replica_feasibility_20261030/primary-tail-author.pdf",
+      "error_type": "ValueError",
+      "error": "response exceeds explicit limit; captured prefix retained",
+      "ended_utc": "2026-10-30T10:29:04.362895+00:00",
+      "effective_status": "failed",
+      "host_monitor": {
+        "status": "child_failed",
+        "wall_seconds": 4.3186966690118425,
+        "peak_rss_bytes": 23412736,
+        "receipt": "runs/replica_feasibility_20261030/monitors/primary-tail-author/probe.json",
+        "sha256": "0f75c864be20d22d1515ec450d076786ca21ec6af8e5ce375b8764a0cad06f3b"
+      }
+    },
+    {
+      "id": "primary-tail-cacm",
+      "requested_url": "https://cacm.acm.org/research/the-tail-at-scale/",
+      "status": "failed",
+      "started_utc": "2026-10-30T10:28:20.050991+00:00",
+      "timeout_seconds": 20,
+      "response_limit_bytes": 2097152,
+      "attempt_limit": 1,
+      "external_code_executed": false,
+      "error_type": "HTTPError",
+      "error": "HTTP Error 403: Forbidden",
+      "http_status": 403,
+      "ended_utc": "2026-10-30T10:28:20.262534+00:00",
+      "effective_status": "failed",
+      "host_monitor": {
+        "status": "child_failed",
+        "wall_seconds": 0.3554794589872472,
+        "peak_rss_bytes": 23420928,
+        "receipt": "runs/replica_feasibility_20261030/monitors/primary-tail-cacm/probe.json",
+        "sha256": "34ec46caac667fa9efaccdc98a22c5ea783cbcde2c4fcadf604842097a42d1ca"
+      }
+    },
+    {
+      "id": "primary-tail",
+      "requested_url": "https://research.google/pubs/the-tail-at-scale/",
+      "status": "failed",
+      "started_utc": "2026-10-30T10:26:29.953966+00:00",
+      "timeout_seconds": 20,
+      "response_limit_bytes": 2097152,
+      "attempt_limit": 1,
+      "external_code_executed": false,
+      "error_type": "URLError",
+      "error": "<urlopen error timed out>",
+      "ended_utc": "2026-10-30T10:26:50.226770+00:00",
+      "effective_status": "failed",
+      "host_monitor": {
+        "status": "child_failed",
+        "wall_seconds": 20.415302354027517,
+        "peak_rss_bytes": 22294528,
+        "receipt": "runs/replica_feasibility_20261030/monitors/primary-tail/probe.json",
+        "sha256": "7d56d65ed13b3e6ae7c1bba2deb8d7641f9dd0d88ca0aacb7deda9616b28fb28"
+      }
+    },
+    {
+      "id": "search-arxiv-fastermoe",
+      "requested_url": "https://export.arxiv.org/api/query?search_query=ti%3AFasterMoE&start=0&max_results=2",
+      "status": "retrieved",
+      "started_utc": "2026-10-30T10:27:30.338823+00:00",
+      "timeout_seconds": 20,
+      "response_limit_bytes": 2097152,
+      "attempt_limit": 1,
+      "external_code_executed": false,
+      "http_status": 200,
+      "final_url": "https://export.arxiv.org/api/query?search_query=ti%3AFasterMoE&start=0&max_results=2",
+      "content_type": "application/atom+xml; charset=utf-8",
+      "etag": null,
+      "last_modified": null,
+      "captured_bytes": 695,
+      "sha256": "5a948e91c9d631fa239ae393ce54066977f897e56eef8259b389278232eea320",
+      "local_path": "data/research/replica_feasibility_20261030/search-arxiv-fastermoe.body",
+      "ended_utc": "2026-10-30T10:27:31.690136+00:00",
+      "effective_status": "retrieved",
+      "host_monitor": {
+        "status": "completed",
+        "wall_seconds": 1.4664930519647896,
+        "peak_rss_bytes": 23420928,
+        "receipt": "runs/replica_feasibility_20261030/monitors/search-arxiv-fastermoe/probe.json",
+        "sha256": "e5e540b18aed6536c8ea9ff88391a39f62ab48558d29e67f6d61e88cbc1c449f"
+      }
+    },
+    {
+      "id": "search-arxiv-inference-resilience",
+      "requested_url": "https://export.arxiv.org/api/query?search_query=%28all%3AMoE%20OR%20all%3A%22mixture-of-experts%22%29%20AND%20all%3Ainference%20AND%20%28all%3A%22fault-tolerant%22%20OR%20all%3A%22fault%20tolerance%22%20OR%20all%3Ahedging%29&sortBy=relevance&start=0&max_results=10",
+      "status": "retrieved",
+      "started_utc": "2026-10-30T10:28:20.481000+00:00",
+      "timeout_seconds": 20,
+      "response_limit_bytes": 2097152,
+      "attempt_limit": 1,
+      "external_code_executed": false,
+      "http_status": 200,
+      "final_url": "https://export.arxiv.org/api/query?search_query=%28all%3AMoE%20OR%20all%3A%22mixture-of-experts%22%29%20AND%20all%3Ainference%20AND%20%28all%3A%22fault-tolerant%22%20OR%20all%3A%22fault%20tolerance%22%20OR%20all%3Ahedging%29&sortBy=relevance&start=0&max_results=10",
+      "content_type": "application/atom+xml; charset=utf-8",
+      "etag": null,
+      "last_modified": null,
+      "captured_bytes": 6795,
+      "sha256": "91a573c2a35d8c082e9d66d3db40220f8cca9038a4e6d16398d7c94d35ad359e",
+      "local_path": "data/research/replica_feasibility_20261030/search-arxiv-inference-resilience.body",
+      "ended_utc": "2026-10-30T10:28:21.360602+00:00",
+      "effective_status": "retrieved",
+      "host_monitor": {
+        "status": "completed",
+        "wall_seconds": 1.0076900760177523,
+        "peak_rss_bytes": 22360064,
+        "receipt": "runs/replica_feasibility_20261030/monitors/search-arxiv-inference-resilience/probe.json",
+        "sha256": "2d3a97c6388aa9ac4bec0155228e3d8fc74f327d0b1c2675a2e90214ac8500db"
+      }
+    },
+    {
+      "id": "search-arxiv-moe-fault",
+      "requested_url": "https://export.arxiv.org/api/query?search_query=all%3A%22mixture-of-experts%22%20AND%20%28all%3Aresilient%20OR%20all%3Afault%20OR%20all%3Ahedging%29&sortBy=submittedDate&sortOrder=descending&start=0&max_results=10",
+      "status": "retrieved",
+      "started_utc": "2026-10-30T10:27:15.529901+00:00",
+      "timeout_seconds": 20,
+      "response_limit_bytes": 2097152,
+      "attempt_limit": 1,
+      "external_code_executed": false,
+      "http_status": 200,
+      "final_url": "https://export.arxiv.org/api/query?search_query=all%3A%22mixture-of-experts%22%20AND%20%28all%3Aresilient%20OR%20all%3Afault%20OR%20all%3Ahedging%29&sortBy=submittedDate&sortOrder=descending&start=0&max_results=10",
+      "content_type": "application/atom+xml; charset=utf-8",
+      "etag": null,
+      "last_modified": null,
+      "captured_bytes": 28096,
+      "sha256": "b531e0f3aad0870fe722fd1d17eef596d35c9b68329d51d5c014c80df4e57333",
+      "local_path": "data/research/replica_feasibility_20261030/search-arxiv-moe-fault.body",
+      "ended_utc": "2026-10-30T10:27:20.418528+00:00",
+      "effective_status": "retrieved",
+      "host_monitor": {
+        "status": "completed",
+        "wall_seconds": 5.0325094040017575,
+        "peak_rss_bytes": 22302720,
+        "receipt": "runs/replica_feasibility_20261030/monitors/search-arxiv-moe-fault/probe.json",
+        "sha256": "49923f0cf7c06d9d488db393c085f4b18d416726c4d72be76825f25795c8bb16"
+      }
+    },
+    {
+      "id": "search-arxiv-resilience",
+      "requested_url": "https://export.arxiv.org/api/query?search_query=ti%3ALazarus&start=0&max_results=8",
+      "status": "retrieved",
+      "started_utc": "2026-10-30T10:26:33.478613+00:00",
+      "timeout_seconds": 20,
+      "response_limit_bytes": 2097152,
+      "attempt_limit": 1,
+      "external_code_executed": false,
+      "http_status": 200,
+      "final_url": "https://export.arxiv.org/api/query?search_query=ti%3ALazarus&start=0&max_results=8",
+      "content_type": "application/atom+xml; charset=utf-8",
+      "etag": null,
+      "last_modified": null,
+      "captured_bytes": 21695,
+      "sha256": "8b9b722964fded26969c1609a989f42b4ef6f25627025ee3eb515bc089064153",
+      "local_path": "data/research/replica_feasibility_20261030/search-arxiv-resilience.body",
+      "ended_utc": "2026-10-30T10:26:35.658319+00:00",
+      "effective_status": "retrieved",
+      "host_monitor": {
+        "status": "completed",
+        "wall_seconds": 2.3650421050260775,
+        "peak_rss_bytes": 23429120,
+        "receipt": "runs/replica_feasibility_20261030/monitors/search-arxiv-resilience/probe.json",
+        "sha256": "68c545ff30903f3310e1e5d70f1f4d9c1437f3b73587122ea97333e1b46786e7"
+      }
+    },
+    {
+      "id": "search-fastermoe",
+      "requested_url": "https://api.crossref.org/works?query.title=FasterMoE&rows=3&select=DOI,title,published,URL,link,abstract",
+      "status": "retrieved",
+      "started_utc": "2026-10-30T10:25:53.839603+00:00",
+      "timeout_seconds": 20,
+      "response_limit_bytes": 2097152,
+      "attempt_limit": 1,
+      "external_code_executed": false,
+      "http_status": 200,
+      "final_url": "https://api.crossref.org/works?query.title=FasterMoE&rows=3&select=DOI,title,published,URL,link,abstract",
+      "content_type": "application/json",
+      "etag": null,
+      "last_modified": null,
+      "captured_bytes": 661,
+      "sha256": "5e9016813a4d31baf4b7478c6f518411fd2919d6f7f887fae001adc7123bbb4c",
+      "local_path": "data/research/replica_feasibility_20261030/search-fastermoe.body",
+      "ended_utc": "2026-10-30T10:25:55.363459+00:00",
+      "effective_status": "retrieved",
+      "host_monitor": {
+        "status": "completed",
+        "wall_seconds": 1.6530169760226272,
+        "peak_rss_bytes": 22372352,
+        "receipt": "runs/replica_feasibility_20261030/monitors/search-fastermoe/probe.json",
+        "sha256": "ea33b61596346151825d9fc62241dc2f4dcf3865e7106396dee5a17ff69b4495"
+      }
+    },
+    {
+      "id": "search-fault-inference",
+      "requested_url": "https://api.crossref.org/works?query=mixture%20experts%20fault%20tolerant%20inference&rows=5&select=DOI,title,published,URL,link,abstract",
+      "status": "retrieved",
+      "started_utc": "2026-10-30T10:25:56.184436+00:00",
+      "timeout_seconds": 20,
+      "response_limit_bytes": 2097152,
+      "attempt_limit": 1,
+      "external_code_executed": false,
+      "http_status": 200,
+      "final_url": "https://api.crossref.org/works?query=mixture%20experts%20fault%20tolerant%20inference&rows=5&select=DOI,title,published,URL,link,abstract",
+      "content_type": "application/json",
+      "etag": null,
+      "last_modified": null,
+      "captured_bytes": 11088,
+      "sha256": "550060027124412bef0ee906402b505d42384714b82d6d6da4ea8e61d9fa0e7a",
+      "local_path": "data/research/replica_feasibility_20261030/search-fault-inference.body",
+      "ended_utc": "2026-10-30T10:25:57.439307+00:00",
+      "effective_status": "retrieved",
+      "host_monitor": {
+        "status": "completed",
+        "wall_seconds": 1.4408644890063442,
+        "peak_rss_bytes": 22372352,
+        "receipt": "runs/replica_feasibility_20261030/monitors/search-fault-inference/probe.json",
+        "sha256": "e013cece6ddec7f95a183ecaab8578d3955f32fdabf2ab5a4cd4cc26dde62271"
+      }
+    },
+    {
+      "id": "search-lazarus-openalex",
+      "requested_url": "https://api.openalex.org/works?search=Lazarus%20mixture%20experts&per-page=4",
+      "status": "retrieved",
+      "started_utc": "2026-10-30T10:26:32.303599+00:00",
+      "timeout_seconds": 20,
+      "response_limit_bytes": 2097152,
+      "attempt_limit": 1,
+      "external_code_executed": false,
+      "http_status": 200,
+      "final_url": "https://api.openalex.org/works?search=Lazarus%20mixture%20experts&per-page=4",
+      "content_type": "application/json",
+      "etag": null,
+      "last_modified": null,
+      "captured_bytes": 82681,
+      "sha256": "e41a862c3e25c9d5469c5c21c11d9b36a244c5daf31d57cd49731daa8f8c53a5",
+      "local_path": "data/research/replica_feasibility_20261030/search-lazarus-openalex.body",
+      "ended_utc": "2026-10-30T10:26:33.311254+00:00",
+      "effective_status": "retrieved",
+      "host_monitor": {
+        "status": "completed",
+        "wall_seconds": 1.231141939992085,
+        "peak_rss_bytes": 23400448,
+        "receipt": "runs/replica_feasibility_20261030/monitors/search-lazarus-openalex/probe.json",
+        "sha256": "9c0735eb97ffd2f3a4fa0fdc3c0614139b700833f6a5975d2ebc479f22c4a38d"
+      }
+    },
+    {
+      "id": "search-lazarus",
+      "requested_url": "https://api.crossref.org/works?query.title=Lazarus%20Resilient%20Elastic%20Mixture%20Experts&rows=4&select=DOI,title,published,URL,link,abstract",
+      "status": "retrieved",
+      "started_utc": "2026-10-30T10:22:44.736038+00:00",
+      "timeout_seconds": 20,
+      "response_limit_bytes": 2097152,
+      "attempt_limit": 1,
+      "external_code_executed": false,
+      "http_status": 200,
+      "final_url": "https://api.crossref.org/works?query.title=Lazarus%20Resilient%20Elastic%20Mixture%20Experts&rows=4&select=DOI,title,published,URL,link,abstract",
+      "content_type": "application/json",
+      "etag": null,
+      "last_modified": null,
+      "captured_bytes": 1349,
+      "sha256": "e986d9bf480347f77ec2556807071ee0aef49d1687374d3adc1db350546c8dfb",
+      "local_path": "data/research/replica_feasibility_20261030/search-lazarus.body",
+      "ended_utc": "2026-10-30T10:22:46.131007+00:00",
+      "effective_status": "retrieved",
+      "host_monitor": {
+        "status": "completed",
+        "wall_seconds": 1.5510948169976473,
+        "peak_rss_bytes": 23347200,
+        "receipt": "runs/replica_feasibility_20261030/monitors/search-lazarus/probe.json",
+        "sha256": "dbd88779bbe78992d487ce4ae5b0a949c0f5624d3313b592b4810cc76d4ac359"
+      }
+    },
+    {
+      "id": "search-openalex-inference",
+      "requested_url": "https://api.openalex.org/works?search=MoE%20fault%20tolerant%20inference&per-page=5",
+      "status": "retrieved",
+      "started_utc": "2026-10-30T10:29:01.323043+00:00",
+      "timeout_seconds": 20,
+      "response_limit_bytes": 2097152,
+      "attempt_limit": 1,
+      "external_code_executed": false,
+      "http_status": 200,
+      "final_url": "https://api.openalex.org/works?search=MoE%20fault%20tolerant%20inference&per-page=5",
+      "content_type": "application/json",
+      "etag": null,
+      "last_modified": null,
+      "captured_bytes": 107550,
+      "sha256": "895d16296a9dda59dbc99ba34a0590f6993c16be2355258aa1383d2a43e07dea",
+      "local_path": "data/research/replica_feasibility_20261030/search-openalex-inference.body",
+      "ended_utc": "2026-10-30T10:29:02.349397+00:00",
+      "effective_status": "retrieved",
+      "host_monitor": {
+        "status": "completed",
+        "wall_seconds": 1.278746536001563,
+        "peak_rss_bytes": 23371776,
+        "receipt": "runs/replica_feasibility_20261030/monitors/search-openalex-inference/probe.json",
+        "sha256": "f862ab55bf5555f5e32bb9c58f5c7491e664963f1e67c57eeb445f46feb46278"
+      }
+    },
+    {
+      "id": "search-tail",
+      "requested_url": "https://api.crossref.org/works?query.title=The%20Tail%20at%20Scale&rows=2&select=DOI,title,published,URL,link,abstract",
+      "status": "retrieved",
+      "started_utc": "2026-10-30T10:25:55.008043+00:00",
+      "timeout_seconds": 20,
+      "response_limit_bytes": 2097152,
+      "attempt_limit": 1,
+      "external_code_executed": false,
+      "http_status": 200,
+      "final_url": "https://api.crossref.org/works?query.title=The%20Tail%20at%20Scale&rows=2&select=DOI,title,published,URL,link,abstract",
+      "content_type": "application/json",
+      "etag": null,
+      "last_modified": null,
+      "captured_bytes": 1243,
+      "sha256": "e5dc39fe829efd0d505a87fbe9f8b921bb16a618c9085373ff5719d18e8bfe64",
+      "local_path": "data/research/replica_feasibility_20261030/search-tail.body",
+      "ended_utc": "2026-10-30T10:25:56.148372+00:00",
+      "effective_status": "retrieved",
+      "host_monitor": {
+        "status": "completed",
+        "wall_seconds": 1.3271199690061621,
+        "peak_rss_bytes": 23437312,
+        "receipt": "runs/replica_feasibility_20261030/monitors/search-tail/probe.json",
+        "sha256": "f5d2e5229c80ccea61864ccff28f0c89eebebdf66fdb285153dcaa878b908673"
+      }
+    }
+  ],
+  "verified_primary_excerpts": {
+    "fastermoe": "Dynamic shadowing is enabled by environment variable",
+    "lazarus": "adaptive expert placement",
+    "eep": "Requests in flight at the moment of failure are reported as failed and must be retried by the client",
+    "megaflux": "The plan preserves token counts, expert selections, and routing weights"
+  },
+  "fastermoe_readme_git_blob": "55736f40105d1597ecb714289bb2d70484a79d27",
+  "text_sha256": {
+    "fastermoe": "f0b4219c22b9547a09f9ba4ca7991f7cc371233a3b890bb1b86b99d3d3c9f358",
+    "lazarus": "ddec192da91e2de3173488f326e406cfd3d7002f46df95195cffe3f4a19e6914",
+    "eep": "487728d3087938b793b73b138920cf300583b2ab545682da46a159713a4567c6",
+    "megaflux": "8503687701ce2c21c4bce49107ec5e47f46a1ec4467f3e035a4576cf55ad0d35"
+  },
+  "code": {
+    "backend/rdma/service.cc": {
+      "sha256": "ef1fa69b378db428500fc10d46e49ceed2b4b4fb8ec0ff66947665a5e973a90e",
+      "anchors": {
+        "rank not available for graph": [
+          119
+        ],
+        "message leaves its EP group": [
+          125
+        ],
+        "can_load_graph()": [
+          50,
+          119
+        ]
+      }
+    },
+    "backend/rdma/astra_adapter.cc": {
+      "sha256": "13de5bb78869cd6301a656b86fc6488ffaedd1a7284d7f7b7cc12b4e95aa62e3",
+      "anchors": {
+        "reused logical message identity": [
+          15
+        ],
+        "SEND posted twice": [
+          45
+        ]
+      }
+    },
+    "python/moe_ub_cosim/scaleout_service.py": {
+      "sha256": "23efb6f997ee55615419d6c6a4eafa7bace17e1998aa4091140f44f392b24c93",
+      "anchors": {
+        "EP groups must partition physical GPUs exactly": [
+          61
+        ],
+        "f'L{layer}.experts'": [
+          200
+        ]
+      }
+    },
+    "python/moe_ub_cosim/scaleout_replay.py": {
+      "sha256": "507da5490bab6ed4a3754ed96c0a1d514866e282cf4e62b0e91b9d5f779af168",
+      "anchors": {
+        "replication unsupported": [
+          74
+        ]
+      }
+    },
+    "backend/rdma/stream_probe.cc": {
+      "sha256": "4914bbf99d826923bf24f5b9878dacb1775a8a52bbc7407085eec4edccb07331",
+      "anchors": {
+        "local_busy": [
+          105,
+          116,
+          117,
+          120
+        ],
+        "serial_per_gpu/1": [
+          56
+        ]
+      }
+    },
+    "python/moe_ub_cosim/scaleout_llm.py": {
+      "sha256": "965e52432169930bd05f693ed91f5b83fb001f9717b997944ca1616dae9a88c7",
+      "anchors": {
+        "device_bytes=None": [
+          29
+        ],
+        "other_workspace_bytes=0": [
+          44
+        ]
+      }
+    }
+  },
+  "saved_execution_inputs": {
+    "runs/token_transient_20261030/normal/graphs/g0.w0/wave.json": "ddfaa77973c44464ed553b64baa8eccddf9f35cc1aea0aebfb9664666b500058",
+    "runs/token_transient_20261030/normal/log/astra_nodes.log": "b5cd018704c0237bf5600a9ddc8ec8fddd87eec0e1a4325849410947a41534da",
+    "runs/token_transient_20261030/normal/input.json": "1c387d9da40589ec18090ba7cbd91686f3695daf0e8221f42cc255494abcb513",
+    "runs/token_transient_20261030/local/graphs/g0.w0/wave.json": "ddfaa77973c44464ed553b64baa8eccddf9f35cc1aea0aebfb9664666b500058",
+    "runs/token_transient_20261030/local/log/astra_nodes.log": "06bf121685a595290fbe86438e73ac34eb79b25e5797d605349860b885800a21",
+    "runs/token_transient_20261030/local/input.json": "1c387d9da40589ec18090ba7cbd91686f3695daf0e8221f42cc255494abcb513"
+  },
+  "cases": {
+    "normal": {
+      "first_dispatch_gate_ns": 16922,
+      "ranks": 64,
+      "expert_completions_before_dispatch_gate": 0,
+      "expert_rows": [
+        {
+          "rank": 0,
+          "gate_ns": 16922,
+          "expert_issue_ns": 16922,
+          "expert_done_ns": 16922,
+          "declared_expert_ns": 0
+        },
+        {
+          "rank": 2,
+          "gate_ns": 16922,
+          "expert_issue_ns": 16922,
+          "expert_done_ns": 16922,
+          "declared_expert_ns": 0
+        },
+        {
+          "rank": 4,
+          "gate_ns": 16922,
+          "expert_issue_ns": 16922,
+          "expert_done_ns": 17222,
+          "declared_expert_ns": 300
+        },
+        {
+          "rank": 6,
+          "gate_ns": 16922,
+          "expert_issue_ns": 16922,
+          "expert_done_ns": 16922,
+          "declared_expert_ns": 0
+        },
+        {
+          "rank": 8,
+          "gate_ns": 16922,
+          "expert_issue_ns": 16922,
+          "expert_done_ns": 17022,
+          "declared_expert_ns": 100
+        },
+        {
+          "rank": 10,
+          "gate_ns": 16922,
+          "expert_issue_ns": 16922,
+          "expert_done_ns": 16922,
+          "declared_expert_ns": 0
+        },
+        {
+          "rank": 12,
+          "gate_ns": 16922,
+          "expert_issue_ns": 16922,
+          "expert_done_ns": 16922,
+          "declared_expert_ns": 0
+        },
+        {
+          "rank": 14,
+          "gate_ns": 16922,
+          "expert_issue_ns": 16922,
+          "expert_done_ns": 17022,
+          "declared_expert_ns": 100
+        },
+        {
+          "rank": 16,
+          "gate_ns": 16922,
+          "expert_issue_ns": 16922,
+          "expert_done_ns": 17122,
+          "declared_expert_ns": 200
+        },
+        {
+          "rank": 18,
+          "gate_ns": 16922,
+          "expert_issue_ns": 16922,
+          "expert_done_ns": 16922,
+          "declared_expert_ns": 0
+        },
+        {
+          "rank": 20,
+          "gate_ns": 16922,
+          "expert_issue_ns": 16922,
+          "expert_done_ns": 17522,
+          "declared_expert_ns": 600
+        },
+        {
+          "rank": 22,
+          "gate_ns": 16922,
+          "expert_issue_ns": 16922,
+          "expert_done_ns": 16922,
+          "declared_expert_ns": 0
+        },
+        {
+          "rank": 24,
+          "gate_ns": 16922,
+          "expert_issue_ns": 16922,
+          "expert_done_ns": 16922,
+          "declared_expert_ns": 0
+        },
+        {
+          "rank": 26,
+          "gate_ns": 16922,
+          "expert_issue_ns": 16922,
+          "expert_done_ns": 17022,
+          "declared_expert_ns": 100
+        },
+        {
+          "rank": 28,
+          "gate_ns": 16922,
+          "expert_issue_ns": 16922,
+          "expert_done_ns": 17122,
+          "declared_expert_ns": 200
+        },
+        {
+          "rank": 30,
+          "gate_ns": 16922,
+          "expert_issue_ns": 16922,
+          "expert_done_ns": 17022,
+          "declared_expert_ns": 100
+        },
+        {
+          "rank": 32,
+          "gate_ns": 16922,
+          "expert_issue_ns": 16922,
+          "expert_done_ns": 17022,
+          "declared_expert_ns": 100
+        },
+        {
+          "rank": 34,
+          "gate_ns": 16922,
+          "expert_issue_ns": 16922,
+          "expert_done_ns": 17022,
+          "declared_expert_ns": 100
+        },
+        {
+          "rank": 36,
+          "gate_ns": 16922,
+          "expert_issue_ns": 16922,
+          "expert_done_ns": 16922,
+          "declared_expert_ns": 0
+        },
+        {
+          "rank": 38,
+          "gate_ns": 16922,
+          "expert_issue_ns": 16922,
+          "expert_done_ns": 16922,
+          "declared_expert_ns": 0
+        },
+        {
+          "rank": 40,
+          "gate_ns": 16922,
+          "expert_issue_ns": 16922,
+          "expert_done_ns": 16922,
+          "declared_expert_ns": 0
+        },
+        {
+          "rank": 42,
+          "gate_ns": 16922,
+          "expert_issue_ns": 16922,
+          "expert_done_ns": 17122,
+          "declared_expert_ns": 200
+        },
+        {
+          "rank": 44,
+          "gate_ns": 16922,
+          "expert_issue_ns": 16922,
+          "expert_done_ns": 16922,
+          "declared_expert_ns": 0
+        },
+        {
+          "rank": 46,
+          "gate_ns": 16922,
+          "expert_issue_ns": 16922,
+          "expert_done_ns": 16922,
+          "declared_expert_ns": 0
+        },
+        {
+          "rank": 48,
+          "gate_ns": 16922,
+          "expert_issue_ns": 16922,
+          "expert_done_ns": 17022,
+          "declared_expert_ns": 100
+        },
+        {
+          "rank": 50,
+          "gate_ns": 16922,
+          "expert_issue_ns": 16922,
+          "expert_done_ns": 17022,
+          "declared_expert_ns": 100
+        },
+        {
+          "rank": 52,
+          "gate_ns": 16922,
+          "expert_issue_ns": 16922,
+          "expert_done_ns": 16922,
+          "declared_expert_ns": 0
+        },
+        {
+          "rank": 54,
+          "gate_ns": 16922,
+          "expert_issue_ns": 16922,
+          "expert_done_ns": 17022,
+          "declared_expert_ns": 100
+        },
+        {
+          "rank": 56,
+          "gate_ns": 16922,
+          "expert_issue_ns": 16922,
+          "expert_done_ns": 16922,
+          "declared_expert_ns": 0
+        },
+        {
+          "rank": 58,
+          "gate_ns": 16922,
+          "expert_issue_ns": 16922,
+          "expert_done_ns": 17022,
+          "declared_expert_ns": 100
+        },
+        {
+          "rank": 60,
+          "gate_ns": 16922,
+          "expert_issue_ns": 16922,
+          "expert_done_ns": 17022,
+          "declared_expert_ns": 100
+        },
+        {
+          "rank": 62,
+          "gate_ns": 16922,
+          "expert_issue_ns": 16922,
+          "expert_done_ns": 16922,
+          "declared_expert_ns": 0
+        },
+        {
+          "rank": 64,
+          "gate_ns": 16922,
+          "expert_issue_ns": 16922,
+          "expert_done_ns": 17222,
+          "declared_expert_ns": 300
+        },
+        {
+          "rank": 66,
+          "gate_ns": 16922,
+          "expert_issue_ns": 16922,
+          "expert_done_ns": 17122,
+          "declared_expert_ns": 200
+        },
+        {
+          "rank": 68,
+          "gate_ns": 16922,
+          "expert_issue_ns": 16922,
+          "expert_done_ns": 17022,
+          "declared_expert_ns": 100
+        },
+        {
+          "rank": 70,
+          "gate_ns": 16922,
+          "expert_issue_ns": 16922,
+          "expert_done_ns": 17322,
+          "declared_expert_ns": 400
+        },
+        {
+          "rank": 72,
+          "gate_ns": 16922,
+          "expert_issue_ns": 16922,
+          "expert_done_ns": 17022,
+          "declared_expert_ns": 100
+        },
+        {
+          "rank": 74,
+          "gate_ns": 16922,
+          "expert_issue_ns": 16922,
+          "expert_done_ns": 16922,
+          "declared_expert_ns": 0
+        },
+        {
+          "rank": 76,
+          "gate_ns": 16922,
+          "expert_issue_ns": 16922,
+          "expert_done_ns": 17022,
+          "declared_expert_ns": 100
+        },
+        {
+          "rank": 78,
+          "gate_ns": 16922,
+          "expert_issue_ns": 16922,
+          "expert_done_ns": 17022,
+          "declared_expert_ns": 100
+        },
+        {
+          "rank": 80,
+          "gate_ns": 16922,
+          "expert_issue_ns": 16922,
+          "expert_done_ns": 17122,
+          "declared_expert_ns": 200
+        },
+        {
+          "rank": 82,
+          "gate_ns": 16922,
+          "expert_issue_ns": 16922,
+          "expert_done_ns": 17422,
+          "declared_expert_ns": 500
+        },
+        {
+          "rank": 84,
+          "gate_ns": 16922,
+          "expert_issue_ns": 16922,
+          "expert_done_ns": 17022,
+          "declared_expert_ns": 100
+        },
+        {
+          "rank": 86,
+          "gate_ns": 16922,
+          "expert_issue_ns": 16922,
+          "expert_done_ns": 16922,
+          "declared_expert_ns": 0
+        },
+        {
+          "rank": 88,
+          "gate_ns": 16922,
+          "expert_issue_ns": 16922,
+          "expert_done_ns": 17022,
+          "declared_expert_ns": 100
+        },
+        {
+          "rank": 90,
+          "gate_ns": 16922,
+          "expert_issue_ns": 16922,
+          "expert_done_ns": 16922,
+          "declared_expert_ns": 0
+        },
+        {
+          "rank": 92,
+          "gate_ns": 16922,
+          "expert_issue_ns": 16922,
+          "expert_done_ns": 17022,
+          "declared_expert_ns": 100
+        },
+        {
+          "rank": 94,
+          "gate_ns": 16922,
+          "expert_issue_ns": 16922,
+          "expert_done_ns": 16922,
+          "declared_expert_ns": 0
+        },
+        {
+          "rank": 96,
+          "gate_ns": 16922,
+          "expert_issue_ns": 16922,
+          "expert_done_ns": 16922,
+          "declared_expert_ns": 0
+        },
+        {
+          "rank": 98,
+          "gate_ns": 16922,
+          "expert_issue_ns": 16922,
+          "expert_done_ns": 17122,
+          "declared_expert_ns": 200
+        },
+        {
+          "rank": 100,
+          "gate_ns": 16922,
+          "expert_issue_ns": 16922,
+          "expert_done_ns": 17422,
+          "declared_expert_ns": 500
+        },
+        {
+          "rank": 102,
+          "gate_ns": 16922,
+          "expert_issue_ns": 16922,
+          "expert_done_ns": 16922,
+          "declared_expert_ns": 0
+        },
+        {
+          "rank": 104,
+          "gate_ns": 16922,
+          "expert_issue_ns": 16922,
+          "expert_done_ns": 17222,
+          "declared_expert_ns": 300
+        },
+        {
+          "rank": 106,
+          "gate_ns": 16922,
+          "expert_issue_ns": 16922,
+          "expert_done_ns": 16922,
+          "declared_expert_ns": 0
+        },
+        {
+          "rank": 108,
+          "gate_ns": 16922,
+          "expert_issue_ns": 16922,
+          "expert_done_ns": 17122,
+          "declared_expert_ns": 200
+        },
+        {
+          "rank": 110,
+          "gate_ns": 16922,
+          "expert_issue_ns": 16922,
+          "expert_done_ns": 16922,
+          "declared_expert_ns": 0
+        },
+        {
+          "rank": 112,
+          "gate_ns": 16922,
+          "expert_issue_ns": 16922,
+          "expert_done_ns": 16922,
+          "declared_expert_ns": 0
+        },
+        {
+          "rank": 114,
+          "gate_ns": 16922,
+          "expert_issue_ns": 16922,
+          "expert_done_ns": 16922,
+          "declared_expert_ns": 0
+        },
+        {
+          "rank": 116,
+          "gate_ns": 16922,
+          "expert_issue_ns": 16922,
+          "expert_done_ns": 17022,
+          "declared_expert_ns": 100
+        },
+        {
+          "rank": 118,
+          "gate_ns": 16922,
+          "expert_issue_ns": 16922,
+          "expert_done_ns": 17022,
+          "declared_expert_ns": 100
+        },
+        {
+          "rank": 120,
+          "gate_ns": 16922,
+          "expert_issue_ns": 16922,
+          "expert_done_ns": 16922,
+          "declared_expert_ns": 0
+        },
+        {
+          "rank": 122,
+          "gate_ns": 16922,
+          "expert_issue_ns": 16922,
+          "expert_done_ns": 16922,
+          "declared_expert_ns": 0
+        },
+        {
+          "rank": 124,
+          "gate_ns": 16922,
+          "expert_issue_ns": 16922,
+          "expert_done_ns": 17022,
+          "declared_expert_ns": 100
+        },
+        {
+          "rank": 126,
+          "gate_ns": 16922,
+          "expert_issue_ns": 16922,
+          "expert_done_ns": 16922,
+          "declared_expert_ns": 0
+        }
+      ],
+      "target_rank": 20,
+      "declared_same_expert_replica_rank": 21,
+      "target_experts_accessed": [
+        40,
+        42
+      ],
+      "overlapping_groups_rejected": "Scale-Out topology: EP groups must partition physical GPUs exactly"
+    },
+    "local": {
+      "first_dispatch_gate_ns": 254594,
+      "ranks": 64,
+      "expert_completions_before_dispatch_gate": 0,
+      "expert_rows": [
+        {
+          "rank": 0,
+          "gate_ns": 254594,
+          "expert_issue_ns": 254594,
+          "expert_done_ns": 254594,
+          "declared_expert_ns": 0
+        },
+        {
+          "rank": 2,
+          "gate_ns": 254594,
+          "expert_issue_ns": 254594,
+          "expert_done_ns": 254594,
+          "declared_expert_ns": 0
+        },
+        {
+          "rank": 4,
+          "gate_ns": 254594,
+          "expert_issue_ns": 254594,
+          "expert_done_ns": 254894,
+          "declared_expert_ns": 300
+        },
+        {
+          "rank": 6,
+          "gate_ns": 254594,
+          "expert_issue_ns": 254594,
+          "expert_done_ns": 254594,
+          "declared_expert_ns": 0
+        },
+        {
+          "rank": 8,
+          "gate_ns": 254594,
+          "expert_issue_ns": 254594,
+          "expert_done_ns": 254694,
+          "declared_expert_ns": 100
+        },
+        {
+          "rank": 10,
+          "gate_ns": 254594,
+          "expert_issue_ns": 254594,
+          "expert_done_ns": 254594,
+          "declared_expert_ns": 0
+        },
+        {
+          "rank": 12,
+          "gate_ns": 254594,
+          "expert_issue_ns": 254594,
+          "expert_done_ns": 254594,
+          "declared_expert_ns": 0
+        },
+        {
+          "rank": 14,
+          "gate_ns": 254594,
+          "expert_issue_ns": 254594,
+          "expert_done_ns": 254694,
+          "declared_expert_ns": 100
+        },
+        {
+          "rank": 16,
+          "gate_ns": 254594,
+          "expert_issue_ns": 254594,
+          "expert_done_ns": 254794,
+          "declared_expert_ns": 200
+        },
+        {
+          "rank": 18,
+          "gate_ns": 254594,
+          "expert_issue_ns": 254594,
+          "expert_done_ns": 254594,
+          "declared_expert_ns": 0
+        },
+        {
+          "rank": 20,
+          "gate_ns": 254594,
+          "expert_issue_ns": 254594,
+          "expert_done_ns": 255194,
+          "declared_expert_ns": 600
+        },
+        {
+          "rank": 22,
+          "gate_ns": 254594,
+          "expert_issue_ns": 254594,
+          "expert_done_ns": 254594,
+          "declared_expert_ns": 0
+        },
+        {
+          "rank": 24,
+          "gate_ns": 254594,
+          "expert_issue_ns": 254594,
+          "expert_done_ns": 254594,
+          "declared_expert_ns": 0
+        },
+        {
+          "rank": 26,
+          "gate_ns": 254594,
+          "expert_issue_ns": 254594,
+          "expert_done_ns": 254694,
+          "declared_expert_ns": 100
+        },
+        {
+          "rank": 28,
+          "gate_ns": 254594,
+          "expert_issue_ns": 254594,
+          "expert_done_ns": 254794,
+          "declared_expert_ns": 200
+        },
+        {
+          "rank": 30,
+          "gate_ns": 254594,
+          "expert_issue_ns": 254594,
+          "expert_done_ns": 254694,
+          "declared_expert_ns": 100
+        },
+        {
+          "rank": 32,
+          "gate_ns": 254594,
+          "expert_issue_ns": 254594,
+          "expert_done_ns": 254694,
+          "declared_expert_ns": 100
+        },
+        {
+          "rank": 34,
+          "gate_ns": 254594,
+          "expert_issue_ns": 254594,
+          "expert_done_ns": 254694,
+          "declared_expert_ns": 100
+        },
+        {
+          "rank": 36,
+          "gate_ns": 254594,
+          "expert_issue_ns": 254594,
+          "expert_done_ns": 254594,
+          "declared_expert_ns": 0
+        },
+        {
+          "rank": 38,
+          "gate_ns": 254594,
+          "expert_issue_ns": 254594,
+          "expert_done_ns": 254594,
+          "declared_expert_ns": 0
+        },
+        {
+          "rank": 40,
+          "gate_ns": 254594,
+          "expert_issue_ns": 254594,
+          "expert_done_ns": 254594,
+          "declared_expert_ns": 0
+        },
+        {
+          "rank": 42,
+          "gate_ns": 254594,
+          "expert_issue_ns": 254594,
+          "expert_done_ns": 254794,
+          "declared_expert_ns": 200
+        },
+        {
+          "rank": 44,
+          "gate_ns": 254594,
+          "expert_issue_ns": 254594,
+          "expert_done_ns": 254594,
+          "declared_expert_ns": 0
+        },
+        {
+          "rank": 46,
+          "gate_ns": 254594,
+          "expert_issue_ns": 254594,
+          "expert_done_ns": 254594,
+          "declared_expert_ns": 0
+        },
+        {
+          "rank": 48,
+          "gate_ns": 254594,
+          "expert_issue_ns": 254594,
+          "expert_done_ns": 254694,
+          "declared_expert_ns": 100
+        },
+        {
+          "rank": 50,
+          "gate_ns": 254594,
+          "expert_issue_ns": 254594,
+          "expert_done_ns": 254694,
+          "declared_expert_ns": 100
+        },
+        {
+          "rank": 52,
+          "gate_ns": 254594,
+          "expert_issue_ns": 254594,
+          "expert_done_ns": 254594,
+          "declared_expert_ns": 0
+        },
+        {
+          "rank": 54,
+          "gate_ns": 254594,
+          "expert_issue_ns": 254594,
+          "expert_done_ns": 254694,
+          "declared_expert_ns": 100
+        },
+        {
+          "rank": 56,
+          "gate_ns": 254594,
+          "expert_issue_ns": 254594,
+          "expert_done_ns": 254594,
+          "declared_expert_ns": 0
+        },
+        {
+          "rank": 58,
+          "gate_ns": 254594,
+          "expert_issue_ns": 254594,
+          "expert_done_ns": 254694,
+          "declared_expert_ns": 100
+        },
+        {
+          "rank": 60,
+          "gate_ns": 254594,
+          "expert_issue_ns": 254594,
+          "expert_done_ns": 254694,
+          "declared_expert_ns": 100
+        },
+        {
+          "rank": 62,
+          "gate_ns": 254594,
+          "expert_issue_ns": 254594,
+          "expert_done_ns": 254594,
+          "declared_expert_ns": 0
+        },
+        {
+          "rank": 64,
+          "gate_ns": 254594,
+          "expert_issue_ns": 254594,
+          "expert_done_ns": 254894,
+          "declared_expert_ns": 300
+        },
+        {
+          "rank": 66,
+          "gate_ns": 254594,
+          "expert_issue_ns": 254594,
+          "expert_done_ns": 254794,
+          "declared_expert_ns": 200
+        },
+        {
+          "rank": 68,
+          "gate_ns": 254594,
+          "expert_issue_ns": 254594,
+          "expert_done_ns": 254694,
+          "declared_expert_ns": 100
+        },
+        {
+          "rank": 70,
+          "gate_ns": 254594,
+          "expert_issue_ns": 254594,
+          "expert_done_ns": 254994,
+          "declared_expert_ns": 400
+        },
+        {
+          "rank": 72,
+          "gate_ns": 254594,
+          "expert_issue_ns": 254594,
+          "expert_done_ns": 254694,
+          "declared_expert_ns": 100
+        },
+        {
+          "rank": 74,
+          "gate_ns": 254594,
+          "expert_issue_ns": 254594,
+          "expert_done_ns": 254594,
+          "declared_expert_ns": 0
+        },
+        {
+          "rank": 76,
+          "gate_ns": 254594,
+          "expert_issue_ns": 254594,
+          "expert_done_ns": 254694,
+          "declared_expert_ns": 100
+        },
+        {
+          "rank": 78,
+          "gate_ns": 254594,
+          "expert_issue_ns": 254594,
+          "expert_done_ns": 254694,
+          "declared_expert_ns": 100
+        },
+        {
+          "rank": 80,
+          "gate_ns": 254594,
+          "expert_issue_ns": 254594,
+          "expert_done_ns": 254794,
+          "declared_expert_ns": 200
+        },
+        {
+          "rank": 82,
+          "gate_ns": 254594,
+          "expert_issue_ns": 254594,
+          "expert_done_ns": 255094,
+          "declared_expert_ns": 500
+        },
+        {
+          "rank": 84,
+          "gate_ns": 254594,
+          "expert_issue_ns": 254594,
+          "expert_done_ns": 254694,
+          "declared_expert_ns": 100
+        },
+        {
+          "rank": 86,
+          "gate_ns": 254594,
+          "expert_issue_ns": 254594,
+          "expert_done_ns": 254594,
+          "declared_expert_ns": 0
+        },
+        {
+          "rank": 88,
+          "gate_ns": 254594,
+          "expert_issue_ns": 254594,
+          "expert_done_ns": 254694,
+          "declared_expert_ns": 100
+        },
+        {
+          "rank": 90,
+          "gate_ns": 254594,
+          "expert_issue_ns": 254594,
+          "expert_done_ns": 254594,
+          "declared_expert_ns": 0
+        },
+        {
+          "rank": 92,
+          "gate_ns": 254594,
+          "expert_issue_ns": 254594,
+          "expert_done_ns": 254694,
+          "declared_expert_ns": 100
+        },
+        {
+          "rank": 94,
+          "gate_ns": 254594,
+          "expert_issue_ns": 254594,
+          "expert_done_ns": 254594,
+          "declared_expert_ns": 0
+        },
+        {
+          "rank": 96,
+          "gate_ns": 254594,
+          "expert_issue_ns": 254594,
+          "expert_done_ns": 254594,
+          "declared_expert_ns": 0
+        },
+        {
+          "rank": 98,
+          "gate_ns": 254594,
+          "expert_issue_ns": 254594,
+          "expert_done_ns": 254794,
+          "declared_expert_ns": 200
+        },
+        {
+          "rank": 100,
+          "gate_ns": 254594,
+          "expert_issue_ns": 254594,
+          "expert_done_ns": 255094,
+          "declared_expert_ns": 500
+        },
+        {
+          "rank": 102,
+          "gate_ns": 254594,
+          "expert_issue_ns": 254594,
+          "expert_done_ns": 254594,
+          "declared_expert_ns": 0
+        },
+        {
+          "rank": 104,
+          "gate_ns": 254594,
+          "expert_issue_ns": 254594,
+          "expert_done_ns": 254894,
+          "declared_expert_ns": 300
+        },
+        {
+          "rank": 106,
+          "gate_ns": 254594,
+          "expert_issue_ns": 254594,
+          "expert_done_ns": 254594,
+          "declared_expert_ns": 0
+        },
+        {
+          "rank": 108,
+          "gate_ns": 254594,
+          "expert_issue_ns": 254594,
+          "expert_done_ns": 254794,
+          "declared_expert_ns": 200
+        },
+        {
+          "rank": 110,
+          "gate_ns": 254594,
+          "expert_issue_ns": 254594,
+          "expert_done_ns": 254594,
+          "declared_expert_ns": 0
+        },
+        {
+          "rank": 112,
+          "gate_ns": 254594,
+          "expert_issue_ns": 254594,
+          "expert_done_ns": 254594,
+          "declared_expert_ns": 0
+        },
+        {
+          "rank": 114,
+          "gate_ns": 254594,
+          "expert_issue_ns": 254594,
+          "expert_done_ns": 254594,
+          "declared_expert_ns": 0
+        },
+        {
+          "rank": 116,
+          "gate_ns": 254594,
+          "expert_issue_ns": 254594,
+          "expert_done_ns": 254694,
+          "declared_expert_ns": 100
+        },
+        {
+          "rank": 118,
+          "gate_ns": 254594,
+          "expert_issue_ns": 254594,
+          "expert_done_ns": 254694,
+          "declared_expert_ns": 100
+        },
+        {
+          "rank": 120,
+          "gate_ns": 254594,
+          "expert_issue_ns": 254594,
+          "expert_done_ns": 254594,
+          "declared_expert_ns": 0
+        },
+        {
+          "rank": 122,
+          "gate_ns": 254594,
+          "expert_issue_ns": 254594,
+          "expert_done_ns": 254594,
+          "declared_expert_ns": 0
+        },
+        {
+          "rank": 124,
+          "gate_ns": 254594,
+          "expert_issue_ns": 254594,
+          "expert_done_ns": 254694,
+          "declared_expert_ns": 100
+        },
+        {
+          "rank": 126,
+          "gate_ns": 254594,
+          "expert_issue_ns": 254594,
+          "expert_done_ns": 254594,
+          "declared_expert_ns": 0
+        }
+      ],
+      "target_rank": 20,
+      "declared_same_expert_replica_rank": 21,
+      "target_experts_accessed": [
+        40,
+        42
+      ],
+      "overlapping_groups_rejected": "Scale-Out topology: EP groups must partition physical GPUs exactly"
+    }
+  },
+  "monitored_wall_seconds_before_audit": 172.21037035802146,
+  "novelty_proven": false,
+  "algorithm_gain_proven": false,
+  "decision": "no_go_for_replication_as_novelty; conditional_feasibility_for_inflight_bundle_repair"
+}

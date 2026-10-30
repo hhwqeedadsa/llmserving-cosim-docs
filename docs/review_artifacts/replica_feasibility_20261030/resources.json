@@ -1,0 +1,1426 @@
+{
+  "scope": "all completed host monitors, including failed attempts and closeout; read-only inspection commands are not timed",
+  "monitors": [
+    {
+      "name": "audit",
+      "sha256": "483ab0c52ade5aa4fb98c59f325ac6ed884afcc992b56ae00d7c58cade6be29e",
+      "receipt": {
+        "schema_version": "moe-ub-host-probe/1",
+        "command": [
+          ".venv/frontend/bin/python",
+          "-B",
+          "docs/review_artifacts/replica_feasibility_20261030/audit.py",
+          "--output",
+          "docs/review_artifacts/replica_feasibility_20261030/evidence.json"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "started_utc": "2026-10-30T10:33:21.718977+00:00",
+        "limits": {
+          "sampled_group_rss_bytes": 1073741824,
+          "per_process_address_bytes": 2147483648,
+          "artifact_bytes": 67108864,
+          "wall_seconds": 120.0
+        },
+        "peak_sampled_group_rss_bytes": 35729408,
+        "peak_sampled_processes": 1,
+        "status": "child_failed",
+        "workload_semantics_validated": false,
+        "artifact_roots": [
+          "/home/lry/moe-ub-cosim/runs/replica_feasibility_20261030",
+          "/home/lry/moe-ub-cosim/data/research/replica_feasibility_20261030"
+        ],
+        "peak_sampled_artifact_bytes": 7843840,
+        "min_free_bytes": 8589934592,
+        "rss_scope": "owned_process_tree_including_detached_descendants",
+        "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+        "disk_sample_interval_seconds": 1.0,
+        "peak_sampled_artifact_apparent_bytes": 7572412,
+        "peak_sampled_artifact_allocated_bytes": 7843840,
+        "process_group": 870129,
+        "child_exit_code": 1,
+        "remaining_live_group_pids": [],
+        "ended_utc": "2026-10-30T10:33:22.961099+00:00",
+        "wall_seconds": 1.2421280480339192,
+        "max_waited_child_rss_kib": 34892,
+        "artifact_bytes_before_report": 4307,
+        "aggregate_artifact_bytes_before_report": 7843840,
+        "aggregate_artifact_usage_before_report": {
+          "apparent_bytes": 7572412,
+          "allocated_bytes": 7843840
+        }
+      }
+    },
+    {
+      "name": "audit-corrected",
+      "sha256": "38b98ff5692555df8772e39bf66984b9cb33aa432f1151507b8a0b392d20589e",
+      "receipt": {
+        "schema_version": "moe-ub-host-probe/1",
+        "command": [
+          ".venv/frontend/bin/python",
+          "-B",
+          "docs/review_artifacts/replica_feasibility_20261030/audit.py",
+          "--output",
+          "docs/review_artifacts/replica_feasibility_20261030/evidence.json"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "started_utc": "2026-10-30T10:33:49.110047+00:00",
+        "limits": {
+          "sampled_group_rss_bytes": 1073741824,
+          "per_process_address_bytes": 2147483648,
+          "artifact_bytes": 67108864,
+          "wall_seconds": 120.0
+        },
+        "peak_sampled_group_rss_bytes": 38940672,
+        "peak_sampled_processes": 1,
+        "status": "completed",
+        "workload_semantics_validated": false,
+        "artifact_roots": [
+          "/home/lry/moe-ub-cosim/runs/replica_feasibility_20261030",
+          "/home/lry/moe-ub-cosim/data/research/replica_feasibility_20261030"
+        ],
+        "peak_sampled_artifact_bytes": 7860224,
+        "min_free_bytes": 8589934592,
+        "rss_scope": "owned_process_tree_including_detached_descendants",
+        "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+        "disk_sample_interval_seconds": 1.0,
+        "peak_sampled_artifact_apparent_bytes": 7579796,
+        "peak_sampled_artifact_allocated_bytes": 7860224,
+        "process_group": 870167,
+        "child_exit_code": 0,
+        "remaining_live_group_pids": [],
+        "ended_utc": "2026-10-30T10:33:51.396944+00:00",
+        "wall_seconds": 2.2869022979866713,
+        "max_waited_child_rss_kib": 38028,
+        "artifact_bytes_before_report": 5771,
+        "aggregate_artifact_bytes_before_report": 7860224,
+        "aggregate_artifact_usage_before_report": {
+          "apparent_bytes": 7579796,
+          "allocated_bytes": 7860224
+        }
+      }
+    },
+    {
+      "name": "closeout",
+      "sha256": "14b98973d627e82a30698ae5d49fc80be8f5b14ce609d3946955e94232cefb25",
+      "receipt": {
+        "schema_version": "moe-ub-host-probe/1",
+        "command": [
+          ".venv/frontend/bin/python",
+          "-B",
+          "docs/review_artifacts/replica_feasibility_20261030/closeout.py"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "started_utc": "2026-10-30T10:38:42.972160+00:00",
+        "limits": {
+          "sampled_group_rss_bytes": 1073741824,
+          "per_process_address_bytes": 2147483648,
+          "artifact_bytes": 67108864,
+          "wall_seconds": 120.0
+        },
+        "peak_sampled_group_rss_bytes": 43450368,
+        "peak_sampled_processes": 3,
+        "status": "completed",
+        "workload_semantics_validated": false,
+        "artifact_roots": [
+          "/home/lry/moe-ub-cosim/runs/replica_feasibility_20261030",
+          "/home/lry/moe-ub-cosim/docs/review_artifacts/replica_feasibility_20261030",
+          "/home/lry/moe-ub-cosim/data/research/replica_feasibility_20261030"
+        ],
+        "peak_sampled_artifact_bytes": 8011776,
+        "min_free_bytes": 8589934592,
+        "rss_scope": "owned_process_tree_including_detached_descendants",
+        "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+        "disk_sample_interval_seconds": 1.0,
+        "peak_sampled_artifact_apparent_bytes": 7691161,
+        "peak_sampled_artifact_allocated_bytes": 8011776,
+        "process_group": 870951,
+        "child_exit_code": 0,
+        "remaining_live_group_pids": [],
+        "ended_utc": "2026-10-30T10:38:43.537286+00:00",
+        "wall_seconds": 0.565133918018546,
+        "max_waited_child_rss_kib": 19568,
+        "artifact_bytes_before_report": 1871,
+        "aggregate_artifact_bytes_before_report": 8011776,
+        "aggregate_artifact_usage_before_report": {
+          "apparent_bytes": 7691161,
+          "allocated_bytes": 8011776
+        }
+      }
+    },
+    {
+      "name": "extract-lazarus",
+      "sha256": "92324b9f085e01e790ae6970f6ad5b5eef9e8f3cf6cb14e6e6768ca3fb806f4a",
+      "receipt": {
+        "schema_version": "moe-ub-host-probe/1",
+        "command": [
+          "/usr/bin/pdftotext",
+          "-layout",
+          "data/research/replica_feasibility_20261030/paper-lazarus.pdf",
+          "data/research/replica_feasibility_20261030/paper-lazarus.txt"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "started_utc": "2026-10-30T10:27:41.519833+00:00",
+        "limits": {
+          "sampled_group_rss_bytes": 1073741824,
+          "per_process_address_bytes": 2147483648,
+          "artifact_bytes": 67108864,
+          "wall_seconds": 120.0
+        },
+        "peak_sampled_group_rss_bytes": 18157568,
+        "peak_sampled_processes": 1,
+        "status": "completed",
+        "workload_semantics_validated": false,
+        "artifact_roots": [
+          "/home/lry/moe-ub-cosim/runs/replica_feasibility_20261030",
+          "/home/lry/moe-ub-cosim/data/research/replica_feasibility_20261030"
+        ],
+        "peak_sampled_artifact_bytes": 2359296,
+        "min_free_bytes": 8589934592,
+        "rss_scope": "owned_process_tree_including_detached_descendants",
+        "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+        "disk_sample_interval_seconds": 1.0,
+        "peak_sampled_artifact_apparent_bytes": 2190054,
+        "peak_sampled_artifact_allocated_bytes": 2359296,
+        "process_group": 869583,
+        "child_exit_code": 0,
+        "remaining_live_group_pids": [],
+        "ended_utc": "2026-10-30T10:27:41.867703+00:00",
+        "wall_seconds": 0.3478724189917557,
+        "max_waited_child_rss_kib": 18784,
+        "artifact_bytes_before_report": 989,
+        "aggregate_artifact_bytes_before_report": 2359296,
+        "aggregate_artifact_usage_before_report": {
+          "apparent_bytes": 2190054,
+          "allocated_bytes": 2359296
+        }
+      }
+    },
+    {
+      "name": "paper-fastermoe",
+      "sha256": "09cd6c15074b6114519993e04304217af223a617bd9fb1cd1136af3cc1d5f4d1",
+      "receipt": {
+        "schema_version": "moe-ub-host-probe/1",
+        "command": [
+          ".venv/frontend/bin/python",
+          "-B",
+          "docs/review_artifacts/replica_feasibility_20261030/fetch.py",
+          "--root",
+          "data/research/replica_feasibility_20261030",
+          "--id",
+          "paper-fastermoe",
+          "--url",
+          "https://dl.acm.org/doi/pdf/10.1145/3503221.3508418",
+          "--pdf"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "started_utc": "2026-10-30T10:27:13.774199+00:00",
+        "limits": {
+          "sampled_group_rss_bytes": 1073741824,
+          "per_process_address_bytes": 2147483648,
+          "artifact_bytes": 67108864,
+          "wall_seconds": 120.0
+        },
+        "peak_sampled_group_rss_bytes": 23371776,
+        "peak_sampled_processes": 1,
+        "status": "child_failed",
+        "workload_semantics_validated": false,
+        "artifact_roots": [
+          "/home/lry/moe-ub-cosim/runs/replica_feasibility_20261030",
+          "/home/lry/moe-ub-cosim/data/research/replica_feasibility_20261030"
+        ],
+        "peak_sampled_artifact_bytes": 2039808,
+        "min_free_bytes": 8589934592,
+        "rss_scope": "owned_process_tree_including_detached_descendants",
+        "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+        "disk_sample_interval_seconds": 1.0,
+        "peak_sampled_artifact_apparent_bytes": 1919322,
+        "peak_sampled_artifact_allocated_bytes": 2039808,
+        "process_group": 868481,
+        "child_exit_code": 1,
+        "remaining_live_group_pids": [],
+        "ended_utc": "2026-10-30T10:27:14.227901+00:00",
+        "wall_seconds": 0.4537101470050402,
+        "max_waited_child_rss_kib": 22824,
+        "artifact_bytes_before_report": 1657,
+        "aggregate_artifact_bytes_before_report": 2039808,
+        "aggregate_artifact_usage_before_report": {
+          "apparent_bytes": 1919322,
+          "allocated_bytes": 2039808
+        }
+      }
+    },
+    {
+      "name": "paper-lazarus",
+      "sha256": "9609b0ae9b354e26dfddb18b018b7f29a1fcc7c1396e2dc11dd0433230b3e0e2",
+      "receipt": {
+        "schema_version": "moe-ub-host-probe/1",
+        "command": [
+          ".venv/frontend/bin/python",
+          "-B",
+          "docs/review_artifacts/replica_feasibility_20261030/fetch.py",
+          "--root",
+          "data/research/replica_feasibility_20261030",
+          "--id",
+          "paper-lazarus",
+          "--url",
+          "https://arxiv.org/pdf/2407.04656v2",
+          "--pdf"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "started_utc": "2026-10-30T10:27:12.695244+00:00",
+        "limits": {
+          "sampled_group_rss_bytes": 1073741824,
+          "per_process_address_bytes": 2147483648,
+          "artifact_bytes": 67108864,
+          "wall_seconds": 120.0
+        },
+        "peak_sampled_group_rss_bytes": 24412160,
+        "peak_sampled_processes": 1,
+        "status": "completed",
+        "workload_semantics_validated": false,
+        "artifact_roots": [
+          "/home/lry/moe-ub-cosim/runs/replica_feasibility_20261030",
+          "/home/lry/moe-ub-cosim/data/research/replica_feasibility_20261030"
+        ],
+        "peak_sampled_artifact_bytes": 2023424,
+        "min_free_bytes": 8589934592,
+        "rss_scope": "owned_process_tree_including_detached_descendants",
+        "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+        "disk_sample_interval_seconds": 1.0,
+        "peak_sampled_artifact_apparent_bytes": 1915541,
+        "peak_sampled_artifact_allocated_bytes": 2023424,
+        "process_group": 868476,
+        "child_exit_code": 0,
+        "remaining_live_group_pids": [],
+        "ended_utc": "2026-10-30T10:27:13.695284+00:00",
+        "wall_seconds": 1.0000514920102432,
+        "max_waited_child_rss_kib": 23840,
+        "artifact_bytes_before_report": 3270,
+        "aggregate_artifact_bytes_before_report": 2023424,
+        "aggregate_artifact_usage_before_report": {
+          "apparent_bytes": 1915541,
+          "allocated_bytes": 2023424
+        }
+      }
+    },
+    {
+      "name": "paper-tail",
+      "sha256": "70e8980d712424202e641d14468f33082e454a095696bddf33d99273c4c948f1",
+      "receipt": {
+        "schema_version": "moe-ub-host-probe/1",
+        "command": [
+          ".venv/frontend/bin/python",
+          "-B",
+          "docs/review_artifacts/replica_feasibility_20261030/fetch.py",
+          "--root",
+          "data/research/replica_feasibility_20261030",
+          "--id",
+          "paper-tail",
+          "--url",
+          "https://research.google.com/pubs/archive/40801.pdf",
+          "--pdf"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "started_utc": "2026-10-30T10:27:14.300134+00:00",
+        "limits": {
+          "sampled_group_rss_bytes": 1073741824,
+          "per_process_address_bytes": 2147483648,
+          "artifact_bytes": 67108864,
+          "wall_seconds": 120.0
+        },
+        "peak_sampled_group_rss_bytes": 22261760,
+        "peak_sampled_processes": 1,
+        "status": "wall_limit",
+        "workload_semantics_validated": false,
+        "artifact_roots": [
+          "/home/lry/moe-ub-cosim/runs/replica_feasibility_20261030",
+          "/home/lry/moe-ub-cosim/data/research/replica_feasibility_20261030"
+        ],
+        "peak_sampled_artifact_bytes": 7208960,
+        "min_free_bytes": 8589934592,
+        "rss_scope": "owned_process_tree_including_detached_descendants",
+        "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+        "disk_sample_interval_seconds": 1.0,
+        "peak_sampled_artifact_apparent_bytes": 6972054,
+        "peak_sampled_artifact_allocated_bytes": 7208960,
+        "process_group": 868486,
+        "child_exit_code": -15,
+        "remaining_live_group_pids": [],
+        "ended_utc": "2026-10-30T10:29:14.573733+00:00",
+        "wall_seconds": 120.2736076109577,
+        "max_waited_child_rss_kib": 21740,
+        "artifact_bytes_before_report": 273788,
+        "aggregate_artifact_bytes_before_report": 7208960,
+        "aggregate_artifact_usage_before_report": {
+          "apparent_bytes": 6972054,
+          "allocated_bytes": 7208960
+        }
+      }
+    },
+    {
+      "name": "primary-fastermoe-readme",
+      "sha256": "99f09d74ac454111d4a9b334f29ca324a2b38db012bad3b6a1e0bd21f9b3f066",
+      "receipt": {
+        "schema_version": "moe-ub-host-probe/1",
+        "command": [
+          ".venv/frontend/bin/python",
+          "-B",
+          "docs/review_artifacts/replica_feasibility_20261030/fetch.py",
+          "--root",
+          "data/research/replica_feasibility_20261030",
+          "--id",
+          "primary-fastermoe-readme",
+          "--url",
+          "https://api.github.com/repos/thu-pacman/FasterMoE/readme"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "started_utc": "2026-10-30T10:27:29.108167+00:00",
+        "limits": {
+          "sampled_group_rss_bytes": 1073741824,
+          "per_process_address_bytes": 2147483648,
+          "artifact_bytes": 67108864,
+          "wall_seconds": 120.0
+        },
+        "peak_sampled_group_rss_bytes": 23367680,
+        "peak_sampled_processes": 1,
+        "status": "completed",
+        "workload_semantics_validated": false,
+        "artifact_roots": [
+          "/home/lry/moe-ub-cosim/runs/replica_feasibility_20261030",
+          "/home/lry/moe-ub-cosim/data/research/replica_feasibility_20261030"
+        ],
+        "peak_sampled_artifact_bytes": 2154496,
+        "min_free_bytes": 8589934592,
+        "rss_scope": "owned_process_tree_including_detached_descendants",
+        "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+        "disk_sample_interval_seconds": 1.0,
+        "peak_sampled_artifact_apparent_bytes": 2008660,
+        "peak_sampled_artifact_allocated_bytes": 2154496,
+        "process_group": 869042,
+        "child_exit_code": 0,
+        "remaining_live_group_pids": [],
+        "ended_utc": "2026-10-30T10:27:30.229689+00:00",
+        "wall_seconds": 1.1215294600115158,
+        "max_waited_child_rss_kib": 22820,
+        "artifact_bytes_before_report": 3603,
+        "aggregate_artifact_bytes_before_report": 2154496,
+        "aggregate_artifact_usage_before_report": {
+          "apparent_bytes": 2008660,
+          "allocated_bytes": 2154496
+        }
+      }
+    },
+    {
+      "name": "primary-fastermoe-repo",
+      "sha256": "b14fefbfd88eb976a0b5ab90f128ab4b723270904bc4aeaf45e730123847dbfa",
+      "receipt": {
+        "schema_version": "moe-ub-host-probe/1",
+        "command": [
+          ".venv/frontend/bin/python",
+          "-B",
+          "docs/review_artifacts/replica_feasibility_20261030/fetch.py",
+          "--root",
+          "data/research/replica_feasibility_20261030",
+          "--id",
+          "primary-fastermoe-repo",
+          "--url",
+          "https://api.github.com/repos/thu-pacman/FasterMoE"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "started_utc": "2026-10-30T10:26:31.072100+00:00",
+        "limits": {
+          "sampled_group_rss_bytes": 1073741824,
+          "per_process_address_bytes": 2147483648,
+          "artifact_bytes": 67108864,
+          "wall_seconds": 120.0
+        },
+        "peak_sampled_group_rss_bytes": 23449600,
+        "peak_sampled_processes": 1,
+        "status": "completed",
+        "workload_semantics_validated": false,
+        "artifact_roots": [
+          "/home/lry/moe-ub-cosim/runs/replica_feasibility_20261030",
+          "/home/lry/moe-ub-cosim/data/research/replica_feasibility_20261030"
+        ],
+        "peak_sampled_artifact_bytes": 131072,
+        "min_free_bytes": 8589934592,
+        "rss_scope": "owned_process_tree_including_detached_descendants",
+        "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+        "disk_sample_interval_seconds": 1.0,
+        "peak_sampled_artifact_apparent_bytes": 61486,
+        "peak_sampled_artifact_allocated_bytes": 131072,
+        "process_group": 868117,
+        "child_exit_code": 0,
+        "remaining_live_group_pids": [],
+        "ended_utc": "2026-10-30T10:26:32.502379+00:00",
+        "wall_seconds": 1.4302883569616824,
+        "max_waited_child_rss_kib": 22900,
+        "artifact_bytes_before_report": 4295,
+        "aggregate_artifact_bytes_before_report": 131072,
+        "aggregate_artifact_usage_before_report": {
+          "apparent_bytes": 61486,
+          "allocated_bytes": 131072
+        }
+      }
+    },
+    {
+      "name": "primary-megaflux",
+      "sha256": "bcafb30c7b253ebaaa5c7b3e31e4b6bb09dc0b100dec474625ec7dfd4f80ac3f",
+      "receipt": {
+        "schema_version": "moe-ub-host-probe/1",
+        "command": [
+          ".venv/frontend/bin/python",
+          "-B",
+          "docs/review_artifacts/replica_feasibility_20261030/fetch.py",
+          "--root",
+          "data/research/replica_feasibility_20261030",
+          "--id",
+          "primary-megaflux",
+          "--url",
+          "https://arxiv.org/html/2610.00671v1"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "started_utc": "2026-10-30T10:29:02.429554+00:00",
+        "limits": {
+          "sampled_group_rss_bytes": 1073741824,
+          "per_process_address_bytes": 2147483648,
+          "artifact_bytes": 67108864,
+          "wall_seconds": 120.0
+        },
+        "peak_sampled_group_rss_bytes": 22372352,
+        "peak_sampled_processes": 1,
+        "status": "completed",
+        "workload_semantics_validated": false,
+        "artifact_roots": [
+          "/home/lry/moe-ub-cosim/runs/replica_feasibility_20261030",
+          "/home/lry/moe-ub-cosim/data/research/replica_feasibility_20261030"
+        ],
+        "peak_sampled_artifact_bytes": 2969600,
+        "min_free_bytes": 8589934592,
+        "rss_scope": "owned_process_tree_including_detached_descendants",
+        "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+        "disk_sample_interval_seconds": 1.0,
+        "peak_sampled_artifact_apparent_bytes": 2742310,
+        "peak_sampled_artifact_allocated_bytes": 2969600,
+        "process_group": 869717,
+        "child_exit_code": 0,
+        "remaining_live_group_pids": [],
+        "ended_utc": "2026-10-30T10:29:02.791309+00:00",
+        "wall_seconds": 0.3617642419994809,
+        "max_waited_child_rss_kib": 21848,
+        "artifact_bytes_before_report": 1711,
+        "aggregate_artifact_bytes_before_report": 2969600,
+        "aggregate_artifact_usage_before_report": {
+          "apparent_bytes": 2742310,
+          "allocated_bytes": 2969600
+        }
+      }
+    },
+    {
+      "name": "primary-partial-rank-html",
+      "sha256": "4b48a5de2f1792ddd2a8d4a3ed430628242175f360d6063fb7207c74ab64b821",
+      "receipt": {
+        "schema_version": "moe-ub-host-probe/1",
+        "command": [
+          ".venv/frontend/bin/python",
+          "-B",
+          "docs/review_artifacts/replica_feasibility_20261030/fetch.py",
+          "--root",
+          "data/research/replica_feasibility_20261030",
+          "--id",
+          "primary-partial-rank-html",
+          "--url",
+          "https://arxiv.org/html/2605.10670"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "started_utc": "2026-10-30T10:29:34.326913+00:00",
+        "limits": {
+          "sampled_group_rss_bytes": 1073741824,
+          "per_process_address_bytes": 2147483648,
+          "artifact_bytes": 67108864,
+          "wall_seconds": 120.0
+        },
+        "peak_sampled_group_rss_bytes": 23429120,
+        "peak_sampled_processes": 1,
+        "status": "completed",
+        "workload_semantics_validated": false,
+        "artifact_roots": [
+          "/home/lry/moe-ub-cosim/runs/replica_feasibility_20261030",
+          "/home/lry/moe-ub-cosim/data/research/replica_feasibility_20261030"
+        ],
+        "peak_sampled_artifact_bytes": 7700480,
+        "min_free_bytes": 8589934592,
+        "rss_scope": "owned_process_tree_including_detached_descendants",
+        "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+        "disk_sample_interval_seconds": 1.0,
+        "peak_sampled_artifact_apparent_bytes": 7439058,
+        "peak_sampled_artifact_allocated_bytes": 7700480,
+        "process_group": 869798,
+        "child_exit_code": 0,
+        "remaining_live_group_pids": [],
+        "ended_utc": "2026-10-30T10:29:35.600725+00:00",
+        "wall_seconds": 1.2738273050053976,
+        "max_waited_child_rss_kib": 22880,
+        "artifact_bytes_before_report": 3788,
+        "aggregate_artifact_bytes_before_report": 7700480,
+        "aggregate_artifact_usage_before_report": {
+          "apparent_bytes": 7439058,
+          "allocated_bytes": 7700480
+        }
+      }
+    },
+    {
+      "name": "primary-partial-rank-metadata",
+      "sha256": "e3d2011946a9235fbe16b35266d9570ca0ed142e67e67cc0e6231aa2d835ea4a",
+      "receipt": {
+        "schema_version": "moe-ub-host-probe/1",
+        "command": [
+          ".venv/frontend/bin/python",
+          "-B",
+          "docs/review_artifacts/replica_feasibility_20261030/fetch.py",
+          "--root",
+          "data/research/replica_feasibility_20261030",
+          "--id",
+          "primary-partial-rank-metadata",
+          "--url",
+          "https://export.arxiv.org/api/query?id_list=2605.10670"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "started_utc": "2026-10-30T10:29:33.147480+00:00",
+        "limits": {
+          "sampled_group_rss_bytes": 1073741824,
+          "per_process_address_bytes": 2147483648,
+          "artifact_bytes": 67108864,
+          "wall_seconds": 120.0
+        },
+        "peak_sampled_group_rss_bytes": 23396352,
+        "peak_sampled_processes": 1,
+        "status": "completed",
+        "workload_semantics_validated": false,
+        "artifact_roots": [
+          "/home/lry/moe-ub-cosim/runs/replica_feasibility_20261030",
+          "/home/lry/moe-ub-cosim/data/research/replica_feasibility_20261030"
+        ],
+        "peak_sampled_artifact_bytes": 7241728,
+        "min_free_bytes": 8589934592,
+        "rss_scope": "owned_process_tree_including_detached_descendants",
+        "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+        "disk_sample_interval_seconds": 1.0,
+        "peak_sampled_artifact_apparent_bytes": 6983241,
+        "peak_sampled_artifact_allocated_bytes": 7241728,
+        "process_group": 869793,
+        "child_exit_code": 0,
+        "remaining_live_group_pids": [],
+        "ended_utc": "2026-10-30T10:29:34.409870+00:00",
+        "wall_seconds": 1.2623934309813194,
+        "max_waited_child_rss_kib": 22848,
+        "artifact_bytes_before_report": 3799,
+        "aggregate_artifact_bytes_before_report": 7241728,
+        "aggregate_artifact_usage_before_report": {
+          "apparent_bytes": 6983241,
+          "allocated_bytes": 7241728
+        }
+      }
+    },
+    {
+      "name": "primary-tail",
+      "sha256": "7d56d65ed13b3e6ae7c1bba2deb8d7641f9dd0d88ca0aacb7deda9616b28fb28",
+      "receipt": {
+        "schema_version": "moe-ub-host-probe/1",
+        "command": [
+          ".venv/frontend/bin/python",
+          "-B",
+          "docs/review_artifacts/replica_feasibility_20261030/fetch.py",
+          "--root",
+          "data/research/replica_feasibility_20261030",
+          "--id",
+          "primary-tail",
+          "--url",
+          "https://research.google/pubs/the-tail-at-scale/"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "started_utc": "2026-10-30T10:26:29.895972+00:00",
+        "limits": {
+          "sampled_group_rss_bytes": 1073741824,
+          "per_process_address_bytes": 2147483648,
+          "artifact_bytes": 67108864,
+          "wall_seconds": 120.0
+        },
+        "peak_sampled_group_rss_bytes": 22294528,
+        "peak_sampled_processes": 1,
+        "status": "child_failed",
+        "workload_semantics_validated": false,
+        "artifact_roots": [
+          "/home/lry/moe-ub-cosim/runs/replica_feasibility_20261030",
+          "/home/lry/moe-ub-cosim/data/research/replica_feasibility_20261030"
+        ],
+        "peak_sampled_artifact_bytes": 319488,
+        "min_free_bytes": 8589934592,
+        "rss_scope": "owned_process_tree_including_detached_descendants",
+        "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+        "disk_sample_interval_seconds": 1.0,
+        "peak_sampled_artifact_apparent_bytes": 222798,
+        "peak_sampled_artifact_allocated_bytes": 319488,
+        "process_group": 868112,
+        "child_exit_code": 1,
+        "remaining_live_group_pids": [],
+        "ended_utc": "2026-10-30T10:26:50.311267+00:00",
+        "wall_seconds": 20.415302354027517,
+        "max_waited_child_rss_kib": 21772,
+        "artifact_bytes_before_report": 47084,
+        "aggregate_artifact_bytes_before_report": 319488,
+        "aggregate_artifact_usage_before_report": {
+          "apparent_bytes": 222798,
+          "allocated_bytes": 319488
+        }
+      }
+    },
+    {
+      "name": "primary-tail-author",
+      "sha256": "0f75c864be20d22d1515ec450d076786ca21ec6af8e5ce375b8764a0cad06f3b",
+      "receipt": {
+        "schema_version": "moe-ub-host-probe/1",
+        "command": [
+          ".venv/frontend/bin/python",
+          "-B",
+          "docs/review_artifacts/replica_feasibility_20261030/fetch.py",
+          "--root",
+          "data/research/replica_feasibility_20261030",
+          "--id",
+          "primary-tail-author",
+          "--url",
+          "https://www.barroso.org/publications/TheTailAtScale.pdf",
+          "--pdf"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "started_utc": "2026-10-30T10:29:00.086240+00:00",
+        "limits": {
+          "sampled_group_rss_bytes": 1073741824,
+          "per_process_address_bytes": 2147483648,
+          "artifact_bytes": 67108864,
+          "wall_seconds": 120.0
+        },
+        "peak_sampled_group_rss_bytes": 23412736,
+        "peak_sampled_processes": 1,
+        "status": "child_failed",
+        "workload_semantics_validated": false,
+        "artifact_roots": [
+          "/home/lry/moe-ub-cosim/runs/replica_feasibility_20261030",
+          "/home/lry/moe-ub-cosim/data/research/replica_feasibility_20261030"
+        ],
+        "peak_sampled_artifact_bytes": 7184384,
+        "min_free_bytes": 8589934592,
+        "rss_scope": "owned_process_tree_including_detached_descendants",
+        "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+        "disk_sample_interval_seconds": 1.0,
+        "peak_sampled_artifact_apparent_bytes": 6947385,
+        "peak_sampled_artifact_allocated_bytes": 7184384,
+        "process_group": 869707,
+        "child_exit_code": 1,
+        "remaining_live_group_pids": [],
+        "ended_utc": "2026-10-30T10:29:04.404927+00:00",
+        "wall_seconds": 4.3186966690118425,
+        "max_waited_child_rss_kib": 24912,
+        "artifact_bytes_before_report": 11099,
+        "aggregate_artifact_bytes_before_report": 7184384,
+        "aggregate_artifact_usage_before_report": {
+          "apparent_bytes": 6947385,
+          "allocated_bytes": 7184384
+        }
+      }
+    },
+    {
+      "name": "primary-tail-cacm",
+      "sha256": "34ec46caac667fa9efaccdc98a22c5ea783cbcde2c4fcadf604842097a42d1ca",
+      "receipt": {
+        "schema_version": "moe-ub-host-probe/1",
+        "command": [
+          ".venv/frontend/bin/python",
+          "-B",
+          "docs/review_artifacts/replica_feasibility_20261030/fetch.py",
+          "--root",
+          "data/research/replica_feasibility_20261030",
+          "--id",
+          "primary-tail-cacm",
+          "--url",
+          "https://cacm.acm.org/research/the-tail-at-scale/"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "started_utc": "2026-10-30T10:28:19.988536+00:00",
+        "limits": {
+          "sampled_group_rss_bytes": 1073741824,
+          "per_process_address_bytes": 2147483648,
+          "artifact_bytes": 67108864,
+          "wall_seconds": 120.0
+        },
+        "peak_sampled_group_rss_bytes": 23420928,
+        "peak_sampled_processes": 1,
+        "status": "child_failed",
+        "workload_semantics_validated": false,
+        "artifact_roots": [
+          "/home/lry/moe-ub-cosim/runs/replica_feasibility_20261030",
+          "/home/lry/moe-ub-cosim/data/research/replica_feasibility_20261030"
+        ],
+        "peak_sampled_artifact_bytes": 2461696,
+        "min_free_bytes": 8589934592,
+        "rss_scope": "owned_process_tree_including_detached_descendants",
+        "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+        "disk_sample_interval_seconds": 1.0,
+        "peak_sampled_artifact_apparent_bytes": 2281200,
+        "peak_sampled_artifact_allocated_bytes": 2461696,
+        "process_group": 869642,
+        "child_exit_code": 1,
+        "remaining_live_group_pids": [],
+        "ended_utc": "2026-10-30T10:28:20.344007+00:00",
+        "wall_seconds": 0.3554794589872472,
+        "max_waited_child_rss_kib": 22872,
+        "artifact_bytes_before_report": 1400,
+        "aggregate_artifact_bytes_before_report": 2461696,
+        "aggregate_artifact_usage_before_report": {
+          "apparent_bytes": 2281200,
+          "allocated_bytes": 2461696
+        }
+      }
+    },
+    {
+      "name": "render",
+      "sha256": "416d2aff51aafdd75083c34083c11efc6d3801a77fb5594862cb1ffb96cae107",
+      "receipt": {
+        "schema_version": "moe-ub-host-probe/1",
+        "command": [
+          ".venv/frontend/bin/python",
+          "-B",
+          "docs/review_artifacts/replica_feasibility_20261030/render.py",
+          "--source",
+          "docs/reviews/专家副本恢复的已有工作与实施边界_20261030.md",
+          "--output",
+          "docs/review_artifacts/replica_feasibility_20261030/report.html"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "started_utc": "2026-10-30T10:36:54.936706+00:00",
+        "limits": {
+          "sampled_group_rss_bytes": 1073741824,
+          "per_process_address_bytes": 2147483648,
+          "artifact_bytes": 67108864,
+          "wall_seconds": 120.0
+        },
+        "peak_sampled_group_rss_bytes": 20193280,
+        "peak_sampled_processes": 1,
+        "status": "child_failed",
+        "workload_semantics_validated": false,
+        "artifact_roots": [
+          "/home/lry/moe-ub-cosim/runs/replica_feasibility_20261030",
+          "/home/lry/moe-ub-cosim/data/research/replica_feasibility_20261030",
+          "/home/lry/moe-ub-cosim/docs/review_artifacts/replica_feasibility_20261030"
+        ],
+        "peak_sampled_artifact_bytes": 7946240,
+        "min_free_bytes": 8589934592,
+        "rss_scope": "owned_process_tree_including_detached_descendants",
+        "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+        "disk_sample_interval_seconds": 1.0,
+        "peak_sampled_artifact_apparent_bytes": 7651684,
+        "peak_sampled_artifact_allocated_bytes": 7946240,
+        "process_group": 870681,
+        "child_exit_code": 1,
+        "remaining_live_group_pids": [],
+        "ended_utc": "2026-10-30T10:36:55.185168+00:00",
+        "wall_seconds": 0.24846952897496521,
+        "max_waited_child_rss_kib": 20748,
+        "artifact_bytes_before_report": 1205,
+        "aggregate_artifact_bytes_before_report": 7946240,
+        "aggregate_artifact_usage_before_report": {
+          "apparent_bytes": 7651684,
+          "allocated_bytes": 7946240
+        }
+      }
+    },
+    {
+      "name": "render-corrected",
+      "sha256": "881cc06518556fc7c71aab0416b7b3106cd9db256c814c9a47e7a707ebbdaedf",
+      "receipt": {
+        "schema_version": "moe-ub-host-probe/1",
+        "command": [
+          ".venv/frontend/bin/python",
+          "-B",
+          "docs/review_artifacts/replica_feasibility_20261030/render.py",
+          "--source",
+          "docs/reviews/专家副本恢复的已有工作与实施边界_20261030.md",
+          "--output",
+          "docs/review_artifacts/replica_feasibility_20261030/report.html"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "started_utc": "2026-10-30T10:37:12.840542+00:00",
+        "limits": {
+          "sampled_group_rss_bytes": 1073741824,
+          "per_process_address_bytes": 2147483648,
+          "artifact_bytes": 67108864,
+          "wall_seconds": 120.0
+        },
+        "peak_sampled_group_rss_bytes": 21217280,
+        "peak_sampled_processes": 1,
+        "status": "completed",
+        "workload_semantics_validated": false,
+        "artifact_roots": [
+          "/home/lry/moe-ub-cosim/runs/replica_feasibility_20261030",
+          "/home/lry/moe-ub-cosim/docs/review_artifacts/replica_feasibility_20261030",
+          "/home/lry/moe-ub-cosim/data/research/replica_feasibility_20261030"
+        ],
+        "peak_sampled_artifact_bytes": 7979008,
+        "min_free_bytes": 8589934592,
+        "rss_scope": "owned_process_tree_including_detached_descendants",
+        "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+        "disk_sample_interval_seconds": 1.0,
+        "peak_sampled_artifact_apparent_bytes": 7670984,
+        "peak_sampled_artifact_allocated_bytes": 7979008,
+        "process_group": 870701,
+        "child_exit_code": 0,
+        "remaining_live_group_pids": [],
+        "ended_utc": "2026-10-30T10:37:13.086670+00:00",
+        "wall_seconds": 0.24613337498158216,
+        "max_waited_child_rss_kib": 20720,
+        "artifact_bytes_before_report": 817,
+        "aggregate_artifact_bytes_before_report": 7979008,
+        "aggregate_artifact_usage_before_report": {
+          "apparent_bytes": 7670984,
+          "allocated_bytes": 7979008
+        }
+      }
+    },
+    {
+      "name": "search-arxiv-fastermoe",
+      "sha256": "e5e540b18aed6536c8ea9ff88391a39f62ab48558d29e67f6d61e88cbc1c449f",
+      "receipt": {
+        "schema_version": "moe-ub-host-probe/1",
+        "command": [
+          ".venv/frontend/bin/python",
+          "-B",
+          "docs/review_artifacts/replica_feasibility_20261030/fetch.py",
+          "--root",
+          "data/research/replica_feasibility_20261030",
+          "--id",
+          "search-arxiv-fastermoe",
+          "--url",
+          "https://export.arxiv.org/api/query?search_query=ti%3AFasterMoE&start=0&max_results=2"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "started_utc": "2026-10-30T10:27:30.277849+00:00",
+        "limits": {
+          "sampled_group_rss_bytes": 1073741824,
+          "per_process_address_bytes": 2147483648,
+          "artifact_bytes": 67108864,
+          "wall_seconds": 120.0
+        },
+        "peak_sampled_group_rss_bytes": 23420928,
+        "peak_sampled_processes": 1,
+        "status": "completed",
+        "workload_semantics_validated": false,
+        "artifact_roots": [
+          "/home/lry/moe-ub-cosim/runs/replica_feasibility_20261030",
+          "/home/lry/moe-ub-cosim/data/research/replica_feasibility_20261030"
+        ],
+        "peak_sampled_artifact_bytes": 2179072,
+        "min_free_bytes": 8589934592,
+        "rss_scope": "owned_process_tree_including_detached_descendants",
+        "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+        "disk_sample_interval_seconds": 1.0,
+        "peak_sampled_artifact_apparent_bytes": 2019607,
+        "peak_sampled_artifact_allocated_bytes": 2179072,
+        "process_group": 869111,
+        "child_exit_code": 0,
+        "remaining_live_group_pids": [],
+        "ended_utc": "2026-10-30T10:27:31.744335+00:00",
+        "wall_seconds": 1.4664930519647896,
+        "max_waited_child_rss_kib": 22872,
+        "artifact_bytes_before_report": 4363,
+        "aggregate_artifact_bytes_before_report": 2179072,
+        "aggregate_artifact_usage_before_report": {
+          "apparent_bytes": 2019607,
+          "allocated_bytes": 2179072
+        }
+      }
+    },
+    {
+      "name": "search-arxiv-inference-resilience",
+      "sha256": "2d3a97c6388aa9ac4bec0155228e3d8fc74f327d0b1c2675a2e90214ac8500db",
+      "receipt": {
+        "schema_version": "moe-ub-host-probe/1",
+        "command": [
+          ".venv/frontend/bin/python",
+          "-B",
+          "docs/review_artifacts/replica_feasibility_20261030/fetch.py",
+          "--root",
+          "data/research/replica_feasibility_20261030",
+          "--id",
+          "search-arxiv-inference-resilience",
+          "--url",
+          "https://export.arxiv.org/api/query?search_query=%28all%3AMoE%20OR%20all%3A%22mixture-of-experts%22%29%20AND%20all%3Ainference%20AND%20%28all%3A%22fault-tolerant%22%20OR%20all%3A%22fault%20tolerance%22%20OR%20all%3Ahedging%29&sortBy=relevance&start=0&max_results=10"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "started_utc": "2026-10-30T10:28:20.419886+00:00",
+        "limits": {
+          "sampled_group_rss_bytes": 1073741824,
+          "per_process_address_bytes": 2147483648,
+          "artifact_bytes": 67108864,
+          "wall_seconds": 120.0
+        },
+        "peak_sampled_group_rss_bytes": 22360064,
+        "peak_sampled_processes": 1,
+        "status": "completed",
+        "workload_semantics_validated": false,
+        "artifact_roots": [
+          "/home/lry/moe-ub-cosim/runs/replica_feasibility_20261030",
+          "/home/lry/moe-ub-cosim/data/research/replica_feasibility_20261030"
+        ],
+        "peak_sampled_artifact_bytes": 2490368,
+        "min_free_bytes": 8589934592,
+        "rss_scope": "owned_process_tree_including_detached_descendants",
+        "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+        "disk_sample_interval_seconds": 1.0,
+        "peak_sampled_artifact_apparent_bytes": 2296932,
+        "peak_sampled_artifact_allocated_bytes": 2490368,
+        "process_group": 869647,
+        "child_exit_code": 0,
+        "remaining_live_group_pids": [],
+        "ended_utc": "2026-10-30T10:28:21.427570+00:00",
+        "wall_seconds": 1.0076900760177523,
+        "max_waited_child_rss_kib": 22864,
+        "artifact_bytes_before_report": 3715,
+        "aggregate_artifact_bytes_before_report": 2490368,
+        "aggregate_artifact_usage_before_report": {
+          "apparent_bytes": 2296932,
+          "allocated_bytes": 2490368
+        }
+      }
+    },
+    {
+      "name": "search-arxiv-moe-fault",
+      "sha256": "49923f0cf7c06d9d488db393c085f4b18d416726c4d72be76825f25795c8bb16",
+      "receipt": {
+        "schema_version": "moe-ub-host-probe/1",
+        "command": [
+          ".venv/frontend/bin/python",
+          "-B",
+          "docs/review_artifacts/replica_feasibility_20261030/fetch.py",
+          "--root",
+          "data/research/replica_feasibility_20261030",
+          "--id",
+          "search-arxiv-moe-fault",
+          "--url",
+          "https://export.arxiv.org/api/query?search_query=all%3A%22mixture-of-experts%22%20AND%20%28all%3Aresilient%20OR%20all%3Afault%20OR%20all%3Ahedging%29&sortBy=submittedDate&sortOrder=descending&start=0&max_results=10"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "started_utc": "2026-10-30T10:27:15.472086+00:00",
+        "limits": {
+          "sampled_group_rss_bytes": 1073741824,
+          "per_process_address_bytes": 2147483648,
+          "artifact_bytes": 67108864,
+          "wall_seconds": 120.0
+        },
+        "peak_sampled_group_rss_bytes": 22302720,
+        "peak_sampled_processes": 1,
+        "status": "completed",
+        "workload_semantics_validated": false,
+        "artifact_roots": [
+          "/home/lry/moe-ub-cosim/runs/replica_feasibility_20261030",
+          "/home/lry/moe-ub-cosim/data/research/replica_feasibility_20261030"
+        ],
+        "peak_sampled_artifact_bytes": 2113536,
+        "min_free_bytes": 8589934592,
+        "rss_scope": "owned_process_tree_including_detached_descendants",
+        "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+        "disk_sample_interval_seconds": 1.0,
+        "peak_sampled_artifact_apparent_bytes": 1977795,
+        "peak_sampled_artifact_allocated_bytes": 2113536,
+        "process_group": 868547,
+        "child_exit_code": 0,
+        "remaining_live_group_pids": [],
+        "ended_utc": "2026-10-30T10:27:20.504590+00:00",
+        "wall_seconds": 5.0325094040017575,
+        "max_waited_child_rss_kib": 21780,
+        "artifact_bytes_before_report": 12862,
+        "aggregate_artifact_bytes_before_report": 2113536,
+        "aggregate_artifact_usage_before_report": {
+          "apparent_bytes": 1977795,
+          "allocated_bytes": 2113536
+        }
+      }
+    },
+    {
+      "name": "search-arxiv-resilience",
+      "sha256": "68c545ff30903f3310e1e5d70f1f4d9c1437f3b73587122ea97333e1b46786e7",
+      "receipt": {
+        "schema_version": "moe-ub-host-probe/1",
+        "command": [
+          ".venv/frontend/bin/python",
+          "-B",
+          "docs/review_artifacts/replica_feasibility_20261030/fetch.py",
+          "--root",
+          "data/research/replica_feasibility_20261030",
+          "--id",
+          "search-arxiv-resilience",
+          "--url",
+          "https://export.arxiv.org/api/query?search_query=ti%3ALazarus&start=0&max_results=8"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "started_utc": "2026-10-30T10:26:33.418949+00:00",
+        "limits": {
+          "sampled_group_rss_bytes": 1073741824,
+          "per_process_address_bytes": 2147483648,
+          "artifact_bytes": 67108864,
+          "wall_seconds": 120.0
+        },
+        "peak_sampled_group_rss_bytes": 23429120,
+        "peak_sampled_processes": 1,
+        "status": "completed",
+        "workload_semantics_validated": false,
+        "artifact_roots": [
+          "/home/lry/moe-ub-cosim/runs/replica_feasibility_20261030",
+          "/home/lry/moe-ub-cosim/data/research/replica_feasibility_20261030"
+        ],
+        "peak_sampled_artifact_bytes": 278528,
+        "min_free_bytes": 8589934592,
+        "rss_scope": "owned_process_tree_including_detached_descendants",
+        "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+        "disk_sample_interval_seconds": 1.0,
+        "peak_sampled_artifact_apparent_bytes": 187534,
+        "peak_sampled_artifact_allocated_bytes": 278528,
+        "process_group": 868127,
+        "child_exit_code": 0,
+        "remaining_live_group_pids": [],
+        "ended_utc": "2026-10-30T10:26:35.783978+00:00",
+        "wall_seconds": 2.3650421050260775,
+        "max_waited_child_rss_kib": 22880,
+        "artifact_bytes_before_report": 6358,
+        "aggregate_artifact_bytes_before_report": 278528,
+        "aggregate_artifact_usage_before_report": {
+          "apparent_bytes": 187534,
+          "allocated_bytes": 278528
+        }
+      }
+    },
+    {
+      "name": "search-fastermoe",
+      "sha256": "ea33b61596346151825d9fc62241dc2f4dcf3865e7106396dee5a17ff69b4495",
+      "receipt": {
+        "schema_version": "moe-ub-host-probe/1",
+        "command": [
+          ".venv/frontend/bin/python",
+          "-B",
+          "docs/review_artifacts/replica_feasibility_20261030/fetch.py",
+          "--root",
+          "data/research/replica_feasibility_20261030",
+          "--id",
+          "search-fastermoe",
+          "--url",
+          "https://api.crossref.org/works?query.title=FasterMoE&rows=3&select=DOI,title,published,URL,link,abstract"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "started_utc": "2026-10-30T10:25:53.780452+00:00",
+        "limits": {
+          "sampled_group_rss_bytes": 1073741824,
+          "per_process_address_bytes": 2147483648,
+          "artifact_bytes": 67108864,
+          "wall_seconds": 120.0
+        },
+        "peak_sampled_group_rss_bytes": 22372352,
+        "peak_sampled_processes": 1,
+        "status": "completed",
+        "workload_semantics_validated": false,
+        "artifact_roots": [
+          "/home/lry/moe-ub-cosim/runs/replica_feasibility_20261030",
+          "/home/lry/moe-ub-cosim/data/research/replica_feasibility_20261030"
+        ],
+        "peak_sampled_artifact_bytes": 45056,
+        "min_free_bytes": 8589934592,
+        "rss_scope": "owned_process_tree_including_detached_descendants",
+        "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+        "disk_sample_interval_seconds": 1.0,
+        "peak_sampled_artifact_apparent_bytes": 16426,
+        "peak_sampled_artifact_allocated_bytes": 45056,
+        "process_group": 868015,
+        "child_exit_code": 0,
+        "remaining_live_group_pids": [],
+        "ended_utc": "2026-10-30T10:25:55.433462+00:00",
+        "wall_seconds": 1.6530169760226272,
+        "max_waited_child_rss_kib": 22872,
+        "artifact_bytes_before_report": 4783,
+        "aggregate_artifact_bytes_before_report": 45056,
+        "aggregate_artifact_usage_before_report": {
+          "apparent_bytes": 16426,
+          "allocated_bytes": 45056
+        }
+      }
+    },
+    {
+      "name": "search-fault-inference",
+      "sha256": "e013cece6ddec7f95a183ecaab8578d3955f32fdabf2ab5a4cd4cc26dde62271",
+      "receipt": {
+        "schema_version": "moe-ub-host-probe/1",
+        "command": [
+          ".venv/frontend/bin/python",
+          "-B",
+          "docs/review_artifacts/replica_feasibility_20261030/fetch.py",
+          "--root",
+          "data/research/replica_feasibility_20261030",
+          "--id",
+          "search-fault-inference",
+          "--url",
+          "https://api.crossref.org/works?query=mixture%20experts%20fault%20tolerant%20inference&rows=5&select=DOI,title,published,URL,link,abstract"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "started_utc": "2026-10-30T10:25:56.123686+00:00",
+        "limits": {
+          "sampled_group_rss_bytes": 1073741824,
+          "per_process_address_bytes": 2147483648,
+          "artifact_bytes": 67108864,
+          "wall_seconds": 120.0
+        },
+        "peak_sampled_group_rss_bytes": 22372352,
+        "peak_sampled_processes": 1,
+        "status": "completed",
+        "workload_semantics_validated": false,
+        "artifact_roots": [
+          "/home/lry/moe-ub-cosim/runs/replica_feasibility_20261030",
+          "/home/lry/moe-ub-cosim/data/research/replica_feasibility_20261030"
+        ],
+        "peak_sampled_artifact_bytes": 86016,
+        "min_free_bytes": 8589934592,
+        "rss_scope": "owned_process_tree_including_detached_descendants",
+        "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+        "disk_sample_interval_seconds": 1.0,
+        "peak_sampled_artifact_apparent_bytes": 40811,
+        "peak_sampled_artifact_allocated_bytes": 86016,
+        "process_group": 868032,
+        "child_exit_code": 0,
+        "remaining_live_group_pids": [],
+        "ended_utc": "2026-10-30T10:25:57.564544+00:00",
+        "wall_seconds": 1.4408644890063442,
+        "max_waited_child_rss_kib": 22872,
+        "artifact_bytes_before_report": 4365,
+        "aggregate_artifact_bytes_before_report": 86016,
+        "aggregate_artifact_usage_before_report": {
+          "apparent_bytes": 40811,
+          "allocated_bytes": 86016
+        }
+      }
+    },
+    {
+      "name": "search-lazarus",
+      "sha256": "dbd88779bbe78992d487ce4ae5b0a949c0f5624d3313b592b4810cc76d4ac359",
+      "receipt": {
+        "schema_version": "moe-ub-host-probe/1",
+        "command": [
+          ".venv/frontend/bin/python",
+          "-B",
+          "docs/review_artifacts/replica_feasibility_20261030/fetch.py",
+          "--root",
+          "data/research/replica_feasibility_20261030",
+          "--id",
+          "search-lazarus",
+          "--url",
+          "https://api.crossref.org/works?query.title=Lazarus%20Resilient%20Elastic%20Mixture%20Experts&rows=4&select=DOI,title,published,URL,link,abstract"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "started_utc": "2026-10-30T10:22:44.679502+00:00",
+        "limits": {
+          "sampled_group_rss_bytes": 1073741824,
+          "per_process_address_bytes": 2147483648,
+          "artifact_bytes": 67108864,
+          "wall_seconds": 120.0
+        },
+        "peak_sampled_group_rss_bytes": 23347200,
+        "peak_sampled_processes": 1,
+        "status": "completed",
+        "workload_semantics_validated": false,
+        "artifact_roots": [
+          "/home/lry/moe-ub-cosim/runs/replica_feasibility_20261030",
+          "/home/lry/moe-ub-cosim/data/research/replica_feasibility_20261030"
+        ],
+        "peak_sampled_artifact_bytes": 16384,
+        "min_free_bytes": 8589934592,
+        "rss_scope": "owned_process_tree_including_detached_descendants",
+        "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+        "disk_sample_interval_seconds": 1.0,
+        "peak_sampled_artifact_apparent_bytes": 6750,
+        "peak_sampled_artifact_allocated_bytes": 16384,
+        "process_group": 867660,
+        "child_exit_code": 0,
+        "remaining_live_group_pids": [],
+        "ended_utc": "2026-10-30T10:22:46.230587+00:00",
+        "wall_seconds": 1.5510948169976473,
+        "max_waited_child_rss_kib": 22800,
+        "artifact_bytes_before_report": 4484,
+        "aggregate_artifact_bytes_before_report": 16384,
+        "aggregate_artifact_usage_before_report": {
+          "apparent_bytes": 6750,
+          "allocated_bytes": 16384
+        }
+      }
+    },
+    {
+      "name": "search-lazarus-openalex",
+      "sha256": "9c0735eb97ffd2f3a4fa0fdc3c0614139b700833f6a5975d2ebc479f22c4a38d",
+      "receipt": {
+        "schema_version": "moe-ub-host-probe/1",
+        "command": [
+          ".venv/frontend/bin/python",
+          "-B",
+          "docs/review_artifacts/replica_feasibility_20261030/fetch.py",
+          "--root",
+          "data/research/replica_feasibility_20261030",
+          "--id",
+          "search-lazarus-openalex",
+          "--url",
+          "https://api.openalex.org/works?search=Lazarus%20mixture%20experts&per-page=4"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "started_utc": "2026-10-30T10:26:32.245422+00:00",
+        "limits": {
+          "sampled_group_rss_bytes": 1073741824,
+          "per_process_address_bytes": 2147483648,
+          "artifact_bytes": 67108864,
+          "wall_seconds": 120.0
+        },
+        "peak_sampled_group_rss_bytes": 23400448,
+        "peak_sampled_processes": 1,
+        "status": "completed",
+        "workload_semantics_validated": false,
+        "artifact_roots": [
+          "/home/lry/moe-ub-cosim/runs/replica_feasibility_20261030",
+          "/home/lry/moe-ub-cosim/data/research/replica_feasibility_20261030"
+        ],
+        "peak_sampled_artifact_bytes": 233472,
+        "min_free_bytes": 8589934592,
+        "rss_scope": "owned_process_tree_including_detached_descendants",
+        "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+        "disk_sample_interval_seconds": 1.0,
+        "peak_sampled_artifact_apparent_bytes": 151858,
+        "peak_sampled_artifact_allocated_bytes": 233472,
+        "process_group": 868122,
+        "child_exit_code": 0,
+        "remaining_live_group_pids": [],
+        "ended_utc": "2026-10-30T10:26:33.476555+00:00",
+        "wall_seconds": 1.231141939992085,
+        "max_waited_child_rss_kib": 22852,
+        "artifact_bytes_before_report": 3756,
+        "aggregate_artifact_bytes_before_report": 233472,
+        "aggregate_artifact_usage_before_report": {
+          "apparent_bytes": 151858,
+          "allocated_bytes": 233472
+        }
+      }
+    },
+    {
+      "name": "search-openalex-inference",
+      "sha256": "f862ab55bf5555f5e32bb9c58f5c7491e664963f1e67c57eeb445f46feb46278",
+      "receipt": {
+        "schema_version": "moe-ub-host-probe/1",
+        "command": [
+          ".venv/frontend/bin/python",
+          "-B",
+          "docs/review_artifacts/replica_feasibility_20261030/fetch.py",
+          "--root",
+          "data/research/replica_feasibility_20261030",
+          "--id",
+          "search-openalex-inference",
+          "--url",
+          "https://api.openalex.org/works?search=MoE%20fault%20tolerant%20inference&per-page=5"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "started_utc": "2026-10-30T10:29:01.258123+00:00",
+        "limits": {
+          "sampled_group_rss_bytes": 1073741824,
+          "per_process_address_bytes": 2147483648,
+          "artifact_bytes": 67108864,
+          "wall_seconds": 120.0
+        },
+        "peak_sampled_group_rss_bytes": 23371776,
+        "peak_sampled_processes": 1,
+        "status": "completed",
+        "workload_semantics_validated": false,
+        "artifact_roots": [
+          "/home/lry/moe-ub-cosim/runs/replica_feasibility_20261030",
+          "/home/lry/moe-ub-cosim/data/research/replica_feasibility_20261030"
+        ],
+        "peak_sampled_artifact_bytes": 2732032,
+        "min_free_bytes": 8589934592,
+        "rss_scope": "owned_process_tree_including_detached_descendants",
+        "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+        "disk_sample_interval_seconds": 1.0,
+        "peak_sampled_artifact_apparent_bytes": 2511406,
+        "peak_sampled_artifact_allocated_bytes": 2732032,
+        "process_group": 869712,
+        "child_exit_code": 0,
+        "remaining_live_group_pids": [],
+        "ended_utc": "2026-10-30T10:29:02.536851+00:00",
+        "wall_seconds": 1.278746536001563,
+        "max_waited_child_rss_kib": 22824,
+        "artifact_bytes_before_report": 3836,
+        "aggregate_artifact_bytes_before_report": 2732032,
+        "aggregate_artifact_usage_before_report": {
+          "apparent_bytes": 2511406,
+          "allocated_bytes": 2732032
+        }
+      }
+    },
+    {
+      "name": "search-tail",
+      "sha256": "f5d2e5229c80ccea61864ccff28f0c89eebebdf66fdb285153dcaa878b908673",
+      "receipt": {
+        "schema_version": "moe-ub-host-probe/1",
+        "command": [
+          ".venv/frontend/bin/python",
+          "-B",
+          "docs/review_artifacts/replica_feasibility_20261030/fetch.py",
+          "--root",
+          "data/research/replica_feasibility_20261030",
+          "--id",
+          "search-tail",
+          "--url",
+          "https://api.crossref.org/works?query.title=The%20Tail%20at%20Scale&rows=2&select=DOI,title,published,URL,link,abstract"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "started_utc": "2026-10-30T10:25:54.950340+00:00",
+        "limits": {
+          "sampled_group_rss_bytes": 1073741824,
+          "per_process_address_bytes": 2147483648,
+          "artifact_bytes": 67108864,
+          "wall_seconds": 120.0
+        },
+        "peak_sampled_group_rss_bytes": 23437312,
+        "peak_sampled_processes": 1,
+        "status": "completed",
+        "workload_semantics_validated": false,
+        "artifact_roots": [
+          "/home/lry/moe-ub-cosim/runs/replica_feasibility_20261030",
+          "/home/lry/moe-ub-cosim/data/research/replica_feasibility_20261030"
+        ],
+        "peak_sampled_artifact_bytes": 65536,
+        "min_free_bytes": 8589934592,
+        "rss_scope": "owned_process_tree_including_detached_descendants",
+        "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+        "disk_sample_interval_seconds": 1.0,
+        "peak_sampled_artifact_apparent_bytes": 23588,
+        "peak_sampled_artifact_allocated_bytes": 65536,
+        "process_group": 868020,
+        "child_exit_code": 0,
+        "remaining_live_group_pids": [],
+        "ended_utc": "2026-10-30T10:25:56.277450+00:00",
+        "wall_seconds": 1.3271199690061621,
+        "max_waited_child_rss_kib": 22888,
+        "artifact_bytes_before_report": 4052,
+        "aggregate_artifact_bytes_before_report": 65536,
+        "aggregate_artifact_usage_before_report": {
+          "apparent_bytes": 23588,
+          "allocated_bytes": 65536
+        }
+      }
+    }
+  ],
+  "monitored_seconds": 175.55700947798323,
+  "peak_group_rss_bytes": 43450368,
+  "cache_apparent_bytes": 7121072,
+  "network_executions": 0,
+  "builds": 0,
+  "gpu_executions": 0
+}

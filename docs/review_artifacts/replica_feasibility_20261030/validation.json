@@ -1,0 +1,220 @@
+{
+  "passed": true,
+  "network_executions": 0,
+  "builds": 0,
+  "gpu_executions": 0,
+  "checked_local_link_count": 4,
+  "checked_local_targets": [
+    "docs/review_artifacts/replica_feasibility_20261030/evidence.json",
+    "docs/review_artifacts/replica_feasibility_20261030/report.html"
+  ],
+  "source_requests": 21,
+  "total_captured_source_bytes": 6832530,
+  "failed_source_requests": [
+    "paper-fastermoe",
+    "paper-tail",
+    "primary-tail-author",
+    "primary-tail-cacm",
+    "primary-tail"
+  ],
+  "monitored_seconds_before_closeout": 174.99187555996468,
+  "monitors": {
+    "audit": {
+      "status": "child_failed",
+      "wall_seconds": 1.2421280480339192,
+      "peak_rss_bytes": 35729408,
+      "sha256": "483ab0c52ade5aa4fb98c59f325ac6ed884afcc992b56ae00d7c58cade6be29e",
+      "path": "runs/replica_feasibility_20261030/monitors/audit/probe.json"
+    },
+    "audit-corrected": {
+      "status": "completed",
+      "wall_seconds": 2.2869022979866713,
+      "peak_rss_bytes": 38940672,
+      "sha256": "38b98ff5692555df8772e39bf66984b9cb33aa432f1151507b8a0b392d20589e",
+      "path": "runs/replica_feasibility_20261030/monitors/audit-corrected/probe.json"
+    },
+    "extract-lazarus": {
+      "status": "completed",
+      "wall_seconds": 0.3478724189917557,
+      "peak_rss_bytes": 18157568,
+      "sha256": "92324b9f085e01e790ae6970f6ad5b5eef9e8f3cf6cb14e6e6768ca3fb806f4a",
+      "path": "runs/replica_feasibility_20261030/monitors/extract-lazarus/probe.json"
+    },
+    "paper-fastermoe": {
+      "status": "child_failed",
+      "wall_seconds": 0.4537101470050402,
+      "peak_rss_bytes": 23371776,
+      "sha256": "09cd6c15074b6114519993e04304217af223a617bd9fb1cd1136af3cc1d5f4d1",
+      "path": "runs/replica_feasibility_20261030/monitors/paper-fastermoe/probe.json"
+    },
+    "paper-lazarus": {
+      "status": "completed",
+      "wall_seconds": 1.0000514920102432,
+      "peak_rss_bytes": 24412160,
+      "sha256": "9609b0ae9b354e26dfddb18b018b7f29a1fcc7c1396e2dc11dd0433230b3e0e2",
+      "path": "runs/replica_feasibility_20261030/monitors/paper-lazarus/probe.json"
+    },
+    "paper-tail": {
+      "status": "wall_limit",
+      "wall_seconds": 120.2736076109577,
+      "peak_rss_bytes": 22261760,
+      "sha256": "70e8980d712424202e641d14468f33082e454a095696bddf33d99273c4c948f1",
+      "path": "runs/replica_feasibility_20261030/monitors/paper-tail/probe.json"
+    },
+    "primary-fastermoe-readme": {
+      "status": "completed",
+      "wall_seconds": 1.1215294600115158,
+      "peak_rss_bytes": 23367680,
+      "sha256": "99f09d74ac454111d4a9b334f29ca324a2b38db012bad3b6a1e0bd21f9b3f066",
+      "path": "runs/replica_feasibility_20261030/monitors/primary-fastermoe-readme/probe.json"
+    },
+    "primary-fastermoe-repo": {
+      "status": "completed",
+      "wall_seconds": 1.4302883569616824,
+      "peak_rss_bytes": 23449600,
+      "sha256": "b14fefbfd88eb976a0b5ab90f128ab4b723270904bc4aeaf45e730123847dbfa",
+      "path": "runs/replica_feasibility_20261030/monitors/primary-fastermoe-repo/probe.json"
+    },
+    "primary-megaflux": {
+      "status": "completed",
+      "wall_seconds": 0.3617642419994809,
+      "peak_rss_bytes": 22372352,
+      "sha256": "bcafb30c7b253ebaaa5c7b3e31e4b6bb09dc0b100dec474625ec7dfd4f80ac3f",
+      "path": "runs/replica_feasibility_20261030/monitors/primary-megaflux/probe.json"
+    },
+    "primary-partial-rank-html": {
+      "status": "completed",
+      "wall_seconds": 1.2738273050053976,
+      "peak_rss_bytes": 23429120,
+      "sha256": "4b48a5de2f1792ddd2a8d4a3ed430628242175f360d6063fb7207c74ab64b821",
+      "path": "runs/replica_feasibility_20261030/monitors/primary-partial-rank-html/probe.json"
+    },
+    "primary-partial-rank-metadata": {
+      "status": "completed",
+      "wall_seconds": 1.2623934309813194,
+      "peak_rss_bytes": 23396352,
+      "sha256": "e3d2011946a9235fbe16b35266d9570ca0ed142e67e67cc0e6231aa2d835ea4a",
+      "path": "runs/replica_feasibility_20261030/monitors/primary-partial-rank-metadata/probe.json"
+    },
+    "primary-tail": {
+      "status": "child_failed",
+      "wall_seconds": 20.415302354027517,
+      "peak_rss_bytes": 22294528,
+      "sha256": "7d56d65ed13b3e6ae7c1bba2deb8d7641f9dd0d88ca0aacb7deda9616b28fb28",
+      "path": "runs/replica_feasibility_20261030/monitors/primary-tail/probe.json"
+    },
+    "primary-tail-author": {
+      "status": "child_failed",
+      "wall_seconds": 4.3186966690118425,
+      "peak_rss_bytes": 23412736,
+      "sha256": "0f75c864be20d22d1515ec450d076786ca21ec6af8e5ce375b8764a0cad06f3b",
+      "path": "runs/replica_feasibility_20261030/monitors/primary-tail-author/probe.json"
+    },
+    "primary-tail-cacm": {
+      "status": "child_failed",
+      "wall_seconds": 0.3554794589872472,
+      "peak_rss_bytes": 23420928,
+      "sha256": "34ec46caac667fa9efaccdc98a22c5ea783cbcde2c4fcadf604842097a42d1ca",
+      "path": "runs/replica_feasibility_20261030/monitors/primary-tail-cacm/probe.json"
+    },
+    "render": {
+      "status": "child_failed",
+      "wall_seconds": 0.24846952897496521,
+      "peak_rss_bytes": 20193280,
+      "sha256": "416d2aff51aafdd75083c34083c11efc6d3801a77fb5594862cb1ffb96cae107",
+      "path": "runs/replica_feasibility_20261030/monitors/render/probe.json"
+    },
+    "render-corrected": {
+      "status": "completed",
+      "wall_seconds": 0.24613337498158216,
+      "peak_rss_bytes": 21217280,
+      "sha256": "881cc06518556fc7c71aab0416b7b3106cd9db256c814c9a47e7a707ebbdaedf",
+      "path": "runs/replica_feasibility_20261030/monitors/render-corrected/probe.json"
+    },
+    "search-arxiv-fastermoe": {
+      "status": "completed",
+      "wall_seconds": 1.4664930519647896,
+      "peak_rss_bytes": 23420928,
+      "sha256": "e5e540b18aed6536c8ea9ff88391a39f62ab48558d29e67f6d61e88cbc1c449f",
+      "path": "runs/replica_feasibility_20261030/monitors/search-arxiv-fastermoe/probe.json"
+    },
+    "search-arxiv-inference-resilience": {
+      "status": "completed",
+      "wall_seconds": 1.0076900760177523,
+      "peak_rss_bytes": 22360064,
+      "sha256": "2d3a97c6388aa9ac4bec0155228e3d8fc74f327d0b1c2675a2e90214ac8500db",
+      "path": "runs/replica_feasibility_20261030/monitors/search-arxiv-inference-resilience/probe.json"
+    },
+    "search-arxiv-moe-fault": {
+      "status": "completed",
+      "wall_seconds": 5.0325094040017575,
+      "peak_rss_bytes": 22302720,
+      "sha256": "49923f0cf7c06d9d488db393c085f4b18d416726c4d72be76825f25795c8bb16",
+      "path": "runs/replica_feasibility_20261030/monitors/search-arxiv-moe-fault/probe.json"
+    },
+    "search-arxiv-resilience": {
+      "status": "completed",
+      "wall_seconds": 2.3650421050260775,
+      "peak_rss_bytes": 23429120,
+      "sha256": "68c545ff30903f3310e1e5d70f1f4d9c1437f3b73587122ea97333e1b46786e7",
+      "path": "runs/replica_feasibility_20261030/monitors/search-arxiv-resilience/probe.json"
+    },
+    "search-fastermoe": {
+      "status": "completed",
+      "wall_seconds": 1.6530169760226272,
+      "peak_rss_bytes": 22372352,
+      "sha256": "ea33b61596346151825d9fc62241dc2f4dcf3865e7106396dee5a17ff69b4495",
+      "path": "runs/replica_feasibility_20261030/monitors/search-fastermoe/probe.json"
+    },
+    "search-fault-inference": {
+      "status": "completed",
+      "wall_seconds": 1.4408644890063442,
+      "peak_rss_bytes": 22372352,
+      "sha256": "e013cece6ddec7f95a183ecaab8578d3955f32fdabf2ab5a4cd4cc26dde62271",
+      "path": "runs/replica_feasibility_20261030/monitors/search-fault-inference/probe.json"
+    },
+    "search-lazarus": {
+      "status": "completed",
+      "wall_seconds": 1.5510948169976473,
+      "peak_rss_bytes": 23347200,
+      "sha256": "dbd88779bbe78992d487ce4ae5b0a949c0f5624d3313b592b4810cc76d4ac359",
+      "path": "runs/replica_feasibility_20261030/monitors/search-lazarus/probe.json"
+    },
+    "search-lazarus-openalex": {
+      "status": "completed",
+      "wall_seconds": 1.231141939992085,
+      "peak_rss_bytes": 23400448,
+      "sha256": "9c0735eb97ffd2f3a4fa0fdc3c0614139b700833f6a5975d2ebc479f22c4a38d",
+      "path": "runs/replica_feasibility_20261030/monitors/search-lazarus-openalex/probe.json"
+    },
+    "search-openalex-inference": {
+      "status": "completed",
+      "wall_seconds": 1.278746536001563,
+      "peak_rss_bytes": 23371776,
+      "sha256": "f862ab55bf5555f5e32bb9c58f5c7491e664963f1e67c57eeb445f46feb46278",
+      "path": "runs/replica_feasibility_20261030/monitors/search-openalex-inference/probe.json"
+    },
+    "search-tail": {
+      "status": "completed",
+      "wall_seconds": 1.3271199690061621,
+      "peak_rss_bytes": 23437312,
+      "sha256": "f5d2e5229c80ccea61864ccff28f0c89eebebdf66fdb285153dcaa878b908673",
+      "path": "runs/replica_feasibility_20261030/monitors/search-tail/probe.json"
+    }
+  },
+  "dependency_check": {
+    "exit_code": 0,
+    "stdout": "WARN: main repository has local file changes; review before committing\n   M README.md\n   M docs/tasks/current.md\n  ?? docs/review_artifacts/replica_feasibility_20261030/\n  ?? \"docs/reviews/\\344\\270\\223\\345\\256\\266\\345\\211\\257\\346\\234\\254\\346\\201\\242\\345\\244\\215\\347\\232\\204\\345\\267\\262\\346\\234\\211\\345\\267\\245\\344\\275\\234\\344\\270\\216\\345\\256\\236\\346\\226\\275\\350\\276\\271\\347\\225\\214_20261030.md\"\nREAD: . @ dff2f4a14a07f8134e0c0da8f7c8ad24094bf580\nREAD: third_party/LLMServingSim @ 3ff9dee68d7184d0d9c7132e2eebfdb821cd8328\nREAD: third_party/LLMServingSim/astra-sim @ 479539202401c04c726440c3c6e61327a96a1e60\nREAD: third_party/LLMServingSim/astra-sim/extern/graph_frontend/chakra @ 30221ab8bfd9212aa9c063cd0b14a7d0a2ea6dd7\nREAD: third_party/LLMServingSim/astra-sim/extern/helper/fmt @ 7e73566ce7bd3617cd4b14a2e3a19a2a30b524c7\nREAD: third_party/LLMServingSim/astra-sim/extern/helper/spdlog @ 63f0875000bf90867aa7c76a831bd834cb7d4b5e\nREAD: third_party/LLMServingSim/astra-sim/extern/memory_backend/analytical @ 62313ef09abaf6a9764d13e2684ca61247def14b\nREAD: third_party/LLMServingSim/astra-sim/extern/network_backend/analytical @ 5dc02322f04ac42fcfbb5304d5f7f2fa20d25e3e\nINFO: checking transitive dependency against its parent: third_party/LLMServingSim/astra-sim/extern/network_backend/analytical/extern/googletest\nREAD: third_party/LLMServingSim/astra-sim/extern/network_backend/analytical/extern/googletest @ 1204d634444b0ba6da53201a8b6caf2a502d883c\nINFO: checking transitive dependency against its parent: third_party/LLMServingSim/astra-sim/extern/network_backend/analytical/extern/yaml-cpp\nREAD: third_party/LLMServingSim/astra-sim/extern/network_backend/analytical/extern/yaml-cpp @ 3d2888cc8a45da2f420454ad728cdfad01a3d54f\nREAD: third_party/LLMServingSim/astra-sim/extern/network_backend/csg-htsim @ 67cbbbb1cccdbddc400803414127d044ecd55290\nREAD: third_party/LLMServingSim/astra-sim/extern/network_backend/ns-3 @ 69cb14764c0c5de2c7ad31599ee5b3999dddc154\nREAD: third_party/ns-3-ub @ fee9fbf6e471f2e1db93db16fbbc44a115dda0b1\nREAD: third_party/ns-3-ub/scratch/ns-3-ub-tools @ 2afc7202f88c132b63c38e8c7dcfc08505b13bb2\nPASS: checked 13 dependency checkouts; versions and inspected states agree.\nThis result does not validate remote availability, compilation, or simulation.\n",
+    "stderr": ""
+  },
+  "artifacts": {
+    "docs/reviews/专家副本恢复的已有工作与实施边界_20261030.md": "fdfb25ce4d7f00ad04cfed40d1ecfb7e4b760ce4b2cf1900848f41229f6b5172",
+    "docs/review_artifacts/replica_feasibility_20261030/report.html": "75b3f8e5af276a3198c5c75a3aea082c61b7abd1f39be73e28055b9f60becc54",
+    "docs/review_artifacts/replica_feasibility_20261030/evidence.json": "dccfda44921a217e53c7e632d53406773692963c3c8911830363046fed86ad47",
+    "docs/review_artifacts/replica_feasibility_20261030/audit.py": "347535f5ac5e5f2bb22d7a95c91867096d3c9b5074bf23506b35a118525ded8a",
+    "docs/review_artifacts/replica_feasibility_20261030/closeout.py": "aeff2d83852d2aa6eba2235fce99eaa41da98e4decdbebc3b9c33ecf0af4eeb2",
+    "docs/review_artifacts/replica_feasibility_20261030/fetch.py": "cbb641545d94e177909c5e7d3f3b677292b6f970624669adbe3f6b38c6e41070",
+    "docs/review_artifacts/replica_feasibility_20261030/render.py": "3c0c6305e94850356855eee0f3f0cb150c3aba985b67cc6980f1a9d22729e8c0"
+  },
+  "no_algorithm_or_novelty_claim": true
+}

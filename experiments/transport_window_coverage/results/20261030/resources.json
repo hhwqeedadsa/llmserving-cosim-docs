@@ -1,0 +1,557 @@
+{
+  "passed": true,
+  "budget": {
+    "monitored_seconds": 2400,
+    "artifact_bytes": 2147483648,
+    "min_free_bytes": 8589934592
+  },
+  "monitored_seconds": 270.86905640678015,
+  "monitored_stages": 33,
+  "peak_group_rss_bytes": 508334080,
+  "peak_task_artifact_bytes": 1154363392,
+  "free_disk_bytes": 28942823424,
+  "new_networks": 12,
+  "builds": 0,
+  "downloads": 0,
+  "failed_monitored_stages": 0,
+  "setup_notes": [
+    "Initial recovery_scope name already belonged to a historical study; mkdir rejected it before writes; the following absent-monitor command did not execute. Both originals remain untouched.",
+    "The matrix driver file was created correctly; its creation command then failed on an unrelated undefined print variable. The saved driver ran once and all 23 matrix stages completed. No network retried."
+  ],
+  "source_files": 15,
+  "unit_methods": 3,
+  "unit_source_counts": [
+    4,
+    15,
+    16
+  ],
+  "calls_checked": 720,
+  "raw_packet_rows_checked": 272,
+  "image_review": "comparison.png viewed with view_image; browser rendering not verified",
+  "markdown_links_checked": 12,
+  "current_publication_sources_sha256": {
+    "experiments/transport_window_coverage/monitor.py": "3d04f28b44554c56e1a1dcdcf31c41dde7696da7544eb5190b9612b6e55de32d",
+    "experiments/transport_window_coverage/study.py": "1630b7771f08ccdce2702f4596317a518416c00860243405840147233ed64ba7",
+    "experiments/transport_window_coverage/verify.py": "98f6b69a10f69a4fe471c75c0afeaf4bc77123e049429a19e92271a39143b3d2",
+    "experiments/transport_window_coverage/publish.py": "5c63cecd7f95e58edd0a2a6666e2fba84ab46e6e90332e63c738b5c1e5486691",
+    "experiments/transport_window_coverage/delivery_check.py": "a2b686c00cb90950b7fda2f73d4bf8cdb1ced5d23d87015f65fd54f500a7d6ff"
+  },
+  "stages": [
+    {
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "experiments/transport_window_coverage/study.py",
+        "analyze",
+        "--study",
+        "runs/transport_window_coverage_20261030/study"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 5.68620643398026,
+      "peak_rss_bytes": 216281088
+    },
+    {
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "experiments/transport_window_coverage/study.py",
+        "run",
+        "--study",
+        "runs/transport_window_coverage_20261030/study",
+        "--case",
+        "base-normal",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 11.489982837985735,
+      "peak_rss_bytes": 508334080
+    },
+    {
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "experiments/transport_window_coverage/study.py",
+        "calibrate",
+        "--study",
+        "runs/transport_window_coverage_20261030/study"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 7.615105398988817,
+      "peak_rss_bytes": 295428096
+    },
+    {
+      "command": [
+        "bash",
+        "scripts/check_deps.sh"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 0.3340026009827852,
+      "peak_rss_bytes": 19161088
+    },
+    {
+      "command": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-B",
+        "experiments/transport_window_coverage/study.py",
+        "diagnose",
+        "--study",
+        "/home/lry/moe-ub-cosim/runs/transport_window_coverage_20261030/study",
+        "--case",
+        "base-loss120"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 8.051446233002935,
+      "peak_rss_bytes": 320036864
+    },
+    {
+      "command": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-B",
+        "experiments/transport_window_coverage/study.py",
+        "diagnose",
+        "--study",
+        "/home/lry/moe-ub-cosim/runs/transport_window_coverage_20261030/study",
+        "--case",
+        "base-loss20"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 8.118321058980655,
+      "peak_rss_bytes": 293953536
+    },
+    {
+      "command": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-B",
+        "experiments/transport_window_coverage/study.py",
+        "diagnose",
+        "--study",
+        "/home/lry/moe-ub-cosim/runs/transport_window_coverage_20261030/study",
+        "--case",
+        "base-loss60"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 8.077910284977406,
+      "peak_rss_bytes": 294273024
+    },
+    {
+      "command": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-B",
+        "experiments/transport_window_coverage/study.py",
+        "diagnose",
+        "--study",
+        "/home/lry/moe-ub-cosim/runs/transport_window_coverage_20261030/study",
+        "--case",
+        "base-normal"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 8.128895973030012,
+      "peak_rss_bytes": 295374848
+    },
+    {
+      "command": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-B",
+        "experiments/transport_window_coverage/study.py",
+        "diagnose",
+        "--study",
+        "/home/lry/moe-ub-cosim/runs/transport_window_coverage_20261030/study",
+        "--case",
+        "calibrated-loss120"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 8.15595253999345,
+      "peak_rss_bytes": 294404096
+    },
+    {
+      "command": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-B",
+        "experiments/transport_window_coverage/study.py",
+        "diagnose",
+        "--study",
+        "/home/lry/moe-ub-cosim/runs/transport_window_coverage_20261030/study",
+        "--case",
+        "calibrated-loss20"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 8.238638417969923,
+      "peak_rss_bytes": 294420480
+    },
+    {
+      "command": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-B",
+        "experiments/transport_window_coverage/study.py",
+        "diagnose",
+        "--study",
+        "/home/lry/moe-ub-cosim/runs/transport_window_coverage_20261030/study",
+        "--case",
+        "calibrated-loss60"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 8.092356179025955,
+      "peak_rss_bytes": 294547456
+    },
+    {
+      "command": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-B",
+        "experiments/transport_window_coverage/study.py",
+        "diagnose",
+        "--study",
+        "/home/lry/moe-ub-cosim/runs/transport_window_coverage_20261030/study",
+        "--case",
+        "calibrated-normal"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 8.229933893948328,
+      "peak_rss_bytes": 294912000
+    },
+    {
+      "command": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-B",
+        "experiments/transport_window_coverage/study.py",
+        "diagnose",
+        "--study",
+        "/home/lry/moe-ub-cosim/runs/transport_window_coverage_20261030/study",
+        "--case",
+        "transfer-loss120"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 8.098780154017732,
+      "peak_rss_bytes": 293736448
+    },
+    {
+      "command": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-B",
+        "experiments/transport_window_coverage/study.py",
+        "diagnose",
+        "--study",
+        "/home/lry/moe-ub-cosim/runs/transport_window_coverage_20261030/study",
+        "--case",
+        "transfer-loss20"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 8.229860472027212,
+      "peak_rss_bytes": 294445056
+    },
+    {
+      "command": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-B",
+        "experiments/transport_window_coverage/study.py",
+        "diagnose",
+        "--study",
+        "/home/lry/moe-ub-cosim/runs/transport_window_coverage_20261030/study",
+        "--case",
+        "transfer-loss60"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 8.191399895003997,
+      "peak_rss_bytes": 294875136
+    },
+    {
+      "command": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-B",
+        "experiments/transport_window_coverage/study.py",
+        "diagnose",
+        "--study",
+        "/home/lry/moe-ub-cosim/runs/transport_window_coverage_20261030/study",
+        "--case",
+        "transfer-normal"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 8.03034725197358,
+      "peak_rss_bytes": 308834304
+    },
+    {
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "experiments/transport_window_coverage/verify.py",
+        "--study",
+        "runs/transport_window_coverage_20261030/study",
+        "--output",
+        "runs/transport_window_coverage_20261030/verification.json"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 5.010117163008545,
+      "peak_rss_bytes": 288219136
+    },
+    {
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/unit",
+        "-p",
+        "message_buffer_prepare_test.py",
+        "-v"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 2.7852695559849963,
+      "peak_rss_bytes": 113946624
+    },
+    {
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/unit",
+        "-p",
+        "message_buffer_prepare_test.py",
+        "-v"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 2.257900010969024,
+      "peak_rss_bytes": 114040832
+    },
+    {
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "experiments/transport_window_coverage/study.py",
+        "prepare",
+        "--source-manifest",
+        "runs/multicall_externality_20261030/study-counted/source-manifest.json",
+        "--source-base",
+        ".",
+        "--build",
+        "runs/message_buffers_20261030/build",
+        "--output",
+        "runs/transport_window_coverage_20261030/study"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 1.7363328179926611,
+      "peak_rss_bytes": 113840128
+    },
+    {
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "experiments/transport_window_coverage/delivery_check.py",
+        "--study",
+        "runs/transport_window_coverage_20261030/study",
+        "--delivery",
+        "experiments/transport_window_coverage/results/20261030",
+        "--output",
+        "experiments/transport_window_coverage/results/20261030/verification.json"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 3.596132335020229,
+      "peak_rss_bytes": 167063552
+    },
+    {
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "experiments/transport_window_coverage/publish.py",
+        "--study",
+        "runs/transport_window_coverage_20261030/study",
+        "--output",
+        "experiments/transport_window_coverage/results/20261030"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 3.0558028729865327,
+      "peak_rss_bytes": 296833024
+    },
+    {
+      "command": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-B",
+        "experiments/transport_window_coverage/study.py",
+        "run",
+        "--study",
+        "/home/lry/moe-ub-cosim/runs/transport_window_coverage_20261030/study",
+        "--case",
+        "base-loss120",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 11.723917389987037,
+      "peak_rss_bytes": 503824384
+    },
+    {
+      "command": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-B",
+        "experiments/transport_window_coverage/study.py",
+        "run",
+        "--study",
+        "/home/lry/moe-ub-cosim/runs/transport_window_coverage_20261030/study",
+        "--case",
+        "base-loss20",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 11.585986660968047,
+      "peak_rss_bytes": 502763520
+    },
+    {
+      "command": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-B",
+        "experiments/transport_window_coverage/study.py",
+        "run",
+        "--study",
+        "/home/lry/moe-ub-cosim/runs/transport_window_coverage_20261030/study",
+        "--case",
+        "base-loss60",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 11.729041997983586,
+      "peak_rss_bytes": 501899264
+    },
+    {
+      "command": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-B",
+        "experiments/transport_window_coverage/study.py",
+        "run",
+        "--study",
+        "/home/lry/moe-ub-cosim/runs/transport_window_coverage_20261030/study",
+        "--case",
+        "calibrated-loss120",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 11.703984865976963,
+      "peak_rss_bytes": 503582720
+    },
+    {
+      "command": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-B",
+        "experiments/transport_window_coverage/study.py",
+        "run",
+        "--study",
+        "/home/lry/moe-ub-cosim/runs/transport_window_coverage_20261030/study",
+        "--case",
+        "calibrated-loss20",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 11.881500211020466,
+      "peak_rss_bytes": 502239232
+    },
+    {
+      "command": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-B",
+        "experiments/transport_window_coverage/study.py",
+        "run",
+        "--study",
+        "/home/lry/moe-ub-cosim/runs/transport_window_coverage_20261030/study",
+        "--case",
+        "calibrated-loss60",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 12.02996555599384,
+      "peak_rss_bytes": 502345728
+    },
+    {
+      "command": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-B",
+        "experiments/transport_window_coverage/study.py",
+        "run",
+        "--study",
+        "/home/lry/moe-ub-cosim/runs/transport_window_coverage_20261030/study",
+        "--case",
+        "calibrated-normal",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 11.760681032028515,
+      "peak_rss_bytes": 506679296
+    },
+    {
+      "command": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-B",
+        "experiments/transport_window_coverage/study.py",
+        "run",
+        "--study",
+        "/home/lry/moe-ub-cosim/runs/transport_window_coverage_20261030/study",
+        "--case",
+        "transfer-loss120",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 11.674114345980342,
+      "peak_rss_bytes": 505393152
+    },
+    {
+      "command": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-B",
+        "experiments/transport_window_coverage/study.py",
+        "run",
+        "--study",
+        "/home/lry/moe-ub-cosim/runs/transport_window_coverage_20261030/study",
+        "--case",
+        "transfer-loss20",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 12.028190172975883,
+      "peak_rss_bytes": 506224640
+    },
+    {
+      "command": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-B",
+        "experiments/transport_window_coverage/study.py",
+        "run",
+        "--study",
+        "/home/lry/moe-ub-cosim/runs/transport_window_coverage_20261030/study",
+        "--case",
+        "transfer-loss60",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 11.573355588014238,
+      "peak_rss_bytes": 506765312
+    },
+    {
+      "command": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-B",
+        "experiments/transport_window_coverage/study.py",
+        "run",
+        "--study",
+        "/home/lry/moe-ub-cosim/runs/transport_window_coverage_20261030/study",
+        "--case",
+        "transfer-normal",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 11.967624204000458,
+      "peak_rss_bytes": 505622528
+    }
+  ]
+}

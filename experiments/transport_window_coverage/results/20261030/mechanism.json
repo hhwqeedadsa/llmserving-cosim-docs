@@ -1,0 +1,5750 @@
+{
+  "passed": true,
+  "normal_packet_and_queue_traces_equal": true,
+  "cases": {
+    "base-loss60": {
+      "damaged": [
+        {
+          "message": {
+            "ack_ns": 85504,
+            "begin": 0,
+            "bytes": 14464,
+            "contributions": 1,
+            "dst": 32,
+            "end": 14464,
+            "id": 7,
+            "layer": 0,
+            "phase": "dispatch",
+            "plane": 0,
+            "published_ns": 1030,
+            "ready_ns": 1030,
+            "receive_ready_ns": 83502,
+            "src": 0,
+            "stream": 14,
+            "tag": 7,
+            "transport_tokens": 1
+          },
+          "attempts": [
+            {
+              "source_packet": {
+                "time_ns": 1030,
+                "stream": 14,
+                "src": 0,
+                "dst": 32,
+                "nic": 1,
+                "sequence": 0,
+                "payload_bytes": 9000,
+                "packet_uid": 0
+              },
+              "path": {
+                "events": [
+                  {
+                    "time_ns": 1030,
+                    "node": 0,
+                    "port": 1,
+                    "event": 0,
+                    "packet_uid": 0,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 2211,
+                    "node": 128,
+                    "port": 1,
+                    "event": 1,
+                    "packet_uid": 0,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 2211,
+                    "node": 128,
+                    "port": 9,
+                    "event": 0,
+                    "packet_uid": 0,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 3392,
+                    "node": 32,
+                    "port": 1,
+                    "event": 2,
+                    "packet_uid": 0,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  }
+                ],
+                "switches": {
+                  "128": {
+                    "rx_ns": 2211,
+                    "tx_ns": 2211,
+                    "port": 9,
+                    "residence_ns": 0
+                  }
+                },
+                "source_tx_ns": 1030,
+                "destination_arrival_ns": 3392,
+                "dropped": true
+              }
+            },
+            {
+              "source_packet": {
+                "time_ns": 2116,
+                "stream": 14,
+                "src": 0,
+                "dst": 32,
+                "nic": 1,
+                "sequence": 9000,
+                "payload_bytes": 5464,
+                "packet_uid": 182
+              },
+              "path": {
+                "events": [
+                  {
+                    "time_ns": 2116,
+                    "node": 0,
+                    "port": 1,
+                    "event": 0,
+                    "packet_uid": 182,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 3226,
+                    "node": 128,
+                    "port": 1,
+                    "event": 1,
+                    "packet_uid": 182,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 3226,
+                    "node": 128,
+                    "port": 9,
+                    "event": 0,
+                    "packet_uid": 182,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 4336,
+                    "node": 32,
+                    "port": 1,
+                    "event": 2,
+                    "packet_uid": 182,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  }
+                ],
+                "switches": {
+                  "128": {
+                    "rx_ns": 3226,
+                    "tx_ns": 3226,
+                    "port": 9,
+                    "residence_ns": 0
+                  }
+                },
+                "source_tx_ns": 2116,
+                "destination_arrival_ns": 4336,
+                "dropped": true
+              }
+            },
+            {
+              "source_packet": {
+                "time_ns": 81030,
+                "stream": 14,
+                "src": 0,
+                "dst": 32,
+                "nic": 1,
+                "sequence": 0,
+                "payload_bytes": 9000,
+                "packet_uid": 2350
+              },
+              "path": {
+                "events": [
+                  {
+                    "time_ns": 81030,
+                    "node": 0,
+                    "port": 1,
+                    "event": 0,
+                    "packet_uid": 2350,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 82211,
+                    "node": 128,
+                    "port": 1,
+                    "event": 1,
+                    "packet_uid": 2350,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 82211,
+                    "node": 128,
+                    "port": 9,
+                    "event": 0,
+                    "packet_uid": 2350,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 83392,
+                    "node": 32,
+                    "port": 1,
+                    "event": 1,
+                    "packet_uid": 2350,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  }
+                ],
+                "switches": {
+                  "128": {
+                    "rx_ns": 82211,
+                    "tx_ns": 82211,
+                    "port": 9,
+                    "residence_ns": 0
+                  }
+                },
+                "source_tx_ns": 81030,
+                "destination_arrival_ns": 83392,
+                "dropped": false
+              }
+            },
+            {
+              "source_packet": {
+                "time_ns": 81211,
+                "stream": 14,
+                "src": 0,
+                "dst": 32,
+                "nic": 1,
+                "sequence": 9000,
+                "payload_bytes": 5464,
+                "packet_uid": 2352
+              },
+              "path": {
+                "events": [
+                  {
+                    "time_ns": 81211,
+                    "node": 0,
+                    "port": 1,
+                    "event": 0,
+                    "packet_uid": 2352,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 82321,
+                    "node": 128,
+                    "port": 1,
+                    "event": 1,
+                    "packet_uid": 2352,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 82392,
+                    "node": 128,
+                    "port": 9,
+                    "event": 0,
+                    "packet_uid": 2352,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 83502,
+                    "node": 32,
+                    "port": 1,
+                    "event": 1,
+                    "packet_uid": 2352,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  }
+                ],
+                "switches": {
+                  "128": {
+                    "rx_ns": 82321,
+                    "tx_ns": 82392,
+                    "port": 9,
+                    "residence_ns": 71
+                  }
+                },
+                "source_tx_ns": 81211,
+                "destination_arrival_ns": 83502,
+                "dropped": false
+              }
+            }
+          ]
+        },
+        {
+          "message": {
+            "ack_ns": 90773,
+            "begin": 0,
+            "bytes": 14464,
+            "contributions": 1,
+            "dst": 32,
+            "end": 14464,
+            "id": 100,
+            "layer": 0,
+            "phase": "dispatch",
+            "plane": 0,
+            "published_ns": 1030,
+            "ready_ns": 1030,
+            "receive_ready_ns": 86769,
+            "src": 12,
+            "stream": 479,
+            "tag": 100,
+            "transport_tokens": 1
+          },
+          "attempts": [
+            {
+              "source_packet": {
+                "time_ns": 1935,
+                "stream": 479,
+                "src": 12,
+                "dst": 32,
+                "nic": 1,
+                "sequence": 0,
+                "payload_bytes": 9000,
+                "packet_uid": 156
+              },
+              "path": {
+                "events": [
+                  {
+                    "time_ns": 1935,
+                    "node": 12,
+                    "port": 1,
+                    "event": 0,
+                    "packet_uid": 156,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 3116,
+                    "node": 129,
+                    "port": 5,
+                    "event": 1,
+                    "packet_uid": 156,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 3840,
+                    "node": 129,
+                    "port": 18,
+                    "event": 0,
+                    "packet_uid": 156,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 47536,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 5021,
+                    "node": 133,
+                    "port": 2,
+                    "event": 1,
+                    "packet_uid": 156,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 5021,
+                    "node": 133,
+                    "port": 1,
+                    "event": 0,
+                    "packet_uid": 156,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 6202,
+                    "node": 128,
+                    "port": 18,
+                    "event": 1,
+                    "packet_uid": 156,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 38500,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 6202,
+                    "node": 128,
+                    "port": 9,
+                    "event": 0,
+                    "packet_uid": 156,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 7383,
+                    "node": 32,
+                    "port": 1,
+                    "event": 2,
+                    "packet_uid": 156,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  }
+                ],
+                "switches": {
+                  "129": {
+                    "rx_ns": 3116,
+                    "tx_ns": 3840,
+                    "port": 18,
+                    "residence_ns": 724
+                  },
+                  "133": {
+                    "rx_ns": 5021,
+                    "tx_ns": 5021,
+                    "port": 1,
+                    "residence_ns": 0
+                  },
+                  "128": {
+                    "rx_ns": 6202,
+                    "tx_ns": 6202,
+                    "port": 9,
+                    "residence_ns": 0
+                  }
+                },
+                "source_tx_ns": 1935,
+                "destination_arrival_ns": 7383,
+                "dropped": true
+              }
+            },
+            {
+              "source_packet": {
+                "time_ns": 3028,
+                "stream": 479,
+                "src": 12,
+                "dst": 32,
+                "nic": 1,
+                "sequence": 9000,
+                "payload_bytes": 5464,
+                "packet_uid": 392
+              },
+              "path": {
+                "events": [
+                  {
+                    "time_ns": 3028,
+                    "node": 12,
+                    "port": 1,
+                    "event": 0,
+                    "packet_uid": 392,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 4138,
+                    "node": 129,
+                    "port": 5,
+                    "event": 1,
+                    "packet_uid": 392,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 5302,
+                    "node": 129,
+                    "port": 18,
+                    "event": 0,
+                    "packet_uid": 392,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 6412,
+                    "node": 133,
+                    "port": 2,
+                    "event": 1,
+                    "packet_uid": 392,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 6412,
+                    "node": 133,
+                    "port": 1,
+                    "event": 0,
+                    "packet_uid": 392,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 7522,
+                    "node": 128,
+                    "port": 18,
+                    "event": 1,
+                    "packet_uid": 392,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 7522,
+                    "node": 128,
+                    "port": 9,
+                    "event": 0,
+                    "packet_uid": 392,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 8632,
+                    "node": 32,
+                    "port": 1,
+                    "event": 2,
+                    "packet_uid": 392,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  }
+                ],
+                "switches": {
+                  "129": {
+                    "rx_ns": 4138,
+                    "tx_ns": 5302,
+                    "port": 18,
+                    "residence_ns": 1164
+                  },
+                  "133": {
+                    "rx_ns": 6412,
+                    "tx_ns": 6412,
+                    "port": 1,
+                    "residence_ns": 0
+                  },
+                  "128": {
+                    "rx_ns": 7522,
+                    "tx_ns": 7522,
+                    "port": 9,
+                    "residence_ns": 0
+                  }
+                },
+                "source_tx_ns": 3028,
+                "destination_arrival_ns": 8632,
+                "dropped": true
+              }
+            },
+            {
+              "source_packet": {
+                "time_ns": 81935,
+                "stream": 479,
+                "src": 12,
+                "dst": 32,
+                "nic": 1,
+                "sequence": 0,
+                "payload_bytes": 9000,
+                "packet_uid": 2382
+              },
+              "path": {
+                "events": [
+                  {
+                    "time_ns": 81935,
+                    "node": 12,
+                    "port": 1,
+                    "event": 0,
+                    "packet_uid": 2382,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 83116,
+                    "node": 129,
+                    "port": 5,
+                    "event": 1,
+                    "packet_uid": 2382,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 83116,
+                    "node": 129,
+                    "port": 18,
+                    "event": 0,
+                    "packet_uid": 2382,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 84297,
+                    "node": 133,
+                    "port": 2,
+                    "event": 1,
+                    "packet_uid": 2382,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 84297,
+                    "node": 133,
+                    "port": 1,
+                    "event": 0,
+                    "packet_uid": 2382,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 85478,
+                    "node": 128,
+                    "port": 18,
+                    "event": 1,
+                    "packet_uid": 2382,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 85478,
+                    "node": 128,
+                    "port": 9,
+                    "event": 0,
+                    "packet_uid": 2382,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 86659,
+                    "node": 32,
+                    "port": 1,
+                    "event": 1,
+                    "packet_uid": 2382,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  }
+                ],
+                "switches": {
+                  "129": {
+                    "rx_ns": 83116,
+                    "tx_ns": 83116,
+                    "port": 18,
+                    "residence_ns": 0
+                  },
+                  "133": {
+                    "rx_ns": 84297,
+                    "tx_ns": 84297,
+                    "port": 1,
+                    "residence_ns": 0
+                  },
+                  "128": {
+                    "rx_ns": 85478,
+                    "tx_ns": 85478,
+                    "port": 9,
+                    "residence_ns": 0
+                  }
+                },
+                "source_tx_ns": 81935,
+                "destination_arrival_ns": 86659,
+                "dropped": false
+              }
+            },
+            {
+              "source_packet": {
+                "time_ns": 82116,
+                "stream": 479,
+                "src": 12,
+                "dst": 32,
+                "nic": 1,
+                "sequence": 9000,
+                "payload_bytes": 5464,
+                "packet_uid": 2418
+              },
+              "path": {
+                "events": [
+                  {
+                    "time_ns": 82116,
+                    "node": 12,
+                    "port": 1,
+                    "event": 0,
+                    "packet_uid": 2418,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 83226,
+                    "node": 129,
+                    "port": 5,
+                    "event": 1,
+                    "packet_uid": 2418,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 83297,
+                    "node": 129,
+                    "port": 18,
+                    "event": 0,
+                    "packet_uid": 2418,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 84407,
+                    "node": 133,
+                    "port": 2,
+                    "event": 1,
+                    "packet_uid": 2418,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 84478,
+                    "node": 133,
+                    "port": 1,
+                    "event": 0,
+                    "packet_uid": 2418,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 85588,
+                    "node": 128,
+                    "port": 18,
+                    "event": 1,
+                    "packet_uid": 2418,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 85659,
+                    "node": 128,
+                    "port": 9,
+                    "event": 0,
+                    "packet_uid": 2418,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 86769,
+                    "node": 32,
+                    "port": 1,
+                    "event": 1,
+                    "packet_uid": 2418,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  }
+                ],
+                "switches": {
+                  "129": {
+                    "rx_ns": 83226,
+                    "tx_ns": 83297,
+                    "port": 18,
+                    "residence_ns": 71
+                  },
+                  "133": {
+                    "rx_ns": 84407,
+                    "tx_ns": 84478,
+                    "port": 1,
+                    "residence_ns": 71
+                  },
+                  "128": {
+                    "rx_ns": 85588,
+                    "tx_ns": 85659,
+                    "port": 9,
+                    "residence_ns": 71
+                  }
+                },
+                "source_tx_ns": 82116,
+                "destination_arrival_ns": 86769,
+                "dropped": false
+              }
+            }
+          ]
+        }
+      ],
+      "first_dispatch_ns": 90773,
+      "timeouts": [
+        {
+          "time_ns": 81030,
+          "event": 2,
+          "source": 0,
+          "message_id": 14,
+          "acknowledged_bytes": 0,
+          "highest_sent_bytes": 14464,
+          "retries_since_progress": 1,
+          "rto_ns": 160000,
+          "deadline_ns": 241030
+        },
+        {
+          "time_ns": 81935,
+          "event": 2,
+          "source": 12,
+          "message_id": 479,
+          "acknowledged_bytes": 0,
+          "highest_sent_bytes": 14464,
+          "retries_since_progress": 1,
+          "rto_ns": 160000,
+          "deadline_ns": 241935
+        }
+      ]
+    },
+    "transfer-loss60": {
+      "damaged": [
+        {
+          "message": {
+            "ack_ns": 124504,
+            "begin": 0,
+            "bytes": 14464,
+            "contributions": 1,
+            "dst": 32,
+            "end": 14464,
+            "id": 7,
+            "layer": 0,
+            "phase": "dispatch",
+            "plane": 0,
+            "published_ns": 1030,
+            "ready_ns": 1030,
+            "receive_ready_ns": 122502,
+            "src": 0,
+            "stream": 14,
+            "tag": 7,
+            "transport_tokens": 1
+          },
+          "attempts": [
+            {
+              "source_packet": {
+                "time_ns": 1030,
+                "stream": 14,
+                "src": 0,
+                "dst": 32,
+                "nic": 1,
+                "sequence": 0,
+                "payload_bytes": 9000,
+                "packet_uid": 0
+              },
+              "path": {
+                "events": [
+                  {
+                    "time_ns": 1030,
+                    "node": 0,
+                    "port": 1,
+                    "event": 0,
+                    "packet_uid": 0,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 2211,
+                    "node": 128,
+                    "port": 1,
+                    "event": 1,
+                    "packet_uid": 0,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 2211,
+                    "node": 128,
+                    "port": 9,
+                    "event": 0,
+                    "packet_uid": 0,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 3392,
+                    "node": 32,
+                    "port": 1,
+                    "event": 2,
+                    "packet_uid": 0,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  }
+                ],
+                "switches": {
+                  "128": {
+                    "rx_ns": 2211,
+                    "tx_ns": 2211,
+                    "port": 9,
+                    "residence_ns": 0
+                  }
+                },
+                "source_tx_ns": 1030,
+                "destination_arrival_ns": 3392,
+                "dropped": true
+              }
+            },
+            {
+              "source_packet": {
+                "time_ns": 2116,
+                "stream": 14,
+                "src": 0,
+                "dst": 32,
+                "nic": 1,
+                "sequence": 9000,
+                "payload_bytes": 5464,
+                "packet_uid": 182
+              },
+              "path": {
+                "events": [
+                  {
+                    "time_ns": 2116,
+                    "node": 0,
+                    "port": 1,
+                    "event": 0,
+                    "packet_uid": 182,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 3226,
+                    "node": 128,
+                    "port": 1,
+                    "event": 1,
+                    "packet_uid": 182,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 3226,
+                    "node": 128,
+                    "port": 9,
+                    "event": 0,
+                    "packet_uid": 182,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 4336,
+                    "node": 32,
+                    "port": 1,
+                    "event": 2,
+                    "packet_uid": 182,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  }
+                ],
+                "switches": {
+                  "128": {
+                    "rx_ns": 3226,
+                    "tx_ns": 3226,
+                    "port": 9,
+                    "residence_ns": 0
+                  }
+                },
+                "source_tx_ns": 2116,
+                "destination_arrival_ns": 4336,
+                "dropped": true
+              }
+            },
+            {
+              "source_packet": {
+                "time_ns": 18030,
+                "stream": 14,
+                "src": 0,
+                "dst": 32,
+                "nic": 1,
+                "sequence": 0,
+                "payload_bytes": 9000,
+                "packet_uid": 625
+              },
+              "path": {
+                "events": [
+                  {
+                    "time_ns": 18030,
+                    "node": 0,
+                    "port": 1,
+                    "event": 0,
+                    "packet_uid": 625,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 19211,
+                    "node": 128,
+                    "port": 1,
+                    "event": 1,
+                    "packet_uid": 625,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 19211,
+                    "node": 128,
+                    "port": 9,
+                    "event": 0,
+                    "packet_uid": 625,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 20392,
+                    "node": 32,
+                    "port": 1,
+                    "event": 2,
+                    "packet_uid": 625,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  }
+                ],
+                "switches": {
+                  "128": {
+                    "rx_ns": 19211,
+                    "tx_ns": 19211,
+                    "port": 9,
+                    "residence_ns": 0
+                  }
+                },
+                "source_tx_ns": 18030,
+                "destination_arrival_ns": 20392,
+                "dropped": true
+              }
+            },
+            {
+              "source_packet": {
+                "time_ns": 18211,
+                "stream": 14,
+                "src": 0,
+                "dst": 32,
+                "nic": 1,
+                "sequence": 9000,
+                "payload_bytes": 5464,
+                "packet_uid": 627
+              },
+              "path": {
+                "events": [
+                  {
+                    "time_ns": 18211,
+                    "node": 0,
+                    "port": 1,
+                    "event": 0,
+                    "packet_uid": 627,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 19321,
+                    "node": 128,
+                    "port": 1,
+                    "event": 1,
+                    "packet_uid": 627,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 19392,
+                    "node": 128,
+                    "port": 9,
+                    "event": 0,
+                    "packet_uid": 627,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 20502,
+                    "node": 32,
+                    "port": 1,
+                    "event": 2,
+                    "packet_uid": 627,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  }
+                ],
+                "switches": {
+                  "128": {
+                    "rx_ns": 19321,
+                    "tx_ns": 19392,
+                    "port": 9,
+                    "residence_ns": 71
+                  }
+                },
+                "source_tx_ns": 18211,
+                "destination_arrival_ns": 20502,
+                "dropped": true
+              }
+            },
+            {
+              "source_packet": {
+                "time_ns": 52030,
+                "stream": 14,
+                "src": 0,
+                "dst": 32,
+                "nic": 1,
+                "sequence": 0,
+                "payload_bytes": 9000,
+                "packet_uid": 1529
+              },
+              "path": {
+                "events": [
+                  {
+                    "time_ns": 52030,
+                    "node": 0,
+                    "port": 1,
+                    "event": 0,
+                    "packet_uid": 1529,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 53211,
+                    "node": 128,
+                    "port": 1,
+                    "event": 1,
+                    "packet_uid": 1529,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 53211,
+                    "node": 128,
+                    "port": 9,
+                    "event": 0,
+                    "packet_uid": 1529,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 54392,
+                    "node": 32,
+                    "port": 1,
+                    "event": 2,
+                    "packet_uid": 1529,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  }
+                ],
+                "switches": {
+                  "128": {
+                    "rx_ns": 53211,
+                    "tx_ns": 53211,
+                    "port": 9,
+                    "residence_ns": 0
+                  }
+                },
+                "source_tx_ns": 52030,
+                "destination_arrival_ns": 54392,
+                "dropped": true
+              }
+            },
+            {
+              "source_packet": {
+                "time_ns": 52211,
+                "stream": 14,
+                "src": 0,
+                "dst": 32,
+                "nic": 1,
+                "sequence": 9000,
+                "payload_bytes": 5464,
+                "packet_uid": 1559
+              },
+              "path": {
+                "events": [
+                  {
+                    "time_ns": 52211,
+                    "node": 0,
+                    "port": 1,
+                    "event": 0,
+                    "packet_uid": 1559,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 53321,
+                    "node": 128,
+                    "port": 1,
+                    "event": 1,
+                    "packet_uid": 1559,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 53392,
+                    "node": 128,
+                    "port": 9,
+                    "event": 0,
+                    "packet_uid": 1559,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 54502,
+                    "node": 32,
+                    "port": 1,
+                    "event": 2,
+                    "packet_uid": 1559,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  }
+                ],
+                "switches": {
+                  "128": {
+                    "rx_ns": 53321,
+                    "tx_ns": 53392,
+                    "port": 9,
+                    "residence_ns": 71
+                  }
+                },
+                "source_tx_ns": 52211,
+                "destination_arrival_ns": 54502,
+                "dropped": true
+              }
+            },
+            {
+              "source_packet": {
+                "time_ns": 120030,
+                "stream": 14,
+                "src": 0,
+                "dst": 32,
+                "nic": 1,
+                "sequence": 0,
+                "payload_bytes": 9000,
+                "packet_uid": 3544
+              },
+              "path": {
+                "events": [
+                  {
+                    "time_ns": 120030,
+                    "node": 0,
+                    "port": 1,
+                    "event": 0,
+                    "packet_uid": 3544,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 121211,
+                    "node": 128,
+                    "port": 1,
+                    "event": 1,
+                    "packet_uid": 3544,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 121211,
+                    "node": 128,
+                    "port": 9,
+                    "event": 0,
+                    "packet_uid": 3544,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 122392,
+                    "node": 32,
+                    "port": 1,
+                    "event": 1,
+                    "packet_uid": 3544,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  }
+                ],
+                "switches": {
+                  "128": {
+                    "rx_ns": 121211,
+                    "tx_ns": 121211,
+                    "port": 9,
+                    "residence_ns": 0
+                  }
+                },
+                "source_tx_ns": 120030,
+                "destination_arrival_ns": 122392,
+                "dropped": false
+              }
+            },
+            {
+              "source_packet": {
+                "time_ns": 120211,
+                "stream": 14,
+                "src": 0,
+                "dst": 32,
+                "nic": 1,
+                "sequence": 9000,
+                "payload_bytes": 5464,
+                "packet_uid": 3552
+              },
+              "path": {
+                "events": [
+                  {
+                    "time_ns": 120211,
+                    "node": 0,
+                    "port": 1,
+                    "event": 0,
+                    "packet_uid": 3552,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 121321,
+                    "node": 128,
+                    "port": 1,
+                    "event": 1,
+                    "packet_uid": 3552,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 121392,
+                    "node": 128,
+                    "port": 9,
+                    "event": 0,
+                    "packet_uid": 3552,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 122502,
+                    "node": 32,
+                    "port": 1,
+                    "event": 1,
+                    "packet_uid": 3552,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  }
+                ],
+                "switches": {
+                  "128": {
+                    "rx_ns": 121321,
+                    "tx_ns": 121392,
+                    "port": 9,
+                    "residence_ns": 71
+                  }
+                },
+                "source_tx_ns": 120211,
+                "destination_arrival_ns": 122502,
+                "dropped": false
+              }
+            }
+          ]
+        },
+        {
+          "message": {
+            "ack_ns": 129773,
+            "begin": 0,
+            "bytes": 14464,
+            "contributions": 1,
+            "dst": 32,
+            "end": 14464,
+            "id": 100,
+            "layer": 0,
+            "phase": "dispatch",
+            "plane": 0,
+            "published_ns": 1030,
+            "ready_ns": 1030,
+            "receive_ready_ns": 125769,
+            "src": 12,
+            "stream": 479,
+            "tag": 100,
+            "transport_tokens": 1
+          },
+          "attempts": [
+            {
+              "source_packet": {
+                "time_ns": 1935,
+                "stream": 479,
+                "src": 12,
+                "dst": 32,
+                "nic": 1,
+                "sequence": 0,
+                "payload_bytes": 9000,
+                "packet_uid": 156
+              },
+              "path": {
+                "events": [
+                  {
+                    "time_ns": 1935,
+                    "node": 12,
+                    "port": 1,
+                    "event": 0,
+                    "packet_uid": 156,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 3116,
+                    "node": 129,
+                    "port": 5,
+                    "event": 1,
+                    "packet_uid": 156,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 3840,
+                    "node": 129,
+                    "port": 18,
+                    "event": 0,
+                    "packet_uid": 156,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 47536,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 5021,
+                    "node": 133,
+                    "port": 2,
+                    "event": 1,
+                    "packet_uid": 156,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 5021,
+                    "node": 133,
+                    "port": 1,
+                    "event": 0,
+                    "packet_uid": 156,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 6202,
+                    "node": 128,
+                    "port": 18,
+                    "event": 1,
+                    "packet_uid": 156,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 38500,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 6202,
+                    "node": 128,
+                    "port": 9,
+                    "event": 0,
+                    "packet_uid": 156,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 7383,
+                    "node": 32,
+                    "port": 1,
+                    "event": 2,
+                    "packet_uid": 156,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  }
+                ],
+                "switches": {
+                  "129": {
+                    "rx_ns": 3116,
+                    "tx_ns": 3840,
+                    "port": 18,
+                    "residence_ns": 724
+                  },
+                  "133": {
+                    "rx_ns": 5021,
+                    "tx_ns": 5021,
+                    "port": 1,
+                    "residence_ns": 0
+                  },
+                  "128": {
+                    "rx_ns": 6202,
+                    "tx_ns": 6202,
+                    "port": 9,
+                    "residence_ns": 0
+                  }
+                },
+                "source_tx_ns": 1935,
+                "destination_arrival_ns": 7383,
+                "dropped": true
+              }
+            },
+            {
+              "source_packet": {
+                "time_ns": 3028,
+                "stream": 479,
+                "src": 12,
+                "dst": 32,
+                "nic": 1,
+                "sequence": 9000,
+                "payload_bytes": 5464,
+                "packet_uid": 392
+              },
+              "path": {
+                "events": [
+                  {
+                    "time_ns": 3028,
+                    "node": 12,
+                    "port": 1,
+                    "event": 0,
+                    "packet_uid": 392,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 4138,
+                    "node": 129,
+                    "port": 5,
+                    "event": 1,
+                    "packet_uid": 392,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 5302,
+                    "node": 129,
+                    "port": 18,
+                    "event": 0,
+                    "packet_uid": 392,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 6412,
+                    "node": 133,
+                    "port": 2,
+                    "event": 1,
+                    "packet_uid": 392,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 6412,
+                    "node": 133,
+                    "port": 1,
+                    "event": 0,
+                    "packet_uid": 392,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 7522,
+                    "node": 128,
+                    "port": 18,
+                    "event": 1,
+                    "packet_uid": 392,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 7522,
+                    "node": 128,
+                    "port": 9,
+                    "event": 0,
+                    "packet_uid": 392,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 8632,
+                    "node": 32,
+                    "port": 1,
+                    "event": 2,
+                    "packet_uid": 392,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  }
+                ],
+                "switches": {
+                  "129": {
+                    "rx_ns": 4138,
+                    "tx_ns": 5302,
+                    "port": 18,
+                    "residence_ns": 1164
+                  },
+                  "133": {
+                    "rx_ns": 6412,
+                    "tx_ns": 6412,
+                    "port": 1,
+                    "residence_ns": 0
+                  },
+                  "128": {
+                    "rx_ns": 7522,
+                    "tx_ns": 7522,
+                    "port": 9,
+                    "residence_ns": 0
+                  }
+                },
+                "source_tx_ns": 3028,
+                "destination_arrival_ns": 8632,
+                "dropped": true
+              }
+            },
+            {
+              "source_packet": {
+                "time_ns": 18935,
+                "stream": 479,
+                "src": 12,
+                "dst": 32,
+                "nic": 1,
+                "sequence": 0,
+                "payload_bytes": 9000,
+                "packet_uid": 835
+              },
+              "path": {
+                "events": [
+                  {
+                    "time_ns": 18935,
+                    "node": 12,
+                    "port": 1,
+                    "event": 0,
+                    "packet_uid": 835,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 20116,
+                    "node": 129,
+                    "port": 5,
+                    "event": 1,
+                    "packet_uid": 835,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 20357,
+                    "node": 129,
+                    "port": 18,
+                    "event": 0,
+                    "packet_uid": 835,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 5500,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 21538,
+                    "node": 133,
+                    "port": 2,
+                    "event": 1,
+                    "packet_uid": 835,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 14472,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 21719,
+                    "node": 133,
+                    "port": 1,
+                    "event": 0,
+                    "packet_uid": 835,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 10936,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 22900,
+                    "node": 128,
+                    "port": 18,
+                    "event": 1,
+                    "packet_uid": 835,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 22900,
+                    "node": 128,
+                    "port": 9,
+                    "event": 0,
+                    "packet_uid": 835,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 24081,
+                    "node": 32,
+                    "port": 1,
+                    "event": 2,
+                    "packet_uid": 835,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  }
+                ],
+                "switches": {
+                  "129": {
+                    "rx_ns": 20116,
+                    "tx_ns": 20357,
+                    "port": 18,
+                    "residence_ns": 241
+                  },
+                  "133": {
+                    "rx_ns": 21538,
+                    "tx_ns": 21719,
+                    "port": 1,
+                    "residence_ns": 181
+                  },
+                  "128": {
+                    "rx_ns": 22900,
+                    "tx_ns": 22900,
+                    "port": 9,
+                    "residence_ns": 0
+                  }
+                },
+                "source_tx_ns": 18935,
+                "destination_arrival_ns": 24081,
+                "dropped": true
+              }
+            },
+            {
+              "source_packet": {
+                "time_ns": 19116,
+                "stream": 479,
+                "src": 12,
+                "dst": 32,
+                "nic": 1,
+                "sequence": 9000,
+                "payload_bytes": 5464,
+                "packet_uid": 871
+              },
+              "path": {
+                "events": [
+                  {
+                    "time_ns": 19116,
+                    "node": 12,
+                    "port": 1,
+                    "event": 0,
+                    "packet_uid": 871,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 20226,
+                    "node": 129,
+                    "port": 5,
+                    "event": 1,
+                    "packet_uid": 871,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 20538,
+                    "node": 129,
+                    "port": 18,
+                    "event": 0,
+                    "packet_uid": 871,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 21648,
+                    "node": 133,
+                    "port": 2,
+                    "event": 1,
+                    "packet_uid": 871,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 9036,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 22009,
+                    "node": 133,
+                    "port": 1,
+                    "event": 0,
+                    "packet_uid": 871,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 23119,
+                    "node": 128,
+                    "port": 18,
+                    "event": 1,
+                    "packet_uid": 871,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 23119,
+                    "node": 128,
+                    "port": 9,
+                    "event": 0,
+                    "packet_uid": 871,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 24229,
+                    "node": 32,
+                    "port": 1,
+                    "event": 2,
+                    "packet_uid": 871,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  }
+                ],
+                "switches": {
+                  "129": {
+                    "rx_ns": 20226,
+                    "tx_ns": 20538,
+                    "port": 18,
+                    "residence_ns": 312
+                  },
+                  "133": {
+                    "rx_ns": 21648,
+                    "tx_ns": 22009,
+                    "port": 1,
+                    "residence_ns": 361
+                  },
+                  "128": {
+                    "rx_ns": 23119,
+                    "tx_ns": 23119,
+                    "port": 9,
+                    "residence_ns": 0
+                  }
+                },
+                "source_tx_ns": 19116,
+                "destination_arrival_ns": 24229,
+                "dropped": true
+              }
+            },
+            {
+              "source_packet": {
+                "time_ns": 52935,
+                "stream": 479,
+                "src": 12,
+                "dst": 32,
+                "nic": 1,
+                "sequence": 0,
+                "payload_bytes": 9000,
+                "packet_uid": 1735
+              },
+              "path": {
+                "events": [
+                  {
+                    "time_ns": 52935,
+                    "node": 12,
+                    "port": 1,
+                    "event": 0,
+                    "packet_uid": 1735,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 54116,
+                    "node": 129,
+                    "port": 5,
+                    "event": 1,
+                    "packet_uid": 1735,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 54116,
+                    "node": 129,
+                    "port": 18,
+                    "event": 0,
+                    "packet_uid": 1735,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 55297,
+                    "node": 133,
+                    "port": 2,
+                    "event": 1,
+                    "packet_uid": 1735,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 5436,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 55297,
+                    "node": 133,
+                    "port": 1,
+                    "event": 0,
+                    "packet_uid": 1735,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 56478,
+                    "node": 128,
+                    "port": 18,
+                    "event": 1,
+                    "packet_uid": 1735,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 56478,
+                    "node": 128,
+                    "port": 9,
+                    "event": 0,
+                    "packet_uid": 1735,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 57659,
+                    "node": 32,
+                    "port": 1,
+                    "event": 2,
+                    "packet_uid": 1735,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  }
+                ],
+                "switches": {
+                  "129": {
+                    "rx_ns": 54116,
+                    "tx_ns": 54116,
+                    "port": 18,
+                    "residence_ns": 0
+                  },
+                  "133": {
+                    "rx_ns": 55297,
+                    "tx_ns": 55297,
+                    "port": 1,
+                    "residence_ns": 0
+                  },
+                  "128": {
+                    "rx_ns": 56478,
+                    "tx_ns": 56478,
+                    "port": 9,
+                    "residence_ns": 0
+                  }
+                },
+                "source_tx_ns": 52935,
+                "destination_arrival_ns": 57659,
+                "dropped": true
+              }
+            },
+            {
+              "source_packet": {
+                "time_ns": 53116,
+                "stream": 479,
+                "src": 12,
+                "dst": 32,
+                "nic": 1,
+                "sequence": 9000,
+                "payload_bytes": 5464,
+                "packet_uid": 1763
+              },
+              "path": {
+                "events": [
+                  {
+                    "time_ns": 53116,
+                    "node": 12,
+                    "port": 1,
+                    "event": 0,
+                    "packet_uid": 1763,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 54226,
+                    "node": 129,
+                    "port": 5,
+                    "event": 1,
+                    "packet_uid": 1763,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 54297,
+                    "node": 129,
+                    "port": 18,
+                    "event": 0,
+                    "packet_uid": 1763,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 55407,
+                    "node": 133,
+                    "port": 2,
+                    "event": 1,
+                    "packet_uid": 1763,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 5436,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 55478,
+                    "node": 133,
+                    "port": 1,
+                    "event": 0,
+                    "packet_uid": 1763,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 56588,
+                    "node": 128,
+                    "port": 18,
+                    "event": 1,
+                    "packet_uid": 1763,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 56659,
+                    "node": 128,
+                    "port": 9,
+                    "event": 0,
+                    "packet_uid": 1763,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 57769,
+                    "node": 32,
+                    "port": 1,
+                    "event": 2,
+                    "packet_uid": 1763,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  }
+                ],
+                "switches": {
+                  "129": {
+                    "rx_ns": 54226,
+                    "tx_ns": 54297,
+                    "port": 18,
+                    "residence_ns": 71
+                  },
+                  "133": {
+                    "rx_ns": 55407,
+                    "tx_ns": 55478,
+                    "port": 1,
+                    "residence_ns": 71
+                  },
+                  "128": {
+                    "rx_ns": 56588,
+                    "tx_ns": 56659,
+                    "port": 9,
+                    "residence_ns": 71
+                  }
+                },
+                "source_tx_ns": 53116,
+                "destination_arrival_ns": 57769,
+                "dropped": true
+              }
+            },
+            {
+              "source_packet": {
+                "time_ns": 120935,
+                "stream": 479,
+                "src": 12,
+                "dst": 32,
+                "nic": 1,
+                "sequence": 0,
+                "payload_bytes": 9000,
+                "packet_uid": 3572
+              },
+              "path": {
+                "events": [
+                  {
+                    "time_ns": 120935,
+                    "node": 12,
+                    "port": 1,
+                    "event": 0,
+                    "packet_uid": 3572,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 122116,
+                    "node": 129,
+                    "port": 5,
+                    "event": 1,
+                    "packet_uid": 3572,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 122116,
+                    "node": 129,
+                    "port": 18,
+                    "event": 0,
+                    "packet_uid": 3572,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 123297,
+                    "node": 133,
+                    "port": 2,
+                    "event": 1,
+                    "packet_uid": 3572,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 123297,
+                    "node": 133,
+                    "port": 1,
+                    "event": 0,
+                    "packet_uid": 3572,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 124478,
+                    "node": 128,
+                    "port": 18,
+                    "event": 1,
+                    "packet_uid": 3572,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 124478,
+                    "node": 128,
+                    "port": 9,
+                    "event": 0,
+                    "packet_uid": 3572,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 125659,
+                    "node": 32,
+                    "port": 1,
+                    "event": 1,
+                    "packet_uid": 3572,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  }
+                ],
+                "switches": {
+                  "129": {
+                    "rx_ns": 122116,
+                    "tx_ns": 122116,
+                    "port": 18,
+                    "residence_ns": 0
+                  },
+                  "133": {
+                    "rx_ns": 123297,
+                    "tx_ns": 123297,
+                    "port": 1,
+                    "residence_ns": 0
+                  },
+                  "128": {
+                    "rx_ns": 124478,
+                    "tx_ns": 124478,
+                    "port": 9,
+                    "residence_ns": 0
+                  }
+                },
+                "source_tx_ns": 120935,
+                "destination_arrival_ns": 125659,
+                "dropped": false
+              }
+            },
+            {
+              "source_packet": {
+                "time_ns": 121116,
+                "stream": 479,
+                "src": 12,
+                "dst": 32,
+                "nic": 1,
+                "sequence": 9000,
+                "payload_bytes": 5464,
+                "packet_uid": 3576
+              },
+              "path": {
+                "events": [
+                  {
+                    "time_ns": 121116,
+                    "node": 12,
+                    "port": 1,
+                    "event": 0,
+                    "packet_uid": 3576,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 122226,
+                    "node": 129,
+                    "port": 5,
+                    "event": 1,
+                    "packet_uid": 3576,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 122297,
+                    "node": 129,
+                    "port": 18,
+                    "event": 0,
+                    "packet_uid": 3576,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 123407,
+                    "node": 133,
+                    "port": 2,
+                    "event": 1,
+                    "packet_uid": 3576,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 123478,
+                    "node": 133,
+                    "port": 1,
+                    "event": 0,
+                    "packet_uid": 3576,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 124588,
+                    "node": 128,
+                    "port": 18,
+                    "event": 1,
+                    "packet_uid": 3576,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 124659,
+                    "node": 128,
+                    "port": 9,
+                    "event": 0,
+                    "packet_uid": 3576,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 125769,
+                    "node": 32,
+                    "port": 1,
+                    "event": 1,
+                    "packet_uid": 3576,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  }
+                ],
+                "switches": {
+                  "129": {
+                    "rx_ns": 122226,
+                    "tx_ns": 122297,
+                    "port": 18,
+                    "residence_ns": 71
+                  },
+                  "133": {
+                    "rx_ns": 123407,
+                    "tx_ns": 123478,
+                    "port": 1,
+                    "residence_ns": 71
+                  },
+                  "128": {
+                    "rx_ns": 124588,
+                    "tx_ns": 124659,
+                    "port": 9,
+                    "residence_ns": 71
+                  }
+                },
+                "source_tx_ns": 121116,
+                "destination_arrival_ns": 125769,
+                "dropped": false
+              }
+            }
+          ]
+        }
+      ],
+      "first_dispatch_ns": 129773,
+      "timeouts": [
+        {
+          "time_ns": 18030,
+          "event": 2,
+          "source": 0,
+          "message_id": 14,
+          "acknowledged_bytes": 0,
+          "highest_sent_bytes": 14464,
+          "retries_since_progress": 1,
+          "rto_ns": 34000,
+          "deadline_ns": 52030
+        },
+        {
+          "time_ns": 18935,
+          "event": 2,
+          "source": 12,
+          "message_id": 479,
+          "acknowledged_bytes": 0,
+          "highest_sent_bytes": 14464,
+          "retries_since_progress": 1,
+          "rto_ns": 34000,
+          "deadline_ns": 52935
+        },
+        {
+          "time_ns": 52030,
+          "event": 2,
+          "source": 0,
+          "message_id": 14,
+          "acknowledged_bytes": 0,
+          "highest_sent_bytes": 14464,
+          "retries_since_progress": 2,
+          "rto_ns": 68000,
+          "deadline_ns": 120030
+        },
+        {
+          "time_ns": 52935,
+          "event": 2,
+          "source": 12,
+          "message_id": 479,
+          "acknowledged_bytes": 0,
+          "highest_sent_bytes": 14464,
+          "retries_since_progress": 2,
+          "rto_ns": 68000,
+          "deadline_ns": 120935
+        },
+        {
+          "time_ns": 120030,
+          "event": 2,
+          "source": 0,
+          "message_id": 14,
+          "acknowledged_bytes": 0,
+          "highest_sent_bytes": 14464,
+          "retries_since_progress": 3,
+          "rto_ns": 136000,
+          "deadline_ns": 256030
+        },
+        {
+          "time_ns": 120935,
+          "event": 2,
+          "source": 12,
+          "message_id": 479,
+          "acknowledged_bytes": 0,
+          "highest_sent_bytes": 14464,
+          "retries_since_progress": 3,
+          "rto_ns": 136000,
+          "deadline_ns": 256935
+        }
+      ]
+    },
+    "calibrated-loss60": {
+      "damaged": [
+        {
+          "message": {
+            "ack_ns": 131504,
+            "begin": 0,
+            "bytes": 14464,
+            "contributions": 1,
+            "dst": 32,
+            "end": 14464,
+            "id": 7,
+            "layer": 0,
+            "phase": "dispatch",
+            "plane": 0,
+            "published_ns": 1030,
+            "ready_ns": 1030,
+            "receive_ready_ns": 129502,
+            "src": 0,
+            "stream": 14,
+            "tag": 7,
+            "transport_tokens": 1
+          },
+          "attempts": [
+            {
+              "source_packet": {
+                "time_ns": 1030,
+                "stream": 14,
+                "src": 0,
+                "dst": 32,
+                "nic": 1,
+                "sequence": 0,
+                "payload_bytes": 9000,
+                "packet_uid": 0
+              },
+              "path": {
+                "events": [
+                  {
+                    "time_ns": 1030,
+                    "node": 0,
+                    "port": 1,
+                    "event": 0,
+                    "packet_uid": 0,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 2211,
+                    "node": 128,
+                    "port": 1,
+                    "event": 1,
+                    "packet_uid": 0,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 2211,
+                    "node": 128,
+                    "port": 9,
+                    "event": 0,
+                    "packet_uid": 0,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 3392,
+                    "node": 32,
+                    "port": 1,
+                    "event": 2,
+                    "packet_uid": 0,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  }
+                ],
+                "switches": {
+                  "128": {
+                    "rx_ns": 2211,
+                    "tx_ns": 2211,
+                    "port": 9,
+                    "residence_ns": 0
+                  }
+                },
+                "source_tx_ns": 1030,
+                "destination_arrival_ns": 3392,
+                "dropped": true
+              }
+            },
+            {
+              "source_packet": {
+                "time_ns": 2116,
+                "stream": 14,
+                "src": 0,
+                "dst": 32,
+                "nic": 1,
+                "sequence": 9000,
+                "payload_bytes": 5464,
+                "packet_uid": 182
+              },
+              "path": {
+                "events": [
+                  {
+                    "time_ns": 2116,
+                    "node": 0,
+                    "port": 1,
+                    "event": 0,
+                    "packet_uid": 182,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 3226,
+                    "node": 128,
+                    "port": 1,
+                    "event": 1,
+                    "packet_uid": 182,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 3226,
+                    "node": 128,
+                    "port": 9,
+                    "event": 0,
+                    "packet_uid": 182,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 4336,
+                    "node": 32,
+                    "port": 1,
+                    "event": 2,
+                    "packet_uid": 182,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  }
+                ],
+                "switches": {
+                  "128": {
+                    "rx_ns": 3226,
+                    "tx_ns": 3226,
+                    "port": 9,
+                    "residence_ns": 0
+                  }
+                },
+                "source_tx_ns": 2116,
+                "destination_arrival_ns": 4336,
+                "dropped": true
+              }
+            },
+            {
+              "source_packet": {
+                "time_ns": 19030,
+                "stream": 14,
+                "src": 0,
+                "dst": 32,
+                "nic": 1,
+                "sequence": 0,
+                "payload_bytes": 9000,
+                "packet_uid": 843
+              },
+              "path": {
+                "events": [
+                  {
+                    "time_ns": 19030,
+                    "node": 0,
+                    "port": 1,
+                    "event": 0,
+                    "packet_uid": 843,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 20211,
+                    "node": 128,
+                    "port": 1,
+                    "event": 1,
+                    "packet_uid": 843,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 20211,
+                    "node": 128,
+                    "port": 9,
+                    "event": 0,
+                    "packet_uid": 843,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 21392,
+                    "node": 32,
+                    "port": 1,
+                    "event": 2,
+                    "packet_uid": 843,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  }
+                ],
+                "switches": {
+                  "128": {
+                    "rx_ns": 20211,
+                    "tx_ns": 20211,
+                    "port": 9,
+                    "residence_ns": 0
+                  }
+                },
+                "source_tx_ns": 19030,
+                "destination_arrival_ns": 21392,
+                "dropped": true
+              }
+            },
+            {
+              "source_packet": {
+                "time_ns": 19211,
+                "stream": 14,
+                "src": 0,
+                "dst": 32,
+                "nic": 1,
+                "sequence": 9000,
+                "payload_bytes": 5464,
+                "packet_uid": 887
+              },
+              "path": {
+                "events": [
+                  {
+                    "time_ns": 19211,
+                    "node": 0,
+                    "port": 1,
+                    "event": 0,
+                    "packet_uid": 887,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 20321,
+                    "node": 128,
+                    "port": 1,
+                    "event": 1,
+                    "packet_uid": 887,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 20392,
+                    "node": 128,
+                    "port": 9,
+                    "event": 0,
+                    "packet_uid": 887,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 21502,
+                    "node": 32,
+                    "port": 1,
+                    "event": 2,
+                    "packet_uid": 887,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  }
+                ],
+                "switches": {
+                  "128": {
+                    "rx_ns": 20321,
+                    "tx_ns": 20392,
+                    "port": 9,
+                    "residence_ns": 71
+                  }
+                },
+                "source_tx_ns": 19211,
+                "destination_arrival_ns": 21502,
+                "dropped": true
+              }
+            },
+            {
+              "source_packet": {
+                "time_ns": 55030,
+                "stream": 14,
+                "src": 0,
+                "dst": 32,
+                "nic": 1,
+                "sequence": 0,
+                "payload_bytes": 9000,
+                "packet_uid": 1792
+              },
+              "path": {
+                "events": [
+                  {
+                    "time_ns": 55030,
+                    "node": 0,
+                    "port": 1,
+                    "event": 0,
+                    "packet_uid": 1792,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 56211,
+                    "node": 128,
+                    "port": 1,
+                    "event": 1,
+                    "packet_uid": 1792,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 56211,
+                    "node": 128,
+                    "port": 9,
+                    "event": 0,
+                    "packet_uid": 1792,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 57392,
+                    "node": 32,
+                    "port": 1,
+                    "event": 2,
+                    "packet_uid": 1792,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  }
+                ],
+                "switches": {
+                  "128": {
+                    "rx_ns": 56211,
+                    "tx_ns": 56211,
+                    "port": 9,
+                    "residence_ns": 0
+                  }
+                },
+                "source_tx_ns": 55030,
+                "destination_arrival_ns": 57392,
+                "dropped": true
+              }
+            },
+            {
+              "source_packet": {
+                "time_ns": 55211,
+                "stream": 14,
+                "src": 0,
+                "dst": 32,
+                "nic": 1,
+                "sequence": 9000,
+                "payload_bytes": 5464,
+                "packet_uid": 1796
+              },
+              "path": {
+                "events": [
+                  {
+                    "time_ns": 55211,
+                    "node": 0,
+                    "port": 1,
+                    "event": 0,
+                    "packet_uid": 1796,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 56321,
+                    "node": 128,
+                    "port": 1,
+                    "event": 1,
+                    "packet_uid": 1796,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 56392,
+                    "node": 128,
+                    "port": 9,
+                    "event": 0,
+                    "packet_uid": 1796,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 57502,
+                    "node": 32,
+                    "port": 1,
+                    "event": 2,
+                    "packet_uid": 1796,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  }
+                ],
+                "switches": {
+                  "128": {
+                    "rx_ns": 56321,
+                    "tx_ns": 56392,
+                    "port": 9,
+                    "residence_ns": 71
+                  }
+                },
+                "source_tx_ns": 55211,
+                "destination_arrival_ns": 57502,
+                "dropped": true
+              }
+            },
+            {
+              "source_packet": {
+                "time_ns": 127030,
+                "stream": 14,
+                "src": 0,
+                "dst": 32,
+                "nic": 1,
+                "sequence": 0,
+                "payload_bytes": 9000,
+                "packet_uid": 3650
+              },
+              "path": {
+                "events": [
+                  {
+                    "time_ns": 127030,
+                    "node": 0,
+                    "port": 1,
+                    "event": 0,
+                    "packet_uid": 3650,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 128211,
+                    "node": 128,
+                    "port": 1,
+                    "event": 1,
+                    "packet_uid": 3650,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 128211,
+                    "node": 128,
+                    "port": 9,
+                    "event": 0,
+                    "packet_uid": 3650,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 129392,
+                    "node": 32,
+                    "port": 1,
+                    "event": 1,
+                    "packet_uid": 3650,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  }
+                ],
+                "switches": {
+                  "128": {
+                    "rx_ns": 128211,
+                    "tx_ns": 128211,
+                    "port": 9,
+                    "residence_ns": 0
+                  }
+                },
+                "source_tx_ns": 127030,
+                "destination_arrival_ns": 129392,
+                "dropped": false
+              }
+            },
+            {
+              "source_packet": {
+                "time_ns": 127211,
+                "stream": 14,
+                "src": 0,
+                "dst": 32,
+                "nic": 1,
+                "sequence": 9000,
+                "payload_bytes": 5464,
+                "packet_uid": 3652
+              },
+              "path": {
+                "events": [
+                  {
+                    "time_ns": 127211,
+                    "node": 0,
+                    "port": 1,
+                    "event": 0,
+                    "packet_uid": 3652,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 128321,
+                    "node": 128,
+                    "port": 1,
+                    "event": 1,
+                    "packet_uid": 3652,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 128392,
+                    "node": 128,
+                    "port": 9,
+                    "event": 0,
+                    "packet_uid": 3652,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 129502,
+                    "node": 32,
+                    "port": 1,
+                    "event": 1,
+                    "packet_uid": 3652,
+                    "message_id": 14,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  }
+                ],
+                "switches": {
+                  "128": {
+                    "rx_ns": 128321,
+                    "tx_ns": 128392,
+                    "port": 9,
+                    "residence_ns": 71
+                  }
+                },
+                "source_tx_ns": 127211,
+                "destination_arrival_ns": 129502,
+                "dropped": false
+              }
+            }
+          ]
+        },
+        {
+          "message": {
+            "ack_ns": 64979,
+            "begin": 0,
+            "bytes": 14464,
+            "contributions": 1,
+            "dst": 32,
+            "end": 14464,
+            "id": 100,
+            "layer": 0,
+            "phase": "dispatch",
+            "plane": 0,
+            "published_ns": 1030,
+            "ready_ns": 1030,
+            "receive_ready_ns": 60975,
+            "src": 12,
+            "stream": 479,
+            "tag": 100,
+            "transport_tokens": 1
+          },
+          "attempts": [
+            {
+              "source_packet": {
+                "time_ns": 1935,
+                "stream": 479,
+                "src": 12,
+                "dst": 32,
+                "nic": 1,
+                "sequence": 0,
+                "payload_bytes": 9000,
+                "packet_uid": 156
+              },
+              "path": {
+                "events": [
+                  {
+                    "time_ns": 1935,
+                    "node": 12,
+                    "port": 1,
+                    "event": 0,
+                    "packet_uid": 156,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 3116,
+                    "node": 129,
+                    "port": 5,
+                    "event": 1,
+                    "packet_uid": 156,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 3840,
+                    "node": 129,
+                    "port": 18,
+                    "event": 0,
+                    "packet_uid": 156,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 47536,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 5021,
+                    "node": 133,
+                    "port": 2,
+                    "event": 1,
+                    "packet_uid": 156,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 5021,
+                    "node": 133,
+                    "port": 1,
+                    "event": 0,
+                    "packet_uid": 156,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 6202,
+                    "node": 128,
+                    "port": 18,
+                    "event": 1,
+                    "packet_uid": 156,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 38500,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 6202,
+                    "node": 128,
+                    "port": 9,
+                    "event": 0,
+                    "packet_uid": 156,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 7383,
+                    "node": 32,
+                    "port": 1,
+                    "event": 2,
+                    "packet_uid": 156,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  }
+                ],
+                "switches": {
+                  "129": {
+                    "rx_ns": 3116,
+                    "tx_ns": 3840,
+                    "port": 18,
+                    "residence_ns": 724
+                  },
+                  "133": {
+                    "rx_ns": 5021,
+                    "tx_ns": 5021,
+                    "port": 1,
+                    "residence_ns": 0
+                  },
+                  "128": {
+                    "rx_ns": 6202,
+                    "tx_ns": 6202,
+                    "port": 9,
+                    "residence_ns": 0
+                  }
+                },
+                "source_tx_ns": 1935,
+                "destination_arrival_ns": 7383,
+                "dropped": true
+              }
+            },
+            {
+              "source_packet": {
+                "time_ns": 3028,
+                "stream": 479,
+                "src": 12,
+                "dst": 32,
+                "nic": 1,
+                "sequence": 9000,
+                "payload_bytes": 5464,
+                "packet_uid": 392
+              },
+              "path": {
+                "events": [
+                  {
+                    "time_ns": 3028,
+                    "node": 12,
+                    "port": 1,
+                    "event": 0,
+                    "packet_uid": 392,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 4138,
+                    "node": 129,
+                    "port": 5,
+                    "event": 1,
+                    "packet_uid": 392,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 5302,
+                    "node": 129,
+                    "port": 18,
+                    "event": 0,
+                    "packet_uid": 392,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 6412,
+                    "node": 133,
+                    "port": 2,
+                    "event": 1,
+                    "packet_uid": 392,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 6412,
+                    "node": 133,
+                    "port": 1,
+                    "event": 0,
+                    "packet_uid": 392,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 7522,
+                    "node": 128,
+                    "port": 18,
+                    "event": 1,
+                    "packet_uid": 392,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 7522,
+                    "node": 128,
+                    "port": 9,
+                    "event": 0,
+                    "packet_uid": 392,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 8632,
+                    "node": 32,
+                    "port": 1,
+                    "event": 2,
+                    "packet_uid": 392,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  }
+                ],
+                "switches": {
+                  "129": {
+                    "rx_ns": 4138,
+                    "tx_ns": 5302,
+                    "port": 18,
+                    "residence_ns": 1164
+                  },
+                  "133": {
+                    "rx_ns": 6412,
+                    "tx_ns": 6412,
+                    "port": 1,
+                    "residence_ns": 0
+                  },
+                  "128": {
+                    "rx_ns": 7522,
+                    "tx_ns": 7522,
+                    "port": 9,
+                    "residence_ns": 0
+                  }
+                },
+                "source_tx_ns": 3028,
+                "destination_arrival_ns": 8632,
+                "dropped": true
+              }
+            },
+            {
+              "source_packet": {
+                "time_ns": 19935,
+                "stream": 479,
+                "src": 12,
+                "dst": 32,
+                "nic": 1,
+                "sequence": 0,
+                "payload_bytes": 9000,
+                "packet_uid": 925
+              },
+              "path": {
+                "events": [
+                  {
+                    "time_ns": 19935,
+                    "node": 12,
+                    "port": 1,
+                    "event": 0,
+                    "packet_uid": 925,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 21116,
+                    "node": 129,
+                    "port": 5,
+                    "event": 1,
+                    "packet_uid": 925,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 21116,
+                    "node": 129,
+                    "port": 18,
+                    "event": 0,
+                    "packet_uid": 925,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 22297,
+                    "node": 133,
+                    "port": 2,
+                    "event": 1,
+                    "packet_uid": 925,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 22297,
+                    "node": 133,
+                    "port": 1,
+                    "event": 0,
+                    "packet_uid": 925,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 23478,
+                    "node": 128,
+                    "port": 18,
+                    "event": 1,
+                    "packet_uid": 925,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 23478,
+                    "node": 128,
+                    "port": 9,
+                    "event": 0,
+                    "packet_uid": 925,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 24659,
+                    "node": 32,
+                    "port": 1,
+                    "event": 2,
+                    "packet_uid": 925,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  }
+                ],
+                "switches": {
+                  "129": {
+                    "rx_ns": 21116,
+                    "tx_ns": 21116,
+                    "port": 18,
+                    "residence_ns": 0
+                  },
+                  "133": {
+                    "rx_ns": 22297,
+                    "tx_ns": 22297,
+                    "port": 1,
+                    "residence_ns": 0
+                  },
+                  "128": {
+                    "rx_ns": 23478,
+                    "tx_ns": 23478,
+                    "port": 9,
+                    "residence_ns": 0
+                  }
+                },
+                "source_tx_ns": 19935,
+                "destination_arrival_ns": 24659,
+                "dropped": true
+              }
+            },
+            {
+              "source_packet": {
+                "time_ns": 20116,
+                "stream": 479,
+                "src": 12,
+                "dst": 32,
+                "nic": 1,
+                "sequence": 9000,
+                "payload_bytes": 5464,
+                "packet_uid": 927
+              },
+              "path": {
+                "events": [
+                  {
+                    "time_ns": 20116,
+                    "node": 12,
+                    "port": 1,
+                    "event": 0,
+                    "packet_uid": 927,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 21226,
+                    "node": 129,
+                    "port": 5,
+                    "event": 1,
+                    "packet_uid": 927,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 21297,
+                    "node": 129,
+                    "port": 18,
+                    "event": 0,
+                    "packet_uid": 927,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 22407,
+                    "node": 133,
+                    "port": 2,
+                    "event": 1,
+                    "packet_uid": 927,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 22478,
+                    "node": 133,
+                    "port": 1,
+                    "event": 0,
+                    "packet_uid": 927,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 23588,
+                    "node": 128,
+                    "port": 18,
+                    "event": 1,
+                    "packet_uid": 927,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 23659,
+                    "node": 128,
+                    "port": 9,
+                    "event": 0,
+                    "packet_uid": 927,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 24769,
+                    "node": 32,
+                    "port": 1,
+                    "event": 2,
+                    "packet_uid": 927,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  }
+                ],
+                "switches": {
+                  "129": {
+                    "rx_ns": 21226,
+                    "tx_ns": 21297,
+                    "port": 18,
+                    "residence_ns": 71
+                  },
+                  "133": {
+                    "rx_ns": 22407,
+                    "tx_ns": 22478,
+                    "port": 1,
+                    "residence_ns": 71
+                  },
+                  "128": {
+                    "rx_ns": 23588,
+                    "tx_ns": 23659,
+                    "port": 9,
+                    "residence_ns": 71
+                  }
+                },
+                "source_tx_ns": 20116,
+                "destination_arrival_ns": 24769,
+                "dropped": true
+              }
+            },
+            {
+              "source_packet": {
+                "time_ns": 55935,
+                "stream": 479,
+                "src": 12,
+                "dst": 32,
+                "nic": 1,
+                "sequence": 0,
+                "payload_bytes": 9000,
+                "packet_uid": 1801
+              },
+              "path": {
+                "events": [
+                  {
+                    "time_ns": 55935,
+                    "node": 12,
+                    "port": 1,
+                    "event": 0,
+                    "packet_uid": 1801,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 57116,
+                    "node": 129,
+                    "port": 5,
+                    "event": 1,
+                    "packet_uid": 1801,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 57116,
+                    "node": 129,
+                    "port": 18,
+                    "event": 0,
+                    "packet_uid": 1801,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 58297,
+                    "node": 133,
+                    "port": 2,
+                    "event": 1,
+                    "packet_uid": 1801,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 58393,
+                    "node": 133,
+                    "port": 1,
+                    "event": 0,
+                    "packet_uid": 1801,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 9036,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 59574,
+                    "node": 128,
+                    "port": 18,
+                    "event": 1,
+                    "packet_uid": 1801,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 59574,
+                    "node": 128,
+                    "port": 9,
+                    "event": 0,
+                    "packet_uid": 1801,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  },
+                  {
+                    "time_ns": 60755,
+                    "node": 32,
+                    "port": 1,
+                    "event": 1,
+                    "packet_uid": 1801,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 0,
+                    "model_bytes": 9036,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 9000
+                  }
+                ],
+                "switches": {
+                  "129": {
+                    "rx_ns": 57116,
+                    "tx_ns": 57116,
+                    "port": 18,
+                    "residence_ns": 0
+                  },
+                  "133": {
+                    "rx_ns": 58297,
+                    "tx_ns": 58393,
+                    "port": 1,
+                    "residence_ns": 96
+                  },
+                  "128": {
+                    "rx_ns": 59574,
+                    "tx_ns": 59574,
+                    "port": 9,
+                    "residence_ns": 0
+                  }
+                },
+                "source_tx_ns": 55935,
+                "destination_arrival_ns": 60755,
+                "dropped": false
+              }
+            },
+            {
+              "source_packet": {
+                "time_ns": 56116,
+                "stream": 479,
+                "src": 12,
+                "dst": 32,
+                "nic": 1,
+                "sequence": 9000,
+                "payload_bytes": 5464,
+                "packet_uid": 1803
+              },
+              "path": {
+                "events": [
+                  {
+                    "time_ns": 56116,
+                    "node": 12,
+                    "port": 1,
+                    "event": 0,
+                    "packet_uid": 1803,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 57226,
+                    "node": 129,
+                    "port": 5,
+                    "event": 1,
+                    "packet_uid": 1803,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 57297,
+                    "node": 129,
+                    "port": 18,
+                    "event": 0,
+                    "packet_uid": 1803,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 58407,
+                    "node": 133,
+                    "port": 2,
+                    "event": 1,
+                    "packet_uid": 1803,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 58755,
+                    "node": 133,
+                    "port": 1,
+                    "event": 0,
+                    "packet_uid": 1803,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 14472,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 59865,
+                    "node": 128,
+                    "port": 18,
+                    "event": 1,
+                    "packet_uid": 1803,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 59865,
+                    "node": 128,
+                    "port": 9,
+                    "event": 0,
+                    "packet_uid": 1803,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  },
+                  {
+                    "time_ns": 60975,
+                    "node": 32,
+                    "port": 1,
+                    "event": 1,
+                    "packet_uid": 1803,
+                    "message_id": 479,
+                    "ip_protocol": 17,
+                    "sequence": 9000,
+                    "model_bytes": 5500,
+                    "ecn": 0,
+                    "egress_queue_bytes": 0,
+                    "data_payload_bytes": 5464
+                  }
+                ],
+                "switches": {
+                  "129": {
+                    "rx_ns": 57226,
+                    "tx_ns": 57297,
+                    "port": 18,
+                    "residence_ns": 71
+                  },
+                  "133": {
+                    "rx_ns": 58407,
+                    "tx_ns": 58755,
+                    "port": 1,
+                    "residence_ns": 348
+                  },
+                  "128": {
+                    "rx_ns": 59865,
+                    "tx_ns": 59865,
+                    "port": 9,
+                    "residence_ns": 0
+                  }
+                },
+                "source_tx_ns": 56116,
+                "destination_arrival_ns": 60975,
+                "dropped": false
+              }
+            }
+          ]
+        }
+      ],
+      "first_dispatch_ns": 131504,
+      "timeouts": [
+        {
+          "time_ns": 19030,
+          "event": 2,
+          "source": 0,
+          "message_id": 14,
+          "acknowledged_bytes": 0,
+          "highest_sent_bytes": 14464,
+          "retries_since_progress": 1,
+          "rto_ns": 36000,
+          "deadline_ns": 55030
+        },
+        {
+          "time_ns": 19935,
+          "event": 2,
+          "source": 12,
+          "message_id": 479,
+          "acknowledged_bytes": 0,
+          "highest_sent_bytes": 14464,
+          "retries_since_progress": 1,
+          "rto_ns": 36000,
+          "deadline_ns": 55935
+        },
+        {
+          "time_ns": 55030,
+          "event": 2,
+          "source": 0,
+          "message_id": 14,
+          "acknowledged_bytes": 0,
+          "highest_sent_bytes": 14464,
+          "retries_since_progress": 2,
+          "rto_ns": 72000,
+          "deadline_ns": 127030
+        },
+        {
+          "time_ns": 55935,
+          "event": 2,
+          "source": 12,
+          "message_id": 479,
+          "acknowledged_bytes": 0,
+          "highest_sent_bytes": 14464,
+          "retries_since_progress": 2,
+          "rto_ns": 72000,
+          "deadline_ns": 127935
+        },
+        {
+          "time_ns": 127030,
+          "event": 2,
+          "source": 0,
+          "message_id": 14,
+          "acknowledged_bytes": 0,
+          "highest_sent_bytes": 14464,
+          "retries_since_progress": 3,
+          "rto_ns": 144000,
+          "deadline_ns": 271030
+        }
+      ]
+    },
+    "base-loss20": {
+      "critical_message": {
+        "ack_ns": 101329,
+        "begin": 14400,
+        "bytes": 14400,
+        "contributions": 1,
+        "dst": 14,
+        "end": 28800,
+        "id": 25485,
+        "layer": 0,
+        "phase": "combine",
+        "plane": 0,
+        "published_ns": 86358,
+        "ready_ns": 86358,
+        "receive_ready_ns": 95323,
+        "src": 90,
+        "stream": 910,
+        "tag": 25485,
+        "transport_tokens": 1
+      },
+      "gate_ns": 101329,
+      "last_payload_source": {
+        "time_ns": 87119,
+        "stream": 910,
+        "src": 90,
+        "dst": 14,
+        "nic": 1,
+        "sequence": 23400,
+        "payload_bytes": 5400,
+        "packet_uid": 2657
+      },
+      "data_path": {
+        "events": [
+          {
+            "time_ns": 87119,
+            "node": 90,
+            "port": 1,
+            "event": 0,
+            "packet_uid": 2657,
+            "message_id": 910,
+            "ip_protocol": 17,
+            "sequence": 23400,
+            "model_bytes": 5436,
+            "ecn": 0,
+            "egress_queue_bytes": 0,
+            "data_payload_bytes": 5400
+          },
+          {
+            "time_ns": 88228,
+            "node": 139,
+            "port": 3,
+            "event": 1,
+            "packet_uid": 2657,
+            "message_id": 910,
+            "ip_protocol": 17,
+            "sequence": 23400,
+            "model_bytes": 5436,
+            "ecn": 0,
+            "egress_queue_bytes": 0,
+            "data_payload_bytes": 5400
+          },
+          {
+            "time_ns": 88228,
+            "node": 139,
+            "port": 18,
+            "event": 0,
+            "packet_uid": 2657,
+            "message_id": 910,
+            "ip_protocol": 17,
+            "sequence": 23400,
+            "model_bytes": 5436,
+            "ecn": 0,
+            "egress_queue_bytes": 0,
+            "data_payload_bytes": 5400
+          },
+          {
+            "time_ns": 89337,
+            "node": 141,
+            "port": 4,
+            "event": 1,
+            "packet_uid": 2657,
+            "message_id": 910,
+            "ip_protocol": 17,
+            "sequence": 23400,
+            "model_bytes": 5436,
+            "ecn": 0,
+            "egress_queue_bytes": 0,
+            "data_payload_bytes": 5400
+          },
+          {
+            "time_ns": 90671,
+            "node": 141,
+            "port": 5,
+            "event": 0,
+            "packet_uid": 2657,
+            "message_id": 910,
+            "ip_protocol": 17,
+            "sequence": 23400,
+            "model_bytes": 5436,
+            "ecn": 0,
+            "egress_queue_bytes": 0,
+            "data_payload_bytes": 5400
+          },
+          {
+            "time_ns": 91780,
+            "node": 145,
+            "port": 2,
+            "event": 1,
+            "packet_uid": 2657,
+            "message_id": 910,
+            "ip_protocol": 17,
+            "sequence": 23400,
+            "model_bytes": 5436,
+            "ecn": 0,
+            "egress_queue_bytes": 0,
+            "data_payload_bytes": 5400
+          },
+          {
+            "time_ns": 91852,
+            "node": 145,
+            "port": 1,
+            "event": 0,
+            "packet_uid": 2657,
+            "message_id": 910,
+            "ip_protocol": 17,
+            "sequence": 23400,
+            "model_bytes": 5436,
+            "ecn": 0,
+            "egress_queue_bytes": 0,
+            "data_payload_bytes": 5400
+          },
+          {
+            "time_ns": 92961,
+            "node": 133,
+            "port": 5,
+            "event": 1,
+            "packet_uid": 2657,
+            "message_id": 910,
+            "ip_protocol": 17,
+            "sequence": 23400,
+            "model_bytes": 5436,
+            "ecn": 0,
+            "egress_queue_bytes": 0,
+            "data_payload_bytes": 5400
+          },
+          {
+            "time_ns": 93033,
+            "node": 133,
+            "port": 2,
+            "event": 0,
+            "packet_uid": 2657,
+            "message_id": 910,
+            "ip_protocol": 17,
+            "sequence": 23400,
+            "model_bytes": 5436,
+            "ecn": 0,
+            "egress_queue_bytes": 0,
+            "data_payload_bytes": 5400
+          },
+          {
+            "time_ns": 94142,
+            "node": 129,
+            "port": 18,
+            "event": 1,
+            "packet_uid": 2657,
+            "message_id": 910,
+            "ip_protocol": 17,
+            "sequence": 23400,
+            "model_bytes": 5436,
+            "ecn": 0,
+            "egress_queue_bytes": 0,
+            "data_payload_bytes": 5400
+          },
+          {
+            "time_ns": 94214,
+            "node": 129,
+            "port": 7,
+            "event": 0,
+            "packet_uid": 2657,
+            "message_id": 910,
+            "ip_protocol": 17,
+            "sequence": 23400,
+            "model_bytes": 5436,
+            "ecn": 0,
+            "egress_queue_bytes": 0,
+            "data_payload_bytes": 5400
+          },
+          {
+            "time_ns": 95323,
+            "node": 14,
+            "port": 1,
+            "event": 1,
+            "packet_uid": 2657,
+            "message_id": 910,
+            "ip_protocol": 17,
+            "sequence": 23400,
+            "model_bytes": 5436,
+            "ecn": 0,
+            "egress_queue_bytes": 0,
+            "data_payload_bytes": 5400
+          }
+        ],
+        "switches": {
+          "139": {
+            "rx_ns": 88228,
+            "tx_ns": 88228,
+            "port": 18,
+            "residence_ns": 0
+          },
+          "141": {
+            "rx_ns": 89337,
+            "tx_ns": 90671,
+            "port": 5,
+            "residence_ns": 1334
+          },
+          "145": {
+            "rx_ns": 91780,
+            "tx_ns": 91852,
+            "port": 1,
+            "residence_ns": 72
+          },
+          "133": {
+            "rx_ns": 92961,
+            "tx_ns": 93033,
+            "port": 2,
+            "residence_ns": 72
+          },
+          "129": {
+            "rx_ns": 94142,
+            "tx_ns": 94214,
+            "port": 7,
+            "residence_ns": 72
+          }
+        },
+        "source_tx_ns": 87119,
+        "destination_arrival_ns": 95323,
+        "dropped": false
+      },
+      "ack_path": {
+        "events": [
+          {
+            "time_ns": 95323,
+            "node": 14,
+            "port": 1,
+            "event": 0,
+            "packet_uid": 2904,
+            "message_id": 910,
+            "ip_protocol": 252,
+            "sequence": 28800,
+            "model_bytes": 50,
+            "ecn": 0,
+            "egress_queue_bytes": 0,
+            "data_payload_bytes": 0
+          },
+          {
+            "time_ns": 96324,
+            "node": 129,
+            "port": 7,
+            "event": 1,
+            "packet_uid": 2904,
+            "message_id": 910,
+            "ip_protocol": 252,
+            "sequence": 28800,
+            "model_bytes": 50,
+            "ecn": 0,
+            "egress_queue_bytes": 0,
+            "data_payload_bytes": 0
+          },
+          {
+            "time_ns": 96324,
+            "node": 129,
+            "port": 18,
+            "event": 0,
+            "packet_uid": 2904,
+            "message_id": 910,
+            "ip_protocol": 252,
+            "sequence": 28800,
+            "model_bytes": 50,
+            "ecn": 0,
+            "egress_queue_bytes": 0,
+            "data_payload_bytes": 0
+          },
+          {
+            "time_ns": 97325,
+            "node": 133,
+            "port": 2,
+            "event": 1,
+            "packet_uid": 2904,
+            "message_id": 910,
+            "ip_protocol": 252,
+            "sequence": 28800,
+            "model_bytes": 50,
+            "ecn": 0,
+            "egress_queue_bytes": 0,
+            "data_payload_bytes": 0
+          },
+          {
+            "time_ns": 97325,
+            "node": 133,
+            "port": 5,
+            "event": 0,
+            "packet_uid": 2904,
+            "message_id": 910,
+            "ip_protocol": 252,
+            "sequence": 28800,
+            "model_bytes": 50,
+            "ecn": 0,
+            "egress_queue_bytes": 0,
+            "data_payload_bytes": 0
+          },
+          {
+            "time_ns": 98326,
+            "node": 145,
+            "port": 1,
+            "event": 1,
+            "packet_uid": 2904,
+            "message_id": 910,
+            "ip_protocol": 252,
+            "sequence": 28800,
+            "model_bytes": 50,
+            "ecn": 0,
+            "egress_queue_bytes": 0,
+            "data_payload_bytes": 0
+          },
+          {
+            "time_ns": 98326,
+            "node": 145,
+            "port": 2,
+            "event": 0,
+            "packet_uid": 2904,
+            "message_id": 910,
+            "ip_protocol": 252,
+            "sequence": 28800,
+            "model_bytes": 50,
+            "ecn": 0,
+            "egress_queue_bytes": 0,
+            "data_payload_bytes": 0
+          },
+          {
+            "time_ns": 99327,
+            "node": 141,
+            "port": 5,
+            "event": 1,
+            "packet_uid": 2904,
+            "message_id": 910,
+            "ip_protocol": 252,
+            "sequence": 28800,
+            "model_bytes": 50,
+            "ecn": 0,
+            "egress_queue_bytes": 0,
+            "data_payload_bytes": 0
+          },
+          {
+            "time_ns": 99327,
+            "node": 141,
+            "port": 4,
+            "event": 0,
+            "packet_uid": 2904,
+            "message_id": 910,
+            "ip_protocol": 252,
+            "sequence": 28800,
+            "model_bytes": 50,
+            "ecn": 0,
+            "egress_queue_bytes": 0,
+            "data_payload_bytes": 0
+          },
+          {
+            "time_ns": 100328,
+            "node": 139,
+            "port": 18,
+            "event": 1,
+            "packet_uid": 2904,
+            "message_id": 910,
+            "ip_protocol": 252,
+            "sequence": 28800,
+            "model_bytes": 50,
+            "ecn": 0,
+            "egress_queue_bytes": 0,
+            "data_payload_bytes": 0
+          },
+          {
+            "time_ns": 100328,
+            "node": 139,
+            "port": 3,
+            "event": 0,
+            "packet_uid": 2904,
+            "message_id": 910,
+            "ip_protocol": 252,
+            "sequence": 28800,
+            "model_bytes": 50,
+            "ecn": 0,
+            "egress_queue_bytes": 0,
+            "data_payload_bytes": 0
+          },
+          {
+            "time_ns": 101329,
+            "node": 90,
+            "port": 1,
+            "event": 1,
+            "packet_uid": 2904,
+            "message_id": 910,
+            "ip_protocol": 252,
+            "sequence": 28800,
+            "model_bytes": 50,
+            "ecn": 0,
+            "egress_queue_bytes": 0,
+            "data_payload_bytes": 0
+          }
+        ],
+        "switches": {
+          "129": {
+            "rx_ns": 96324,
+            "tx_ns": 96324,
+            "port": 18,
+            "residence_ns": 0
+          },
+          "133": {
+            "rx_ns": 97325,
+            "tx_ns": 97325,
+            "port": 5,
+            "residence_ns": 0
+          },
+          "145": {
+            "rx_ns": 98326,
+            "tx_ns": 98326,
+            "port": 2,
+            "residence_ns": 0
+          },
+          "141": {
+            "rx_ns": 99327,
+            "tx_ns": 99327,
+            "port": 4,
+            "residence_ns": 0
+          },
+          "139": {
+            "rx_ns": 100328,
+            "tx_ns": 100328,
+            "port": 3,
+            "residence_ns": 0
+          }
+        },
+        "source_tx_ns": 95323,
+        "destination_arrival_ns": 101329,
+        "dropped": false
+      },
+      "final_message": {
+        "ack_ns": 131864,
+        "begin": 28800,
+        "bytes": 14400,
+        "contributions": 1,
+        "dst": 10,
+        "end": 43200,
+        "id": 27375,
+        "layer": 1,
+        "phase": "combine",
+        "plane": 0,
+        "published_ns": 117473,
+        "ready_ns": 117473,
+        "receive_ready_ns": 125858,
+        "src": 78,
+        "stream": 851,
+        "tag": 27375,
+        "transport_tokens": 1
+      },
+      "final_gate_ns": 131864,
+      "switch133_port": 2,
+      "switch133_residence_ns": 72,
+      "wire_occupiers": [
+        {
+          "packet": {
+            "time_ns": 92852,
+            "node": 133,
+            "port": 2,
+            "event": 0,
+            "packet_uid": 2635,
+            "message_id": 910,
+            "ip_protocol": 17,
+            "sequence": 14400,
+            "model_bytes": 9036,
+            "ecn": 0,
+            "egress_queue_bytes": 0,
+            "data_payload_bytes": 9000
+          },
+          "serialization_ns": 181,
+          "occupied_interval_ns": 72,
+          "src": 90,
+          "dst": 14,
+          "source_group": 2
+        }
+      ]
+    },
+    "transfer-loss20": {
+      "critical_message": {
+        "ack_ns": 101788,
+        "begin": 14400,
+        "bytes": 14400,
+        "contributions": 1,
+        "dst": 14,
+        "end": 28800,
+        "id": 25485,
+        "layer": 0,
+        "phase": "combine",
+        "plane": 0,
+        "published_ns": 86364,
+        "ready_ns": 86364,
+        "receive_ready_ns": 95782,
+        "src": 90,
+        "stream": 910,
+        "tag": 25485,
+        "transport_tokens": 1
+      },
+      "gate_ns": 101788,
+      "last_payload_source": {
+        "time_ns": 87125,
+        "stream": 910,
+        "src": 90,
+        "dst": 14,
+        "nic": 1,
+        "sequence": 23400,
+        "payload_bytes": 5400,
+        "packet_uid": 3290
+      },
+      "data_path": {
+        "events": [
+          {
+            "time_ns": 87125,
+            "node": 90,
+            "port": 1,
+            "event": 0,
+            "packet_uid": 3290,
+            "message_id": 910,
+            "ip_protocol": 17,
+            "sequence": 23400,
+            "model_bytes": 5436,
+            "ecn": 0,
+            "egress_queue_bytes": 0,
+            "data_payload_bytes": 5400
+          },
+          {
+            "time_ns": 88234,
+            "node": 139,
+            "port": 3,
+            "event": 1,
+            "packet_uid": 3290,
+            "message_id": 910,
+            "ip_protocol": 17,
+            "sequence": 23400,
+            "model_bytes": 5436,
+            "ecn": 0,
+            "egress_queue_bytes": 0,
+            "data_payload_bytes": 5400
+          },
+          {
+            "time_ns": 88234,
+            "node": 139,
+            "port": 18,
+            "event": 0,
+            "packet_uid": 3290,
+            "message_id": 910,
+            "ip_protocol": 17,
+            "sequence": 23400,
+            "model_bytes": 5436,
+            "ecn": 0,
+            "egress_queue_bytes": 0,
+            "data_payload_bytes": 5400
+          },
+          {
+            "time_ns": 89343,
+            "node": 141,
+            "port": 4,
+            "event": 1,
+            "packet_uid": 3290,
+            "message_id": 910,
+            "ip_protocol": 17,
+            "sequence": 23400,
+            "model_bytes": 5436,
+            "ecn": 0,
+            "egress_queue_bytes": 0,
+            "data_payload_bytes": 5400
+          },
+          {
+            "time_ns": 90677,
+            "node": 141,
+            "port": 5,
+            "event": 0,
+            "packet_uid": 3290,
+            "message_id": 910,
+            "ip_protocol": 17,
+            "sequence": 23400,
+            "model_bytes": 5436,
+            "ecn": 0,
+            "egress_queue_bytes": 0,
+            "data_payload_bytes": 5400
+          },
+          {
+            "time_ns": 91786,
+            "node": 145,
+            "port": 2,
+            "event": 1,
+            "packet_uid": 3290,
+            "message_id": 910,
+            "ip_protocol": 17,
+            "sequence": 23400,
+            "model_bytes": 5436,
+            "ecn": 0,
+            "egress_queue_bytes": 0,
+            "data_payload_bytes": 5400
+          },
+          {
+            "time_ns": 91858,
+            "node": 145,
+            "port": 1,
+            "event": 0,
+            "packet_uid": 3290,
+            "message_id": 910,
+            "ip_protocol": 17,
+            "sequence": 23400,
+            "model_bytes": 5436,
+            "ecn": 0,
+            "egress_queue_bytes": 0,
+            "data_payload_bytes": 5400
+          },
+          {
+            "time_ns": 92967,
+            "node": 133,
+            "port": 5,
+            "event": 1,
+            "packet_uid": 3290,
+            "message_id": 910,
+            "ip_protocol": 17,
+            "sequence": 23400,
+            "model_bytes": 5436,
+            "ecn": 0,
+            "egress_queue_bytes": 0,
+            "data_payload_bytes": 5400
+          },
+          {
+            "time_ns": 93564,
+            "node": 133,
+            "port": 2,
+            "event": 0,
+            "packet_uid": 3290,
+            "message_id": 910,
+            "ip_protocol": 17,
+            "sequence": 23400,
+            "model_bytes": 5436,
+            "ecn": 0,
+            "egress_queue_bytes": 25344,
+            "data_payload_bytes": 5400
+          },
+          {
+            "time_ns": 94673,
+            "node": 129,
+            "port": 18,
+            "event": 1,
+            "packet_uid": 3290,
+            "message_id": 910,
+            "ip_protocol": 17,
+            "sequence": 23400,
+            "model_bytes": 5436,
+            "ecn": 0,
+            "egress_queue_bytes": 0,
+            "data_payload_bytes": 5400
+          },
+          {
+            "time_ns": 94673,
+            "node": 129,
+            "port": 7,
+            "event": 0,
+            "packet_uid": 3290,
+            "message_id": 910,
+            "ip_protocol": 17,
+            "sequence": 23400,
+            "model_bytes": 5436,
+            "ecn": 0,
+            "egress_queue_bytes": 0,
+            "data_payload_bytes": 5400
+          },
+          {
+            "time_ns": 95782,
+            "node": 14,
+            "port": 1,
+            "event": 1,
+            "packet_uid": 3290,
+            "message_id": 910,
+            "ip_protocol": 17,
+            "sequence": 23400,
+            "model_bytes": 5436,
+            "ecn": 0,
+            "egress_queue_bytes": 0,
+            "data_payload_bytes": 5400
+          }
+        ],
+        "switches": {
+          "139": {
+            "rx_ns": 88234,
+            "tx_ns": 88234,
+            "port": 18,
+            "residence_ns": 0
+          },
+          "141": {
+            "rx_ns": 89343,
+            "tx_ns": 90677,
+            "port": 5,
+            "residence_ns": 1334
+          },
+          "145": {
+            "rx_ns": 91786,
+            "tx_ns": 91858,
+            "port": 1,
+            "residence_ns": 72
+          },
+          "133": {
+            "rx_ns": 92967,
+            "tx_ns": 93564,
+            "port": 2,
+            "residence_ns": 597
+          },
+          "129": {
+            "rx_ns": 94673,
+            "tx_ns": 94673,
+            "port": 7,
+            "residence_ns": 0
+          }
+        },
+        "source_tx_ns": 87125,
+        "destination_arrival_ns": 95782,
+        "dropped": false
+      },
+      "ack_path": {
+        "events": [
+          {
+            "time_ns": 95782,
+            "node": 14,
+            "port": 1,
+            "event": 0,
+            "packet_uid": 3553,
+            "message_id": 910,
+            "ip_protocol": 252,
+            "sequence": 28800,
+            "model_bytes": 50,
+            "ecn": 0,
+            "egress_queue_bytes": 0,
+            "data_payload_bytes": 0
+          },
+          {
+            "time_ns": 96783,
+            "node": 129,
+            "port": 7,
+            "event": 1,
+            "packet_uid": 3553,
+            "message_id": 910,
+            "ip_protocol": 252,
+            "sequence": 28800,
+            "model_bytes": 50,
+            "ecn": 0,
+            "egress_queue_bytes": 0,
+            "data_payload_bytes": 0
+          },
+          {
+            "time_ns": 96783,
+            "node": 129,
+            "port": 18,
+            "event": 0,
+            "packet_uid": 3553,
+            "message_id": 910,
+            "ip_protocol": 252,
+            "sequence": 28800,
+            "model_bytes": 50,
+            "ecn": 0,
+            "egress_queue_bytes": 0,
+            "data_payload_bytes": 0
+          },
+          {
+            "time_ns": 97784,
+            "node": 133,
+            "port": 2,
+            "event": 1,
+            "packet_uid": 3553,
+            "message_id": 910,
+            "ip_protocol": 252,
+            "sequence": 28800,
+            "model_bytes": 50,
+            "ecn": 0,
+            "egress_queue_bytes": 0,
+            "data_payload_bytes": 0
+          },
+          {
+            "time_ns": 97784,
+            "node": 133,
+            "port": 5,
+            "event": 0,
+            "packet_uid": 3553,
+            "message_id": 910,
+            "ip_protocol": 252,
+            "sequence": 28800,
+            "model_bytes": 50,
+            "ecn": 0,
+            "egress_queue_bytes": 0,
+            "data_payload_bytes": 0
+          },
+          {
+            "time_ns": 98785,
+            "node": 145,
+            "port": 1,
+            "event": 1,
+            "packet_uid": 3553,
+            "message_id": 910,
+            "ip_protocol": 252,
+            "sequence": 28800,
+            "model_bytes": 50,
+            "ecn": 0,
+            "egress_queue_bytes": 0,
+            "data_payload_bytes": 0
+          },
+          {
+            "time_ns": 98785,
+            "node": 145,
+            "port": 2,
+            "event": 0,
+            "packet_uid": 3553,
+            "message_id": 910,
+            "ip_protocol": 252,
+            "sequence": 28800,
+            "model_bytes": 50,
+            "ecn": 0,
+            "egress_queue_bytes": 0,
+            "data_payload_bytes": 0
+          },
+          {
+            "time_ns": 99786,
+            "node": 141,
+            "port": 5,
+            "event": 1,
+            "packet_uid": 3553,
+            "message_id": 910,
+            "ip_protocol": 252,
+            "sequence": 28800,
+            "model_bytes": 50,
+            "ecn": 0,
+            "egress_queue_bytes": 0,
+            "data_payload_bytes": 0
+          },
+          {
+            "time_ns": 99786,
+            "node": 141,
+            "port": 4,
+            "event": 0,
+            "packet_uid": 3553,
+            "message_id": 910,
+            "ip_protocol": 252,
+            "sequence": 28800,
+            "model_bytes": 50,
+            "ecn": 0,
+            "egress_queue_bytes": 0,
+            "data_payload_bytes": 0
+          },
+          {
+            "time_ns": 100787,
+            "node": 139,
+            "port": 18,
+            "event": 1,
+            "packet_uid": 3553,
+            "message_id": 910,
+            "ip_protocol": 252,
+            "sequence": 28800,
+            "model_bytes": 50,
+            "ecn": 0,
+            "egress_queue_bytes": 0,
+            "data_payload_bytes": 0
+          },
+          {
+            "time_ns": 100787,
+            "node": 139,
+            "port": 3,
+            "event": 0,
+            "packet_uid": 3553,
+            "message_id": 910,
+            "ip_protocol": 252,
+            "sequence": 28800,
+            "model_bytes": 50,
+            "ecn": 0,
+            "egress_queue_bytes": 0,
+            "data_payload_bytes": 0
+          },
+          {
+            "time_ns": 101788,
+            "node": 90,
+            "port": 1,
+            "event": 1,
+            "packet_uid": 3553,
+            "message_id": 910,
+            "ip_protocol": 252,
+            "sequence": 28800,
+            "model_bytes": 50,
+            "ecn": 0,
+            "egress_queue_bytes": 0,
+            "data_payload_bytes": 0
+          }
+        ],
+        "switches": {
+          "129": {
+            "rx_ns": 96783,
+            "tx_ns": 96783,
+            "port": 18,
+            "residence_ns": 0
+          },
+          "133": {
+            "rx_ns": 97784,
+            "tx_ns": 97784,
+            "port": 5,
+            "residence_ns": 0
+          },
+          "145": {
+            "rx_ns": 98785,
+            "tx_ns": 98785,
+            "port": 2,
+            "residence_ns": 0
+          },
+          "141": {
+            "rx_ns": 99786,
+            "tx_ns": 99786,
+            "port": 4,
+            "residence_ns": 0
+          },
+          "139": {
+            "rx_ns": 100787,
+            "tx_ns": 100787,
+            "port": 3,
+            "residence_ns": 0
+          }
+        },
+        "source_tx_ns": 95782,
+        "destination_arrival_ns": 101788,
+        "dropped": false
+      },
+      "final_message": {
+        "ack_ns": 132302,
+        "begin": 28800,
+        "bytes": 14400,
+        "contributions": 1,
+        "dst": 10,
+        "end": 43200,
+        "id": 27375,
+        "layer": 1,
+        "phase": "combine",
+        "plane": 0,
+        "published_ns": 117932,
+        "ready_ns": 117932,
+        "receive_ready_ns": 126296,
+        "src": 78,
+        "stream": 851,
+        "tag": 27375,
+        "transport_tokens": 1
+      },
+      "final_gate_ns": 132302,
+      "switch133_port": 2,
+      "switch133_residence_ns": 597,
+      "wire_occupiers": [
+        {
+          "packet": {
+            "time_ns": 92912,
+            "node": 133,
+            "port": 2,
+            "event": 0,
+            "packet_uid": 3407,
+            "message_id": 2,
+            "ip_protocol": 17,
+            "sequence": 14464,
+            "model_bytes": 9036,
+            "ecn": 0,
+            "egress_queue_bytes": 18072,
+            "data_payload_bytes": 9000
+          },
+          "serialization_ns": 181,
+          "occupied_interval_ns": 126,
+          "src": 0,
+          "dst": 8,
+          "source_group": 0
+        },
+        {
+          "packet": {
+            "time_ns": 93093,
+            "node": 133,
+            "port": 2,
+            "event": 0,
+            "packet_uid": 3269,
+            "message_id": 910,
+            "ip_protocol": 17,
+            "sequence": 14400,
+            "model_bytes": 9036,
+            "ecn": 0,
+            "egress_queue_bytes": 28944,
+            "data_payload_bytes": 9000
+          },
+          "serialization_ns": 181,
+          "occupied_interval_ns": 181,
+          "src": 90,
+          "dst": 14,
+          "source_group": 2
+        },
+        {
+          "packet": {
+            "time_ns": 93274,
+            "node": 133,
+            "port": 2,
+            "event": 0,
+            "packet_uid": 3414,
+            "message_id": 596,
+            "ip_protocol": 17,
+            "sequence": 14400,
+            "model_bytes": 9036,
+            "ecn": 0,
+            "egress_queue_bytes": 25344,
+            "data_payload_bytes": 9000
+          },
+          "serialization_ns": 181,
+          "occupied_interval_ns": 181,
+          "src": 20,
+          "dst": 12,
+          "source_group": 0
+        },
+        {
+          "packet": {
+            "time_ns": 93455,
+            "node": 133,
+            "port": 2,
+            "event": 0,
+            "packet_uid": 3423,
+            "message_id": 2,
+            "ip_protocol": 17,
+            "sequence": 23464,
+            "model_bytes": 5436,
+            "ecn": 0,
+            "egress_queue_bytes": 30780,
+            "data_payload_bytes": 5400
+          },
+          "serialization_ns": 109,
+          "occupied_interval_ns": 109,
+          "src": 0,
+          "dst": 8,
+          "source_group": 0
+        }
+      ]
+    }
+  },
+  "healthy_cost": {
+    "selected_after_inspection": "largest positive other-group difference: transfer-loss20 group2",
+    "source_tx_shift_ns": 6,
+    "switch_residence_changes_ns": {
+      "139": 0,
+      "141": 0,
+      "145": 0,
+      "133": 525,
+      "129": -72
+    },
+    "total_extra_residence_ns": 453,
+    "first_combine_gate_shift_ns": 459,
+    "later_critical_ready_to_ack_change_ns": -21,
+    "completion_delay_ns": 438,
+    "recovered_target_group_serialization_during_wait_ns": 416,
+    "interpretation": "6ns carried start shift + 453ns extra packet residence - 21ns later transfer span = 438ns; do not sum with phase or request delays"
+  },
+  "publisher_sha256": "5c63cecd7f95e58edd0a2a6666e2fba84ab46e6e90332e63c738b5c1e5486691",
+  "scope": "Observed post-run explanation, no new networks or novel recovery policy"
+}

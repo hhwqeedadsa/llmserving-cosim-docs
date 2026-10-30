@@ -36,4 +36,4 @@ python experiments/transport_window_coverage/study.py calibrate --study /path/to
 python experiments/transport_window_coverage/study.py run --study /path/to/new-study --case transfer-normal --protoc /path/to/protoc
 ```
 
-按冻结映射再运行其余唯一case，随后`study.py analyze --study /path/to/new-study`和`verify.py --study /path/to/new-study --output /path/to/new-verification.json`。别名case不会再次发起网络，收据会明确记录复用。
+按冻结映射再运行其余唯一case，各以`study.py diagnose --study /path/to/new-study --case CASE`调用公开诊断，随后`study.py analyze --study /path/to/new-study`和`verify.py --study /path/to/new-study --output /path/to/new-verification.json`。别名case不会再次发起网络，收据会明确记录复用。每个诊断独立监控，避免把多份大记录的核查塞入一个120秒阶段。

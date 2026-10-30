@@ -37,6 +37,32 @@ def event_time(events, graph, rank, node, kind):
     return events[key]
 
 
+def verify_replay_requests(config, replay, frontend):
+    """Cross-check actual scheduler selection, not only regenerated graphs."""
+    ids=set(replay.records)
+    requests=frontend['requests']
+    require({q['id'] for q in requests}==ids and len(requests)==len(ids),
+            'missing/duplicate replay request')
+    for q in requests:
+        require(q['state']=='OBSERVATION_ENDED' and q['scheduler_state']=='FINISHED' and
+                q['initial_context_tokens']==replay.records[q['id']]['context_tokens'] and
+                len(q['intertoken_ns'])==config['workload']['decode_steps'],
+                'replay request context/completion mismatch')
+    expected_calls=0
+    for history in frontend['history']:
+        group=config['parallel']['groups'][history['group_index']]
+        expected={str(r):replay.request_ids(r) for r in group if replay.request_ids(r)}
+        batches=history['batch_request_ids']
+        require(set(batches)==set(expected) and all(
+            len(batches[r])==len(expected[r]) and set(batches[r])==set(expected[r]) for r in expected),
+            'scheduler batch differs from explicit replay requests')
+        expected_calls+=len(expected)
+    require(frontend['scheduler_calls']==expected_calls, 'scheduler call count differs from active source ranks')
+    if 'active_source_ranks' in frontend:
+        require(frontend['active_source_ranks']==sorted({row['rank_id'] for row in replay.records.values()}),
+                'active source ranks differ from explicit requests')
+
+
 def verify(directory):
     directory=Path(directory).resolve()
     rdma=checked_json(directory/'rdma.json',65536)
@@ -102,6 +128,7 @@ def verify(directory):
                 require(len(token['experts'])==len(set(token['experts']))==config['model']['top_k'], 'invalid Top-K')
                 if replay:
                     request_id=token['rank']*config['workload']['batch_per_rank']+token['slot']
+                    require(request_id in replay.records, 'token has no explicit source request')
                     record=replay.records[request_id]
                     offset=(history['step']*config['model']['layers']+layer['layer'])*config['model']['top_k']
                     require(token['experts']==list(record['choices'][offset:offset+config['model']['top_k']]),
@@ -117,7 +144,9 @@ def verify(directory):
                     dst=ranks[owner]
                     if token['rank']!=dst:
                         matrix[token['rank'],dst]+=h*bpe
-            require(seen_tokens=={(r,s) for r in ranks for s in range(config['workload']['batch_per_rank'])},
+            expected_tokens={(row['rank_id'],row['slot']) for row in replay.records.values() if row['rank_id'] in ranks} if replay else {
+                (r,s) for r in ranks for s in range(config['workload']['batch_per_rank'])}
+            require(seen_tokens==expected_tokens,
                     'missing scheduled token routes')
             for (src,dst),size in matrix.items():
                 expected[layer['layer'],'dispatch',src,dst]=size
@@ -205,10 +234,7 @@ def verify(directory):
                 len(q['intertoken_ns'])==config['workload']['decode_steps'] for q in frontend['requests']),
             'request did not complete every Decode step')
     if replay:
-        require({q['id'] for q in frontend['requests']}==set(replay.records) and
-                len(frontend['requests'])==len(replay.records), 'missing/duplicate replay request')
-        require(all(q['initial_context_tokens']==replay.records[q['id']]['context_tokens']
-                    for q in frontend['requests']), 'replay initial context mismatch')
+        verify_replay_requests(config,replay,frontend)
     from .service_terminal import service_terminal
     terminal=service_terminal(result,frontend,require_complete=True)
     report=dict(passed=True,messages=len(flows),remote_payload_bytes=total_bytes,verified_nodes=node_count,
@@ -223,8 +249,7 @@ def verify(directory):
         report.update(intra_host_payload_bytes=sum(local_payload.values())//2,
                       inter_host_payload_bytes=total_bytes-sum(local_payload.values())//2)
     if replay:
-        report.update(route_source=replay.manifest['source']['kind'],source_records_verified=sum(
-            len(g)*config['workload']['batch_per_rank']*config['model']['layers']*config['workload']['decode_steps']
-            for g in config['parallel']['groups']),eos_inferred=False)
+        report.update(route_source=replay.manifest['source']['kind'],source_records_verified=
+            len(replay.records)*config['model']['layers']*config['workload']['decode_steps'],eos_inferred=False)
     from .scaleout_switch_drops import attach
     return attach(report,result,topology,rdma)

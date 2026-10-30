@@ -110,6 +110,7 @@ def make_wave(config, group, group_index, step, planes, replay=None):
     nodes = {r: [] for r in group}; next_node = {r: 1 for r in group}; previous = {r: [] for r in group}
     messages, route_rows = [], []
     full=config['schema_version']=='moe-scaleout-service/2'
+    local_batch={r:len(replay.contexts(r)) if full and replay else w['batch_per_rank'] for r in group}
     # Identity depends on logical work, never submission/completion order.
     pair_counts=[len(g)*(len(g)-1) for g in config['parallel']['groups']]
     pairs=len(group)*(len(group)-1)
@@ -143,7 +144,7 @@ def make_wave(config, group, group_index, step, planes, replay=None):
         return incoming
 
     if full:
-        previous={r:[node(r,'COMP','embedding',[],cost['embedding_ns_per_token']*w['batch_per_rank'])] for r in group}
+        previous={r:[node(r,'COMP','embedding',[],cost['embedding_ns_per_token']*local_batch[r])] for r in group}
     for layer in range(m['layers']):
         selected = replay.routes(group,step,layer) if replay else routes(config, group, step, layer)
         source_tokens=Counter(token['rank'] for token in selected)
@@ -159,32 +160,32 @@ def make_wave(config, group, group_index, step, planes, replay=None):
         for r in group:
             deps=previous[r]
             if full:
-                deps=[node(r,'COMP',f'L{layer}.attention_norm',deps,cost['norm_ns_per_token']*w['batch_per_rank'])]
+                deps=[node(r,'COMP',f'L{layer}.attention_norm',deps,cost['norm_ns_per_token']*local_batch[r])]
             attention_cost=cost['attention_ns_per_token']
             if full and not replay:attention_cost+=cost['attention_context_ns_per_token']*(w['context_tokens']+step)
-            attention_duration=attention_cost*(w['batch_per_rank'] if full else source_tokens[r])
+            attention_duration=attention_cost*(local_batch[r] if full else source_tokens[r])
             if full and replay:attention_duration+=cost['attention_context_ns_per_token']*sum(x+step for x in replay.contexts(r))
             attention = node(r,'COMP',f'L{layer}.attention',deps,attention_duration)
             deps=[attention]
             if full:
-                residual=node(r,'COMP',f'L{layer}.attention_residual',deps,cost['residual_ns_per_token']*w['batch_per_rank'])
-                deps=[node(r,'COMP',f'L{layer}.ffn_norm',[residual],cost['norm_ns_per_token']*w['batch_per_rank'])]
-            packed[r] = node(r,'COMP',f'L{layer}.pack',deps,cost['pack_ns_per_token']*(w['batch_per_rank'] if full else source_tokens[r]))
+                residual=node(r,'COMP',f'L{layer}.attention_residual',deps,cost['residual_ns_per_token']*local_batch[r])
+                deps=[node(r,'COMP',f'L{layer}.ffn_norm',[residual],cost['norm_ns_per_token']*local_batch[r])]
+            packed[r] = node(r,'COMP',f'L{layer}.pack',deps,cost['pack_ns_per_token']*(local_batch[r] if full else source_tokens[r]))
         incoming = leg(layer,'dispatch',matrix,packed,0)
         experts = {r:node(r,'COMP',f'L{layer}.experts',incoming[r]+[packed[r]],
                          cost['expert_ns_per_contribution']*received[r]) for r in group}
         combine = Counter({(dst,src):n for (src,dst),n in matrix.items()})
         returned = leg(layer,'combine',combine,experts,1)
         previous = {r:[node(r,'COMP',f'L{layer}.merge',returned[r]+[experts[r]],
-                           cost['merge_ns_per_token']*(w['batch_per_rank'] if full else source_tokens[r]))] for r in group}
+                           cost['merge_ns_per_token']*(local_batch[r] if full else source_tokens[r]))] for r in group}
         if full:
-            previous={r:[node(r,'COMP',f'L{layer}.ffn_residual',previous[r],cost['residual_ns_per_token']*w['batch_per_rank'])] for r in group}
+            previous={r:[node(r,'COMP',f'L{layer}.ffn_residual',previous[r],cost['residual_ns_per_token']*local_batch[r])] for r in group}
     if full:
         for r in group:
             deps=previous[r]
             for stage in ('final_norm','lm_head','sampling'):
                 key='norm' if stage=='final_norm' else stage
-                deps=[node(r,'COMP',stage,deps,cost[key+'_ns_per_token']*w['batch_per_rank'])]
+                deps=[node(r,'COMP',stage,deps,cost[key+'_ns_per_token']*local_batch[r])]
     require(all(m['id'] < 2**31 for m in messages), 'ASTRA message tag range exceeded')
     return dict(schema_version='moe-scaleout-wave/1', graph_id=graph, rank_ids=group,
                 group_index=group_index, decode_step=step, messages=messages, rank_nodes=nodes,
@@ -230,6 +231,9 @@ class Frontend:
         # resource model declaration, not full-model A100 capacity validation.
         for rank in range(ranks):
             contexts=replay.contexts(rank) if replay else [w['context_tokens']]*w['batch_per_rank']
+            if not contexts:
+                continue  # Expert-only ranks still execute their complete ASTRA graph.
+            identities=replay.request_ids(rank) if replay else [rank*w['batch_per_rank']+s for s in range(w['batch_per_rank'])]
             blocks=[math.ceil((context+w['decode_steps'])/block_size) for context in contexts]
             group = next(g for g in self.groups if rank in g)
             declared=capacity(config,len(group),contexts);weights=declared['weight_bytes_per_rank']
@@ -243,13 +247,13 @@ class Frontend:
             model = dict(name=m['name'],max_position_embeddings=w['context_tokens']+w['decode_steps'])
             scheduler = ConfiguredScheduler(model,audit,block_size,w['batch_per_rank'],w['batch_per_rank'],w['batch_per_rank'],
                                             pool_factory=LazyUncachedBlockPool)
-            for slot in range(w['batch_per_rank']):
-                context=contexts[slot]
-                request = Request(rank*w['batch_per_rank']+slot,m['name'],context,
+            for position,identity in enumerate(identities):
+                context=contexts[position]
+                request = Request(identity,m['name'],context,
                                   context+w['decode_steps'],0,rank,is_init=False)
                 request.num_computed_tokens=context-1
                 request.num_tokens_reached=context;request.recent_end=0
-                require(scheduler.kv.allocate_slots(request, blocks[slot]*block_size-request.num_computed_tokens) is not None,
+                require(scheduler.kv.allocate_slots(request, blocks[position]*block_size-request.num_computed_tokens) is not None,
                         'ready-KV reservation failed')
                 scheduler.add_decode(request); self.requests.append(request)
             self.schedulers[rank]=scheduler
@@ -269,10 +273,13 @@ class Frontend:
             if self.steps[index]>=self.config['workload']['decode_steps'] or any(i==index for i,_,_ in self.active.values()):
                 continue
             require(all(r in event['available_rank_ids'] for r in group), 'backend group unavailable')
-            batches={r:self.schedulers[r].schedule(now,r) for r in group}; self.calls+=len(group)
-            expected=self.config['workload']['batch_per_rank']
-            require(all(b is not None and b.num_prefill==0 and len(b.requests)==expected and
-                        set(b.scheduled_tokens.values())=={1} for b in batches.values()), 'invalid real Decode batch')
+            batches={r:self.schedulers[r].schedule(now,r) for r in group if r in self.schedulers}; self.calls+=len(batches)
+            for rank,batch in batches.items():
+                expected=set(self.replay.request_ids(rank)) if self.replay else {
+                    rank*self.config['workload']['batch_per_rank']+s for s in range(self.config['workload']['batch_per_rank'])}
+                require(batch is not None and batch.num_prefill==0 and
+                        len(batch.requests)==len(expected) and {q.id for q in batch.requests}==expected and
+                        set(batch.scheduled_tokens.values())=={1}, 'invalid real Decode batch')
             with self.timing.span('wave_build'):
                 wave=make_wave(self.config,group,index,self.steps[index],self.planes,self.replay)
             self.message_preflight.accept_wave(wave,now)
@@ -345,6 +352,7 @@ def _worker(config_path,topology_path,protocol_path,backend,protoc,output,timing
         if child is not None and child.poll() is None:
             child.terminate();child.wait(timeout=5)
         report=dict(history=frontend.history,transcript=transcript,scheduler_calls=frontend.calls,
+            active_source_ranks=sorted(frontend.schedulers),
             scheduler_source='pinned_LLMServingSim_ConfiguredScheduler_initialization_only',
             requests=[dict(id=q.id,state=q.status.name,computed_tokens=q.num_computed_tokens,
                            reached_tokens=q.num_tokens_reached,intertoken_ns=q.itl) for q in frontend.requests])

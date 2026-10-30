@@ -30,7 +30,11 @@ class Replay:
         self.config, self.base = config, Path(base)
         spec = config['route_replay']
         fields(spec, 'manifest layer_ids requests budget'+
+               (' request_layout' if 'request_layout' in spec else '')+
                (' expert_to_group_rank' if 'expert_to_group_rank' in spec else ''), 'route replay')
+        self.request_layout = spec.get('request_layout', 'dense_per_rank/1')
+        require(self.request_layout in ('dense_per_rank/1', 'sparse_explicit/1'),
+                'unsupported replay request layout')
         budget = spec['budget']
         fields(budget, 'max_files max_bytes', 'replay budget')
         integer(budget['max_files'], 'replay max files', 1, 4096)
@@ -79,16 +83,25 @@ class Replay:
             require((rank, slot) not in seen_slots and isinstance(request['file_id'], str) and
                     request['file_id'] not in mapping, 'repeated request slot or source file')
             seen_slots.add((rank, slot)); mapping[request['file_id']] = request
-        require(seen_slots == {(r,s) for r in ranks for s in range(w['batch_per_rank'])},
-                'replay must explicitly supply every scheduled request; no cycling or cloning')
+        if self.request_layout == 'dense_per_rank/1':
+            require(seen_slots == {(r,s) for r in ranks for s in range(w['batch_per_rank'])},
+                    'replay must explicitly supply every scheduled request; no cycling or cloning')
+        else:
+            require(all(any(rank in group for rank, _ in seen_slots)
+                        for group in config['parallel']['groups']),
+                    'each sparse EP group needs at least one explicit source request')
         require(len(mapping) <= budget['max_files'], 'replay file budget exceeded')
         selected = deepcopy(self.manifest)
         selected['files'] = [f for f in selected['files'] if f['file_id'] in mapping]
         require({f['file_id'] for f in selected['files']} == set(mapping), 'unknown replay file ID')
         total = 0
+        paths, hashes = set(), set()
         for f in selected['files']:
             p = (self.base/f['file']['path']).resolve()
             require(p.is_file() and p.stat().st_size <= 16777216, 'missing/oversized raw route '+str(p))
+            require(p not in paths and f['file']['sha256'] not in hashes,
+                    'cycling/cloning source routes is unsupported')
+            paths.add(p); hashes.add(f['file']['sha256'])
             total += p.stat().st_size
             f['file']['path'] = str(p)
         require(total <= budget['max_bytes'], 'replay cumulative input budget exceeded')
@@ -106,10 +119,15 @@ class Replay:
             identity = request['rank_id']*w['batch_per_rank']+request['slot']
             self.records[identity] = dict(**request, context_tokens=context, choices=choices,
                                          source_file=source['file'], original_path=source['original_path'])
+        self._rank_ids = {r: sorted(i for i, row in self.records.items() if row['rank_id'] == r)
+                          for r in ranks}
+
+    def request_ids(self, rank):
+        """Stable rank/slot identities; absent slots never create requests."""
+        return list(self._rank_ids[rank])
 
     def contexts(self, rank):
-        batch = self.config['workload']['batch_per_rank']
-        return [self.records[rank*batch+s]['context_tokens'] for s in range(batch)]
+        return [self.records[i]['context_tokens'] for i in self.request_ids(rank)]
 
     def routes(self, group, step, layer):
         m, w = self.config['model'], self.config['workload']
@@ -118,10 +136,9 @@ class Replay:
         begin = (step*m['layers']+layer)*m['top_k']
         result = []
         for rank in group:
-            for slot in range(w['batch_per_rank']):
-                identity = rank*w['batch_per_rank']+slot
+            for identity in self.request_ids(rank):
                 row = self.records[identity]
-                result.append(dict(rank=rank, slot=slot, experts=list(row['choices'][begin:begin+m['top_k']]),
+                result.append(dict(rank=rank, slot=row['slot'], experts=list(row['choices'][begin:begin+m['top_k']]),
                     source=dict(request_id=identity, file_id=row['file_id'],
                                 source_entry=row['first_decode_entry']+step, source_token_row=0,
                                 source_layer_id=self.layers[layer], sha256=row['source_file']['sha256'])))

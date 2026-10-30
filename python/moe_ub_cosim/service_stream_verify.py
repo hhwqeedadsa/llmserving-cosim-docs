@@ -5,7 +5,7 @@ from pathlib import Path
 from .scaleout_rdma import checked_json
 from .scaleout_limits import limits
 from .scaleout_topology import require
-from .scaleout_verify import node_events,event_time
+from .scaleout_verify import node_events,event_time,verify_replay_requests
 from .scaleout_service import make_wave,validate as validate_service
 from .service_terminal import service_terminal
 from .service_transport import message_preflight
@@ -32,6 +32,7 @@ def verify(directory):
         n,planes=validate_service(c,t,p,replay)
         require(f['scheduler_source']=='pinned_LLMServingSim_ConfiguredScheduler_initialization_only',
                 'actual LLMServingSim scheduler identity differs')
+        if replay:verify_replay_requests(c,replay,f)
     require(r['native_network_executed'] and r['gpu_count']==n,'native endpoint count differs')
     libs=[Path(x) for x in r['loaded_libraries'] if Path(x).name.startswith('libns3')]
     require(len(libs)>=5 and len({x.parent for x in libs})==1 and

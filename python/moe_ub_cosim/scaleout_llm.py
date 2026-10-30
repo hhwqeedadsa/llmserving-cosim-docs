@@ -33,7 +33,9 @@ def capacity(config, group_size, contexts=None):
     weight=(replicated+expert//group_size)*s['weight_bytes']
     kv_token=2*l*kv*m['activation_bytes']
     contexts=contexts if contexts is not None else [w['context_tokens']]*w['batch_per_rank']
-    require(len(contexts)==w['batch_per_rank'],'KV context vector differs from batch')
+    sparse=config.get('route_replay',{}).get('request_layout')=='sparse_explicit/1'
+    require((0<=len(contexts)<=w['batch_per_rank']) if sparse else len(contexts)==w['batch_per_rank'],
+            'KV context vector differs from batch')
     kv_blocks=sum((context+w['decode_steps']+15)//16 for context in contexts)
     kv_reserved=kv_blocks*16*kv_token
     require(weight+kv_reserved <= s['device_bytes'],'weights plus declared KV exceed GPU device memory')

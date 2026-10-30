@@ -1,0 +1,32 @@
+{
+  "passed": true,
+  "new_networks": 0,
+  "new_builds": 0,
+  "unit_test_methods": 3,
+  "source_count_cases": [
+    4,
+    15,
+    16
+  ],
+  "synthetic_shape_only": true,
+  "command": [
+    ".venv/frontend/bin/python",
+    "-B",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "tests/unit",
+    "-p",
+    "message_buffer_prepare_test.py",
+    "-v"
+  ],
+  "exit_code": 0,
+  "source_sha256": {
+    "examples/scaleout_message_buffers/prepare.py": "0af8a519062213ab8672f1e8c39597e273e23da909e05930bea2dfc9de775286",
+    "tests/unit/message_buffer_prepare_test.py": "3426c172e5687bf368d8f47b9ca9a3157925040e2e659625c5095d644a71efc3"
+  },
+  "failed_initial_setup": "The initial directory name recovery_scope already existed; mkdir refused before any writes; a missing monitor command consequently did not execute. Existing directory untouched. New dedicated namespace transport_window_coverage selected.",
+  "evidence_root": "runs/transport_window_coverage_20261030",
+  "scope": "Public preparation and rejection checks only, no actual R1 execution or network calibration"
+}

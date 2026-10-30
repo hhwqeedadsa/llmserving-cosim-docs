@@ -17,10 +17,13 @@ ROOT=Path(__file__).resolve().parents[2]
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output',type=Path,required=True)
-    parser.add_argument('--source-manifest',type=Path,help='Optional R1 routing manifest; select first four distinct files')
+    parser.add_argument('--source-manifest',type=Path,help='Optional R1 routing manifest; select first N distinct files')
     parser.add_argument('--source-base',type=Path,help='Required base for relative file references in a supplied manifest')
+    parser.add_argument('--route-files',type=int,default=4,help='4..16 distinct R1 sources; default4, one request per source rank')
     args=parser.parse_args();out=args.output.resolve()
     require((args.source_manifest is None)==(args.source_base is None),'provide source manifest and base together')
+    require(4<=args.route_files<=16,'route-files must be4..16 for four EP groups and bounded contribution records')
+    require(args.source_manifest is not None or args.route_files==4,'nondefault route-files requires an R1 source manifest')
     subprocess.run([sys.executable,'-B',str(ROOT/'examples/scaleout_inflight_helpers/prepare.py'),
                     '--output',str(out)],cwd=ROOT,check=True)
     c=json.loads((out/'service-helper.json').read_bytes())
@@ -28,9 +31,9 @@ def main():
     if args.source_manifest:
         manifest=json.loads(args.source_manifest.read_bytes())
         require(manifest['model']['name']=='deepseek-ai/DeepSeek-R1' and
-                manifest['model']['hidden_dim']==7168 and len(manifest['files'])>=4,
-                'real example needs four distinct declared R1 files')
-        manifest['files']=manifest['files'][:4]
+                manifest['model']['hidden_dim']==7168 and len(manifest['files'])>=args.route_files,
+                'real example needs the requested number of distinct declared R1 files')
+        manifest['files']=manifest['files'][:args.route_files]
         for row in manifest['files']:row['file']['path']=str((args.source_base/row['file']['path']).resolve())
         manifest_path=out/'buffer-source-manifest.json'
         with manifest_path.open('x') as stream:json.dump(manifest,stream,indent=2);stream.write('\n')
@@ -38,9 +41,11 @@ def main():
         c['workload']['context_tokens']=65536
         c['parallel']['groups']=[list(range(i,128,4)) for i in range(4)]
         c['route_replay'].update(manifest=dict(path=str(manifest_path),sha256=hashlib.sha256(manifest_path.read_bytes()).hexdigest()),
-            layer_ids=[3,4],budget=dict(max_files=4,max_bytes=16*2**20),requests=[
+            layer_ids=[3,4],budget=dict(max_files=args.route_files,max_bytes=args.route_files*4*2**20),requests=[
                 dict(rank_id=i,slot=0,file_id=row['file_id'],first_decode_entry=1) for i,row in enumerate(manifest['files'])])
         c['source_ack_watchdog'].update(max_messages=512,max_notifications=512)
+        if args.route_files>4:
+            c['source_ack_watchdog'].update(max_messages=4096,max_notifications=4096)
         replay=Replay(c,ROOT)
         waves=[make_wave(c,g,i,step,1,replay) for i,g in enumerate(c['parallel']['groups']) for step in range(2)]
         keys={(m['src'],m['dst'],m['plane']) for w in waves for m in w['messages']}
@@ -49,6 +54,9 @@ def main():
         c['transport']['streams']=[dict(id=i,src=s,dst=d,plane=plane,wire_port=21000+i,source_nic=1,
             destination_nic=1,queue_depth=32) for i,(s,d,plane) in enumerate(sorted(keys))]
         c['transport']['limits']['max_streams']=len(keys)
+        if args.route_files>4:
+            c['transport']['limits']['max_work']=4096
+            p['limits']['max_messages']=4096
         incoming=Counter()
         for m in waves[0]['messages']:
             if m['phase']=='dispatch' and m['layer']==0:incoming[m['dst']]+=m['bytes']

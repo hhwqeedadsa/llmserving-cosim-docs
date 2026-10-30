@@ -1,0 +1,74 @@
+{
+  "passed": true,
+  "rejections": [
+    {
+      "case": "normal/message",
+      "rejected": true
+    },
+    {
+      "case": "normal/rank",
+      "rejected": true
+    },
+    {
+      "case": "normal/future",
+      "rejected": true
+    },
+    {
+      "case": "normal/sequence",
+      "rejected": true
+    },
+    {
+      "case": "normal/receive_is_not_source_confirmation",
+      "rejected": true
+    },
+    {
+      "case": "normal/duplicate_post",
+      "rejected": true
+    },
+    {
+      "case": "local/message",
+      "rejected": true
+    },
+    {
+      "case": "local/rank",
+      "rejected": true
+    },
+    {
+      "case": "local/future",
+      "rejected": true
+    },
+    {
+      "case": "local/sequence",
+      "rejected": true
+    },
+    {
+      "case": "local/receive_is_not_source_confirmation",
+      "rejected": true
+    },
+    {
+      "case": "local/duplicate_post",
+      "rejected": true
+    },
+    {
+      "case": "source_manifest_hash",
+      "rejected": true
+    },
+    {
+      "case": "declared_compute",
+      "rejected": true
+    },
+    {
+      "case": "graph_message_bytes",
+      "rejected": true
+    },
+    {
+      "case": "missing_gate_member",
+      "rejected": true
+    }
+  ],
+  "negative_cases": 16,
+  "read_only_networks_unchanged": 5,
+  "source_predicate_matches_actual_local_decision": true,
+  "new_network_executions": 0,
+  "verifier_sha256": "61f8d3574cbaee1c657048af138b130daf3e9e7b3b740c18e4686a483146ee68"
+}

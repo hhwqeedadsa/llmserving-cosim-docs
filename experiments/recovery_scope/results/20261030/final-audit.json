@@ -1,0 +1,39 @@
+{
+  "passed": true,
+  "links_checked": [
+    "figures/request-work.png",
+    "analysis.json",
+    "per-request.csv",
+    "missing-bundles.csv",
+    "verification.json",
+    "frozen.json",
+    "receipt.json",
+    "final-audit.json",
+    "README.md",
+    "../../README.md",
+    "../../protocol.md",
+    "../../../ack_guard_whole/results/20261030/report.html"
+  ],
+  "plots": 1,
+  "images_visually_inspected": true,
+  "browser_rendering_checked": false,
+  "graph_rule_tests": 7,
+  "negative_real_cases": 16,
+  "unchanged_networks": 5,
+  "new_networks": 0,
+  "scientific_scope": "Structural constraints and declared work, not a modified execution or novel performance benefit",
+  "artifact_sha256": {
+    "README.md": "61dcf4a822a7dd1b5613f125f1ac8e78d59a7b148094902f01784093d6d85a6e",
+    "analysis.json": "424a284eb8630dc1a7acf82eb964730a5bdeb6c266385dcf776967477788344e",
+    "figures/request-work.png": "d64097e5d352c924b5b794e2eb00fb6cbbf935cd4e74e0d58bed54b3e245bfc5",
+    "figures/request-work.svg": "b37f3c3ced942bd361052ed8594e1f6a92b9090c0d16e7404c5dcbdc340f8e29",
+    "frozen.json": "5c2a773e291bdf6a00d6cfe65f5cd1d198fda51248fd7a286fdcbeff790add11",
+    "missing-bundles.csv": "b9a8b0b331ec2b643a1646bfbae300c217d8a0efd58bcb9c2c8150303fa451a6",
+    "per-request.csv": "ba0fa2ed2f9a137e18527840ee280689cced6a0d0265fa48d236cb1a1fe157b7",
+    "receipt.json": "5ba9e68f331cd34bf88a226cdfd2ef42025a63182ad05119502fd5d4bcc03447",
+    "report.html": "6c91308009a492db60f45cedb2ccc5c02b36ec26072c5154a06511f0134aea7f",
+    "verification.json": "4c6f1d3d43d32f45c2beb7ed663e99c301a5aca03f1c2076c8019a74297de173"
+  },
+  "image_sha256": "d64097e5d352c924b5b794e2eb00fb6cbbf935cd4e74e0d58bed54b3e245bfc5",
+  "documentation_links_checked": true
+}

@@ -2,6 +2,8 @@
 
 在128端点Clos早备用强基线之后，核对三个超时输入、完整备用工作和全部目标请求的依赖，判断哪些成本有希望减少、哪些恢复单位当前不可执行。方法见[执行前约定](protocol.md)。本研究只读已保存结果，不改平台、不执行新网络，不把账面子集成本当成等价任务加速。
 
+本轮[可读网页](results/20261030/report.html)与[结论](results/20261030/README.md)明确区分直接缺失、组级连带约束、账面工作和已有可执行接口。
+
 在仓库根目录、已有前端环境及前轮原件完整时使用，输出目录须不存在，事前落实600秒/256MiB累计预算及8GiB磁盘余量：
 
 ```bash
@@ -15,6 +17,16 @@ PYTHONPATH=python OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 \
   .venv/frontend/bin/python -B experiments/recovery_scope/analyze.py \
   --frozen runs/recovery_scope_20261030/input/frozen.json \
   --output runs/recovery_scope_20261030/analysis
+
+PYTHONPATH=python .venv/frontend/bin/python -B experiments/recovery_scope/verify.py \
+  --frozen runs/recovery_scope_20261030/input/frozen.json \
+  --analysis runs/recovery_scope_20261030/analysis/analysis.json \
+  --output runs/recovery_scope_20261030/analysis/verification.json
+
+PYTHONPATH=python OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 \
+  .venv/frontend/bin/python -B experiments/recovery_scope/report.py \
+  --task-root runs/recovery_scope_20261030 \
+  --output experiments/recovery_scope/results/20261030
 ```
 
 `prepare.py`固定原网络逐文件身份，并将实际启动DECIDE之前的源发送/确认前缀单独导出。正常以相同绝对时刻截断；同纳秒原生顺序保留。`source_status`只读初始图及上述源前缀，不读接收真值或后续结果。事后分析才读取完整记录、原JSON、接收和节点时刻。

@@ -1,0 +1,514 @@
+{
+  "passed": true,
+  "source_only_status": {
+    "normal": {
+      "posted": 52,
+      "confirmed": 26,
+      "pending": [
+        1024,
+        1025,
+        1119,
+        1148,
+        1150,
+        1180,
+        1210,
+        1211,
+        1212,
+        1240,
+        1241,
+        1303,
+        1426,
+        1428,
+        1488,
+        1489,
+        1490,
+        1519,
+        1521,
+        1550,
+        1581,
+        1613,
+        1615,
+        1644,
+        1770,
+        1801
+      ],
+      "overdue": []
+    },
+    "local": {
+      "posted": 26,
+      "confirmed": 23,
+      "pending": [
+        37,
+        68,
+        99
+      ],
+      "overdue": [
+        37,
+        68,
+        99
+      ]
+    }
+  },
+  "trigger_ns": 19030,
+  "missing_input_bundles": [
+    {
+      "graph": "g0.w0",
+      "step": 0,
+      "layer": 0,
+      "source_layer": 3,
+      "primary_request": 4,
+      "src": 4,
+      "dst": 28,
+      "experts": [
+        56
+      ],
+      "declared_expert_and_reduce_ns": 100,
+      "dispatch_message": 37,
+      "combine_message": 1210,
+      "network_payload_bytes": 28864,
+      "source_post_ns": 1030,
+      "actual_input_receive_ns": 86045,
+      "actual_source_ack_ns": 90049
+    },
+    {
+      "graph": "g0.w0",
+      "step": 0,
+      "layer": 0,
+      "source_layer": 3,
+      "primary_request": 8,
+      "src": 8,
+      "dst": 28,
+      "experts": [
+        56
+      ],
+      "declared_expert_and_reduce_ns": 100,
+      "dispatch_message": 68,
+      "combine_message": 1211,
+      "network_payload_bytes": 28864,
+      "source_post_ns": 1030,
+      "actual_input_receive_ns": 86566,
+      "actual_source_ack_ns": 90570
+    },
+    {
+      "graph": "g0.w0",
+      "step": 0,
+      "layer": 0,
+      "source_layer": 3,
+      "primary_request": 12,
+      "src": 12,
+      "dst": 28,
+      "experts": [
+        56
+      ],
+      "declared_expert_and_reduce_ns": 100,
+      "dispatch_message": 99,
+      "combine_message": 1212,
+      "network_payload_bytes": 28864,
+      "source_post_ns": 1030,
+      "actual_input_receive_ns": 86676,
+      "actual_source_ack_ns": 90680
+    }
+  ],
+  "direct_request_count": 3,
+  "target_request_count": 4,
+  "dependency_paths": [
+    {
+      "primary_request": 0,
+      "path": [
+        {
+          "graph": "g0.w0",
+          "rank": 28,
+          "node": 3,
+          "name": "L0.dispatch.4-28.recv",
+          "kind": "RECV"
+        },
+        {
+          "graph": "g0.w0",
+          "rank": 28,
+          "node": 7,
+          "name": "L0.experts",
+          "kind": "COMP"
+        },
+        {
+          "graph": "g0.w0",
+          "rank": 28,
+          "node": 13,
+          "name": "L0.merge",
+          "kind": "COMP"
+        },
+        {
+          "graph": "g0.w0",
+          "rank": 28,
+          "node": 14,
+          "name": "L1.attention",
+          "kind": "COMP"
+        },
+        {
+          "graph": "g0.w0",
+          "rank": 28,
+          "node": 15,
+          "name": "L1.pack",
+          "kind": "COMP"
+        },
+        {
+          "graph": "g0.w0",
+          "rank": 28,
+          "node": 18,
+          "name": "L1.experts",
+          "kind": "COMP"
+        },
+        {
+          "graph": "g0.w0",
+          "rank": 28,
+          "node": 22,
+          "name": "L1.merge",
+          "kind": "COMP"
+        },
+        {
+          "graph": "g0.w1",
+          "rank": 0,
+          "node": 38,
+          "name": "L1.combine.8-0.recv",
+          "kind": "RECV"
+        },
+        {
+          "graph": "g0.w1",
+          "rank": 0,
+          "node": 46,
+          "name": "L1.merge",
+          "kind": "COMP"
+        }
+      ]
+    },
+    {
+      "primary_request": 4,
+      "path": [
+        {
+          "graph": "g0.w0",
+          "rank": 28,
+          "node": 3,
+          "name": "L0.dispatch.4-28.recv",
+          "kind": "RECV"
+        },
+        {
+          "graph": "g0.w0",
+          "rank": 28,
+          "node": 7,
+          "name": "L0.experts",
+          "kind": "COMP"
+        },
+        {
+          "graph": "g0.w0",
+          "rank": 28,
+          "node": 13,
+          "name": "L0.merge",
+          "kind": "COMP"
+        },
+        {
+          "graph": "g0.w0",
+          "rank": 28,
+          "node": 14,
+          "name": "L1.attention",
+          "kind": "COMP"
+        },
+        {
+          "graph": "g0.w0",
+          "rank": 28,
+          "node": 15,
+          "name": "L1.pack",
+          "kind": "COMP"
+        },
+        {
+          "graph": "g0.w0",
+          "rank": 28,
+          "node": 18,
+          "name": "L1.experts",
+          "kind": "COMP"
+        },
+        {
+          "graph": "g0.w0",
+          "rank": 28,
+          "node": 22,
+          "name": "L1.merge",
+          "kind": "COMP"
+        },
+        {
+          "graph": "g0.w1",
+          "rank": 4,
+          "node": 33,
+          "name": "L1.combine.0-4.recv",
+          "kind": "RECV"
+        },
+        {
+          "graph": "g0.w1",
+          "rank": 4,
+          "node": 42,
+          "name": "L1.merge",
+          "kind": "COMP"
+        }
+      ]
+    },
+    {
+      "primary_request": 8,
+      "path": [
+        {
+          "graph": "g0.w0",
+          "rank": 28,
+          "node": 3,
+          "name": "L0.dispatch.4-28.recv",
+          "kind": "RECV"
+        },
+        {
+          "graph": "g0.w0",
+          "rank": 28,
+          "node": 7,
+          "name": "L0.experts",
+          "kind": "COMP"
+        },
+        {
+          "graph": "g0.w0",
+          "rank": 28,
+          "node": 13,
+          "name": "L0.merge",
+          "kind": "COMP"
+        },
+        {
+          "graph": "g0.w0",
+          "rank": 28,
+          "node": 14,
+          "name": "L1.attention",
+          "kind": "COMP"
+        },
+        {
+          "graph": "g0.w0",
+          "rank": 28,
+          "node": 15,
+          "name": "L1.pack",
+          "kind": "COMP"
+        },
+        {
+          "graph": "g0.w0",
+          "rank": 28,
+          "node": 18,
+          "name": "L1.experts",
+          "kind": "COMP"
+        },
+        {
+          "graph": "g0.w0",
+          "rank": 28,
+          "node": 22,
+          "name": "L1.merge",
+          "kind": "COMP"
+        },
+        {
+          "graph": "g0.w1",
+          "rank": 8,
+          "node": 39,
+          "name": "L1.combine.4-8.recv",
+          "kind": "RECV"
+        },
+        {
+          "graph": "g0.w1",
+          "rank": 8,
+          "node": 48,
+          "name": "L1.merge",
+          "kind": "COMP"
+        }
+      ]
+    },
+    {
+      "primary_request": 12,
+      "path": [
+        {
+          "graph": "g0.w0",
+          "rank": 28,
+          "node": 3,
+          "name": "L0.dispatch.4-28.recv",
+          "kind": "RECV"
+        },
+        {
+          "graph": "g0.w0",
+          "rank": 28,
+          "node": 7,
+          "name": "L0.experts",
+          "kind": "COMP"
+        },
+        {
+          "graph": "g0.w0",
+          "rank": 28,
+          "node": 13,
+          "name": "L0.merge",
+          "kind": "COMP"
+        },
+        {
+          "graph": "g0.w0",
+          "rank": 28,
+          "node": 14,
+          "name": "L1.attention",
+          "kind": "COMP"
+        },
+        {
+          "graph": "g0.w0",
+          "rank": 28,
+          "node": 15,
+          "name": "L1.pack",
+          "kind": "COMP"
+        },
+        {
+          "graph": "g0.w0",
+          "rank": 28,
+          "node": 18,
+          "name": "L1.experts",
+          "kind": "COMP"
+        },
+        {
+          "graph": "g0.w0",
+          "rank": 28,
+          "node": 22,
+          "name": "L1.merge",
+          "kind": "COMP"
+        },
+        {
+          "graph": "g0.w1",
+          "rank": 12,
+          "node": 42,
+          "name": "L1.combine.20-12.recv",
+          "kind": "RECV"
+        },
+        {
+          "graph": "g0.w1",
+          "rank": 12,
+          "node": 50,
+          "name": "L1.merge",
+          "kind": "COMP"
+        }
+      ]
+    }
+  ],
+  "per_request": [
+    {
+      "primary_request": 0,
+      "file_id": "local-1472",
+      "source_sha256": "3085c39e9b9950a7e68f30eed8517eaecbfe3d0ad75d813925ff788a1c164255",
+      "network_payload_bytes": 750464,
+      "declared_compute_ns": 8040,
+      "bundles": 26,
+      "expert_contributions": 32,
+      "local_bundles": 0,
+      "directly_has_overdue_input": false,
+      "blocked_by_send_dependency": true,
+      "blocked_by_recv_dependency": true,
+      "current_primary_last_merge_ns": 201880,
+      "first_remote_inputs": 6,
+      "first_remote_inputs_received_by_trigger": 6
+    },
+    {
+      "primary_request": 4,
+      "file_id": "local-1808",
+      "source_sha256": "c8c9cf4917498a2195960dbd9c65e9efe027af6606db098d40b0db8f7c266092",
+      "network_payload_bytes": 721600,
+      "declared_compute_ns": 7940,
+      "bundles": 27,
+      "expert_contributions": 32,
+      "local_bundles": 2,
+      "directly_has_overdue_input": true,
+      "blocked_by_send_dependency": true,
+      "blocked_by_recv_dependency": true,
+      "current_primary_last_merge_ns": 201880,
+      "first_remote_inputs": 7,
+      "first_remote_inputs_received_by_trigger": 6
+    },
+    {
+      "primary_request": 8,
+      "file_id": "local-2675",
+      "source_sha256": "848633cf8afa1c9247d9cdaf5968bb09a5f2e2d409387f4a333ce7a6e35390cd",
+      "network_payload_bytes": 779328,
+      "declared_compute_ns": 7740,
+      "bundles": 29,
+      "expert_contributions": 32,
+      "local_bundles": 2,
+      "directly_has_overdue_input": true,
+      "blocked_by_send_dependency": true,
+      "blocked_by_recv_dependency": true,
+      "current_primary_last_merge_ns": 201880,
+      "first_remote_inputs": 6,
+      "first_remote_inputs_received_by_trigger": 5
+    },
+    {
+      "primary_request": 12,
+      "file_id": "local-6447",
+      "source_sha256": "265c8e66cfb49da12be0d8037cd7a8be6997f4207bcb0a48ca3c616bbe253b96",
+      "network_payload_bytes": 837056,
+      "declared_compute_ns": 7740,
+      "bundles": 29,
+      "expert_contributions": 32,
+      "local_bundles": 0,
+      "directly_has_overdue_input": true,
+      "blocked_by_send_dependency": true,
+      "blocked_by_recv_dependency": true,
+      "current_primary_last_merge_ns": 201880,
+      "first_remote_inputs": 7,
+      "first_remote_inputs_received_by_trigger": 6
+    }
+  ],
+  "closure_counts": {
+    "SEND": {
+      "nodes": 1131,
+      "first_layer_expert_nodes": 32,
+      "target_final_merges": 4
+    },
+    "RECV": {
+      "nodes": 1131,
+      "first_layer_expert_nodes": 32,
+      "target_final_merges": 4
+    },
+    "combined": {
+      "nodes": 1134,
+      "first_layer_expert_nodes": 32,
+      "target_final_merges": 4
+    }
+  },
+  "first_stage": {
+    "remote_dispatch_messages": 26,
+    "received_messages": 23,
+    "received_payload_bytes": 332672,
+    "unreceived_payload_bytes": 43392,
+    "first_expert_nodes": 32,
+    "first_expert_issued_before_trigger": 0,
+    "first_expert_completed_before_trigger": 0,
+    "declared_compute_completed_before_trigger_ns": 4120,
+    "dispatch_members_arrived_before_trigger": 28,
+    "dispatch_release_ns": 90680
+  },
+  "complete_backup": {
+    "network_payload_bytes": 3088448,
+    "declared_compute_ns": 31460,
+    "all_rank_bundles": 111,
+    "expert_contributions": 128
+  },
+  "subset_accounting_only": {
+    "selected_requests": [
+      4,
+      8,
+      12
+    ],
+    "excluded_requests": [
+      0
+    ],
+    "selected_network_bytes": 2337984,
+    "selected_declared_compute_ns": 23420,
+    "existing_consumer_accepts_subset": false,
+    "equivalent_task_or_speedup_proven": false
+  },
+  "existing_records_unchanged": {
+    "control-normal": true,
+    "control-local": true,
+    "fixed-local": true,
+    "guarded-normal": true,
+    "guarded-local": true
+  },
+  "new_network_executions": 0,
+  "analyzer_sha256": "2905acce0db36e4d6af795c61652ed0d5a394bd0c4e7d1a6351cf551d731e27b",
+  "dependency_analyzer_sha256": "08a1214d88f0437781cbce5e85ea616ee96da7499bb1426d1c63a11a17f06172",
+  "scope": "Structural reachability and linear declared work attribution only. Source predicate never sees receiver truth. No modified execution, counterfactual latency, numerical tensor equivalence, full671B or new recovery benefit."
+}

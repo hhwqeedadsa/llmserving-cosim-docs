@@ -1,0 +1,15 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>备用贡献能带来多少消费收益？</title><style>body{font:16px/1.75 system-ui,sans-serif;max-width:1180px;margin:30px auto;padding:0 20px;background:#f4f7fb;color:#183149}section{background:white;padding:22px;margin:20px 0;border-radius:12px}h1{font-size:28px}h2{font-size:21px}table{border-collapse:collapse;display:block;overflow:auto;font-size:14px}td,th{padding:9px;border:1px solid #d9e3ed;text-align:left;white-space:nowrap}th{background:#edf3f9}img{width:100%;height:auto}strong{color:#9c352e}a{color:#1261a2}</style>
+<h1>单个备用快了，整个请求能快多少？</h1>
+<p>128端点Clos，实际网络记录的只读核查。真实输入为四份R1专家选择，两层、两步Decode；载荷为标记字节、计算为声明值，没有硬件校准。本轮零新网络、零构建。</p>
+<section><h2>本轮最重要的结果</h2><p><strong>这次备用贡献提前62.002微秒，但全部贡献到齐的时间没有提前。</strong>首调用原件与赢家集合均在93.669微秒到齐，最后结果来自r68，备用修复的是r32。保持其他已记录事件不变时，新增一个消费者不能把这62.002微秒直接变成请求加速。</p>
+<table><thead><tr><th>输入</th><th>层步调用</th><th>贡献包</th><th>前沿提前调用数</th><th>最大前沿提前ns</th><th>实际备用字节</th></tr></thead><tbody><tr><td>真实R1专家选择</td><td>16</td><td>111</td><td>0</td><td>0</td><td>28864</td></tr><tr><td>独立人工输入</td><td>16</td><td>32</td><td>0</td><td>0</td><td>1216</td></tr></tbody></table>
+<p>“0”仅指固定记录中的全贡献就绪差，不是移除备用后重新仿真的时延；移除工作会改变网络和GPU竞争。所有层步调用分别核对，没有把时延相加。</p></section>
+<section><h2>真实调用中，每份结果何时可用？</h2><img src="readiness.png" alt="各贡献的原件与赢家时间，以及备用缓冲释放和汇合时刻">
+<table><thead><tr><th>贡献包</th><th>原件结果µs</th><th>赢家结果µs</th><th>最后到齐</th><th>输入到达µs</th><th>专家实际开始µs</th></tr></thead><tbody><tr><td>r32</td><td>88.075</td><td>26.073</td><td>否</td><td>83.502</td><td>85.504</td></tr><tr><td>r56</td><td>90.437</td><td>90.437</td><td>否</td><td>7.713</td><td>85.504</td></tr><tr><td>r64</td><td>93.56</td><td>93.56</td><td>否</td><td>9.351</td><td>85.504</td></tr><tr><td>r68</td><td>93.669</td><td>93.669</td><td>是</td><td>10.146</td><td>85.504</td></tr><tr><td>r72</td><td>92.98</td><td>92.98</td><td>否</td><td>10.373</td><td>85.504</td></tr><tr><td>r76</td><td>93.089</td><td>93.089</td><td>否</td><td>10.703</td><td>85.504</td></tr></tbody></table>
+<p>健康r68的输入10.146微秒已到，专家仍等到85.504微秒才开始。原图Dispatch组门限是实际最后前驱，GPU FIFO等待为0。备用结果没有替代原始Dispatch的源确认，所以没有提前解除这道门限；这段等待不能直接归因于GPU计算不足。</p></section>
+<section><h2>缓冲还有什么要求？</h2><p>备用结果26.073微秒收到，28.075微秒确认并释放；全部贡献93.669微秒才到齐。未来消费者若要在那时读取赢家，至少还需保留65.594微秒，后续合并和排队可能需要更久。现有模式没有消费者，因此这不是现有越界访问，也不是上游漏洞。当前标记内容也不能证明数值等价。</p></section>
+<section><h2>哪里还有优化空间？</h2><p>全部贡献就绪93.669微秒到原merge开始99.997微秒相差6.328微秒。这只是这次记录中的间隔，包含必要依赖与同步，不是已证明可消除的时延。研究独立消费者时，必须同时提供同样消费者的无备用基线，不能把消费者自身的作用归给备用策略。</p>
+<p>当前结果不支持继续宣称单份备用能获得62微秒的推理收益。下一步先针对阻塞整个EP组的原始Dispatch完成路径，比较成熟SR、尾包探测及完整早备用。只有在这些强基线之后，按通信组完成进度分配恢复预算仍能减少尾部且不拖累健康任务，才值得作为新机制候选。若只是调低RTO或通用重传更早，正常作为基线收尾。</p></section>
+<section><h2>证据与复现</h2><p>公开工具先复核实际来源、图、原生回调与共享计算，再核对输入目录全部文件SHA。真实431份、人工427份保持不变。早先只看备用结果的解释在本轮被完整集合条件修正，没有删除门限或重跑网络来制造收益。</p>
+<p><a href="analysis.json">派生证据</a> · <a href="readiness.svg">矢量图</a> · <a href="../../../../docs/contribution_frontier.md">公开工具与字段</a> · <a href="../../README.md">研究方法</a></p></section></html>

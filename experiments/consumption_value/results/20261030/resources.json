@@ -1,0 +1,224 @@
+{
+  "passed": true,
+  "budget": {
+    "total_monitored_seconds": 600,
+    "artifact_bytes": 268435456,
+    "min_free_bytes": 8589934592
+  },
+  "used_monitored_seconds": 13.387192072113976,
+  "new_networks": 0,
+  "builds": 0,
+  "stages": [
+    {
+      "stage": "artificial-frontier",
+      "argv": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "contribution-frontier",
+        "--run",
+        "runs/message_buffers_20261030/independent-run",
+        "--output",
+        "runs/consumption_value_20261030/artificial"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 0.7564841199782677,
+      "peak_rss_bytes": 37027840,
+      "peak_artifact_bytes": 81920
+    },
+    {
+      "stage": "contribution-regression",
+      "argv": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/unit",
+        "-p",
+        "contribution*test.py",
+        "-v"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 0.22535974497441202,
+      "peak_rss_bytes": 23351296,
+      "peak_artifact_bytes": 851968
+    },
+    {
+      "stage": "dependencies",
+      "argv": [
+        "bash",
+        "scripts/check_deps.sh"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 0.4497488110209815,
+      "peak_rss_bytes": 20201472,
+      "peak_artifact_bytes": 1916928
+    },
+    {
+      "stage": "final-unit",
+      "argv": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/unit",
+        "-p",
+        "contribution_frontier_test.py",
+        "-v"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 0.11985987302614376,
+      "peak_rss_bytes": 5304320,
+      "peak_artifact_bytes": 241664
+    },
+    {
+      "stage": "platform-receipt",
+      "argv": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "runs/consumption_value_20261030/platform_receipt.py"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 0.12226824701065198,
+      "peak_rss_bytes": 5357568,
+      "peak_artifact_bytes": 892928
+    },
+    {
+      "stage": "publication-check",
+      "argv": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "experiments/consumption_value/verify.py",
+        "--study",
+        "runs/consumption_value_20261030/study",
+        "--delivery",
+        "experiments/consumption_value/results/20261030",
+        "--output",
+        "experiments/consumption_value/results/20261030/verification.json"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 0.123222641996108,
+      "peak_rss_bytes": 5312512,
+      "peak_artifact_bytes": 1294336
+    },
+    {
+      "stage": "publication-pinned",
+      "argv": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "experiments/consumption_value/verify.py",
+        "--study",
+        "runs/consumption_value_20261030/study-pinned",
+        "--delivery",
+        "experiments/consumption_value/results/20261030",
+        "--output",
+        "experiments/consumption_value/results/20261030/verification.json"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 0.12749691301723942,
+      "peak_rss_bytes": 5349376,
+      "peak_artifact_bytes": 1904640
+    },
+    {
+      "stage": "real-frontier",
+      "argv": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "contribution-frontier",
+        "--run",
+        "runs/message_buffers_20261030/real-run",
+        "--output",
+        "runs/consumption_value_20261030/real"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 2.5682585880276747,
+      "peak_rss_bytes": 102297600,
+      "peak_artifact_bytes": 225280
+    },
+    {
+      "stage": "study",
+      "argv": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "experiments/consumption_value/analyze.py",
+        "--real-run",
+        "runs/message_buffers_20261030/real-run",
+        "--artificial-run",
+        "runs/message_buffers_20261030/independent-run",
+        "--output",
+        "runs/consumption_value_20261030/study"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 4.254192030988634,
+      "peak_rss_bytes": 119382016,
+      "peak_artifact_bytes": 835584
+    },
+    {
+      "stage": "study-pinned",
+      "argv": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "experiments/consumption_value/analyze.py",
+        "--real-run",
+        "runs/message_buffers_20261030/real-run",
+        "--artificial-run",
+        "runs/message_buffers_20261030/independent-run",
+        "--output",
+        "runs/consumption_value_20261030/study-pinned"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 4.296536381996702,
+      "peak_rss_bytes": 124243968,
+      "peak_artifact_bytes": 1888256
+    },
+    {
+      "stage": "unit",
+      "argv": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/unit",
+        "-p",
+        "contribution_frontier_test.py",
+        "-v"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 0.118810766027309,
+      "peak_rss_bytes": 5345280,
+      "peak_artifact_bytes": 12288
+    },
+    {
+      "stage": "unit-observe-only",
+      "argv": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/unit",
+        "-p",
+        "contribution*test.py",
+        "-v"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 0.22495395404985175,
+      "peak_rss_bytes": 23347200,
+      "peak_artifact_bytes": 868352
+    }
+  ],
+  "dependency_check": "13 pinned checkouts passed; not a compilation or hardware claim",
+  "manual_figure_review": "PNG viewed with view_image; browser rendering not verified"
+}

@@ -24,6 +24,7 @@ from .phase_completion import enabled as phase_enabled
 from .token_transport import configuration as token_configuration, payload_sizes
 from .execution_events import configuration as event_configuration, ExecutionObserver
 from .contribution_binding import configuration as binding_configuration, ContributionBinding
+from .source_ack_watchdog import configuration as watchdog_configuration, SourceAckObserver
 
 
 def validate(c, topology, rdma, replay=None):
@@ -31,11 +32,13 @@ def validate(c, topology, rdma, replay=None):
            (' transport' if 'transport' in c else '')+(' phase_completion' if 'phase_completion' in c else '')+
            (' token_transport' if 'token_transport' in c else '')+
            (' execution_events' if 'execution_events' in c else '')+
-           (' contribution_tracking' if 'contribution_tracking' in c else ''), 'service')
+           (' contribution_tracking' if 'contribution_tracking' in c else '')+
+           (' source_ack_watchdog' if 'source_ack_watchdog' in c else ''), 'service')
     phase_enabled(c)
     token_configuration(c)
     event_configuration(c)
     binding_configuration(c)
+    watchdog_configuration(c)
     extended=c['schema_version']=='moe-scaleout-service/2'
     require(c['schema_version'] in ('moe-scaleout-service/1','moe-scaleout-service/2'), 'unsupported service schema')
     budget=limits(rdma)
@@ -380,7 +383,9 @@ def _worker(config_path,topology_path,protocol_path,backend,protoc,output,timing
     transcript=[]; child=None
     observation=ExecutionObserver(event_configuration(c)) if event_configuration(c) else None
     binding=ContributionBinding(c,replay,observation) if binding_configuration(c) else None
+    watchdog=SourceAckObserver(c,observation) if watchdog_configuration(c) else None
     event_file=(output/'execution_events.jsonl').open('x',buffering=1) if observation else None
+    timeout_file=(output/'source_ack_timeouts.jsonl').open('x',buffering=1) if watchdog else None
     try:
         # A host-budget kill must not lose already-read complete control lines
         # in Python's block buffer. This is not fsync/power-loss durability.
@@ -390,12 +395,17 @@ def _worker(config_path,topology_path,protocol_path,backend,protoc,output,timing
                 with timing.span('native_output_wait'):line=child.stdout.readline()
                 if not line:break
                 logs.write(line)
-                event=control_event(line,observations=observation is not None)
+                event=control_event(line,observations=observation is not None,source_ack_timeouts=watchdog is not None)
                 if event is None:continue
                 if event['type']=='OBSERVE':
                     if binding:binding.accept(event)
                     else:observation.accept(event)
+                    if watchdog:watchdog.observe(event)
                     event_file.write(json.dumps(event,separators=(',',':'))+'\n')
+                    continue
+                if event['type']=='SOURCE_ACK_TIMEOUT':
+                    watchdog.accept(event)
+                    timeout_file.write(json.dumps(event,separators=(',',':'))+'\n')
                     continue
                 with timing.span('frontend_decide'):reply=frontend.decide(event,output,proto)
                 if observation:
@@ -407,6 +417,9 @@ def _worker(config_path,topology_path,protocol_path,backend,protoc,output,timing
                 child.stdin.write(json.dumps(reply)+'\n');child.stdin.flush()
             code=child.wait();require(code==0, 'native service failed; inspect native.stderr.log')
     finally:
+        if timeout_file is not None:
+            timeout_file.close()
+            save(output/'source_ack_watchdog.json',watchdog.snapshot())
         if event_file is not None:
             event_file.close()
             save(output/'execution_observation.json',observation.snapshot())
@@ -471,6 +484,12 @@ def run(config, topology, protocol, backend, output, protoc='protoc', *, host_ti
         for name in ('contribution_binding.py','contribution_attempts.py'):
             module=ROOT/'python/moe_ub_cosim'/name
             provenance['hashes'][str(module)]=digest(module)
+        save(output/'provenance.json',provenance)
+    if watchdog_configuration(c):
+        provenance=checked_json(output/'provenance.json',65536)
+        provenance['source_ack_watchdog']=dict(c['source_ack_watchdog'])
+        module=ROOT/'python/moe_ub_cosim/source_ack_watchdog.py'
+        provenance['hashes'][str(module)]=digest(module)
         save(output/'provenance.json',provenance)
     command=[sys.executable,'-m','moe_ub_cosim.scaleout_service','--worker',str(output/'input.json'),str(output),str(output/'rdma.json'),
              str(backend),str(protoc),str(output)]

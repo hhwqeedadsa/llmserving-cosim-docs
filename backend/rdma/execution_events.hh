@@ -11,6 +11,7 @@ class ExecutionEvents {
     Require(maximum<=262144,"execution event budget exceeds limit");
   }
   bool Enabled() const {return maximum_!=0;}
+  uint64_t Count() const {return count_;}
   void Emit(Json event) {
     if(!Enabled())return;
     Require(count_<maximum_,"execution event budget exceeded");

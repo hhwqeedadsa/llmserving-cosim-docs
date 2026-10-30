@@ -65,6 +65,12 @@ def native_arguments(config, output):
     from .execution_events import configuration
     option=configuration(config)
     if option:args+=['--execution-events',str(option['max_events'])]
+    from .source_ack_watchdog import configuration as watchdog_configuration
+    watchdog=watchdog_configuration(config)
+    if watchdog:
+        from .scaleout_rdma import save
+        watchdog_path=output/'source-ack-watchdog-config.json';save(watchdog_path,watchdog)
+        args+=['--source-ack-watchdog',str(watchdog_path)]
     if 'transport' not in config:return args
     from .scaleout_rdma import save
     path=output/'service-transport.json';save(path,config['transport'])

@@ -8,7 +8,7 @@ import json
 PREFIX='MOE_RDMA_EVENT '
 
 
-def event(line, *, observations=False):
+def event(line, *, observations=False, source_ack_timeouts=False):
     if not line.startswith(PREFIX):return None
     payload=line[len(PREFIX):]
     if len(payload.encode('utf-8'))>1048577 or not payload.endswith('\n'):
@@ -18,6 +18,9 @@ def event(line, *, observations=False):
     except json.JSONDecodeError as error:
         raise ValueError('invalid native control frame; inspect native.stdout.log') from error
     allowed=('DECIDE','OBSERVE') if observations else ('DECIDE',)
+    if source_ack_timeouts:
+        if not observations:raise ValueError('source ACK timeouts require execution observations')
+        allowed+=('SOURCE_ACK_TIMEOUT',)
     if not isinstance(result,dict) or result.get('type') not in allowed:
         raise ValueError('unexpected native control event; inspect native.stdout.log')
     return result

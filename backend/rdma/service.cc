@@ -3,6 +3,7 @@
 #include "host_timing.hh"
 #include "phase_gates.hh"
 #include "execution_events.hh"
+#include "source_ack_watchdog.hh"
 #include "astra-sim/system/Sys.hh"
 #include <filesystem>
 #include <fstream>
@@ -16,10 +17,11 @@ namespace moe_rdma { void InitializeLogging(); void ShutdownLogging(); }
 namespace fs=std::filesystem;
 class Service {
  public:
-  Service(Fabric& fabric,ServiceTransport& transport,ControlChannel& control,int ranks,const std::string& bootstrap,const std::string& system,HostTiming& timing,bool phase_completion,uint64_t event_limit):
-    fabric_(fabric),transport_(transport),control_(control),events_(control,event_limit),messages_(fabric,transport),owners_(ranks),boot_done_(ranks,false),timing_(timing),phase_completion_(phase_completion) {
+  Service(Fabric& fabric,ServiceTransport& transport,ControlChannel& control,int ranks,const std::string& bootstrap,const std::string& system,HostTiming& timing,bool phase_completion,uint64_t event_limit,const SourceAckWatchdogOptions& watchdog):
+    fabric_(fabric),transport_(transport),control_(control),events_(control,event_limit),watchdog_(control,events_,watchdog),messages_(fabric,transport),owners_(ranks),boot_done_(ranks,false),timing_(timing),phase_completion_(phase_completion),watchdog_enabled_(watchdog.enabled) {
     if(events_.Enabled())messages_.SetObserver([this](const std::string& kind,const std::string& graph,uint64_t message,int rank){
       events_.Emit({{"kind",kind},{"graph_id",graph},{"message",message},{"rank",rank}});
+      watchdog_.Observe(kind,graph,message,rank);
     });
     for(int r=0;r<ranks;++r)
       adapters_.push_back(std::make_unique<Adapter>(r,messages_,[this,r](){Finished(r);}));
@@ -169,6 +171,7 @@ class Service {
     Json report={{"service_finished",finished_},{"decisions",decision_},{"waves",history_},
       {"active_graphs",waves_.size()},{"message_callbacks",messages_.Report()}};
     if(events_.Enabled())report["execution_events"]=events_.Report();
+    if(watchdog_enabled_)report["source_ack_watchdog"]=watchdog_.Report();
     if(phase_completion_) {
       Json gates=Json::array();
       for(const auto& [key,group]:phase_gates_.Groups()) {
@@ -186,7 +189,7 @@ class Service {
  private:
   static int64_t Now(){return ns3::Simulator::Now().GetNanoSeconds();}
   struct Wave { std::vector<uint64_t> messages;std::vector<int> ranks;std::set<int> finished;int64_t start; };
-  Fabric& fabric_;ServiceTransport& transport_;ControlChannel& control_;ExecutionEvents events_;Messages messages_;
+  Fabric& fabric_;ServiceTransport& transport_;ControlChannel& control_;ExecutionEvents events_;SourceAckWatchdog watchdog_;Messages messages_;
   std::vector<std::string> owners_;
   std::vector<bool> boot_done_;
   std::vector<std::unique_ptr<Adapter>> adapters_;
@@ -196,13 +199,13 @@ class Service {
   Json history_=Json::array();
   unsigned decision_=0;bool pump_pending_=false,finished_=false;
   HostTiming& timing_;
-  bool phase_completion_;
+  bool phase_completion_,watchdog_enabled_;
   PhaseGates phase_gates_;
 };
 static int Libraries(dl_phdr_info* info,std::size_t,void* data) {
   if(info->dlpi_name && info->dlpi_name[0])static_cast<Json*>(data)->push_back(info->dlpi_name);return 0;
 }
-static void Execute(char** argv,HostTiming& timing,const Json& transport_config,ControlChannel& control,bool phase_completion,uint64_t event_limit) {
+static void Execute(char** argv,HostTiming& timing,const Json& transport_config,ControlChannel& control,bool phase_completion,uint64_t event_limit,const SourceAckWatchdogOptions& watchdog) {
     auto total=timing.Span("native_total");
     Require(!fs::exists(argv[5]),"result already exists");
     ns3::Time::SetResolution(ns3::Time::NS);Json topology,config;
@@ -215,7 +218,7 @@ static void Execute(char** argv,HostTiming& timing,const Json& transport_config,
     ServiceTransport transport(fabric,transport_config);
     int ranks=0;for(const auto& node:topology.at("nodes"))if(node.at("kind")=="gpu")++ranks;
     std::unique_ptr<Service> service_owner;
-    {auto phase=timing.Span("astra_init");service_owner=std::make_unique<Service>(fabric,transport,control,ranks,argv[4],argv[3],timing,phase_completion,event_limit);}
+    {auto phase=timing.Span("astra_init");service_owner=std::make_unique<Service>(fabric,transport,control,ranks,argv[4],argv[3],timing,phase_completion,event_limit,watchdog);}
     auto& service=*service_owner;
     ns3::Simulator::Stop(ns3::NanoSeconds(fabric.MaxSimNs()));
     {auto phase=timing.Span("simulator_run");ns3::Simulator::Run();}
@@ -247,8 +250,8 @@ static void Execute(char** argv,HostTiming& timing,const Json& transport_config,
 int main(int argc,char** argv) {
   try {
     ControlChannel control;
-    Require(argc>=6 && argc<=13,"usage: moe-rdma-service TOPOLOGY RDMA SYSTEM BOOTSTRAP_PREFIX NEW_RESULT [NEW_HOST_TIMING.jsonl] [--phase-completion ep_transport_flush/1] [--transport CONFIG.json] [--execution-events MAX_EVENTS]");
-    int next=6;std::string host;Json transport;bool phase_completion=false,has_transport=false;uint64_t event_limit=0;
+    Require(argc>=6 && argc<=15,"usage: moe-rdma-service TOPOLOGY RDMA SYSTEM BOOTSTRAP_PREFIX NEW_RESULT [NEW_HOST_TIMING.jsonl] [--phase-completion ep_transport_flush/1] [--transport CONFIG.json] [--execution-events MAX_EVENTS] [--source-ack-watchdog CONFIG.json]");
+    int next=6;std::string host;Json transport,watchdog_json;bool phase_completion=false,has_transport=false;uint64_t event_limit=0;
     if(next<argc && std::string(argv[next]).rfind("--",0)!=0)host=argv[next++];
     while(next<argc) {
       Require(next+1<argc,"missing service option value");const std::string option=argv[next++],value=argv[next++];
@@ -258,10 +261,16 @@ int main(int argc,char** argv) {
         Require(event_limit==0 && !value.empty() && value.find_first_not_of("0123456789")==std::string::npos,"invalid execution event option");
         event_limit=std::stoull(value);Require(event_limit>0 && event_limit<=262144,"invalid execution event limit");
       }
+      else if(option=="--source-ack-watchdog") {
+        Require(watchdog_json.is_null(),"repeated source ACK watchdog option");watchdog_json=ReadJson(value);
+        Require(!watchdog_json.is_null(),"null source ACK watchdog option");
+      }
       else Require(false,"unexpected service option");
     }
     Require(next==argc,"unexpected service arguments");
-    HostTiming timing(host);Execute(argv,timing,transport,control,phase_completion,event_limit);timing.Complete();return 0;
+    const auto watchdog=SourceAckWatchdogOptions::Parse(watchdog_json);
+    Require(!watchdog.enabled || (event_limit>0 && has_transport),"source ACK watchdog requires execution events and persistent transport");
+    HostTiming timing(host);Execute(argv,timing,transport,control,phase_completion,event_limit,watchdog);timing.Complete();return 0;
   } catch(const std::exception& error) {
     std::cerr<<error.what()<<'\n';ns3::Simulator::Destroy();ShutdownLogging();return 1;
   }

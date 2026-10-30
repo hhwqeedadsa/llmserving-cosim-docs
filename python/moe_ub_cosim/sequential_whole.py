@@ -56,6 +56,12 @@ class SequentialWholeConsumer(DelayedWholeConsumer):
             require(a['waves'][-1]['finished_ns']==now and now>=self.now,'next graph before previous actual completion')
         a['waves'].append(dict(graph_id=graph,step=step,submitted_ns=now,finished_ns=None))
 
+    def next_graphs(self,groups):
+        """Names of the actual next graphs, before registering these submissions."""
+        attempts={a['group_index']:a for call in self.calls.values() for a in call['attempts'].values()}
+        require(all(i in attempts and len(attempts[i]['waves'])<self.steps for i in groups),'no next sequential graph')
+        return [f'g{i}.w{len(attempts[i]["waves"])}' for i in groups]
+
     def accept(self,event):
         if event['kind']!='graph_retired':return
         fields(event,'schema_version type sequence time_ns kind graph_id','sequential callback')

@@ -23,6 +23,14 @@ def submit(c,r,w,index,step,now):w.register(make_wave(c,c['parallel']['groups'][
 
 
 class SequentialChecks(unittest.TestCase):
+    def test_prefix_audit_uses_next_step_name_not_always_step_zero(self):
+        c,r,w=fresh(config());self.assertEqual(w.next_graphs([0,2]),['g0.w0','g2.w0'])
+        submit(c,r,w,0,0,0);submit(c,r,w,2,0,0);w.accept(event('g0.w0',60,1))
+        groups,_=w.choose(decide(60,1));self.assertEqual(w.next_graphs(groups),['g0.w1'])
+        self.assertNotEqual(w.next_graphs(groups),['g0.w0'])
+        submit(c,r,w,0,1,60)
+        with self.assertRaises(ValueError):w.next_graphs([0])
+
     def test_different_segment_lengths_have_different_input_identity(self):
         c=config();_,_,a=fresh(c);c=deepcopy(c);c['workload']['decode_steps']=3;_,_,b=fresh(c)
         self.assertNotEqual(a.snapshot()['calls']['target']['input_identity'],b.snapshot()['calls']['target']['input_identity'])

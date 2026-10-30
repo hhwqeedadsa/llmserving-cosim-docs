@@ -1,0 +1,18 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>共享资源备用执行：为什么还没有业务收益</title><style>
+    body{font:17px/1.8 system-ui,sans-serif;background:#f3f6f8;color:#183449;margin:0}main{max-width:1000px;margin:auto;padding:35px 22px}h1{font-size:32px;line-height:1.4}h2{font-size:23px}section{background:white;padding:22px 26px;margin:22px 0;border-radius:12px}table{border-collapse:collapse;width:100%;font-size:15px}td,th{padding:9px;border-bottom:1px solid #dce4e8;text-align:left}.callout{border-left:5px solid #b56936;background:#fff4e9;padding:16px}a{color:#1c638a}img{width:100%}code{overflow-wrap:anywhere}small{color:#566c7b}.table{overflow:auto}</style><main>
+    <small>128端点Clos · 人工功能路由 · 同一GPU/NIC/网络资源 · 执行版本 a7b736ec76</small>
+    <h1>备用贡献提前62.002微秒，<br>整项任务仍没有变快</h1>
+    <p class="callout"><strong>已证明：</strong>备用输入、计算、归并、回传和ACK真实执行，共享原来的资源。<strong>尚未实现：</strong>备用贡献替代原图必要依赖、推动推理请求提前完成。不能把单项提前当作整体恢复收益。</p>
+    <section><h2>这轮做了什么</h2><ol><li>在确认超时处加入同一ns-3时刻的同步决策回复，避免前端把恢复动作回填到过去。</li><li>普通计算和备用计算共用每GPU非抢占FIFO；备用消息通过原ServiceTransport、NIC和Clos传输。</li><li>将真实备用生命周期绑定到贡献的一次提交、迟到结果判重和全部资源退休；保存完整逐包记录与独立审核。</li></ol></section>
+    <section><h2>三组实际结果</h2><div class="table"><table><tr><th>条件</th><th>任务完成/us</th><th>实际消息</th><th>逐包事件</th><th>计算任务</th><th>布局载荷/B</th></tr><tr><td>正常</td><td>103.852</td><td>62</td><td>2120</td><td>2560</td><td>37696</td></tr><tr><td>局部故障</td><td>175.778</td><td>62</td><td>2126</td><td>2560</td><td>37696</td></tr><tr><td>相同故障＋一次备用</td><td>175.778</td><td>64</td><td>2150</td><td>2562</td><td>38912</td></tr></table></div>
+    <p>三组原图均3708节点、62消息、2560计算任务，四份独立人工路由、31个数据活跃rank。局部故障仅在[0,20us)丢弃发往GPU6的DATA，实际丢1包，控制包保留；已有选择性重传SR和参考DCQCN保持开启。两组EP64完整副本均已声明，三组均声明相同108条持久流，不临时增加GPU或独立网络。</p>
+    <img src="timing.png" alt="三组任务完成时间及备用贡献、门限、原图退休的时间点"><p>图中SR表示选择性重传；时间为仿真时钟，不是宿主运行时间。布局载荷不含协议头和ACK，逐包事件数包含逐跳发送接收，不能当作源端包数。</p></section>
+    <section><h2>为什么先返回也没用</h2><p>示例token需要原rank6的专家12—15，也需要rank8的专家16—19。0→6的原Dispatch丢包后，前端于21.030us收到超时并请求rank7执行同一专家集合。备用输入23.058us到达，专家计算400ns、归并300ns，结果25.782us回到源端；原rank6结果87.784us才回到源端，单包贡献提前62.002us。</p>
+    <p>可是rank8虽然5.100us就收到输入，专家计算仍须等整个EP组Dispatch门限85.060us释放。rank8的结果89.808us才返回。所以同一token全部专家到齐时间仍为89.808us，原首轮图123.834us退休，完整两层两步服务175.778us结束。原消息继续真正确认，迟到的rank6结果被记为冗余，没有伪造ACK或跳过原连接。</p>
+    <p class="callout">当前实测任务收益0%，新增1216B布局载荷（640B输入＋576B回传，约为原37696B的3.23%），新增700ns声明计算。健康组本例未观察到完成时间恶化；不能推广为繁忙集群下备用无干扰。</p></section>
+    <section><h2>发现与下一步</h2><p>只增加重传、超时或备用请求还不够。下一步应检查通信接口能否允许已具备完整输入的贡献独立计算，并让真实结果到达驱动token级归并，同时把原传输排空放到后台。这需要明确执行语义和实际资源成本，不能简单删除现有EP门限或伪造原任务完成。若实际通信库必须等待整个调用完成，就应把优化放在调用内部，或承认该部署下备用策略没有收益。</p>
+    <p>当前尚无经过验证的新恢复算法或真实R1收益。功能用例通过后仍须使用真实专家路由、合理故障范围和同副本预算的成熟备用基线，再测SLO、尾延迟、额外带宽/计算及健康任务影响；不为追求正收益削弱基线或制造任意热点。</p></section>
+    <section><h2>验证与边界</h2><p>83项单元检查通过，含9项新检查；无网络CPU检查独立验证6任务FIFO时序和3类非法输入。三个新128端点Clos条件各运行一次，完整记录和公开rdma-check均通过。6类记录篡改、5类原生非法声明被拒绝；迁移后检查通过。没有依赖重编、升级、下载或真实GPU执行。</p>
+    <p>与旧非共享队列结果离线比较：两组完成时间不变。新正常条件的同纳秒事件顺序改变，两条ACK回调和三个节点时刻最大差1ns；不能声称旧新原件逐字节一致。局部故障原包、消息和节点时刻一致，原始事件序列顺序仍有差异。当前故障对照与备用条件使用相同共享队列，其原执行事件逐字节一致。</p>
+    <p>首次CPU回归发现旧输入缺service字段，已修复；首次离线审核错误要求新旧包完全相同，已保留失败并改为明确报告真实差异。两次均未重跑网络。功能例不是完整DeepSeek-R1，没有激活/权重数值验证，H100标签和声明成本没有硬件校准。</p>
+    <p><a href="verification.json">独立核验</a> · <a href="receipt.json">源码、命令与监控</a> · <a href="resources.json">资源汇总</a> · <a href="final-audit.json">最终核查</a> · <a href="../../docs/inflight_helpers.md">接口文档</a> · <a href="../../examples/scaleout_inflight_helpers/README.md">公开复现示例</a></p></section></main></html>

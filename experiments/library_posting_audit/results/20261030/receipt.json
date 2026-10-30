@@ -1,0 +1,106 @@
+{
+  "passed": true,
+  "method_commit": "17ea4ed80ec293de0aabc10465f086a63cb2f035",
+  "method_sha256": {
+    "experiments/library_posting_audit/audit.py": "3112776328c3934aadd3be3a0429042b57ff04fffd771c18b08bf906c1013f68",
+    "experiments/library_posting_audit/publish.py": "e10205cc5945fa9d886f3b8ca5e9ee2938090d78199f024c50375a5a36ff52ea",
+    "experiments/library_posting_audit/verify.py": "c9c6719d2860ac4a8609055b12284a4a6c7e6260d9c70a61cab9d24037226cd9",
+    "experiments/library_posting_audit/README.md": "84bebd23553134c1b8c2268440e7f6e95105bf4c0c518eeff552553255c1160e"
+  },
+  "finalizer_sha256": "54de3e6ecfafffccac2b683a3804b92d602a580ef098c9a29e931d7b2608fc06",
+  "frozen_sha256": "d3a018aa5f4ed035087b0747936d10cbc742c04a0502ce11ddc65cb777809936",
+  "actual_commands": {
+    "prepare": {
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "experiments/library_posting_audit/audit.py",
+        "prepare",
+        "--run",
+        "runs/explicit_prefix_moe_20261030/study/normal",
+        "--output",
+        "runs/library_posting_audit_20261030/input"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "child_exit_code": 0
+    },
+    "analyze": {
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "experiments/library_posting_audit/audit.py",
+        "analyze",
+        "--input",
+        "runs/library_posting_audit_20261030/input",
+        "--output",
+        "runs/library_posting_audit_20261030/analysis.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "child_exit_code": 0
+    },
+    "verify": {
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "experiments/library_posting_audit/verify.py",
+        "--input",
+        "runs/library_posting_audit_20261030/input",
+        "--analysis",
+        "runs/library_posting_audit_20261030/analysis.json",
+        "--output",
+        "runs/library_posting_audit_20261030/verification.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "child_exit_code": 0
+    },
+    "publish": {
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "experiments/library_posting_audit/publish.py",
+        "--stage",
+        "runs/library_posting_audit_20261030",
+        "--output",
+        "experiments/library_posting_audit/results/20261030"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "child_exit_code": 0
+    }
+  },
+  "monitored_seconds": 1.5235747069236822,
+  "monitored_stages": 4,
+  "peak_sampled_artifact_bytes": 827392,
+  "peak_sampled_group_rss_bytes": 154406912,
+  "budget": {
+    "monitored_seconds": 300,
+    "artifact_bytes": 67108864,
+    "min_free_bytes": 8589934592
+  },
+  "monitor_scope": "four analysis stages; preflight and finalization are separately read-only",
+  "source_files": 6,
+  "original_artifacts_hash_checked": 266,
+  "tamper_rejected": [
+    "put_count",
+    "zero_notification",
+    "posting_call",
+    "key_split"
+  ],
+  "static_HTML_links": 10,
+  "markdown_links": 7,
+  "browser_rendering_verified": false,
+  "new_networks": 0,
+  "new_builds": 0,
+  "downloads": 0,
+  "GPU_execution": false,
+  "latency_predicted": false,
+  "hardware_calibrated": false,
+  "delivery_sha256": {
+    "analysis.json": "f7934d112d5843d274e1b5bfd5dedfb585f1fb6d4dbd83d97a68f210b5ac5e81",
+    "verification.json": "e90cacda35cf9f0b25196e153b645d0aadd1945d971f3ad2c8e289944881896c",
+    "sources.json": "d108fdd0e1b70e951f7155a1584570c657340f2844b851e071bb53531efaa2e0",
+    "projections.json": "0e92a626f9d02169824492215932c0a726dae020cb972ef66848cae1d0efb2dd",
+    "frozen.json": "d3a018aa5f4ed035087b0747936d10cbc742c04a0502ce11ddc65cb777809936",
+    "README.md": "c0221722c5eef901e061fb1eb21767680c5d843f847d8a54e4cedbccf511dd9c",
+    "report.html": "cd053124bb36dc114ba283e7086217d1eabed44b98e9cba589e58850e75a895d"
+  }
+}

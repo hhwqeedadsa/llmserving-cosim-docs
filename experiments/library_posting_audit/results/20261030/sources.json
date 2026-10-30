@@ -1,0 +1,158 @@
+[
+  {
+    "family": "deepep_semantics",
+    "revision": "9af0e0d0e74f3577af1979c9b9e1ac2cad0104ee",
+    "path": "data/research/deepep_semantics_20261022/sources/csrc/kernels/ibgda_device.cuh",
+    "public_url": "https://github.com/deepseek-ai/DeepEP/blob/9af0e0d0e74f3577af1979c9b9e1ac2cad0104ee/csrc/kernels/ibgda_device.cuh",
+    "sha256": "1c5353a768a27a4b7d349bb50215cb54f8767934247f7caef7a8f331c2f2bbd2",
+    "git_blob_sha1": "7fab70c13f0e21081831a401f5140ceed1d970a2",
+    "bytes": 21149,
+    "excerpts": [
+      {
+        "marker": "return &state->globalmem.rcs[",
+        "first_line": 78,
+        "last_line": 83,
+        "text": "    auto state = ibgda_get_state();\n    const auto num_rc_per_pe = ibgda_get_state()->num_rc_per_pe;\n    return &state->globalmem.rcs[pe * num_rc_per_pe * state->num_devices_initialized + id % (num_rc_per_pe * state->num_devices_initialized)];\n}\n\n__device__ static __forceinline__"
+      },
+      {
+        "marker": "constexpr int kNumRequestInBatch = 4;",
+        "first_line": 163,
+        "last_line": 168,
+        "text": "    // Always post, not in batch\n    if (!state->use_async_postsend) {\n        constexpr int kNumRequestInBatch = 4;\n        if (kAlwaysDoPostSend or (message_idx + 1) % kNumRequestInBatch == 0)\n            ibgda_post_send(qp, new_wqe_idx);\n    }"
+      },
+      {
+        "marker": "template <bool kAlwaysDoPostSend = false>",
+        "first_line": 335,
+        "last_line": 340,
+        "text": "}\n\ntemplate <bool kAlwaysDoPostSend = false>\n__device__ static __forceinline__ void\nnvshmemi_ibgda_put_nbi_warp(uint64_t req_rptr, uint64_t req_lptr, size_t bytes, int dst_pe, int qp_id, int lane_id, int message_idx) {\n    // Get lkey and rkey, store them into lanes"
+      },
+      {
+        "marker": "return min(lchunk_size, rchunk_size);",
+        "first_line": 232,
+        "last_line": 237,
+        "text": "    // Return the minimum of local and remote chunk sizes\n    auto rchunk_size = device_key.next_addr - roffset;\n    return min(lchunk_size, rchunk_size);\n}\n\n__device__ static __forceinline__ void"
+      },
+      {
+        "marker": "ctrl_seg.fm_ce_se = MLX5_WQE_CTRL_CQ_UPDATE;",
+        "first_line": 190,
+        "last_line": 195,
+        "text": "    ctrl_seg = {0};\n    ctrl_seg.qpn_ds = HtoBE32((qp->qpn << 8) | 3);\n    ctrl_seg.fm_ce_se = MLX5_WQE_CTRL_CQ_UPDATE;\n    ctrl_seg.opmod_idx_opcode = HtoBE32((wqe_idx << 8) | (imm != std::numeric_limits<uint32_t>::max() ? MLX5_OPCODE_RDMA_WRITE_IMM : MLX5_OPCODE_RDMA_WRITE));\n    if (imm != std::numeric_limits<uint32_t>::max())\n        ctrl_seg.imm = HtoBE32(imm);"
+      },
+      {
+        "marker": "auto remaining_bytes = bytes;",
+        "first_line": 349,
+        "last_line": 354,
+        "text": "\n    // Decide how many messages (theoretically 3 for maximum)\n    auto remaining_bytes = bytes;\n    while (remaining_bytes > 0) {\n        if (lane_id == num_wqes) {\n            my_chunk_size = min(remaining_bytes,"
+      },
+      {
+        "marker": "ibgda_submit_requests<true>(qp, my_wqe_idx, 1);",
+        "first_line": 447,
+        "last_line": 452,
+        "text": "                                qp->ibuf.lkey, raddr, rkey, my_wqe_idx, &wqe_ptrs);\n\n        ibgda_submit_requests<true>(qp, my_wqe_idx, 1);\n    }\n}\n"
+      }
+    ]
+  },
+  {
+    "family": "deepep_semantics",
+    "revision": "9af0e0d0e74f3577af1979c9b9e1ac2cad0104ee",
+    "path": "data/research/deepep_semantics_20261022/sources/csrc/kernels/internode_ll.cu",
+    "public_url": "https://github.com/deepseek-ai/DeepEP/blob/9af0e0d0e74f3577af1979c9b9e1ac2cad0104ee/csrc/kernels/internode_ll.cu",
+    "sha256": "91d374c7354d2c92716c23793b6beec65d47cb22498eb22a7954dda0d880161e",
+    "git_blob_sha1": "cfd0d2b258b688dad55fdfd9c769624618dc54db",
+    "bytes": 53128,
+    "excerpts": [
+      {
+        "marker": "nvshmemi_ibgda_put_nbi_warp(dst_ptr, src_ptr, num_bytes_per_msg",
+        "first_line": 162,
+        "last_line": 167,
+        "text": "                const auto dst_p2p_ptr = nvshmemi_get_p2p_ptr(dst_ptr, rank, dst_rank);\n                if (dst_p2p_ptr == 0) {\n                    nvshmemi_ibgda_put_nbi_warp(dst_ptr, src_ptr, num_bytes_per_msg, dst_rank, dst_expert_local_idx, lane_id, slot_idx);\n                } else {\n                    // NOTES: only 2 load iterations for 7K hidden with 8 unrolls\n                    const auto* src_int4_ptr = reinterpret_cast<const int4*>(src_ptr);"
+      },
+      {
+        "marker": "nvshmemi_ibgda_put_nbi_warp(dst_ptr, buf_ptr, num_send_bytes",
+        "first_line": 733,
+        "last_line": 738,
+        "text": "            // NOTES: for zero-copy mode, we assume the data is already in the send buffer\n            if (dst_p2p_ptr == 0)\n                nvshmemi_ibgda_put_nbi_warp(dst_ptr, buf_ptr, num_send_bytes, dst_rank, local_expert_idx, lane_id, token_idx - offset);\n        }\n\n        // Put the finishing flag"
+      },
+      {
+        "marker": "nvshmemi_ibgda_amo_nonfetch_add",
+        "first_line": 229,
+        "last_line": 234,
+        "text": "        auto dst_p2p_ptr = nvshmemi_get_p2p_ptr(dst_ptr, rank, dst_rank);\n        if (dst_p2p_ptr == 0) {\n            nvshmemi_ibgda_amo_nonfetch_add(reinterpret_cast<int*>(dst_ptr), -num_tokens_sent - 1, dst_rank, dst_expert_local_idx);\n        } else {\n            st_release_sys_global(reinterpret_cast<int*>(dst_p2p_ptr), -num_tokens_sent - 1);\n        }"
+      }
+    ]
+  },
+  {
+    "family": "deepep_modern",
+    "revision": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+    "path": "data/research/deepep_modern_20261022/sources/deep_ep/include/deep_ep/impls/ep/dispatch.cuh",
+    "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/impls/ep/dispatch.cuh",
+    "sha256": "447ec0ef779bb2a74f7efa8ece04254c2036ab4000999f566356d6f94df9335a",
+    "git_blob_sha1": "3bacfc60c10fb7e4b21e6d6c57e64cbdb6ae9a58",
+    "bytes": 20457,
+    "excerpts": [
+      {
+        "marker": "gin.put<team_t>(recv_buffer.get_token_buffer",
+        "first_line": 383,
+        "last_line": 388,
+        "text": "                // NOTES: we should skip the NVLink accessible ranks\n                if (stored_dst_slot_idx >= 0 and dst_ptr == nullptr) {\n                    gin.put<team_t>(recv_buffer.get_token_buffer(stored_dst_slot_idx).get_base_ptr(),\n                                    send_buffer_ptr, tma_buffer.get_num_bytes<false>(), stored_dst_rank_idx);\n                }\n                __syncwarp();"
+      }
+    ]
+  },
+  {
+    "family": "nccl_gin",
+    "revision": "12df1a11afad322be5a204a2db890161cbf8131d",
+    "path": "data/research/nccl_gin_20261022/sources/src/transport/net_ib/gdaki/gin_host_gdaki.cc",
+    "public_url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/src/transport/net_ib/gdaki/gin_host_gdaki.cc",
+    "sha256": "d554a0295c463782d60a36b746ed8e998c7e427493f00e6b6813f9d945fdd361",
+    "git_blob_sha1": "976ab919d4ee438147f635d247721704bd511868",
+    "bytes": 60093,
+    "excerpts": [
+      {
+        "marker": "doca_verbs_qp_attr_set_ack_timeout(verbs_qp_attr, ncclParamIbTimeout())",
+        "first_line": 524,
+        "last_line": 529,
+        "text": "  DOCACHECKGOTO(doca_verbs_qp_attr_set_sq_psn(verbs_qp_attr, 0), status, destroy_verbs_qp_attr);\n  DOCACHECKGOTO(doca_verbs_qp_attr_set_port_num(verbs_qp_attr, ctx->port_num), status, destroy_verbs_qp_attr);\n  DOCACHECKGOTO(doca_verbs_qp_attr_set_ack_timeout(verbs_qp_attr, ncclParamIbTimeout()), status, destroy_verbs_qp_attr);\n  DOCACHECKGOTO(doca_verbs_qp_attr_set_retry_cnt(verbs_qp_attr, ncclParamIbRetryCnt()), status, destroy_verbs_qp_attr);\n  DOCACHECKGOTO(doca_verbs_qp_attr_set_rnr_retry(verbs_qp_attr, 7), status, destroy_verbs_qp_attr);\n  DOCACHECKGOTO(doca_verbs_qp_attr_set_min_rnr_timer(verbs_qp_attr, 12), status, destroy_verbs_qp_attr);"
+      },
+      {
+        "marker": "doca_verbs_qp_attr_set_retry_cnt(verbs_qp_attr, ncclParamIbRetryCnt())",
+        "first_line": 525,
+        "last_line": 530,
+        "text": "  DOCACHECKGOTO(doca_verbs_qp_attr_set_port_num(verbs_qp_attr, ctx->port_num), status, destroy_verbs_qp_attr);\n  DOCACHECKGOTO(doca_verbs_qp_attr_set_ack_timeout(verbs_qp_attr, ncclParamIbTimeout()), status, destroy_verbs_qp_attr);\n  DOCACHECKGOTO(doca_verbs_qp_attr_set_retry_cnt(verbs_qp_attr, ncclParamIbRetryCnt()), status, destroy_verbs_qp_attr);\n  DOCACHECKGOTO(doca_verbs_qp_attr_set_rnr_retry(verbs_qp_attr, 7), status, destroy_verbs_qp_attr);\n  DOCACHECKGOTO(doca_verbs_qp_attr_set_min_rnr_timer(verbs_qp_attr, 12), status, destroy_verbs_qp_attr);\n  DOCACHECKGOTO(doca_verbs_qp_attr_set_next_state(verbs_qp_attr, DOCA_VERBS_QP_STATE_INIT), status,"
+      }
+    ]
+  },
+  {
+    "family": "nccl_gin",
+    "revision": "12df1a11afad322be5a204a2db890161cbf8131d",
+    "path": "data/research/nccl_gin_20261022/sources/src/transport/net_ib/gdaki/doca-gpunetio/include/common/doca_gpunetio_verbs_def.h",
+    "public_url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/src/transport/net_ib/gdaki/doca-gpunetio/include/common/doca_gpunetio_verbs_def.h",
+    "sha256": "7d26e765bc83d05dddb4bf9fd8ecb9c5cd1e012e4cb1b47e6e29c28e9c6d502b",
+    "git_blob_sha1": "b8ccf5b96050af0b9ed06c9766dcec51c1f6556a",
+    "bytes": 19940,
+    "excerpts": [
+      {
+        "marker": "DOCA_GPUNETIO_IB_MLX5_WQE_CTRL_CQ_UPDATE =",
+        "first_line": 229,
+        "last_line": 234,
+        "text": " */\nenum doca_gpu_dev_verbs_wqe_ctrl_flags {\n    DOCA_GPUNETIO_IB_MLX5_WQE_CTRL_CQ_UPDATE = DOCA_GPUNETIO_IB_MLX5_WQE_CTRL_CE_CQE_ALWAYS << 2,\n    DOCA_GPUNETIO_IB_MLX5_WQE_CTRL_CQ_ERROR_UPDATE =\n        DOCA_GPUNETIO_IB_MLX5_WQE_CTRL_CE_CQE_ON_CQE_ERROR << 2,\n    DOCA_GPUNETIO_IB_MLX5_WQE_CTRL_CQ_FIRST_CQE_ERROR ="
+      }
+    ]
+  },
+  {
+    "family": "nccl_gin",
+    "revision": "12df1a11afad322be5a204a2db890161cbf8131d",
+    "path": "data/research/nccl_gin_20261022/sources/src/transport/net_ib/gdaki/doca-gpunetio/include/device/doca_gpunetio_dev_verbs_qp.cuh",
+    "public_url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/src/transport/net_ib/gdaki/doca-gpunetio/include/device/doca_gpunetio_dev_verbs_qp.cuh",
+    "sha256": "fa84c6402f05bd58ea1e5d8eb8d4ead02161aba966ea3297b90ed652878cd8e8",
+    "git_blob_sha1": "910b710c56bd8d0da730270cda9f521ee8e4fd83",
+    "bytes": 56066,
+    "excerpts": [
+      {
+        "marker": "Traditional GPU-CQ mode preserves historical behavior by always requesting a CQE.",
+        "first_line": 124,
+        "last_line": 129,
+        "text": "/**\n * @brief Select CQE request flags.\n * Traditional GPU-CQ mode preserves historical behavior by always requesting a CQE. Collapsed CQ\n * modes honor SKIP_DB_RINGING so callers can intentionally prepare unsignaled WQEs.\n */\ntemplate <enum doca_gpu_dev_verbs_qp_type qp_type = DOCA_GPUNETIO_VERBS_QP_SQ,"
+      }
+    ]
+  }
+]

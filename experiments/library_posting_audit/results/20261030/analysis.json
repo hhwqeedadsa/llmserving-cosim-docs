@@ -1,0 +1,1361 @@
+{
+  "passed": true,
+  "frozen_sha256": "d3a018aa5f4ed035087b0747936d10cbc742c04a0502ce11ddc65cb777809936",
+  "rows": [
+    {
+      "graph_id": "g0.w0",
+      "group": 0,
+      "step": 0,
+      "layer": 0,
+      "ranks": [
+        0,
+        4,
+        8,
+        12,
+        16,
+        20,
+        24,
+        28,
+        32,
+        36,
+        40,
+        44,
+        48,
+        52,
+        56,
+        60,
+        64,
+        68,
+        72,
+        76,
+        80,
+        84,
+        88,
+        92,
+        96,
+        100,
+        104,
+        108,
+        112,
+        116,
+        120,
+        124
+      ],
+      "tokens": 4,
+      "selections": 32,
+      "low_latency_projection": {
+        "dispatch": {
+          "data_puts": 32,
+          "nonempty_marker_contexts": 32,
+          "marker_operations": 7936,
+          "zero_token_markers": 7904,
+          "data_active_logical_QPs": 32,
+          "synchronous_data_postsend_calls": 0,
+          "puts_in_final_unrung_batch": 32,
+          "marker_forced_postsend_calls": 7936,
+          "cq_update_requests_per_WQE": "one request in reviewed constructors; not a wire ACK count"
+        },
+        "combine": {
+          "data_puts": 32,
+          "nonempty_marker_contexts": 32,
+          "marker_operations": 7936,
+          "zero_token_markers": 7904,
+          "data_active_logical_QPs": 32,
+          "synchronous_data_postsend_calls": 0,
+          "puts_in_final_unrung_batch": 32,
+          "marker_forced_postsend_calls": 7936,
+          "cq_update_requests_per_WQE": "one request in reviewed constructors; not a wire ACK count"
+        }
+      },
+      "current_direct": {
+        "mode": {
+          "mode": "deepep_direct_bf16/1",
+          "combine": "rank_reduced/1",
+          "local_reduce_ns_per_extra": 100,
+          "payload_bytes_per_token": {
+            "dispatch": 14464,
+            "combine": 14400
+          }
+        },
+        "messages": 54,
+        "logical_payload_bytes": 779328
+      }
+    },
+    {
+      "graph_id": "g0.w0",
+      "group": 0,
+      "step": 0,
+      "layer": 1,
+      "ranks": [
+        0,
+        4,
+        8,
+        12,
+        16,
+        20,
+        24,
+        28,
+        32,
+        36,
+        40,
+        44,
+        48,
+        52,
+        56,
+        60,
+        64,
+        68,
+        72,
+        76,
+        80,
+        84,
+        88,
+        92,
+        96,
+        100,
+        104,
+        108,
+        112,
+        116,
+        120,
+        124
+      ],
+      "tokens": 4,
+      "selections": 32,
+      "low_latency_projection": {
+        "dispatch": {
+          "data_puts": 32,
+          "nonempty_marker_contexts": 32,
+          "marker_operations": 7936,
+          "zero_token_markers": 7904,
+          "data_active_logical_QPs": 32,
+          "synchronous_data_postsend_calls": 0,
+          "puts_in_final_unrung_batch": 32,
+          "marker_forced_postsend_calls": 7936,
+          "cq_update_requests_per_WQE": "one request in reviewed constructors; not a wire ACK count"
+        },
+        "combine": {
+          "data_puts": 32,
+          "nonempty_marker_contexts": 32,
+          "marker_operations": 7936,
+          "zero_token_markers": 7904,
+          "data_active_logical_QPs": 32,
+          "synchronous_data_postsend_calls": 0,
+          "puts_in_final_unrung_batch": 32,
+          "marker_forced_postsend_calls": 7936,
+          "cq_update_requests_per_WQE": "one request in reviewed constructors; not a wire ACK count"
+        }
+      },
+      "current_direct": {
+        "mode": {
+          "mode": "deepep_direct_bf16/1",
+          "combine": "rank_reduced/1",
+          "local_reduce_ns_per_extra": 100,
+          "payload_bytes_per_token": {
+            "dispatch": 14464,
+            "combine": 14400
+          }
+        },
+        "messages": 52,
+        "logical_payload_bytes": 750464
+      }
+    },
+    {
+      "graph_id": "g0.w1",
+      "group": 0,
+      "step": 1,
+      "layer": 0,
+      "ranks": [
+        0,
+        4,
+        8,
+        12,
+        16,
+        20,
+        24,
+        28,
+        32,
+        36,
+        40,
+        44,
+        48,
+        52,
+        56,
+        60,
+        64,
+        68,
+        72,
+        76,
+        80,
+        84,
+        88,
+        92,
+        96,
+        100,
+        104,
+        108,
+        112,
+        116,
+        120,
+        124
+      ],
+      "tokens": 4,
+      "selections": 32,
+      "low_latency_projection": {
+        "dispatch": {
+          "data_puts": 32,
+          "nonempty_marker_contexts": 32,
+          "marker_operations": 7936,
+          "zero_token_markers": 7904,
+          "data_active_logical_QPs": 32,
+          "synchronous_data_postsend_calls": 0,
+          "puts_in_final_unrung_batch": 32,
+          "marker_forced_postsend_calls": 7936,
+          "cq_update_requests_per_WQE": "one request in reviewed constructors; not a wire ACK count"
+        },
+        "combine": {
+          "data_puts": 32,
+          "nonempty_marker_contexts": 32,
+          "marker_operations": 7936,
+          "zero_token_markers": 7904,
+          "data_active_logical_QPs": 32,
+          "synchronous_data_postsend_calls": 0,
+          "puts_in_final_unrung_batch": 32,
+          "marker_forced_postsend_calls": 7936,
+          "cq_update_requests_per_WQE": "one request in reviewed constructors; not a wire ACK count"
+        }
+      },
+      "current_direct": {
+        "mode": {
+          "mode": "deepep_direct_bf16/1",
+          "combine": "rank_reduced/1",
+          "local_reduce_ns_per_extra": 100,
+          "payload_bytes_per_token": {
+            "dispatch": 14464,
+            "combine": 14400
+          }
+        },
+        "messages": 54,
+        "logical_payload_bytes": 779328
+      }
+    },
+    {
+      "graph_id": "g0.w1",
+      "group": 0,
+      "step": 1,
+      "layer": 1,
+      "ranks": [
+        0,
+        4,
+        8,
+        12,
+        16,
+        20,
+        24,
+        28,
+        32,
+        36,
+        40,
+        44,
+        48,
+        52,
+        56,
+        60,
+        64,
+        68,
+        72,
+        76,
+        80,
+        84,
+        88,
+        92,
+        96,
+        100,
+        104,
+        108,
+        112,
+        116,
+        120,
+        124
+      ],
+      "tokens": 4,
+      "selections": 32,
+      "low_latency_projection": {
+        "dispatch": {
+          "data_puts": 30,
+          "nonempty_marker_contexts": 30,
+          "marker_operations": 7936,
+          "zero_token_markers": 7906,
+          "data_active_logical_QPs": 30,
+          "synchronous_data_postsend_calls": 0,
+          "puts_in_final_unrung_batch": 30,
+          "marker_forced_postsend_calls": 7936,
+          "cq_update_requests_per_WQE": "one request in reviewed constructors; not a wire ACK count"
+        },
+        "combine": {
+          "data_puts": 30,
+          "nonempty_marker_contexts": 30,
+          "marker_operations": 7936,
+          "zero_token_markers": 7906,
+          "data_active_logical_QPs": 30,
+          "synchronous_data_postsend_calls": 0,
+          "puts_in_final_unrung_batch": 30,
+          "marker_forced_postsend_calls": 7936,
+          "cq_update_requests_per_WQE": "one request in reviewed constructors; not a wire ACK count"
+        }
+      },
+      "current_direct": {
+        "mode": {
+          "mode": "deepep_direct_bf16/1",
+          "combine": "rank_reduced/1",
+          "local_reduce_ns_per_extra": 100,
+          "payload_bytes_per_token": {
+            "dispatch": 14464,
+            "combine": 14400
+          }
+        },
+        "messages": 48,
+        "logical_payload_bytes": 692736
+      }
+    },
+    {
+      "graph_id": "g1.w0",
+      "group": 1,
+      "step": 0,
+      "layer": 0,
+      "ranks": [
+        1,
+        5,
+        9,
+        13,
+        17,
+        21,
+        25,
+        29,
+        33,
+        37,
+        41,
+        45,
+        49,
+        53,
+        57,
+        61,
+        65,
+        69,
+        73,
+        77,
+        81,
+        85,
+        89,
+        93,
+        97,
+        101,
+        105,
+        109,
+        113,
+        117,
+        121,
+        125
+      ],
+      "tokens": 4,
+      "selections": 32,
+      "low_latency_projection": {
+        "dispatch": {
+          "data_puts": 31,
+          "nonempty_marker_contexts": 31,
+          "marker_operations": 7936,
+          "zero_token_markers": 7905,
+          "data_active_logical_QPs": 31,
+          "synchronous_data_postsend_calls": 0,
+          "puts_in_final_unrung_batch": 31,
+          "marker_forced_postsend_calls": 7936,
+          "cq_update_requests_per_WQE": "one request in reviewed constructors; not a wire ACK count"
+        },
+        "combine": {
+          "data_puts": 31,
+          "nonempty_marker_contexts": 31,
+          "marker_operations": 7936,
+          "zero_token_markers": 7905,
+          "data_active_logical_QPs": 31,
+          "synchronous_data_postsend_calls": 0,
+          "puts_in_final_unrung_batch": 31,
+          "marker_forced_postsend_calls": 7936,
+          "cq_update_requests_per_WQE": "one request in reviewed constructors; not a wire ACK count"
+        }
+      },
+      "current_direct": {
+        "mode": {
+          "mode": "deepep_direct_bf16/1",
+          "combine": "rank_reduced/1",
+          "local_reduce_ns_per_extra": 100,
+          "payload_bytes_per_token": {
+            "dispatch": 14464,
+            "combine": 14400
+          }
+        },
+        "messages": 58,
+        "logical_payload_bytes": 837056
+      }
+    },
+    {
+      "graph_id": "g1.w0",
+      "group": 1,
+      "step": 0,
+      "layer": 1,
+      "ranks": [
+        1,
+        5,
+        9,
+        13,
+        17,
+        21,
+        25,
+        29,
+        33,
+        37,
+        41,
+        45,
+        49,
+        53,
+        57,
+        61,
+        65,
+        69,
+        73,
+        77,
+        81,
+        85,
+        89,
+        93,
+        97,
+        101,
+        105,
+        109,
+        113,
+        117,
+        121,
+        125
+      ],
+      "tokens": 4,
+      "selections": 32,
+      "low_latency_projection": {
+        "dispatch": {
+          "data_puts": 30,
+          "nonempty_marker_contexts": 30,
+          "marker_operations": 7936,
+          "zero_token_markers": 7906,
+          "data_active_logical_QPs": 30,
+          "synchronous_data_postsend_calls": 0,
+          "puts_in_final_unrung_batch": 30,
+          "marker_forced_postsend_calls": 7936,
+          "cq_update_requests_per_WQE": "one request in reviewed constructors; not a wire ACK count"
+        },
+        "combine": {
+          "data_puts": 30,
+          "nonempty_marker_contexts": 30,
+          "marker_operations": 7936,
+          "zero_token_markers": 7906,
+          "data_active_logical_QPs": 30,
+          "synchronous_data_postsend_calls": 0,
+          "puts_in_final_unrung_batch": 30,
+          "marker_forced_postsend_calls": 7936,
+          "cq_update_requests_per_WQE": "one request in reviewed constructors; not a wire ACK count"
+        }
+      },
+      "current_direct": {
+        "mode": {
+          "mode": "deepep_direct_bf16/1",
+          "combine": "rank_reduced/1",
+          "local_reduce_ns_per_extra": 100,
+          "payload_bytes_per_token": {
+            "dispatch": 14464,
+            "combine": 14400
+          }
+        },
+        "messages": 48,
+        "logical_payload_bytes": 692736
+      }
+    },
+    {
+      "graph_id": "g1.w1",
+      "group": 1,
+      "step": 1,
+      "layer": 0,
+      "ranks": [
+        1,
+        5,
+        9,
+        13,
+        17,
+        21,
+        25,
+        29,
+        33,
+        37,
+        41,
+        45,
+        49,
+        53,
+        57,
+        61,
+        65,
+        69,
+        73,
+        77,
+        81,
+        85,
+        89,
+        93,
+        97,
+        101,
+        105,
+        109,
+        113,
+        117,
+        121,
+        125
+      ],
+      "tokens": 4,
+      "selections": 32,
+      "low_latency_projection": {
+        "dispatch": {
+          "data_puts": 32,
+          "nonempty_marker_contexts": 32,
+          "marker_operations": 7936,
+          "zero_token_markers": 7904,
+          "data_active_logical_QPs": 32,
+          "synchronous_data_postsend_calls": 0,
+          "puts_in_final_unrung_batch": 32,
+          "marker_forced_postsend_calls": 7936,
+          "cq_update_requests_per_WQE": "one request in reviewed constructors; not a wire ACK count"
+        },
+        "combine": {
+          "data_puts": 32,
+          "nonempty_marker_contexts": 32,
+          "marker_operations": 7936,
+          "zero_token_markers": 7904,
+          "data_active_logical_QPs": 32,
+          "synchronous_data_postsend_calls": 0,
+          "puts_in_final_unrung_batch": 32,
+          "marker_forced_postsend_calls": 7936,
+          "cq_update_requests_per_WQE": "one request in reviewed constructors; not a wire ACK count"
+        }
+      },
+      "current_direct": {
+        "mode": {
+          "mode": "deepep_direct_bf16/1",
+          "combine": "rank_reduced/1",
+          "local_reduce_ns_per_extra": 100,
+          "payload_bytes_per_token": {
+            "dispatch": 14464,
+            "combine": 14400
+          }
+        },
+        "messages": 52,
+        "logical_payload_bytes": 750464
+      }
+    },
+    {
+      "graph_id": "g1.w1",
+      "group": 1,
+      "step": 1,
+      "layer": 1,
+      "ranks": [
+        1,
+        5,
+        9,
+        13,
+        17,
+        21,
+        25,
+        29,
+        33,
+        37,
+        41,
+        45,
+        49,
+        53,
+        57,
+        61,
+        65,
+        69,
+        73,
+        77,
+        81,
+        85,
+        89,
+        93,
+        97,
+        101,
+        105,
+        109,
+        113,
+        117,
+        121,
+        125
+      ],
+      "tokens": 4,
+      "selections": 32,
+      "low_latency_projection": {
+        "dispatch": {
+          "data_puts": 30,
+          "nonempty_marker_contexts": 30,
+          "marker_operations": 7936,
+          "zero_token_markers": 7906,
+          "data_active_logical_QPs": 30,
+          "synchronous_data_postsend_calls": 0,
+          "puts_in_final_unrung_batch": 30,
+          "marker_forced_postsend_calls": 7936,
+          "cq_update_requests_per_WQE": "one request in reviewed constructors; not a wire ACK count"
+        },
+        "combine": {
+          "data_puts": 30,
+          "nonempty_marker_contexts": 30,
+          "marker_operations": 7936,
+          "zero_token_markers": 7906,
+          "data_active_logical_QPs": 30,
+          "synchronous_data_postsend_calls": 0,
+          "puts_in_final_unrung_batch": 30,
+          "marker_forced_postsend_calls": 7936,
+          "cq_update_requests_per_WQE": "one request in reviewed constructors; not a wire ACK count"
+        }
+      },
+      "current_direct": {
+        "mode": {
+          "mode": "deepep_direct_bf16/1",
+          "combine": "rank_reduced/1",
+          "local_reduce_ns_per_extra": 100,
+          "payload_bytes_per_token": {
+            "dispatch": 14464,
+            "combine": 14400
+          }
+        },
+        "messages": 50,
+        "logical_payload_bytes": 721600
+      }
+    },
+    {
+      "graph_id": "g2.w0",
+      "group": 2,
+      "step": 0,
+      "layer": 0,
+      "ranks": [
+        2,
+        6,
+        10,
+        14,
+        18,
+        22,
+        26,
+        30,
+        34,
+        38,
+        42,
+        46,
+        50,
+        54,
+        58,
+        62,
+        66,
+        70,
+        74,
+        78,
+        82,
+        86,
+        90,
+        94,
+        98,
+        102,
+        106,
+        110,
+        114,
+        118,
+        122,
+        126
+      ],
+      "tokens": 4,
+      "selections": 32,
+      "low_latency_projection": {
+        "dispatch": {
+          "data_puts": 29,
+          "nonempty_marker_contexts": 29,
+          "marker_operations": 7936,
+          "zero_token_markers": 7907,
+          "data_active_logical_QPs": 29,
+          "synchronous_data_postsend_calls": 0,
+          "puts_in_final_unrung_batch": 29,
+          "marker_forced_postsend_calls": 7936,
+          "cq_update_requests_per_WQE": "one request in reviewed constructors; not a wire ACK count"
+        },
+        "combine": {
+          "data_puts": 29,
+          "nonempty_marker_contexts": 29,
+          "marker_operations": 7936,
+          "zero_token_markers": 7907,
+          "data_active_logical_QPs": 29,
+          "synchronous_data_postsend_calls": 0,
+          "puts_in_final_unrung_batch": 29,
+          "marker_forced_postsend_calls": 7936,
+          "cq_update_requests_per_WQE": "one request in reviewed constructors; not a wire ACK count"
+        }
+      },
+      "current_direct": {
+        "mode": {
+          "mode": "deepep_direct_bf16/1",
+          "combine": "rank_reduced/1",
+          "local_reduce_ns_per_extra": 100,
+          "payload_bytes_per_token": {
+            "dispatch": 14464,
+            "combine": 14400
+          }
+        },
+        "messages": 50,
+        "logical_payload_bytes": 721600
+      }
+    },
+    {
+      "graph_id": "g2.w0",
+      "group": 2,
+      "step": 0,
+      "layer": 1,
+      "ranks": [
+        2,
+        6,
+        10,
+        14,
+        18,
+        22,
+        26,
+        30,
+        34,
+        38,
+        42,
+        46,
+        50,
+        54,
+        58,
+        62,
+        66,
+        70,
+        74,
+        78,
+        82,
+        86,
+        90,
+        94,
+        98,
+        102,
+        106,
+        110,
+        114,
+        118,
+        122,
+        126
+      ],
+      "tokens": 4,
+      "selections": 32,
+      "low_latency_projection": {
+        "dispatch": {
+          "data_puts": 32,
+          "nonempty_marker_contexts": 32,
+          "marker_operations": 7936,
+          "zero_token_markers": 7904,
+          "data_active_logical_QPs": 32,
+          "synchronous_data_postsend_calls": 0,
+          "puts_in_final_unrung_batch": 32,
+          "marker_forced_postsend_calls": 7936,
+          "cq_update_requests_per_WQE": "one request in reviewed constructors; not a wire ACK count"
+        },
+        "combine": {
+          "data_puts": 32,
+          "nonempty_marker_contexts": 32,
+          "marker_operations": 7936,
+          "zero_token_markers": 7904,
+          "data_active_logical_QPs": 32,
+          "synchronous_data_postsend_calls": 0,
+          "puts_in_final_unrung_batch": 32,
+          "marker_forced_postsend_calls": 7936,
+          "cq_update_requests_per_WQE": "one request in reviewed constructors; not a wire ACK count"
+        }
+      },
+      "current_direct": {
+        "mode": {
+          "mode": "deepep_direct_bf16/1",
+          "combine": "rank_reduced/1",
+          "local_reduce_ns_per_extra": 100,
+          "payload_bytes_per_token": {
+            "dispatch": 14464,
+            "combine": 14400
+          }
+        },
+        "messages": 50,
+        "logical_payload_bytes": 721600
+      }
+    },
+    {
+      "graph_id": "g2.w1",
+      "group": 2,
+      "step": 1,
+      "layer": 0,
+      "ranks": [
+        2,
+        6,
+        10,
+        14,
+        18,
+        22,
+        26,
+        30,
+        34,
+        38,
+        42,
+        46,
+        50,
+        54,
+        58,
+        62,
+        66,
+        70,
+        74,
+        78,
+        82,
+        86,
+        90,
+        94,
+        98,
+        102,
+        106,
+        110,
+        114,
+        118,
+        122,
+        126
+      ],
+      "tokens": 4,
+      "selections": 32,
+      "low_latency_projection": {
+        "dispatch": {
+          "data_puts": 31,
+          "nonempty_marker_contexts": 31,
+          "marker_operations": 7936,
+          "zero_token_markers": 7905,
+          "data_active_logical_QPs": 31,
+          "synchronous_data_postsend_calls": 0,
+          "puts_in_final_unrung_batch": 31,
+          "marker_forced_postsend_calls": 7936,
+          "cq_update_requests_per_WQE": "one request in reviewed constructors; not a wire ACK count"
+        },
+        "combine": {
+          "data_puts": 31,
+          "nonempty_marker_contexts": 31,
+          "marker_operations": 7936,
+          "zero_token_markers": 7905,
+          "data_active_logical_QPs": 31,
+          "synchronous_data_postsend_calls": 0,
+          "puts_in_final_unrung_batch": 31,
+          "marker_forced_postsend_calls": 7936,
+          "cq_update_requests_per_WQE": "one request in reviewed constructors; not a wire ACK count"
+        }
+      },
+      "current_direct": {
+        "mode": {
+          "mode": "deepep_direct_bf16/1",
+          "combine": "rank_reduced/1",
+          "local_reduce_ns_per_extra": 100,
+          "payload_bytes_per_token": {
+            "dispatch": 14464,
+            "combine": 14400
+          }
+        },
+        "messages": 54,
+        "logical_payload_bytes": 779328
+      }
+    },
+    {
+      "graph_id": "g2.w1",
+      "group": 2,
+      "step": 1,
+      "layer": 1,
+      "ranks": [
+        2,
+        6,
+        10,
+        14,
+        18,
+        22,
+        26,
+        30,
+        34,
+        38,
+        42,
+        46,
+        50,
+        54,
+        58,
+        62,
+        66,
+        70,
+        74,
+        78,
+        82,
+        86,
+        90,
+        94,
+        98,
+        102,
+        106,
+        110,
+        114,
+        118,
+        122,
+        126
+      ],
+      "tokens": 4,
+      "selections": 32,
+      "low_latency_projection": {
+        "dispatch": {
+          "data_puts": 30,
+          "nonempty_marker_contexts": 30,
+          "marker_operations": 7936,
+          "zero_token_markers": 7906,
+          "data_active_logical_QPs": 30,
+          "synchronous_data_postsend_calls": 0,
+          "puts_in_final_unrung_batch": 30,
+          "marker_forced_postsend_calls": 7936,
+          "cq_update_requests_per_WQE": "one request in reviewed constructors; not a wire ACK count"
+        },
+        "combine": {
+          "data_puts": 30,
+          "nonempty_marker_contexts": 30,
+          "marker_operations": 7936,
+          "zero_token_markers": 7906,
+          "data_active_logical_QPs": 30,
+          "synchronous_data_postsend_calls": 0,
+          "puts_in_final_unrung_batch": 30,
+          "marker_forced_postsend_calls": 7936,
+          "cq_update_requests_per_WQE": "one request in reviewed constructors; not a wire ACK count"
+        }
+      },
+      "current_direct": {
+        "mode": {
+          "mode": "deepep_direct_bf16/1",
+          "combine": "rank_reduced/1",
+          "local_reduce_ns_per_extra": 100,
+          "payload_bytes_per_token": {
+            "dispatch": 14464,
+            "combine": 14400
+          }
+        },
+        "messages": 54,
+        "logical_payload_bytes": 779328
+      }
+    },
+    {
+      "graph_id": "g3.w0",
+      "group": 3,
+      "step": 0,
+      "layer": 0,
+      "ranks": [
+        3,
+        7,
+        11,
+        15,
+        19,
+        23,
+        27,
+        31,
+        35,
+        39,
+        43,
+        47,
+        51,
+        55,
+        59,
+        63,
+        67,
+        71,
+        75,
+        79,
+        83,
+        87,
+        91,
+        95,
+        99,
+        103,
+        107,
+        111,
+        115,
+        119,
+        123,
+        127
+      ],
+      "tokens": 3,
+      "selections": 24,
+      "low_latency_projection": {
+        "dispatch": {
+          "data_puts": 22,
+          "nonempty_marker_contexts": 22,
+          "marker_operations": 7936,
+          "zero_token_markers": 7914,
+          "data_active_logical_QPs": 22,
+          "synchronous_data_postsend_calls": 0,
+          "puts_in_final_unrung_batch": 22,
+          "marker_forced_postsend_calls": 7936,
+          "cq_update_requests_per_WQE": "one request in reviewed constructors; not a wire ACK count"
+        },
+        "combine": {
+          "data_puts": 22,
+          "nonempty_marker_contexts": 22,
+          "marker_operations": 7936,
+          "zero_token_markers": 7914,
+          "data_active_logical_QPs": 22,
+          "synchronous_data_postsend_calls": 0,
+          "puts_in_final_unrung_batch": 22,
+          "marker_forced_postsend_calls": 7936,
+          "cq_update_requests_per_WQE": "one request in reviewed constructors; not a wire ACK count"
+        }
+      },
+      "current_direct": {
+        "mode": {
+          "mode": "deepep_direct_bf16/1",
+          "combine": "rank_reduced/1",
+          "local_reduce_ns_per_extra": 100,
+          "payload_bytes_per_token": {
+            "dispatch": 14464,
+            "combine": 14400
+          }
+        },
+        "messages": 40,
+        "logical_payload_bytes": 577280
+      }
+    },
+    {
+      "graph_id": "g3.w0",
+      "group": 3,
+      "step": 0,
+      "layer": 1,
+      "ranks": [
+        3,
+        7,
+        11,
+        15,
+        19,
+        23,
+        27,
+        31,
+        35,
+        39,
+        43,
+        47,
+        51,
+        55,
+        59,
+        63,
+        67,
+        71,
+        75,
+        79,
+        83,
+        87,
+        91,
+        95,
+        99,
+        103,
+        107,
+        111,
+        115,
+        119,
+        123,
+        127
+      ],
+      "tokens": 3,
+      "selections": 24,
+      "low_latency_projection": {
+        "dispatch": {
+          "data_puts": 24,
+          "nonempty_marker_contexts": 24,
+          "marker_operations": 7936,
+          "zero_token_markers": 7912,
+          "data_active_logical_QPs": 24,
+          "synchronous_data_postsend_calls": 0,
+          "puts_in_final_unrung_batch": 24,
+          "marker_forced_postsend_calls": 7936,
+          "cq_update_requests_per_WQE": "one request in reviewed constructors; not a wire ACK count"
+        },
+        "combine": {
+          "data_puts": 24,
+          "nonempty_marker_contexts": 24,
+          "marker_operations": 7936,
+          "zero_token_markers": 7912,
+          "data_active_logical_QPs": 24,
+          "synchronous_data_postsend_calls": 0,
+          "puts_in_final_unrung_batch": 24,
+          "marker_forced_postsend_calls": 7936,
+          "cq_update_requests_per_WQE": "one request in reviewed constructors; not a wire ACK count"
+        }
+      },
+      "current_direct": {
+        "mode": {
+          "mode": "deepep_direct_bf16/1",
+          "combine": "rank_reduced/1",
+          "local_reduce_ns_per_extra": 100,
+          "payload_bytes_per_token": {
+            "dispatch": 14464,
+            "combine": 14400
+          }
+        },
+        "messages": 40,
+        "logical_payload_bytes": 577280
+      }
+    },
+    {
+      "graph_id": "g3.w1",
+      "group": 3,
+      "step": 1,
+      "layer": 0,
+      "ranks": [
+        3,
+        7,
+        11,
+        15,
+        19,
+        23,
+        27,
+        31,
+        35,
+        39,
+        43,
+        47,
+        51,
+        55,
+        59,
+        63,
+        67,
+        71,
+        75,
+        79,
+        83,
+        87,
+        91,
+        95,
+        99,
+        103,
+        107,
+        111,
+        115,
+        119,
+        123,
+        127
+      ],
+      "tokens": 3,
+      "selections": 24,
+      "low_latency_projection": {
+        "dispatch": {
+          "data_puts": 23,
+          "nonempty_marker_contexts": 23,
+          "marker_operations": 7936,
+          "zero_token_markers": 7913,
+          "data_active_logical_QPs": 23,
+          "synchronous_data_postsend_calls": 0,
+          "puts_in_final_unrung_batch": 23,
+          "marker_forced_postsend_calls": 7936,
+          "cq_update_requests_per_WQE": "one request in reviewed constructors; not a wire ACK count"
+        },
+        "combine": {
+          "data_puts": 23,
+          "nonempty_marker_contexts": 23,
+          "marker_operations": 7936,
+          "zero_token_markers": 7913,
+          "data_active_logical_QPs": 23,
+          "synchronous_data_postsend_calls": 0,
+          "puts_in_final_unrung_batch": 23,
+          "marker_forced_postsend_calls": 7936,
+          "cq_update_requests_per_WQE": "one request in reviewed constructors; not a wire ACK count"
+        }
+      },
+      "current_direct": {
+        "mode": {
+          "mode": "deepep_direct_bf16/1",
+          "combine": "rank_reduced/1",
+          "local_reduce_ns_per_extra": 100,
+          "payload_bytes_per_token": {
+            "dispatch": 14464,
+            "combine": 14400
+          }
+        },
+        "messages": 36,
+        "logical_payload_bytes": 519552
+      }
+    },
+    {
+      "graph_id": "g3.w1",
+      "group": 3,
+      "step": 1,
+      "layer": 1,
+      "ranks": [
+        3,
+        7,
+        11,
+        15,
+        19,
+        23,
+        27,
+        31,
+        35,
+        39,
+        43,
+        47,
+        51,
+        55,
+        59,
+        63,
+        67,
+        71,
+        75,
+        79,
+        83,
+        87,
+        91,
+        95,
+        99,
+        103,
+        107,
+        111,
+        115,
+        119,
+        123,
+        127
+      ],
+      "tokens": 3,
+      "selections": 24,
+      "low_latency_projection": {
+        "dispatch": {
+          "data_puts": 23,
+          "nonempty_marker_contexts": 23,
+          "marker_operations": 7936,
+          "zero_token_markers": 7913,
+          "data_active_logical_QPs": 23,
+          "synchronous_data_postsend_calls": 0,
+          "puts_in_final_unrung_batch": 23,
+          "marker_forced_postsend_calls": 7936,
+          "cq_update_requests_per_WQE": "one request in reviewed constructors; not a wire ACK count"
+        },
+        "combine": {
+          "data_puts": 23,
+          "nonempty_marker_contexts": 23,
+          "marker_operations": 7936,
+          "zero_token_markers": 7913,
+          "data_active_logical_QPs": 23,
+          "synchronous_data_postsend_calls": 0,
+          "puts_in_final_unrung_batch": 23,
+          "marker_forced_postsend_calls": 7936,
+          "cq_update_requests_per_WQE": "one request in reviewed constructors; not a wire ACK count"
+        }
+      },
+      "current_direct": {
+        "mode": {
+          "mode": "deepep_direct_bf16/1",
+          "combine": "rank_reduced/1",
+          "local_reduce_ns_per_extra": 100,
+          "payload_bytes_per_token": {
+            "dispatch": 14464,
+            "combine": 14400
+          }
+        },
+        "messages": 38,
+        "logical_payload_bytes": 548416
+      }
+    }
+  ],
+  "totals": {
+    "tokens": 60,
+    "selections": 480,
+    "current_direct_messages": 778,
+    "current_direct_payload_bytes": 11228096,
+    "dispatch_data_puts": 463,
+    "dispatch_nonempty_marker_contexts": 463,
+    "dispatch_marker_operations": 126976,
+    "dispatch_zero_token_markers": 126513,
+    "dispatch_data_active_logical_QPs": 463,
+    "dispatch_synchronous_data_postsend_calls": 0,
+    "dispatch_puts_in_final_unrung_batch": 463,
+    "dispatch_marker_forced_postsend_calls": 126976,
+    "combine_data_puts": 463,
+    "combine_nonempty_marker_contexts": 463,
+    "combine_marker_operations": 126976,
+    "combine_zero_token_markers": 126513,
+    "combine_data_active_logical_QPs": 463,
+    "combine_synchronous_data_postsend_calls": 0,
+    "combine_puts_in_final_unrung_batch": 463,
+    "combine_marker_forced_postsend_calls": 126976
+  },
+  "distinct_real_requests": 15,
+  "request_sha256": {
+    "0": "3085c39e9b9950a7e68f30eed8517eaecbfe3d0ad75d813925ff788a1c164255",
+    "4": "cee894cf6401b3b518b8bd8784762fd629528006c660a91383069bc80146163d",
+    "8": "b4666178efd2472f056e631728980b37d572e4a74147471d2c3dde66a7642b40",
+    "12": "0dd8cd33c9a2d0175f222e36274cbbf873cc5de9b3abbc024c6a81895d88c048",
+    "1": "c8c9cf4917498a2195960dbd9c65e9efe027af6606db098d40b0db8f7c266092",
+    "5": "8a6a2620152ce43255c7243f16a9a05f17a7cc9df993e5da4923e1ae4f1221e5",
+    "9": "fe6242fe706a21168c1775a2697bf84e4f45357fd34263d5638e2e92789ab179",
+    "13": "adef7e2065576fae3a5db8eea07966e819b4428447209253d2cc2861f6d3485f",
+    "2": "848633cf8afa1c9247d9cdaf5968bb09a5f2e2d409387f4a333ce7a6e35390cd",
+    "6": "abab099e678cb7fad8d9dbba30d06fa4099410d32d11f766c30c2426daac2851",
+    "10": "adca5765840be6c91bc24e6904361a3f8d0207620f6a590bab415e2638b1d75c",
+    "14": "4035bb389e7e7b0c10325de3df3491bee2c22ac9ff575b5e5d2a8ccf2db3fc84",
+    "3": "265c8e66cfb49da12be0d8037cd7a8be6997f4207bcb0a48ca3c616bbe253b96",
+    "7": "f57f4047a5813f8f0c02b0a0eea52c914ef4cec3b9bed890791c686ad6995187",
+    "11": "e0e7ea297df844c59bb90bdf7806f601d3ddaf99ab18ccd641db2c6e81f933bb"
+  },
+  "key_examples": [
+    {
+      "put_bytes": 14352,
+      "assumed_key_span_bytes": 32768,
+      "local_offset": 0,
+      "remote_offset": 0,
+      "WQE_payload_bytes": [
+        14352
+      ],
+      "network_packets": null,
+      "ACKs": null
+    },
+    {
+      "put_bytes": 14352,
+      "assumed_key_span_bytes": 32768,
+      "local_offset": 30000,
+      "remote_offset": 30000,
+      "WQE_payload_bytes": [
+        2768,
+        11584
+      ],
+      "network_packets": null,
+      "ACKs": null
+    },
+    {
+      "put_bytes": 14352,
+      "assumed_key_span_bytes": 32768,
+      "local_offset": 25000,
+      "remote_offset": 30000,
+      "WQE_payload_bytes": [
+        2768,
+        5000,
+        6584
+      ],
+      "network_packets": null,
+      "ACKs": null
+    }
+  ],
+  "conditions": {
+    "library_projection": "DeepEP v1.2.1 low-latency BF16, RDMA-only",
+    "conditional_sync_postsend": true,
+    "actual_async_mode_known": false,
+    "runtime_reservation_order_known": false,
+    "source_key_layout_known": false,
+    "current_direct_is_same_library_mode": false,
+    "NCCL_provider_sources_jointly_built": false,
+    "hardware_ACK_cadence_verified": false
+  },
+  "network_executed": false,
+  "latency_predicted": false,
+  "hardware_calibrated": false
+}

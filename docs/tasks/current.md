@@ -2,9 +2,13 @@
 
 ## 2026-10-30 通信库发送发布与反馈边界
 
-状态：`in_progress`。上一目标轮为progress：`9f9465d8c9`交付恢复计时/ACK核查并发布用户分支。本轮只读固定DeepEP低延迟、现代DeepEP及NCCL/DOCA本地源码，核对QP索引、WQE拆分、发送发布、CQ与网络ACK的区别；对既有128Clos/四EP32组/15真实选择的两层两步做独立操作核算，确定具体建模改进及准入条件。旧库投影与当前direct抽象分开，不把数据准备、门铃发布或CQ标记等同实际发包/ACK，不从逻辑数量推出时延收益。
+状态：`completed`（本轮发送发布核查交付；新状态机与网络接入尚未实现，整体目标active）。上一目标轮为progress：`9f9465d8c9`交付恢复计时/ACK核查。本轮方法`17ea4ed80e`固定后，只读核验6份DeepEP低延迟、现代DeepEP及NCCL/DOCA本地源码身份；独立枚举262,144个source/expert项，核查原128Clos/四EP32组/15真实请求的16个组/层/步窗口（60个token输入、480个选择），266份原始网络文件hash保持。交付[网页](../../experiments/library_posting_audit/results/20261030/report.html)、[结果](../../experiments/library_posting_audit/RESULTS.md)、[独立验证](../../experiments/library_posting_audit/results/20261030/verification.json)、[源码](../../experiments/library_posting_audit/results/20261030/sources.json)和[收据](../../experiments/library_posting_audit/results/20261030/receipt.json)。
 
-根`runs/library_posting_audit_20261030`：300受监控秒/64MiB/卷留8GiB，阶段60秒/RSS512MiB/地址1GiB；零新网络、构建、下载、安装、依赖变更或GPU，不重跑旧网络。先固定方法/来源，再核算、独立验证、发布解释及下一项实现规范。只发布既有用户分支，整体目标保持active。
+旧低延迟条件RDMA-only投影每方向463次数据put、126,976次原子通知，其中126,513次零token；同步发布条件下所有非空上下文仅1条put，不从数据自身触发四条批次，后续原子通知推动发布。数值是逻辑操作，不是已执行的网络包或时延。key边界条件算例同一14352B put可拆1/2/3条WQE；CQ update请求不等于网络ACK位。固定NCCL/DOCA参考有QP超时/重试设置，但实际值、硬件ACK和与现代DeepEP组合构建均未验证。当前direct的778条/11,228,096B消息另列，旧低延迟通知/发布不能直接套用或当作已测漏包。
+
+四类计数/拆分篡改拒绝，源Git blob/SHA256和原文行段检查通过；4监控阶段累计1.524秒，峰值采样组RSS154,406,912B、产物827,392B。13项固定依赖在分析前检查一致；Python解析、报告本地链接和最终收据hash通过，网页仅静态检查。零新网络、构建、下载、安装、依赖修改或GPU。下一步按[发送发布规范](posting_boundary_spec.md)先实现可独立检查的QP保留/就绪/发布前缀，再明确目标库和有界表示后接入原生网络；不得缩网络、删通知或失败后自动扩限。成熟批处理不作为创新，任务进度调度仍待同信息强基线验证。
+
+根`runs/library_posting_audit_20261030`：300受监控秒/64MiB/卷留8GiB，阶段60秒/RSS512MiB/地址1GiB；预检和收尾单列。失败不自动扩预算，不重跑旧网络。仅发布既有用户分支，整体目标保持active。
 
 ## 2026-10-30 恢复计时语义与调度机会核查
 

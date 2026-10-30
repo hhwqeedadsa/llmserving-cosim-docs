@@ -1,0 +1,27 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>128卡MoE传输表示核验</title>
+<style>body{font:17px/1.8 system-ui,sans-serif;max-width:1060px;margin:40px auto;padding:0 20px;color:#15243a;background:#f6f8fc}
+table{border-collapse:collapse;width:100%;background:white;font-size:15px}th,td{padding:12px;border:1px solid #d8dfeb;text-align:left}
+h1,h2{line-height:1.4}.note{padding:16px;background:#fff4da;border-left:4px solid #d18a00}a{color:#135dc1}</style>
+<h1>128卡MoE传输表示核验</h1><p>2026-10-30 · 平台增量 · 不是新算法收益实验</p>
+<p>本轮让通信量更接近固定DeepEP direct BF16：同一个token的多个专家若在同一卡，Dispatch只发一份；
+Combine可逐专家回传，也可卡内合并后回传。专家计算份数保留，合并成本单独声明。</p>
+<h2>真实路由：只做离线核算</h2><p>15份不同R1-AWQ/MMLU原件，两层两步，共480份专家贡献。
+其中474份远端贡献对应441个token-rank单元。三种表示的消息数均为882。</p>
+<table><tr><th>表示</th><th>布局载荷/B</th><th>专家贡献</th><th>累计声明归并工作/ns</th></tr><tr><td>default</td><td>13,590,528</td><td>480</td><td>0</td></tr><tr><td>expanded_per_expert/1</td><td>13,173,888</td><td>480</td><td>0</td></tr><tr><td>rank_reduced/1</td><td>12,729,024</td><td>480</td><td>3,400</td></tr></table>
+<p class="note">真实输入本轮未新增网络执行。这些字节差异是表示修正；累计归并工作不是业务时延，不能按减少字节的比例推断收益。
+布局载荷包含元数据与填充，未包含网络包头。</p>
+<h2>128卡功能执行：两模式各一次</h2><p>16服务器×8模拟GPU，8 ToR / 8 Agg / 4 Core，168链路，各层400Gbps、每链路1微秒。
+两个EP64组、每rank每层4专家；四份不同人工请求，H256 / E256 / Top8，两层两步。
+原始路由刻意共置专家，属于稀疏功能输入，不是满载或真实R1性能。</p>
+<table><tr><th>Combine模式</th><th>布局载荷/B</th><th>专家贡献</th><th>有限任务完成/μs</th><th>完整包事件</th></tr><tr><td>expanded_per_expert/1</td><td>83,328</td><td>128</td><td>103.582</td><td>2,120</td></tr><tr><td>rank_reduced/1</td><td>37,696</td><td>128</td><td>103.852</td><td>2,120</td></tr></table>
+<p>两者均62消息、16阶段门限、1024成员到达；收发字节守恒。卡内合并使用每份额外贡献100ns的人工成本，
+累计9600ns工作在不同rank上执行。实际计算完成才解锁Combine发送与阶段门限。</p>
+<p class="note">少传字节没有在这个小消息输入下变成更短任务：卡内合并103.852μs，逐专家103.582μs。
+两模式同时改变数据表示与声明合并工作；这里只验证功能，不能当作校准性能结论。</p>
+<h2>已经核验与仍有限制</h2><p>7项新增与38项回归CPU检查；19份固定源码身份；历史3次实际执行的10张默认图完全一致；
+两个新128卡实际执行及独立原JSON/逐包/回调检查。零构建、下载、GPU执行或依赖修改。</p>
+<p>本模式尚无GIN计数/屏障包、真实CQ/GPU可见性、FP8/SF、hybrid多级转发或硬件成本校准。
+后续故障研究应明确采用哪种通信表示，分开核对故障代价与可消除空间。</p>
+<p><a href="README.md">验收说明</a> · <a href="verification.json">独立核验</a> · <a href="receipt.json">执行收据</a>
+ · <a href="../../examples/scaleout_token_transport/README.md">公开复现示例</a></p></html>

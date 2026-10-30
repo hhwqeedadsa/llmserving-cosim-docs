@@ -1,0 +1,670 @@
+{
+  "passed": true,
+  "tests": {
+    "unit": 7,
+    "regressions": 38
+  },
+  "geometry": {
+    "endpoints": 128,
+    "servers": 16,
+    "switch_counts": {
+      "tor": 8,
+      "agg": 8,
+      "core": 4
+    },
+    "links": 168,
+    "ep_sizes": [
+      64,
+      64
+    ],
+    "independent_synthetic_requests": 4,
+    "bandwidth_bps_by_tier": {
+      "access": [
+        400000000000
+      ],
+      "agg_core": [
+        400000000000
+      ],
+      "tor_agg": [
+        400000000000
+      ]
+    },
+    "link_delays_ns": [
+      1000
+    ]
+  },
+  "offline": {
+    "passed": true,
+    "network_executed": false,
+    "source_identities": [
+      {
+        "path": "deep_ep/buffers/ep.py",
+        "cache_path": "data/research/invocation_semantics_20261023/sources/deep_ep/buffers/ep.py",
+        "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+        "git_blob_sha": "9b8a95364413b3de0c3fd5061280088e5f58b272",
+        "sha256": "a8f72c3975bbf0433b7c2bad7574053c2b8b42296c2d692336beade92b4ed737",
+        "bytes": 51176,
+        "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/buffers/ep.py"
+      },
+      {
+        "path": "csrc/kernels/ep/dispatch.hpp",
+        "cache_path": "data/research/invocation_semantics_20261023/sources/csrc/kernels/ep/dispatch.hpp",
+        "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+        "git_blob_sha": "953af9f7d7e8b2901d3109e96e9ce49f8f2ea834",
+        "sha256": "a811a8602c8d552366494deb566c1fd4c7b243b34e294a60036d0a79848cb1a5",
+        "bytes": 10075,
+        "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/csrc/kernels/ep/dispatch.hpp"
+      },
+      {
+        "path": "csrc/kernels/ep/combine.hpp",
+        "cache_path": "data/research/invocation_semantics_20261023/sources/csrc/kernels/ep/combine.hpp",
+        "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+        "git_blob_sha": "39baaa126ff3cb8778f46d20c6df17ff8ade022c",
+        "sha256": "42f71363c302e764cca1db7e57e50b0c8861e43a479b29cf6dc922f1518eff05",
+        "bytes": 8668,
+        "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/csrc/kernels/ep/combine.hpp"
+      },
+      {
+        "path": "csrc/comm/stream.hpp",
+        "cache_path": "data/research/invocation_semantics_20261023/sources/csrc/comm/stream.hpp",
+        "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+        "git_blob_sha": "41b612cc06b7b9485e0c6cd4ca05a1bace1151f8",
+        "sha256": "b9a5de2d39c71b2ee826fb84f7bd53ac68eed6d95190188cfeab1c4e00a2d947",
+        "bytes": 784,
+        "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/csrc/comm/stream.hpp"
+      },
+      {
+        "path": "csrc/utils/event.hpp",
+        "cache_path": "data/research/invocation_semantics_20261023/sources/csrc/utils/event.hpp",
+        "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+        "git_blob_sha": "adc57941c6264082c14555327d54b8b1a5d9602f",
+        "sha256": "27d1eb1ca27d033e72ddbcdaea92224971e5dbb68cc74f2d5aef6f588f32ac8d",
+        "bytes": 988,
+        "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/csrc/utils/event.hpp"
+      },
+      {
+        "path": "deep_ep/utils/event.py",
+        "cache_path": "data/research/invocation_semantics_20261023/sources/deep_ep/utils/event.py",
+        "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+        "git_blob_sha": "f8aadf826afdb9ccf8a864d363037ea5f6f25f04",
+        "sha256": "db7e5b40d6e401104a2bb72a2cd7859c9d4cc6d8225677073c56356c75d4def9",
+        "bytes": 4255,
+        "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/utils/event.py"
+      },
+      {
+        "path": "csrc/buffers/ep.hpp",
+        "cache_path": "data/research/deepep_modern_20261022/sources/csrc/buffers/ep.hpp",
+        "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+        "git_blob_sha": "04f4dbfddeaf1cf8b0cf7006cc723e1323839210",
+        "sha256": "e00e92a793b8e5a448db6f704ccd2c391ff9943cba30ec470c9d3945460c0193",
+        "bytes": 60540,
+        "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/csrc/buffers/ep.hpp"
+      },
+      {
+        "path": "csrc/kernels/comm/context.cpp",
+        "cache_path": "data/research/deepep_modern_20261022/sources/csrc/kernels/comm/context.cpp",
+        "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+        "git_blob_sha": "d26fdac9a7b280617653f1b6775587d056e85a28",
+        "sha256": "c420b55314b9525dcb7e9f6c9d23a11cfe62a20268887493b76fc52881bb5e6a",
+        "bytes": 12061,
+        "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/csrc/kernels/comm/context.cpp"
+      },
+      {
+        "path": "deep_ep/include/deep_ep/comm/handle.cuh",
+        "cache_path": "data/research/deepep_modern_20261022/sources/deep_ep/include/deep_ep/comm/handle.cuh",
+        "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+        "git_blob_sha": "b459a34a7d9012a95ca9821b947a60e5819fa736",
+        "sha256": "24c321c8bc35a09620b7c842c9333f64d7e208faa45b832241deab430f65f068",
+        "bytes": 11249,
+        "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/comm/handle.cuh"
+      },
+      {
+        "path": "deep_ep/include/deep_ep/comm/barrier.cuh",
+        "cache_path": "data/research/deepep_modern_20261022/sources/deep_ep/include/deep_ep/comm/barrier.cuh",
+        "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+        "git_blob_sha": "732c598ca1986636c300036533141ebeb49a320e",
+        "sha256": "e4361353f31a2f3a36e019bb2ef013991017a205c16ab92f76f9da2a2652260f",
+        "bytes": 11335,
+        "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/comm/barrier.cuh"
+      },
+      {
+        "path": "deep_ep/include/deep_ep/impls/ep/dispatch.cuh",
+        "cache_path": "data/research/deepep_modern_20261022/sources/deep_ep/include/deep_ep/impls/ep/dispatch.cuh",
+        "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+        "git_blob_sha": "3bacfc60c10fb7e4b21e6d6c57e64cbdb6ae9a58",
+        "sha256": "447ec0ef779bb2a74f7efa8ece04254c2036ab4000999f566356d6f94df9335a",
+        "bytes": 20457,
+        "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/impls/ep/dispatch.cuh"
+      },
+      {
+        "path": "deep_ep/include/deep_ep/impls/ep/combine.cuh",
+        "cache_path": "data/research/deepep_modern_20261022/sources/deep_ep/include/deep_ep/impls/ep/combine.cuh",
+        "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+        "git_blob_sha": "ba223750d3e8d3cb1623e4856becc36d4ab41eb1",
+        "sha256": "90d98b54151c854611b36f16757d7bca37d4d46a684ede5b1418f069218c2c93",
+        "bytes": 12081,
+        "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/impls/ep/combine.cuh"
+      },
+      {
+        "path": "deep_ep/include/deep_ep/layout/ep/token.cuh",
+        "cache_path": "data/research/deepep_modern_20261022/sources/deep_ep/include/deep_ep/layout/ep/token.cuh",
+        "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+        "git_blob_sha": "ee1a9b91d6313c3e417d2ff800587fe27e2e9836",
+        "sha256": "3510d2832b3aeaa99746cb2c3423bf68c6719e0ca56cd4eb408e9b533dbd58e6",
+        "bytes": 5653,
+        "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/layout/ep/token.cuh"
+      },
+      {
+        "path": "README.md",
+        "cache_path": "data/research/deepep_modern_20261022/sources/README.md",
+        "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+        "git_blob_sha": "8c949a4adbc4113bc4199ffb096ae1a7125f6a5d",
+        "sha256": "86415f7fc11381dceb14c112b6c602103d975936444601666ab1fcfd65e8fceb",
+        "bytes": 32914,
+        "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/README.md"
+      },
+      {
+        "path": "deep_ep/include/deep_ep/common/compiled.cuh",
+        "cache_path": "data/research/deepep_layout_20261022/sources/deep_ep/include/deep_ep/common/compiled.cuh",
+        "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+        "git_blob_sha": "55e55d595d3682e1c9bf4d470a66a961e7b49aac",
+        "sha256": "5adc25fabb787db1106387f01693c8cbdd7d302545ee11c3794529b1e4720f0f",
+        "bytes": 2416,
+        "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/common/compiled.cuh"
+      },
+      {
+        "path": "src/gin/gin_host.cc",
+        "cache_path": "data/research/nccl_gin_20261022/sources/src/gin/gin_host.cc",
+        "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+        "git_blob_sha": "b4ec6c2a4056031f540edf2271acb5fc801fa6c6",
+        "sha256": "402adfd2097ca25a8abd4e0151511ad933cbcb9841f941230078827e89880d81",
+        "bytes": 22975,
+        "public_url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/src/gin/gin_host.cc"
+      },
+      {
+        "path": "src/transport/net_ib/gdaki/gin_host_gdaki.cc",
+        "cache_path": "data/research/nccl_gin_20261022/sources/src/transport/net_ib/gdaki/gin_host_gdaki.cc",
+        "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+        "git_blob_sha": "976ab919d4ee438147f635d247721704bd511868",
+        "sha256": "d554a0295c463782d60a36b746ed8e998c7e427493f00e6b6813f9d945fdd361",
+        "bytes": 60093,
+        "public_url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/src/transport/net_ib/gdaki/gin_host_gdaki.cc"
+      },
+      {
+        "path": "src/include/nccl_device/impl/gin__funcs.h",
+        "cache_path": "data/research/nccl_gin_20261022/sources/src/include/nccl_device/impl/gin__funcs.h",
+        "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+        "git_blob_sha": "cfcd5470bbedca8be3d0657fc002bf950814c0f1",
+        "sha256": "8ed25a57375cef3856c81a49be3b89024e567bd1e1dbe6f39ebffb1e7836255d",
+        "bytes": 81127,
+        "public_url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/src/include/nccl_device/impl/gin__funcs.h"
+      },
+      {
+        "path": "src/include/nccl_device/gin/gdaki/gin_gdaki.h",
+        "cache_path": "data/research/nccl_gin_20261022/sources/src/include/nccl_device/gin/gdaki/gin_gdaki.h",
+        "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+        "git_blob_sha": "6ad2c76b3e88e3419298c7b6772c399246a8bc29",
+        "sha256": "510dae47c9c4e9b8a1dd58c63e9197e4b69f8c6dbc559cb3e7aed7ee41e54b9e",
+        "bytes": 35130,
+        "public_url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/src/include/nccl_device/gin/gdaki/gin_gdaki.h"
+      }
+    ],
+    "default_compatibility": [
+      {
+        "run": "/home/lry/moe-ub-cosim/runs/clos_transient_20261030/normal",
+        "graphs": 4,
+        "identical": true
+      },
+      {
+        "run": "/home/lry/moe-ub-cosim/runs/clos_transient_20261030/local",
+        "graphs": 4,
+        "identical": true
+      },
+      {
+        "run": "/home/lry/moe-ub-cosim/runs/phase_completion_20261030/native128",
+        "graphs": 2,
+        "identical": true
+      }
+    ],
+    "real_originals": 15,
+    "source_kind": "user_provided_model_routes",
+    "dataset_revision": null,
+    "offline_real_route_modes": {
+      "default": {
+        "messages": 882,
+        "layout_payload_bytes": 13590528,
+        "expert_contributions": 480,
+        "remote_expert_contributions": 474,
+        "remote_token_rank_units": 441,
+        "local_reduce_declared_ns": 0
+      },
+      "expanded_per_expert/1": {
+        "messages": 882,
+        "layout_payload_bytes": 13173888,
+        "expert_contributions": 480,
+        "remote_expert_contributions": 474,
+        "remote_token_rank_units": 441,
+        "local_reduce_declared_ns": 0
+      },
+      "rank_reduced/1": {
+        "messages": 882,
+        "layout_payload_bytes": 12729024,
+        "expert_contributions": 480,
+        "remote_expert_contributions": 474,
+        "remote_token_rank_units": 441,
+        "local_reduce_declared_ns": 3400
+      }
+    },
+    "new_algorithm_gain_measured": false
+  },
+  "native_modes": [
+    {
+      "passed": true,
+      "gpu_endpoints": 128,
+      "ep_sizes": [
+        64,
+        64
+      ],
+      "synthetic_originals": 4,
+      "combine": "rank_reduced/1",
+      "messages": 62,
+      "layout_payload_bytes": 37696,
+      "expert_contributions": 128,
+      "remote_expert_contributions": 124,
+      "remote_token_rank_units": 31,
+      "local_reduce_declared_ns": 9600,
+      "verified_nodes": 3708,
+      "packet_events_checked": 2120,
+      "gates_checked": 16,
+      "gate_members_checked": 1024,
+      "positive_reduction_callbacks": [
+        {
+          "graph_id": "g0.w0",
+          "rank": 6,
+          "node": 6,
+          "duration_ns": 300,
+          "issue_ns": 13534,
+          "completed_ns": 13834
+        },
+        {
+          "graph_id": "g0.w0",
+          "rank": 8,
+          "node": 6,
+          "duration_ns": 300,
+          "issue_ns": 13534,
+          "completed_ns": 13834
+        },
+        {
+          "graph_id": "g0.w0",
+          "rank": 14,
+          "node": 13,
+          "duration_ns": 300,
+          "issue_ns": 39488,
+          "completed_ns": 39788
+        },
+        {
+          "graph_id": "g0.w0",
+          "rank": 16,
+          "node": 13,
+          "duration_ns": 300,
+          "issue_ns": 39488,
+          "completed_ns": 39788
+        },
+        {
+          "graph_id": "g0.w0",
+          "rank": 34,
+          "node": 6,
+          "duration_ns": 300,
+          "issue_ns": 13534,
+          "completed_ns": 13834
+        },
+        {
+          "graph_id": "g0.w0",
+          "rank": 36,
+          "node": 6,
+          "duration_ns": 300,
+          "issue_ns": 13534,
+          "completed_ns": 13834
+        },
+        {
+          "graph_id": "g0.w0",
+          "rank": 42,
+          "node": 13,
+          "duration_ns": 300,
+          "issue_ns": 39488,
+          "completed_ns": 39788
+        },
+        {
+          "graph_id": "g0.w0",
+          "rank": 44,
+          "node": 13,
+          "duration_ns": 300,
+          "issue_ns": 39488,
+          "completed_ns": 39788
+        },
+        {
+          "graph_id": "g1.w0",
+          "rank": 21,
+          "node": 6,
+          "duration_ns": 300,
+          "issue_ns": 13548,
+          "completed_ns": 13848
+        },
+        {
+          "graph_id": "g1.w0",
+          "rank": 23,
+          "node": 6,
+          "duration_ns": 300,
+          "issue_ns": 13548,
+          "completed_ns": 13848
+        },
+        {
+          "graph_id": "g1.w0",
+          "rank": 29,
+          "node": 13,
+          "duration_ns": 300,
+          "issue_ns": 39502,
+          "completed_ns": 39802
+        },
+        {
+          "graph_id": "g1.w0",
+          "rank": 31,
+          "node": 13,
+          "duration_ns": 300,
+          "issue_ns": 39502,
+          "completed_ns": 39802
+        },
+        {
+          "graph_id": "g1.w0",
+          "rank": 49,
+          "node": 6,
+          "duration_ns": 300,
+          "issue_ns": 13548,
+          "completed_ns": 13848
+        },
+        {
+          "graph_id": "g1.w0",
+          "rank": 51,
+          "node": 6,
+          "duration_ns": 300,
+          "issue_ns": 13548,
+          "completed_ns": 13848
+        },
+        {
+          "graph_id": "g1.w0",
+          "rank": 57,
+          "node": 13,
+          "duration_ns": 300,
+          "issue_ns": 39502,
+          "completed_ns": 39802
+        },
+        {
+          "graph_id": "g1.w0",
+          "rank": 59,
+          "node": 13,
+          "duration_ns": 300,
+          "issue_ns": 39502,
+          "completed_ns": 39802
+        },
+        {
+          "graph_id": "g0.w1",
+          "rank": 12,
+          "node": 6,
+          "duration_ns": 300,
+          "issue_ns": 65442,
+          "completed_ns": 65742
+        },
+        {
+          "graph_id": "g0.w1",
+          "rank": 14,
+          "node": 6,
+          "duration_ns": 300,
+          "issue_ns": 65442,
+          "completed_ns": 65742
+        },
+        {
+          "graph_id": "g0.w1",
+          "rank": 20,
+          "node": 13,
+          "duration_ns": 300,
+          "issue_ns": 91408,
+          "completed_ns": 91708
+        },
+        {
+          "graph_id": "g0.w1",
+          "rank": 22,
+          "node": 13,
+          "duration_ns": 300,
+          "issue_ns": 91408,
+          "completed_ns": 91708
+        },
+        {
+          "graph_id": "g0.w1",
+          "rank": 40,
+          "node": 6,
+          "duration_ns": 300,
+          "issue_ns": 65442,
+          "completed_ns": 65742
+        },
+        {
+          "graph_id": "g0.w1",
+          "rank": 42,
+          "node": 6,
+          "duration_ns": 300,
+          "issue_ns": 65442,
+          "completed_ns": 65742
+        },
+        {
+          "graph_id": "g0.w1",
+          "rank": 48,
+          "node": 13,
+          "duration_ns": 300,
+          "issue_ns": 91408,
+          "completed_ns": 91708
+        },
+        {
+          "graph_id": "g0.w1",
+          "rank": 50,
+          "node": 13,
+          "duration_ns": 300,
+          "issue_ns": 91408,
+          "completed_ns": 91708
+        },
+        {
+          "graph_id": "g1.w1",
+          "rank": 27,
+          "node": 6,
+          "duration_ns": 300,
+          "issue_ns": 65456,
+          "completed_ns": 65756
+        },
+        {
+          "graph_id": "g1.w1",
+          "rank": 29,
+          "node": 6,
+          "duration_ns": 300,
+          "issue_ns": 65456,
+          "completed_ns": 65756
+        },
+        {
+          "graph_id": "g1.w1",
+          "rank": 35,
+          "node": 13,
+          "duration_ns": 300,
+          "issue_ns": 91396,
+          "completed_ns": 91696
+        },
+        {
+          "graph_id": "g1.w1",
+          "rank": 37,
+          "node": 13,
+          "duration_ns": 300,
+          "issue_ns": 91396,
+          "completed_ns": 91696
+        },
+        {
+          "graph_id": "g1.w1",
+          "rank": 55,
+          "node": 6,
+          "duration_ns": 300,
+          "issue_ns": 65456,
+          "completed_ns": 65756
+        },
+        {
+          "graph_id": "g1.w1",
+          "rank": 57,
+          "node": 6,
+          "duration_ns": 300,
+          "issue_ns": 65456,
+          "completed_ns": 65756
+        },
+        {
+          "graph_id": "g1.w1",
+          "rank": 63,
+          "node": 13,
+          "duration_ns": 300,
+          "issue_ns": 91396,
+          "completed_ns": 91696
+        },
+        {
+          "graph_id": "g1.w1",
+          "rank": 65,
+          "node": 17,
+          "duration_ns": 300,
+          "issue_ns": 91396,
+          "completed_ns": 91696
+        }
+      ],
+      "application_finished_ns": 103852,
+      "network_drained_ns": 103852,
+      "hardware_calibrated": false,
+      "complete_DeepEP": false,
+      "new_algorithm_gain_measured": false
+    },
+    {
+      "passed": true,
+      "gpu_endpoints": 128,
+      "ep_sizes": [
+        64,
+        64
+      ],
+      "synthetic_originals": 4,
+      "combine": "expanded_per_expert/1",
+      "messages": 62,
+      "layout_payload_bytes": 83328,
+      "expert_contributions": 128,
+      "remote_expert_contributions": 124,
+      "remote_token_rank_units": 31,
+      "local_reduce_declared_ns": 0,
+      "verified_nodes": 3196,
+      "packet_events_checked": 2120,
+      "gates_checked": 16,
+      "gate_members_checked": 1024,
+      "positive_reduction_callbacks": [],
+      "application_finished_ns": 103582,
+      "network_drained_ns": 103582,
+      "hardware_calibrated": false,
+      "complete_DeepEP": false,
+      "new_algorithm_gain_measured": false
+    }
+  ],
+  "actual_traffic": [
+    {
+      "mode": "reduced",
+      "source_data_packets": 62,
+      "source_payload_bytes": 37696,
+      "data_active_ranks": [
+        0,
+        1,
+        6,
+        8,
+        12,
+        14,
+        16,
+        20,
+        21,
+        22,
+        23,
+        27,
+        29,
+        31,
+        34,
+        35,
+        36,
+        37,
+        40,
+        42,
+        44,
+        48,
+        49,
+        50,
+        51,
+        55,
+        57,
+        59,
+        63,
+        64,
+        65
+      ],
+      "active_source_ranks": [
+        0,
+        1,
+        64,
+        65
+      ],
+      "full_cluster_load": false,
+      "gpu_execution": false
+    },
+    {
+      "mode": "expanded",
+      "source_data_packets": 62,
+      "source_payload_bytes": 83328,
+      "data_active_ranks": [
+        0,
+        1,
+        6,
+        8,
+        12,
+        14,
+        16,
+        20,
+        21,
+        22,
+        23,
+        27,
+        29,
+        31,
+        34,
+        35,
+        36,
+        37,
+        40,
+        42,
+        44,
+        48,
+        49,
+        50,
+        51,
+        55,
+        57,
+        59,
+        63,
+        64,
+        65
+      ],
+      "active_source_ranks": [
+        0,
+        1,
+        64,
+        65
+      ],
+      "full_cluster_load": false,
+      "gpu_execution": false
+    }
+  ],
+  "new_network_executions": 2,
+  "real_route_network_executions": 0,
+  "hardware_calibrated": false,
+  "complete_DeepEP": false,
+  "new_algorithm_gain_measured": false
+}

@@ -1,0 +1,59 @@
+{
+  "passed": true,
+  "receipt_hashes_revalidated": true,
+  "html_parsed": true,
+  "html_links_checked": 4,
+  "new_markdown_links_checked": true,
+  "public_example_and_audit_help_checked": true,
+  "dependency_check_exit": 0,
+  "whitespace_check_exit": 0,
+  "network_executions": 2,
+  "successful_network_reruns": 0,
+  "remaining_research_goal": "active; novel algorithm gain not established",
+  "completed_monitors": 13,
+  "monitored_seconds": 9.507918782066554,
+  "peak_sampled_group_rss_bytes": 210624512,
+  "final_check_probe": {
+    "schema_version": "moe-ub-host-probe/1",
+    "command": [
+      ".venv/frontend/bin/python",
+      "-B",
+      "-"
+    ],
+    "cwd": "/home/lry/moe-ub-cosim",
+    "started_utc": "2026-10-30T09:53:21.623827+00:00",
+    "limits": {
+      "sampled_group_rss_bytes": 1073741824,
+      "per_process_address_bytes": 2147483648,
+      "artifact_bytes": 536870912,
+      "wall_seconds": 120.0
+    },
+    "peak_sampled_group_rss_bytes": 41639936,
+    "peak_sampled_processes": 4,
+    "status": "completed",
+    "workload_semantics_validated": false,
+    "artifact_roots": [
+      "/home/lry/moe-ub-cosim/runs/token_transport_20261030"
+    ],
+    "peak_sampled_artifact_bytes": 7905280,
+    "min_free_bytes": 8589934592,
+    "rss_scope": "owned_process_tree_including_detached_descendants",
+    "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+    "disk_sample_interval_seconds": 1.0,
+    "peak_sampled_artifact_apparent_bytes": 4934548,
+    "peak_sampled_artifact_allocated_bytes": 7905280,
+    "process_group": 864188,
+    "child_exit_code": 0,
+    "remaining_live_group_pids": [],
+    "ended_utc": "2026-10-30T09:53:22.449322+00:00",
+    "wall_seconds": 0.82550130400341,
+    "max_waited_child_rss_kib": 22796,
+    "artifact_bytes_before_report": 2707,
+    "aggregate_artifact_bytes_before_report": 7905280,
+    "aggregate_artifact_usage_before_report": {
+      "apparent_bytes": 4934548,
+      "allocated_bytes": 7905280
+    }
+  },
+  "checked_utc": "2026-10-30T09:53:51.414828+00:00"
+}

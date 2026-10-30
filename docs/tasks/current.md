@@ -1,5 +1,13 @@
 # 当前任务与交接
 
+## 2026-10-30 真实路由下的短时共享上行故障
+
+状态：`in_progress`。上一目标轮为progress：`c8c4e24ece`已完成并发布临时断链恢复平台，六个128Clos功能网络通过。本轮按[独立方法](../../experiments/transient_uplink_recovery/README.md)比较真实请求的短时共享上行故障，先提交方法/执行/独立核验，再冻结输入和执行；平台行为不改，整体研究目标active。
+
+沿用15份不同R1真实选择/四EP32组/两层两步/17µs SR及原门限和缓冲，无备用。128–132边4µs关闭，分别中断20/60µs；每窗口比较60µs延迟全局通知、本地旧候选过滤及零延迟全局参考，另跑一个新正常条件核对旧正常原件。最多七新128Clos网络各一次；不按结果改位置、时间、负载或超时。收益同时看四组完成、重传、排空及实际末前驱，不把传统改路或normal参考差距当创新或可消除上限。
+
+预算根`runs/transient_uplink_recovery_20261030`：累计1800受监控秒/新增2GiB/卷留8GiB，阶段120秒/RSS1GiB/地址2GiB；native60秒/模拟5ms/包和队列200000行，单次产物512MiB/结果256MiB。复用已核公开恢复构建，无构建安装下载、平台/依赖修改或GPU；失败保留不自动扩限或重跑成功网络。仅发布已授权用户分支。
+
 ## 2026-10-30 临时断链的物理恢复与通知版本
 
 状态：`completed`（临时断链恢复平台增量已验收，整体研究目标仍active）。上一目标轮仅解释normal/local命名，未改变项目状态，分类no progress；本轮完成已有实现的最终身份、依赖和文档核查及提交发布收尾。要求见[平台规范](temporary_link_restore_spec.md)，操作见[公开恢复示例](../../examples/scaleout_link_restore/README.md)，结果见[功能验收网页](../../fixtures/temporary_link_restore/report.html)、[独立核验](../../fixtures/temporary_link_restore/verification.json)和[源码及资源收据](../../fixtures/temporary_link_restore/receipt.json)。

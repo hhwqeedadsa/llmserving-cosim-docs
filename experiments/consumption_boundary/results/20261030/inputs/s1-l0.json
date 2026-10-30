@@ -1,0 +1,211 @@
+{
+  "schema_version": "moe-modern-deepep-input/1",
+  "model": {
+    "experts": 256,
+    "top_k": 8,
+    "hidden_size": 7168,
+    "precision": "bf16"
+  },
+  "execution": {
+    "ranks": 32,
+    "max_tokens_per_rank": 1,
+    "mode": "direct_rdma_only_fresh",
+    "stream": "compute_wait_no_deferred_epilogue",
+    "expanded_layout": true,
+    "allow_multiple_reduction": true,
+    "expert_alignment": 1,
+    "num_sms": 2,
+    "dispatch_warps": 2,
+    "combine_warps": 2,
+    "call_contexts": 5,
+    "requested_contexts": 5,
+    "connections": 1,
+    "local_devices": [
+      [
+        0
+      ],
+      [
+        0
+      ],
+      [
+        0
+      ],
+      [
+        0
+      ],
+      [
+        0
+      ],
+      [
+        0
+      ],
+      [
+        0
+      ],
+      [
+        0
+      ],
+      [
+        0
+      ],
+      [
+        0
+      ],
+      [
+        0
+      ],
+      [
+        0
+      ],
+      [
+        0
+      ],
+      [
+        0
+      ],
+      [
+        0
+      ],
+      [
+        0
+      ],
+      [
+        0
+      ],
+      [
+        0
+      ],
+      [
+        0
+      ],
+      [
+        0
+      ],
+      [
+        0
+      ],
+      [
+        0
+      ],
+      [
+        0
+      ],
+      [
+        0
+      ],
+      [
+        0
+      ],
+      [
+        0
+      ],
+      [
+        0
+      ],
+      [
+        0
+      ],
+      [
+        0
+      ],
+      [
+        0
+      ],
+      [
+        0
+      ],
+      [
+        0
+      ]
+    ]
+  },
+  "calls": [
+    {
+      "name": "s1-l0",
+      "tokens": [
+        [
+          [
+            123,
+            146,
+            150,
+            160,
+            175,
+            189,
+            197,
+            126
+          ]
+        ],
+        [
+          [
+            10,
+            14,
+            21,
+            47,
+            120,
+            125,
+            249,
+            31
+          ]
+        ],
+        [
+          [
+            1,
+            9,
+            42,
+            54,
+            92,
+            133,
+            151,
+            25
+          ]
+        ],
+        [
+          [
+            0,
+            134,
+            196,
+            227,
+            236,
+            250,
+            252,
+            223
+          ]
+        ],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        []
+      ]
+    }
+  ],
+  "limits": {
+    "max_events": 65536,
+    "max_operations": 16384,
+    "max_input_bytes": 1048576,
+    "max_output_bytes": 16777216
+  }
+}

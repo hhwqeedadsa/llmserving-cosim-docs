@@ -1,0 +1,215 @@
+[
+  {
+    "path": "csrc/deep_ep.cpp",
+    "commit": "9af0e0d0e74f3577af1979c9b9e1ac2cad0104ee",
+    "sha256": "de03cc5b5e2d05b3dc521ab1bfd419f3d94bfaa5385ee3c05e0052295a6e138d",
+    "git_blob_sha": "0789cd58509ebbe06cf20ab0078821b8aaa2f68e",
+    "bytes": 76678,
+    "public_url": "https://github.com/deepseek-ai/DeepEP/blob/9af0e0d0e74f3577af1979c9b9e1ac2cad0104ee/csrc/deep_ep.cpp",
+    "local_path": "/home/lry/moe-ub-cosim/data/research/deepep_semantics_20261022/sources/csrc/deep_ep.cpp",
+    "excerpts": [
+      {
+        "first_line": 1125,
+        "last_line": 1137,
+        "excerpt": "    // Buffer control\n    LowLatencyLayout layout(rdma_buffer_ptr, num_max_dispatch_tokens_per_rank, hidden, num_ranks, num_experts);\n    EP_HOST_ASSERT(layout.total_bytes <= num_rdma_bytes);\n    auto buffer = layout.buffers[low_latency_buffer_idx];\n    auto next_buffer = layout.buffers[low_latency_buffer_idx ^= 1];\n\n    // Wait previous tasks to be finished\n    // NOTES: the hook mode will always use the default stream\n    auto compute_stream = at::cuda::getCurrentCUDAStream();\n    auto launch_stream = return_recv_hook ? compute_stream : comm_stream;\n    EP_HOST_ASSERT(not (async and return_recv_hook));\n    if (not return_recv_hook)\n        stream_wait(launch_stream, compute_stream);",
+        "url": "https://github.com/deepseek-ai/DeepEP/blob/9af0e0d0e74f3577af1979c9b9e1ac2cad0104ee/csrc/deep_ep.cpp#L1125-L1137"
+      },
+      {
+        "first_line": 1184,
+        "last_line": 1202,
+        "excerpt": "    launcher(return_recv_hook ? LOW_LATENCY_SEND_PHASE : (LOW_LATENCY_SEND_PHASE | LOW_LATENCY_RECV_PHASE));\n\n    // Wait streams\n    std::optional<EventHandle> event;\n    if (async) {\n        // NOTES: we must ensure the all tensors will not be deallocated before the stream-wait happens,\n        // so in Python API, we must wrap all tensors into the event handle.\n        event = EventHandle(launch_stream);\n    } else if (not return_recv_hook) {\n        stream_wait(compute_stream, launch_stream);\n    }\n\n    // Receiver callback\n    std::optional<std::function<void()>> recv_hook = std::nullopt;\n    if (return_recv_hook)\n        recv_hook = [=]() { launcher(LOW_LATENCY_RECV_PHASE); };\n\n    // Return values\n    return {packed_recv_x, packed_recv_x_scales, packed_recv_count, packed_recv_src_info, packed_recv_layout_range, event, recv_hook};",
+        "url": "https://github.com/deepseek-ai/DeepEP/blob/9af0e0d0e74f3577af1979c9b9e1ac2cad0104ee/csrc/deep_ep.cpp#L1184-L1202"
+      },
+      {
+        "first_line": 1247,
+        "last_line": 1258,
+        "excerpt": "    LowLatencyLayout layout(rdma_buffer_ptr, num_max_dispatch_tokens_per_rank, hidden, num_ranks, num_experts);\n    EP_HOST_ASSERT(layout.total_bytes <= num_rdma_bytes);\n    auto buffer = layout.buffers[low_latency_buffer_idx];\n    auto next_buffer = layout.buffers[low_latency_buffer_idx ^= 1];\n\n    // Wait previous tasks to be finished\n    // NOTES: the hook mode will always use the default stream\n    auto compute_stream = at::cuda::getCurrentCUDAStream();\n    auto launch_stream = return_recv_hook ? compute_stream : comm_stream;\n    EP_HOST_ASSERT(not (async and return_recv_hook));\n    if (not return_recv_hook)\n        stream_wait(launch_stream, compute_stream);",
+        "url": "https://github.com/deepseek-ai/DeepEP/blob/9af0e0d0e74f3577af1979c9b9e1ac2cad0104ee/csrc/deep_ep.cpp#L1247-L1258"
+      },
+      {
+        "first_line": 1287,
+        "last_line": 1305,
+        "excerpt": "    launcher(return_recv_hook ? LOW_LATENCY_SEND_PHASE : (LOW_LATENCY_SEND_PHASE | LOW_LATENCY_RECV_PHASE));\n\n    // Wait streams\n    std::optional<EventHandle> event;\n    if (async) {\n        // NOTES: we must ensure the all tensors will not be deallocated before the stream-wait happens,\n        // so in Python API, we must wrap all tensors into the event handle.\n        event = EventHandle(launch_stream);\n    } else if (not return_recv_hook) {\n        stream_wait(compute_stream, launch_stream);\n    }\n\n    // Receiver callback\n    std::optional<std::function<void()>> recv_hook = std::nullopt;\n    if (return_recv_hook)\n        recv_hook = [=]() { launcher(LOW_LATENCY_RECV_PHASE); };\n\n    // Return values\n    return {combined_x, event, recv_hook};",
+        "url": "https://github.com/deepseek-ai/DeepEP/blob/9af0e0d0e74f3577af1979c9b9e1ac2cad0104ee/csrc/deep_ep.cpp#L1287-L1305"
+      }
+    ]
+  },
+  {
+    "path": "csrc/kernels/internode_ll.cu",
+    "commit": "9af0e0d0e74f3577af1979c9b9e1ac2cad0104ee",
+    "sha256": "91d374c7354d2c92716c23793b6beec65d47cb22498eb22a7954dda0d880161e",
+    "git_blob_sha": "cfd0d2b258b688dad55fdfd9c769624618dc54db",
+    "bytes": 53128,
+    "public_url": "https://github.com/deepseek-ai/DeepEP/blob/9af0e0d0e74f3577af1979c9b9e1ac2cad0104ee/csrc/kernels/internode_ll.cu",
+    "local_path": "/home/lry/moe-ub-cosim/data/research/deepep_semantics_20261022/sources/csrc/kernels/internode_ll.cu",
+    "excerpts": [
+      {
+        "first_line": 183,
+        "last_line": 192,
+        "excerpt": "            // The first SM is also responsible for cleaning the next buffer\n            #pragma unroll\n            for (int i = lane_id; i < num_next_clean_int; i += 32)\n                next_clean[i] = 0;\n\n            // Notify before executing `int_p`\n            __syncwarp();\n            #pragma unroll\n            for (int i = lane_id; i < num_experts; i += 32)\n                atomic_add_release_global(atomic_finish_counter_per_expert + i, FINISHED_SUM_TAG);",
+        "url": "https://github.com/deepseek-ai/DeepEP/blob/9af0e0d0e74f3577af1979c9b9e1ac2cad0104ee/csrc/kernels/internode_ll.cu#L183-L192"
+      },
+      {
+        "first_line": 220,
+        "last_line": 234,
+        "excerpt": "    // Issue count sends\n    if (responsible_expert_idx < num_experts and sub_warp_id == 0 and lane_id == 0) {\n        const auto dst_rank = responsible_expert_idx / num_local_experts;\n        const auto dst_expert_local_idx = responsible_expert_idx % num_local_experts;\n        const auto num_tokens_sent = shared_num_tokens_sent_per_expert[responsible_expert_idx - sm_id * num_warp_groups];\n\n        // Wait local sends issued and send expert counts\n        while (ld_acquire_global(atomic_finish_counter_per_expert + responsible_expert_idx) != FINISHED_SUM_TAG * 2);\n        auto dst_ptr = reinterpret_cast<uint64_t>(rdma_recv_count + dst_expert_local_idx * num_ranks + rank);\n        auto dst_p2p_ptr = nvshmemi_get_p2p_ptr(dst_ptr, rank, dst_rank);\n        if (dst_p2p_ptr == 0) {\n            nvshmemi_ibgda_amo_nonfetch_add(reinterpret_cast<int*>(dst_ptr), -num_tokens_sent - 1, dst_rank, dst_expert_local_idx);\n        } else {\n            st_release_sys_global(reinterpret_cast<int*>(dst_p2p_ptr), -num_tokens_sent - 1);\n        }",
+        "url": "https://github.com/deepseek-ai/DeepEP/blob/9af0e0d0e74f3577af1979c9b9e1ac2cad0104ee/csrc/kernels/internode_ll.cu#L220-L234"
+      },
+      {
+        "first_line": 274,
+        "last_line": 284,
+        "excerpt": "        int num_recv_tokens, recv_token_begin_idx;\n        EP_DEVICE_ASSERT(num_warps_per_group > 1 and num_warp_groups < 15);\n        if (sub_warp_id == 1 and lane_id == 0) {\n            auto start_time = clock64();\n            while ((num_recv_tokens = ld_acquire_sys_global(rdma_recv_count + local_expert_idx * num_ranks + src_rank)) == 0);\n            auto wait_recv_cost = clock64() - start_time;\n            num_recv_tokens = -num_recv_tokens - 1;\n            recv_token_begin_idx = atomicAdd(packed_recv_count + local_expert_idx, num_recv_tokens);\n            shared_num_recv_tokens[warp_group_id] = num_recv_tokens;\n            shared_recv_token_begin_idx[warp_group_id] = recv_token_begin_idx;\n            recv_range[src_rank] = pack2<int, int64_t>(num_recv_tokens, recv_token_begin_idx);",
+        "url": "https://github.com/deepseek-ai/DeepEP/blob/9af0e0d0e74f3577af1979c9b9e1ac2cad0104ee/csrc/kernels/internode_ll.cu#L274-L284"
+      },
+      {
+        "first_line": 738,
+        "last_line": 751,
+        "excerpt": "        // Put the finishing flag\n        EP_DEVICE_ASSERT(num_warps_per_group > 1 and num_warp_groups < 16);\n        asm volatile(\"bar.sync %0, %1;\" :: \"r\"(warp_group_id + 1), \"r\"(num_warps_per_group * 32));\n        if (sub_warp_id == 1 and lane_id == 0) {\n            while (ld_acquire_global(atomic_clean_flag) == 0);\n            auto dst_ptr = reinterpret_cast<uint64_t>(rdma_recv_flag + global_expert_idx);\n            auto dst_p2p_ptr = nvshmemi_get_p2p_ptr(dst_ptr, rank, dst_rank);\n            if (dst_p2p_ptr == 0) {\n                nvshmemi_ibgda_amo_nonfetch_add(reinterpret_cast<int*>(dst_ptr), 1, dst_rank, local_expert_idx);\n            } else {\n                st_release_sys_global(reinterpret_cast<int*>(dst_p2p_ptr), 1);\n            }\n            atomic_add_release_global(atomic_clean_flag, -1);\n        }",
+        "url": "https://github.com/deepseek-ai/DeepEP/blob/9af0e0d0e74f3577af1979c9b9e1ac2cad0104ee/csrc/kernels/internode_ll.cu#L738-L751"
+      },
+      {
+        "first_line": 770,
+        "last_line": 790,
+        "excerpt": "        EP_DEVICE_ASSERT(num_warps_per_group > 1);\n        if (sub_warp_id == 0 and lane_id == 0) {\n            auto start_time = clock64();\n            while (ld_acquire_sys_global(rdma_recv_flag + responsible_expert_idx) == 0);\n            auto wait_recv_cost = clock64() - start_time;\n            if (combine_wait_recv_cost_stats != nullptr) {\n                const auto& src_rank = responsible_expert_idx / num_local_experts;\n                atomicAdd(reinterpret_cast<unsigned long long*>(combine_wait_recv_cost_stats + src_rank), wait_recv_cost);\n            }\n        }\n    }\n    cg::this_grid().sync();\n\n    // Reassign warp groups\n    constexpr int kMaxNumGroups = 2;\n    const int num_decode_warps = hidden_bf16_int4_pad / (kNumRecvUnrolls * 32);\n    const int num_groups = min(kMaxNumGroups, (num_threads / 32) / (num_decode_warps + 1));\n    const int decode_warp_idx = __shfl_sync(0xffffffff, warp_id % (num_decode_warps + 1), 0);\n    const int group_idx = __shfl_sync(0xffffffff, warp_id / (num_decode_warps + 1), 0);\n    EP_STATIC_ASSERT(kHidden % (32 * kNumElemsPerInt4) == 0, \"Invalid vectorization\");\n    EP_DEVICE_ASSERT(num_topk <= 32);",
+        "url": "https://github.com/deepseek-ai/DeepEP/blob/9af0e0d0e74f3577af1979c9b9e1ac2cad0104ee/csrc/kernels/internode_ll.cu#L770-L790"
+      }
+    ]
+  },
+  {
+    "path": "csrc/kernels/ibgda_device.cuh",
+    "commit": "9af0e0d0e74f3577af1979c9b9e1ac2cad0104ee",
+    "sha256": "1c5353a768a27a4b7d349bb50215cb54f8767934247f7caef7a8f331c2f2bbd2",
+    "git_blob_sha": "7fab70c13f0e21081831a401f5140ceed1d970a2",
+    "bytes": 21149,
+    "public_url": "https://github.com/deepseek-ai/DeepEP/blob/9af0e0d0e74f3577af1979c9b9e1ac2cad0104ee/csrc/kernels/ibgda_device.cuh",
+    "local_path": "/home/lry/moe-ub-cosim/data/research/deepep_semantics_20261022/sources/csrc/kernels/ibgda_device.cuh",
+    "excerpts": [
+      {
+        "first_line": 495,
+        "last_line": 500,
+        "excerpt": "nvshmemi_ibgda_quiet(int dst_pe, int qp_id) {\n    auto qp = ibgda_get_rc(dst_pe, qp_id);\n    auto state = ibgda_get_state();\n    uint64_t prod_idx = state->use_async_postsend ? ld_na_relaxed(qp->tx_wq.prod_idx) : ld_na_relaxed(&qp->mvars.tx_wq.ready_head);\n    ibgda_poll_cq(qp->tx_wq.cq, prod_idx);\n}",
+        "url": "https://github.com/deepseek-ai/DeepEP/blob/9af0e0d0e74f3577af1979c9b9e1ac2cad0104ee/csrc/kernels/ibgda_device.cuh#L495-L500"
+      }
+    ]
+  },
+  {
+    "path": "csrc/buffers/ep.hpp",
+    "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+    "sha256": "e00e92a793b8e5a448db6f704ccd2c391ff9943cba30ec470c9d3945460c0193",
+    "git_blob_sha": "04f4dbfddeaf1cf8b0cf7006cc723e1323839210",
+    "bytes": 60540,
+    "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/csrc/buffers/ep.hpp",
+    "local_path": "/home/lry/moe-ub-cosim/data/research/deepep_modern_20261022/sources/csrc/buffers/ep.hpp",
+    "excerpts": [
+      {
+        "first_line": 152,
+        "last_line": 180,
+        "excerpt": "    static std::optional<EventHandle> stream_control_epilogue(const tensor_list_t& tensors,\n                                                              const at::cuda::CUDAStream& compute_stream,\n                                                              const bool& allocate_on_comm_stream,\n                                                              const bool& async_with_compute_stream) {\n        // Ensure memory access safety between two streams\n        const auto comm_stream = comm::get_comm_stream();\n        std::optional<EventHandle> event;\n        if (async_with_compute_stream) {\n            event = EventHandle(comm_stream);\n\n            // NOTES: this environment only applies to V2 APIs\n            if (get_env<int>(\"EP_AVOID_RECORD_STREAM\", 0)) {\n                event->tensors_to_record = tensors;\n            } else {\n                for (auto& t: tensors) if (t.has_value()) {\n                    t->record_stream(compute_stream);\n                    t->record_stream(comm_stream);\n                }\n            }\n        } else {\n            comm::stream_wait(compute_stream, comm_stream);\n        }\n\n        // Switch back compute stream\n        if (allocate_on_comm_stream)\n            at::cuda::setCurrentCUDAStream(compute_stream);\n\n        // The CUDA event marking the finishing\n        return event;",
+        "url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/csrc/buffers/ep.hpp#L152-L180"
+      },
+      {
+        "first_line": 770,
+        "last_line": 786,
+        "excerpt": "        // Defer epilogue: record the created tensors only, and return intermediately\n        // NOTES: CPU sync will be deferred, too\n        if (defer_epilogue) {\n            EP_HOST_ASSERT(async_with_compute_stream);\n            const auto event = stream_control_epilogue(\n                tensors_to_record, compute_stream, allocate_on_comm_stream, true);\n            std::function<pybind11::object()> epilogue_hook = [epilogue = std::move(epilogue)]() mutable {\n                return epilogue(at::cuda::getCurrentCUDAStream(), std::nullopt);\n            };\n            return pybind11::make_tuple(pybind11::none(), event, epilogue_hook);\n        }\n\n        // Do epilogue intermediately and record all tensors\n        auto result = epilogue(comm_stream, std::ref(tensors_to_record));\n        const auto event = stream_control_epilogue(\n            tensors_to_record, compute_stream, allocate_on_comm_stream, async_with_compute_stream);\n        return pybind11::make_tuple(result, event, pybind11::none());",
+        "url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/csrc/buffers/ep.hpp#L770-L786"
+      }
+    ]
+  },
+  {
+    "path": "deep_ep/include/deep_ep/comm/barrier.cuh",
+    "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+    "sha256": "e4361353f31a2f3a36e019bb2ef013991017a205c16ab92f76f9da2a2652260f",
+    "git_blob_sha": "732c598ca1986636c300036533141ebeb49a320e",
+    "bytes": 11335,
+    "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/comm/barrier.cuh",
+    "local_path": "/home/lry/moe-ub-cosim/data/research/deepep_modern_20261022/sources/deep_ep/include/deep_ep/comm/barrier.cuh",
+    "excerpts": [
+      {
+        "first_line": 146,
+        "last_line": 167,
+        "excerpt": "    // Flush all QPs by all SMs (only needed for release semantics)\n    if constexpr (kFlushStores) {\n        for (int i = global_warp_idx; i < num_qps; i += kNumSMs * kNumWarps) {\n            ncclGin(nccl_dev_comm, i, NCCL_GIN_RESOURCE_SHARING_CTA).flush(ncclCoopWarp());\n        }\n\n        // World-team barriers may mix direct NVLink writes with GIN signals, so a system-scope\n        // threadfence is required to make the NVLink writes visible before publishing the barrier\n        if constexpr (std::is_same_v<team_t, ncclTeamTagWorld>)\n            ptx::fence_acq_rel_sys();\n\n        // NOTES: we can not use `kNumSMs` to judge, as maybe only part of the SMs will call this function\n        (gridDim.x > 1) ? cooperative_groups::this_grid().sync() : __syncthreads();\n    }\n\n    if (sm_idx == 0) {\n        // Use QP 0 to do barrier: signal slot `rank_idx` on every rank, then wait for every rank's slot\n        const NCCLGin barrier_gin(nccl_dev_comm, gin.nccl_window, 0, NCCL_GIN_RESOURCE_SHARING_CTA);\n        for (int i = thread_idx; i < kNumRanks; i += kNumThreads)\n            barrier_gin.signal<team_t>(i, ncclGin_SignalInc{static_cast<ncclGinSignal_t>(rank_idx)});\n        for (int i = thread_idx; i < kNumRanks; i += kNumThreads)\n            barrier_gin.wait_signal<team_t, kNumTimeoutCycles>(i, rank_idx);",
+        "url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/comm/barrier.cuh#L146-L167"
+      }
+    ]
+  },
+  {
+    "path": "deep_ep/include/deep_ep/impls/ep/dispatch.cuh",
+    "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+    "sha256": "447ec0ef779bb2a74f7efa8ece04254c2036ab4000999f566356d6f94df9335a",
+    "git_blob_sha": "3bacfc60c10fb7e4b21e6d6c57e64cbdb6ae9a58",
+    "bytes": 20457,
+    "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/impls/ep/dispatch.cuh",
+    "local_path": "/home/lry/moe-ub-cosim/data/research/deepep_modern_20261022/sources/deep_ep/include/deep_ep/impls/ep/dispatch.cuh",
+    "excerpts": [
+      {
+        "first_line": 393,
+        "last_line": 397,
+        "excerpt": "    // Barrier to ensure data arrival\n    comm::gpu_barrier<kIsScaleupNVLink, 1, kNumRanks,\n                      kNumSMs, kNumThreads, kNumQPs, kNumTimeoutCycles, comm::kDispatchTag1, true, true, false>(\n        gin, workspace_layout.get_barrier_signals(), 0, rank_idx, sm_idx, thread_idx);\n",
+        "url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/impls/ep/dispatch.cuh#L393-L397"
+      }
+    ]
+  },
+  {
+    "path": "deep_ep/include/deep_ep/impls/ep/combine.cuh",
+    "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+    "sha256": "90d98b54151c854611b36f16757d7bca37d4d46a684ede5b1418f069218c2c93",
+    "git_blob_sha": "ba223750d3e8d3cb1623e4856becc36d4ab41eb1",
+    "bytes": 12081,
+    "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/impls/ep/combine.cuh",
+    "local_path": "/home/lry/moe-ub-cosim/data/research/deepep_modern_20261022/sources/deep_ep/include/deep_ep/impls/ep/combine.cuh",
+    "excerpts": [
+      {
+        "first_line": 77,
+        "last_line": 82,
+        "excerpt": "    // Full barrier to ensure the remote buffer is available\n    const auto workspace_layout = layout::EPWorkspaceLayout(workspace, 1, kNumRanks, kNumExperts);\n    comm::gpu_barrier<kIsScaleupNVLink, 1, kNumRanks,\n                      kNumSMs, kNumThreads, kNumQPs, kNumTimeoutCycles, comm::kCombineTag0, false, false, true>(\n        gin, workspace_layout.get_barrier_signals(), 0, rank_idx, sm_idx, thread_idx);\n",
+        "url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/impls/ep/combine.cuh#L77-L82"
+      },
+      {
+        "first_line": 240,
+        "last_line": 244,
+        "excerpt": "    // Final barrier to ensure data arrival\n    comm::gpu_barrier<kIsScaleupNVLink, 1, kNumRanks,\n                      kNumSMs, kNumThreads, kNumQPs, kNumTimeoutCycles, comm::kCombineTag1, true, true, false>(\n        gin, workspace_layout.get_barrier_signals(), 0, rank_idx, sm_idx, thread_idx);\n}",
+        "url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/impls/ep/combine.cuh#L240-L244"
+      }
+    ]
+  },
+  {
+    "path": "deep_ep/include/deep_ep/impls/ep/hybrid_dispatch.cuh",
+    "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+    "sha256": "d7e6e98aeb605392c668bf46de3520072f02b61f145cfc5779dd9c32f0e73db9",
+    "git_blob_sha": "0cb8e7da20940881c945720b45dd0eeea8feffc1",
+    "bytes": 36817,
+    "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/impls/ep/hybrid_dispatch.cuh",
+    "local_path": "/home/lry/moe-ub-cosim/data/research/deepep_modern_20261022/sources/deep_ep/include/deep_ep/impls/ep/hybrid_dispatch.cuh",
+    "excerpts": [
+      {
+        "first_line": 658,
+        "last_line": 666,
+        "excerpt": "    // Scale-up barrier to ensure data arrival\n    // As scale-out tokens have already been consumed by forwarders, no need to do scale-out barrier again\n    comm::gpu_barrier<true, kNumScaleoutRanks, kNumScaleupRanks,\n                      kNumSMs, kNumThreads, kNumQPs, kNumTimeoutCycles, comm::kHybridDispatchTag1, true, true, false>(\n        gin, workspace_layout.get_barrier_signals(), scaleout_rank_idx, scaleup_rank_idx, sm_idx, thread_idx, /* do not scale-out */ false, true);\n\n    // Trigger the copy epilogue kernel\n    cudaTriggerProgrammaticLaunchCompletion();\n",
+        "url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/impls/ep/hybrid_dispatch.cuh#L658-L666"
+      }
+    ]
+  },
+  {
+    "path": "deep_ep/include/deep_ep/impls/ep/hybrid_combine.cuh",
+    "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+    "sha256": "7a5091f7acd501fe0500564d1ef775e10150d880512e178e6c6bb40285eb1248",
+    "git_blob_sha": "631dd01710c7c2cd07502327ac099b2a86438ef9",
+    "bytes": 33159,
+    "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/impls/ep/hybrid_combine.cuh",
+    "local_path": "/home/lry/moe-ub-cosim/data/research/deepep_modern_20261022/sources/deep_ep/include/deep_ep/impls/ep/hybrid_combine.cuh",
+    "excerpts": [
+      {
+        "first_line": 588,
+        "last_line": 605,
+        "excerpt": "        // Update, wait and clean\n        EP_STATIC_ASSERT(kNumScaleoutRanks <= 32, \"Invalid ranks\");\n        const auto expected_signal = math::pack2<int, int64_t>(1, 0);\n        gin.flush<ncclCoopWarp>();\n        if (lane_idx < kNumScaleoutRanks) {\n            // Update remote tails\n            gin.red_add_rel<ncclTeamTagRail>(\n                workspace_layout.get_scaleout_channel_signaled_tail_ptr(channel_idx, scaleout_rank_idx),\n                expected_signal, lane_idx);\n        }\n        __syncwarp();\n\n        // Wait tail arrival\n        if (lane_idx < kNumScaleoutRanks) {\n            const auto wait_ptr = workspace_layout.get_scaleout_channel_signaled_tail_ptr(channel_idx, lane_idx);\n            comm::timeout_while<kNumTimeoutCycles>([=](const bool& is_last_check) {\n                const auto signal = ptx::ld_acquire_sys<int64_t>(wait_ptr);\n                if (signal == expected_signal) {",
+        "url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/impls/ep/hybrid_combine.cuh#L588-L605"
+      },
+      {
+        "first_line": 606,
+        "last_line": 625,
+        "excerpt": "                    // Clean for next usages\n                    *wait_ptr = 0;\n                    return true;\n                }\n\n                if (is_last_check) {\n                    printf(\"DeepEP combine (scale-out wait all) timeout, scale-out: %d/%d, scale-up: %d/%d, \"\n                           \"channel: %d, lane: %d, signal: %lld, expected: %lld\\n\",\n                           scaleout_rank_idx, kNumScaleoutRanks, scaleup_rank_idx, kNumScaleupRanks,\n                           channel_idx, lane_idx,\n                           signal, expected_signal);\n                }\n                return false;\n            });\n        }\n        __syncwarp();\n    }\n\n    // No barrier at epilogue\n}",
+        "url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/impls/ep/hybrid_combine.cuh#L606-L625"
+      }
+    ]
+  }
+]

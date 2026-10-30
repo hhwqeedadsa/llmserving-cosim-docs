@@ -1,0 +1,274 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>局部恢复：数据可用、发送完成与缓冲复用</title>
+<style>body{margin:0;background:#f3f5f8;color:#172537;font:17px/1.8 system-ui,sans-serif}main{max-width:1120px;margin:32px auto;padding:0 22px}section{background:white;border:1px solid #dde3ec;border-radius:14px;padding:24px;margin:18px 0}h1{font-size:30px;line-height:1.4}h2{font-size:23px}small{color:#526278}table{width:100%;border-collapse:collapse;font-size:15px}th,td{text-align:left;padding:12px;border-bottom:1px solid #dde3ec;vertical-align:top}th{background:#eef3fa}.scroll{overflow:auto}.lead{border-left:5px solid #1862a8;padding-left:18px}code,pre{font-size:13px;overflow-wrap:anywhere}pre{overflow:auto;white-space:pre-wrap;background:#f3f5f8;padding:12px}summary{cursor:pointer;font-size:14px}details{margin:12px 0;border-bottom:1px solid #dde3ec;padding-bottom:10px}a{color:#145d9c}.cards{display:flex;gap:18px;flex-wrap:wrap}.cards p{flex:1;min-width:180px;background:#eef3fa;padding:16px;border-radius:10px}.cards b{font-size:28px}</style>
+<main><small>2026-10-30 · 固定源码审计 · 沿用128端点Clos中的EP32真实选择 · 零新网络</small>
+<h1>局部恢复不能只看“备用结果到了没有”</h1>
+<p class="lead">还必须回答：应用能否消费这份结果、原传输是否完成、旧写入还会不会落到已复用缓冲。本轮核实这三个边界，为后续实现排除会产生虚假加速或内存覆盖的改法。</p>
+<section><h2>这一轮实际交付了什么</h2><div class="cards"><p><b>9</b><br>份源码核验提交、SHA256及Git blob</p><p><b>4</b><br>份真实选择的EP32单调用计划</p><p><b>8＋11</b><br>项依赖探针与篡改拒绝检查</p></div><p>只读取既有网络文件，全部哈希保持；CPU检查累计9.45秒，阶段组RSS采样峰值172.6MiB。这里没有新增GPU/网络运行、时延收益或安全性证明。</p></section>
+<section><h2>三个路径，三种完成边界</h2><div class="scroll"><table><tr><th>路径</th><th>源码实际等待</th><th>对局部恢复的含义</th></tr>
+<tr><td>旧低延迟</td><td>按来源/专家等计数、打包；Combine等专家flag后归并。recv_hook启动完整接收阶段。</td><td>内部细粒度通知不是公开逐贡献消费接口；零token通知仍必要。</td></tr>
+<tr><td>现代direct</td><td>退出flush与全组信号；Dispatch打包/展开、Combine归并还有本地边界。</td><td>不能把一条DATA到达直接当整组完成；源完成与目标可见仍需区分。</td></tr>
+<tr><td>现代hybrid</td><td>Dispatch末尾保留scale-up屏障；Combine无统一尾部屏障，但此前flush并等所有scale-out通道尾标记。</td><td>不能概括为“不等待”；当前direct计划也不能替代hybrid实测。</td></tr></table></div>
+<p>当前服务<code>ep_transport_flush/1</code>是已声明的完成投影；本轮没有修改它，也没有把这些不同路径的时间混为一个性能对照。</p></section>
+<section><h2>真实选择投影后的依赖检查</h2><p>来自原层3/4及两个Decode入口，每份4个真实token、E256、Top8、H7168。逻辑rank7对应物理模拟端点28；将图事件暂扣，只计算能否继续，不预测等多久。</p>
+<div class="scroll"><table><tr><th>输入</th><th>暂扣什么</th><th>Dispatch受阻rank数</th><th>Combine受阻rank数</th><th>可达事件</th></tr><tr><td>s0-l0</td><td>完整计划</td><td>0</td><td>0</td><td>25,366/25,366</td></tr><tr><td>s0-l0</td><td>三份受损输入的目标可见事件</td><td>1</td><td>32</td><td>20,835/25,366</td></tr><tr><td>s0-l0</td><td>一份受损输入的源完成</td><td>32</td><td>32</td><td>16,557/25,366</td></tr><tr><td>s0-l0</td><td>一份零token专家计数块可见事件</td><td>32</td><td>32</td><td>16,554/25,366</td></tr><tr><td>s0-l0</td><td>最终Combine信号的源完成</td><td>0</td><td>0</td><td>25,365/25,366</td></tr><tr><td>s0-l1</td><td>完整计划</td><td>0</td><td>0</td><td>25,376/25,376</td></tr><tr><td>s1-l0</td><td>完整计划</td><td>0</td><td>0</td><td>25,366/25,366</td></tr><tr><td>s1-l1</td><td>完整计划</td><td>0</td><td>0</td><td>25,386/25,386</td></tr></table></div>
+<p>最后一项所有应用完成仍可达，但源完成尚未发生，说明“可以消费”和“资源已经退出”确实不是同一件事。这不证明目标GPU可见性或缓冲寿命已经硬件验证。</p></section>
+<section><h2>为什么不能直接替原尝试写flag</h2><p>旧Dispatch计数按<code>-n-1</code>编码。若两个应用尝试都向同一槽原子相加，接收端会解成<code>2n+1</code>，而不是n。传输选择性重传的去重不能代替两个应用尝试的去重。</p>
+<p>若在旧尝试仍有写入时提前复用内存，迟到旧数据会覆盖新数据；只改逻辑epoch不会拦住写向同一地址的操作。需要隔离实际目标范围、通知以及生命周期。反例针对未经实现的改法，<strong>不是发现原DeepEP合法执行存在漏洞</strong>。</p></section>
+<section><h2>同时发现的平台覆盖缺口</h2><p>旧低延迟计划在本次E256/EP32首调用实际返回<code>event budget exceeded</code>。仅16,448个操作的四事件下界就超过65,536事件，操作数也超过16,384上限。错误已保留；没有扩预算或缩小专家数。它是本平台离线编译器的限制，不是DeepEP或GPU的规模限制。</p></section>
+<section><h2>下一步怎么改，怎样验收</h2><ol><li>先让原/备用拥有互不重叠的实际输出与通知范围；所有可能迟到的写入退出后才能复用。</li><li>将贡献的一次提交接到真实计算/归并消费，区分应用就绪与原图后台收尾；后继层、Decode和KV依赖全部保留。</li><li>用同资源的完整早备用作强基线，再跑128端点Clos对照。同时报告目标、健康任务、排空、字节、计算与缓冲代价。</li></ol>
+<p>现有贡献核心和helper已提供部分生命周期能力，但不能因此声称新消费接口已接通。候选是否有创新价值，要看完整成本计入后是否仍有净收益。</p></section>
+<section><h2>可复核结果与源码</h2><p><a href="README.md">详细结论与实现清单</a> · <a href="analysis.json">依赖结果</a> · <a href="sources.json">源码身份</a> · <a href="checks.json">11项拒绝检查</a> · <a href="plans.json">计划摘要</a> · <a href="resources.json">资源记录</a> · <a href="inputs/s0-l0.json">独立EP32输入</a></p><details><summary>csrc/deep_ep.cpp · 9af0e0d0e7</summary><p>SHA256：<code>de03cc5b5e2d05b3dc521ab1bfd419f3d94bfaa5385ee3c05e0052295a6e138d</code></p><a href="https://github.com/deepseek-ai/DeepEP/blob/9af0e0d0e74f3577af1979c9b9e1ac2cad0104ee/csrc/deep_ep.cpp#L1125-L1137">源码 L1125–L1137</a><pre>    // Buffer control
+    LowLatencyLayout layout(rdma_buffer_ptr, num_max_dispatch_tokens_per_rank, hidden, num_ranks, num_experts);
+    EP_HOST_ASSERT(layout.total_bytes &lt;= num_rdma_bytes);
+    auto buffer = layout.buffers[low_latency_buffer_idx];
+    auto next_buffer = layout.buffers[low_latency_buffer_idx ^= 1];
+
+    // Wait previous tasks to be finished
+    // NOTES: the hook mode will always use the default stream
+    auto compute_stream = at::cuda::getCurrentCUDAStream();
+    auto launch_stream = return_recv_hook ? compute_stream : comm_stream;
+    EP_HOST_ASSERT(not (async and return_recv_hook));
+    if (not return_recv_hook)
+        stream_wait(launch_stream, compute_stream);</pre><a href="https://github.com/deepseek-ai/DeepEP/blob/9af0e0d0e74f3577af1979c9b9e1ac2cad0104ee/csrc/deep_ep.cpp#L1184-L1202">源码 L1184–L1202</a><pre>    launcher(return_recv_hook ? LOW_LATENCY_SEND_PHASE : (LOW_LATENCY_SEND_PHASE | LOW_LATENCY_RECV_PHASE));
+
+    // Wait streams
+    std::optional&lt;EventHandle&gt; event;
+    if (async) {
+        // NOTES: we must ensure the all tensors will not be deallocated before the stream-wait happens,
+        // so in Python API, we must wrap all tensors into the event handle.
+        event = EventHandle(launch_stream);
+    } else if (not return_recv_hook) {
+        stream_wait(compute_stream, launch_stream);
+    }
+
+    // Receiver callback
+    std::optional&lt;std::function&lt;void()&gt;&gt; recv_hook = std::nullopt;
+    if (return_recv_hook)
+        recv_hook = [=]() { launcher(LOW_LATENCY_RECV_PHASE); };
+
+    // Return values
+    return {packed_recv_x, packed_recv_x_scales, packed_recv_count, packed_recv_src_info, packed_recv_layout_range, event, recv_hook};</pre><a href="https://github.com/deepseek-ai/DeepEP/blob/9af0e0d0e74f3577af1979c9b9e1ac2cad0104ee/csrc/deep_ep.cpp#L1247-L1258">源码 L1247–L1258</a><pre>    LowLatencyLayout layout(rdma_buffer_ptr, num_max_dispatch_tokens_per_rank, hidden, num_ranks, num_experts);
+    EP_HOST_ASSERT(layout.total_bytes &lt;= num_rdma_bytes);
+    auto buffer = layout.buffers[low_latency_buffer_idx];
+    auto next_buffer = layout.buffers[low_latency_buffer_idx ^= 1];
+
+    // Wait previous tasks to be finished
+    // NOTES: the hook mode will always use the default stream
+    auto compute_stream = at::cuda::getCurrentCUDAStream();
+    auto launch_stream = return_recv_hook ? compute_stream : comm_stream;
+    EP_HOST_ASSERT(not (async and return_recv_hook));
+    if (not return_recv_hook)
+        stream_wait(launch_stream, compute_stream);</pre><a href="https://github.com/deepseek-ai/DeepEP/blob/9af0e0d0e74f3577af1979c9b9e1ac2cad0104ee/csrc/deep_ep.cpp#L1287-L1305">源码 L1287–L1305</a><pre>    launcher(return_recv_hook ? LOW_LATENCY_SEND_PHASE : (LOW_LATENCY_SEND_PHASE | LOW_LATENCY_RECV_PHASE));
+
+    // Wait streams
+    std::optional&lt;EventHandle&gt; event;
+    if (async) {
+        // NOTES: we must ensure the all tensors will not be deallocated before the stream-wait happens,
+        // so in Python API, we must wrap all tensors into the event handle.
+        event = EventHandle(launch_stream);
+    } else if (not return_recv_hook) {
+        stream_wait(compute_stream, launch_stream);
+    }
+
+    // Receiver callback
+    std::optional&lt;std::function&lt;void()&gt;&gt; recv_hook = std::nullopt;
+    if (return_recv_hook)
+        recv_hook = [=]() { launcher(LOW_LATENCY_RECV_PHASE); };
+
+    // Return values
+    return {combined_x, event, recv_hook};</pre></details><details><summary>csrc/kernels/internode_ll.cu · 9af0e0d0e7</summary><p>SHA256：<code>91d374c7354d2c92716c23793b6beec65d47cb22498eb22a7954dda0d880161e</code></p><a href="https://github.com/deepseek-ai/DeepEP/blob/9af0e0d0e74f3577af1979c9b9e1ac2cad0104ee/csrc/kernels/internode_ll.cu#L183-L192">源码 L183–L192</a><pre>            // The first SM is also responsible for cleaning the next buffer
+            #pragma unroll
+            for (int i = lane_id; i &lt; num_next_clean_int; i += 32)
+                next_clean[i] = 0;
+
+            // Notify before executing `int_p`
+            __syncwarp();
+            #pragma unroll
+            for (int i = lane_id; i &lt; num_experts; i += 32)
+                atomic_add_release_global(atomic_finish_counter_per_expert + i, FINISHED_SUM_TAG);</pre><a href="https://github.com/deepseek-ai/DeepEP/blob/9af0e0d0e74f3577af1979c9b9e1ac2cad0104ee/csrc/kernels/internode_ll.cu#L220-L234">源码 L220–L234</a><pre>    // Issue count sends
+    if (responsible_expert_idx &lt; num_experts and sub_warp_id == 0 and lane_id == 0) {
+        const auto dst_rank = responsible_expert_idx / num_local_experts;
+        const auto dst_expert_local_idx = responsible_expert_idx % num_local_experts;
+        const auto num_tokens_sent = shared_num_tokens_sent_per_expert[responsible_expert_idx - sm_id * num_warp_groups];
+
+        // Wait local sends issued and send expert counts
+        while (ld_acquire_global(atomic_finish_counter_per_expert + responsible_expert_idx) != FINISHED_SUM_TAG * 2);
+        auto dst_ptr = reinterpret_cast&lt;uint64_t&gt;(rdma_recv_count + dst_expert_local_idx * num_ranks + rank);
+        auto dst_p2p_ptr = nvshmemi_get_p2p_ptr(dst_ptr, rank, dst_rank);
+        if (dst_p2p_ptr == 0) {
+            nvshmemi_ibgda_amo_nonfetch_add(reinterpret_cast&lt;int*&gt;(dst_ptr), -num_tokens_sent - 1, dst_rank, dst_expert_local_idx);
+        } else {
+            st_release_sys_global(reinterpret_cast&lt;int*&gt;(dst_p2p_ptr), -num_tokens_sent - 1);
+        }</pre><a href="https://github.com/deepseek-ai/DeepEP/blob/9af0e0d0e74f3577af1979c9b9e1ac2cad0104ee/csrc/kernels/internode_ll.cu#L274-L284">源码 L274–L284</a><pre>        int num_recv_tokens, recv_token_begin_idx;
+        EP_DEVICE_ASSERT(num_warps_per_group &gt; 1 and num_warp_groups &lt; 15);
+        if (sub_warp_id == 1 and lane_id == 0) {
+            auto start_time = clock64();
+            while ((num_recv_tokens = ld_acquire_sys_global(rdma_recv_count + local_expert_idx * num_ranks + src_rank)) == 0);
+            auto wait_recv_cost = clock64() - start_time;
+            num_recv_tokens = -num_recv_tokens - 1;
+            recv_token_begin_idx = atomicAdd(packed_recv_count + local_expert_idx, num_recv_tokens);
+            shared_num_recv_tokens[warp_group_id] = num_recv_tokens;
+            shared_recv_token_begin_idx[warp_group_id] = recv_token_begin_idx;
+            recv_range[src_rank] = pack2&lt;int, int64_t&gt;(num_recv_tokens, recv_token_begin_idx);</pre><a href="https://github.com/deepseek-ai/DeepEP/blob/9af0e0d0e74f3577af1979c9b9e1ac2cad0104ee/csrc/kernels/internode_ll.cu#L738-L751">源码 L738–L751</a><pre>        // Put the finishing flag
+        EP_DEVICE_ASSERT(num_warps_per_group &gt; 1 and num_warp_groups &lt; 16);
+        asm volatile(&quot;bar.sync %0, %1;&quot; :: &quot;r&quot;(warp_group_id + 1), &quot;r&quot;(num_warps_per_group * 32));
+        if (sub_warp_id == 1 and lane_id == 0) {
+            while (ld_acquire_global(atomic_clean_flag) == 0);
+            auto dst_ptr = reinterpret_cast&lt;uint64_t&gt;(rdma_recv_flag + global_expert_idx);
+            auto dst_p2p_ptr = nvshmemi_get_p2p_ptr(dst_ptr, rank, dst_rank);
+            if (dst_p2p_ptr == 0) {
+                nvshmemi_ibgda_amo_nonfetch_add(reinterpret_cast&lt;int*&gt;(dst_ptr), 1, dst_rank, local_expert_idx);
+            } else {
+                st_release_sys_global(reinterpret_cast&lt;int*&gt;(dst_p2p_ptr), 1);
+            }
+            atomic_add_release_global(atomic_clean_flag, -1);
+        }</pre><a href="https://github.com/deepseek-ai/DeepEP/blob/9af0e0d0e74f3577af1979c9b9e1ac2cad0104ee/csrc/kernels/internode_ll.cu#L770-L790">源码 L770–L790</a><pre>        EP_DEVICE_ASSERT(num_warps_per_group &gt; 1);
+        if (sub_warp_id == 0 and lane_id == 0) {
+            auto start_time = clock64();
+            while (ld_acquire_sys_global(rdma_recv_flag + responsible_expert_idx) == 0);
+            auto wait_recv_cost = clock64() - start_time;
+            if (combine_wait_recv_cost_stats != nullptr) {
+                const auto&amp; src_rank = responsible_expert_idx / num_local_experts;
+                atomicAdd(reinterpret_cast&lt;unsigned long long*&gt;(combine_wait_recv_cost_stats + src_rank), wait_recv_cost);
+            }
+        }
+    }
+    cg::this_grid().sync();
+
+    // Reassign warp groups
+    constexpr int kMaxNumGroups = 2;
+    const int num_decode_warps = hidden_bf16_int4_pad / (kNumRecvUnrolls * 32);
+    const int num_groups = min(kMaxNumGroups, (num_threads / 32) / (num_decode_warps + 1));
+    const int decode_warp_idx = __shfl_sync(0xffffffff, warp_id % (num_decode_warps + 1), 0);
+    const int group_idx = __shfl_sync(0xffffffff, warp_id / (num_decode_warps + 1), 0);
+    EP_STATIC_ASSERT(kHidden % (32 * kNumElemsPerInt4) == 0, &quot;Invalid vectorization&quot;);
+    EP_DEVICE_ASSERT(num_topk &lt;= 32);</pre></details><details><summary>csrc/kernels/ibgda_device.cuh · 9af0e0d0e7</summary><p>SHA256：<code>1c5353a768a27a4b7d349bb50215cb54f8767934247f7caef7a8f331c2f2bbd2</code></p><a href="https://github.com/deepseek-ai/DeepEP/blob/9af0e0d0e74f3577af1979c9b9e1ac2cad0104ee/csrc/kernels/ibgda_device.cuh#L495-L500">源码 L495–L500</a><pre>nvshmemi_ibgda_quiet(int dst_pe, int qp_id) {
+    auto qp = ibgda_get_rc(dst_pe, qp_id);
+    auto state = ibgda_get_state();
+    uint64_t prod_idx = state-&gt;use_async_postsend ? ld_na_relaxed(qp-&gt;tx_wq.prod_idx) : ld_na_relaxed(&amp;qp-&gt;mvars.tx_wq.ready_head);
+    ibgda_poll_cq(qp-&gt;tx_wq.cq, prod_idx);
+}</pre></details><details><summary>csrc/buffers/ep.hpp · f6aa38fe06</summary><p>SHA256：<code>e00e92a793b8e5a448db6f704ccd2c391ff9943cba30ec470c9d3945460c0193</code></p><a href="https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/csrc/buffers/ep.hpp#L152-L180">源码 L152–L180</a><pre>    static std::optional&lt;EventHandle&gt; stream_control_epilogue(const tensor_list_t&amp; tensors,
+                                                              const at::cuda::CUDAStream&amp; compute_stream,
+                                                              const bool&amp; allocate_on_comm_stream,
+                                                              const bool&amp; async_with_compute_stream) {
+        // Ensure memory access safety between two streams
+        const auto comm_stream = comm::get_comm_stream();
+        std::optional&lt;EventHandle&gt; event;
+        if (async_with_compute_stream) {
+            event = EventHandle(comm_stream);
+
+            // NOTES: this environment only applies to V2 APIs
+            if (get_env&lt;int&gt;(&quot;EP_AVOID_RECORD_STREAM&quot;, 0)) {
+                event-&gt;tensors_to_record = tensors;
+            } else {
+                for (auto&amp; t: tensors) if (t.has_value()) {
+                    t-&gt;record_stream(compute_stream);
+                    t-&gt;record_stream(comm_stream);
+                }
+            }
+        } else {
+            comm::stream_wait(compute_stream, comm_stream);
+        }
+
+        // Switch back compute stream
+        if (allocate_on_comm_stream)
+            at::cuda::setCurrentCUDAStream(compute_stream);
+
+        // The CUDA event marking the finishing
+        return event;</pre><a href="https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/csrc/buffers/ep.hpp#L770-L786">源码 L770–L786</a><pre>        // Defer epilogue: record the created tensors only, and return intermediately
+        // NOTES: CPU sync will be deferred, too
+        if (defer_epilogue) {
+            EP_HOST_ASSERT(async_with_compute_stream);
+            const auto event = stream_control_epilogue(
+                tensors_to_record, compute_stream, allocate_on_comm_stream, true);
+            std::function&lt;pybind11::object()&gt; epilogue_hook = [epilogue = std::move(epilogue)]() mutable {
+                return epilogue(at::cuda::getCurrentCUDAStream(), std::nullopt);
+            };
+            return pybind11::make_tuple(pybind11::none(), event, epilogue_hook);
+        }
+
+        // Do epilogue intermediately and record all tensors
+        auto result = epilogue(comm_stream, std::ref(tensors_to_record));
+        const auto event = stream_control_epilogue(
+            tensors_to_record, compute_stream, allocate_on_comm_stream, async_with_compute_stream);
+        return pybind11::make_tuple(result, event, pybind11::none());</pre></details><details><summary>deep_ep/include/deep_ep/comm/barrier.cuh · f6aa38fe06</summary><p>SHA256：<code>e4361353f31a2f3a36e019bb2ef013991017a205c16ab92f76f9da2a2652260f</code></p><a href="https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/comm/barrier.cuh#L146-L167">源码 L146–L167</a><pre>    // Flush all QPs by all SMs (only needed for release semantics)
+    if constexpr (kFlushStores) {
+        for (int i = global_warp_idx; i &lt; num_qps; i += kNumSMs * kNumWarps) {
+            ncclGin(nccl_dev_comm, i, NCCL_GIN_RESOURCE_SHARING_CTA).flush(ncclCoopWarp());
+        }
+
+        // World-team barriers may mix direct NVLink writes with GIN signals, so a system-scope
+        // threadfence is required to make the NVLink writes visible before publishing the barrier
+        if constexpr (std::is_same_v&lt;team_t, ncclTeamTagWorld&gt;)
+            ptx::fence_acq_rel_sys();
+
+        // NOTES: we can not use `kNumSMs` to judge, as maybe only part of the SMs will call this function
+        (gridDim.x &gt; 1) ? cooperative_groups::this_grid().sync() : __syncthreads();
+    }
+
+    if (sm_idx == 0) {
+        // Use QP 0 to do barrier: signal slot `rank_idx` on every rank, then wait for every rank&#x27;s slot
+        const NCCLGin barrier_gin(nccl_dev_comm, gin.nccl_window, 0, NCCL_GIN_RESOURCE_SHARING_CTA);
+        for (int i = thread_idx; i &lt; kNumRanks; i += kNumThreads)
+            barrier_gin.signal&lt;team_t&gt;(i, ncclGin_SignalInc{static_cast&lt;ncclGinSignal_t&gt;(rank_idx)});
+        for (int i = thread_idx; i &lt; kNumRanks; i += kNumThreads)
+            barrier_gin.wait_signal&lt;team_t, kNumTimeoutCycles&gt;(i, rank_idx);</pre></details><details><summary>deep_ep/include/deep_ep/impls/ep/dispatch.cuh · f6aa38fe06</summary><p>SHA256：<code>447ec0ef779bb2a74f7efa8ece04254c2036ab4000999f566356d6f94df9335a</code></p><a href="https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/impls/ep/dispatch.cuh#L393-L397">源码 L393–L397</a><pre>    // Barrier to ensure data arrival
+    comm::gpu_barrier&lt;kIsScaleupNVLink, 1, kNumRanks,
+                      kNumSMs, kNumThreads, kNumQPs, kNumTimeoutCycles, comm::kDispatchTag1, true, true, false&gt;(
+        gin, workspace_layout.get_barrier_signals(), 0, rank_idx, sm_idx, thread_idx);
+</pre></details><details><summary>deep_ep/include/deep_ep/impls/ep/combine.cuh · f6aa38fe06</summary><p>SHA256：<code>90d98b54151c854611b36f16757d7bca37d4d46a684ede5b1418f069218c2c93</code></p><a href="https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/impls/ep/combine.cuh#L77-L82">源码 L77–L82</a><pre>    // Full barrier to ensure the remote buffer is available
+    const auto workspace_layout = layout::EPWorkspaceLayout(workspace, 1, kNumRanks, kNumExperts);
+    comm::gpu_barrier&lt;kIsScaleupNVLink, 1, kNumRanks,
+                      kNumSMs, kNumThreads, kNumQPs, kNumTimeoutCycles, comm::kCombineTag0, false, false, true&gt;(
+        gin, workspace_layout.get_barrier_signals(), 0, rank_idx, sm_idx, thread_idx);
+</pre><a href="https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/impls/ep/combine.cuh#L240-L244">源码 L240–L244</a><pre>    // Final barrier to ensure data arrival
+    comm::gpu_barrier&lt;kIsScaleupNVLink, 1, kNumRanks,
+                      kNumSMs, kNumThreads, kNumQPs, kNumTimeoutCycles, comm::kCombineTag1, true, true, false&gt;(
+        gin, workspace_layout.get_barrier_signals(), 0, rank_idx, sm_idx, thread_idx);
+}</pre></details><details><summary>deep_ep/include/deep_ep/impls/ep/hybrid_dispatch.cuh · f6aa38fe06</summary><p>SHA256：<code>d7e6e98aeb605392c668bf46de3520072f02b61f145cfc5779dd9c32f0e73db9</code></p><a href="https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/impls/ep/hybrid_dispatch.cuh#L658-L666">源码 L658–L666</a><pre>    // Scale-up barrier to ensure data arrival
+    // As scale-out tokens have already been consumed by forwarders, no need to do scale-out barrier again
+    comm::gpu_barrier&lt;true, kNumScaleoutRanks, kNumScaleupRanks,
+                      kNumSMs, kNumThreads, kNumQPs, kNumTimeoutCycles, comm::kHybridDispatchTag1, true, true, false&gt;(
+        gin, workspace_layout.get_barrier_signals(), scaleout_rank_idx, scaleup_rank_idx, sm_idx, thread_idx, /* do not scale-out */ false, true);
+
+    // Trigger the copy epilogue kernel
+    cudaTriggerProgrammaticLaunchCompletion();
+</pre></details><details><summary>deep_ep/include/deep_ep/impls/ep/hybrid_combine.cuh · f6aa38fe06</summary><p>SHA256：<code>7a5091f7acd501fe0500564d1ef775e10150d880512e178e6c6bb40285eb1248</code></p><a href="https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/impls/ep/hybrid_combine.cuh#L588-L605">源码 L588–L605</a><pre>        // Update, wait and clean
+        EP_STATIC_ASSERT(kNumScaleoutRanks &lt;= 32, &quot;Invalid ranks&quot;);
+        const auto expected_signal = math::pack2&lt;int, int64_t&gt;(1, 0);
+        gin.flush&lt;ncclCoopWarp&gt;();
+        if (lane_idx &lt; kNumScaleoutRanks) {
+            // Update remote tails
+            gin.red_add_rel&lt;ncclTeamTagRail&gt;(
+                workspace_layout.get_scaleout_channel_signaled_tail_ptr(channel_idx, scaleout_rank_idx),
+                expected_signal, lane_idx);
+        }
+        __syncwarp();
+
+        // Wait tail arrival
+        if (lane_idx &lt; kNumScaleoutRanks) {
+            const auto wait_ptr = workspace_layout.get_scaleout_channel_signaled_tail_ptr(channel_idx, lane_idx);
+            comm::timeout_while&lt;kNumTimeoutCycles&gt;([=](const bool&amp; is_last_check) {
+                const auto signal = ptx::ld_acquire_sys&lt;int64_t&gt;(wait_ptr);
+                if (signal == expected_signal) {</pre><a href="https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/impls/ep/hybrid_combine.cuh#L606-L625">源码 L606–L625</a><pre>                    // Clean for next usages
+                    *wait_ptr = 0;
+                    return true;
+                }
+
+                if (is_last_check) {
+                    printf(&quot;DeepEP combine (scale-out wait all) timeout, scale-out: %d/%d, scale-up: %d/%d, &quot;
+                           &quot;channel: %d, lane: %d, signal: %lld, expected: %lld\n&quot;,
+                           scaleout_rank_idx, kNumScaleoutRanks, scaleup_rank_idx, kNumScaleupRanks,
+                           channel_idx, lane_idx,
+                           signal, expected_signal);
+                }
+                return false;
+            });
+        }
+        __syncwarp();
+    }
+
+    // No barrier at epilogue
+}</pre></details></section>
+<p><small>范围：两层两步的专家选择与声明布局，不是完整671B数值推理、生产故障率、p99、现代provider性能或商业收益。报告为静态HTML，可直接打开。</small></p></main></html>

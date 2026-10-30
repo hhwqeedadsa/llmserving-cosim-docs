@@ -1,0 +1,162 @@
+{
+  "passed": true,
+  "published_files_checked": 52,
+  "public_commands": 13,
+  "expected_budget_rejections": 1,
+  "local_html_links": 7,
+  "historical_files_checked": 369,
+  "new_networks": 0,
+  "source_audit_compiler_implementation": "not CUDA/library execution",
+  "browser_rendering_checked": false,
+  "completed_stages": {
+    "audit": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "experiments/consumption_boundary/audit.py",
+        "--run",
+        "runs/ack_guard_whole_20261030/study/guarded-local",
+        "--ll-source",
+        "data/research/deepep_semantics_20261022",
+        "--modern-source",
+        "data/research/deepep_modern_20261022",
+        "--output",
+        "runs/consumption_boundary_20261030/audit"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-30T18:10:35.373967+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 268435456,
+        "wall_seconds": 120.0
+      },
+      "peak_sampled_group_rss_bytes": 180944896,
+      "peak_sampled_processes": 2,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/runs/consumption_boundary_20261030",
+        "/home/lry/moe-ub-cosim/experiments/consumption_boundary"
+      ],
+      "peak_sampled_artifact_bytes": 40927232,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 40781913,
+      "peak_sampled_artifact_allocated_bytes": 40927232,
+      "process_group": 913199,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-30T18:10:43.399144+00:00",
+      "wall_seconds": 8.02519974601455,
+      "max_waited_child_rss_kib": 107260,
+      "artifact_bytes_before_report": 21763,
+      "aggregate_artifact_bytes_before_report": 40927232,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 40781913,
+        "allocated_bytes": 40927232
+      }
+    },
+    "checks": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "experiments/consumption_boundary/checks.py",
+        "--audit",
+        "runs/consumption_boundary_20261030/audit",
+        "--output",
+        "runs/consumption_boundary_20261030/checks.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-30T18:11:10.587807+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 268435456,
+        "wall_seconds": 120.0
+      },
+      "peak_sampled_group_rss_bytes": 86798336,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/runs/consumption_boundary_20261030",
+        "/home/lry/moe-ub-cosim/experiments/consumption_boundary"
+      ],
+      "peak_sampled_artifact_bytes": 40943616,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 40788067,
+      "peak_sampled_artifact_allocated_bytes": 40943616,
+      "process_group": 913230,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-30T18:11:12.013310+00:00",
+      "wall_seconds": 1.4255074269603938,
+      "max_waited_child_rss_kib": 86820,
+      "artifact_bytes_before_report": 3968,
+      "aggregate_artifact_bytes_before_report": 40943616,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 40788067,
+        "allocated_bytes": 40943616
+      }
+    },
+    "report": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "experiments/consumption_boundary/report.py",
+        "--audit",
+        "runs/consumption_boundary_20261030/audit",
+        "--checks",
+        "runs/consumption_boundary_20261030/checks.json",
+        "--monitors",
+        "runs/consumption_boundary_20261030/monitors",
+        "--output",
+        "experiments/consumption_boundary/results/20261030"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-30T18:13:53.746036+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 268435456,
+        "wall_seconds": 120.0
+      },
+      "peak_sampled_group_rss_bytes": 7483392,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/experiments/consumption_boundary",
+        "/home/lry/moe-ub-cosim/runs/consumption_boundary_20261030"
+      ],
+      "peak_sampled_artifact_bytes": 41250816,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 40982949,
+      "peak_sampled_artifact_allocated_bytes": 41250816,
+      "process_group": 913370,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-30T18:13:53.879971+00:00",
+      "wall_seconds": 0.13393740996252745,
+      "max_waited_child_rss_kib": 17688,
+      "artifact_bytes_before_report": 571,
+      "aggregate_artifact_bytes_before_report": 41250816,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 40982949,
+        "allocated_bytes": 41250816
+      }
+    }
+  }
+}

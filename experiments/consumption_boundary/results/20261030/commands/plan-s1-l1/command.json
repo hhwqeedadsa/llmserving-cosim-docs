@@ -1,0 +1,17 @@
+{
+  "argv": [
+    "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+    "-B",
+    "-m",
+    "moe_ub_cosim",
+    "scaleout",
+    "modern-deepep-plan",
+    "--config",
+    "/home/lry/moe-ub-cosim/runs/consumption_boundary_20261030/audit/inputs/s1-l1.json",
+    "--output",
+    "/home/lry/moe-ub-cosim/runs/consumption_boundary_20261030/audit/plans/s1-l1"
+  ],
+  "cwd": "/home/lry/moe-ub-cosim",
+  "exit_code": 0,
+  "expected_exit_code": 0
+}

@@ -1,0 +1,19 @@
+{
+  "passed": true,
+  "rejected_cases": [
+    "source-commit",
+    "source-sha256",
+    "source-git_blob_sha",
+    "source-bytes",
+    "source-public_url",
+    "same-size-source-byte-change",
+    "duplicate-event",
+    "unknown-dependency",
+    "duplicate-dependency",
+    "unknown-held-event",
+    "missing-required-completion"
+  ],
+  "rejection_count": 11,
+  "complete_registered_probes": 8,
+  "new_networks": 0
+}

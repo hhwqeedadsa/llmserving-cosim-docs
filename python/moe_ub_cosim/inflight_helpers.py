@@ -220,6 +220,8 @@ def audit_compute(result, execution):
             node=execution.nodes[key]
             require(node['spec']['kind']=='COMP' and node['spec']['duration_ns']==task['duration_ns'] and
                     node['issue']==task['ready_ns'] and node['complete']==task['done_ns'], 'shared original differs from actual ASTRA callbacks')
+            if execution.actual_compute_starts:
+                require(node['compute_start']==task['start_ns'], 'original start differs from actual shared FIFO')
             originals[key]=task
         else:
             require(task['kind'] in ('helper_experts','helper_reduce'), 'unknown shared compute task kind')

@@ -64,7 +64,7 @@ def native_arguments(config, output):
     args=['--phase-completion','ep_transport_flush/1'] if enabled(config) else []
     from .execution_events import configuration
     option=configuration(config)
-    if option:args+=['--execution-events',str(option['max_events'])]
+    if option:args+=['--execution-events-v2' if option['schema_version']=='moe-execution-events/2' else '--execution-events',str(option['max_events'])]
     from .source_ack_watchdog import configuration as watchdog_configuration
     watchdog=watchdog_configuration(config)
     if watchdog:

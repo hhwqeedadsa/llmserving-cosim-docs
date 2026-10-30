@@ -125,7 +125,8 @@ class ContributionBinding:
                     action(nk('node_issue', src, pack), call, bundle, 'resource_open', resource=graph_ref)
                     expert_node = nodes[rank, f'L{lid}.experts']
                     producer = nodes[rank, f'L{lid}.combine_reduce']
-                    action(nk('node_issue', rank, expert_node), call, bundle, 'compute_begin')
+                    start_kind = 'node_compute_start' if self.observer.actual_compute_starts else 'node_issue'
+                    action(nk(start_kind, rank, expert_node), call, bundle, 'compute_begin')
                     action(nk('node_complete', rank, expert_node), call, bundle, 'compute_done')
                     dispatch = combine = None
                     if src == rank:

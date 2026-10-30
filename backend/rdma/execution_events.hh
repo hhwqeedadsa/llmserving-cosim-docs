@@ -7,23 +7,25 @@ namespace moe_rdma {
 // simulation time. A recording overflow fails explicitly rather than sampling.
 class ExecutionEvents {
  public:
-  ExecutionEvents(ControlChannel& control, uint64_t maximum):control_(control),maximum_(maximum) {
+  ExecutionEvents(ControlChannel& control, uint64_t maximum,bool compute_starts=false):control_(control),maximum_(maximum),compute_starts_(compute_starts) {
     Require(maximum<=262144,"execution event budget exceeds limit");
   }
   bool Enabled() const {return maximum_!=0;}
+  bool ComputeStarts() const {return compute_starts_;}
   uint64_t Count() const {return count_;}
   void Emit(Json event) {
     if(!Enabled())return;
     Require(count_<maximum_,"execution event budget exceeded");
-    event["schema_version"]="moe-execution-event/1";
+    event["schema_version"]=compute_starts_?"moe-execution-event/2":"moe-execution-event/1";
     event["type"]="OBSERVE";event["sequence"]=count_;
     event["time_ns"]=ns3::Simulator::Now().GetNanoSeconds();
     control_.Send(event.dump());++count_;
   }
-  Json Report() const {return {{"schema_version","moe-execution-events/1"},
+  Json Report() const {return {{"schema_version",compute_starts_?"moe-execution-events/2":"moe-execution-events/1"},
     {"max_events",maximum_},{"events",count_}};}
  private:
   ControlChannel& control_;
   uint64_t maximum_,count_=0;
+  bool compute_starts_;
 };
 }

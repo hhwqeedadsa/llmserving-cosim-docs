@@ -38,7 +38,9 @@ def validate(c, topology, rdma, replay=None):
            (' inflight_helpers' if 'inflight_helpers' in c else ''), 'service')
     phase_enabled(c)
     token_configuration(c)
-    event_configuration(c)
+    event_option = event_configuration(c)
+    require(not event_option or event_option['schema_version'] != 'moe-execution-events/2' or 'inflight_helpers' in c,
+            'execution events/2 requires explicitly shared inflight helper compute')
     binding_configuration(c)
     watchdog_configuration(c)
     helper_configuration(c)

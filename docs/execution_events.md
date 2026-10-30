@@ -24,6 +24,7 @@ LLMServingSim Scale-Out服务可在执行中向Python发送节点和消息事件
 | `kind` | 发生位置与含义 |
 |---|---|
 | `node_issue` | ASTRA已准许该节点启动，进入实际dispatch之前；不是排队入图时刻 |
+| `node_compute_start` | 仅显式`/2`：原COMP实际占用共享GPU FIFO引擎的时刻，包含零时长COMP，不包含GATE |
 | `node_complete` | ASTRA接受该节点有效回调之后、释放资源和解锁后继之前 |
 | `message_send_post` | 实际逻辑SEND已提交，进入共享传输服务之前 |
 | `message_recv_post` | 实际逻辑RECV开始等待，不另发一份数据 |
@@ -44,4 +45,14 @@ LLMServingSim Scale-Out服务可在执行中向Python发送节点和消息事件
 
 `result.service.execution_events`给出有效配置和原生已发事件总数。`rdma-check`重新读取JSONL，对照独立ASTRA日志、消息post/回调结果、图退出和排空时刻，检查事件总数与在线摘要。部分前缀不是完整验收。关闭记录时不生成这些文件或结果字段。
 
-平台接口`moe_ub_cosim.execution_events.ExecutionObserver(option)`提供`register(wave)`、`accept(event)`和`snapshot()`。register只接受调用者实际已提交的任务图；它不生成执行时刻。事件验证包括依赖、计算最小时长、消息两端身份、重复/乱序以及未完成资源退出。可选[贡献绑定](contribution_binding.md)将这些事件接入`ContributionAttempts`的原尝试状态；尚不能插入备用任务。后续仍需在线故障触发及共享GPU/NIC资源调度，不能靠解析日志或改目的rank代替。
+平台接口`moe_ub_cosim.execution_events.ExecutionObserver(option)`提供`register(wave)`、`accept(event)`和`snapshot()`。register只接受调用者实际已提交的任务图；它不生成执行时刻。事件验证包括依赖、计算最小时长、消息两端身份、重复/乱序以及未完成资源退出。可选[贡献绑定](contribution_binding.md)将这些事件接入`ContributionAttempts`；合法的额外执行见[共享GPU/NIC备用接口](inflight_helpers.md)，不能靠改目的rank替代。
+
+## 显式记录实际计算开始
+
+在已经开启`inflight_helpers`的共享计算服务中，将上述配置的`schema_version`设为`moe-execution-events/2`，继续使用相同命令；后端须支持`--execution-events-v2 MAX_EVENTS`。默认`/1`保持原事件、摘要及贡献口径，可继续核验历史结果。缺少共享计算的`/2`输入和旧后端均明确拒绝。
+
+`/2`每个原COMP新增一个`node_compute_start`，直接由FIFO开始回调发出，不额外调度事件或在完成后回填。所有OBSERVE帧改用`moe-execution-event/2`，摘要为`moe-execution-observation/2`并增加`compute_starts`。累计预算须额外覆盖全部COMP；GATE、SEND/RECV没有该事件。
+
+`node_issue → node_compute_start`为本模型的GPU队列等待，`node_compute_start → node_complete`必须恰等于原声明计算成本。零成本COMP也可排队；GATE的等待仍属于阶段依赖。接收和ACK可在排队期间继续发生。贡献的`compute_begin_ns`在此模式取实际开始；`/1`仍取原issue，不能混用两者计算GPU占用。
+
+`rdma-check`另外逐项核对实际开始与`shared_compute.tasks.start_ns`，检查原COMP完整覆盖、实际时长与FIFO顺序。自包含的128端点Clos竞争用例见[示例](../examples/scaleout_compute_start/README.md)。这些开始时刻仍是声明计算模型，不是CUDA或GPU实测。

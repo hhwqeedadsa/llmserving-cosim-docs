@@ -18,8 +18,8 @@ namespace moe_rdma { void InitializeLogging(); void ShutdownLogging(); }
 namespace fs=std::filesystem;
 class Service {
  public:
-  Service(Fabric& fabric,ServiceTransport& transport,ControlChannel& control,int ranks,const std::string& bootstrap,const std::string& system,HostTiming& timing,bool phase_completion,uint64_t event_limit,const SourceAckWatchdogOptions& watchdog,const Json& helpers):
-    fabric_(fabric),transport_(transport),control_(control),events_(control,event_limit),watchdog_(control,events_,watchdog),
+  Service(Fabric& fabric,ServiceTransport& transport,ControlChannel& control,int ranks,const std::string& bootstrap,const std::string& system,HostTiming& timing,bool phase_completion,uint64_t event_limit,bool compute_starts,const SourceAckWatchdogOptions& watchdog,const Json& helpers):
+    fabric_(fabric),transport_(transport),control_(control),events_(control,event_limit,compute_starts),watchdog_(control,events_,watchdog),
     compute_(ranks,helpers.is_null()?1:helpers.at("configuration").at("max_compute_tasks").get<uint64_t>()),helpers_(transport,compute_,control,events_,helpers),
     messages_(fabric,transport),owners_(ranks),boot_done_(ranks,false),timing_(timing),phase_completion_(phase_completion),watchdog_enabled_(watchdog.enabled) {
     if(helpers_.Enabled()) {
@@ -170,7 +170,9 @@ class Service {
           if(!phase_gates_.Contains(id,rank,node)) {
             if(!helpers_.Enabled()){done();return;}
             compute_.Submit(id+".r"+std::to_string(rank)+".n"+std::to_string(node),rank,compute_costs.at(node),
-              {{"kind","original"},{"graph_id",id},{"node",node}}, {},std::move(done));return;
+              {{"kind","original"},{"graph_id",id},{"node",node}},
+              [this,id,rank,node](){if(events_.ComputeStarts())events_.Emit(
+                {{"kind","node_compute_start"},{"graph_id",id},{"rank",rank},{"node",node}});},std::move(done));return;
           }
           auto ready=phase_gates_.Arrive(id,rank,node,Now(),std::move(done));
           for(auto& callback:ready)callback(); // ASTRA's external completion schedules its own zero-time event.
@@ -230,7 +232,7 @@ class Service {
 static int Libraries(dl_phdr_info* info,std::size_t,void* data) {
   if(info->dlpi_name && info->dlpi_name[0])static_cast<Json*>(data)->push_back(info->dlpi_name);return 0;
 }
-static void Execute(char** argv,HostTiming& timing,const Json& transport_config,ControlChannel& control,bool phase_completion,uint64_t event_limit,const SourceAckWatchdogOptions& watchdog,const Json& helpers) {
+static void Execute(char** argv,HostTiming& timing,const Json& transport_config,ControlChannel& control,bool phase_completion,uint64_t event_limit,bool compute_starts,const SourceAckWatchdogOptions& watchdog,const Json& helpers) {
     auto total=timing.Span("native_total");
     Require(!fs::exists(argv[5]),"result already exists");
     ns3::Time::SetResolution(ns3::Time::NS);Json topology,config;
@@ -247,7 +249,7 @@ static void Execute(char** argv,HostTiming& timing,const Json& transport_config,
       Require(declared==unsigned(ranks),"helper replica groups do not partition physical simulated GPUs");
     }
     std::unique_ptr<Service> service_owner;
-    {auto phase=timing.Span("astra_init");service_owner=std::make_unique<Service>(fabric,transport,control,ranks,argv[4],argv[3],timing,phase_completion,event_limit,watchdog,helpers);}
+    {auto phase=timing.Span("astra_init");service_owner=std::make_unique<Service>(fabric,transport,control,ranks,argv[4],argv[3],timing,phase_completion,event_limit,compute_starts,watchdog,helpers);}
     auto& service=*service_owner;
     ns3::Simulator::Stop(ns3::NanoSeconds(fabric.MaxSimNs()));
     {auto phase=timing.Span("simulator_run");ns3::Simulator::Run();}
@@ -279,14 +281,15 @@ static void Execute(char** argv,HostTiming& timing,const Json& transport_config,
 int main(int argc,char** argv) {
   try {
     ControlChannel control;
-    Require(argc>=6 && argc<=17,"usage: moe-rdma-service TOPOLOGY RDMA SYSTEM BOOTSTRAP_PREFIX NEW_RESULT [NEW_HOST_TIMING.jsonl] [--phase-completion ep_transport_flush/1] [--transport CONFIG.json] [--execution-events MAX_EVENTS] [--source-ack-watchdog CONFIG.json] [--inflight-helpers CONFIG.json]");
-    int next=6;std::string host;Json transport,watchdog_json,helpers;bool phase_completion=false,has_transport=false;uint64_t event_limit=0;
+    Require(argc>=6 && argc<=17,"usage: moe-rdma-service TOPOLOGY RDMA SYSTEM BOOTSTRAP_PREFIX NEW_RESULT [NEW_HOST_TIMING.jsonl] [--phase-completion ep_transport_flush/1] [--transport CONFIG.json] [--execution-events MAX_EVENTS | --execution-events-v2 MAX_EVENTS] [--source-ack-watchdog CONFIG.json] [--inflight-helpers CONFIG.json]");
+    int next=6;std::string host;Json transport,watchdog_json,helpers;bool phase_completion=false,has_transport=false,compute_starts=false;uint64_t event_limit=0;
     if(next<argc && std::string(argv[next]).rfind("--",0)!=0)host=argv[next++];
     while(next<argc) {
       Require(next+1<argc,"missing service option value");const std::string option=argv[next++],value=argv[next++];
       if(option=="--transport") {Require(!has_transport,"repeated transport option");has_transport=true;transport=ReadJson(value);}
       else if(option=="--phase-completion") {Require(!phase_completion && value=="ep_transport_flush/1","invalid phase completion option");phase_completion=true;}
-      else if(option=="--execution-events") {
+      else if(option=="--execution-events" || option=="--execution-events-v2") {
+        compute_starts=(option=="--execution-events-v2");
         Require(event_limit==0 && !value.empty() && value.find_first_not_of("0123456789")==std::string::npos,"invalid execution event option");
         event_limit=std::stoull(value);Require(event_limit>0 && event_limit<=262144,"invalid execution event limit");
       }
@@ -344,7 +347,8 @@ int main(int argc,char** argv) {
     const auto watchdog=SourceAckWatchdogOptions::Parse(watchdog_json);
     Require(!watchdog.enabled || (event_limit>0 && has_transport),"source ACK watchdog requires execution events and persistent transport");
     Require(helpers.is_null() || (watchdog.enabled && phase_completion),"inflight helpers require watchdog and phase completion");
-    HostTiming timing(host);Execute(argv,timing,transport,control,phase_completion,event_limit,watchdog,helpers);timing.Complete();return 0;
+    Require(!compute_starts || !helpers.is_null(),"actual compute start events require shared inflight compute");
+    HostTiming timing(host);Execute(argv,timing,transport,control,phase_completion,event_limit,compute_starts,watchdog,helpers);timing.Complete();return 0;
   } catch(const std::exception& error) {
     std::cerr<<error.what()<<'\n';ns3::Simulator::Destroy();ShutdownLogging();return 1;
   }

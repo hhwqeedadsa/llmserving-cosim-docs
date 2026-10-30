@@ -4,6 +4,8 @@
 
 LLMServingSim Scale-Out服务可选的`execution_events.jsonl`保存实际节点/消息事件，`execution_observation.json`保存已验证前缀摘要；`result.service.execution_events`给出原生计数与上限。时间为同一ns-3绝对纳秒，同时间按sequence排序，失败不补全。字段、接收/源确认/退出口径及独立核验见[实时执行事件](execution_events.md)。
 
+显式`execution_events /2`每个原COMP增加`node_compute_start`，事件与摘要分别为`moe-execution-event/2`、`moe-execution-observation/2`，摘要增加`compute_starts`。issue/start/complete分别表示共享计算入队/引擎开始/实际回调；贡献compute_begin改取实际开始。默认`/1`及历史文件保持原口径，GATE不发计算开始事件；详见同一接口说明。
+
 离线`contribution-check`保存原样`input.json`与`moe-contribution-state/1`格式`report.json`。其中`transcript_sha256`是回调输入文件hash；`logical_complete_ns`、`all_started_attempts_retired`及`declared_call_retirable`分别记录声明贡献到齐和资源退出，不能当网络仿真结果。`events`保留输入顺序、time_ns、sequence和outcome，人工时刻不代表设备测量；身份、预算和字段定义见[贡献包说明](contribution_attempts.md)。
 
 显式`token_transport`在`wave.json`保存模式、Combine选择、声明归并单位成本及`payload_bytes_per_token`。消息的`contributions`仍是原专家贡献数，`transport_tokens`是本模式实际发送的token单元数；二者不能混用。`bytes`、接收累计曲线和远端payload统计在此模式下包含TokenLayout元数据及填充，既不全是激活张量，也不是包含网络包头的线上字节。rank合并的`L*.combine_reduce`是独立COMP节点，实际issue/callback与声明时长分别保存；缺省不添加这些字段或节点。输入与公式见[传输规范](tasks/token_transport_spec.md)。

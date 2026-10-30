@@ -14,7 +14,7 @@ def configuration(config):
     if 'execution_events' not in config:
         return None
     fields(value, 'schema_version max_events', 'execution_events')
-    require(value['schema_version'] == 'moe-execution-events/1', 'unsupported execution events schema')
+    require(value['schema_version'] in ('moe-execution-events/1', 'moe-execution-events/2'), 'unsupported execution events schema')
     integer(value['max_events'], 'execution max_events', 1, 262144)
     return value
 
@@ -24,6 +24,7 @@ class ExecutionObserver:
     def __init__(self, config):
         self.config = dict(config)
         configuration(dict(execution_events=config))
+        self.actual_compute_starts = config['schema_version'] == 'moe-execution-events/2'
         self.count = 0
         self.now = -1
         self.nodes = {}
@@ -35,10 +36,14 @@ class ExecutionObserver:
         graph = wave['graph_id']
         require(self.drained_ns is None and graph not in self.graphs, 'reused or post-drain observed graph')
         nodes = {(graph, int(rank), n['id']): n for rank, tasks in wave['rank_nodes'].items() for n in tasks}
+        require(not self.actual_compute_starts or wave.get('shared_compute', {}).get('mode') == 'serial_per_gpu/1',
+                'actual compute start observations require shared GPU FIFO')
         messages = {m['id']: m for m in wave['messages']}
         require(len(messages) == len(wave['messages']) and not (messages.keys() & self.messages.keys()),
                 'reused observed message')
         minimum = 2*(len(self.nodes)+len(nodes)) + 4*(len(self.messages)+len(messages)) + len(self.graphs)+2
+        if self.actual_compute_starts:
+            minimum += sum(n['spec']['kind'] == 'COMP' for n in self.nodes.values()) + sum(n['kind'] == 'COMP' for n in nodes.values())
         require(minimum <= self.config['max_events'], 'declared graph exceeds execution event budget')
         bindings = {}
         for key, node in nodes.items():
@@ -51,6 +56,7 @@ class ExecutionObserver:
         self.graphs[graph] = dict(nodes=set(nodes), messages=set(messages), retired_ns=None)
         for key, node in nodes.items():
             self.nodes[key] = dict(spec=node, issue=None, complete=None)
+            if self.actual_compute_starts:self.nodes[key]['compute_start'] = None
         for mid, message in messages.items():
             self.messages[mid] = dict(spec=message, graph=graph,
                                      send_post=None, recv_post=None, send_complete=None, recv_complete=None,
@@ -60,7 +66,8 @@ class ExecutionObserver:
         require(isinstance(event, dict), 'invalid execution event')
         kind = event.get('kind')
         base = 'schema_version type sequence time_ns kind'
-        if kind in ('node_issue', 'node_complete'):
+        if kind in ('node_issue', 'node_complete', 'node_compute_start'):
+            require(kind != 'node_compute_start' or self.actual_compute_starts, 'undeclared actual compute start event')
             extra = ' graph_id rank node'
         elif kind in ('message_send_post', 'message_recv_post', 'message_send_complete', 'message_recv_complete'):
             extra = ' graph_id rank message'
@@ -70,7 +77,7 @@ class ExecutionObserver:
             require(kind == 'service_drained', 'unknown execution event kind')
             extra = ''
         fields(event, base+extra, 'execution event')
-        require(event['schema_version'] == 'moe-execution-event/1' and event['type'] == 'OBSERVE',
+        require(event['schema_version'] == ('moe-execution-event/2' if self.actual_compute_starts else 'moe-execution-event/1') and event['type'] == 'OBSERVE',
                 'invalid execution event schema/type')
         integer(event['sequence'], 'execution sequence', 0, 262143)
         integer(event['time_ns'], 'execution time_ns', 0, 2**63-1)
@@ -96,12 +103,18 @@ class ExecutionObserver:
             if action == 'issue':
                 require(all(self.nodes[graph, event['rank'], d]['complete'] is not None for d in spec['deps']),
                         'observed node issued before dependencies')
+            elif action == 'compute_start':
+                require(spec['kind'] == 'COMP' and state['issue'] is not None and state['complete'] is None,
+                        'compute start without live issued COMP')
             else:
                 require(state['issue'] is not None, 'observed node completion before issue')
                 if spec['kind'] in ('SEND', 'RECV'):
                     side = 'send' if spec['kind'] == 'SEND' else 'recv'
                     require(self.messages[spec['message']['id']][side+'_complete'] is not None,
                             'node completed before actual message callback')
+                elif spec['kind'] == 'COMP' and self.actual_compute_starts:
+                    require(state['compute_start'] is not None and now-state['compute_start'] == spec['duration_ns'],
+                            'COMP completion differs from actual start and declared duration')
                 else:
                     require(now-state['issue'] >= spec['duration_ns'], 'node completed before declared work')
             state[action] = now
@@ -137,13 +150,16 @@ class ExecutionObserver:
         self.now = now
 
     def snapshot(self):
-        return dict(schema_version='moe-execution-observation/1', events=self.count,
+        result = dict(schema_version='moe-execution-observation/2' if self.actual_compute_starts else 'moe-execution-observation/1', events=self.count,
                     last_time_ns=self.now if self.count else None, service_drained_ns=self.drained_ns,
                     registered_graphs=len(self.graphs), retired_graphs=sum(g['retired_ns'] is not None for g in self.graphs.values()),
                     nodes=len(self.nodes), node_completions=sum(n['complete'] is not None for n in self.nodes.values()),
                     messages=len(self.messages), receiver_completions=sum(m['recv_complete'] is not None for m in self.messages.values()),
                     sender_completions=sum(m['send_complete'] is not None for m in self.messages.values()),
                     scope='passive_actual_callbacks_no_recovery_or_tensor_validation')
+        if self.actual_compute_starts:
+            result['compute_starts'] = sum(n['compute_start'] is not None for n in self.nodes.values())
+        return result
 
 
 def audit(directory, result, frontend):
@@ -163,6 +179,13 @@ def audit(directory, result, frontend):
     for row in frontend['history']:
         observer.register(checked_json(directory/'graphs'/row['graph_id']/'wave.json', 268435456))
     logs = node_events(directory)
+    compute = {}
+    if observer.actual_compute_starts:
+        for task in result['service']['shared_compute']['tasks']:
+            if task['kind'] == 'original':
+                key = task['graph_id'], task['rank'], task['node']
+                require(key not in compute, 'duplicate original shared compute identity')
+                compute[key] = task
     callbacks = {m['id']: m for m in result['service']['message_callbacks']}
     retired = {w['graph_id']: w['finished_ns'] for w in result['service']['waves']}
     path = directory/'execution_events.jsonl'
@@ -173,7 +196,11 @@ def audit(directory, result, frontend):
             event = json.loads(line)
             observer.accept(event)
             kind = event['kind']
-            if kind.startswith('node_'):
+            if kind == 'node_compute_start':
+                key = event['graph_id'], event['rank'], event['node']
+                require(key in compute and compute[key]['start_ns'] == event['time_ns'],
+                        'live compute start differs from actual shared FIFO')
+            elif kind.startswith('node_'):
                 key = event['graph_id'], event['rank'], event['node'], 'issue' if kind == 'node_issue' else 'callback'
                 require(logs.get(key) == event['time_ns'], 'live node event differs from independent ASTRA log')
             elif kind.startswith('message_'):
@@ -183,6 +210,9 @@ def audit(directory, result, frontend):
             elif kind == 'graph_retired':
                 require(retired[event['graph_id']] == event['time_ns'], 'live graph retirement differs')
     summary = observer.snapshot()
+    if observer.actual_compute_starts:
+        require(set(compute) == {key for key, node in observer.nodes.items() if node['spec']['kind'] == 'COMP'},
+                'actual compute observations omit original COMP work')
     require(observer.drained_ns == result['finish_ns'] and native['events'] == observer.count and
             checked_json(directory/'execution_observation.json', 65536) == summary,
             'incomplete or mismatched live execution observations')

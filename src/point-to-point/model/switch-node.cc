@@ -20,6 +20,8 @@ TypeId SwitchNode::GetTypeId (void)
   static TypeId tid = TypeId ("ns3::SwitchNode")
     .SetParent<Node> ()
     .AddConstructor<SwitchNode> ()
+	.AddTraceSource("SwitchDrop", "Passive local forwarding/admission drop: packet, ingress, egress (-1 if absent), priority, DropReason.",
+			MakeTraceSourceAccessor(&SwitchNode::m_switchDrop), "ns3::SwitchNode::SwitchDropCallback")
 	.AddAttribute("EcnEnabled",
 			"Enable ECN marking.",
 			BooleanValue(false),
@@ -127,7 +129,11 @@ void SwitchNode::SendToDev(Ptr<Packet>p, CustomHeader &ch){
 	// has already arrived: drop locally without charging an egress MMU.
 	if (idx < 0 || !m_devices[idx]->IsLinkUp()) {
 		FlowIdTag tag;
-		if (p->PeekPacketTag(tag)) {
+		const uint32_t priority = (ch.l3Prot == 0xFF || ch.l3Prot == 0xFE ||
+			(m_ackHighPrio && (ch.l3Prot == 0xFD || ch.l3Prot == 0xFC))) ? 0 : (ch.l3Prot == 0x06 ? 1 : ch.udp.pg);
+		const bool tagged = p->PeekPacketTag(tag);
+		m_switchDrop(p, tagged ? tag.GetFlowId() : 0, idx, priority, idx < 0 ? NO_ROUTE : LINK_DOWN);
+		if (tagged) {
 			Ptr<QbbNetDevice> ingress = DynamicCast<QbbNetDevice>(m_devices[tag.GetFlowId()]);
 			ingress->m_traceDrop(p, 0);
 		}
@@ -149,12 +155,17 @@ void SwitchNode::SendToDev(Ptr<Packet>p, CustomHeader &ch){
 		p->PeekPacketTag(t);
 		uint32_t inDev = t.GetFlowId();
 		if (qIndex != 0){ //not highest priority
-			if (m_mmu->CheckIngressAdmission(inDev, qIndex, p->GetSize()) && m_mmu->CheckEgressAdmission(idx, qIndex, p->GetSize())){			// Admission control
+			// Preserve short-circuit order: the egress check must not run after an ingress rejection.
+			if (!m_mmu->CheckIngressAdmission(inDev, qIndex, p->GetSize())) {
+				m_switchDrop(p, inDev, idx, qIndex, INGRESS_ADMISSION);
+				return;
+			}
+			if (!m_mmu->CheckEgressAdmission(idx, qIndex, p->GetSize())) {
+				m_switchDrop(p, inDev, idx, qIndex, EGRESS_ADMISSION);
+				return;
+			}
 				m_mmu->UpdateIngressAdmission(inDev, qIndex, p->GetSize());
 				m_mmu->UpdateEgressAdmission(idx, qIndex, p->GetSize());
-			}else{
-				return; // Drop
-			}
 			CheckAndSendPfc(inDev, qIndex);
 		}
 		ByteCounter(inDev, idx, qIndex) += p->GetSize();

@@ -4,6 +4,7 @@
 #include <unordered_map>
 #include <vector>
 #include <ns3/node.h>
+#include <ns3/traced-callback.h>
 #include "qbb-net-device.h"
 #include "switch-mmu.h"
 #include "pint.h"
@@ -36,6 +37,8 @@ protected:
 	uint64_t m_maxRtt;
 
 	uint32_t m_ackHighPrio; // set high priority for ACK/NACK
+	// Passive reason observation. No packet ownership or scheduling change.
+	TracedCallback<Ptr<const Packet>, uint32_t, int32_t, uint32_t, uint32_t> m_switchDrop;
 
 private:
 	int GetOutDev(Ptr<const Packet>, CustomHeader &ch);
@@ -44,6 +47,10 @@ private:
 	void CheckAndSendPfc(uint32_t inDev, uint32_t qIndex);
 	void CheckAndSendResume(uint32_t inDev, uint32_t qIndex);
 public:
+	enum DropReason : uint32_t {
+		INGRESS_ADMISSION = 1, EGRESS_ADMISSION = 2, NO_ROUTE = 3, LINK_DOWN = 4
+	};
+	typedef void (*SwitchDropCallback)(Ptr<const Packet>, uint32_t, int32_t, uint32_t, uint32_t);
 	Ptr<SwitchMmu> m_mmu;
 
 	static TypeId GetTypeId (void);

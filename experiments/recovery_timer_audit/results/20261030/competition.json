@@ -1,0 +1,1031 @@
+{
+  "passed": true,
+  "post_result_diagnosis": true,
+  "cases": {
+    "prefix-w20": {
+      "result_sha256": "fb75413d3110ae4f0e9859bec1cf4743b01363e3e9122dea37e0dda822e520c3",
+      "messages": [
+        {
+          "stream": 65,
+          "message": {
+            "ack_ns": 31995,
+            "begin": 0,
+            "bytes": 14464,
+            "contributions": 1,
+            "dst": 65,
+            "end": 14464,
+            "id": 3983,
+            "layer": 0,
+            "phase": "dispatch",
+            "plane": 0,
+            "published_ns": 1030,
+            "ready_ns": 1030,
+            "receive_ready_ns": 25989,
+            "src": 1,
+            "stream": 65,
+            "tag": 3983,
+            "transport_tokens": 1
+          },
+          "gate": {
+            "graph_id": "g1.w0",
+            "id": "L0.dispatch",
+            "members": [
+              {
+                "arrived_ns": 35384,
+                "node": 11,
+                "rank": 1
+              },
+              {
+                "arrived_ns": 37568,
+                "node": 11,
+                "rank": 5
+              },
+              {
+                "arrived_ns": 33564,
+                "node": 12,
+                "rank": 9
+              },
+              {
+                "arrived_ns": 17362,
+                "node": 10,
+                "rank": 13
+              },
+              {
+                "arrived_ns": 0,
+                "node": 3,
+                "rank": 17
+              },
+              {
+                "arrived_ns": 31380,
+                "node": 5,
+                "rank": 21
+              },
+              {
+                "arrived_ns": 8838,
+                "node": 5,
+                "rank": 25
+              },
+              {
+                "arrived_ns": 9466,
+                "node": 6,
+                "rank": 29
+              },
+              {
+                "arrived_ns": 7940,
+                "node": 5,
+                "rank": 33
+              },
+              {
+                "arrived_ns": 8050,
+                "node": 4,
+                "rank": 37
+              },
+              {
+                "arrived_ns": 7862,
+                "node": 4,
+                "rank": 41
+              },
+              {
+                "arrived_ns": 0,
+                "node": 3,
+                "rank": 45
+              },
+              {
+                "arrived_ns": 7972,
+                "node": 5,
+                "rank": 49
+              },
+              {
+                "arrived_ns": 0,
+                "node": 3,
+                "rank": 53
+              },
+              {
+                "arrived_ns": 8192,
+                "node": 4,
+                "rank": 57
+              },
+              {
+                "arrived_ns": 0,
+                "node": 3,
+                "rank": 61
+              },
+              {
+                "arrived_ns": 25989,
+                "node": 4,
+                "rank": 65
+              },
+              {
+                "arrived_ns": 0,
+                "node": 3,
+                "rank": 69
+              },
+              {
+                "arrived_ns": 0,
+                "node": 3,
+                "rank": 73
+              },
+              {
+                "arrived_ns": 10657,
+                "node": 4,
+                "rank": 77
+              },
+              {
+                "arrived_ns": 26131,
+                "node": 5,
+                "rank": 81
+              },
+              {
+                "arrived_ns": 11310,
+                "node": 4,
+                "rank": 85
+              },
+              {
+                "arrived_ns": 11026,
+                "node": 4,
+                "rank": 89
+              },
+              {
+                "arrived_ns": 11356,
+                "node": 4,
+                "rank": 93
+              },
+              {
+                "arrived_ns": 10987,
+                "node": 4,
+                "rank": 97
+              },
+              {
+                "arrived_ns": 0,
+                "node": 3,
+                "rank": 101
+              },
+              {
+                "arrived_ns": 0,
+                "node": 3,
+                "rank": 105
+              },
+              {
+                "arrived_ns": 10696,
+                "node": 4,
+                "rank": 109
+              },
+              {
+                "arrived_ns": 11317,
+                "node": 4,
+                "rank": 113
+              },
+              {
+                "arrived_ns": 0,
+                "node": 3,
+                "rank": 117
+              },
+              {
+                "arrived_ns": 10987,
+                "node": 4,
+                "rank": 121
+              },
+              {
+                "arrived_ns": 12491,
+                "node": 4,
+                "rank": 125
+              }
+            ],
+            "released_ns": 37568
+          },
+          "original_gate_slack_ns": 5573,
+          "competing_QP_occupied_ns": 181
+        },
+        {
+          "stream": 69,
+          "message": {
+            "ack_ns": 32137,
+            "begin": 0,
+            "bytes": 14464,
+            "contributions": 1,
+            "dst": 81,
+            "end": 14464,
+            "id": 3987,
+            "layer": 0,
+            "phase": "dispatch",
+            "plane": 0,
+            "published_ns": 1030,
+            "ready_ns": 1030,
+            "receive_ready_ns": 26131,
+            "src": 1,
+            "stream": 69,
+            "tag": 3987,
+            "transport_tokens": 1
+          },
+          "gate": {
+            "graph_id": "g1.w0",
+            "id": "L0.dispatch",
+            "members": [
+              {
+                "arrived_ns": 35384,
+                "node": 11,
+                "rank": 1
+              },
+              {
+                "arrived_ns": 37568,
+                "node": 11,
+                "rank": 5
+              },
+              {
+                "arrived_ns": 33564,
+                "node": 12,
+                "rank": 9
+              },
+              {
+                "arrived_ns": 17362,
+                "node": 10,
+                "rank": 13
+              },
+              {
+                "arrived_ns": 0,
+                "node": 3,
+                "rank": 17
+              },
+              {
+                "arrived_ns": 31380,
+                "node": 5,
+                "rank": 21
+              },
+              {
+                "arrived_ns": 8838,
+                "node": 5,
+                "rank": 25
+              },
+              {
+                "arrived_ns": 9466,
+                "node": 6,
+                "rank": 29
+              },
+              {
+                "arrived_ns": 7940,
+                "node": 5,
+                "rank": 33
+              },
+              {
+                "arrived_ns": 8050,
+                "node": 4,
+                "rank": 37
+              },
+              {
+                "arrived_ns": 7862,
+                "node": 4,
+                "rank": 41
+              },
+              {
+                "arrived_ns": 0,
+                "node": 3,
+                "rank": 45
+              },
+              {
+                "arrived_ns": 7972,
+                "node": 5,
+                "rank": 49
+              },
+              {
+                "arrived_ns": 0,
+                "node": 3,
+                "rank": 53
+              },
+              {
+                "arrived_ns": 8192,
+                "node": 4,
+                "rank": 57
+              },
+              {
+                "arrived_ns": 0,
+                "node": 3,
+                "rank": 61
+              },
+              {
+                "arrived_ns": 25989,
+                "node": 4,
+                "rank": 65
+              },
+              {
+                "arrived_ns": 0,
+                "node": 3,
+                "rank": 69
+              },
+              {
+                "arrived_ns": 0,
+                "node": 3,
+                "rank": 73
+              },
+              {
+                "arrived_ns": 10657,
+                "node": 4,
+                "rank": 77
+              },
+              {
+                "arrived_ns": 26131,
+                "node": 5,
+                "rank": 81
+              },
+              {
+                "arrived_ns": 11310,
+                "node": 4,
+                "rank": 85
+              },
+              {
+                "arrived_ns": 11026,
+                "node": 4,
+                "rank": 89
+              },
+              {
+                "arrived_ns": 11356,
+                "node": 4,
+                "rank": 93
+              },
+              {
+                "arrived_ns": 10987,
+                "node": 4,
+                "rank": 97
+              },
+              {
+                "arrived_ns": 0,
+                "node": 3,
+                "rank": 101
+              },
+              {
+                "arrived_ns": 0,
+                "node": 3,
+                "rank": 105
+              },
+              {
+                "arrived_ns": 10696,
+                "node": 4,
+                "rank": 109
+              },
+              {
+                "arrived_ns": 11317,
+                "node": 4,
+                "rank": 113
+              },
+              {
+                "arrived_ns": 0,
+                "node": 3,
+                "rank": 117
+              },
+              {
+                "arrived_ns": 10987,
+                "node": 4,
+                "rank": 121
+              },
+              {
+                "arrived_ns": 12491,
+                "node": 4,
+                "rank": 125
+              }
+            ],
+            "released_ns": 37568
+          },
+          "original_gate_slack_ns": 5431,
+          "competing_QP_occupied_ns": 110
+        }
+      ],
+      "actual_NIC_schedule": [
+        {
+          "packet": {
+            "time_ns": 18754,
+            "stream": 65,
+            "src": 1,
+            "dst": 65,
+            "nic": 1,
+            "sequence": 0,
+            "payload_bytes": 9000,
+            "packet_uid": 623,
+            "repeated_bytes": 9000
+          },
+          "model_bytes": 9036,
+          "start_ns": 18754,
+          "end_ns": 18935
+        },
+        {
+          "packet": {
+            "time_ns": 18935,
+            "stream": 69,
+            "src": 1,
+            "dst": 81,
+            "nic": 1,
+            "sequence": 0,
+            "payload_bytes": 9000,
+            "packet_uid": 631,
+            "repeated_bytes": 9000
+          },
+          "model_bytes": 9036,
+          "start_ns": 18935,
+          "end_ns": 19116
+        },
+        {
+          "packet": {
+            "time_ns": 19116,
+            "stream": 65,
+            "src": 1,
+            "dst": 65,
+            "nic": 1,
+            "sequence": 9000,
+            "payload_bytes": 5464,
+            "packet_uid": 637,
+            "repeated_bytes": 5464
+          },
+          "model_bytes": 5500,
+          "start_ns": 19116,
+          "end_ns": 19226
+        },
+        {
+          "packet": {
+            "time_ns": 19226,
+            "stream": 69,
+            "src": 1,
+            "dst": 81,
+            "nic": 1,
+            "sequence": 9000,
+            "payload_bytes": 5464,
+            "packet_uid": 639,
+            "repeated_bytes": 5464
+          },
+          "model_bytes": 5500,
+          "start_ns": 19226,
+          "end_ns": 19336
+        }
+      ],
+      "physical_source_TX": [
+        {
+          "time_ns": 18754,
+          "node": 1,
+          "port": 1,
+          "event": 0,
+          "packet_uid": 623,
+          "message_id": 65,
+          "ip_protocol": 17,
+          "sequence": 0,
+          "model_bytes": 9036,
+          "ecn": 0,
+          "egress_queue_bytes": 0,
+          "data_payload_bytes": 9000
+        },
+        {
+          "time_ns": 18935,
+          "node": 1,
+          "port": 1,
+          "event": 0,
+          "packet_uid": 631,
+          "message_id": 69,
+          "ip_protocol": 17,
+          "sequence": 0,
+          "model_bytes": 9036,
+          "ecn": 0,
+          "egress_queue_bytes": 0,
+          "data_payload_bytes": 9000
+        },
+        {
+          "time_ns": 19116,
+          "node": 1,
+          "port": 1,
+          "event": 0,
+          "packet_uid": 637,
+          "message_id": 65,
+          "ip_protocol": 17,
+          "sequence": 9000,
+          "model_bytes": 5500,
+          "ecn": 0,
+          "egress_queue_bytes": 0,
+          "data_payload_bytes": 5464
+        },
+        {
+          "time_ns": 19226,
+          "node": 1,
+          "port": 1,
+          "event": 0,
+          "packet_uid": 639,
+          "message_id": 69,
+          "ip_protocol": 17,
+          "sequence": 9000,
+          "model_bytes": 5500,
+          "ecn": 0,
+          "egress_queue_bytes": 0,
+          "data_payload_bytes": 5464
+        }
+      ],
+      "scope": "original gate slack and serialization; no counterfactual latency claim"
+    },
+    "prefix-w60": {
+      "result_sha256": "4a558a0d82d2063ee3b5cb9dd467cdb20cc16b5356fce1bb6320e911ea62a422",
+      "messages": [
+        {
+          "stream": 65,
+          "message": {
+            "ack_ns": 33999,
+            "begin": 0,
+            "bytes": 14464,
+            "contributions": 1,
+            "dst": 65,
+            "end": 14464,
+            "id": 3983,
+            "layer": 0,
+            "phase": "dispatch",
+            "plane": 0,
+            "published_ns": 1030,
+            "ready_ns": 1030,
+            "receive_ready_ns": 25989,
+            "src": 1,
+            "stream": 65,
+            "tag": 3983,
+            "transport_tokens": 1
+          },
+          "gate": {
+            "graph_id": "g1.w0",
+            "id": "L0.dispatch",
+            "members": [
+              {
+                "arrived_ns": 35384,
+                "node": 11,
+                "rank": 1
+              },
+              {
+                "arrived_ns": 39572,
+                "node": 11,
+                "rank": 5
+              },
+              {
+                "arrived_ns": 33564,
+                "node": 12,
+                "rank": 9
+              },
+              {
+                "arrived_ns": 17362,
+                "node": 10,
+                "rank": 13
+              },
+              {
+                "arrived_ns": 0,
+                "node": 3,
+                "rank": 17
+              },
+              {
+                "arrived_ns": 31380,
+                "node": 5,
+                "rank": 21
+              },
+              {
+                "arrived_ns": 8838,
+                "node": 5,
+                "rank": 25
+              },
+              {
+                "arrived_ns": 9466,
+                "node": 6,
+                "rank": 29
+              },
+              {
+                "arrived_ns": 7940,
+                "node": 5,
+                "rank": 33
+              },
+              {
+                "arrived_ns": 8050,
+                "node": 4,
+                "rank": 37
+              },
+              {
+                "arrived_ns": 7862,
+                "node": 4,
+                "rank": 41
+              },
+              {
+                "arrived_ns": 0,
+                "node": 3,
+                "rank": 45
+              },
+              {
+                "arrived_ns": 7972,
+                "node": 5,
+                "rank": 49
+              },
+              {
+                "arrived_ns": 0,
+                "node": 3,
+                "rank": 53
+              },
+              {
+                "arrived_ns": 8192,
+                "node": 4,
+                "rank": 57
+              },
+              {
+                "arrived_ns": 0,
+                "node": 3,
+                "rank": 61
+              },
+              {
+                "arrived_ns": 25989,
+                "node": 4,
+                "rank": 65
+              },
+              {
+                "arrived_ns": 0,
+                "node": 3,
+                "rank": 69
+              },
+              {
+                "arrived_ns": 0,
+                "node": 3,
+                "rank": 73
+              },
+              {
+                "arrived_ns": 10657,
+                "node": 4,
+                "rank": 77
+              },
+              {
+                "arrived_ns": 26131,
+                "node": 5,
+                "rank": 81
+              },
+              {
+                "arrived_ns": 11310,
+                "node": 4,
+                "rank": 85
+              },
+              {
+                "arrived_ns": 11026,
+                "node": 4,
+                "rank": 89
+              },
+              {
+                "arrived_ns": 11356,
+                "node": 4,
+                "rank": 93
+              },
+              {
+                "arrived_ns": 10987,
+                "node": 4,
+                "rank": 97
+              },
+              {
+                "arrived_ns": 0,
+                "node": 3,
+                "rank": 101
+              },
+              {
+                "arrived_ns": 0,
+                "node": 3,
+                "rank": 105
+              },
+              {
+                "arrived_ns": 10696,
+                "node": 4,
+                "rank": 109
+              },
+              {
+                "arrived_ns": 11317,
+                "node": 4,
+                "rank": 113
+              },
+              {
+                "arrived_ns": 0,
+                "node": 3,
+                "rank": 117
+              },
+              {
+                "arrived_ns": 10987,
+                "node": 4,
+                "rank": 121
+              },
+              {
+                "arrived_ns": 12491,
+                "node": 4,
+                "rank": 125
+              }
+            ],
+            "released_ns": 39572
+          },
+          "original_gate_slack_ns": 5573,
+          "competing_QP_occupied_ns": 181
+        },
+        {
+          "stream": 69,
+          "message": {
+            "ack_ns": 32137,
+            "begin": 0,
+            "bytes": 14464,
+            "contributions": 1,
+            "dst": 81,
+            "end": 14464,
+            "id": 3987,
+            "layer": 0,
+            "phase": "dispatch",
+            "plane": 0,
+            "published_ns": 1030,
+            "ready_ns": 1030,
+            "receive_ready_ns": 26131,
+            "src": 1,
+            "stream": 69,
+            "tag": 3987,
+            "transport_tokens": 1
+          },
+          "gate": {
+            "graph_id": "g1.w0",
+            "id": "L0.dispatch",
+            "members": [
+              {
+                "arrived_ns": 35384,
+                "node": 11,
+                "rank": 1
+              },
+              {
+                "arrived_ns": 39572,
+                "node": 11,
+                "rank": 5
+              },
+              {
+                "arrived_ns": 33564,
+                "node": 12,
+                "rank": 9
+              },
+              {
+                "arrived_ns": 17362,
+                "node": 10,
+                "rank": 13
+              },
+              {
+                "arrived_ns": 0,
+                "node": 3,
+                "rank": 17
+              },
+              {
+                "arrived_ns": 31380,
+                "node": 5,
+                "rank": 21
+              },
+              {
+                "arrived_ns": 8838,
+                "node": 5,
+                "rank": 25
+              },
+              {
+                "arrived_ns": 9466,
+                "node": 6,
+                "rank": 29
+              },
+              {
+                "arrived_ns": 7940,
+                "node": 5,
+                "rank": 33
+              },
+              {
+                "arrived_ns": 8050,
+                "node": 4,
+                "rank": 37
+              },
+              {
+                "arrived_ns": 7862,
+                "node": 4,
+                "rank": 41
+              },
+              {
+                "arrived_ns": 0,
+                "node": 3,
+                "rank": 45
+              },
+              {
+                "arrived_ns": 7972,
+                "node": 5,
+                "rank": 49
+              },
+              {
+                "arrived_ns": 0,
+                "node": 3,
+                "rank": 53
+              },
+              {
+                "arrived_ns": 8192,
+                "node": 4,
+                "rank": 57
+              },
+              {
+                "arrived_ns": 0,
+                "node": 3,
+                "rank": 61
+              },
+              {
+                "arrived_ns": 25989,
+                "node": 4,
+                "rank": 65
+              },
+              {
+                "arrived_ns": 0,
+                "node": 3,
+                "rank": 69
+              },
+              {
+                "arrived_ns": 0,
+                "node": 3,
+                "rank": 73
+              },
+              {
+                "arrived_ns": 10657,
+                "node": 4,
+                "rank": 77
+              },
+              {
+                "arrived_ns": 26131,
+                "node": 5,
+                "rank": 81
+              },
+              {
+                "arrived_ns": 11310,
+                "node": 4,
+                "rank": 85
+              },
+              {
+                "arrived_ns": 11026,
+                "node": 4,
+                "rank": 89
+              },
+              {
+                "arrived_ns": 11356,
+                "node": 4,
+                "rank": 93
+              },
+              {
+                "arrived_ns": 10987,
+                "node": 4,
+                "rank": 97
+              },
+              {
+                "arrived_ns": 0,
+                "node": 3,
+                "rank": 101
+              },
+              {
+                "arrived_ns": 0,
+                "node": 3,
+                "rank": 105
+              },
+              {
+                "arrived_ns": 10696,
+                "node": 4,
+                "rank": 109
+              },
+              {
+                "arrived_ns": 11317,
+                "node": 4,
+                "rank": 113
+              },
+              {
+                "arrived_ns": 0,
+                "node": 3,
+                "rank": 117
+              },
+              {
+                "arrived_ns": 10987,
+                "node": 4,
+                "rank": 121
+              },
+              {
+                "arrived_ns": 12491,
+                "node": 4,
+                "rank": 125
+              }
+            ],
+            "released_ns": 39572
+          },
+          "original_gate_slack_ns": 7435,
+          "competing_QP_occupied_ns": 110
+        }
+      ],
+      "actual_NIC_schedule": [
+        {
+          "packet": {
+            "time_ns": 18754,
+            "stream": 65,
+            "src": 1,
+            "dst": 65,
+            "nic": 1,
+            "sequence": 0,
+            "payload_bytes": 9000,
+            "packet_uid": 623,
+            "repeated_bytes": 9000
+          },
+          "model_bytes": 9036,
+          "start_ns": 18754,
+          "end_ns": 18935
+        },
+        {
+          "packet": {
+            "time_ns": 18935,
+            "stream": 69,
+            "src": 1,
+            "dst": 81,
+            "nic": 1,
+            "sequence": 0,
+            "payload_bytes": 9000,
+            "packet_uid": 631,
+            "repeated_bytes": 9000
+          },
+          "model_bytes": 9036,
+          "start_ns": 18935,
+          "end_ns": 19116
+        },
+        {
+          "packet": {
+            "time_ns": 19116,
+            "stream": 65,
+            "src": 1,
+            "dst": 65,
+            "nic": 1,
+            "sequence": 9000,
+            "payload_bytes": 5464,
+            "packet_uid": 637,
+            "repeated_bytes": 5464
+          },
+          "model_bytes": 5500,
+          "start_ns": 19116,
+          "end_ns": 19226
+        },
+        {
+          "packet": {
+            "time_ns": 19226,
+            "stream": 69,
+            "src": 1,
+            "dst": 81,
+            "nic": 1,
+            "sequence": 9000,
+            "payload_bytes": 5464,
+            "packet_uid": 639,
+            "repeated_bytes": 5464
+          },
+          "model_bytes": 5500,
+          "start_ns": 19226,
+          "end_ns": 19336
+        }
+      ],
+      "physical_source_TX": [
+        {
+          "time_ns": 18754,
+          "node": 1,
+          "port": 1,
+          "event": 0,
+          "packet_uid": 623,
+          "message_id": 65,
+          "ip_protocol": 17,
+          "sequence": 0,
+          "model_bytes": 9036,
+          "ecn": 0,
+          "egress_queue_bytes": 0,
+          "data_payload_bytes": 9000
+        },
+        {
+          "time_ns": 18935,
+          "node": 1,
+          "port": 1,
+          "event": 0,
+          "packet_uid": 631,
+          "message_id": 69,
+          "ip_protocol": 17,
+          "sequence": 0,
+          "model_bytes": 9036,
+          "ecn": 0,
+          "egress_queue_bytes": 0,
+          "data_payload_bytes": 9000
+        },
+        {
+          "time_ns": 19116,
+          "node": 1,
+          "port": 1,
+          "event": 0,
+          "packet_uid": 637,
+          "message_id": 65,
+          "ip_protocol": 17,
+          "sequence": 9000,
+          "model_bytes": 5500,
+          "ecn": 0,
+          "egress_queue_bytes": 0,
+          "data_payload_bytes": 5464
+        },
+        {
+          "time_ns": 19226,
+          "node": 1,
+          "port": 1,
+          "event": 0,
+          "packet_uid": 639,
+          "message_id": 69,
+          "ip_protocol": 17,
+          "sequence": 9000,
+          "model_bytes": 5500,
+          "ecn": 0,
+          "egress_queue_bytes": 0,
+          "data_payload_bytes": 5464
+        }
+      ],
+      "scope": "original gate slack and serialization; no counterfactual latency claim"
+    }
+  },
+  "source_sha256": "dccb2c2f457d97f193dec8d4e196d0d727f211376d9af56afbf4d779381a508b"
+}

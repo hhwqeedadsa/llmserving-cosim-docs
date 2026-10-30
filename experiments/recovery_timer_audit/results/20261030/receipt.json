@@ -1,0 +1,122 @@
+{
+  "passed": true,
+  "method_commit": "006f8f1ee0b9a1dcfd834dc0097c4214beff7d4f",
+  "frozen_sha256": "ef669d595c710be93b48c6c4e0def0bc47d43d2e152844de0b6895f58a3f6ac6",
+  "execution_source_sha256": {
+    "experiments/recovery_timer_audit/audit.py": "1cae276fae9011b0a66382b501508bb3763135f5ea0bad041cda140eb634b6cb",
+    "experiments/recovery_timer_audit/closeout.py": "cd71865fe1e9180a3ac702db6497de806cab2ba1365276948c03915f8ea89ad0",
+    "experiments/recovery_timer_audit/monitor.py": "731515d6432eb82deb5a05137c43678694112e7e634507b3741416c4d067bd84",
+    "experiments/recovery_timer_audit/publish.py": "cb4d44ed2a834414cae15b087523de7341696f9f3c21956d1bac9520c87d90a6",
+    "experiments/recovery_timer_audit/sources.py": "bcd8f4b2cba722984c39629c1d3762f66acc10cfd4bafa9caa4dd200afc659a5",
+    "experiments/recovery_timer_audit/verify.py": "ccb20f1ddadbd5e4873e061a587e29bc454425f07d180b1b55e5ec1461c53ca4",
+    "experiments/recovery_timer_audit/README.md": "f3f44141494d43d720944994b28edafa96a0be3d4768dc6f9bde6ef206b2948f"
+  },
+  "postrun_source_sha256": {
+    "experiments/recovery_timer_audit/postrun/ack_policy.py": "dc1dd779a0c76933c4e4b988315d6d1f2cdd4a6abb463b373eb554e14ade5b7f",
+    "experiments/recovery_timer_audit/postrun/explain_competition.py": "dccb2c2f457d97f193dec8d4e196d0d727f211376d9af56afbf4d779381a508b",
+    "experiments/recovery_timer_audit/postrun/finalize.py": "2e95dd4c0e991bdf22c0698de8039522e6d2b80e95ee554947e8b6e839fb3046"
+  },
+  "public_source_sha256": {
+    "rxe_comp.c": "c2c59b186cbeef632b5b03f82d78df7492abd0b6139748363f813a7e6133aeee",
+    "rxe_qp.c": "6f3c23174e2862beea5eb7094697956f143345d66dd1c68e2c3a8f4766c26e7b",
+    "rxe_req.c": "c829196711751667ba37226cb55d9f0e2d41aa4ae7e68be25693924d6559b359",
+    "rfc8985.txt": "5b947b1dad18d60ed4550e36e0f474d1678412a413b4664feb5d1428e27d7c5f",
+    "rfc6298.txt": "f3a6d937c0a7653bd431fdbbdcd7920f4e9d9cdb6134fa9db7a74b90d215edf6"
+  },
+  "postrun_public_source": {
+    "name": "rxe_resp",
+    "reference": "https://github.com/torvalds/linux/blob/v6.12/drivers/infiniband/sw/rxe/rxe_resp.c",
+    "url": "https://api.github.com/repos/torvalds/linux/contents/drivers/infiniband/sw/rxe/rxe_resp.c?ref=v6.12",
+    "git_blob_sha1": "c11ab280551a8638e1d9c8fa33f8bc9fc743c020",
+    "path": "runs/recovery_timer_audit_20261030/postrun-ack/rxe_resp.c",
+    "sha256": "b5cdbf37a48ecaa6f9d5f397e5f064317a48d93573b23546cf2fd2c602322e59",
+    "bytes": 40930,
+    "response_sha256": "f8ad7af73e626f3d99a9b02f6ac4542179041b774804486abe5c5a6e4fb5a044",
+    "post_result_source": true,
+    "additional_requests": 1,
+    "request_deadline_seconds": 5
+  },
+  "ACK_example_editorial_revision": {
+    "reason": "separate illustrative RXE WRITE MTU from model 9000-byte packet size",
+    "source_path": "runs/recovery_timer_audit_20261030/correct_ack_example.py",
+    "source_sha256": "466a4402085827869e1c0aeaa24a952e0816e86c2f9160d59e8200aa1c660e83",
+    "original_artifact_sha256": "4c56aca3dbca42ed63091c6be78f0bbdee8f24835847e6000284022922edec34",
+    "original_source_path": "runs/recovery_timer_audit_20261030/before-example-correction/ack_policy.py",
+    "original_source_sha256": "9befa8001a853717b10ee0d7b089e545504ca0d3e0e9d95a3a497151eb900be0",
+    "new_networks": 0,
+    "raw_analysis_changed": false
+  },
+  "cases": {
+    "normal": {
+      "directory": "/home/lry/moe-ub-cosim/runs/explicit_prefix_moe_20261030/study/normal",
+      "result_sha256": "8c510bf54e372fa221d06b8fb8a7f62dafdb5c233d033a318e0a001f8ffa9030"
+    },
+    "local-w20": {
+      "directory": "/home/lry/moe-ub-cosim/runs/transient_uplink_recovery_20261030/study/local-w20",
+      "result_sha256": "eae8a73864a8e6adbe0f7596fe8e869953f64f6a0ccce224f518f935dcc1e417"
+    },
+    "prefix-w20": {
+      "directory": "/home/lry/moe-ub-cosim/runs/explicit_prefix_moe_20261030/study/prefix-w20",
+      "result_sha256": "fb75413d3110ae4f0e9859bec1cf4743b01363e3e9122dea37e0dda822e520c3"
+    },
+    "prefix-w60": {
+      "directory": "/home/lry/moe-ub-cosim/runs/explicit_prefix_moe_20261030/study/prefix-w60",
+      "result_sha256": "4a558a0d82d2063ee3b5cb9dd467cdb20cc16b5356fce1bb6320e911ea62a422"
+    }
+  },
+  "monitored_stages": 8,
+  "monitored_seconds": 7.461407923023216,
+  "peak_artifact_bytes": 835584,
+  "peak_group_rss_bytes": 261935104,
+  "budget": {
+    "monitored_seconds": 300,
+    "artifact_bytes": 67108864,
+    "min_free_bytes": 8589934592
+  },
+  "source_requests": 6,
+  "source_preflight_deadline_upper_bound_seconds": 58,
+  "source_bodies_imported_without_new_requests": true,
+  "retained_HTTP_failure": {
+    "url": "https://raw.githubusercontent.com/torvalds/linux/v6.12/drivers/infiniband/sw/rxe/rxe_comp.c",
+    "method": "HEAD",
+    "exit_code": 28,
+    "deadline_seconds": 15,
+    "error": "Operation timed out after15002ms with0bytes",
+    "same_URL_retried": false
+  },
+  "retained_report_stage_failure": {
+    "stage": "competition",
+    "source_sha256": "c5eec46aa5d05257ef72a25cc7b02fe49c4aa919d6cee297f0daa7fe7ccca202",
+    "source_copy": "runs/recovery_timer_audit_20261030/competition-v1.py",
+    "exit_code": 1,
+    "error": "TypeError: list indices must be integers or slices, not str",
+    "cause": "packet loop shadowed case reference variable row",
+    "results_written": false,
+    "network_simulations": 0
+  },
+  "prior_receipt_sha256": "b568fb952fbd1caedd3fce79d410898725e3f0ea4662b332b0aeda12b554bbb2",
+  "independent_tamper_checks": [
+    "missing_bytes",
+    "first_send_time",
+    "other_QP_occupancy"
+  ],
+  "dependency_checks": 13,
+  "new_networks": 0,
+  "new_builds": 0,
+  "installs": 0,
+  "GPU_execution": false,
+  "browser_rendering_verified": false,
+  "hardware_calibrated": false,
+  "static_HTML_links": 13,
+  "delivery_sha256": {
+    "analysis.json": "b9dccd80aa1eb0c9241eb608a7f01cd09d6f1c4d2dccdb81dc44bab9afd93b74",
+    "verification.json": "e78b3c4a60452a4a376221b1d950801a366148e6c20387bf462b1330ebf9ebb6",
+    "sources.json": "a1e8b1dd3b1dd47fb53d4e77f09dc36024ff7a4ed6ce45b67483e84908170a24",
+    "README.md": "06c91de7e2274e7552f9fa28d255129116e8b65aa0a839f6e9275b7cef782e5b",
+    "report.html": "8f5f75f321b6d545ae224156b7952001dc69fbe3b14f022fc20e873562542396",
+    "competition.json": "7c6ebb826825328218d02523c4eeb6d121923662a2bd1d992c88442d161a89ad",
+    "competition_explanation.md": "221f68825d418506e4d3333a4715ee44888784421828b20ac05a5d004cd9db4d",
+    "ack_policy.json": "905edc66002cef358792061d19ca452a2601993165b2fccfd4f7cd7922048ad1",
+    "ack_policy_explanation.md": "6effc31ddf46b45eb07cd50058bd62a99b0fc5e54fbd23b41be6122d53090b5f"
+  }
+}

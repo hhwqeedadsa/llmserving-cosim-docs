@@ -1,0 +1,3848 @@
+{
+  "passed": true,
+  "frozen_sha256": "ef669d595c710be93b48c6c4e0def0bc47d43d2e152844de0b6895f58a3f6ac6",
+  "cases": {
+    "normal": {
+      "result_sha256": "8c510bf54e372fa221d06b8fb8a7f62dafdb5c233d033a318e0a001f8ffa9030",
+      "logical_payload_bytes": 11228096,
+      "repeated_payload_bytes": 0,
+      "trigger_counts": {},
+      "batches": [],
+      "positive_first_send_wait_count": 0,
+      "simultaneous_waiting_recoveries": [],
+      "complete_batches": 0,
+      "same_ns_feedback_ambiguous_batches": 0,
+      "max_first_send_wait_ns": 0,
+      "other_QP_occupied_ns": 0,
+      "max_batch_span_ns": 0
+    },
+    "local-w20": {
+      "result_sha256": "eae8a73864a8e6adbe0f7596fe8e869953f64f6a0ccce224f518f935dcc1e417",
+      "logical_payload_bytes": 11228096,
+      "repeated_payload_bytes": 318208,
+      "trigger_counts": {
+        "timeout": 23,
+        "fast_retransmit": 2
+      },
+      "batches": [
+        {
+          "trigger": {
+            "kind": "fast_retransmit",
+            "time_ns": 17103,
+            "stream": 71,
+            "source": 1,
+            "ack": 0,
+            "high": 14464,
+            "selective_index": 705,
+            "source_event": {
+              "cumulative_ack": 0,
+              "extension_hex": "4d535231000023280000388000000001",
+              "ip_protocol": 253,
+              "kind": "fast_retransmit",
+              "model_bytes": 50,
+              "packet_uid": 595,
+              "sack_begin": 9000,
+              "sack_end": 14464,
+              "sack_valid": true,
+              "stream": 71,
+              "time_ns": 17103
+            }
+          },
+          "nic": 1,
+          "source_feedback": [
+            {
+              "cumulative_ack": 0,
+              "extension_hex": "4d535231000023280000388000000001",
+              "ip_protocol": 253,
+              "kind": "feedback_received",
+              "model_bytes": 50,
+              "packet_uid": 595,
+              "sack_begin": 9000,
+              "sack_end": 14464,
+              "sack_valid": true,
+              "stream": 71,
+              "time_ns": 17103
+            }
+          ],
+          "same_ns_unordered_feedback": [],
+          "missing_ranges": [
+            [
+              0,
+              9000
+            ]
+          ],
+          "missing_bytes": 9000,
+          "cutoff_ns": 17316,
+          "actual_retransmission_packets": [
+            {
+              "time_ns": 17103,
+              "stream": 71,
+              "src": 1,
+              "dst": 85,
+              "nic": 1,
+              "sequence": 0,
+              "payload_bytes": 9000,
+              "packet_uid": 615,
+              "repeated_bytes": 9000
+            }
+          ],
+          "uncovered_ranges": [],
+          "fully_covered_before_next_feedback": true,
+          "first_retransmission_ns": 17103,
+          "first_retransmission_delay_ns": 0,
+          "last_retransmission_start_ns": 17103,
+          "batch_serialization_end_ns": 17284,
+          "batch_span_ns": 181,
+          "own_serialization_ns": 181,
+          "other_QP_serialization": [],
+          "other_QP_occupied_ns": 0,
+          "unexplained_or_interpacket_ns": 0
+        },
+        {
+          "trigger": {
+            "kind": "fast_retransmit",
+            "time_ns": 17653,
+            "stream": 272,
+            "source": 6,
+            "ack": 0,
+            "high": 14464,
+            "selective_index": 715,
+            "source_event": {
+              "cumulative_ack": 0,
+              "extension_hex": "4d535231000023280000388000000001",
+              "ip_protocol": 253,
+              "kind": "fast_retransmit",
+              "model_bytes": 50,
+              "packet_uid": 607,
+              "sack_begin": 9000,
+              "sack_end": 14464,
+              "sack_valid": true,
+              "stream": 272,
+              "time_ns": 17653
+            }
+          },
+          "nic": 1,
+          "source_feedback": [
+            {
+              "cumulative_ack": 0,
+              "extension_hex": "4d535231000023280000388000000001",
+              "ip_protocol": 253,
+              "kind": "feedback_received",
+              "model_bytes": 50,
+              "packet_uid": 607,
+              "sack_begin": 9000,
+              "sack_end": 14464,
+              "sack_valid": true,
+              "stream": 272,
+              "time_ns": 17653
+            }
+          ],
+          "same_ns_unordered_feedback": [],
+          "missing_ranges": [
+            [
+              0,
+              9000
+            ]
+          ],
+          "missing_bytes": 9000,
+          "cutoff_ns": 19116,
+          "actual_retransmission_packets": [
+            {
+              "time_ns": 17653,
+              "stream": 272,
+              "src": 6,
+              "dst": 106,
+              "nic": 1,
+              "sequence": 0,
+              "payload_bytes": 9000,
+              "packet_uid": 617,
+              "repeated_bytes": 9000
+            }
+          ],
+          "uncovered_ranges": [],
+          "fully_covered_before_next_feedback": true,
+          "first_retransmission_ns": 17653,
+          "first_retransmission_delay_ns": 0,
+          "last_retransmission_start_ns": 17653,
+          "batch_serialization_end_ns": 17834,
+          "batch_span_ns": 181,
+          "own_serialization_ns": 181,
+          "other_QP_serialization": [],
+          "other_QP_occupied_ns": 0,
+          "unexplained_or_interpacket_ns": 0
+        },
+        {
+          "trigger": {
+            "kind": "timeout",
+            "time_ns": 18030,
+            "stream": 199,
+            "source": 5,
+            "ack": 0,
+            "high": 14464,
+            "source_event": {
+              "time_ns": 18030,
+              "event": 2,
+              "source": 5,
+              "message_id": 199,
+              "acknowledged_bytes": 0,
+              "highest_sent_bytes": 14464,
+              "retries_since_progress": 1,
+              "rto_ns": 34000,
+              "deadline_ns": 52030
+            }
+          },
+          "nic": 1,
+          "source_feedback": [],
+          "same_ns_unordered_feedback": [],
+          "missing_ranges": [
+            [
+              0,
+              14464
+            ]
+          ],
+          "missing_bytes": 14464,
+          "cutoff_ns": 26758,
+          "actual_retransmission_packets": [
+            {
+              "time_ns": 18030,
+              "stream": 199,
+              "src": 5,
+              "dst": 9,
+              "nic": 1,
+              "sequence": 0,
+              "payload_bytes": 9000,
+              "packet_uid": 619,
+              "repeated_bytes": 9000
+            },
+            {
+              "time_ns": 18211,
+              "stream": 199,
+              "src": 5,
+              "dst": 9,
+              "nic": 1,
+              "sequence": 9000,
+              "payload_bytes": 5464,
+              "packet_uid": 629,
+              "repeated_bytes": 5464
+            }
+          ],
+          "uncovered_ranges": [],
+          "fully_covered_before_next_feedback": true,
+          "first_retransmission_ns": 18030,
+          "first_retransmission_delay_ns": 0,
+          "last_retransmission_start_ns": 18211,
+          "batch_serialization_end_ns": 18321,
+          "batch_span_ns": 291,
+          "own_serialization_ns": 291,
+          "other_QP_serialization": [],
+          "other_QP_occupied_ns": 0,
+          "unexplained_or_interpacket_ns": 0
+        },
+        {
+          "trigger": {
+            "kind": "timeout",
+            "time_ns": 18030,
+            "stream": 242,
+            "source": 6,
+            "ack": 0,
+            "high": 14464,
+            "source_event": {
+              "time_ns": 18030,
+              "event": 2,
+              "source": 6,
+              "message_id": 242,
+              "acknowledged_bytes": 0,
+              "highest_sent_bytes": 14464,
+              "retries_since_progress": 1,
+              "rto_ns": 34000,
+              "deadline_ns": 52030
+            }
+          },
+          "nic": 1,
+          "source_feedback": [],
+          "same_ns_unordered_feedback": [],
+          "missing_ranges": [
+            [
+              0,
+              14464
+            ]
+          ],
+          "missing_bytes": 14464,
+          "cutoff_ns": 26759,
+          "actual_retransmission_packets": [
+            {
+              "time_ns": 18030,
+              "stream": 242,
+              "src": 6,
+              "dst": 10,
+              "nic": 1,
+              "sequence": 0,
+              "payload_bytes": 9000,
+              "packet_uid": 621,
+              "repeated_bytes": 9000
+            },
+            {
+              "time_ns": 18392,
+              "stream": 242,
+              "src": 6,
+              "dst": 10,
+              "nic": 1,
+              "sequence": 9000,
+              "payload_bytes": 5464,
+              "packet_uid": 643,
+              "repeated_bytes": 5464
+            }
+          ],
+          "uncovered_ranges": [],
+          "fully_covered_before_next_feedback": true,
+          "first_retransmission_ns": 18030,
+          "first_retransmission_delay_ns": 0,
+          "last_retransmission_start_ns": 18392,
+          "batch_serialization_end_ns": 18502,
+          "batch_span_ns": 472,
+          "own_serialization_ns": 291,
+          "other_QP_serialization": [
+            {
+              "source_packet": {
+                "time_ns": 18211,
+                "stream": 244,
+                "src": 6,
+                "dst": 14,
+                "nic": 1,
+                "sequence": 0,
+                "payload_bytes": 9000,
+                "packet_uid": 631,
+                "repeated_bytes": 9000
+              },
+              "overlap_ns": 181
+            }
+          ],
+          "other_QP_occupied_ns": 181,
+          "unexplained_or_interpacket_ns": 0
+        },
+        {
+          "trigger": {
+            "kind": "timeout",
+            "time_ns": 18211,
+            "stream": 55,
+            "source": 1,
+            "ack": 0,
+            "high": 14464,
+            "source_event": {
+              "time_ns": 18211,
+              "event": 2,
+              "source": 1,
+              "message_id": 55,
+              "acknowledged_bytes": 0,
+              "highest_sent_bytes": 14464,
+              "retries_since_progress": 1,
+              "rto_ns": 34000,
+              "deadline_ns": 52211
+            }
+          },
+          "nic": 1,
+          "source_feedback": [],
+          "same_ns_unordered_feedback": [],
+          "missing_ranges": [
+            [
+              0,
+              14464
+            ]
+          ],
+          "missing_bytes": 14464,
+          "cutoff_ns": 26939,
+          "actual_retransmission_packets": [
+            {
+              "time_ns": 18211,
+              "stream": 55,
+              "src": 1,
+              "dst": 29,
+              "nic": 1,
+              "sequence": 0,
+              "payload_bytes": 9000,
+              "packet_uid": 623,
+              "repeated_bytes": 9000
+            },
+            {
+              "time_ns": 18392,
+              "stream": 55,
+              "src": 1,
+              "dst": 29,
+              "nic": 1,
+              "sequence": 9000,
+              "payload_bytes": 5464,
+              "packet_uid": 637,
+              "repeated_bytes": 5464
+            }
+          ],
+          "uncovered_ranges": [],
+          "fully_covered_before_next_feedback": true,
+          "first_retransmission_ns": 18211,
+          "first_retransmission_delay_ns": 0,
+          "last_retransmission_start_ns": 18392,
+          "batch_serialization_end_ns": 18502,
+          "batch_span_ns": 291,
+          "own_serialization_ns": 291,
+          "other_QP_serialization": [],
+          "other_QP_occupied_ns": 0,
+          "unexplained_or_interpacket_ns": 0
+        },
+        {
+          "trigger": {
+            "kind": "timeout",
+            "time_ns": 18211,
+            "stream": 81,
+            "source": 2,
+            "ack": 0,
+            "high": 14464,
+            "source_event": {
+              "time_ns": 18211,
+              "event": 2,
+              "source": 2,
+              "message_id": 81,
+              "acknowledged_bytes": 0,
+              "highest_sent_bytes": 14464,
+              "retries_since_progress": 1,
+              "rto_ns": 34000,
+              "deadline_ns": 52211
+            }
+          },
+          "nic": 1,
+          "source_feedback": [],
+          "same_ns_unordered_feedback": [],
+          "missing_ranges": [
+            [
+              0,
+              14464
+            ]
+          ],
+          "missing_bytes": 14464,
+          "cutoff_ns": 26940,
+          "actual_retransmission_packets": [
+            {
+              "time_ns": 18211,
+              "stream": 81,
+              "src": 2,
+              "dst": 10,
+              "nic": 1,
+              "sequence": 0,
+              "payload_bytes": 9000,
+              "packet_uid": 625,
+              "repeated_bytes": 9000
+            },
+            {
+              "time_ns": 18573,
+              "stream": 81,
+              "src": 2,
+              "dst": 10,
+              "nic": 1,
+              "sequence": 9000,
+              "payload_bytes": 5464,
+              "packet_uid": 653,
+              "repeated_bytes": 5464
+            }
+          ],
+          "uncovered_ranges": [],
+          "fully_covered_before_next_feedback": true,
+          "first_retransmission_ns": 18211,
+          "first_retransmission_delay_ns": 0,
+          "last_retransmission_start_ns": 18573,
+          "batch_serialization_end_ns": 18683,
+          "batch_span_ns": 472,
+          "own_serialization_ns": 291,
+          "other_QP_serialization": [
+            {
+              "source_packet": {
+                "time_ns": 18392,
+                "stream": 87,
+                "src": 2,
+                "dst": 26,
+                "nic": 1,
+                "sequence": 0,
+                "payload_bytes": 9000,
+                "packet_uid": 639,
+                "repeated_bytes": 9000
+              },
+              "overlap_ns": 181
+            }
+          ],
+          "other_QP_occupied_ns": 181,
+          "unexplained_or_interpacket_ns": 0
+        },
+        {
+          "trigger": {
+            "kind": "timeout",
+            "time_ns": 18211,
+            "stream": 244,
+            "source": 6,
+            "ack": 0,
+            "high": 14464,
+            "source_event": {
+              "time_ns": 18211,
+              "event": 2,
+              "source": 6,
+              "message_id": 244,
+              "acknowledged_bytes": 0,
+              "highest_sent_bytes": 14464,
+              "retries_since_progress": 1,
+              "rto_ns": 34000,
+              "deadline_ns": 52211
+            }
+          },
+          "nic": 1,
+          "source_feedback": [],
+          "same_ns_unordered_feedback": [],
+          "missing_ranges": [
+            [
+              0,
+              14464
+            ]
+          ],
+          "missing_bytes": 14464,
+          "cutoff_ns": 27120,
+          "actual_retransmission_packets": [
+            {
+              "time_ns": 18211,
+              "stream": 244,
+              "src": 6,
+              "dst": 14,
+              "nic": 1,
+              "sequence": 0,
+              "payload_bytes": 9000,
+              "packet_uid": 631,
+              "repeated_bytes": 9000
+            },
+            {
+              "time_ns": 18502,
+              "stream": 244,
+              "src": 6,
+              "dst": 14,
+              "nic": 1,
+              "sequence": 9000,
+              "payload_bytes": 5464,
+              "packet_uid": 645,
+              "repeated_bytes": 5464
+            }
+          ],
+          "uncovered_ranges": [],
+          "fully_covered_before_next_feedback": true,
+          "first_retransmission_ns": 18211,
+          "first_retransmission_delay_ns": 0,
+          "last_retransmission_start_ns": 18502,
+          "batch_serialization_end_ns": 18612,
+          "batch_span_ns": 401,
+          "own_serialization_ns": 291,
+          "other_QP_serialization": [
+            {
+              "source_packet": {
+                "time_ns": 18392,
+                "stream": 242,
+                "src": 6,
+                "dst": 10,
+                "nic": 1,
+                "sequence": 9000,
+                "payload_bytes": 5464,
+                "packet_uid": 643,
+                "repeated_bytes": 5464
+              },
+              "overlap_ns": 110
+            }
+          ],
+          "other_QP_occupied_ns": 110,
+          "unexplained_or_interpacket_ns": 0
+        },
+        {
+          "trigger": {
+            "kind": "timeout",
+            "time_ns": 18211,
+            "stream": 284,
+            "source": 7,
+            "ack": 0,
+            "high": 14464,
+            "source_event": {
+              "time_ns": 18211,
+              "event": 2,
+              "source": 7,
+              "message_id": 284,
+              "acknowledged_bytes": 0,
+              "highest_sent_bytes": 14464,
+              "retries_since_progress": 1,
+              "rto_ns": 34000,
+              "deadline_ns": 52211
+            }
+          },
+          "nic": 1,
+          "source_feedback": [],
+          "same_ns_unordered_feedback": [],
+          "missing_ranges": [
+            [
+              0,
+              14464
+            ]
+          ],
+          "missing_bytes": 14464,
+          "cutoff_ns": 27121,
+          "actual_retransmission_packets": [
+            {
+              "time_ns": 18211,
+              "stream": 284,
+              "src": 7,
+              "dst": 31,
+              "nic": 1,
+              "sequence": 0,
+              "payload_bytes": 9000,
+              "packet_uid": 627,
+              "repeated_bytes": 9000
+            },
+            {
+              "time_ns": 18392,
+              "stream": 284,
+              "src": 7,
+              "dst": 31,
+              "nic": 1,
+              "sequence": 9000,
+              "payload_bytes": 5464,
+              "packet_uid": 641,
+              "repeated_bytes": 5464
+            }
+          ],
+          "uncovered_ranges": [],
+          "fully_covered_before_next_feedback": true,
+          "first_retransmission_ns": 18211,
+          "first_retransmission_delay_ns": 0,
+          "last_retransmission_start_ns": 18392,
+          "batch_serialization_end_ns": 18502,
+          "batch_span_ns": 291,
+          "own_serialization_ns": 291,
+          "other_QP_serialization": [],
+          "other_QP_occupied_ns": 0,
+          "unexplained_or_interpacket_ns": 0
+        },
+        {
+          "trigger": {
+            "kind": "timeout",
+            "time_ns": 18392,
+            "stream": 87,
+            "source": 2,
+            "ack": 0,
+            "high": 14464,
+            "source_event": {
+              "time_ns": 18392,
+              "event": 2,
+              "source": 2,
+              "message_id": 87,
+              "acknowledged_bytes": 0,
+              "highest_sent_bytes": 14464,
+              "retries_since_progress": 1,
+              "rto_ns": 34000,
+              "deadline_ns": 52392
+            }
+          },
+          "nic": 1,
+          "source_feedback": [],
+          "same_ns_unordered_feedback": [],
+          "missing_ranges": [
+            [
+              0,
+              14464
+            ]
+          ],
+          "missing_bytes": 14464,
+          "cutoff_ns": 27812,
+          "actual_retransmission_packets": [
+            {
+              "time_ns": 18392,
+              "stream": 87,
+              "src": 2,
+              "dst": 26,
+              "nic": 1,
+              "sequence": 0,
+              "payload_bytes": 9000,
+              "packet_uid": 639,
+              "repeated_bytes": 9000
+            },
+            {
+              "time_ns": 18683,
+              "stream": 87,
+              "src": 2,
+              "dst": 26,
+              "nic": 1,
+              "sequence": 9000,
+              "payload_bytes": 5464,
+              "packet_uid": 655,
+              "repeated_bytes": 5464
+            }
+          ],
+          "uncovered_ranges": [],
+          "fully_covered_before_next_feedback": true,
+          "first_retransmission_ns": 18392,
+          "first_retransmission_delay_ns": 0,
+          "last_retransmission_start_ns": 18683,
+          "batch_serialization_end_ns": 18793,
+          "batch_span_ns": 401,
+          "own_serialization_ns": 291,
+          "other_QP_serialization": [
+            {
+              "source_packet": {
+                "time_ns": 18573,
+                "stream": 81,
+                "src": 2,
+                "dst": 10,
+                "nic": 1,
+                "sequence": 9000,
+                "payload_bytes": 5464,
+                "packet_uid": 653,
+                "repeated_bytes": 5464
+              },
+              "overlap_ns": 110
+            }
+          ],
+          "other_QP_occupied_ns": 110,
+          "unexplained_or_interpacket_ns": 0
+        },
+        {
+          "trigger": {
+            "kind": "timeout",
+            "time_ns": 18392,
+            "stream": 120,
+            "source": 3,
+            "ack": 0,
+            "high": 14464,
+            "source_event": {
+              "time_ns": 18392,
+              "event": 2,
+              "source": 3,
+              "message_id": 120,
+              "acknowledged_bytes": 0,
+              "highest_sent_bytes": 14464,
+              "retries_since_progress": 1,
+              "rto_ns": 34000,
+              "deadline_ns": 52392
+            }
+          },
+          "nic": 1,
+          "source_feedback": [],
+          "same_ns_unordered_feedback": [],
+          "missing_ranges": [
+            [
+              0,
+              14464
+            ]
+          ],
+          "missing_bytes": 14464,
+          "cutoff_ns": 27631,
+          "actual_retransmission_packets": [
+            {
+              "time_ns": 18392,
+              "stream": 120,
+              "src": 3,
+              "dst": 23,
+              "nic": 1,
+              "sequence": 0,
+              "payload_bytes": 9000,
+              "packet_uid": 635,
+              "repeated_bytes": 9000
+            },
+            {
+              "time_ns": 18573,
+              "stream": 120,
+              "src": 3,
+              "dst": 23,
+              "nic": 1,
+              "sequence": 9000,
+              "payload_bytes": 5464,
+              "packet_uid": 651,
+              "repeated_bytes": 5464
+            }
+          ],
+          "uncovered_ranges": [],
+          "fully_covered_before_next_feedback": true,
+          "first_retransmission_ns": 18392,
+          "first_retransmission_delay_ns": 0,
+          "last_retransmission_start_ns": 18573,
+          "batch_serialization_end_ns": 18683,
+          "batch_span_ns": 291,
+          "own_serialization_ns": 291,
+          "other_QP_serialization": [],
+          "other_QP_occupied_ns": 0,
+          "unexplained_or_interpacket_ns": 0
+        },
+        {
+          "trigger": {
+            "kind": "timeout",
+            "time_ns": 18392,
+            "stream": 179,
+            "source": 4,
+            "ack": 0,
+            "high": 14464,
+            "source_event": {
+              "time_ns": 18392,
+              "event": 2,
+              "source": 4,
+              "message_id": 179,
+              "acknowledged_bytes": 0,
+              "highest_sent_bytes": 14464,
+              "retries_since_progress": 1,
+              "rto_ns": 34000,
+              "deadline_ns": 52392
+            }
+          },
+          "nic": 1,
+          "source_feedback": [],
+          "same_ns_unordered_feedback": [],
+          "missing_ranges": [
+            [
+              0,
+              14464
+            ]
+          ],
+          "missing_bytes": 14464,
+          "cutoff_ns": 27301,
+          "actual_retransmission_packets": [
+            {
+              "time_ns": 18392,
+              "stream": 179,
+              "src": 4,
+              "dst": 52,
+              "nic": 1,
+              "sequence": 0,
+              "payload_bytes": 9000,
+              "packet_uid": 633,
+              "repeated_bytes": 9000
+            },
+            {
+              "time_ns": 18935,
+              "stream": 179,
+              "src": 4,
+              "dst": 52,
+              "nic": 1,
+              "sequence": 9000,
+              "payload_bytes": 5464,
+              "packet_uid": 673,
+              "repeated_bytes": 5464
+            }
+          ],
+          "uncovered_ranges": [],
+          "fully_covered_before_next_feedback": true,
+          "first_retransmission_ns": 18392,
+          "first_retransmission_delay_ns": 0,
+          "last_retransmission_start_ns": 18935,
+          "batch_serialization_end_ns": 19045,
+          "batch_span_ns": 653,
+          "own_serialization_ns": 291,
+          "other_QP_serialization": [
+            {
+              "source_packet": {
+                "time_ns": 18573,
+                "stream": 181,
+                "src": 4,
+                "dst": 60,
+                "nic": 1,
+                "sequence": 0,
+                "payload_bytes": 9000,
+                "packet_uid": 649,
+                "repeated_bytes": 9000
+              },
+              "overlap_ns": 181
+            },
+            {
+              "source_packet": {
+                "time_ns": 18754,
+                "stream": 183,
+                "src": 4,
+                "dst": 68,
+                "nic": 1,
+                "sequence": 0,
+                "payload_bytes": 9000,
+                "packet_uid": 663,
+                "repeated_bytes": 9000
+              },
+              "overlap_ns": 181
+            }
+          ],
+          "other_QP_occupied_ns": 362,
+          "unexplained_or_interpacket_ns": 0
+        },
+        {
+          "trigger": {
+            "kind": "timeout",
+            "time_ns": 18573,
+            "stream": 24,
+            "source": 0,
+            "ack": 0,
+            "high": 14464,
+            "source_event": {
+              "time_ns": 18573,
+              "event": 2,
+              "source": 0,
+              "message_id": 24,
+              "acknowledged_bytes": 0,
+              "highest_sent_bytes": 14464,
+              "retries_since_progress": 1,
+              "rto_ns": 34000,
+              "deadline_ns": 52573
+            }
+          },
+          "nic": 1,
+          "source_feedback": [],
+          "same_ns_unordered_feedback": [],
+          "missing_ranges": [
+            [
+              0,
+              14464
+            ]
+          ],
+          "missing_bytes": 14464,
+          "cutoff_ns": 32066,
+          "actual_retransmission_packets": [
+            {
+              "time_ns": 18573,
+              "stream": 24,
+              "src": 0,
+              "dst": 68,
+              "nic": 1,
+              "sequence": 0,
+              "payload_bytes": 9000,
+              "packet_uid": 647,
+              "repeated_bytes": 9000
+            },
+            {
+              "time_ns": 18754,
+              "stream": 24,
+              "src": 0,
+              "dst": 68,
+              "nic": 1,
+              "sequence": 9000,
+              "payload_bytes": 5464,
+              "packet_uid": 661,
+              "repeated_bytes": 5464
+            }
+          ],
+          "uncovered_ranges": [],
+          "fully_covered_before_next_feedback": true,
+          "first_retransmission_ns": 18573,
+          "first_retransmission_delay_ns": 0,
+          "last_retransmission_start_ns": 18754,
+          "batch_serialization_end_ns": 18864,
+          "batch_span_ns": 291,
+          "own_serialization_ns": 291,
+          "other_QP_serialization": [],
+          "other_QP_occupied_ns": 0,
+          "unexplained_or_interpacket_ns": 0
+        },
+        {
+          "trigger": {
+            "kind": "timeout",
+            "time_ns": 18573,
+            "stream": 181,
+            "source": 4,
+            "ack": 0,
+            "high": 14464,
+            "source_event": {
+              "time_ns": 18573,
+              "event": 2,
+              "source": 4,
+              "message_id": 181,
+              "acknowledged_bytes": 0,
+              "highest_sent_bytes": 14464,
+              "retries_since_progress": 1,
+              "rto_ns": 34000,
+              "deadline_ns": 52573
+            }
+          },
+          "nic": 1,
+          "source_feedback": [],
+          "same_ns_unordered_feedback": [],
+          "missing_ranges": [
+            [
+              0,
+              14464
+            ]
+          ],
+          "missing_bytes": 14464,
+          "cutoff_ns": 27883,
+          "actual_retransmission_packets": [
+            {
+              "time_ns": 18573,
+              "stream": 181,
+              "src": 4,
+              "dst": 60,
+              "nic": 1,
+              "sequence": 0,
+              "payload_bytes": 9000,
+              "packet_uid": 649,
+              "repeated_bytes": 9000
+            },
+            {
+              "time_ns": 19045,
+              "stream": 181,
+              "src": 4,
+              "dst": 60,
+              "nic": 1,
+              "sequence": 9000,
+              "payload_bytes": 5464,
+              "packet_uid": 675,
+              "repeated_bytes": 5464
+            }
+          ],
+          "uncovered_ranges": [],
+          "fully_covered_before_next_feedback": true,
+          "first_retransmission_ns": 18573,
+          "first_retransmission_delay_ns": 0,
+          "last_retransmission_start_ns": 19045,
+          "batch_serialization_end_ns": 19155,
+          "batch_span_ns": 582,
+          "own_serialization_ns": 291,
+          "other_QP_serialization": [
+            {
+              "source_packet": {
+                "time_ns": 18754,
+                "stream": 183,
+                "src": 4,
+                "dst": 68,
+                "nic": 1,
+                "sequence": 0,
+                "payload_bytes": 9000,
+                "packet_uid": 663,
+                "repeated_bytes": 9000
+              },
+              "overlap_ns": 181
+            },
+            {
+              "source_packet": {
+                "time_ns": 18935,
+                "stream": 179,
+                "src": 4,
+                "dst": 52,
+                "nic": 1,
+                "sequence": 9000,
+                "payload_bytes": 5464,
+                "packet_uid": 673,
+                "repeated_bytes": 5464
+              },
+              "overlap_ns": 110
+            }
+          ],
+          "other_QP_occupied_ns": 291,
+          "unexplained_or_interpacket_ns": 0
+        },
+        {
+          "trigger": {
+            "kind": "timeout",
+            "time_ns": 18754,
+            "stream": 65,
+            "source": 1,
+            "ack": 0,
+            "high": 14464,
+            "source_event": {
+              "time_ns": 18754,
+              "event": 2,
+              "source": 1,
+              "message_id": 65,
+              "acknowledged_bytes": 0,
+              "highest_sent_bytes": 14464,
+              "retries_since_progress": 1,
+              "rto_ns": 34000,
+              "deadline_ns": 52754
+            }
+          },
+          "nic": 1,
+          "source_feedback": [],
+          "same_ns_unordered_feedback": [],
+          "missing_ranges": [
+            [
+              0,
+              14464
+            ]
+          ],
+          "missing_bytes": 14464,
+          "cutoff_ns": 31846,
+          "actual_retransmission_packets": [
+            {
+              "time_ns": 18754,
+              "stream": 65,
+              "src": 1,
+              "dst": 65,
+              "nic": 1,
+              "sequence": 0,
+              "payload_bytes": 9000,
+              "packet_uid": 657,
+              "repeated_bytes": 9000
+            },
+            {
+              "time_ns": 19116,
+              "stream": 65,
+              "src": 1,
+              "dst": 65,
+              "nic": 1,
+              "sequence": 9000,
+              "payload_bytes": 5464,
+              "packet_uid": 683,
+              "repeated_bytes": 5464
+            }
+          ],
+          "uncovered_ranges": [],
+          "fully_covered_before_next_feedback": true,
+          "first_retransmission_ns": 18754,
+          "first_retransmission_delay_ns": 0,
+          "last_retransmission_start_ns": 19116,
+          "batch_serialization_end_ns": 19226,
+          "batch_span_ns": 472,
+          "own_serialization_ns": 291,
+          "other_QP_serialization": [
+            {
+              "source_packet": {
+                "time_ns": 18935,
+                "stream": 69,
+                "src": 1,
+                "dst": 81,
+                "nic": 1,
+                "sequence": 0,
+                "payload_bytes": 9000,
+                "packet_uid": 669,
+                "repeated_bytes": 9000
+              },
+              "overlap_ns": 181
+            }
+          ],
+          "other_QP_occupied_ns": 181,
+          "unexplained_or_interpacket_ns": 0
+        },
+        {
+          "trigger": {
+            "kind": "timeout",
+            "time_ns": 18754,
+            "stream": 183,
+            "source": 4,
+            "ack": 0,
+            "high": 14464,
+            "source_event": {
+              "time_ns": 18754,
+              "event": 2,
+              "source": 4,
+              "message_id": 183,
+              "acknowledged_bytes": 0,
+              "highest_sent_bytes": 14464,
+              "retries_since_progress": 1,
+              "rto_ns": 34000,
+              "deadline_ns": 52754
+            }
+          },
+          "nic": 1,
+          "source_feedback": [],
+          "same_ns_unordered_feedback": [],
+          "missing_ranges": [
+            [
+              0,
+              14464
+            ]
+          ],
+          "missing_bytes": 14464,
+          "cutoff_ns": 32719,
+          "actual_retransmission_packets": [
+            {
+              "time_ns": 18754,
+              "stream": 183,
+              "src": 4,
+              "dst": 68,
+              "nic": 1,
+              "sequence": 0,
+              "payload_bytes": 9000,
+              "packet_uid": 663,
+              "repeated_bytes": 9000
+            },
+            {
+              "time_ns": 19155,
+              "stream": 183,
+              "src": 4,
+              "dst": 68,
+              "nic": 1,
+              "sequence": 9000,
+              "payload_bytes": 5464,
+              "packet_uid": 687,
+              "repeated_bytes": 5464
+            }
+          ],
+          "uncovered_ranges": [],
+          "fully_covered_before_next_feedback": true,
+          "first_retransmission_ns": 18754,
+          "first_retransmission_delay_ns": 0,
+          "last_retransmission_start_ns": 19155,
+          "batch_serialization_end_ns": 19265,
+          "batch_span_ns": 511,
+          "own_serialization_ns": 291,
+          "other_QP_serialization": [
+            {
+              "source_packet": {
+                "time_ns": 18935,
+                "stream": 179,
+                "src": 4,
+                "dst": 52,
+                "nic": 1,
+                "sequence": 9000,
+                "payload_bytes": 5464,
+                "packet_uid": 673,
+                "repeated_bytes": 5464
+              },
+              "overlap_ns": 110
+            },
+            {
+              "source_packet": {
+                "time_ns": 19045,
+                "stream": 181,
+                "src": 4,
+                "dst": 60,
+                "nic": 1,
+                "sequence": 9000,
+                "payload_bytes": 5464,
+                "packet_uid": 675,
+                "repeated_bytes": 5464
+              },
+              "overlap_ns": 110
+            }
+          ],
+          "other_QP_occupied_ns": 220,
+          "unexplained_or_interpacket_ns": 0
+        },
+        {
+          "trigger": {
+            "kind": "timeout",
+            "time_ns": 18754,
+            "stream": 302,
+            "source": 7,
+            "ack": 0,
+            "high": 14464,
+            "source_event": {
+              "time_ns": 18754,
+              "event": 2,
+              "source": 7,
+              "message_id": 302,
+              "acknowledged_bytes": 0,
+              "highest_sent_bytes": 14464,
+              "retries_since_progress": 1,
+              "rto_ns": 34000,
+              "deadline_ns": 52754
+            }
+          },
+          "nic": 1,
+          "source_feedback": [],
+          "same_ns_unordered_feedback": [],
+          "missing_ranges": [
+            [
+              0,
+              14464
+            ]
+          ],
+          "missing_bytes": 14464,
+          "cutoff_ns": 32538,
+          "actual_retransmission_packets": [
+            {
+              "time_ns": 18754,
+              "stream": 302,
+              "src": 7,
+              "dst": 83,
+              "nic": 1,
+              "sequence": 0,
+              "payload_bytes": 9000,
+              "packet_uid": 659,
+              "repeated_bytes": 9000
+            },
+            {
+              "time_ns": 19116,
+              "stream": 302,
+              "src": 7,
+              "dst": 83,
+              "nic": 1,
+              "sequence": 9000,
+              "payload_bytes": 5464,
+              "packet_uid": 685,
+              "repeated_bytes": 5464
+            }
+          ],
+          "uncovered_ranges": [],
+          "fully_covered_before_next_feedback": true,
+          "first_retransmission_ns": 18754,
+          "first_retransmission_delay_ns": 0,
+          "last_retransmission_start_ns": 19116,
+          "batch_serialization_end_ns": 19226,
+          "batch_span_ns": 472,
+          "own_serialization_ns": 291,
+          "other_QP_serialization": [
+            {
+              "source_packet": {
+                "time_ns": 18935,
+                "stream": 304,
+                "src": 7,
+                "dst": 87,
+                "nic": 1,
+                "sequence": 0,
+                "payload_bytes": 9000,
+                "packet_uid": 671,
+                "repeated_bytes": 9000
+              },
+              "overlap_ns": 181
+            }
+          ],
+          "other_QP_occupied_ns": 181,
+          "unexplained_or_interpacket_ns": 0
+        },
+        {
+          "trigger": {
+            "kind": "timeout",
+            "time_ns": 18935,
+            "stream": 69,
+            "source": 1,
+            "ack": 0,
+            "high": 14464,
+            "source_event": {
+              "time_ns": 18935,
+              "event": 2,
+              "source": 1,
+              "message_id": 69,
+              "acknowledged_bytes": 0,
+              "highest_sent_bytes": 14464,
+              "retries_since_progress": 1,
+              "rto_ns": 34000,
+              "deadline_ns": 52935
+            }
+          },
+          "nic": 1,
+          "source_feedback": [],
+          "same_ns_unordered_feedback": [],
+          "missing_ranges": [
+            [
+              0,
+              14464
+            ]
+          ],
+          "missing_bytes": 14464,
+          "cutoff_ns": 32027,
+          "actual_retransmission_packets": [
+            {
+              "time_ns": 18935,
+              "stream": 69,
+              "src": 1,
+              "dst": 81,
+              "nic": 1,
+              "sequence": 0,
+              "payload_bytes": 9000,
+              "packet_uid": 669,
+              "repeated_bytes": 9000
+            },
+            {
+              "time_ns": 19226,
+              "stream": 69,
+              "src": 1,
+              "dst": 81,
+              "nic": 1,
+              "sequence": 9000,
+              "payload_bytes": 5464,
+              "packet_uid": 689,
+              "repeated_bytes": 5464
+            }
+          ],
+          "uncovered_ranges": [],
+          "fully_covered_before_next_feedback": true,
+          "first_retransmission_ns": 18935,
+          "first_retransmission_delay_ns": 0,
+          "last_retransmission_start_ns": 19226,
+          "batch_serialization_end_ns": 19336,
+          "batch_span_ns": 401,
+          "own_serialization_ns": 291,
+          "other_QP_serialization": [
+            {
+              "source_packet": {
+                "time_ns": 19116,
+                "stream": 65,
+                "src": 1,
+                "dst": 65,
+                "nic": 1,
+                "sequence": 9000,
+                "payload_bytes": 5464,
+                "packet_uid": 683,
+                "repeated_bytes": 5464
+              },
+              "overlap_ns": 110
+            }
+          ],
+          "other_QP_occupied_ns": 110,
+          "unexplained_or_interpacket_ns": 0
+        },
+        {
+          "trigger": {
+            "kind": "timeout",
+            "time_ns": 18935,
+            "stream": 144,
+            "source": 3,
+            "ack": 0,
+            "high": 14464,
+            "source_event": {
+              "time_ns": 18935,
+              "event": 2,
+              "source": 3,
+              "message_id": 144,
+              "acknowledged_bytes": 0,
+              "highest_sent_bytes": 14464,
+              "retries_since_progress": 1,
+              "rto_ns": 34000,
+              "deadline_ns": 52935
+            }
+          },
+          "nic": 1,
+          "source_feedback": [],
+          "same_ns_unordered_feedback": [],
+          "missing_ranges": [
+            [
+              0,
+              14464
+            ]
+          ],
+          "missing_bytes": 14464,
+          "cutoff_ns": 33191,
+          "actual_retransmission_packets": [
+            {
+              "time_ns": 18935,
+              "stream": 144,
+              "src": 3,
+              "dst": 103,
+              "nic": 1,
+              "sequence": 0,
+              "payload_bytes": 9000,
+              "packet_uid": 667,
+              "repeated_bytes": 9000
+            },
+            {
+              "time_ns": 19116,
+              "stream": 144,
+              "src": 3,
+              "dst": 103,
+              "nic": 1,
+              "sequence": 9000,
+              "payload_bytes": 5464,
+              "packet_uid": 681,
+              "repeated_bytes": 5464
+            }
+          ],
+          "uncovered_ranges": [],
+          "fully_covered_before_next_feedback": true,
+          "first_retransmission_ns": 18935,
+          "first_retransmission_delay_ns": 0,
+          "last_retransmission_start_ns": 19116,
+          "batch_serialization_end_ns": 19226,
+          "batch_span_ns": 291,
+          "own_serialization_ns": 291,
+          "other_QP_serialization": [],
+          "other_QP_occupied_ns": 0,
+          "unexplained_or_interpacket_ns": 0
+        },
+        {
+          "trigger": {
+            "kind": "timeout",
+            "time_ns": 18935,
+            "stream": 270,
+            "source": 6,
+            "ack": 0,
+            "high": 14464,
+            "source_event": {
+              "time_ns": 18935,
+              "event": 2,
+              "source": 6,
+              "message_id": 270,
+              "acknowledged_bytes": 0,
+              "highest_sent_bytes": 14464,
+              "retries_since_progress": 1,
+              "rto_ns": 34000,
+              "deadline_ns": 52935
+            }
+          },
+          "nic": 1,
+          "source_feedback": [],
+          "same_ns_unordered_feedback": [],
+          "missing_ranges": [
+            [
+              0,
+              14464
+            ]
+          ],
+          "missing_bytes": 14464,
+          "cutoff_ns": 33010,
+          "actual_retransmission_packets": [
+            {
+              "time_ns": 18935,
+              "stream": 270,
+              "src": 6,
+              "dst": 102,
+              "nic": 1,
+              "sequence": 0,
+              "payload_bytes": 9000,
+              "packet_uid": 665,
+              "repeated_bytes": 9000
+            },
+            {
+              "time_ns": 19297,
+              "stream": 270,
+              "src": 6,
+              "dst": 102,
+              "nic": 1,
+              "sequence": 9000,
+              "payload_bytes": 5464,
+              "packet_uid": 695,
+              "repeated_bytes": 5464
+            }
+          ],
+          "uncovered_ranges": [],
+          "fully_covered_before_next_feedback": true,
+          "first_retransmission_ns": 18935,
+          "first_retransmission_delay_ns": 0,
+          "last_retransmission_start_ns": 19297,
+          "batch_serialization_end_ns": 19407,
+          "batch_span_ns": 472,
+          "own_serialization_ns": 291,
+          "other_QP_serialization": [
+            {
+              "source_packet": {
+                "time_ns": 19116,
+                "stream": 272,
+                "src": 6,
+                "dst": 106,
+                "nic": 1,
+                "sequence": 0,
+                "payload_bytes": 9000,
+                "packet_uid": 679,
+                "repeated_bytes": 9000
+              },
+              "overlap_ns": 181
+            }
+          ],
+          "other_QP_occupied_ns": 181,
+          "unexplained_or_interpacket_ns": 0
+        },
+        {
+          "trigger": {
+            "kind": "timeout",
+            "time_ns": 18935,
+            "stream": 304,
+            "source": 7,
+            "ack": 0,
+            "high": 14464,
+            "source_event": {
+              "time_ns": 18935,
+              "event": 2,
+              "source": 7,
+              "message_id": 304,
+              "acknowledged_bytes": 0,
+              "highest_sent_bytes": 14464,
+              "retries_since_progress": 1,
+              "rto_ns": 34000,
+              "deadline_ns": 52935
+            }
+          },
+          "nic": 1,
+          "source_feedback": [],
+          "same_ns_unordered_feedback": [],
+          "missing_ranges": [
+            [
+              0,
+              14464
+            ]
+          ],
+          "missing_bytes": 14464,
+          "cutoff_ns": 32208,
+          "actual_retransmission_packets": [
+            {
+              "time_ns": 18935,
+              "stream": 304,
+              "src": 7,
+              "dst": 87,
+              "nic": 1,
+              "sequence": 0,
+              "payload_bytes": 9000,
+              "packet_uid": 671,
+              "repeated_bytes": 9000
+            },
+            {
+              "time_ns": 19226,
+              "stream": 304,
+              "src": 7,
+              "dst": 87,
+              "nic": 1,
+              "sequence": 9000,
+              "payload_bytes": 5464,
+              "packet_uid": 691,
+              "repeated_bytes": 5464
+            }
+          ],
+          "uncovered_ranges": [],
+          "fully_covered_before_next_feedback": true,
+          "first_retransmission_ns": 18935,
+          "first_retransmission_delay_ns": 0,
+          "last_retransmission_start_ns": 19226,
+          "batch_serialization_end_ns": 19336,
+          "batch_span_ns": 401,
+          "own_serialization_ns": 291,
+          "other_QP_serialization": [
+            {
+              "source_packet": {
+                "time_ns": 19116,
+                "stream": 302,
+                "src": 7,
+                "dst": 83,
+                "nic": 1,
+                "sequence": 9000,
+                "payload_bytes": 5464,
+                "packet_uid": 685,
+                "repeated_bytes": 5464
+              },
+              "overlap_ns": 110
+            }
+          ],
+          "other_QP_occupied_ns": 110,
+          "unexplained_or_interpacket_ns": 0
+        },
+        {
+          "trigger": {
+            "kind": "timeout",
+            "time_ns": 19116,
+            "stream": 99,
+            "source": 2,
+            "ack": 0,
+            "high": 14464,
+            "source_event": {
+              "time_ns": 19116,
+              "event": 2,
+              "source": 2,
+              "message_id": 99,
+              "acknowledged_bytes": 0,
+              "highest_sent_bytes": 14464,
+              "retries_since_progress": 1,
+              "rto_ns": 34000,
+              "deadline_ns": 53116
+            }
+          },
+          "nic": 1,
+          "source_feedback": [],
+          "same_ns_unordered_feedback": [],
+          "missing_ranges": [
+            [
+              0,
+              14464
+            ]
+          ],
+          "missing_bytes": 14464,
+          "cutoff_ns": 32499,
+          "actual_retransmission_packets": [
+            {
+              "time_ns": 19116,
+              "stream": 99,
+              "src": 2,
+              "dst": 70,
+              "nic": 1,
+              "sequence": 0,
+              "payload_bytes": 9000,
+              "packet_uid": 677,
+              "repeated_bytes": 9000
+            },
+            {
+              "time_ns": 19297,
+              "stream": 99,
+              "src": 2,
+              "dst": 70,
+              "nic": 1,
+              "sequence": 9000,
+              "payload_bytes": 5464,
+              "packet_uid": 693,
+              "repeated_bytes": 5464
+            }
+          ],
+          "uncovered_ranges": [],
+          "fully_covered_before_next_feedback": true,
+          "first_retransmission_ns": 19116,
+          "first_retransmission_delay_ns": 0,
+          "last_retransmission_start_ns": 19297,
+          "batch_serialization_end_ns": 19407,
+          "batch_span_ns": 291,
+          "own_serialization_ns": 291,
+          "other_QP_serialization": [],
+          "other_QP_occupied_ns": 0,
+          "unexplained_or_interpacket_ns": 0
+        },
+        {
+          "trigger": {
+            "kind": "timeout",
+            "time_ns": 19116,
+            "stream": 272,
+            "source": 6,
+            "ack": 0,
+            "high": 14464,
+            "source_event": {
+              "time_ns": 19116,
+              "event": 2,
+              "source": 6,
+              "message_id": 272,
+              "acknowledged_bytes": 0,
+              "highest_sent_bytes": 14464,
+              "retries_since_progress": 1,
+              "rto_ns": 34000,
+              "deadline_ns": 53116
+            }
+          },
+          "nic": 1,
+          "source_feedback": [
+            {
+              "cumulative_ack": 0,
+              "extension_hex": "4d535231000023280000388000000001",
+              "ip_protocol": 253,
+              "kind": "feedback_received",
+              "model_bytes": 50,
+              "packet_uid": 607,
+              "sack_begin": 9000,
+              "sack_end": 14464,
+              "sack_valid": true,
+              "stream": 272,
+              "time_ns": 17653
+            }
+          ],
+          "same_ns_unordered_feedback": [],
+          "missing_ranges": [
+            [
+              0,
+              9000
+            ]
+          ],
+          "missing_bytes": 9000,
+          "cutoff_ns": 30745,
+          "actual_retransmission_packets": [
+            {
+              "time_ns": 19116,
+              "stream": 272,
+              "src": 6,
+              "dst": 106,
+              "nic": 1,
+              "sequence": 0,
+              "payload_bytes": 9000,
+              "packet_uid": 679,
+              "repeated_bytes": 9000
+            }
+          ],
+          "uncovered_ranges": [],
+          "fully_covered_before_next_feedback": true,
+          "first_retransmission_ns": 19116,
+          "first_retransmission_delay_ns": 0,
+          "last_retransmission_start_ns": 19116,
+          "batch_serialization_end_ns": 19297,
+          "batch_span_ns": 181,
+          "own_serialization_ns": 181,
+          "other_QP_serialization": [],
+          "other_QP_occupied_ns": 0,
+          "unexplained_or_interpacket_ns": 0
+        },
+        {
+          "trigger": {
+            "kind": "timeout",
+            "time_ns": 26758,
+            "stream": 167,
+            "source": 4,
+            "ack": 9000,
+            "high": 14464,
+            "source_event": {
+              "time_ns": 26758,
+              "event": 2,
+              "source": 4,
+              "message_id": 167,
+              "acknowledged_bytes": 9000,
+              "highest_sent_bytes": 14464,
+              "retries_since_progress": 1,
+              "rto_ns": 34000,
+              "deadline_ns": 60758
+            }
+          },
+          "nic": 1,
+          "source_feedback": [
+            {
+              "cumulative_ack": 9000,
+              "extension_hex": "4d535231000000000000232800000001",
+              "ip_protocol": 252,
+              "kind": "feedback_received",
+              "model_bytes": 50,
+              "packet_uid": 418,
+              "sack_begin": 0,
+              "sack_end": 9000,
+              "sack_valid": true,
+              "stream": 167,
+              "time_ns": 9758
+            }
+          ],
+          "same_ns_unordered_feedback": [],
+          "missing_ranges": [
+            [
+              9000,
+              14464
+            ]
+          ],
+          "missing_bytes": 5464,
+          "cutoff_ns": 35202,
+          "actual_retransmission_packets": [
+            {
+              "time_ns": 26758,
+              "stream": 167,
+              "src": 4,
+              "dst": 24,
+              "nic": 1,
+              "sequence": 9000,
+              "payload_bytes": 5464,
+              "packet_uid": 733,
+              "repeated_bytes": 5464
+            }
+          ],
+          "uncovered_ranges": [],
+          "fully_covered_before_next_feedback": true,
+          "first_retransmission_ns": 26758,
+          "first_retransmission_delay_ns": 0,
+          "last_retransmission_start_ns": 26758,
+          "batch_serialization_end_ns": 26868,
+          "batch_span_ns": 110,
+          "own_serialization_ns": 110,
+          "other_QP_serialization": [],
+          "other_QP_occupied_ns": 0,
+          "unexplained_or_interpacket_ns": 0
+        },
+        {
+          "trigger": {
+            "kind": "timeout",
+            "time_ns": 26940,
+            "stream": 53,
+            "source": 1,
+            "ack": 9000,
+            "high": 14464,
+            "source_event": {
+              "time_ns": 26940,
+              "event": 2,
+              "source": 1,
+              "message_id": 53,
+              "acknowledged_bytes": 9000,
+              "highest_sent_bytes": 14464,
+              "retries_since_progress": 1,
+              "rto_ns": 34000,
+              "deadline_ns": 60940
+            }
+          },
+          "nic": 1,
+          "source_feedback": [
+            {
+              "cumulative_ack": 9000,
+              "extension_hex": "4d535231000000000000232800000001",
+              "ip_protocol": 252,
+              "kind": "feedback_received",
+              "model_bytes": 50,
+              "packet_uid": 425,
+              "sack_begin": 0,
+              "sack_end": 9000,
+              "sack_valid": true,
+              "stream": 53,
+              "time_ns": 9940
+            }
+          ],
+          "same_ns_unordered_feedback": [],
+          "missing_ranges": [
+            [
+              9000,
+              14464
+            ]
+          ],
+          "missing_bytes": 5464,
+          "cutoff_ns": 35384,
+          "actual_retransmission_packets": [
+            {
+              "time_ns": 26940,
+              "stream": 53,
+              "src": 1,
+              "dst": 21,
+              "nic": 1,
+              "sequence": 9000,
+              "payload_bytes": 5464,
+              "packet_uid": 735,
+              "repeated_bytes": 5464
+            }
+          ],
+          "uncovered_ranges": [],
+          "fully_covered_before_next_feedback": true,
+          "first_retransmission_ns": 26940,
+          "first_retransmission_delay_ns": 0,
+          "last_retransmission_start_ns": 26940,
+          "batch_serialization_end_ns": 27050,
+          "batch_span_ns": 110,
+          "own_serialization_ns": 110,
+          "other_QP_serialization": [],
+          "other_QP_occupied_ns": 0,
+          "unexplained_or_interpacket_ns": 0
+        },
+        {
+          "trigger": {
+            "kind": "timeout",
+            "time_ns": 27301,
+            "stream": 246,
+            "source": 6,
+            "ack": 9000,
+            "high": 14464,
+            "source_event": {
+              "time_ns": 27301,
+              "event": 2,
+              "source": 6,
+              "message_id": 246,
+              "acknowledged_bytes": 9000,
+              "highest_sent_bytes": 14464,
+              "retries_since_progress": 1,
+              "rto_ns": 34000,
+              "deadline_ns": 61301
+            }
+          },
+          "nic": 1,
+          "source_feedback": [
+            {
+              "cumulative_ack": 9000,
+              "extension_hex": "4d535231000000000000232800000001",
+              "ip_protocol": 252,
+              "kind": "feedback_received",
+              "model_bytes": 50,
+              "packet_uid": 442,
+              "sack_begin": 0,
+              "sack_end": 9000,
+              "sack_valid": true,
+              "stream": 246,
+              "time_ns": 10301
+            }
+          ],
+          "same_ns_unordered_feedback": [],
+          "missing_ranges": [
+            [
+              9000,
+              14464
+            ]
+          ],
+          "missing_bytes": 5464,
+          "cutoff_ns": 35745,
+          "actual_retransmission_packets": [
+            {
+              "time_ns": 27301,
+              "stream": 246,
+              "src": 6,
+              "dst": 22,
+              "nic": 1,
+              "sequence": 9000,
+              "payload_bytes": 5464,
+              "packet_uid": 741,
+              "repeated_bytes": 5464
+            }
+          ],
+          "uncovered_ranges": [],
+          "fully_covered_before_next_feedback": true,
+          "first_retransmission_ns": 27301,
+          "first_retransmission_delay_ns": 0,
+          "last_retransmission_start_ns": 27301,
+          "batch_serialization_end_ns": 27411,
+          "batch_span_ns": 110,
+          "own_serialization_ns": 110,
+          "other_QP_serialization": [],
+          "other_QP_occupied_ns": 0,
+          "unexplained_or_interpacket_ns": 0
+        }
+      ],
+      "positive_first_send_wait_count": 0,
+      "simultaneous_waiting_recoveries": [],
+      "complete_batches": 25,
+      "same_ns_feedback_ambiguous_batches": 0,
+      "max_first_send_wait_ns": 0,
+      "other_QP_occupied_ns": 2218,
+      "max_batch_span_ns": 653
+    },
+    "prefix-w20": {
+      "result_sha256": "fb75413d3110ae4f0e9859bec1cf4743b01363e3e9122dea37e0dda822e520c3",
+      "logical_payload_bytes": 11228096,
+      "repeated_payload_bytes": 121176,
+      "trigger_counts": {
+        "timeout": 10,
+        "fast_retransmit": 2
+      },
+      "batches": [
+        {
+          "trigger": {
+            "kind": "fast_retransmit",
+            "time_ns": 17103,
+            "stream": 71,
+            "source": 1,
+            "ack": 0,
+            "high": 14464,
+            "selective_index": 724,
+            "source_event": {
+              "cumulative_ack": 0,
+              "extension_hex": "4d535231000023280000388000000001",
+              "ip_protocol": 253,
+              "kind": "fast_retransmit",
+              "model_bytes": 50,
+              "packet_uid": 595,
+              "sack_begin": 9000,
+              "sack_end": 14464,
+              "sack_valid": true,
+              "stream": 71,
+              "time_ns": 17103
+            }
+          },
+          "nic": 1,
+          "source_feedback": [
+            {
+              "cumulative_ack": 0,
+              "extension_hex": "4d535231000023280000388000000001",
+              "ip_protocol": 253,
+              "kind": "feedback_received",
+              "model_bytes": 50,
+              "packet_uid": 595,
+              "sack_begin": 9000,
+              "sack_end": 14464,
+              "sack_valid": true,
+              "stream": 71,
+              "time_ns": 17103
+            }
+          ],
+          "same_ns_unordered_feedback": [],
+          "missing_ranges": [
+            [
+              0,
+              9000
+            ]
+          ],
+          "missing_bytes": 9000,
+          "cutoff_ns": 17316,
+          "actual_retransmission_packets": [
+            {
+              "time_ns": 17103,
+              "stream": 71,
+              "src": 1,
+              "dst": 85,
+              "nic": 1,
+              "sequence": 0,
+              "payload_bytes": 9000,
+              "packet_uid": 615,
+              "repeated_bytes": 9000
+            }
+          ],
+          "uncovered_ranges": [],
+          "fully_covered_before_next_feedback": true,
+          "first_retransmission_ns": 17103,
+          "first_retransmission_delay_ns": 0,
+          "last_retransmission_start_ns": 17103,
+          "batch_serialization_end_ns": 17284,
+          "batch_span_ns": 181,
+          "own_serialization_ns": 181,
+          "other_QP_serialization": [],
+          "other_QP_occupied_ns": 0,
+          "unexplained_or_interpacket_ns": 0
+        },
+        {
+          "trigger": {
+            "kind": "fast_retransmit",
+            "time_ns": 17653,
+            "stream": 272,
+            "source": 6,
+            "ack": 0,
+            "high": 14464,
+            "selective_index": 734,
+            "source_event": {
+              "cumulative_ack": 0,
+              "extension_hex": "4d535231000023280000388000000001",
+              "ip_protocol": 253,
+              "kind": "fast_retransmit",
+              "model_bytes": 50,
+              "packet_uid": 607,
+              "sack_begin": 9000,
+              "sack_end": 14464,
+              "sack_valid": true,
+              "stream": 272,
+              "time_ns": 17653
+            }
+          },
+          "nic": 1,
+          "source_feedback": [
+            {
+              "cumulative_ack": 0,
+              "extension_hex": "4d535231000023280000388000000001",
+              "ip_protocol": 253,
+              "kind": "feedback_received",
+              "model_bytes": 50,
+              "packet_uid": 607,
+              "sack_begin": 9000,
+              "sack_end": 14464,
+              "sack_valid": true,
+              "stream": 272,
+              "time_ns": 17653
+            }
+          ],
+          "same_ns_unordered_feedback": [],
+          "missing_ranges": [
+            [
+              0,
+              9000
+            ]
+          ],
+          "missing_bytes": 9000,
+          "cutoff_ns": 19116,
+          "actual_retransmission_packets": [
+            {
+              "time_ns": 17653,
+              "stream": 272,
+              "src": 6,
+              "dst": 106,
+              "nic": 1,
+              "sequence": 0,
+              "payload_bytes": 9000,
+              "packet_uid": 617,
+              "repeated_bytes": 9000
+            }
+          ],
+          "uncovered_ranges": [],
+          "fully_covered_before_next_feedback": true,
+          "first_retransmission_ns": 17653,
+          "first_retransmission_delay_ns": 0,
+          "last_retransmission_start_ns": 17653,
+          "batch_serialization_end_ns": 17834,
+          "batch_span_ns": 181,
+          "own_serialization_ns": 181,
+          "other_QP_serialization": [],
+          "other_QP_occupied_ns": 0,
+          "unexplained_or_interpacket_ns": 0
+        },
+        {
+          "trigger": {
+            "kind": "timeout",
+            "time_ns": 18573,
+            "stream": 24,
+            "source": 0,
+            "ack": 0,
+            "high": 14464,
+            "source_event": {
+              "time_ns": 18573,
+              "event": 2,
+              "source": 0,
+              "message_id": 24,
+              "acknowledged_bytes": 0,
+              "highest_sent_bytes": 14464,
+              "retries_since_progress": 1,
+              "rto_ns": 34000,
+              "deadline_ns": 52573
+            }
+          },
+          "nic": 1,
+          "source_feedback": [],
+          "same_ns_unordered_feedback": [],
+          "missing_ranges": [
+            [
+              0,
+              14464
+            ]
+          ],
+          "missing_bytes": 14464,
+          "cutoff_ns": 31665,
+          "actual_retransmission_packets": [
+            {
+              "time_ns": 18573,
+              "stream": 24,
+              "src": 0,
+              "dst": 68,
+              "nic": 1,
+              "sequence": 0,
+              "payload_bytes": 9000,
+              "packet_uid": 619,
+              "repeated_bytes": 9000
+            },
+            {
+              "time_ns": 18754,
+              "stream": 24,
+              "src": 0,
+              "dst": 68,
+              "nic": 1,
+              "sequence": 9000,
+              "payload_bytes": 5464,
+              "packet_uid": 627,
+              "repeated_bytes": 5464
+            }
+          ],
+          "uncovered_ranges": [],
+          "fully_covered_before_next_feedback": true,
+          "first_retransmission_ns": 18573,
+          "first_retransmission_delay_ns": 0,
+          "last_retransmission_start_ns": 18754,
+          "batch_serialization_end_ns": 18864,
+          "batch_span_ns": 291,
+          "own_serialization_ns": 291,
+          "other_QP_serialization": [],
+          "other_QP_occupied_ns": 0,
+          "unexplained_or_interpacket_ns": 0
+        },
+        {
+          "trigger": {
+            "kind": "timeout",
+            "time_ns": 18754,
+            "stream": 65,
+            "source": 1,
+            "ack": 0,
+            "high": 14464,
+            "source_event": {
+              "time_ns": 18754,
+              "event": 2,
+              "source": 1,
+              "message_id": 65,
+              "acknowledged_bytes": 0,
+              "highest_sent_bytes": 14464,
+              "retries_since_progress": 1,
+              "rto_ns": 34000,
+              "deadline_ns": 52754
+            }
+          },
+          "nic": 1,
+          "source_feedback": [],
+          "same_ns_unordered_feedback": [],
+          "missing_ranges": [
+            [
+              0,
+              14464
+            ]
+          ],
+          "missing_bytes": 14464,
+          "cutoff_ns": 31846,
+          "actual_retransmission_packets": [
+            {
+              "time_ns": 18754,
+              "stream": 65,
+              "src": 1,
+              "dst": 65,
+              "nic": 1,
+              "sequence": 0,
+              "payload_bytes": 9000,
+              "packet_uid": 623,
+              "repeated_bytes": 9000
+            },
+            {
+              "time_ns": 19116,
+              "stream": 65,
+              "src": 1,
+              "dst": 65,
+              "nic": 1,
+              "sequence": 9000,
+              "payload_bytes": 5464,
+              "packet_uid": 637,
+              "repeated_bytes": 5464
+            }
+          ],
+          "uncovered_ranges": [],
+          "fully_covered_before_next_feedback": true,
+          "first_retransmission_ns": 18754,
+          "first_retransmission_delay_ns": 0,
+          "last_retransmission_start_ns": 19116,
+          "batch_serialization_end_ns": 19226,
+          "batch_span_ns": 472,
+          "own_serialization_ns": 291,
+          "other_QP_serialization": [
+            {
+              "source_packet": {
+                "time_ns": 18935,
+                "stream": 69,
+                "src": 1,
+                "dst": 81,
+                "nic": 1,
+                "sequence": 0,
+                "payload_bytes": 9000,
+                "packet_uid": 631,
+                "repeated_bytes": 9000
+              },
+              "overlap_ns": 181
+            }
+          ],
+          "other_QP_occupied_ns": 181,
+          "unexplained_or_interpacket_ns": 0
+        },
+        {
+          "trigger": {
+            "kind": "timeout",
+            "time_ns": 18754,
+            "stream": 183,
+            "source": 4,
+            "ack": 0,
+            "high": 14464,
+            "source_event": {
+              "time_ns": 18754,
+              "event": 2,
+              "source": 4,
+              "message_id": 183,
+              "acknowledged_bytes": 0,
+              "highest_sent_bytes": 14464,
+              "retries_since_progress": 1,
+              "rto_ns": 34000,
+              "deadline_ns": 52754
+            }
+          },
+          "nic": 1,
+          "source_feedback": [],
+          "same_ns_unordered_feedback": [],
+          "missing_ranges": [
+            [
+              0,
+              14464
+            ]
+          ],
+          "missing_bytes": 14464,
+          "cutoff_ns": 31956,
+          "actual_retransmission_packets": [
+            {
+              "time_ns": 18754,
+              "stream": 183,
+              "src": 4,
+              "dst": 68,
+              "nic": 1,
+              "sequence": 0,
+              "payload_bytes": 9000,
+              "packet_uid": 621,
+              "repeated_bytes": 9000
+            },
+            {
+              "time_ns": 18935,
+              "stream": 183,
+              "src": 4,
+              "dst": 68,
+              "nic": 1,
+              "sequence": 9000,
+              "payload_bytes": 5464,
+              "packet_uid": 629,
+              "repeated_bytes": 5464
+            }
+          ],
+          "uncovered_ranges": [],
+          "fully_covered_before_next_feedback": true,
+          "first_retransmission_ns": 18754,
+          "first_retransmission_delay_ns": 0,
+          "last_retransmission_start_ns": 18935,
+          "batch_serialization_end_ns": 19045,
+          "batch_span_ns": 291,
+          "own_serialization_ns": 291,
+          "other_QP_serialization": [],
+          "other_QP_occupied_ns": 0,
+          "unexplained_or_interpacket_ns": 0
+        },
+        {
+          "trigger": {
+            "kind": "timeout",
+            "time_ns": 18754,
+            "stream": 302,
+            "source": 7,
+            "ack": 0,
+            "high": 14464,
+            "source_event": {
+              "time_ns": 18754,
+              "event": 2,
+              "source": 7,
+              "message_id": 302,
+              "acknowledged_bytes": 0,
+              "highest_sent_bytes": 14464,
+              "retries_since_progress": 1,
+              "rto_ns": 34000,
+              "deadline_ns": 52754
+            }
+          },
+          "nic": 1,
+          "source_feedback": [],
+          "same_ns_unordered_feedback": [],
+          "missing_ranges": [
+            [
+              0,
+              14464
+            ]
+          ],
+          "missing_bytes": 14464,
+          "cutoff_ns": 32137,
+          "actual_retransmission_packets": [
+            {
+              "time_ns": 18754,
+              "stream": 302,
+              "src": 7,
+              "dst": 83,
+              "nic": 1,
+              "sequence": 0,
+              "payload_bytes": 9000,
+              "packet_uid": 625,
+              "repeated_bytes": 9000
+            },
+            {
+              "time_ns": 18935,
+              "stream": 302,
+              "src": 7,
+              "dst": 83,
+              "nic": 1,
+              "sequence": 9000,
+              "payload_bytes": 5464,
+              "packet_uid": 633,
+              "repeated_bytes": 5464
+            }
+          ],
+          "uncovered_ranges": [],
+          "fully_covered_before_next_feedback": true,
+          "first_retransmission_ns": 18754,
+          "first_retransmission_delay_ns": 0,
+          "last_retransmission_start_ns": 18935,
+          "batch_serialization_end_ns": 19045,
+          "batch_span_ns": 291,
+          "own_serialization_ns": 291,
+          "other_QP_serialization": [],
+          "other_QP_occupied_ns": 0,
+          "unexplained_or_interpacket_ns": 0
+        },
+        {
+          "trigger": {
+            "kind": "timeout",
+            "time_ns": 18935,
+            "stream": 69,
+            "source": 1,
+            "ack": 0,
+            "high": 14464,
+            "source_event": {
+              "time_ns": 18935,
+              "event": 2,
+              "source": 1,
+              "message_id": 69,
+              "acknowledged_bytes": 0,
+              "highest_sent_bytes": 14464,
+              "retries_since_progress": 1,
+              "rto_ns": 34000,
+              "deadline_ns": 52935
+            }
+          },
+          "nic": 1,
+          "source_feedback": [],
+          "same_ns_unordered_feedback": [],
+          "missing_ranges": [
+            [
+              0,
+              14464
+            ]
+          ],
+          "missing_bytes": 14464,
+          "cutoff_ns": 32027,
+          "actual_retransmission_packets": [
+            {
+              "time_ns": 18935,
+              "stream": 69,
+              "src": 1,
+              "dst": 81,
+              "nic": 1,
+              "sequence": 0,
+              "payload_bytes": 9000,
+              "packet_uid": 631,
+              "repeated_bytes": 9000
+            },
+            {
+              "time_ns": 19226,
+              "stream": 69,
+              "src": 1,
+              "dst": 81,
+              "nic": 1,
+              "sequence": 9000,
+              "payload_bytes": 5464,
+              "packet_uid": 639,
+              "repeated_bytes": 5464
+            }
+          ],
+          "uncovered_ranges": [],
+          "fully_covered_before_next_feedback": true,
+          "first_retransmission_ns": 18935,
+          "first_retransmission_delay_ns": 0,
+          "last_retransmission_start_ns": 19226,
+          "batch_serialization_end_ns": 19336,
+          "batch_span_ns": 401,
+          "own_serialization_ns": 291,
+          "other_QP_serialization": [
+            {
+              "source_packet": {
+                "time_ns": 19116,
+                "stream": 65,
+                "src": 1,
+                "dst": 65,
+                "nic": 1,
+                "sequence": 9000,
+                "payload_bytes": 5464,
+                "packet_uid": 637,
+                "repeated_bytes": 5464
+              },
+              "overlap_ns": 110
+            }
+          ],
+          "other_QP_occupied_ns": 110,
+          "unexplained_or_interpacket_ns": 0
+        },
+        {
+          "trigger": {
+            "kind": "timeout",
+            "time_ns": 19116,
+            "stream": 272,
+            "source": 6,
+            "ack": 0,
+            "high": 14464,
+            "source_event": {
+              "time_ns": 19116,
+              "event": 2,
+              "source": 6,
+              "message_id": 272,
+              "acknowledged_bytes": 0,
+              "highest_sent_bytes": 14464,
+              "retries_since_progress": 1,
+              "rto_ns": 34000,
+              "deadline_ns": 53116
+            }
+          },
+          "nic": 1,
+          "source_feedback": [
+            {
+              "cumulative_ack": 0,
+              "extension_hex": "4d535231000023280000388000000001",
+              "ip_protocol": 253,
+              "kind": "feedback_received",
+              "model_bytes": 50,
+              "packet_uid": 607,
+              "sack_begin": 9000,
+              "sack_end": 14464,
+              "sack_valid": true,
+              "stream": 272,
+              "time_ns": 17653
+            }
+          ],
+          "same_ns_unordered_feedback": [],
+          "missing_ranges": [
+            [
+              0,
+              9000
+            ]
+          ],
+          "missing_bytes": 9000,
+          "cutoff_ns": 30745,
+          "actual_retransmission_packets": [
+            {
+              "time_ns": 19116,
+              "stream": 272,
+              "src": 6,
+              "dst": 106,
+              "nic": 1,
+              "sequence": 0,
+              "payload_bytes": 9000,
+              "packet_uid": 635,
+              "repeated_bytes": 9000
+            }
+          ],
+          "uncovered_ranges": [],
+          "fully_covered_before_next_feedback": true,
+          "first_retransmission_ns": 19116,
+          "first_retransmission_delay_ns": 0,
+          "last_retransmission_start_ns": 19116,
+          "batch_serialization_end_ns": 19297,
+          "batch_span_ns": 181,
+          "own_serialization_ns": 181,
+          "other_QP_serialization": [],
+          "other_QP_occupied_ns": 0,
+          "unexplained_or_interpacket_ns": 0
+        },
+        {
+          "trigger": {
+            "kind": "timeout",
+            "time_ns": 26758,
+            "stream": 167,
+            "source": 4,
+            "ack": 9000,
+            "high": 14464,
+            "source_event": {
+              "time_ns": 26758,
+              "event": 2,
+              "source": 4,
+              "message_id": 167,
+              "acknowledged_bytes": 9000,
+              "highest_sent_bytes": 14464,
+              "retries_since_progress": 1,
+              "rto_ns": 34000,
+              "deadline_ns": 60758
+            }
+          },
+          "nic": 1,
+          "source_feedback": [
+            {
+              "cumulative_ack": 9000,
+              "extension_hex": "4d535231000000000000232800000001",
+              "ip_protocol": 252,
+              "kind": "feedback_received",
+              "model_bytes": 50,
+              "packet_uid": 418,
+              "sack_begin": 0,
+              "sack_end": 9000,
+              "sack_valid": true,
+              "stream": 167,
+              "time_ns": 9758
+            }
+          ],
+          "same_ns_unordered_feedback": [],
+          "missing_ranges": [
+            [
+              9000,
+              14464
+            ]
+          ],
+          "missing_bytes": 5464,
+          "cutoff_ns": 35202,
+          "actual_retransmission_packets": [
+            {
+              "time_ns": 26758,
+              "stream": 167,
+              "src": 4,
+              "dst": 24,
+              "nic": 1,
+              "sequence": 9000,
+              "payload_bytes": 5464,
+              "packet_uid": 654,
+              "repeated_bytes": 5464
+            }
+          ],
+          "uncovered_ranges": [],
+          "fully_covered_before_next_feedback": true,
+          "first_retransmission_ns": 26758,
+          "first_retransmission_delay_ns": 0,
+          "last_retransmission_start_ns": 26758,
+          "batch_serialization_end_ns": 26868,
+          "batch_span_ns": 110,
+          "own_serialization_ns": 110,
+          "other_QP_serialization": [],
+          "other_QP_occupied_ns": 0,
+          "unexplained_or_interpacket_ns": 0
+        },
+        {
+          "trigger": {
+            "kind": "timeout",
+            "time_ns": 26940,
+            "stream": 53,
+            "source": 1,
+            "ack": 9000,
+            "high": 14464,
+            "source_event": {
+              "time_ns": 26940,
+              "event": 2,
+              "source": 1,
+              "message_id": 53,
+              "acknowledged_bytes": 9000,
+              "highest_sent_bytes": 14464,
+              "retries_since_progress": 1,
+              "rto_ns": 34000,
+              "deadline_ns": 60940
+            }
+          },
+          "nic": 1,
+          "source_feedback": [
+            {
+              "cumulative_ack": 9000,
+              "extension_hex": "4d535231000000000000232800000001",
+              "ip_protocol": 252,
+              "kind": "feedback_received",
+              "model_bytes": 50,
+              "packet_uid": 425,
+              "sack_begin": 0,
+              "sack_end": 9000,
+              "sack_valid": true,
+              "stream": 53,
+              "time_ns": 9940
+            }
+          ],
+          "same_ns_unordered_feedback": [],
+          "missing_ranges": [
+            [
+              9000,
+              14464
+            ]
+          ],
+          "missing_bytes": 5464,
+          "cutoff_ns": 35384,
+          "actual_retransmission_packets": [
+            {
+              "time_ns": 26940,
+              "stream": 53,
+              "src": 1,
+              "dst": 21,
+              "nic": 1,
+              "sequence": 9000,
+              "payload_bytes": 5464,
+              "packet_uid": 656,
+              "repeated_bytes": 5464
+            }
+          ],
+          "uncovered_ranges": [],
+          "fully_covered_before_next_feedback": true,
+          "first_retransmission_ns": 26940,
+          "first_retransmission_delay_ns": 0,
+          "last_retransmission_start_ns": 26940,
+          "batch_serialization_end_ns": 27050,
+          "batch_span_ns": 110,
+          "own_serialization_ns": 110,
+          "other_QP_serialization": [],
+          "other_QP_occupied_ns": 0,
+          "unexplained_or_interpacket_ns": 0
+        },
+        {
+          "trigger": {
+            "kind": "timeout",
+            "time_ns": 27301,
+            "stream": 246,
+            "source": 6,
+            "ack": 9000,
+            "high": 14464,
+            "source_event": {
+              "time_ns": 27301,
+              "event": 2,
+              "source": 6,
+              "message_id": 246,
+              "acknowledged_bytes": 9000,
+              "highest_sent_bytes": 14464,
+              "retries_since_progress": 1,
+              "rto_ns": 34000,
+              "deadline_ns": 61301
+            }
+          },
+          "nic": 1,
+          "source_feedback": [
+            {
+              "cumulative_ack": 9000,
+              "extension_hex": "4d535231000000000000232800000001",
+              "ip_protocol": 252,
+              "kind": "feedback_received",
+              "model_bytes": 50,
+              "packet_uid": 442,
+              "sack_begin": 0,
+              "sack_end": 9000,
+              "sack_valid": true,
+              "stream": 246,
+              "time_ns": 10301
+            }
+          ],
+          "same_ns_unordered_feedback": [],
+          "missing_ranges": [
+            [
+              9000,
+              14464
+            ]
+          ],
+          "missing_bytes": 5464,
+          "cutoff_ns": 35745,
+          "actual_retransmission_packets": [
+            {
+              "time_ns": 27301,
+              "stream": 246,
+              "src": 6,
+              "dst": 22,
+              "nic": 1,
+              "sequence": 9000,
+              "payload_bytes": 5464,
+              "packet_uid": 658,
+              "repeated_bytes": 5464
+            }
+          ],
+          "uncovered_ranges": [],
+          "fully_covered_before_next_feedback": true,
+          "first_retransmission_ns": 27301,
+          "first_retransmission_delay_ns": 0,
+          "last_retransmission_start_ns": 27301,
+          "batch_serialization_end_ns": 27411,
+          "batch_span_ns": 110,
+          "own_serialization_ns": 110,
+          "other_QP_serialization": [],
+          "other_QP_occupied_ns": 0,
+          "unexplained_or_interpacket_ns": 0
+        },
+        {
+          "trigger": {
+            "kind": "timeout",
+            "time_ns": 29124,
+            "stream": 199,
+            "source": 5,
+            "ack": 9000,
+            "high": 14464,
+            "source_event": {
+              "time_ns": 29124,
+              "event": 2,
+              "source": 5,
+              "message_id": 199,
+              "acknowledged_bytes": 9000,
+              "highest_sent_bytes": 14464,
+              "retries_since_progress": 1,
+              "rto_ns": 34000,
+              "deadline_ns": 63124
+            }
+          },
+          "nic": 1,
+          "source_feedback": [
+            {
+              "cumulative_ack": 9000,
+              "extension_hex": "4d535231000000000000232800000001",
+              "ip_protocol": 252,
+              "kind": "feedback_received",
+              "model_bytes": 50,
+              "packet_uid": 430,
+              "sack_begin": 0,
+              "sack_end": 9000,
+              "sack_valid": true,
+              "stream": 199,
+              "time_ns": 12124
+            }
+          ],
+          "same_ns_unordered_feedback": [],
+          "missing_ranges": [
+            [
+              9000,
+              14464
+            ]
+          ],
+          "missing_bytes": 5464,
+          "cutoff_ns": 37568,
+          "actual_retransmission_packets": [
+            {
+              "time_ns": 29124,
+              "stream": 199,
+              "src": 5,
+              "dst": 9,
+              "nic": 1,
+              "sequence": 9000,
+              "payload_bytes": 5464,
+              "packet_uid": 660,
+              "repeated_bytes": 5464
+            }
+          ],
+          "uncovered_ranges": [],
+          "fully_covered_before_next_feedback": true,
+          "first_retransmission_ns": 29124,
+          "first_retransmission_delay_ns": 0,
+          "last_retransmission_start_ns": 29124,
+          "batch_serialization_end_ns": 29234,
+          "batch_span_ns": 110,
+          "own_serialization_ns": 110,
+          "other_QP_serialization": [],
+          "other_QP_occupied_ns": 0,
+          "unexplained_or_interpacket_ns": 0
+        }
+      ],
+      "positive_first_send_wait_count": 0,
+      "simultaneous_waiting_recoveries": [],
+      "complete_batches": 12,
+      "same_ns_feedback_ambiguous_batches": 0,
+      "max_first_send_wait_ns": 0,
+      "other_QP_occupied_ns": 291,
+      "max_batch_span_ns": 472
+    },
+    "prefix-w60": {
+      "result_sha256": "4a558a0d82d2063ee3b5cb9dd467cdb20cc16b5356fce1bb6320e911ea62a422",
+      "logical_payload_bytes": 11228096,
+      "repeated_payload_bytes": 121176,
+      "trigger_counts": {
+        "timeout": 10,
+        "fast_retransmit": 2
+      },
+      "batches": [
+        {
+          "trigger": {
+            "kind": "fast_retransmit",
+            "time_ns": 17103,
+            "stream": 71,
+            "source": 1,
+            "ack": 0,
+            "high": 14464,
+            "selective_index": 724,
+            "source_event": {
+              "cumulative_ack": 0,
+              "extension_hex": "4d535231000023280000388000000001",
+              "ip_protocol": 253,
+              "kind": "fast_retransmit",
+              "model_bytes": 50,
+              "packet_uid": 595,
+              "sack_begin": 9000,
+              "sack_end": 14464,
+              "sack_valid": true,
+              "stream": 71,
+              "time_ns": 17103
+            }
+          },
+          "nic": 1,
+          "source_feedback": [
+            {
+              "cumulative_ack": 0,
+              "extension_hex": "4d535231000023280000388000000001",
+              "ip_protocol": 253,
+              "kind": "feedback_received",
+              "model_bytes": 50,
+              "packet_uid": 595,
+              "sack_begin": 9000,
+              "sack_end": 14464,
+              "sack_valid": true,
+              "stream": 71,
+              "time_ns": 17103
+            }
+          ],
+          "same_ns_unordered_feedback": [],
+          "missing_ranges": [
+            [
+              0,
+              9000
+            ]
+          ],
+          "missing_bytes": 9000,
+          "cutoff_ns": 17316,
+          "actual_retransmission_packets": [
+            {
+              "time_ns": 17103,
+              "stream": 71,
+              "src": 1,
+              "dst": 85,
+              "nic": 1,
+              "sequence": 0,
+              "payload_bytes": 9000,
+              "packet_uid": 615,
+              "repeated_bytes": 9000
+            }
+          ],
+          "uncovered_ranges": [],
+          "fully_covered_before_next_feedback": true,
+          "first_retransmission_ns": 17103,
+          "first_retransmission_delay_ns": 0,
+          "last_retransmission_start_ns": 17103,
+          "batch_serialization_end_ns": 17284,
+          "batch_span_ns": 181,
+          "own_serialization_ns": 181,
+          "other_QP_serialization": [],
+          "other_QP_occupied_ns": 0,
+          "unexplained_or_interpacket_ns": 0
+        },
+        {
+          "trigger": {
+            "kind": "fast_retransmit",
+            "time_ns": 17653,
+            "stream": 272,
+            "source": 6,
+            "ack": 0,
+            "high": 14464,
+            "selective_index": 734,
+            "source_event": {
+              "cumulative_ack": 0,
+              "extension_hex": "4d535231000023280000388000000001",
+              "ip_protocol": 253,
+              "kind": "fast_retransmit",
+              "model_bytes": 50,
+              "packet_uid": 607,
+              "sack_begin": 9000,
+              "sack_end": 14464,
+              "sack_valid": true,
+              "stream": 272,
+              "time_ns": 17653
+            }
+          },
+          "nic": 1,
+          "source_feedback": [
+            {
+              "cumulative_ack": 0,
+              "extension_hex": "4d535231000023280000388000000001",
+              "ip_protocol": 253,
+              "kind": "feedback_received",
+              "model_bytes": 50,
+              "packet_uid": 607,
+              "sack_begin": 9000,
+              "sack_end": 14464,
+              "sack_valid": true,
+              "stream": 272,
+              "time_ns": 17653
+            }
+          ],
+          "same_ns_unordered_feedback": [],
+          "missing_ranges": [
+            [
+              0,
+              9000
+            ]
+          ],
+          "missing_bytes": 9000,
+          "cutoff_ns": 19116,
+          "actual_retransmission_packets": [
+            {
+              "time_ns": 17653,
+              "stream": 272,
+              "src": 6,
+              "dst": 106,
+              "nic": 1,
+              "sequence": 0,
+              "payload_bytes": 9000,
+              "packet_uid": 617,
+              "repeated_bytes": 9000
+            }
+          ],
+          "uncovered_ranges": [],
+          "fully_covered_before_next_feedback": true,
+          "first_retransmission_ns": 17653,
+          "first_retransmission_delay_ns": 0,
+          "last_retransmission_start_ns": 17653,
+          "batch_serialization_end_ns": 17834,
+          "batch_span_ns": 181,
+          "own_serialization_ns": 181,
+          "other_QP_serialization": [],
+          "other_QP_occupied_ns": 0,
+          "unexplained_or_interpacket_ns": 0
+        },
+        {
+          "trigger": {
+            "kind": "timeout",
+            "time_ns": 18573,
+            "stream": 24,
+            "source": 0,
+            "ack": 0,
+            "high": 14464,
+            "source_event": {
+              "time_ns": 18573,
+              "event": 2,
+              "source": 0,
+              "message_id": 24,
+              "acknowledged_bytes": 0,
+              "highest_sent_bytes": 14464,
+              "retries_since_progress": 1,
+              "rto_ns": 34000,
+              "deadline_ns": 52573
+            }
+          },
+          "nic": 1,
+          "source_feedback": [],
+          "same_ns_unordered_feedback": [],
+          "missing_ranges": [
+            [
+              0,
+              14464
+            ]
+          ],
+          "missing_bytes": 14464,
+          "cutoff_ns": 31665,
+          "actual_retransmission_packets": [
+            {
+              "time_ns": 18573,
+              "stream": 24,
+              "src": 0,
+              "dst": 68,
+              "nic": 1,
+              "sequence": 0,
+              "payload_bytes": 9000,
+              "packet_uid": 619,
+              "repeated_bytes": 9000
+            },
+            {
+              "time_ns": 18754,
+              "stream": 24,
+              "src": 0,
+              "dst": 68,
+              "nic": 1,
+              "sequence": 9000,
+              "payload_bytes": 5464,
+              "packet_uid": 627,
+              "repeated_bytes": 5464
+            }
+          ],
+          "uncovered_ranges": [],
+          "fully_covered_before_next_feedback": true,
+          "first_retransmission_ns": 18573,
+          "first_retransmission_delay_ns": 0,
+          "last_retransmission_start_ns": 18754,
+          "batch_serialization_end_ns": 18864,
+          "batch_span_ns": 291,
+          "own_serialization_ns": 291,
+          "other_QP_serialization": [],
+          "other_QP_occupied_ns": 0,
+          "unexplained_or_interpacket_ns": 0
+        },
+        {
+          "trigger": {
+            "kind": "timeout",
+            "time_ns": 18754,
+            "stream": 65,
+            "source": 1,
+            "ack": 0,
+            "high": 14464,
+            "source_event": {
+              "time_ns": 18754,
+              "event": 2,
+              "source": 1,
+              "message_id": 65,
+              "acknowledged_bytes": 0,
+              "highest_sent_bytes": 14464,
+              "retries_since_progress": 1,
+              "rto_ns": 34000,
+              "deadline_ns": 52754
+            }
+          },
+          "nic": 1,
+          "source_feedback": [],
+          "same_ns_unordered_feedback": [],
+          "missing_ranges": [
+            [
+              0,
+              14464
+            ]
+          ],
+          "missing_bytes": 14464,
+          "cutoff_ns": 33850,
+          "actual_retransmission_packets": [
+            {
+              "time_ns": 18754,
+              "stream": 65,
+              "src": 1,
+              "dst": 65,
+              "nic": 1,
+              "sequence": 0,
+              "payload_bytes": 9000,
+              "packet_uid": 623,
+              "repeated_bytes": 9000
+            },
+            {
+              "time_ns": 19116,
+              "stream": 65,
+              "src": 1,
+              "dst": 65,
+              "nic": 1,
+              "sequence": 9000,
+              "payload_bytes": 5464,
+              "packet_uid": 637,
+              "repeated_bytes": 5464
+            }
+          ],
+          "uncovered_ranges": [],
+          "fully_covered_before_next_feedback": true,
+          "first_retransmission_ns": 18754,
+          "first_retransmission_delay_ns": 0,
+          "last_retransmission_start_ns": 19116,
+          "batch_serialization_end_ns": 19226,
+          "batch_span_ns": 472,
+          "own_serialization_ns": 291,
+          "other_QP_serialization": [
+            {
+              "source_packet": {
+                "time_ns": 18935,
+                "stream": 69,
+                "src": 1,
+                "dst": 81,
+                "nic": 1,
+                "sequence": 0,
+                "payload_bytes": 9000,
+                "packet_uid": 631,
+                "repeated_bytes": 9000
+              },
+              "overlap_ns": 181
+            }
+          ],
+          "other_QP_occupied_ns": 181,
+          "unexplained_or_interpacket_ns": 0
+        },
+        {
+          "trigger": {
+            "kind": "timeout",
+            "time_ns": 18754,
+            "stream": 183,
+            "source": 4,
+            "ack": 0,
+            "high": 14464,
+            "source_event": {
+              "time_ns": 18754,
+              "event": 2,
+              "source": 4,
+              "message_id": 183,
+              "acknowledged_bytes": 0,
+              "highest_sent_bytes": 14464,
+              "retries_since_progress": 1,
+              "rto_ns": 34000,
+              "deadline_ns": 52754
+            }
+          },
+          "nic": 1,
+          "source_feedback": [],
+          "same_ns_unordered_feedback": [],
+          "missing_ranges": [
+            [
+              0,
+              14464
+            ]
+          ],
+          "missing_bytes": 14464,
+          "cutoff_ns": 31956,
+          "actual_retransmission_packets": [
+            {
+              "time_ns": 18754,
+              "stream": 183,
+              "src": 4,
+              "dst": 68,
+              "nic": 1,
+              "sequence": 0,
+              "payload_bytes": 9000,
+              "packet_uid": 621,
+              "repeated_bytes": 9000
+            },
+            {
+              "time_ns": 18935,
+              "stream": 183,
+              "src": 4,
+              "dst": 68,
+              "nic": 1,
+              "sequence": 9000,
+              "payload_bytes": 5464,
+              "packet_uid": 629,
+              "repeated_bytes": 5464
+            }
+          ],
+          "uncovered_ranges": [],
+          "fully_covered_before_next_feedback": true,
+          "first_retransmission_ns": 18754,
+          "first_retransmission_delay_ns": 0,
+          "last_retransmission_start_ns": 18935,
+          "batch_serialization_end_ns": 19045,
+          "batch_span_ns": 291,
+          "own_serialization_ns": 291,
+          "other_QP_serialization": [],
+          "other_QP_occupied_ns": 0,
+          "unexplained_or_interpacket_ns": 0
+        },
+        {
+          "trigger": {
+            "kind": "timeout",
+            "time_ns": 18754,
+            "stream": 302,
+            "source": 7,
+            "ack": 0,
+            "high": 14464,
+            "source_event": {
+              "time_ns": 18754,
+              "event": 2,
+              "source": 7,
+              "message_id": 302,
+              "acknowledged_bytes": 0,
+              "highest_sent_bytes": 14464,
+              "retries_since_progress": 1,
+              "rto_ns": 34000,
+              "deadline_ns": 52754
+            }
+          },
+          "nic": 1,
+          "source_feedback": [],
+          "same_ns_unordered_feedback": [],
+          "missing_ranges": [
+            [
+              0,
+              14464
+            ]
+          ],
+          "missing_bytes": 14464,
+          "cutoff_ns": 34141,
+          "actual_retransmission_packets": [
+            {
+              "time_ns": 18754,
+              "stream": 302,
+              "src": 7,
+              "dst": 83,
+              "nic": 1,
+              "sequence": 0,
+              "payload_bytes": 9000,
+              "packet_uid": 625,
+              "repeated_bytes": 9000
+            },
+            {
+              "time_ns": 18935,
+              "stream": 302,
+              "src": 7,
+              "dst": 83,
+              "nic": 1,
+              "sequence": 9000,
+              "payload_bytes": 5464,
+              "packet_uid": 633,
+              "repeated_bytes": 5464
+            }
+          ],
+          "uncovered_ranges": [],
+          "fully_covered_before_next_feedback": true,
+          "first_retransmission_ns": 18754,
+          "first_retransmission_delay_ns": 0,
+          "last_retransmission_start_ns": 18935,
+          "batch_serialization_end_ns": 19045,
+          "batch_span_ns": 291,
+          "own_serialization_ns": 291,
+          "other_QP_serialization": [],
+          "other_QP_occupied_ns": 0,
+          "unexplained_or_interpacket_ns": 0
+        },
+        {
+          "trigger": {
+            "kind": "timeout",
+            "time_ns": 18935,
+            "stream": 69,
+            "source": 1,
+            "ack": 0,
+            "high": 14464,
+            "source_event": {
+              "time_ns": 18935,
+              "event": 2,
+              "source": 1,
+              "message_id": 69,
+              "acknowledged_bytes": 0,
+              "highest_sent_bytes": 14464,
+              "retries_since_progress": 1,
+              "rto_ns": 34000,
+              "deadline_ns": 52935
+            }
+          },
+          "nic": 1,
+          "source_feedback": [],
+          "same_ns_unordered_feedback": [],
+          "missing_ranges": [
+            [
+              0,
+              14464
+            ]
+          ],
+          "missing_bytes": 14464,
+          "cutoff_ns": 32027,
+          "actual_retransmission_packets": [
+            {
+              "time_ns": 18935,
+              "stream": 69,
+              "src": 1,
+              "dst": 81,
+              "nic": 1,
+              "sequence": 0,
+              "payload_bytes": 9000,
+              "packet_uid": 631,
+              "repeated_bytes": 9000
+            },
+            {
+              "time_ns": 19226,
+              "stream": 69,
+              "src": 1,
+              "dst": 81,
+              "nic": 1,
+              "sequence": 9000,
+              "payload_bytes": 5464,
+              "packet_uid": 639,
+              "repeated_bytes": 5464
+            }
+          ],
+          "uncovered_ranges": [],
+          "fully_covered_before_next_feedback": true,
+          "first_retransmission_ns": 18935,
+          "first_retransmission_delay_ns": 0,
+          "last_retransmission_start_ns": 19226,
+          "batch_serialization_end_ns": 19336,
+          "batch_span_ns": 401,
+          "own_serialization_ns": 291,
+          "other_QP_serialization": [
+            {
+              "source_packet": {
+                "time_ns": 19116,
+                "stream": 65,
+                "src": 1,
+                "dst": 65,
+                "nic": 1,
+                "sequence": 9000,
+                "payload_bytes": 5464,
+                "packet_uid": 637,
+                "repeated_bytes": 5464
+              },
+              "overlap_ns": 110
+            }
+          ],
+          "other_QP_occupied_ns": 110,
+          "unexplained_or_interpacket_ns": 0
+        },
+        {
+          "trigger": {
+            "kind": "timeout",
+            "time_ns": 19116,
+            "stream": 272,
+            "source": 6,
+            "ack": 0,
+            "high": 14464,
+            "source_event": {
+              "time_ns": 19116,
+              "event": 2,
+              "source": 6,
+              "message_id": 272,
+              "acknowledged_bytes": 0,
+              "highest_sent_bytes": 14464,
+              "retries_since_progress": 1,
+              "rto_ns": 34000,
+              "deadline_ns": 53116
+            }
+          },
+          "nic": 1,
+          "source_feedback": [
+            {
+              "cumulative_ack": 0,
+              "extension_hex": "4d535231000023280000388000000001",
+              "ip_protocol": 253,
+              "kind": "feedback_received",
+              "model_bytes": 50,
+              "packet_uid": 607,
+              "sack_begin": 9000,
+              "sack_end": 14464,
+              "sack_valid": true,
+              "stream": 272,
+              "time_ns": 17653
+            }
+          ],
+          "same_ns_unordered_feedback": [],
+          "missing_ranges": [
+            [
+              0,
+              9000
+            ]
+          ],
+          "missing_bytes": 9000,
+          "cutoff_ns": 30745,
+          "actual_retransmission_packets": [
+            {
+              "time_ns": 19116,
+              "stream": 272,
+              "src": 6,
+              "dst": 106,
+              "nic": 1,
+              "sequence": 0,
+              "payload_bytes": 9000,
+              "packet_uid": 635,
+              "repeated_bytes": 9000
+            }
+          ],
+          "uncovered_ranges": [],
+          "fully_covered_before_next_feedback": true,
+          "first_retransmission_ns": 19116,
+          "first_retransmission_delay_ns": 0,
+          "last_retransmission_start_ns": 19116,
+          "batch_serialization_end_ns": 19297,
+          "batch_span_ns": 181,
+          "own_serialization_ns": 181,
+          "other_QP_serialization": [],
+          "other_QP_occupied_ns": 0,
+          "unexplained_or_interpacket_ns": 0
+        },
+        {
+          "trigger": {
+            "kind": "timeout",
+            "time_ns": 26758,
+            "stream": 167,
+            "source": 4,
+            "ack": 9000,
+            "high": 14464,
+            "source_event": {
+              "time_ns": 26758,
+              "event": 2,
+              "source": 4,
+              "message_id": 167,
+              "acknowledged_bytes": 9000,
+              "highest_sent_bytes": 14464,
+              "retries_since_progress": 1,
+              "rto_ns": 34000,
+              "deadline_ns": 60758
+            }
+          },
+          "nic": 1,
+          "source_feedback": [
+            {
+              "cumulative_ack": 9000,
+              "extension_hex": "4d535231000000000000232800000001",
+              "ip_protocol": 252,
+              "kind": "feedback_received",
+              "model_bytes": 50,
+              "packet_uid": 418,
+              "sack_begin": 0,
+              "sack_end": 9000,
+              "sack_valid": true,
+              "stream": 167,
+              "time_ns": 9758
+            }
+          ],
+          "same_ns_unordered_feedback": [],
+          "missing_ranges": [
+            [
+              9000,
+              14464
+            ]
+          ],
+          "missing_bytes": 5464,
+          "cutoff_ns": 35202,
+          "actual_retransmission_packets": [
+            {
+              "time_ns": 26758,
+              "stream": 167,
+              "src": 4,
+              "dst": 24,
+              "nic": 1,
+              "sequence": 9000,
+              "payload_bytes": 5464,
+              "packet_uid": 654,
+              "repeated_bytes": 5464
+            }
+          ],
+          "uncovered_ranges": [],
+          "fully_covered_before_next_feedback": true,
+          "first_retransmission_ns": 26758,
+          "first_retransmission_delay_ns": 0,
+          "last_retransmission_start_ns": 26758,
+          "batch_serialization_end_ns": 26868,
+          "batch_span_ns": 110,
+          "own_serialization_ns": 110,
+          "other_QP_serialization": [],
+          "other_QP_occupied_ns": 0,
+          "unexplained_or_interpacket_ns": 0
+        },
+        {
+          "trigger": {
+            "kind": "timeout",
+            "time_ns": 26940,
+            "stream": 53,
+            "source": 1,
+            "ack": 9000,
+            "high": 14464,
+            "source_event": {
+              "time_ns": 26940,
+              "event": 2,
+              "source": 1,
+              "message_id": 53,
+              "acknowledged_bytes": 9000,
+              "highest_sent_bytes": 14464,
+              "retries_since_progress": 1,
+              "rto_ns": 34000,
+              "deadline_ns": 60940
+            }
+          },
+          "nic": 1,
+          "source_feedback": [
+            {
+              "cumulative_ack": 9000,
+              "extension_hex": "4d535231000000000000232800000001",
+              "ip_protocol": 252,
+              "kind": "feedback_received",
+              "model_bytes": 50,
+              "packet_uid": 425,
+              "sack_begin": 0,
+              "sack_end": 9000,
+              "sack_valid": true,
+              "stream": 53,
+              "time_ns": 9940
+            }
+          ],
+          "same_ns_unordered_feedback": [],
+          "missing_ranges": [
+            [
+              9000,
+              14464
+            ]
+          ],
+          "missing_bytes": 5464,
+          "cutoff_ns": 35384,
+          "actual_retransmission_packets": [
+            {
+              "time_ns": 26940,
+              "stream": 53,
+              "src": 1,
+              "dst": 21,
+              "nic": 1,
+              "sequence": 9000,
+              "payload_bytes": 5464,
+              "packet_uid": 656,
+              "repeated_bytes": 5464
+            }
+          ],
+          "uncovered_ranges": [],
+          "fully_covered_before_next_feedback": true,
+          "first_retransmission_ns": 26940,
+          "first_retransmission_delay_ns": 0,
+          "last_retransmission_start_ns": 26940,
+          "batch_serialization_end_ns": 27050,
+          "batch_span_ns": 110,
+          "own_serialization_ns": 110,
+          "other_QP_serialization": [],
+          "other_QP_occupied_ns": 0,
+          "unexplained_or_interpacket_ns": 0
+        },
+        {
+          "trigger": {
+            "kind": "timeout",
+            "time_ns": 27301,
+            "stream": 246,
+            "source": 6,
+            "ack": 9000,
+            "high": 14464,
+            "source_event": {
+              "time_ns": 27301,
+              "event": 2,
+              "source": 6,
+              "message_id": 246,
+              "acknowledged_bytes": 9000,
+              "highest_sent_bytes": 14464,
+              "retries_since_progress": 1,
+              "rto_ns": 34000,
+              "deadline_ns": 61301
+            }
+          },
+          "nic": 1,
+          "source_feedback": [
+            {
+              "cumulative_ack": 9000,
+              "extension_hex": "4d535231000000000000232800000001",
+              "ip_protocol": 252,
+              "kind": "feedback_received",
+              "model_bytes": 50,
+              "packet_uid": 442,
+              "sack_begin": 0,
+              "sack_end": 9000,
+              "sack_valid": true,
+              "stream": 246,
+              "time_ns": 10301
+            }
+          ],
+          "same_ns_unordered_feedback": [],
+          "missing_ranges": [
+            [
+              9000,
+              14464
+            ]
+          ],
+          "missing_bytes": 5464,
+          "cutoff_ns": 35745,
+          "actual_retransmission_packets": [
+            {
+              "time_ns": 27301,
+              "stream": 246,
+              "src": 6,
+              "dst": 22,
+              "nic": 1,
+              "sequence": 9000,
+              "payload_bytes": 5464,
+              "packet_uid": 658,
+              "repeated_bytes": 5464
+            }
+          ],
+          "uncovered_ranges": [],
+          "fully_covered_before_next_feedback": true,
+          "first_retransmission_ns": 27301,
+          "first_retransmission_delay_ns": 0,
+          "last_retransmission_start_ns": 27301,
+          "batch_serialization_end_ns": 27411,
+          "batch_span_ns": 110,
+          "own_serialization_ns": 110,
+          "other_QP_serialization": [],
+          "other_QP_occupied_ns": 0,
+          "unexplained_or_interpacket_ns": 0
+        },
+        {
+          "trigger": {
+            "kind": "timeout",
+            "time_ns": 29124,
+            "stream": 199,
+            "source": 5,
+            "ack": 9000,
+            "high": 14464,
+            "source_event": {
+              "time_ns": 29124,
+              "event": 2,
+              "source": 5,
+              "message_id": 199,
+              "acknowledged_bytes": 9000,
+              "highest_sent_bytes": 14464,
+              "retries_since_progress": 1,
+              "rto_ns": 34000,
+              "deadline_ns": 63124
+            }
+          },
+          "nic": 1,
+          "source_feedback": [
+            {
+              "cumulative_ack": 9000,
+              "extension_hex": "4d535231000000000000232800000001",
+              "ip_protocol": 252,
+              "kind": "feedback_received",
+              "model_bytes": 50,
+              "packet_uid": 430,
+              "sack_begin": 0,
+              "sack_end": 9000,
+              "sack_valid": true,
+              "stream": 199,
+              "time_ns": 12124
+            }
+          ],
+          "same_ns_unordered_feedback": [],
+          "missing_ranges": [
+            [
+              9000,
+              14464
+            ]
+          ],
+          "missing_bytes": 5464,
+          "cutoff_ns": 39572,
+          "actual_retransmission_packets": [
+            {
+              "time_ns": 29124,
+              "stream": 199,
+              "src": 5,
+              "dst": 9,
+              "nic": 1,
+              "sequence": 9000,
+              "payload_bytes": 5464,
+              "packet_uid": 660,
+              "repeated_bytes": 5464
+            }
+          ],
+          "uncovered_ranges": [],
+          "fully_covered_before_next_feedback": true,
+          "first_retransmission_ns": 29124,
+          "first_retransmission_delay_ns": 0,
+          "last_retransmission_start_ns": 29124,
+          "batch_serialization_end_ns": 29234,
+          "batch_span_ns": 110,
+          "own_serialization_ns": 110,
+          "other_QP_serialization": [],
+          "other_QP_occupied_ns": 0,
+          "unexplained_or_interpacket_ns": 0
+        }
+      ],
+      "positive_first_send_wait_count": 0,
+      "simultaneous_waiting_recoveries": [],
+      "complete_batches": 12,
+      "same_ns_feedback_ambiguous_batches": 0,
+      "max_first_send_wait_ns": 0,
+      "other_QP_occupied_ns": 291,
+      "max_batch_span_ns": 472
+    }
+  },
+  "public_source_excerpts": {
+    "rfc6298.txt": [
+      {
+        "anchor": "(5.3)",
+        "line_start": 255,
+        "line_end": 266,
+        "text": "\n   (5.3) When an ACK is received that acknowledges new data, restart the\n         retransmission timer so that it will expire after RTO seconds\n         (for the current value of RTO).\n\n   When the retransmission timer expires, do the following:\n\n   (5.4) Retransmit the earliest segment that has not been acknowledged\n         by the TCP receiver.\n\n   (5.5) The host MUST set RTO <- RTO * 2 (\"back off the timer\").  The\n         maximum value discussed in (2.5) above may be used to provide"
+      },
+      {
+        "anchor": "segment is never retransmitted too early",
+        "line_start": 241,
+        "line_end": 252,
+        "text": "   An implementation MUST manage the retransmission timer(s) in such a\n   way that a segment is never retransmitted too early, i.e., less than\n   one RTO after the previous transmission of that segment.\n\n   The following is the RECOMMENDED algorithm for managing the\n   retransmission timer:\n\n   (5.1) Every time a packet containing data is sent (including a\n         retransmission), if the timer is not running, start it running\n         so that it will expire after RTO seconds (for the current value\n         of RTO).\n"
+      }
+    ],
+    "rfc8985.txt": [
+      {
+        "anchor": "RACK-TLP uses per-segment transmit timestamps",
+        "line_start": 17,
+        "line_end": 28,
+        "text": "   This document presents the RACK-TLP loss detection algorithm for TCP.\n   RACK-TLP uses per-segment transmit timestamps and selective\n   acknowledgments (SACKs) and has two parts.  Recent Acknowledgment\n   (RACK) starts fast recovery quickly using time-based inferences\n   derived from acknowledgment (ACK) feedback, and Tail Loss Probe (TLP)\n   leverages RACK and sends a probe packet to trigger ACK feedback to\n   avoid retransmission timeout (RTO) events.  Compared to the widely\n   used duplicate acknowledgment (DupAck) threshold approach, RACK-TLP\n   detects losses more efficiently when there are application-limited\n   flights of data, lost retransmissions, or data packet reordering\n   events.  It is intended to be an alternative to the DupAck threshold\n   approach."
+      },
+      {
+        "anchor": "Tail Loss Probe (TLP)",
+        "line_start": 20,
+        "line_end": 31,
+        "text": "   (RACK) starts fast recovery quickly using time-based inferences\n   derived from acknowledgment (ACK) feedback, and Tail Loss Probe (TLP)\n   leverages RACK and sends a probe packet to trigger ACK feedback to\n   avoid retransmission timeout (RTO) events.  Compared to the widely\n   used duplicate acknowledgment (DupAck) threshold approach, RACK-TLP\n   detects losses more efficiently when there are application-limited\n   flights of data, lost retransmissions, or data packet reordering\n   events.  It is intended to be an alternative to the DupAck threshold\n   approach.\n\nStatus of This Memo\n"
+      }
+    ],
+    "rxe_comp.c": [
+      {
+        "anchor": "static void reset_retry_timer",
+        "line_start": 623,
+        "line_end": 634,
+        "text": " */\nstatic void reset_retry_timer(struct rxe_qp *qp)\n{\n\tunsigned long flags;\n\n\tif (qp_type(qp) == IB_QPT_RC && qp->qp_timeout_jiffies) {\n\t\tspin_lock_irqsave(&qp->state_lock, flags);\n\t\tif (qp_state(qp) >= IB_QPS_RTS &&\n\t\t    psn_compare(qp->req.psn, qp->comp.psn) > 0)\n\t\t\tmod_timer(&qp->retrans_timer,\n\t\t\t\t  jiffies + qp->qp_timeout_jiffies);\n\t\tspin_unlock_irqrestore(&qp->state_lock, flags);"
+      },
+      {
+        "anchor": "reset_retry_timer(qp);",
+        "line_start": 747,
+        "line_end": 758,
+        "text": "\n\t\t\treset_retry_timer(qp);\n\t\t\tgoto exit;\n\n\t\tcase COMPST_ERROR_RETRY:\n\t\t\t/* we come here if the retry timer fired and we did\n\t\t\t * not receive a response packet. try to retry the send\n\t\t\t * queue if that makes sense and the limits have not\n\t\t\t * been exceeded. remember that some timeouts are\n\t\t\t * spurious since we do not reset the timer but kick\n\t\t\t * it down the road or let it expire\n\t\t\t */"
+      }
+    ],
+    "rxe_qp.c": [
+      {
+        "anchor": "timeout = 4.096",
+        "line_start": 704,
+        "line_end": 715,
+        "text": "\t\t} else {\n\t\t\t/* According to the spec, timeout = 4.096 * 2 ^ attr->timeout [us] */\n\t\t\tint j = nsecs_to_jiffies(4096ULL << attr->timeout);\n\n\t\t\tqp->qp_timeout_jiffies = j ? j : 1;\n\t\t}\n\t}\n\n\tif (mask & IB_QP_RETRY_CNT) {\n\t\tqp->attr.retry_cnt = attr->retry_cnt;\n\t\tqp->comp.retry_cnt = attr->retry_cnt;\n\t\trxe_dbg_qp(qp, \"set retry count = %d\\n\", attr->retry_cnt);"
+      },
+      {
+        "anchor": "qp->qp_timeout_jiffies = j ? j : 1",
+        "line_start": 707,
+        "line_end": 718,
+        "text": "\n\t\t\tqp->qp_timeout_jiffies = j ? j : 1;\n\t\t}\n\t}\n\n\tif (mask & IB_QP_RETRY_CNT) {\n\t\tqp->attr.retry_cnt = attr->retry_cnt;\n\t\tqp->comp.retry_cnt = attr->retry_cnt;\n\t\trxe_dbg_qp(qp, \"set retry count = %d\\n\", attr->retry_cnt);\n\t}\n\n\tif (mask & IB_QP_RNR_RETRY) {"
+      }
+    ],
+    "rxe_req.c": [
+      {
+        "anchor": "ack_req = ((pkt->mask",
+        "line_start": 448,
+        "line_end": 459,
+        "text": "\tif (qp_type(qp) != IB_QPT_UD && qp_type(qp) != IB_QPT_UC)\n\t\tack_req = ((pkt->mask & RXE_END_MASK) ||\n\t\t\t   (qp->req.noack_pkts++ > RXE_MAX_PKT_PER_ACK));\n\tif (ack_req)\n\t\tqp->req.noack_pkts = 0;\n\n\tbth_init(pkt, pkt->opcode, solicited, 0, pad, IB_DEFAULT_PKEY_FULL, qp_num,\n\t\t ack_req, pkt->psn);\n\n\t/* init optional headers */\n\tif (pkt->mask & RXE_RETH_MASK) {\n\t\tif (pkt->mask & RXE_FETH_MASK)"
+      },
+      {
+        "anchor": "!timer_pending(&qp->retrans_timer)",
+        "line_start": 588,
+        "line_end": 599,
+        "text": "\n\tif (qp->qp_timeout_jiffies && !timer_pending(&qp->retrans_timer))\n\t\tmod_timer(&qp->retrans_timer,\n\t\t\t  jiffies + qp->qp_timeout_jiffies);\n}\n\nstatic int rxe_do_local_ops(struct rxe_qp *qp, struct rxe_send_wqe *wqe)\n{\n\tu8 opcode = wqe->wr.opcode;\n\tu32 rkey;\n\tint ret;\n"
+      }
+    ]
+  },
+  "hardware": {
+    "sysfs_devices": [
+      {
+        "device": "mlx5_0",
+        "attributes": {
+          "hca_type": "MT4121",
+          "fw_ver": "16.35.2000",
+          "ports/1/state": "1: DOWN",
+          "ports/1/link_layer": "Ethernet",
+          "ports/1/rate": "40 Gb/sec (4X QDR)"
+        }
+      },
+      {
+        "device": "mlx5_1",
+        "attributes": {
+          "hca_type": "MT4121",
+          "fw_ver": "16.35.2000",
+          "ports/1/state": "1: DOWN",
+          "ports/1/link_layer": "Ethernet",
+          "ports/1/rate": "40 Gb/sec (4X QDR)"
+        }
+      },
+      {
+        "device": "mlx5_2",
+        "attributes": {
+          "hca_type": "MT4121",
+          "fw_ver": "16.35.3502",
+          "ports/1/state": "1: DOWN",
+          "ports/1/link_layer": "Ethernet",
+          "ports/1/rate": "40 Gb/sec (4X QDR)"
+        }
+      },
+      {
+        "device": "mlx5_3",
+        "attributes": {
+          "hca_type": "MT4121",
+          "fw_ver": "16.35.3502",
+          "ports/1/state": "1: DOWN",
+          "ports/1/link_layer": "Ethernet",
+          "ports/1/rate": "40 Gb/sec (4X QDR)"
+        }
+      }
+    ],
+    "preflight_verbs_query": {
+      "command": [
+        "ibv_devinfo",
+        "-d",
+        "mlx5_0",
+        "-i",
+        "1"
+      ],
+      "exit_code": 255,
+      "diagnostic": "IB device 'mlx5_0' wasn't found",
+      "provenance": "read-only preflight query before input freeze"
+    },
+    "calibrated": false,
+    "scope": "sysfs visibility does not prove userspace access or an active two-host RoCE link"
+  },
+  "scope": "observed source-local batch opportunities; no new network or counterfactual completion estimate"
+}

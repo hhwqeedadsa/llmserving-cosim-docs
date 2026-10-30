@@ -1,0 +1,81 @@
+{
+  "passed": true,
+  "sources": [
+    {
+      "name": "rxe_comp",
+      "url": "https://api.github.com/repos/torvalds/linux/contents/drivers/infiniband/sw/rxe/rxe_comp.c?ref=v6.12",
+      "reference": "https://github.com/torvalds/linux/blob/v6.12/drivers/infiniband/sw/rxe/rxe_comp.c",
+      "git_blob_sha1": "d48af218074588cfb7c16594d162e62b4174f7d1",
+      "path": "rxe_comp.c",
+      "sha256": "c2c59b186cbeef632b5b03f82d78df7492abd0b6139748363f813a7e6133aeee",
+      "bytes": 20772,
+      "response_sha256": "ac0da09c8461b8d35cdb6ecb228f92cfc7d901b4e7ae9acbaf3a825ce8ed41a4"
+    },
+    {
+      "name": "rxe_qp",
+      "url": "https://api.github.com/repos/torvalds/linux/contents/drivers/infiniband/sw/rxe/rxe_qp.c?ref=v6.12",
+      "reference": "https://github.com/torvalds/linux/blob/v6.12/drivers/infiniband/sw/rxe/rxe_qp.c",
+      "git_blob_sha1": "d2f7b5195c19dd2df34f3c24f3031e946804eb6d",
+      "path": "rxe_qp.c",
+      "sha256": "6f3c23174e2862beea5eb7094697956f143345d66dd1c68e2c3a8f4766c26e7b",
+      "bytes": 20154,
+      "response_sha256": "d1176fafaa57196d80795ad9959c4030b6348dfda7a133aedf8c620fec1d7c20"
+    },
+    {
+      "name": "rxe_req",
+      "url": "https://api.github.com/repos/torvalds/linux/contents/drivers/infiniband/sw/rxe/rxe_req.c?ref=v6.12",
+      "reference": "https://github.com/torvalds/linux/blob/v6.12/drivers/infiniband/sw/rxe/rxe_req.c",
+      "git_blob_sha1": "479c07e6e4ed3eab4646400455897cd20e3316a2",
+      "path": "rxe_req.c",
+      "sha256": "c829196711751667ba37226cb55d9f0e2d41aa4ae7e68be25693924d6559b359",
+      "bytes": 20319,
+      "response_sha256": "df6fbd8bfbae321d38808fc0db5c1dce925025d320b1a2143d528d7eb9c34d71"
+    },
+    {
+      "name": "rfc8985",
+      "url": "https://www.rfc-editor.org/rfc/rfc8985.txt",
+      "reference": "https://www.rfc-editor.org/rfc/rfc8985.txt",
+      "git_blob_sha1": null,
+      "path": "rfc8985.txt",
+      "sha256": "5b947b1dad18d60ed4550e36e0f474d1678412a413b4664feb5d1428e27d7c5f",
+      "bytes": 73724,
+      "response_sha256": "5b947b1dad18d60ed4550e36e0f474d1678412a413b4664feb5d1428e27d7c5f"
+    },
+    {
+      "name": "rfc6298",
+      "url": "https://www.rfc-editor.org/rfc/rfc6298.txt",
+      "reference": "https://www.rfc-editor.org/rfc/rfc6298#section-5",
+      "path": "rfc6298.txt",
+      "sha256": "f3a6d937c0a7653bd431fdbbdcd7920f4e9d9cdb6134fa9db7a74b90d215edf6",
+      "bytes": 22454,
+      "provenance": "previously acquired local RFC snapshot; not a new HTTP request"
+    },
+    {
+      "name": "rxe_resp",
+      "reference": "https://github.com/torvalds/linux/blob/v6.12/drivers/infiniband/sw/rxe/rxe_resp.c",
+      "url": "https://api.github.com/repos/torvalds/linux/contents/drivers/infiniband/sw/rxe/rxe_resp.c?ref=v6.12",
+      "git_blob_sha1": "c11ab280551a8638e1d9c8fa33f8bc9fc743c020",
+      "path": "runs/recovery_timer_audit_20261030/postrun-ack/rxe_resp.c",
+      "sha256": "b5cdbf37a48ecaa6f9d5f397e5f064317a48d93573b23546cf2fd2c602322e59",
+      "bytes": 40930,
+      "response_sha256": "f8ad7af73e626f3d99a9b02f6ac4542179041b774804486abe5c5a6e4fb5a044",
+      "post_result_source": true,
+      "additional_requests": 1,
+      "request_deadline_seconds": 5
+    }
+  ],
+  "original_preflight_requests": 5,
+  "preflight_deadline_upper_bound_seconds": 53,
+  "retained_request_failure": {
+    "url": "https://raw.githubusercontent.com/torvalds/linux/v6.12/drivers/infiniband/sw/rxe/rxe_comp.c",
+    "method": "HEAD",
+    "exit_code": 28,
+    "deadline_seconds": 15,
+    "error": "Operation timed out after15002ms with0bytes",
+    "same_URL_retried": false
+  },
+  "note": "API was a different official retrieval endpoint; four bodies imported without new requests",
+  "total_source_requests": 6,
+  "total_preflight_deadline_upper_bound_seconds": 58,
+  "post_result_addition": "receiver ACK source imported after frozen original analysis; original manifest retained in input/sources"
+}

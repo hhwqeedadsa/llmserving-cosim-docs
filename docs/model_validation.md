@@ -100,7 +100,7 @@ stream-work/3的本地阶段使用输入显式声明的ns耗时，每GPU单个�
 
 通信按 token×expert 分别计贡献，同 rank 项本地完成，其余按 rank 聚合为不等长直接成对 All-to-All-v；不声称复现 NCCL 或 DeepEP 算法。全部组与轮次共用唯一原生 RDMA ns-3。连续接收完整字节放行 RECV，完整 ACK 结束 SEND；实际事件推进 ASTRA 和下一轮 LLMServingSim 调度。合成路由、有限片段功能验证、硬件校准分别说明。延迟ACK未验证；默认原生协议存在尾包、最终ACK和NACK丢失后可能停滞的限制。可选 `go_back_n` 扩展提供源端ACK进展超时、指数退避和有限重试，接收重复数据通过真实ACK重新确认；故障注入与离线诊断可用于对照。服务主基线仍是无故障，不声称生产RDMA恢复精度。输入、输出和资源范围见[非 UB 小例](../examples/scaleout_rdma/README.md)与[丢包小例](../examples/scaleout_rdma_faults/README.md)。
 
-固定DeepEP v1.2.1低延迟路径的源码核查进一步明确了适用边界：该库按peer/本地expert选择已有QP，逐贡献发送数据，另发包括零token在内的count/flag，并用双buffer及CUDA事件控制复用。当前Scale-Out按rank聚合、每消息新建QP，没有显式表达这些应用通知；完整接收字节也未建模GPU flag可见与接收kernel完成。二者不能视为等价实现。该差异是抽象范围，不使已有抽象模型功能验收失效，也不由操作数量推断时延误差。具体固定源码、四请求核算和建模修正条件见[通信语义审计](reviews/DeepEP低延迟通信语义与建模修正_20261022.md)。
+固定DeepEP v1.2.1低延迟路径的源码核查进一步明确了适用边界：该库按peer/本地expert选择已有QP，逐贡献发送数据，另发包括零token在内的count/flag，并用双buffer及CUDA事件控制复用。该次审计采用的早期Scale-Out入口按rank聚合、每消息新建QP，没有显式表达这些应用通知；完整接收字节也未建模GPU flag可见与接收kernel完成。后续独立持久字节/事务路径已保留QP，不能再把“每消息新建QP”写成全部当前入口的限制；保留QP本身仍不表示实现了DeepEP的通知或GPU可见性。二者不能视为等价实现。该差异是抽象范围，不使已有抽象模型功能验收失效，也不由操作数量推断时延误差。具体固定源码、四请求核算和建模修正条件见[通信语义审计](reviews/DeepEP低延迟通信语义与建模修正_20261022.md)。
 
 ### 可选原生 RDMA 恢复扩展的依据
 
@@ -110,7 +110,11 @@ stream-work/3的本地阶段使用输入显式声明的ns耗时，每GPU单个�
 
 计时原则参考 [RFC 6298 第5节](https://www.rfc-editor.org/rfc/rfc6298#section-5)，它是 TCP 文献，仅用于说明 ACK 进展和退避原则；固定模式不估计RTT；新增可选估计采用相同平滑原则，但采样、舍入和超时下限另有明确声明，不实现TCP拥塞控制。[Linux v6.12 RXE 接收器 duplicate_request](https://github.com/torvalds/linux/blob/v6.12/drivers/infiniband/sw/rxe/rxe_resp.c#L1275)在重复 SEND/WRITE 时重新发送 ACK，[RXE 完成器](https://github.com/torvalds/linux/blob/v6.12/drivers/infiniband/sw/rxe/rxe_comp.c#L771)对未确认请求有限重试并在耗尽时报告错误。这些源码支持重试/重复确认的设计动机，不表示本实现复刻了 RXE 的 PSN、重试状态机或生产网卡。
 
-功能验证覆盖尾包、最终 ACK、NACK、连续丢失、过短超时、同刻 ACK/超时、双 plane、资源释放和真实前端推进；覆盖范围见[验收](../fixtures/scaleout_recovery/README.md)。重试耗尽采用整个共享运行终止，保留资源到诊断/销毁，不模拟单 QP 错误向应用传播后的继续执行。默认原生模式逐字段兼容、记录截断不改变协议，均已单独检查。显式可选Karn RTT估计已加入：每QP单个待测原始包，重传/NACK/超时作废歧义样本，采用平滑RTT与偏差生成有界基准RTO；无配置仍固定超时。精确更新与条件证明见[推理通信脆弱性](communication_fragility.md)。这不是完整RFC6298/TCP或RoCE实现，尚缺硬件RTO校准、真实通信库分块、QP复用和千卡故障执行证据。
+新ACK进展后重启计时是已有机制，不能仅凭某次尾段因此晚重试就称为计时器漏洞。固定Linux v6.12 RXE还使用PSN状态和离散QP超时编码，软件时钟舍入、ACK请求节奏也与项目内字节/MSR1参考不同；不能把仿真中的17µs等值映射为商用网卡参数。RFC8985的RACK-TLP属于另有状态和前提的TCP快速检测机制，当前选择重传不能据此称为完整RACK或IRN。原文身份、行段和真实源重发机会核查见[恢复计时审计](../experiments/recovery_timer_audit/results/20261030/report.html)。
+
+当前独立持久适配器要求逐包ACK配置，选择性接收路径对每次DATA处理生成实际ACK/NACK反馈。固定RXE普通成功RC SEND/WRITE的ACK受请求位控制，重复和错误另有处理。因此，部分ACK推动计时的现象依赖实际WQE拆分和ACK节奏，真实专家选择JSON不足以校准这两项。条件算例及两端源码见[ACK语义核查](../experiments/recovery_timer_audit/results/20261030/ack_policy_explanation.md)；软件RXE不代表mlx5或现代DeepEP的已验证执行，本轮没有改变协议默认值。
+
+功能验证覆盖尾包、最终 ACK、NACK、连续丢失、过短超时、同刻 ACK/超时、双 plane、资源释放和真实前端推进；覆盖范围见[验收](../fixtures/scaleout_recovery/README.md)。重试耗尽采用整个共享运行终止，保留资源到诊断/销毁，不模拟单 QP 错误向应用传播后的继续执行。默认原生模式逐字段兼容、记录截断不改变协议，均已单独检查。显式可选Karn RTT估计已加入：每QP单个待测原始包，重传/NACK/超时作废歧义样本，采用平滑RTT与偏差生成有界基准RTO；无配置仍固定超时。精确更新与条件证明见[推理通信脆弱性](communication_fragility.md)。这不是完整RFC6298/TCP或RoCE实现；本节早期入口没有真实通信库分块或跨消息QP复用，其他入口的QP保留见前文，硬件RTO与完整库恢复精度仍未校准。
 
 可选跨QP恢复历史仅传递本源先前有效RTT和超时退避形成的保守RTO，每源容量/年龄/LRU独立，目的地址包含plane身份；不预测ECMP下一条路径，不伪造RTT样本。目的端份额是软件逻辑占用上限，不是网卡硬件保护或请求级容错。公开配置与验证范围见[恢复与资源保护](../examples/scaleout_rdma_resilience/README.md)。两者可能减少重复发送或保护健康候选，也可能降低并发、延后故障检测；不能预设业务收益。
 

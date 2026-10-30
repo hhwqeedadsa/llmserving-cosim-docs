@@ -1,0 +1,84 @@
+{
+  "passed": true,
+  "post_result_diagnosis": true,
+  "source_sha256": "9befa8001a853717b10ee0d7b089e545504ca0d3e0e9d95a3a497151eb900be0",
+  "public_source": {
+    "name": "rxe_resp",
+    "reference": "https://github.com/torvalds/linux/blob/v6.12/drivers/infiniband/sw/rxe/rxe_resp.c",
+    "url": "https://api.github.com/repos/torvalds/linux/contents/drivers/infiniband/sw/rxe/rxe_resp.c?ref=v6.12",
+    "git_blob_sha1": "c11ab280551a8638e1d9c8fa33f8bc9fc743c020",
+    "path": "runs/recovery_timer_audit_20261030/postrun-ack/rxe_resp.c",
+    "sha256": "b5cdbf37a48ecaa6f9d5f397e5f064317a48d93573b23546cf2fd2c602322e59",
+    "bytes": 40930,
+    "response_sha256": "f8ad7af73e626f3d99a9b02f6ac4542179041b774804486abe5c5a6e4fb5a044",
+    "post_result_source": true,
+    "additional_requests": 1,
+    "request_deadline_seconds": 5
+  },
+  "excerpts": {
+    "adapter_requires_ack_each_packet": {
+      "path": "backend/rdma/persistent_streams.cc",
+      "sha256": "b1a747fd72347f7be5e0207dab4240c40b583c00148e6891a2a225e3d2f73cf8",
+      "first_line": 66,
+      "last_line": 71,
+      "text": "  fabric_.EnableNicBindings();\n  fabric_.network_state_changed_=[this](){Notify();};\n  for(unsigned node=0;node<fabric_.drivers_.size();++node) {\n    auto hw=fabric_.drivers_[node]->m_rdma;\n    Require(hw->m_cc_mode==1 && hw->m_ack_interval==1 && !hw->m_backto0,\"stream adapter requires DCQCN/ACK-each-packet/no-backtozero\");\n    for(auto& nic:hw->m_nic) if(nic.dev) {"
+    },
+    "selective_feedback_unconditional": {
+      "path": "backend/rdma/persistent_streams.cc",
+      "sha256": "b1a747fd72347f7be5e0207dab4240c40b583c00148e6891a2a225e3d2f73cf8",
+      "first_line": 395,
+      "last_line": 405,
+      "text": "  });\n  qbbHeader feedback;feedback.SetSeq(rx->ReceiverNextExpectedSeq);feedback.SetPG(h.udp.pg);\n  feedback.SetSport(h.udp.dport);feedback.SetDport(h.udp.sport);feedback.SetIntHeader(h.udp.ih);\n  const auto bytes=ack.Encode();auto response=Create<Packet>(bytes.data(),bytes.size());response->AddHeader(feedback);\n  Ipv4Header ip;ip.SetDestination(Ipv4Address(h.sip));ip.SetSource(Ipv4Address(h.dip));\n  ip.SetProtocol(h.udp.seq>before?0xfd:0xfc);ip.SetTtl(64);ip.SetPayloadSize(response->GetSize());ip.SetIdentification(rx->m_ipid++);\n  response->AddHeader(ip);hw->AddHeader(response,0x800);\n  SelectiveLog(s,\"feedback_generated\",response,ack);\n  auto dev=hw->m_nic[s.destination_nic].dev;dev->RdmaEnqueueHighPrioQ(response);dev->TriggerTransmit();\n  CheckAccepted(s);\n  if(h.GetIpv4EcnBits()==3)ReferenceMark(s,packet);"
+    },
+    "RXE_request_bit": {
+      "path": "runs/recovery_timer_audit_20261030/input/sources/rxe_req.c",
+      "sha256": "c829196711751667ba37226cb55d9f0e2d41aa4ae7e68be25693924d6559b359",
+      "first_line": 448,
+      "last_line": 455,
+      "text": "\tif (qp_type(qp) != IB_QPT_UD && qp_type(qp) != IB_QPT_UC)\n\t\tack_req = ((pkt->mask & RXE_END_MASK) ||\n\t\t\t   (qp->req.noack_pkts++ > RXE_MAX_PKT_PER_ACK));\n\tif (ack_req)\n\t\tqp->req.noack_pkts = 0;\n\n\tbth_init(pkt, pkt->opcode, solicited, 0, pad, IB_DEFAULT_PKEY_FULL, qp_num,\n\t\t ack_req, pkt->psn);"
+    },
+    "RXE_ordinary_ack": {
+      "path": "runs/recovery_timer_audit_20261030/postrun-ack/rxe_resp.c",
+      "sha256": "b5cdbf37a48ecaa6f9d5f397e5f064317a48d93573b23546cf2fd2c602322e59",
+      "first_line": 1218,
+      "last_line": 1233,
+      "text": "static enum resp_states acknowledge(struct rxe_qp *qp,\n\t\t\t\t    struct rxe_pkt_info *pkt)\n{\n\tif (qp_type(qp) != IB_QPT_RC)\n\t\treturn RESPST_CLEANUP;\n\n\tif (qp->resp.aeth_syndrome != AETH_ACK_UNLIMITED)\n\t\tsend_ack(qp, qp->resp.aeth_syndrome, pkt->psn);\n\telse if (pkt->mask & RXE_ATOMIC_MASK)\n\t\tsend_atomic_ack(qp, AETH_ACK_UNLIMITED, pkt->psn);\n\telse if (pkt->mask & (RXE_FLUSH_MASK | RXE_ATOMIC_WRITE_MASK))\n\t\tsend_read_response_ack(qp, AETH_ACK_UNLIMITED, pkt->psn);\n\telse if (bth_ack(pkt))\n\t\tsend_ack(qp, AETH_ACK_UNLIMITED, pkt->psn);\n\n\treturn RESPST_CLEANUP;"
+    },
+    "RXE_duplicate_ack": {
+      "path": "runs/recovery_timer_audit_20261030/postrun-ack/rxe_resp.c",
+      "sha256": "b5cdbf37a48ecaa6f9d5f397e5f064317a48d93573b23546cf2fd2c602322e59",
+      "first_line": 1275,
+      "last_line": 1285,
+      "text": "static enum resp_states duplicate_request(struct rxe_qp *qp,\n\t\t\t\t\t  struct rxe_pkt_info *pkt)\n{\n\tenum resp_states rc;\n\tu32 prev_psn = (qp->resp.ack_psn - 1) & BTH_PSN_MASK;\n\n\tif (pkt->mask & RXE_SEND_MASK ||\n\t    pkt->mask & RXE_WRITE_MASK) {\n\t\t/* SEND. Ack again and cleanup. C9-105. */\n\t\tsend_ack(qp, AETH_ACK_UNLIMITED, prev_psn);\n\t\treturn RESPST_CLEANUP;"
+    }
+  },
+  "conditional_example": {
+    "logical_message_bytes": 6000,
+    "assumed_work_requests": 1,
+    "operation": "ordinary successful RC WRITE",
+    "assumed_packets": 2,
+    "first_packet_requests_ACK": false,
+    "last_packet_requests_ACK": true,
+    "last_packet_lost": true,
+    "assumes_no_periodic_ACK_request_threshold": true,
+    "assumes_no_error_or_duplicate": true,
+    "conclusion": "No ordinary ACK for first packet solely on this receive path; timer reset event may be absent.",
+    "target_library_WQE_mapping_verified": false,
+    "mlx5_behavior_verified": false,
+    "assumed_path_MTU_bytes": 4096
+  },
+  "new_networks": 0,
+  "protocol_changed": false,
+  "hardware_calibrated": false,
+  "reproduction_source_sha256": "dc1dd779a0c76933c4e4b988315d6d1f2cdd4a6abb463b373eb554e14ade5b7f",
+  "editorial_revision": {
+    "reason": "separate illustrative RXE WRITE MTU from model 9000-byte packet size",
+    "source_path": "runs/recovery_timer_audit_20261030/correct_ack_example.py",
+    "source_sha256": "466a4402085827869e1c0aeaa24a952e0816e86c2f9160d59e8200aa1c660e83",
+    "original_artifact_sha256": "4c56aca3dbca42ed63091c6be78f0bbdee8f24835847e6000284022922edec34",
+    "original_source_path": "runs/recovery_timer_audit_20261030/before-example-correction/ack_policy.py",
+    "original_source_sha256": "9befa8001a853717b10ee0d7b089e545504ca0d3e0e9d95a3a497151eb900be0",
+    "new_networks": 0,
+    "raw_analysis_changed": false
+  }
+}

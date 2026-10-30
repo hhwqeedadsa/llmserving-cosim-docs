@@ -1,0 +1,13 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>临时断链恢复功能验收</title>
+<style>body{font:16px/1.7 system-ui,sans-serif;max-width:1000px;margin:32px auto;padding:0 24px;background:#f5f8fc;color:#153047}table{border-collapse:collapse;width:100%;background:white}td,th{padding:9px;border-bottom:1px solid #dce4ef;text-align:right}td:first-child,th:first-child{text-align:left}.box{background:#e3eefb;padding:18px;border-left:5px solid #3279c4}a{color:#2465a7}</style>
+<h1>短时断链后，恢复原链路和原连接</h1>
+<p>128端点Clos · 20交换机 · 4条人工持久连接 · 选择性重传始终启用 · 没有GPU执行或真实MoE性能结论</p>
+<div class="box">已实现物理关闭/上线、独立的路由通知、迟到通知版本保护。六个功能网络通过；正常条件的新旧原始结果除库路径外一致。</div>
+<h2>关键情况：恢复先到，旧故障通知晚到</h2>
+<table><tr><th>时间</th><th>物理端口</th><th>控制器动作</th></tr><tr><td>4µs</td><td>关闭</td><td>尚未收到断链通知</td></tr><tr><td>24µs</td><td>恢复上线</td><td>收到版本2恢复通知</td></tr><tr><td>110.791µs</td><td>保持上线</td><td>所有工作已实际ACK</td></tr><tr><td>300µs</td><td>保持上线</td><td>忽略迟到的版本1断链通知；处理完未来事件才结束</td></tr></table>
+<p>另一条件在10µs物理恢复、20µs才收到断链通知、30µs收到恢复通知；控制面在20–30µs仍应排除该边，不能偷读物理状态。实际包路径已按当时获知的路由独立核对。</p>
+<h2>原始验收记录</h2><table><tr><th>条件</th><th>物理发送</th><th>物理丢弃</th><th>路由代次</th><th>最后ACK ns</th><th>网络结束 ns</th></tr><tr><td>normal-old</td><td>2,592</td><td>0</td><td>—</td><td>—</td><td>—</td></tr><tr><td>normal-new</td><td>2,592</td><td>0</td><td>—</td><td>—</td><td>—</td></tr><tr><td>stale-down</td><td>3,187</td><td>26</td><td>1</td><td>110791</td><td>300000</td></tr><tr><td>ordered-local</td><td>3,019</td><td>26</td><td>2</td><td>110791</td><td>110791</td></tr><tr><td>physical-before-report</td><td>3,499</td><td>26</td><td>2</td><td>110791</td><td>110791</td></tr><tr><td>inflight</td><td>3,667</td><td>0</td><td>2</td><td>110791</td><td>110791</td></tr></table>
+<p>合计18,556次物理发送逐跳匹配接收/丢弃；9,785次DATA/ACK/NACK实际入队核对独立最短路和原生哈希，事件同ns边界单独保留歧义；源字节、ACK/SACK、队列积分和终态MMU全部核对。34项单位检查、16类非法输入、6类篡改检查通过。</p>
+<h2>这次增加的价值</h2><p>此前只能断开链路，现在可以复现短时故障后的恢复过程，并避免迟到通知让控制状态回退。后续真实MoE实验可以分别研究故障持续时间、恢复通知延迟与任务阶段等待。本轮是系统功能建设，不把链路上线或选择性重传称为创新协议。</p>
+<p>边界：1ns窗口检查原发送状态未被重置；接收仍按到达瞬间端口状态判断，不模拟发送途中比特中断/CRC或光模块训练。没有真实分布式控制报文、硬件校准、生产收益或完整模型恢复实验。</p>
+<p><a href="README.md">验收解释与复算</a> · <a href="../../examples/scaleout_link_restore/README.md">公开运行示例</a> · <a href="verification.json">核验摘要</a> · <a href="receipt.json">版本与资源</a></p></html>

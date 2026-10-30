@@ -107,9 +107,10 @@ class Fabric {
   void EnableNicBindings();
   ns3::Ipv4Address NicAddress(unsigned gpu,unsigned plane,unsigned nic) const;
   bool NicConnectionReachable(unsigned src,unsigned source_nic,unsigned dst,unsigned destination_nic,unsigned plane) const;
-  void InstallLocalRoutes(unsigned node,bool record=false,unsigned event_index=0);
+  void InstallLocalRoutes(unsigned node,bool record=false,unsigned event_index=0,const char* state=nullptr);
   void FailLink(Json event,unsigned index);
-  void UpdateRoutes(Json event,unsigned index);
+  void RestoreLink(Json event,unsigned index);
+  void UpdateRoutes(Json event,unsigned index,unsigned revision);
   int64_t PacketFlow(ns3::Ptr<const ns3::Packet>) const;
   void PacketEvent(unsigned event, unsigned node, unsigned port, ns3::Ptr<const ns3::Packet>);
   bool Corrupt(unsigned node, unsigned port, ns3::Ptr<ns3::Packet>);
@@ -171,6 +172,7 @@ class Fabric {
   bool drain_check_pending_=false;
   bool persistent_stream_mode_=false;
   std::set<std::pair<unsigned,unsigned>> routing_down_;
+  std::map<unsigned,unsigned> known_link_revision_;
   uint64_t pending_link_events_=0,route_epoch_=0,local_drops_=0;
   Json link_events_=Json::array();
   Done network_state_changed_;

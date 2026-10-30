@@ -25,4 +25,4 @@ PYTHONPATH=python PYTHONDONTWRITEBYTECODE=1 python3 -B -m moe_ub_cosim scaleout 
 
 `result.json.link_failures.local_failover`记录模式、范围及每次故障两端的候选数、安装数、空目的数和被剔除端口。候选计数不是包计数。完整捕获中的本地转发丢弃绑定入口端口，需结合实际包头、接收及当时路由判断原因。字段见[输出说明](../../docs/record_storage.md)，独立包/哈希验证见[功能验收](../../fixtures/live_ecmp/README.md)。
 
-该模式没有额外本地检测或编程时延，是立即本地响应的经典理想参考。不支持新绕行、显式源端故障通知、链路恢复或生产FRR/LFA成本，不代表现代GIN、硬件校准或论文创新。
+该模式没有额外本地检测或编程时延，是立即本地响应的经典理想参考。这里的永久断链输入不恢复链路；支持恢复的v2输入见[独立示例](../scaleout_link_restore/README.md)。本地剔除不支持生成新绕行、显式源端故障通知或生产FRR/LFA成本，不代表现代GIN、硬件校准或论文创新。

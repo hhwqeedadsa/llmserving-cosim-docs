@@ -26,6 +26,8 @@ context连接规划沿用[固定provider共享范围核查](reviews/现代连接
 
 `switch_links/1`是原生Scale-Out的永久交换机边故障功能模型：真实端口关闭、数据MMU回收、PFC恢复、在途到达丢弃与真实ACK/重传，配合声明延迟的集中最短路/ECMP更新。小例覆盖排队、headroom、多故障不同延迟、持久QP、未来事件与永久分区；[证据及限制](../fixtures/switch_link_failure/README.md)区分其功能范围。检测/控制报文、NIC故障、rail重绑定、GPU/MR恢复和硬件成本没有建模；经典改路与缓冲修复不是论文创新，未验证千卡或现代MoE性能。
 
+`switch_links/2`支持每条交换机边一轮临时关闭/恢复，项目派生端口保留固定原生数据路径和在途发送状态；控制面只按显式到达的版本化通知知晓状态。恢复可能先于断链通知，不能从物理真值提前改路。它是[功能模型](../examples/scaleout_link_restore/README.md)，接收仍按到达瞬间端口状态判断，未模拟发送中途信号中断对比特/CRC的影响、光模块训练、真实路由协议与控制报文；极短窗口只能检查状态寿命，不校准物理丢包率，也不增加现代GIN/GPU或硬件性能可信度。
+
 固定NCCL官方文档要求窗口注销前保证对应buffer无NCCL访问；已有Revoke（保留资源）及SHRINK_ABORT（新通信域不与父域共享资源）必须作为恢复强基线。外部devComm的abort指针选择、GIN等待分支与DeepEP用户内核终止的区别，见[恢复适用性核查](reviews/通信域恢复与外部GIN内核边界_20261024.md)。该研究只执行精确CPU片段及记录替身，未实现真实恢复、证明用户CUDA生产者退出或校准成本。
 
 `local_views/1`依据固定NCCL窗口/底层分配引用关系，只实现输入声明的本地视图和使用寿命：多个视图共享现有存储/注册。未执行可复用flags/handles/跨rank协商，未模拟provider退出、DMA fence或真实注销。最后视图关闭后真实MRT1包仍可通过静态权限写入，这是功能边界，不是上游漏洞。依据见[生命周期核查](reviews/窗口注销合法边界与底层注册复用_20261024.md)，功能验收见[本地窗口](../fixtures/application_windows/README.md)。

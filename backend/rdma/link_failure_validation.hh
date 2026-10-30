@@ -12,7 +12,8 @@ inline Json LinkFailureEvents(const Json& config,const Json& topology,int64_t ma
   if(!config.contains("link_failures"))return Json::array();
   const auto& model=config.at("link_failures");
   Require(model.is_object() && model.size()==2 && model.contains("mode") && model.contains("events") &&
-          model.at("mode")=="switch_links/1","unsupported link failure model");
+          (model.at("mode")=="switch_links/1" || model.at("mode")=="switch_links/2"),"unsupported link failure model");
+  const bool temporary=model.at("mode")=="switch_links/2";
   const auto& events=model.at("events");
   Require(events.is_array() && !events.empty() && events.size()<=8,"require 1..8 switch link failures");
   auto integer=[](const Json& v,uint64_t bound) {
@@ -22,11 +23,17 @@ inline Json LinkFailureEvents(const Json& config,const Json& topology,int64_t ma
   Json output=Json::array();std::set<std::pair<unsigned,unsigned>> seen;
   const auto& nodes=topology.at("nodes");
   for(const auto& e:events) {
-    Require(e.is_object() && e.size()==4,"wrong link failure event fields");
+    Require(e.is_object() && e.size()==(temporary?6:4),"wrong link failure event fields");
     for(const auto* k:{"src","dst","time_ns","route_update_delay_ns"})Require(e.contains(k),"missing link failure field");
     const auto a=integer(e.at("src"),1279),b=integer(e.at("dst"),1279);
     const auto time=integer(e.at("time_ns"),maximum-1);
     integer(e.at("route_update_delay_ns"),maximum-1-time);
+    if(temporary) {
+      Require(e.contains("restore_time_ns") && e.contains("restore_route_update_delay_ns"),"missing restore fields");
+      const auto restore=integer(e.at("restore_time_ns"),maximum-1);
+      Require(restore>time,"restore must follow link failure");
+      integer(e.at("restore_route_update_delay_ns"),maximum-1-restore);
+    }
     Require(a<b && b<nodes.size() && nodes.at(a).at("id")==a && nodes.at(b).at("id")==b &&
       nodes.at(a).at("kind")!="gpu" && nodes.at(b).at("kind")!="gpu" &&
       nodes.at(a).at("plane")==nodes.at(b).at("plane") && seen.emplace(a,b).second,

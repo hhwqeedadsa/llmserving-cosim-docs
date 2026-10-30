@@ -55,6 +55,8 @@ transactions/5的可选`declared_service_fifo/1`为每个self连接调度独立s
 
 原生Scale-Out的可选`switch_links/1`通过同一Simulator关闭实际switch—switch两端，保留在途发送，区分本地排队/转发丢弃与物理到达丢弃。声明延迟后仅排除当时已知故障，重建同plane最短路/ECMP表，保留QP序号及拥塞状态。持久控制器监听网络状态变化，尚有配置事件时不能提前排空关闭；它不是分布式控制平面。范围见[物理链路失效](../examples/scaleout_link_failure/README.md)。
 
+`switch_links/2`在同一网络增加原端口恢复与版本化控制通知。物理设备状态、控制器已知状态分别更新，控制器只能接受已到的较新通知；恢复不取消原在途发送完成、重传或源ACK等待，不重建QP。恢复与通知均参与终止检查，见[临时断链](../examples/scaleout_link_restore/README.md)。
+
 显式`live_ecmp/1`在上述机制上增加交换机本地候选过滤：实际关闭端口后，两端只安装原全局候选中的存活端口；下一次全局重建继续过滤本地坏端口，远端仍等待各故障自己的更新时间。不创建非等价绕路、不通知源、不迁移排队包；没有模拟额外本地检测/编程成本。配置见[本地失效端口剔除](../examples/scaleout_live_ecmp/README.md)。
 
 v4/v5的可选`local_views/1`在物理存储和静态NIC注册之上维护应用子窗口；操作准入/实际完成之间持有本地使用，local节点完成才释放视图引用。最后引用为0只进入provider待处理状态，包接收不查询应用视图；发送方不读取目标关闭状态。见[窗口使用与关闭](../examples/scaleout_rdma_transactions/README.md#应用窗口关闭与底层注册分开)。

@@ -73,5 +73,46 @@ class LinkFailureTest(unittest.TestCase):
             with self.subTest(filename=filename):
                 validate(topology, json.loads((directory/'protocol.json').read_text()), json.loads((directory/filename).read_text()))
 
+    def test_temporary_reports_may_arrive_in_either_order(self):
+        self.protocol['link_failures']['mode'] = 'switch_links/2'
+        for down_delay, restore, up_delay in ((2000, 20000, 1000), (30000, 15000, 0),
+                                               (20000, 15000, 40000), (0, 10001, 0)):
+            self.event.update(route_update_delay_ns=down_delay, restore_time_ns=restore,
+                              restore_route_update_delay_ns=up_delay)
+            validate_topology(self.topology, self.protocol)
+
+    def test_temporary_schedule_types_bounds_and_versions(self):
+        self.protocol['link_failures']['mode'] = 'switch_links/2'
+        self.event.update(restore_time_ns=20000, restore_route_update_delay_ns=2000)
+        invalid = [('restore_time_ns', True), ('restore_time_ns', 1.5), ('restore_time_ns', -1),
+                   ('restore_time_ns', 10000), ('restore_time_ns', 9999), ('restore_time_ns', 5000000),
+                   ('restore_route_update_delay_ns', True), ('restore_route_update_delay_ns', -1),
+                   ('restore_route_update_delay_ns', 4980000), ('extra', 1)]
+        for key, value in invalid:
+            c = deepcopy(self.protocol)
+            c['link_failures']['events'][0][key] = value
+            with self.subTest(key=key, value=value), self.assertRaises(ValueError):
+                validate_options(c)
+        for missing in ('restore_time_ns', 'restore_route_update_delay_ns'):
+            c = deepcopy(self.protocol)
+            del c['link_failures']['events'][0][missing]
+            with self.subTest(missing=missing), self.assertRaises(ValueError):
+                validate_options(c)
+        self.protocol['link_failures']['mode'] = 'switch_links/1'
+        with self.assertRaises(ValueError):
+            validate_options(self.protocol)
+
+    def test_temporary_example_prepares_independent_clos128_inputs(self):
+        import importlib.util
+        spec = importlib.util.spec_from_file_location('restore_example', ROOT/'examples/scaleout_link_restore/prepare.py')
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        topology_config, protocols, work = module.inputs()
+        topology, _ = generate(topology_config)
+        from moe_ub_cosim.scaleout_streams import validate
+        self.assertEqual(sum(n['kind'] == 'gpu' for n in topology['nodes']), 128)
+        for protocol in protocols.values():
+            validate(topology, protocol, work)
+
 
 if __name__ == '__main__': unittest.main()

@@ -1,0 +1,231 @@
+{
+  "passed": true,
+  "actual_Clos128_networks": 6,
+  "default_result_identical_except_libraries": true,
+  "cases": {
+    "normal-old": {
+      "passed": true,
+      "source_packets": 320,
+      "source_payload_bytes": 320000,
+      "peak_reorder_bytes": {},
+      "physical": {
+        "tx": 2592,
+        "rx": 2592
+      },
+      "actual_feedback_received": 320,
+      "fast_retransmits": 0,
+      "ack_extension_model_bytes": [
+        50
+      ],
+      "temporary": false
+    },
+    "normal-new": {
+      "passed": true,
+      "source_packets": 320,
+      "source_payload_bytes": 320000,
+      "peak_reorder_bytes": {},
+      "physical": {
+        "tx": 2592,
+        "rx": 2592
+      },
+      "actual_feedback_received": 320,
+      "fast_retransmits": 0,
+      "ack_extension_model_bytes": [
+        50
+      ],
+      "temporary": false
+    },
+    "stale-down": {
+      "passed": true,
+      "source_packets": 677,
+      "source_payload_bytes": 677000,
+      "peak_reorder_bytes": {
+        "3": 5000
+      },
+      "physical": {
+        "tx": 3187,
+        "rx": 3161,
+        "physical_drop": 26
+      },
+      "actual_feedback_received": 315,
+      "fast_retransmits": 1,
+      "ack_extension_model_bytes": [
+        50
+      ],
+      "temporary": true,
+      "notification_kinds": {
+        "link_down": 1,
+        "link_up": 1,
+        "routes_updated": 1,
+        "routes_update_ignored": 1
+      },
+      "route_epoch": 1,
+      "routing": {
+        "serialized_transmissions_checked": 3187,
+        "actual_enqueues_checked": 2244,
+        "selected_port_tx": 514,
+        "selected_port_tx_after_restore": 455
+      },
+      "transmitting_across_short_outage": [],
+      "last_ack_ns": 110791,
+      "final_ns": 300000,
+      "waited_for_future_notification": true
+    },
+    "ordered-local": {
+      "passed": true,
+      "source_packets": 554,
+      "source_payload_bytes": 554000,
+      "peak_reorder_bytes": {},
+      "physical": {
+        "tx": 3019,
+        "rx": 2993,
+        "physical_drop": 26
+      },
+      "actual_feedback_received": 320,
+      "fast_retransmits": 0,
+      "ack_extension_model_bytes": [
+        50
+      ],
+      "temporary": true,
+      "notification_kinds": {
+        "link_down": 1,
+        "routes_updated": 2,
+        "link_up": 1
+      },
+      "route_epoch": 2,
+      "routing": {
+        "serialized_transmissions_checked": 3019,
+        "actual_enqueues_checked": 2200,
+        "selected_port_tx": 156,
+        "selected_port_tx_after_restore": 97
+      },
+      "transmitting_across_short_outage": [],
+      "last_ack_ns": 110791,
+      "final_ns": 110791,
+      "waited_for_future_notification": false
+    },
+    "physical-before-report": {
+      "passed": true,
+      "source_packets": 570,
+      "source_payload_bytes": 570000,
+      "peak_reorder_bytes": {
+        "3": 17000,
+        "2": 16000,
+        "0": 4000
+      },
+      "physical": {
+        "tx": 3499,
+        "rx": 3473,
+        "physical_drop": 26
+      },
+      "actual_feedback_received": 364,
+      "fast_retransmits": 6,
+      "ack_extension_model_bytes": [
+        50
+      ],
+      "temporary": true,
+      "notification_kinds": {
+        "link_down": 1,
+        "link_up": 1,
+        "routes_updated": 2
+      },
+      "route_epoch": 2,
+      "routing": {
+        "serialized_transmissions_checked": 3499,
+        "actual_enqueues_checked": 2614,
+        "selected_port_tx": 346,
+        "selected_port_tx_after_restore": 287
+      },
+      "transmitting_across_short_outage": [],
+      "last_ack_ns": 110791,
+      "final_ns": 110791,
+      "waited_for_future_notification": false
+    },
+    "inflight": {
+      "passed": true,
+      "source_packets": 457,
+      "source_payload_bytes": 457000,
+      "peak_reorder_bytes": {
+        "0": 62000,
+        "1": 62000
+      },
+      "physical": {
+        "tx": 3667,
+        "rx": 3667
+      },
+      "actual_feedback_received": 454,
+      "fast_retransmits": 2,
+      "ack_extension_model_bytes": [
+        50
+      ],
+      "temporary": true,
+      "notification_kinds": {
+        "link_down": 1,
+        "routes_updated": 2,
+        "link_up": 1
+      },
+      "route_epoch": 2,
+      "routing": {
+        "serialized_transmissions_checked": 3667,
+        "actual_enqueues_checked": 2727,
+        "selected_port_tx": 691,
+        "selected_port_tx_after_restore": 690
+      },
+      "transmitting_across_short_outage": [
+        {
+          "time_ns": 1021,
+          "node": 128,
+          "port": 17,
+          "event": 0,
+          "packet_uid": 0,
+          "message_id": 0,
+          "ip_protocol": 17,
+          "sequence": 0,
+          "model_bytes": 1036,
+          "ecn": 0,
+          "egress_queue_bytes": 0,
+          "data_payload_bytes": 1000
+        }
+      ],
+      "last_ack_ns": 110791,
+      "final_ns": 110791,
+      "waited_for_future_notification": false
+    }
+  },
+  "independent_route_scope": "all DATA/ACK/NACK enqueues except same-ns state boundaries",
+  "tamper_checks": [
+    {
+      "condition": "stale-down",
+      "mutation": "old report accepted over new known version",
+      "rejected": true
+    },
+    {
+      "condition": "stale-down",
+      "mutation": "ignored report changed route epoch",
+      "rejected": true
+    },
+    {
+      "condition": "physical-before-report",
+      "mutation": "physical truth substituted for known down state",
+      "rejected": true
+    },
+    {
+      "condition": "inflight",
+      "mutation": "wrong actual recovery time",
+      "rejected": true
+    },
+    {
+      "condition": "stale-down",
+      "mutation": "source ACK synthesized before real feedback",
+      "rejected": true
+    },
+    {
+      "condition": "stale-down",
+      "mutation": "residual switch buffer hidden at exit",
+      "rejected": true
+    }
+  ],
+  "native_invalid_cases": 16,
+  "unit_checks": 34,
+  "source_raw_verification_sha256": "8b390d25ad043f7bda40f2a10687f3dcfea50b30b9919e0e5fe212d666046d67"
+}

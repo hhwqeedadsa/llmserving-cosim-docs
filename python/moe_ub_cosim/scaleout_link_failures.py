@@ -1,4 +1,4 @@
-"""Permanent switch-link failures with explicitly declared route convergence."""
+"""Switch-link failures/restoration with explicitly declared route convergence."""
 from .scaleout_topology import fields, integer, require
 
 
@@ -14,16 +14,22 @@ def validate_options(config):
     maximum = limits(config)['max_sim_ns']
     model = config['link_failures']
     fields(model, 'mode events', 'link failures')
-    require(model['mode'] == 'switch_links/1', 'unsupported link failure mode')
+    require(model['mode'] in ('switch_links/1', 'switch_links/2'), 'unsupported link failure mode')
+    temporary = model['mode'] == 'switch_links/2'
     events = model['events']
     require(isinstance(events, list) and 1 <= len(events) <= 8, 'require 1..8 switch link failures')
     seen = set()
     for event in events:
-        fields(event, 'src dst time_ns route_update_delay_ns', 'link failure event')
+        fields(event, 'src dst time_ns route_update_delay_ns'+
+               (' restore_time_ns restore_route_update_delay_ns' if temporary else ''), 'link failure event')
         integer(event['src'], 'failure source switch', 0, 1279)
         integer(event['dst'], 'failure destination switch', event['src']+1, 1279)
         integer(event['time_ns'], 'link failure time', 0, maximum-1)
         integer(event['route_update_delay_ns'], 'route update delay', 0, maximum-1-event['time_ns'])
+        if temporary:
+            integer(event['restore_time_ns'], 'restore time', event['time_ns']+1, maximum-1)
+            integer(event['restore_route_update_delay_ns'], 'restore route update delay',
+                    0, maximum-1-event['restore_time_ns'])
         pair = event['src'], event['dst']
         require(pair not in seen, 'duplicate link failure')
         seen.add(pair)

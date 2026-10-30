@@ -74,4 +74,4 @@ PYTHONPATH=python python3 -m moe_ub_cosim scaleout rdma-stream-probe \
 
 故障和路由事件未结束时，物理排空检查不会允许提前关闭。示例probe固定运行到预算时限，因此顶层`finish_ns`不是消息完成时延，应读各消息`ack_ns`。持久入口在全部工作及网络事件结束后停止。
 
-目前没有NIC失效、rail重绑定、链路恢复、分布式控制报文、GPU内核终止或内存注册撤销。控制延迟是声明参数，没有硬件校准；PFC/字节/事务例只是功能核验，不能据此声称千卡、现代GIN、生产MoE或恢复性能收益。独立核验、失败和复现入口见[验收记录](../../fixtures/switch_link_failure/README.md)。
+本例v1不恢复链路；临时断链及恢复请使用[独立v2示例](../scaleout_link_restore/README.md)。目前没有NIC失效、rail重绑定、分布式控制报文、GPU内核终止或内存注册撤销。控制延迟是声明参数，没有硬件校准；PFC/字节/事务例只是功能核验，不能据此声称千卡、现代GIN、生产MoE或恢复性能收益。独立核验、失败和复现入口见[验收记录](../../fixtures/switch_link_failure/README.md)。

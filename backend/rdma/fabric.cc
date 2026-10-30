@@ -5,6 +5,7 @@
 #include "ns3/switch-node.h"
 #include "cnp_switch.hh"
 #include "link_failure_validation.hh"
+#include "recoverable_qbb.hh"
 #include <algorithm>
 #include <fstream>
 #include <queue>
@@ -185,7 +186,11 @@ Fabric::Fabric(const Json& topology, const Json& config): topology_(topology), c
     QbbHelper helper;
     helper.SetDeviceAttribute("DataRate", DataRateValue(DataRate(l.at("rate_bps").get<uint64_t>())));
     helper.SetChannelAttribute("Delay", TimeValue(NanoSeconds(l.at("delay_ns").get<int64_t>())));
-    auto d=helper.Install(nodes_.Get(a), nodes_.Get(b));
+    const bool recoverable=std::any_of(link_failures.begin(),link_failures.end(),[a,b](const Json& e) {
+      return e.contains("restore_time_ns") && e.at("src")==a && e.at("dst")==b;
+    });
+    auto d=recoverable ? InstallRecoverableLink(nodes_.Get(a),nodes_.Get(b),
+      l.at("rate_bps").get<uint64_t>(),l.at("delay_ns").get<int64_t>()) : helper.Install(nodes_.Get(a),nodes_.Get(b));
     Ipv4AddressHelper ips;
     const uint32_t base = 0x0a000000u + (++edge_index << 8);
     ips.SetBase(Ipv4Address(base), Ipv4Mask("255.255.255.0")); ips.Assign(d);
@@ -282,10 +287,13 @@ Fabric::Fabric(const Json& topology, const Json& config): topology_(topology), c
   }
   RdmaEgressQueue::ack_q_idx=0;
   RebuildRoutes();
-  pending_link_events_=2*link_failures.size();
+  pending_link_events_=0;
   for(unsigned index=0;index<link_failures.size();++index) {
     const auto& event=link_failures.at(index);
+    pending_link_events_+=event.contains("restore_time_ns")?4:2;
     Simulator::Schedule(NanoSeconds(event.at("time_ns").get<int64_t>()),&Fabric::FailLink,this,event,index);
+    if(event.contains("restore_time_ns"))
+      Simulator::Schedule(NanoSeconds(event.at("restore_time_ns").get<int64_t>()),&Fabric::RestoreLink,this,event,index);
   }
   for(const auto n:capture_nodes_)Require(n<nodes_.GetN(),"capture node absent from topology");
   for(const auto& rule:fault_rules_) {
@@ -391,7 +399,7 @@ void Fabric::RebuildRoutes() {
   }
   if(local_failover_)for(unsigned node=gpus_;node<nodes_.GetN();++node)InstallLocalRoutes(node);
 }
-void Fabric::InstallLocalRoutes(unsigned node,bool record,unsigned event_index) {
+void Fabric::InstallLocalRoutes(unsigned node,bool record,unsigned event_index,const char* state) {
   // Candidates only reflect globally converged failures. IsLinkUp is read
   // for this switch's own ports, never used in another node's reverse BFS.
   const auto sw=DynamicCast<SwitchNode>(nodes_.Get(node));sw->ClearTable();
@@ -415,6 +423,7 @@ void Fabric::InstallLocalRoutes(unsigned node,bool record,unsigned event_index) 
     local_route_updates_.push_back({{"time_ns",Now()},{"node",node},{"event_index",event_index},
       {"candidate_destinations",table.size()},{"candidate_next_hops",candidates},
       {"installed_next_hops",installed},{"empty_destinations",empty},{"removed_by_port",losses}});
+    if(state)local_route_updates_.back()["physical_state"]=state;
   }
 }
 void Fabric::FailLink(Json event,unsigned index) {
@@ -441,16 +450,54 @@ void Fabric::FailLink(Json event,unsigned index) {
     {"src",a},{"dst",b},{"src_port",ap},{"dst_port",bp},{"queued_bytes_before",queued},
     {"local_drops_during_close",local_drops_-before},{"route_epoch",route_epoch_},
     {"buffer_before",before_state},{"buffer_after",Json::array({occupancy(a,ap),occupancy(b,bp)})}});
-  if(local_failover_) {InstallLocalRoutes(a,true,index);InstallLocalRoutes(b,true,index);}
-  Simulator::Schedule(NanoSeconds(event.at("route_update_delay_ns").get<int64_t>()),&Fabric::UpdateRoutes,this,event,index);
+  const char* state=event.contains("restore_time_ns")?"down":nullptr;
+  if(local_failover_) {InstallLocalRoutes(a,true,index,state);InstallLocalRoutes(b,true,index,state);}
+  Simulator::Schedule(NanoSeconds(event.at("route_update_delay_ns").get<int64_t>()),&Fabric::UpdateRoutes,this,event,index,1u);
   CheckDrain();if(network_state_changed_)network_state_changed_();
 }
-void Fabric::UpdateRoutes(Json event,unsigned index) {
-  routing_down_.emplace(event.at("src"),event.at("src_port"));
-  routing_down_.emplace(event.at("dst"),event.at("dst_port"));
+void Fabric::RestoreLink(Json event,unsigned index) {
+  const unsigned a=event.at("src"),b=event.at("dst"),ap=event.at("src_port"),bp=event.at("dst_port");
+  const auto first=DynamicCast<RecoverableQbb>(devices_.at({a,ap}));
+  const auto second=DynamicCast<RecoverableQbb>(devices_.at({b,bp}));
+  Require(first && second && !first->IsLinkUp() && !second->IsLinkUp(),"restore requires paired down switch ports");
+  first->RestoreSwitchPort();second->RestoreSwitchPort();--pending_link_events_;
+  link_events_.push_back({{"kind","link_up"},{"time_ns",Now()},{"event_index",index},
+    {"src",a},{"dst",b},{"src_port",ap},{"dst_port",bp},{"route_epoch",route_epoch_}});
+  if(local_failover_) {InstallLocalRoutes(a,true,index,"up");InstallLocalRoutes(b,true,index,"up");}
+  first->TriggerTransmit();second->TriggerTransmit();
+  Simulator::Schedule(NanoSeconds(event.at("restore_route_update_delay_ns").get<int64_t>()),
+    &Fabric::UpdateRoutes,this,event,index,2u);
+  CheckDrain();if(network_state_changed_)network_state_changed_();
+}
+void Fabric::UpdateRoutes(Json event,unsigned index,unsigned revision) {
+  const bool temporary=event.contains("restore_time_ns");
+  if(temporary) {
+    // Notification versions, NOT the physical generation, are the controller's
+    // only knowledge. A down report may legitimately arrive after physical up.
+    auto& known=known_link_revision_[index];
+    if(revision<=known) {
+      --pending_link_events_;
+      link_events_.push_back({{"kind","routes_update_ignored"},{"time_ns",Now()},{"event_index",index},
+        {"notification_revision",revision},{"known_revision",known},{"route_epoch",route_epoch_},
+        {"excluded_directed_ports",routing_down_.size()}});
+      CheckDrain();if(network_state_changed_)network_state_changed_();return;
+    }
+    known=revision;
+  }
+  if(revision==1) {
+    routing_down_.emplace(event.at("src"),event.at("src_port"));
+    routing_down_.emplace(event.at("dst"),event.at("dst_port"));
+  } else {
+    routing_down_.erase({event.at("src"),event.at("src_port")});
+    routing_down_.erase({event.at("dst"),event.at("dst_port")});
+  }
   RebuildRoutes();++route_epoch_;--pending_link_events_;
   link_events_.push_back({{"kind","routes_updated"},{"time_ns",Now()},{"event_index",index},
     {"route_epoch",route_epoch_},{"excluded_directed_ports",routing_down_.size()}});
+  if(temporary) {
+    link_events_.back()["notification_revision"]=revision;
+    link_events_.back()["known_state"]=revision==1?"down":"up";
+  }
   CheckDrain();if(network_state_changed_)network_state_changed_();
 }
 
@@ -767,6 +814,8 @@ Json Fabric::Report() {
   if(config_.contains("link_failures"))r["link_failures"]={{"configuration",config_.at("link_failures")},
     {"events",link_events_},{"pending_events",pending_link_events_},{"route_epoch",route_epoch_},{"local_drops",local_drops_},
     {"scope","permanent bidirectional switch-switch shutdown; delayed centralized shortest-path/ECMP update; declared control delay, no control packets or hardware calibration; QPs retain sequence and congestion state"}};
+  if(config_.contains("link_failures") && config_.at("link_failures").at("mode")=="switch_links/2")
+    r["link_failures"]["scope"]="temporary bidirectional switch shutdown/up on the same ports; delayed versioned state notifications only; no controller physical-state oracle, control packets or hardware calibration; QPs, current transmission and retry state retained";
   if(local_failover_)r["link_failures"]["local_failover"]={{"configuration",config_.at("local_failover")},
     {"events",local_route_updates_},
     {"scope","immediate local pruning of existing equal-cost candidates using own actual link state; no new paths, remote notification, control cost or hardware calibration"}};

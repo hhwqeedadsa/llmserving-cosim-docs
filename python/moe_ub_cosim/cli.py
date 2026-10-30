@@ -112,7 +112,7 @@ def parser():
                     help='Explicit compile time budget, 60..1800 seconds (default 300); never increased automatically')
     rp = sc.add_parser('rdma-probe', help='Execute bounded real RDMA messages on a generated small fabric; no frontend service yet')
     rp.add_argument('--topology', type=Path, required=True, help='Directory produced by scaleout topology')
-    rp.add_argument('--config', type=Path, required=True, help='Explicit RDMA/ECN protocol JSON; optional switch_links/1 failures with declared route-update delay')
+    rp.add_argument('--config', type=Path, required=True, help='Explicit RDMA/ECN protocol JSON; optional switch_links/1 permanent or switch_links/2 temporary failures with declared route-update delay')
     rp.add_argument('--messages', type=Path, required=True, help='Bounded microprobe message array, not an LLM workload')
     rp.add_argument('--backend', type=Path, required=True, help='Executable returned by rdma-build')
     rp.add_argument('--output', type=Path, required=True, help='New result directory on a volume with at least 8GiB free')

@@ -95,6 +95,8 @@ Fabric在初始化时从实际`RdmaHw`对象读回拥塞/传输属性，统一�
 
 显式`link_failures.mode=switch_links/1`在分配网络前验证完整物理边列表，`FailLink`调用两端原生`TakeDown`，逐实际排队数据回收入口/出口MMU和私有转发计数。`PhyRxDrop`结束一次在途传输；`QbbDrop`记录本地丢弃而不重复扣在途。`UpdateRoutes`仅将本次已到期故障加入`routing_down_`，不能通过`IsLinkUp()`提前获知另一故障；清表/重建不清除QP。`NetworkEventsPending`参与Fabric及持久控制器的排空检查。声明控制延迟未校准，输入及回调边界见[链路失效](../examples/scaleout_link_failure/README.md)。
 
+`switch_links/2`增加显式物理恢复与独立恢复通知。仅指定边使用项目内`RecoverableQbb`派生设备，仍走原生channel、queue、TakeDown、Receive和TransmitComplete；恢复调用保护的NotifyLinkUp并唤醒，不重置BUSY/currentPkt或重新Attach。集中路由只按到达通知的版本1/2更新已知边状态，迟到旧版本不覆盖新版本；不能用实际物理恢复时间取消尚未过期的旧断链报告。四个事件都计入pending。永久模式保持原输入/记录，具体范围见[恢复示例](../examples/scaleout_link_restore/README.md)。
+
 可选`local_failover.mode=live_ecmp/1`只允许故障边两端交换机根据自己的`IsLinkUp()`剔除原全局表中的失效出口，保留候选顺序和原生ECMP哈希；空候选仍丢弃。全局重建也只按各交换机自己的实际端口状态过滤，不能把另一尚未收敛故障传播到远端表。默认行为不变；本地动作没有额外检测/编程耗时，是经典理想参考，不是生产快速重路由。见[配置和边界](../examples/scaleout_live_ecmp/README.md)。
 
 `Fabric::Report`可选读取有界交换机MMU/BEgressQueue终态，选择及端口预算在分配网络前检查。没有新增仿真事件或drop修复，省略配置时保持旧结果。离线`scaleout_mmu.py`区分合法未排空与守恒不一致，详见[终态缓冲示例](../examples/scaleout_rdma_mmu/README.md)与[字段](../docs/record_storage.md)。

@@ -1,0 +1,162 @@
+{
+  "passed": true,
+  "new_networks": 0,
+  "builds": 0,
+  "new_unit_methods": 9,
+  "related_unit_methods": 34,
+  "source_sha256": {
+    "python/moe_ub_cosim/contribution_frontier.py": "bbe53a7bcff149893fde82e1d6f0865ec4cd5c61d62e23034915b4fc1fe14f34",
+    "python/moe_ub_cosim/cli.py": "ca232fc21efece720fc50d72da1b7e61bffccebc2fdbb929c92ee92ae1ad01dc",
+    "tests/unit/contribution_frontier_test.py": "79c6dea5d5dc822845636706e00da068c2d94bcc813d3f9a59f72c1a3897ecb5"
+  },
+  "input_checks": {
+    "real": {
+      "input_run_verified": true,
+      "input_files_unchanged": 431,
+      "input_identity": {
+        "input.json": "91ce6acc4bb73f29e514ffe73115d3a2a5129171cbfc77b73c5b6a36fe4a7ed6",
+        "result.json": "e2c9e22122bf698b27233aa02de9d09b1eed644479656bec3de1e7be3231d8f2",
+        "contribution_calls.jsonl": "71181e93a223e33eed266fe9c31f0f7d0b13269cf6ed01371b4beef86a5dbadd",
+        "execution_events.jsonl": "a929eff927795f7a9060a5e3d51db8e948f20f58ed17a23723d0c82858b0e50a"
+      }
+    },
+    "artificial": {
+      "input_run_verified": true,
+      "input_files_unchanged": 427,
+      "input_identity": {
+        "input.json": "8db24dd591232a3b13697f9f2fe48759e8d39a3c5682d590c2e501632e53ba30",
+        "result.json": "21f3239ee94456618889ceb0c18d1842d64d2b9f3f1afd0a9435fe7ea758cbeb",
+        "contribution_calls.jsonl": "5ff1a0aa4edf0dc93543cadb33b0f54eb360134ebe1615522bfaaa5fd35ef3cc",
+        "execution_events.jsonl": "73b061f976572e48fdcef562c66a36834abe016ec35495eef82929f905ee4973"
+      }
+    }
+  },
+  "commands": [
+    {
+      "stage": "artificial-frontier",
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "contribution-frontier",
+        "--run",
+        "runs/message_buffers_20261030/independent-run",
+        "--output",
+        "runs/consumption_value_20261030/artificial"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 0.7564841199782677,
+      "peak_rss_bytes": 37027840
+    },
+    {
+      "stage": "contribution-regression",
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/unit",
+        "-p",
+        "contribution*test.py",
+        "-v"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 0.22535974497441202,
+      "peak_rss_bytes": 23351296
+    },
+    {
+      "stage": "final-unit",
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/unit",
+        "-p",
+        "contribution_frontier_test.py",
+        "-v"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 0.11985987302614376,
+      "peak_rss_bytes": 5304320
+    },
+    {
+      "stage": "real-frontier",
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "contribution-frontier",
+        "--run",
+        "runs/message_buffers_20261030/real-run",
+        "--output",
+        "runs/consumption_value_20261030/real"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 2.5682585880276747,
+      "peak_rss_bytes": 102297600
+    },
+    {
+      "stage": "study",
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "experiments/consumption_value/analyze.py",
+        "--real-run",
+        "runs/message_buffers_20261030/real-run",
+        "--artificial-run",
+        "runs/message_buffers_20261030/independent-run",
+        "--output",
+        "runs/consumption_value_20261030/study"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 4.254192030988634,
+      "peak_rss_bytes": 119382016
+    },
+    {
+      "stage": "unit",
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/unit",
+        "-p",
+        "contribution_frontier_test.py",
+        "-v"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 0.118810766027309,
+      "peak_rss_bytes": 5345280
+    },
+    {
+      "stage": "unit-observe-only",
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/unit",
+        "-p",
+        "contribution*test.py",
+        "-v"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 0.22495395404985175,
+      "peak_rss_bytes": 23347200
+    }
+  ],
+  "scope": "read-only diagnosis functional checks; positive research benefit not required"
+}

@@ -1,5 +1,7 @@
 # 观测记录与存储格式
 
+`scaleout contribution-frontier`从已核验服务生成`summary.json`、逐调用`calls.json`及`bundles.csv`，分别记录全部贡献就绪前沿、所有并列末贡献、实际共享计算与赢家缓冲在汇合时的存活情况。它不写原运行目录，字段单位及同纳秒未知规则见[诊断说明](contribution_frontier.md)。
+
 可选主服务消息缓冲在`result.json.service_transport.message_buffers`记录实际片段写入、源/目标arena偏移、FNV摘要、post/receive/ACK/scope/release纳秒时间及当前/峰值字节。传输副本另存`native.message_payload`，源包内容存`native.source_payload_packets`。默认不产生这些缓冲字段；`rdma-check`的独立字节与范围核查见[格式和语义](message_buffers.md)。
 
 有限片段持久服务显式选择`sparse_active_groups/1`时，`frontend.admitted_group_indices`保存实际准入组索引；`route_evidence`另含`inactive_group_indices`及空闲组范围说明。无源整组没有图、请求或KV，`parallel.groups`和物理端点仍完整保留。默认及旧稀疏模式不新增此字段，接口见[空闲EP组](../examples/scaleout_sparse_clos/README.md#保留部署但让整个ep组空闲)。

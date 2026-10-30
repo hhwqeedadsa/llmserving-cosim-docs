@@ -1,5 +1,7 @@
 # 用户指南
 
+判断一个备用结果提前是否真正提前了全部专家贡献就绪，可对已完成的贡献/helper服务运行[就绪与消费窗口诊断](contribution_frontier.md)。公开`scaleout contribution-frontier`只读核查并输出原件/赢家前沿、门限/FIFO和缓冲寿命；固定记录的提前量不等于重新仿真的请求加速。
+
 检查原/备用消息的实际字节写入、迟到包与缓冲复用，可显式开启[主服务消息缓冲](message_buffers.md)，按[128端点Clos示例](../examples/scaleout_message_buffers/README.md)执行既有`rdma-run/rdma-check`。内容是标记字节，不是数值激活；源确认与graph/helper退出分别约束释放。
 
 比较同一片段的两个完整副本，可使用[完整片段副本](whole_call.md)及[128端点Clos示例](../examples/scaleout_whole_call/README.md)。只在一个整个尝试实际完成后提交逻辑结果，另一个继续清理；分列原始请求数和副本执行数，等价ready-KV为声明初态。

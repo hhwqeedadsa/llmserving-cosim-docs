@@ -26,6 +26,9 @@ def parser():
         description='Check declared contribution/attempt callbacks; no network, GPU or timing prediction')
     contributions.add_argument('--config', type=Path, required=True, help='Bounded contribution transcript JSON; no external references')
     contributions.add_argument('--output', type=Path, required=True, help='New directory for copied input and untimed state report')
+    frontier=sc.add_parser('contribution-frontier',help='Verify one saved helper service and compare recorded all-contribution readiness and buffer lifetimes; no network rerun or speedup prediction')
+    frontier.add_argument('--run',type=Path,required=True,help='Completed contribution-tracked helper/shared-compute service directory')
+    frontier.add_argument('--output',type=Path,required=True,help='New directory outside input: summary.json, calls.json and bundles.csv')
     simai_prepare = sc.add_parser('simai-prepare', help='Verify pinned SimAI sources and prepare its real Vidur scheduler; no network execution')
     simai_prepare.add_argument('--source-root',type=Path,required=True,help='Extracted aliyun/SimAI a57d765c source root')
     simai_prepare.add_argument('--output',type=Path,required=True,help='New runtime with hash receipt and two lazy registry initializers')
@@ -327,6 +330,9 @@ def main(argv=None):
             elif args.scaleout_command == 'contribution-check':
                 from .contribution_attempts import check
                 value = check(args.config, args.output)
+            elif args.scaleout_command == 'contribution-frontier':
+                from .contribution_frontier import execute
+                value = execute(args.run,args.output)
             elif args.scaleout_command == 'rdma-check':
                 from .scaleout_verify import verify
                 value = verify(args.run)

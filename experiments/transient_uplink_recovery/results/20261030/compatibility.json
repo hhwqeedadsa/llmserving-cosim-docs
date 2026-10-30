@@ -1,0 +1,32 @@
+{
+  "passed": true,
+  "native_commit": "69cb14764c0c5de2c7ad31599ee5b3999dddc154",
+  "native_compile_commands_equal_after_build_path_normalization": true,
+  "translation_units": 442,
+  "serial_overlay_identical": true,
+  "full_service_normal_identical_except_loaded_library_paths": true,
+  "old_library_hashes": {
+    "libns3.42-core.so": "5c0fbbc10fae420967c7ef884f741391deca49f4c471c93c4e93d5fd011e0fa2",
+    "libns3.42-stats.so": "5f4df9f957a9f89a9910af16bac6d1f6ec527f3b92281b999112f1b709c67a8d",
+    "libns3.42-network.so": "80cd2c29613155652fef2910ba2c7af27cbfe6fc71c9e983297921fc279675dc",
+    "libns3.42-bridge.so": "37f07c1d5a17253d3c90a197914529ec5557268156e84b9954991a0181054df1",
+    "libns3.42-traffic-control.so": "396e15c8cc43afedf7a89e8364af3791a661639657b211991b0f684179f61b47",
+    "libns3.42-internet.so": "33604cff39a01c60db4e3277e6451e74e0b5983d7c8bde99c2f30e3170ea8961",
+    "libns3.42-point-to-point.so": "b418b2564e4e195b9c6f1c5cf2b4f9459a15a0e3fb71edb9bb6f0532c4fed115",
+    "libns3.42-applications.so": "643cd37084f93c63e90791145bbe46384c83851119a6944b516f7290ec326c15"
+  },
+  "new_library_hashes": {
+    "libns3.42-core.so": "d46e18396d9c6b887736c66ec1606c914049a6b2f85f6e670fd7d89ece82cb95",
+    "libns3.42-stats.so": "ec225801132cd40adac114dc446d03bad9032050cdb339ebe9a0704e91fb86a5",
+    "libns3.42-network.so": "8db16fb2a561a027008c50c9c0a12fd0ad11796aebdbd8cfcd4491ea362e148d",
+    "libns3.42-bridge.so": "8c8fd0665051caf65bd522ddd56d0c579d21646b91a7236b32d2e78b41425250",
+    "libns3.42-traffic-control.so": "1aa3d008403f5b79517267954e6f9cd5278016faaeb34cc33f30b4652f609009",
+    "libns3.42-internet.so": "1e503d62dae86f8e497d3a1f3cbde1030cfac3d9a4e56a0ff208112d585a5eb7",
+    "libns3.42-point-to-point.so": "856d9d3274683808c5be8e1b9518a03c2c715cc9198805e26946266821a5567b",
+    "libns3.42-applications.so": "b938bd52735139001b1193cd87cc81c504072799a69f29758045611a192c7490"
+  },
+  "binary_library_equality_claimed": false,
+  "original_frozen_sha256": "06087d4a206eb21b584ab676010d3d22054cb8fc38748aa7ce3cec85dcb75066",
+  "normal_result_sha256": "06676b36ee7fdd2f5c47c0d6926c9a6d741a471f5e16c545a8450ef9c93287e1",
+  "explanation": "Independent build paths change ELF RUNPATH/build-id and __FILE__ strings; native source revision, overlay and normalized compilation commands agree. Entire normal result agrees; no binary-library equivalence claim."
+}

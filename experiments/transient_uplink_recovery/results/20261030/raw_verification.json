@@ -1,0 +1,76 @@
+{
+  "passed": true,
+  "actual_Clos128_networks": 7,
+  "all_original_graphs_equal": true,
+  "original_routes_and_declared_inputs_equal": true,
+  "all_physical_protocols_paired": true,
+  "all_message_source_ACK_witnesses_checked": true,
+  "source_bytes_and_final_buffers_checked": true,
+  "per_case": {
+    "normal": {
+      "messages": 778,
+      "physical_hops": 15476,
+      "queue_rows": 24542,
+      "graph_files": 264,
+      "restored_link_tx": 0,
+      "boundary_tx_not_ordered": 0,
+      "actual_source_ACK_witnesses": 778
+    },
+    "global-w20": {
+      "messages": 778,
+      "physical_hops": 15562,
+      "queue_rows": 24604,
+      "graph_files": 264,
+      "restored_link_tx": 353,
+      "boundary_tx_not_ordered": 0,
+      "actual_source_ACK_witnesses": 778
+    },
+    "local-w20": {
+      "messages": 778,
+      "physical_hops": 15411,
+      "queue_rows": 24388,
+      "graph_files": 264,
+      "restored_link_tx": 334,
+      "boundary_tx_not_ordered": 0,
+      "actual_source_ACK_witnesses": 778
+    },
+    "instant-w20": {
+      "messages": 778,
+      "physical_hops": 15237,
+      "queue_rows": 24140,
+      "graph_files": 264,
+      "restored_link_tx": 374,
+      "boundary_tx_not_ordered": 0,
+      "actual_source_ACK_witnesses": 778
+    },
+    "global-w60": {
+      "messages": 778,
+      "physical_hops": 15838,
+      "queue_rows": 24938,
+      "graph_files": 264,
+      "restored_link_tx": 399,
+      "boundary_tx_not_ordered": 0,
+      "actual_source_ACK_witnesses": 778
+    },
+    "local-w60": {
+      "messages": 778,
+      "physical_hops": 16005,
+      "queue_rows": 25292,
+      "graph_files": 264,
+      "restored_link_tx": 391,
+      "boundary_tx_not_ordered": 0,
+      "actual_source_ACK_witnesses": 778
+    },
+    "instant-w60": {
+      "messages": 778,
+      "physical_hops": 15335,
+      "queue_rows": 24304,
+      "graph_files": 264,
+      "restored_link_tx": 248,
+      "boundary_tx_not_ordered": 0,
+      "actual_source_ACK_witnesses": 778
+    }
+  },
+  "analysis_sha256": "75d9684ac691cb1d758ce24c37a89da961cd6f35ba94b60bdeea751663806a69",
+  "verifier_sha256": "c72eaa378bb4f8c815c7c113699215babd8537384678b3d0499fe2a97518dc98"
+}

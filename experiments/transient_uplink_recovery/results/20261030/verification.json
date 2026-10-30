@@ -1,0 +1,38 @@
+{
+  "passed": true,
+  "unique_RX_increments_checked": 174,
+  "raw_mechanism_packet_witnesses": 37,
+  "tamper_checks": [
+    {
+      "mutation": "duplicate or invented receive bytes",
+      "rejected": true
+    },
+    {
+      "mutation": "source confirmation before actual ACK",
+      "rejected": true
+    },
+    {
+      "mutation": "invented dropped packet",
+      "rejected": true
+    },
+    {
+      "mutation": "changed actual retry schedule",
+      "rejected": true
+    }
+  ],
+  "html_resources": 8,
+  "markdown_links": 5,
+  "browser_rendering_verified": false,
+  "delivery_sha256": {
+    "analysis.json": "75d9684ac691cb1d758ce24c37a89da961cd6f35ba94b60bdeea751663806a69",
+    "raw_verification.json": "a9825ec48d0067f515a7f1206b1e74dc88951803aeb9b4c7b3bb06a62d870efb",
+    "mechanism.json": "f9f5e773bcaf4ea83b6a09a2f7e8ad64e1e9ea78ca20a1e98192e2f7f8726996",
+    "compatibility.json": "42ec64a671679391f302bb84acff4d7a7e4f0597482d4f89d33de6fd2991103d",
+    "arrival_curves.json": "7b889937ccdb205f31b1e746472c4ced1a9ef91ac7979d4ea3fe0acc2f72de4d",
+    "comparison.png": "86ee63226a49e55938af4fff24cf9f07dfa9dc8823bd08774787362847572aaf",
+    "arrival_curves.png": "d0c5b42823253bd0ac47a9e4f552a11d2e9e4b4d85a725bad36461d919e9036a",
+    "README.md": "691fae0682721530f803ef03c131b1f0cac1472ca2cf45ccfb114e2cf18662c2",
+    "report.html": "4ca5f17440bf5f5e3247693d873684707f417fafd58c59b454184e892bfc0a32"
+  },
+  "verifier_sha256": "b0568444497eb8cbb7304167968cc586fa8eaf446f42eed6ad79b16cf44e7f6f"
+}

@@ -1,0 +1,1196 @@
+{
+  "selection": "post-run local-w60 last group1 first-Dispatch predecessor; not a preselected victim",
+  "local-w60": {
+    "result_sha256": "a8c5e1140895caac46c65bc38ed9b22cb1d2f565b99b5ee60dfba0d6d3c0dbb6",
+    "message": {
+      "ack_ns": 133846,
+      "begin": 0,
+      "bytes": 14464,
+      "contributions": 1,
+      "dst": 65,
+      "end": 14464,
+      "id": 3983,
+      "layer": 0,
+      "phase": "dispatch",
+      "plane": 0,
+      "published_ns": 1030,
+      "ready_ns": 1030,
+      "receive_ready_ns": 26170,
+      "src": 1,
+      "stream": 65,
+      "tag": 3983,
+      "transport_tokens": 1
+    },
+    "first_dispatch_gate": {
+      "graph_id": "g1.w0",
+      "id": "L0.dispatch",
+      "members": [
+        {
+          "arrived_ns": 133846,
+          "node": 11,
+          "rank": 1
+        },
+        {
+          "arrived_ns": 128758,
+          "node": 11,
+          "rank": 5
+        },
+        {
+          "arrived_ns": 22864,
+          "node": 12,
+          "rank": 9
+        },
+        {
+          "arrived_ns": 17362,
+          "node": 10,
+          "rank": 13
+        },
+        {
+          "arrived_ns": 0,
+          "node": 3,
+          "rank": 17
+        },
+        {
+          "arrived_ns": 31380,
+          "node": 5,
+          "rank": 21
+        },
+        {
+          "arrived_ns": 8838,
+          "node": 5,
+          "rank": 25
+        },
+        {
+          "arrived_ns": 9466,
+          "node": 6,
+          "rank": 29
+        },
+        {
+          "arrived_ns": 7940,
+          "node": 5,
+          "rank": 33
+        },
+        {
+          "arrived_ns": 8050,
+          "node": 4,
+          "rank": 37
+        },
+        {
+          "arrived_ns": 7862,
+          "node": 4,
+          "rank": 41
+        },
+        {
+          "arrived_ns": 0,
+          "node": 3,
+          "rank": 45
+        },
+        {
+          "arrived_ns": 7972,
+          "node": 5,
+          "rank": 49
+        },
+        {
+          "arrived_ns": 0,
+          "node": 3,
+          "rank": 53
+        },
+        {
+          "arrived_ns": 8192,
+          "node": 4,
+          "rank": 57
+        },
+        {
+          "arrived_ns": 0,
+          "node": 3,
+          "rank": 61
+        },
+        {
+          "arrived_ns": 26170,
+          "node": 4,
+          "rank": 65
+        },
+        {
+          "arrived_ns": 0,
+          "node": 3,
+          "rank": 69
+        },
+        {
+          "arrived_ns": 0,
+          "node": 3,
+          "rank": 73
+        },
+        {
+          "arrived_ns": 10657,
+          "node": 4,
+          "rank": 77
+        },
+        {
+          "arrived_ns": 26461,
+          "node": 5,
+          "rank": 81
+        },
+        {
+          "arrived_ns": 11310,
+          "node": 4,
+          "rank": 85
+        },
+        {
+          "arrived_ns": 11026,
+          "node": 4,
+          "rank": 89
+        },
+        {
+          "arrived_ns": 11356,
+          "node": 4,
+          "rank": 93
+        },
+        {
+          "arrived_ns": 10987,
+          "node": 4,
+          "rank": 97
+        },
+        {
+          "arrived_ns": 0,
+          "node": 3,
+          "rank": 101
+        },
+        {
+          "arrived_ns": 0,
+          "node": 3,
+          "rank": 105
+        },
+        {
+          "arrived_ns": 10696,
+          "node": 4,
+          "rank": 109
+        },
+        {
+          "arrived_ns": 11317,
+          "node": 4,
+          "rank": 113
+        },
+        {
+          "arrived_ns": 0,
+          "node": 3,
+          "rank": 117
+        },
+        {
+          "arrived_ns": 10987,
+          "node": 4,
+          "rank": 121
+        },
+        {
+          "arrived_ns": 12491,
+          "node": 4,
+          "rank": 125
+        }
+      ],
+      "released_ns": 133846
+    },
+    "source_packets": [
+      {
+        "time_ns": 1754,
+        "stream": 65,
+        "src": 1,
+        "dst": 65,
+        "nic": 1,
+        "sequence": 0,
+        "payload_bytes": 9000,
+        "packet_uid": 128
+      },
+      {
+        "time_ns": 2737,
+        "stream": 65,
+        "src": 1,
+        "dst": 65,
+        "nic": 1,
+        "sequence": 9000,
+        "payload_bytes": 5464,
+        "packet_uid": 338
+      },
+      {
+        "time_ns": 18754,
+        "stream": 65,
+        "src": 1,
+        "dst": 65,
+        "nic": 1,
+        "sequence": 0,
+        "payload_bytes": 9000,
+        "packet_uid": 657
+      },
+      {
+        "time_ns": 19116,
+        "stream": 65,
+        "src": 1,
+        "dst": 65,
+        "nic": 1,
+        "sequence": 9000,
+        "payload_bytes": 5464,
+        "packet_uid": 683
+      },
+      {
+        "time_ns": 52754,
+        "stream": 65,
+        "src": 1,
+        "dst": 65,
+        "nic": 1,
+        "sequence": 0,
+        "payload_bytes": 9000,
+        "packet_uid": 784
+      },
+      {
+        "time_ns": 52935,
+        "stream": 65,
+        "src": 1,
+        "dst": 65,
+        "nic": 1,
+        "sequence": 9000,
+        "payload_bytes": 5464,
+        "packet_uid": 796
+      },
+      {
+        "time_ns": 120754,
+        "stream": 65,
+        "src": 1,
+        "dst": 65,
+        "nic": 1,
+        "sequence": 0,
+        "payload_bytes": 9000,
+        "packet_uid": 883
+      },
+      {
+        "time_ns": 120935,
+        "stream": 65,
+        "src": 1,
+        "dst": 65,
+        "nic": 1,
+        "sequence": 9000,
+        "payload_bytes": 5464,
+        "packet_uid": 889
+      }
+    ],
+    "recovery_events": [
+      {
+        "time_ns": 1030,
+        "event": 5,
+        "source": 1,
+        "message_id": 65,
+        "acknowledged_bytes": 0,
+        "highest_sent_bytes": 0,
+        "retries_since_progress": 0,
+        "rto_ns": 17000,
+        "deadline_ns": -1
+      },
+      {
+        "time_ns": 1754,
+        "event": 0,
+        "source": 1,
+        "message_id": 65,
+        "acknowledged_bytes": 0,
+        "highest_sent_bytes": 9000,
+        "retries_since_progress": 0,
+        "rto_ns": 17000,
+        "deadline_ns": 18754
+      },
+      {
+        "time_ns": 18754,
+        "event": 2,
+        "source": 1,
+        "message_id": 65,
+        "acknowledged_bytes": 0,
+        "highest_sent_bytes": 14464,
+        "retries_since_progress": 1,
+        "rto_ns": 34000,
+        "deadline_ns": 52754
+      },
+      {
+        "time_ns": 52754,
+        "event": 2,
+        "source": 1,
+        "message_id": 65,
+        "acknowledged_bytes": 0,
+        "highest_sent_bytes": 14464,
+        "retries_since_progress": 2,
+        "rto_ns": 68000,
+        "deadline_ns": 120754
+      },
+      {
+        "time_ns": 120754,
+        "event": 2,
+        "source": 1,
+        "message_id": 65,
+        "acknowledged_bytes": 0,
+        "highest_sent_bytes": 14464,
+        "retries_since_progress": 3,
+        "rto_ns": 136000,
+        "deadline_ns": 256754
+      },
+      {
+        "time_ns": 133846,
+        "event": 3,
+        "source": 1,
+        "message_id": 65,
+        "acknowledged_bytes": 14464,
+        "highest_sent_bytes": 14464,
+        "retries_since_progress": 0,
+        "rto_ns": 17000,
+        "deadline_ns": -1
+      }
+    ],
+    "drop_rows": [
+      {
+        "time_ns": 4000,
+        "node": 128,
+        "port": 17,
+        "event": 5,
+        "packet_uid": 338,
+        "message_id": 65,
+        "ip_protocol": 17,
+        "sequence": 9000,
+        "model_bytes": 5500,
+        "ecn": 0,
+        "egress_queue_bytes": 5500,
+        "data_payload_bytes": 5464
+      },
+      {
+        "time_ns": 4478,
+        "node": 132,
+        "port": 1,
+        "event": 2,
+        "packet_uid": 128,
+        "message_id": 65,
+        "ip_protocol": 17,
+        "sequence": 0,
+        "model_bytes": 9036,
+        "ecn": 0,
+        "egress_queue_bytes": 0,
+        "data_payload_bytes": 9000
+      },
+      {
+        "time_ns": 29844,
+        "node": 132,
+        "port": 5,
+        "event": 5,
+        "packet_uid": 719,
+        "message_id": 65,
+        "ip_protocol": 252,
+        "sequence": 9000,
+        "model_bytes": 50,
+        "ecn": 0,
+        "egress_queue_bytes": 0,
+        "data_payload_bytes": 0
+      },
+      {
+        "time_ns": 30174,
+        "node": 132,
+        "port": 5,
+        "event": 5,
+        "packet_uid": 722,
+        "message_id": 65,
+        "ip_protocol": 252,
+        "sequence": 14464,
+        "model_bytes": 50,
+        "ecn": 0,
+        "egress_queue_bytes": 0,
+        "data_payload_bytes": 0
+      },
+      {
+        "time_ns": 63844,
+        "node": 132,
+        "port": 5,
+        "event": 5,
+        "packet_uid": 835,
+        "message_id": 65,
+        "ip_protocol": 252,
+        "sequence": 14464,
+        "model_bytes": 50,
+        "ecn": 0,
+        "egress_queue_bytes": 0,
+        "data_payload_bytes": 0
+      },
+      {
+        "time_ns": 63954,
+        "node": 132,
+        "port": 5,
+        "event": 5,
+        "packet_uid": 836,
+        "message_id": 65,
+        "ip_protocol": 252,
+        "sequence": 14464,
+        "model_bytes": 50,
+        "ecn": 0,
+        "egress_queue_bytes": 0,
+        "data_payload_bytes": 0
+      }
+    ],
+    "actual_source_ACKs": [
+      {
+        "time_ns": 133846,
+        "node": 1,
+        "port": 1,
+        "event": 1,
+        "packet_uid": 911,
+        "message_id": 65,
+        "ip_protocol": 252,
+        "sequence": 14464,
+        "model_bytes": 50,
+        "ecn": 0,
+        "egress_queue_bytes": 0,
+        "data_payload_bytes": 0
+      }
+    ],
+    "actual_data_ready_RX": [
+      {
+        "time_ns": 26170,
+        "node": 65,
+        "port": 1,
+        "event": 1,
+        "packet_uid": 683,
+        "message_id": 65,
+        "ip_protocol": 17,
+        "sequence": 9000,
+        "model_bytes": 5500,
+        "ecn": 0,
+        "egress_queue_bytes": 0,
+        "data_payload_bytes": 5464
+      }
+    ],
+    "final_ACK_path": [
+      {
+        "time_ns": 127840,
+        "node": 65,
+        "port": 1,
+        "event": 0,
+        "packet_uid": 911,
+        "message_id": 65,
+        "ip_protocol": 252,
+        "sequence": 14464,
+        "model_bytes": 50,
+        "ecn": 0,
+        "egress_queue_bytes": 0,
+        "data_payload_bytes": 0
+      },
+      {
+        "time_ns": 128841,
+        "node": 136,
+        "port": 2,
+        "event": 1,
+        "packet_uid": 911,
+        "message_id": 65,
+        "ip_protocol": 252,
+        "sequence": 14464,
+        "model_bytes": 50,
+        "ecn": 0,
+        "egress_queue_bytes": 0,
+        "data_payload_bytes": 0
+      },
+      {
+        "time_ns": 128841,
+        "node": 136,
+        "port": 17,
+        "event": 0,
+        "packet_uid": 911,
+        "message_id": 65,
+        "ip_protocol": 252,
+        "sequence": 14464,
+        "model_bytes": 50,
+        "ecn": 0,
+        "egress_queue_bytes": 0,
+        "data_payload_bytes": 0
+      },
+      {
+        "time_ns": 129842,
+        "node": 140,
+        "port": 1,
+        "event": 1,
+        "packet_uid": 911,
+        "message_id": 65,
+        "ip_protocol": 252,
+        "sequence": 14464,
+        "model_bytes": 50,
+        "ecn": 0,
+        "egress_queue_bytes": 0,
+        "data_payload_bytes": 0
+      },
+      {
+        "time_ns": 129842,
+        "node": 140,
+        "port": 5,
+        "event": 0,
+        "packet_uid": 911,
+        "message_id": 65,
+        "ip_protocol": 252,
+        "sequence": 14464,
+        "model_bytes": 50,
+        "ecn": 0,
+        "egress_queue_bytes": 0,
+        "data_payload_bytes": 0
+      },
+      {
+        "time_ns": 130843,
+        "node": 144,
+        "port": 2,
+        "event": 1,
+        "packet_uid": 911,
+        "message_id": 65,
+        "ip_protocol": 252,
+        "sequence": 14464,
+        "model_bytes": 50,
+        "ecn": 0,
+        "egress_queue_bytes": 0,
+        "data_payload_bytes": 0
+      },
+      {
+        "time_ns": 130843,
+        "node": 144,
+        "port": 1,
+        "event": 0,
+        "packet_uid": 911,
+        "message_id": 65,
+        "ip_protocol": 252,
+        "sequence": 14464,
+        "model_bytes": 50,
+        "ecn": 0,
+        "egress_queue_bytes": 0,
+        "data_payload_bytes": 0
+      },
+      {
+        "time_ns": 131844,
+        "node": 132,
+        "port": 5,
+        "event": 1,
+        "packet_uid": 911,
+        "message_id": 65,
+        "ip_protocol": 252,
+        "sequence": 14464,
+        "model_bytes": 50,
+        "ecn": 0,
+        "egress_queue_bytes": 0,
+        "data_payload_bytes": 0
+      },
+      {
+        "time_ns": 131844,
+        "node": 132,
+        "port": 1,
+        "event": 0,
+        "packet_uid": 911,
+        "message_id": 65,
+        "ip_protocol": 252,
+        "sequence": 14464,
+        "model_bytes": 50,
+        "ecn": 0,
+        "egress_queue_bytes": 0,
+        "data_payload_bytes": 0
+      },
+      {
+        "time_ns": 132845,
+        "node": 128,
+        "port": 17,
+        "event": 1,
+        "packet_uid": 911,
+        "message_id": 65,
+        "ip_protocol": 252,
+        "sequence": 14464,
+        "model_bytes": 50,
+        "ecn": 0,
+        "egress_queue_bytes": 0,
+        "data_payload_bytes": 0
+      },
+      {
+        "time_ns": 132845,
+        "node": 128,
+        "port": 2,
+        "event": 0,
+        "packet_uid": 911,
+        "message_id": 65,
+        "ip_protocol": 252,
+        "sequence": 14464,
+        "model_bytes": 50,
+        "ecn": 0,
+        "egress_queue_bytes": 0,
+        "data_payload_bytes": 0
+      },
+      {
+        "time_ns": 133846,
+        "node": 1,
+        "port": 1,
+        "event": 1,
+        "packet_uid": 911,
+        "message_id": 65,
+        "ip_protocol": 252,
+        "sequence": 14464,
+        "model_bytes": 50,
+        "ecn": 0,
+        "egress_queue_bytes": 0,
+        "data_payload_bytes": 0
+      }
+    ],
+    "group1_finished_ns": 244806
+  },
+  "instant-w60": {
+    "result_sha256": "84d56c156d9639341627f82f8f90f58b42119758a22a7eaeb4ad475ae8b5182d",
+    "message": {
+      "ack_ns": 31995,
+      "begin": 0,
+      "bytes": 14464,
+      "contributions": 1,
+      "dst": 65,
+      "end": 14464,
+      "id": 3983,
+      "layer": 0,
+      "phase": "dispatch",
+      "plane": 0,
+      "published_ns": 1030,
+      "ready_ns": 1030,
+      "receive_ready_ns": 25989,
+      "src": 1,
+      "stream": 65,
+      "tag": 3983,
+      "transport_tokens": 1
+    },
+    "first_dispatch_gate": {
+      "graph_id": "g1.w0",
+      "id": "L0.dispatch",
+      "members": [
+        {
+          "arrived_ns": 35384,
+          "node": 11,
+          "rank": 1
+        },
+        {
+          "arrived_ns": 35565,
+          "node": 11,
+          "rank": 5
+        },
+        {
+          "arrived_ns": 31561,
+          "node": 12,
+          "rank": 9
+        },
+        {
+          "arrived_ns": 17362,
+          "node": 10,
+          "rank": 13
+        },
+        {
+          "arrived_ns": 0,
+          "node": 3,
+          "rank": 17
+        },
+        {
+          "arrived_ns": 31380,
+          "node": 5,
+          "rank": 21
+        },
+        {
+          "arrived_ns": 8838,
+          "node": 5,
+          "rank": 25
+        },
+        {
+          "arrived_ns": 9466,
+          "node": 6,
+          "rank": 29
+        },
+        {
+          "arrived_ns": 8632,
+          "node": 5,
+          "rank": 33
+        },
+        {
+          "arrived_ns": 8742,
+          "node": 4,
+          "rank": 37
+        },
+        {
+          "arrived_ns": 7862,
+          "node": 4,
+          "rank": 41
+        },
+        {
+          "arrived_ns": 0,
+          "node": 3,
+          "rank": 45
+        },
+        {
+          "arrived_ns": 7972,
+          "node": 5,
+          "rank": 49
+        },
+        {
+          "arrived_ns": 0,
+          "node": 3,
+          "rank": 53
+        },
+        {
+          "arrived_ns": 8192,
+          "node": 4,
+          "rank": 57
+        },
+        {
+          "arrived_ns": 0,
+          "node": 3,
+          "rank": 61
+        },
+        {
+          "arrived_ns": 25989,
+          "node": 4,
+          "rank": 65
+        },
+        {
+          "arrived_ns": 0,
+          "node": 3,
+          "rank": 69
+        },
+        {
+          "arrived_ns": 0,
+          "node": 3,
+          "rank": 73
+        },
+        {
+          "arrived_ns": 10657,
+          "node": 4,
+          "rank": 77
+        },
+        {
+          "arrived_ns": 26131,
+          "node": 5,
+          "rank": 81
+        },
+        {
+          "arrived_ns": 11310,
+          "node": 4,
+          "rank": 85
+        },
+        {
+          "arrived_ns": 11026,
+          "node": 4,
+          "rank": 89
+        },
+        {
+          "arrived_ns": 11356,
+          "node": 4,
+          "rank": 93
+        },
+        {
+          "arrived_ns": 10987,
+          "node": 4,
+          "rank": 97
+        },
+        {
+          "arrived_ns": 0,
+          "node": 3,
+          "rank": 101
+        },
+        {
+          "arrived_ns": 0,
+          "node": 3,
+          "rank": 105
+        },
+        {
+          "arrived_ns": 10696,
+          "node": 4,
+          "rank": 109
+        },
+        {
+          "arrived_ns": 11317,
+          "node": 4,
+          "rank": 113
+        },
+        {
+          "arrived_ns": 0,
+          "node": 3,
+          "rank": 117
+        },
+        {
+          "arrived_ns": 10987,
+          "node": 4,
+          "rank": 121
+        },
+        {
+          "arrived_ns": 12491,
+          "node": 4,
+          "rank": 125
+        }
+      ],
+      "released_ns": 35565
+    },
+    "source_packets": [
+      {
+        "time_ns": 1754,
+        "stream": 65,
+        "src": 1,
+        "dst": 65,
+        "nic": 1,
+        "sequence": 0,
+        "payload_bytes": 9000,
+        "packet_uid": 128
+      },
+      {
+        "time_ns": 2737,
+        "stream": 65,
+        "src": 1,
+        "dst": 65,
+        "nic": 1,
+        "sequence": 9000,
+        "payload_bytes": 5464,
+        "packet_uid": 338
+      },
+      {
+        "time_ns": 18754,
+        "stream": 65,
+        "src": 1,
+        "dst": 65,
+        "nic": 1,
+        "sequence": 0,
+        "payload_bytes": 9000,
+        "packet_uid": 625
+      },
+      {
+        "time_ns": 19116,
+        "stream": 65,
+        "src": 1,
+        "dst": 65,
+        "nic": 1,
+        "sequence": 9000,
+        "payload_bytes": 5464,
+        "packet_uid": 639
+      }
+    ],
+    "recovery_events": [
+      {
+        "time_ns": 1030,
+        "event": 5,
+        "source": 1,
+        "message_id": 65,
+        "acknowledged_bytes": 0,
+        "highest_sent_bytes": 0,
+        "retries_since_progress": 0,
+        "rto_ns": 17000,
+        "deadline_ns": -1
+      },
+      {
+        "time_ns": 1754,
+        "event": 0,
+        "source": 1,
+        "message_id": 65,
+        "acknowledged_bytes": 0,
+        "highest_sent_bytes": 9000,
+        "retries_since_progress": 0,
+        "rto_ns": 17000,
+        "deadline_ns": 18754
+      },
+      {
+        "time_ns": 18754,
+        "event": 2,
+        "source": 1,
+        "message_id": 65,
+        "acknowledged_bytes": 0,
+        "highest_sent_bytes": 14464,
+        "retries_since_progress": 1,
+        "rto_ns": 34000,
+        "deadline_ns": 52754
+      },
+      {
+        "time_ns": 31846,
+        "event": 1,
+        "source": 1,
+        "message_id": 65,
+        "acknowledged_bytes": 9000,
+        "highest_sent_bytes": 14464,
+        "retries_since_progress": 0,
+        "rto_ns": 17000,
+        "deadline_ns": 48846
+      },
+      {
+        "time_ns": 31995,
+        "event": 3,
+        "source": 1,
+        "message_id": 65,
+        "acknowledged_bytes": 14464,
+        "highest_sent_bytes": 14464,
+        "retries_since_progress": 0,
+        "rto_ns": 17000,
+        "deadline_ns": -1
+      }
+    ],
+    "drop_rows": [
+      {
+        "time_ns": 4000,
+        "node": 128,
+        "port": 17,
+        "event": 5,
+        "packet_uid": 338,
+        "message_id": 65,
+        "ip_protocol": 17,
+        "sequence": 9000,
+        "model_bytes": 5500,
+        "ecn": 0,
+        "egress_queue_bytes": 5500,
+        "data_payload_bytes": 5464
+      },
+      {
+        "time_ns": 4478,
+        "node": 132,
+        "port": 1,
+        "event": 2,
+        "packet_uid": 128,
+        "message_id": 65,
+        "ip_protocol": 17,
+        "sequence": 0,
+        "model_bytes": 9036,
+        "ecn": 0,
+        "egress_queue_bytes": 0,
+        "data_payload_bytes": 9000
+      }
+    ],
+    "actual_source_ACKs": [
+      {
+        "time_ns": 31846,
+        "node": 1,
+        "port": 1,
+        "event": 1,
+        "packet_uid": 647,
+        "message_id": 65,
+        "ip_protocol": 252,
+        "sequence": 9000,
+        "model_bytes": 50,
+        "ecn": 0,
+        "egress_queue_bytes": 0,
+        "data_payload_bytes": 0
+      },
+      {
+        "time_ns": 31995,
+        "node": 1,
+        "port": 1,
+        "event": 1,
+        "packet_uid": 649,
+        "message_id": 65,
+        "ip_protocol": 252,
+        "sequence": 14464,
+        "model_bytes": 50,
+        "ecn": 0,
+        "egress_queue_bytes": 0,
+        "data_payload_bytes": 0
+      }
+    ],
+    "actual_data_ready_RX": [
+      {
+        "time_ns": 25989,
+        "node": 65,
+        "port": 1,
+        "event": 1,
+        "packet_uid": 639,
+        "message_id": 65,
+        "ip_protocol": 17,
+        "sequence": 9000,
+        "model_bytes": 5500,
+        "ecn": 0,
+        "egress_queue_bytes": 0,
+        "data_payload_bytes": 5464
+      }
+    ],
+    "final_ACK_path": [
+      {
+        "time_ns": 25989,
+        "node": 65,
+        "port": 1,
+        "event": 0,
+        "packet_uid": 649,
+        "message_id": 65,
+        "ip_protocol": 252,
+        "sequence": 14464,
+        "model_bytes": 50,
+        "ecn": 0,
+        "egress_queue_bytes": 0,
+        "data_payload_bytes": 0
+      },
+      {
+        "time_ns": 26990,
+        "node": 136,
+        "port": 2,
+        "event": 1,
+        "packet_uid": 649,
+        "message_id": 65,
+        "ip_protocol": 252,
+        "sequence": 14464,
+        "model_bytes": 50,
+        "ecn": 0,
+        "egress_queue_bytes": 0,
+        "data_payload_bytes": 0
+      },
+      {
+        "time_ns": 26990,
+        "node": 136,
+        "port": 19,
+        "event": 0,
+        "packet_uid": 649,
+        "message_id": 65,
+        "ip_protocol": 252,
+        "sequence": 14464,
+        "model_bytes": 50,
+        "ecn": 0,
+        "egress_queue_bytes": 0,
+        "data_payload_bytes": 0
+      },
+      {
+        "time_ns": 27991,
+        "node": 142,
+        "port": 1,
+        "event": 1,
+        "packet_uid": 649,
+        "message_id": 65,
+        "ip_protocol": 252,
+        "sequence": 14464,
+        "model_bytes": 50,
+        "ecn": 0,
+        "egress_queue_bytes": 0,
+        "data_payload_bytes": 0
+      },
+      {
+        "time_ns": 27991,
+        "node": 142,
+        "port": 5,
+        "event": 0,
+        "packet_uid": 649,
+        "message_id": 65,
+        "ip_protocol": 252,
+        "sequence": 14464,
+        "model_bytes": 50,
+        "ecn": 0,
+        "egress_queue_bytes": 0,
+        "data_payload_bytes": 0
+      },
+      {
+        "time_ns": 28992,
+        "node": 146,
+        "port": 2,
+        "event": 1,
+        "packet_uid": 649,
+        "message_id": 65,
+        "ip_protocol": 252,
+        "sequence": 14464,
+        "model_bytes": 50,
+        "ecn": 0,
+        "egress_queue_bytes": 0,
+        "data_payload_bytes": 0
+      },
+      {
+        "time_ns": 28992,
+        "node": 146,
+        "port": 1,
+        "event": 0,
+        "packet_uid": 649,
+        "message_id": 65,
+        "ip_protocol": 252,
+        "sequence": 14464,
+        "model_bytes": 50,
+        "ecn": 0,
+        "egress_queue_bytes": 0,
+        "data_payload_bytes": 0
+      },
+      {
+        "time_ns": 29993,
+        "node": 134,
+        "port": 5,
+        "event": 1,
+        "packet_uid": 649,
+        "message_id": 65,
+        "ip_protocol": 252,
+        "sequence": 14464,
+        "model_bytes": 50,
+        "ecn": 0,
+        "egress_queue_bytes": 0,
+        "data_payload_bytes": 0
+      },
+      {
+        "time_ns": 29993,
+        "node": 134,
+        "port": 1,
+        "event": 0,
+        "packet_uid": 649,
+        "message_id": 65,
+        "ip_protocol": 252,
+        "sequence": 14464,
+        "model_bytes": 50,
+        "ecn": 0,
+        "egress_queue_bytes": 0,
+        "data_payload_bytes": 0
+      },
+      {
+        "time_ns": 30994,
+        "node": 128,
+        "port": 19,
+        "event": 1,
+        "packet_uid": 649,
+        "message_id": 65,
+        "ip_protocol": 252,
+        "sequence": 14464,
+        "model_bytes": 50,
+        "ecn": 0,
+        "egress_queue_bytes": 0,
+        "data_payload_bytes": 0
+      },
+      {
+        "time_ns": 30994,
+        "node": 128,
+        "port": 2,
+        "event": 0,
+        "packet_uid": 649,
+        "message_id": 65,
+        "ip_protocol": 252,
+        "sequence": 14464,
+        "model_bytes": 50,
+        "ecn": 0,
+        "egress_queue_bytes": 0,
+        "data_payload_bytes": 0
+      },
+      {
+        "time_ns": 31995,
+        "node": 1,
+        "port": 1,
+        "event": 1,
+        "packet_uid": 649,
+        "message_id": 65,
+        "ip_protocol": 252,
+        "sequence": 14464,
+        "model_bytes": 50,
+        "ecn": 0,
+        "egress_queue_bytes": 0,
+        "data_payload_bytes": 0
+      }
+    ],
+    "group1_finished_ns": 146693
+  },
+  "accounting": {
+    "original_ACK_next_hops_at_Agg132": [
+      [
+        128,
+        1
+      ]
+    ],
+    "local_filter_leaves_no_original_candidate": true,
+    "ACKs_dropped_at_Agg132_ns": [
+      29844,
+      30174,
+      63844,
+      63954
+    ],
+    "physical_restore_ns": 64000,
+    "first_complete_data_ns": 26170,
+    "next_retry_ns": 120754,
+    "source_ACK_ns": 133846,
+    "restore_to_retry_ns": 56754,
+    "retry_to_ACK_ns": 13092,
+    "restore_to_ACK_ns": 69846,
+    "last_failed_ACK_before_restore_ns": 46,
+    "same_message_ACK_delta_ns": 101851,
+    "instant_gate_slack_ns": 3570,
+    "first_dispatch_gate_delta_ns": 98281,
+    "later_group_span_delta_ns": -168,
+    "group1_finish_delta_ns": 98113,
+    "scope": "Source confirmation blocks original SEND/Dispatch gate; no new ACK path, retry-on-link-up or performance counterfactual implemented"
+  },
+  "passed": true
+}

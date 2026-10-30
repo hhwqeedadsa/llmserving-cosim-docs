@@ -1,0 +1,32 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>实时执行事件验收</title>
+<style>body{font:17px/1.75 system-ui,sans-serif;background:#f3f5f8;color:#142438;margin:0;padding:36px}
+main{max-width:1040px;margin:auto;background:white;padding:32px;border-radius:12px}h1{line-height:1.3}
+table{border-collapse:collapse;width:100%}td,th{border:1px solid #cbd5e1;padding:10px;text-align:left}
+.note{padding:16px;background:#eff6ff;border-left:5px solid #2463bd}a{color:#1557ac}code{font-size:.92em}</style>
+<main><h1>前端现在能在运行中看到哪些实际事件</h1>
+<p class="note">新增的是运行中的观察能力：区分“数据交到了”和“发送方确认完成”。当前没有启动备用专家，没有测得新恢复算法收益。</p>
+<p>原生ASTRA/ns-3在真实调用点发送7669条事件，Python在线验证并保存，不解析日志猜时间。
+任务完成、原传输确认与网络排空分别处理。</p>
+<table><tr><th>128端点Clos人工功能输入</th><th>关闭记录</th><th>开启记录</th></tr>
+<tr><td>EP组 / 来源请求</td><td>2×64 / 4</td><td>相同</td></tr>
+<tr><td>ASTRA节点 / 消息 / 布局载荷</td><td>3708 / 62 / 37696B</td><td>相同</td></tr>
+<tr><td>完整包事件</td><td>2120</td><td>逐项相同</td></tr>
+<tr><td>任务完成 / 网络排空</td><td>103.852 / 103.852μs</td><td>相同</td></tr>
+<tr><td>实时执行事件</td><td>关闭</td><td>7669条，序号与实际日志/回调一致</td></tr></table>
+<h2>一个实际消息的时间线</h2><p>消息2：rank0→6。</p>
+<table><tr><th>阶段</th><th>实际时刻</th><th>含义</th></tr>
+<tr><td>SEND提交</td><td>1.030μs</td><td>进入共享传输服务</td></tr>
+<tr><td>接收回调</td><td>3.058μs</td><td>完整消息可交给ASTRA接收节点</td></tr>
+<tr><td>发送确认</td><td>5.060μs</td><td>源端才得到传输完成通知</td></tr></table>
+<p>两个回调相差2.002μs。接收回调不会代替发送确认，也不会提前释放原传输。
+这不是2.002μs的优化收益。</p>
+<h2>已验证与剩余工作</h2><p>45项CPU检查通过；可迁移运行的公开核验通过。
+删除排空事件、改接收rank、改回调时间、重复或截断事件，五种情况均被拒绝。
+除新增计数字段外，两次完整网络结果及任务图一致。</p>
+<p>本次是四份不同人工路由、31个数据活跃rank、两层两步、声明计算成本，未注入故障；不是完整R1或硬件测量。
+下一步仍需将贡献包绑定到同一调用，接入可见故障触发和共享GPU/NIC的备用执行，再对照已有机制评价收益。</p>
+<p>构建重新编译27个受影响对象，保留旧产物。累计受监控105.963秒（含嵌套执行的保守相加），
+构建峰值采样904.6MiB；没有下载、GPU运行或网络重跑。</p>
+<p><a href="README.md">方法与边界</a> · <a href="verification.json">独立核验</a> ·
+<a href="receipt.json">命令、版本和资源收据</a> · <a href="../../docs/execution_events.md">使用说明</a></p></main></html>

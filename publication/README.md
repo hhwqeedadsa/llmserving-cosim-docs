@@ -35,8 +35,8 @@ tar -xzf third_party/source_archives/SimAI-a57d765c.tar.gz -C runs/simai-source
 
 |依赖|固定源码分支|
 |---|---|
-|llmservingsim|[3ff9dee68d71](https://github.com/hhwqeedadsa/llmserving-cosim-docs/tree/codex/deps/llmservingsim)|
-|astra-sim|[479539202401](https://github.com/hhwqeedadsa/llmserving-cosim-docs/tree/codex/deps/astra-sim)|
+|llmservingsim|[77da4a672047](https://github.com/hhwqeedadsa/llmserving-cosim-docs/tree/codex/deps/llmservingsim)|
+|astra-sim|[04948bc1dd88](https://github.com/hhwqeedadsa/llmserving-cosim-docs/tree/codex/deps/astra-sim)|
 |fmt|[7e73566ce7bd](https://github.com/hhwqeedadsa/llmserving-cosim-docs/tree/codex/deps/fmt)|
 |spdlog|[63f0875000bf](https://github.com/hhwqeedadsa/llmserving-cosim-docs/tree/codex/deps/spdlog)|
 |ns3-rdma|[69cb14764c0c](https://github.com/hhwqeedadsa/llmserving-cosim-docs/tree/codex/deps/ns3-rdma)|

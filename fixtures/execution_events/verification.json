@@ -1,0 +1,70 @@
+{
+  "passed": true,
+  "source_execution_commit": "b405711bc65ef23e2e8bb09bd1e9d9485c18dae1",
+  "gpu_endpoints": 128,
+  "independent_synthetic_sources": 4,
+  "ep_sizes": [
+    64,
+    64
+  ],
+  "graphs": 4,
+  "same_graph_bytes": true,
+  "same_complete_packet_queue_callback_results": true,
+  "packet_events": 2120,
+  "live_observation": {
+    "schema_version": "moe-execution-observation/1",
+    "events": 7669,
+    "last_time_ns": 103852,
+    "service_drained_ns": 103852,
+    "registered_graphs": 4,
+    "retired_graphs": 4,
+    "nodes": 3708,
+    "node_completions": 3708,
+    "messages": 62,
+    "receiver_completions": 62,
+    "sender_completions": 62,
+    "scope": "passive_actual_callbacks_no_recovery_or_tensor_validation"
+  },
+  "messages_receiver_before_sender": 62,
+  "real_callback_example": {
+    "id": 2,
+    "recv_callback_ns": 3058,
+    "recv_post_ns": 0,
+    "send_callback_ns": 5060,
+    "send_post_ns": 1030,
+    "src": 0,
+    "dst": 6
+  },
+  "fault_injected": false,
+  "new_network_executions": 0,
+  "input_recorded_not_tensor_execution": true,
+  "negative_checks": {
+    "missing-drain": {
+      "rejected": true,
+      "exit_code": 1
+    },
+    "wrong-rank": {
+      "rejected": true,
+      "exit_code": 1
+    },
+    "different-log-time": {
+      "rejected": true,
+      "exit_code": 1
+    },
+    "duplicate": {
+      "rejected": true,
+      "exit_code": 1
+    },
+    "truncated": {
+      "rejected": true,
+      "exit_code": 1
+    }
+  },
+  "original_evidence_unchanged": true,
+  "source_hashes": {
+    "/home/lry/moe-ub-cosim/runs/execution_events_20261030/on/execution_events.jsonl": "fab2439297d591b546e7b0475b7600703129521704cf467779d58068aede320a",
+    "/home/lry/moe-ub-cosim/runs/execution_events_20261030/on/result.json": "8b5e0396903c2c470bde8567fc4d89e9f182f7bd7ce1349ff5b669dd202c6860",
+    "/home/lry/moe-ub-cosim/runs/execution_events_20261030/on/execution_observation.json": "277bc0b6d23c98aadde05f6b913a269a4a1a07748b4a714fbfb4d1a5bbc17ddf"
+  },
+  "scope": "128 Clos passive observation correctness and noninterference; no recovery or algorithm gain"
+}

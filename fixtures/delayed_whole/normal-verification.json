@@ -1,0 +1,92 @@
+{
+  "passed": true,
+  "public_verification": {
+    "passed": true,
+    "transport": "astra_persistent_streams/1",
+    "frontend": "actual_LLMServingSim",
+    "gpu_count": 128,
+    "messages": 122,
+    "remote_payload_bytes": 1760704,
+    "verified_nodes": 1140,
+    "waves": 1,
+    "finish_ns": 62506,
+    "packet_events_checked": 8070,
+    "source_payload_bytes": 1760704,
+    "receiver_accepted_bytes": 1760704,
+    "hardware_calibrated": false,
+    "scope": "actual ASTRA scheduling and persistent message intervals; finite service; not calibrated hardware",
+    "timing_status": "complete",
+    "timing_reason": null,
+    "application_finished_ns": 62506,
+    "network_drained_ns": 62506,
+    "network_stopped_ns": 62506,
+    "post_application_drain_ns": 0,
+    "timing_scope": "delayed_whole_finite_segment/1",
+    "attempts_finished_ns": 62506,
+    "execution_observation": {
+      "schema_version": "moe-execution-observation/1",
+      "events": 2770,
+      "last_time_ns": 62506,
+      "service_drained_ns": 62506,
+      "registered_graphs": 1,
+      "retired_graphs": 1,
+      "nodes": 1140,
+      "node_completions": 1140,
+      "messages": 122,
+      "receiver_completions": 122,
+      "sender_completions": 122,
+      "scope": "passive_actual_callbacks_no_recovery_or_tensor_validation"
+    }
+  },
+  "relocated": true,
+  "originals_unchanged": true,
+  "skipped_request_ids": [
+    1,
+    3,
+    5,
+    7
+  ],
+  "new_network_executions": 0,
+  "rejected_mutations": [
+    {
+      "case": "timer_event",
+      "error": "Scale-Out topology: native wakeup lifecycle differs from actual control transcript"
+    },
+    {
+      "case": "timer_pending",
+      "error": "Scale-Out topology: native wakeup lifecycle differs from actual control transcript"
+    },
+    {
+      "case": "decision_deadline",
+      "error": "Scale-Out topology: delayed decision identity/deadline differs"
+    },
+    {
+      "case": "reserved_KV",
+      "error": "Scale-Out topology: standby KV reservation/release differs from source contexts and actual lifecycle"
+    },
+    {
+      "case": "released_KV",
+      "error": "Scale-Out topology: standby KV reservation/release differs from source contexts and actual lifecycle"
+    },
+    {
+      "case": "early_result",
+      "error": "Scale-Out topology: delayed result differs from native prefix policy"
+    },
+    {
+      "case": "foreign_group",
+      "error": "Scale-Out topology: scheduler batch differs from explicit replay requests"
+    },
+    {
+      "case": "fake_ITL",
+      "error": "Scale-Out topology: skipped replica must remain unexecuted with no fabricated completion"
+    },
+    {
+      "case": "fake_token",
+      "error": "Scale-Out topology: skipped replica must remain unexecuted with no fabricated completion"
+    },
+    {
+      "case": "fake_finish",
+      "error": "Scale-Out topology: skipped replica must remain unexecuted with no fabricated completion"
+    }
+  ]
+}

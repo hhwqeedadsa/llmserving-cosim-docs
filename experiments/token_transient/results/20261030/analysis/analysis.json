@@ -1,0 +1,2280 @@
+{
+  "passed": true,
+  "preparation_sha256": "48542348eb6e5d4dbdd182b4bf079098e2511488f5cbe88dea75f5e722d21b7c",
+  "cases": {
+    "normal": {
+      "timing": {
+        "timing_status": "complete",
+        "timing_reason": null,
+        "application_finished_ns": 132159,
+        "network_drained_ns": 180957,
+        "network_stopped_ns": 180957,
+        "post_application_drain_ns": 48798
+      },
+      "groups": [
+        {
+          "group": 0,
+          "finished_ns": 132159,
+          "graphs": [
+            {
+              "graph_id": "g0.w0",
+              "start_ns": 0,
+              "finished_ns": 65119,
+              "elapsed_ns": 65119
+            },
+            {
+              "graph_id": "g0.w1",
+              "start_ns": 65119,
+              "finished_ns": 132159,
+              "elapsed_ns": 67040
+            }
+          ]
+        },
+        {
+          "group": 1,
+          "finished_ns": 132013,
+          "graphs": [
+            {
+              "graph_id": "g1.w0",
+              "start_ns": 0,
+              "finished_ns": 65409,
+              "elapsed_ns": 65409
+            },
+            {
+              "graph_id": "g1.w1",
+              "start_ns": 65409,
+              "finished_ns": 132013,
+              "elapsed_ns": 66604
+            }
+          ]
+        }
+      ],
+      "accounting": {
+        "messages": 882,
+        "layout_bytes": 12729024,
+        "expert_contributions": 480,
+        "remote_expert_contributions": 474,
+        "remote_token_rank_units": 441,
+        "declared_reduce_work_ns": 3400
+      },
+      "packet": {
+        "source_data_packets": 1764,
+        "source_payload_bytes": 12729024,
+        "group_direct_drops": [
+          0,
+          0
+        ],
+        "group_destination_ce_packets": [
+          19,
+          10
+        ],
+        "group_switch_residence_sum_ns": [
+          388648,
+          390600
+        ],
+        "shared_directed_exits": [
+          {
+            "node": 128,
+            "port": 17,
+            "group0_data_model_bytes": 304552,
+            "group1_data_model_bytes": 333816
+          },
+          {
+            "node": 128,
+            "port": 18,
+            "group0_data_model_bytes": 203440,
+            "group1_data_model_bytes": 232384
+          },
+          {
+            "node": 128,
+            "port": 19,
+            "group0_data_model_bytes": 246664,
+            "group1_data_model_bytes": 188648
+          },
+          {
+            "node": 128,
+            "port": 20,
+            "group0_data_model_bytes": 334008,
+            "group1_data_model_bytes": 275864
+          },
+          {
+            "node": 129,
+            "port": 17,
+            "group0_data_model_bytes": 130248,
+            "group1_data_model_bytes": 130248
+          },
+          {
+            "node": 129,
+            "port": 18,
+            "group0_data_model_bytes": 86832,
+            "group1_data_model_bytes": 72360
+          },
+          {
+            "node": 129,
+            "port": 19,
+            "group0_data_model_bytes": 43416,
+            "group1_data_model_bytes": 115776
+          },
+          {
+            "node": 129,
+            "port": 20,
+            "group0_data_model_bytes": 43416,
+            "group1_data_model_bytes": 86832
+          },
+          {
+            "node": 130,
+            "port": 17,
+            "group0_data_model_bytes": 232320,
+            "group1_data_model_bytes": 232256
+          },
+          {
+            "node": 130,
+            "port": 18,
+            "group0_data_model_bytes": 334008,
+            "group1_data_model_bytes": 305064
+          },
+          {
+            "node": 130,
+            "port": 19,
+            "group0_data_model_bytes": 275928,
+            "group1_data_model_bytes": 362824
+          },
+          {
+            "node": 130,
+            "port": 20,
+            "group0_data_model_bytes": 290016,
+            "group1_data_model_bytes": 159576
+          },
+          {
+            "node": 131,
+            "port": 17,
+            "group0_data_model_bytes": 86832,
+            "group1_data_model_bytes": 57888
+          },
+          {
+            "node": 131,
+            "port": 18,
+            "group0_data_model_bytes": 86832,
+            "group1_data_model_bytes": 101304
+          },
+          {
+            "node": 131,
+            "port": 19,
+            "group0_data_model_bytes": 115776,
+            "group1_data_model_bytes": 188136
+          },
+          {
+            "node": 131,
+            "port": 20,
+            "group0_data_model_bytes": 115776,
+            "group1_data_model_bytes": 188136
+          },
+          {
+            "node": 132,
+            "port": 1,
+            "group0_data_model_bytes": 275416,
+            "group1_data_model_bytes": 260944
+          },
+          {
+            "node": 132,
+            "port": 2,
+            "group0_data_model_bytes": 87216,
+            "group1_data_model_bytes": 72680
+          },
+          {
+            "node": 132,
+            "port": 3,
+            "group0_data_model_bytes": 304360,
+            "group1_data_model_bytes": 304232
+          },
+          {
+            "node": 132,
+            "port": 4,
+            "group0_data_model_bytes": 43608,
+            "group1_data_model_bytes": 72680
+          },
+          {
+            "node": 132,
+            "port": 5,
+            "group0_data_model_bytes": 521952,
+            "group1_data_model_bytes": 333624
+          },
+          {
+            "node": 133,
+            "port": 1,
+            "group0_data_model_bytes": 217464,
+            "group1_data_model_bytes": 260944
+          },
+          {
+            "node": 133,
+            "port": 2,
+            "group0_data_model_bytes": 130824,
+            "group1_data_model_bytes": 87216
+          },
+          {
+            "node": 133,
+            "port": 3,
+            "group0_data_model_bytes": 289568,
+            "group1_data_model_bytes": 275352
+          },
+          {
+            "node": 133,
+            "port": 4,
+            "group0_data_model_bytes": 72680,
+            "group1_data_model_bytes": 203504
+          },
+          {
+            "node": 133,
+            "port": 5,
+            "group0_data_model_bytes": 449976,
+            "group1_data_model_bytes": 261200
+          },
+          {
+            "node": 134,
+            "port": 1,
+            "group0_data_model_bytes": 275480,
+            "group1_data_model_bytes": 304232
+          },
+          {
+            "node": 134,
+            "port": 2,
+            "group0_data_model_bytes": 43608,
+            "group1_data_model_bytes": 87216
+          },
+          {
+            "node": 134,
+            "port": 3,
+            "group0_data_model_bytes": 260944,
+            "group1_data_model_bytes": 217336
+          },
+          {
+            "node": 134,
+            "port": 4,
+            "group0_data_model_bytes": 116288,
+            "group1_data_model_bytes": 72680
+          },
+          {
+            "node": 134,
+            "port": 5,
+            "group0_data_model_bytes": 420712,
+            "group1_data_model_bytes": 478536
+          },
+          {
+            "node": 135,
+            "port": 1,
+            "group0_data_model_bytes": 318576,
+            "group1_data_model_bytes": 202736
+          },
+          {
+            "node": 135,
+            "port": 2,
+            "group0_data_model_bytes": 43608,
+            "group1_data_model_bytes": 159896
+          },
+          {
+            "node": 135,
+            "port": 3,
+            "group0_data_model_bytes": 275480,
+            "group1_data_model_bytes": 260944
+          },
+          {
+            "node": 135,
+            "port": 4,
+            "group0_data_model_bytes": 174432,
+            "group1_data_model_bytes": 188968
+          },
+          {
+            "node": 135,
+            "port": 5,
+            "group0_data_model_bytes": 435120,
+            "group1_data_model_bytes": 449336
+          },
+          {
+            "node": 136,
+            "port": 17,
+            "group0_data_model_bytes": 362888,
+            "group1_data_model_bytes": 43416
+          },
+          {
+            "node": 136,
+            "port": 18,
+            "group0_data_model_bytes": 348096,
+            "group1_data_model_bytes": 101304
+          },
+          {
+            "node": 136,
+            "port": 19,
+            "group0_data_model_bytes": 275928,
+            "group1_data_model_bytes": 86832
+          },
+          {
+            "node": 136,
+            "port": 20,
+            "group0_data_model_bytes": 275608,
+            "group1_data_model_bytes": 28944
+          },
+          {
+            "node": 137,
+            "port": 17,
+            "group0_data_model_bytes": 159192,
+            "group1_data_model_bytes": 261264
+          },
+          {
+            "node": 137,
+            "port": 18,
+            "group0_data_model_bytes": 144720,
+            "group1_data_model_bytes": 174432
+          },
+          {
+            "node": 137,
+            "port": 19,
+            "group0_data_model_bytes": 86832,
+            "group1_data_model_bytes": 174368
+          },
+          {
+            "node": 137,
+            "port": 20,
+            "group0_data_model_bytes": 86832,
+            "group1_data_model_bytes": 305192
+          },
+          {
+            "node": 138,
+            "port": 17,
+            "group0_data_model_bytes": 305064,
+            "group1_data_model_bytes": 72360
+          },
+          {
+            "node": 138,
+            "port": 18,
+            "group0_data_model_bytes": 232192,
+            "group1_data_model_bytes": 86832
+          },
+          {
+            "node": 138,
+            "port": 19,
+            "group0_data_model_bytes": 261072,
+            "group1_data_model_bytes": 72360
+          },
+          {
+            "node": 138,
+            "port": 20,
+            "group0_data_model_bytes": 290464,
+            "group1_data_model_bytes": 173664
+          },
+          {
+            "node": 139,
+            "port": 17,
+            "group0_data_model_bytes": 72360,
+            "group1_data_model_bytes": 130376
+          },
+          {
+            "node": 139,
+            "port": 18,
+            "group0_data_model_bytes": 101304,
+            "group1_data_model_bytes": 174112
+          },
+          {
+            "node": 139,
+            "port": 19,
+            "group0_data_model_bytes": 101304,
+            "group1_data_model_bytes": 145168
+          },
+          {
+            "node": 139,
+            "port": 20,
+            "group0_data_model_bytes": 115776,
+            "group1_data_model_bytes": 188712
+          },
+          {
+            "node": 140,
+            "port": 1,
+            "group0_data_model_bytes": 405920,
+            "group1_data_model_bytes": 29072
+          },
+          {
+            "node": 140,
+            "port": 2,
+            "group0_data_model_bytes": 145360,
+            "group1_data_model_bytes": 159192
+          },
+          {
+            "node": 140,
+            "port": 3,
+            "group0_data_model_bytes": 246216,
+            "group1_data_model_bytes": 174432
+          },
+          {
+            "node": 140,
+            "port": 4,
+            "group0_data_model_bytes": 145360,
+            "group1_data_model_bytes": 188392
+          },
+          {
+            "node": 140,
+            "port": 5,
+            "group0_data_model_bytes": 478600,
+            "group1_data_model_bytes": 289952
+          },
+          {
+            "node": 141,
+            "port": 1,
+            "group0_data_model_bytes": 260944,
+            "group1_data_model_bytes": 29072
+          },
+          {
+            "node": 141,
+            "port": 2,
+            "group0_data_model_bytes": 145360,
+            "group1_data_model_bytes": 188328
+          },
+          {
+            "node": 141,
+            "port": 3,
+            "group0_data_model_bytes": 347904,
+            "group1_data_model_bytes": 72680
+          },
+          {
+            "node": 141,
+            "port": 4,
+            "group0_data_model_bytes": 72680,
+            "group1_data_model_bytes": 130696
+          },
+          {
+            "node": 141,
+            "port": 5,
+            "group0_data_model_bytes": 449400,
+            "group1_data_model_bytes": 377104
+          },
+          {
+            "node": 142,
+            "port": 1,
+            "group0_data_model_bytes": 289824,
+            "group1_data_model_bytes": 130824
+          },
+          {
+            "node": 142,
+            "port": 2,
+            "group0_data_model_bytes": 116288,
+            "group1_data_model_bytes": 260624
+          },
+          {
+            "node": 142,
+            "port": 3,
+            "group0_data_model_bytes": 231808,
+            "group1_data_model_bytes": 116288
+          },
+          {
+            "node": 142,
+            "port": 4,
+            "group0_data_model_bytes": 72680,
+            "group1_data_model_bytes": 144912
+          },
+          {
+            "node": 142,
+            "port": 5,
+            "group0_data_model_bytes": 435248,
+            "group1_data_model_bytes": 304616
+          },
+          {
+            "node": 143,
+            "port": 1,
+            "group0_data_model_bytes": 304488,
+            "group1_data_model_bytes": 72680
+          },
+          {
+            "node": 143,
+            "port": 2,
+            "group0_data_model_bytes": 72680,
+            "group1_data_model_bytes": 304104
+          },
+          {
+            "node": 143,
+            "port": 3,
+            "group0_data_model_bytes": 260880,
+            "group1_data_model_bytes": 43608
+          },
+          {
+            "node": 143,
+            "port": 4,
+            "group0_data_model_bytes": 101752,
+            "group1_data_model_bytes": 173984
+          },
+          {
+            "node": 143,
+            "port": 5,
+            "group0_data_model_bytes": 464000,
+            "group1_data_model_bytes": 551472
+          },
+          {
+            "node": 144,
+            "port": 1,
+            "group0_data_model_bytes": 478600,
+            "group1_data_model_bytes": 289952
+          },
+          {
+            "node": 144,
+            "port": 2,
+            "group0_data_model_bytes": 521952,
+            "group1_data_model_bytes": 333624
+          },
+          {
+            "node": 145,
+            "port": 1,
+            "group0_data_model_bytes": 449400,
+            "group1_data_model_bytes": 377104
+          },
+          {
+            "node": 145,
+            "port": 2,
+            "group0_data_model_bytes": 449976,
+            "group1_data_model_bytes": 261200
+          },
+          {
+            "node": 146,
+            "port": 1,
+            "group0_data_model_bytes": 435248,
+            "group1_data_model_bytes": 304616
+          },
+          {
+            "node": 146,
+            "port": 2,
+            "group0_data_model_bytes": 420712,
+            "group1_data_model_bytes": 478536
+          },
+          {
+            "node": 147,
+            "port": 1,
+            "group0_data_model_bytes": 464000,
+            "group1_data_model_bytes": 551472
+          },
+          {
+            "node": 147,
+            "port": 2,
+            "group0_data_model_bytes": 435120,
+            "group1_data_model_bytes": 449336
+          }
+        ],
+        "destination_data_arrivals": 1764,
+        "destination_data_drops": 0,
+        "all_cluster_destination_observed_loss_fraction": 0.0,
+        "critical_first_dispatch_messages": [
+          {
+            "message": {
+              "ack_ns": 16922,
+              "begin": 0,
+              "bytes": 14464,
+              "contributions": 1,
+              "dst": 100,
+              "end": 14464,
+              "id": 553,
+              "layer": 0,
+              "phase": "dispatch",
+              "plane": 0,
+              "published_ns": 1030,
+              "ready_ns": 1030,
+              "receive_ready_ns": 10916,
+              "src": 16,
+              "stream": 115,
+              "tag": 553,
+              "transport_tokens": 1
+            },
+            "source_packets": [
+              {
+                "time_ns": 2116,
+                "node": 16,
+                "port": 1,
+                "event": 0,
+                "packet_uid": 91,
+                "message_id": 115,
+                "ip_protocol": 17,
+                "sequence": 0,
+                "model_bytes": 9036,
+                "ecn": 0,
+                "egress_queue_bytes": 0,
+                "data_payload_bytes": 9000
+              },
+              {
+                "time_ns": 3138,
+                "node": 16,
+                "port": 1,
+                "event": 0,
+                "packet_uid": 209,
+                "message_id": 115,
+                "ip_protocol": 17,
+                "sequence": 9000,
+                "model_bytes": 5500,
+                "ecn": 0,
+                "egress_queue_bytes": 0,
+                "data_payload_bytes": 5464
+              }
+            ],
+            "endpoint_packets": [
+              {
+                "time_ns": 9564,
+                "node": 100,
+                "port": 1,
+                "event": 1,
+                "packet_uid": 91,
+                "message_id": 115,
+                "ip_protocol": 17,
+                "sequence": 0,
+                "model_bytes": 9036,
+                "ecn": 0,
+                "egress_queue_bytes": 0,
+                "data_payload_bytes": 9000
+              },
+              {
+                "time_ns": 10916,
+                "node": 100,
+                "port": 1,
+                "event": 1,
+                "packet_uid": 209,
+                "message_id": 115,
+                "ip_protocol": 17,
+                "sequence": 9000,
+                "model_bytes": 5500,
+                "ecn": 0,
+                "egress_queue_bytes": 0,
+                "data_payload_bytes": 5464
+              }
+            ],
+            "recovery_requests": [
+              {
+                "time_ns": 1030,
+                "event": 5,
+                "source": 16,
+                "message_id": 115,
+                "acknowledged_bytes": 0,
+                "highest_sent_bytes": 0,
+                "retries_since_progress": 0,
+                "rto_ns": 80000,
+                "deadline_ns": -1
+              },
+              {
+                "time_ns": 2116,
+                "event": 0,
+                "source": 16,
+                "message_id": 115,
+                "acknowledged_bytes": 0,
+                "highest_sent_bytes": 9000,
+                "retries_since_progress": 0,
+                "rto_ns": 80000,
+                "deadline_ns": 82116
+              },
+              {
+                "time_ns": 15571,
+                "event": 1,
+                "source": 16,
+                "message_id": 115,
+                "acknowledged_bytes": 9000,
+                "highest_sent_bytes": 14464,
+                "retries_since_progress": 0,
+                "rto_ns": 80000,
+                "deadline_ns": 95571
+              },
+              {
+                "time_ns": 16922,
+                "event": 3,
+                "source": 16,
+                "message_id": 115,
+                "acknowledged_bytes": 14464,
+                "highest_sent_bytes": 14464,
+                "retries_since_progress": 0,
+                "rto_ns": 80000,
+                "deadline_ns": -1
+              }
+            ],
+            "first_source_tx_after_fault_end_ns": null,
+            "fault_end_to_next_source_tx_ns": null,
+            "timeout_recovery_requests": 0,
+            "timeout_requests_with_same_time_source_tx": 0
+          }
+        ],
+        "scope": "offline packet lineage and switch RX-to-TX residence; cumulative work is not task latency"
+      },
+      "phases": [
+        {
+          "graph_id": "g0.w0",
+          "group": 0,
+          "layer": 0,
+          "phase": "dispatch",
+          "last_receive_ns": 10916,
+          "last_source_ack_ns": 16922,
+          "last_producer_ns": 1030,
+          "released_ns": 16922,
+          "post_last_source_ack_ns": 0,
+          "positive_group_wait_ranks": 63,
+          "max_group_wait_ns": 16922,
+          "median_group_wait_ns": 9583.5,
+          "max_local_issue_delay_ns": 0,
+          "last_ack_message_ids": [
+            553
+          ]
+        },
+        {
+          "graph_id": "g0.w0",
+          "group": 0,
+          "layer": 0,
+          "phase": "combine",
+          "last_receive_ns": 26544,
+          "last_source_ack_ns": 32550,
+          "last_producer_ns": 17622,
+          "released_ns": 32550,
+          "post_last_source_ack_ns": 0,
+          "positive_group_wait_ranks": 63,
+          "max_group_wait_ns": 15628,
+          "median_group_wait_ns": 6398.0,
+          "max_local_issue_delay_ns": 0,
+          "last_ack_message_ids": [
+            4717
+          ]
+        },
+        {
+          "graph_id": "g0.w0",
+          "group": 0,
+          "layer": 1,
+          "phase": "dispatch",
+          "last_receive_ns": 42882,
+          "last_source_ack_ns": 48888,
+          "last_producer_ns": 33610,
+          "released_ns": 48888,
+          "post_last_source_ack_ns": 0,
+          "positive_group_wait_ranks": 63,
+          "max_group_wait_ns": 16338,
+          "median_group_wait_ns": 7840.0,
+          "max_local_issue_delay_ns": 0,
+          "last_ack_message_ids": [
+            8121
+          ]
+        },
+        {
+          "graph_id": "g0.w0",
+          "group": 0,
+          "layer": 1,
+          "phase": "combine",
+          "last_receive_ns": 59083,
+          "last_source_ack_ns": 65089,
+          "last_producer_ns": 49988,
+          "released_ns": 65089,
+          "post_last_source_ack_ns": 0,
+          "positive_group_wait_ranks": 63,
+          "max_group_wait_ns": 16201,
+          "median_group_wait_ns": 6797.5,
+          "max_local_issue_delay_ns": 0,
+          "last_ack_message_ids": [
+            13348
+          ]
+        },
+        {
+          "graph_id": "g0.w1",
+          "group": 0,
+          "layer": 0,
+          "phase": "dispatch",
+          "last_receive_ns": 76765,
+          "last_source_ack_ns": 82771,
+          "last_producer_ns": 66149,
+          "released_ns": 82771,
+          "post_last_source_ack_ns": 0,
+          "positive_group_wait_ranks": 63,
+          "max_group_wait_ns": 17652,
+          "median_group_wait_ns": 10003.0,
+          "max_local_issue_delay_ns": 0,
+          "last_ack_message_ids": [
+            32309
+          ]
+        },
+        {
+          "graph_id": "g0.w1",
+          "group": 0,
+          "layer": 0,
+          "phase": "combine",
+          "last_receive_ns": 93292,
+          "last_source_ack_ns": 99298,
+          "last_producer_ns": 83171,
+          "released_ns": 99298,
+          "post_last_source_ack_ns": 0,
+          "positive_group_wait_ranks": 63,
+          "max_group_wait_ns": 16527,
+          "median_group_wait_ns": 6666.5,
+          "max_local_issue_delay_ns": 0,
+          "last_ack_message_ids": [
+            36831
+          ]
+        },
+        {
+          "graph_id": "g0.w1",
+          "group": 0,
+          "layer": 1,
+          "phase": "dispatch",
+          "last_receive_ns": 110536,
+          "last_source_ack_ns": 116542,
+          "last_producer_ns": 100358,
+          "released_ns": 116542,
+          "post_last_source_ack_ns": 0,
+          "positive_group_wait_ranks": 63,
+          "max_group_wait_ns": 17244,
+          "median_group_wait_ns": 9781.5,
+          "max_local_issue_delay_ns": 0,
+          "last_ack_message_ids": [
+            40866
+          ]
+        },
+        {
+          "graph_id": "g0.w1",
+          "group": 0,
+          "layer": 1,
+          "phase": "combine",
+          "last_receive_ns": 126123,
+          "last_source_ack_ns": 132129,
+          "last_producer_ns": 116942,
+          "released_ns": 132129,
+          "post_last_source_ack_ns": 0,
+          "positive_group_wait_ranks": 63,
+          "max_group_wait_ns": 15587,
+          "median_group_wait_ns": 6052.5,
+          "max_local_issue_delay_ns": 0,
+          "last_ack_message_ids": [
+            45021
+          ]
+        },
+        {
+          "graph_id": "g1.w0",
+          "group": 1,
+          "layer": 0,
+          "phase": "dispatch",
+          "last_receive_ns": 11466,
+          "last_source_ack_ns": 17472,
+          "last_producer_ns": 1030,
+          "released_ns": 17472,
+          "post_last_source_ack_ns": 0,
+          "positive_group_wait_ranks": 63,
+          "max_group_wait_ns": 17472,
+          "median_group_wait_ns": 12169.0,
+          "max_local_issue_delay_ns": 0,
+          "last_ack_message_ids": [
+            18425
+          ]
+        },
+        {
+          "graph_id": "g1.w0",
+          "group": 1,
+          "layer": 0,
+          "phase": "combine",
+          "last_receive_ns": 27595,
+          "last_source_ack_ns": 33601,
+          "last_producer_ns": 18272,
+          "released_ns": 33601,
+          "post_last_source_ack_ns": 0,
+          "positive_group_wait_ranks": 63,
+          "max_group_wait_ns": 16129,
+          "median_group_wait_ns": 11465.5,
+          "max_local_issue_delay_ns": 0,
+          "last_ack_message_ids": [
+            20339
+          ]
+        },
+        {
+          "graph_id": "g1.w0",
+          "group": 1,
+          "layer": 1,
+          "phase": "dispatch",
+          "last_receive_ns": 43723,
+          "last_source_ack_ns": 49729,
+          "last_producer_ns": 34661,
+          "released_ns": 49729,
+          "post_last_source_ack_ns": 0,
+          "positive_group_wait_ranks": 63,
+          "max_group_wait_ns": 16128,
+          "median_group_wait_ns": 16128.0,
+          "max_local_issue_delay_ns": 0,
+          "last_ack_message_ids": [
+            24818
+          ]
+        },
+        {
+          "graph_id": "g1.w0",
+          "group": 1,
+          "layer": 1,
+          "phase": "combine",
+          "last_receive_ns": 59373,
+          "last_source_ack_ns": 65379,
+          "last_producer_ns": 51229,
+          "released_ns": 65379,
+          "post_last_source_ack_ns": 0,
+          "positive_group_wait_ranks": 63,
+          "max_group_wait_ns": 15650,
+          "median_group_wait_ns": 15650.0,
+          "max_local_issue_delay_ns": 0,
+          "last_ack_message_ids": [
+            30897
+          ]
+        },
+        {
+          "graph_id": "g1.w1",
+          "group": 1,
+          "layer": 0,
+          "phase": "dispatch",
+          "last_receive_ns": 76655,
+          "last_source_ack_ns": 82661,
+          "last_producer_ns": 66439,
+          "released_ns": 82661,
+          "post_last_source_ack_ns": 0,
+          "positive_group_wait_ranks": 63,
+          "max_group_wait_ns": 17252,
+          "median_group_wait_ns": 10295.0,
+          "max_local_issue_delay_ns": 0,
+          "last_ack_message_ids": [
+            49573
+          ]
+        },
+        {
+          "graph_id": "g1.w1",
+          "group": 1,
+          "layer": 0,
+          "phase": "combine",
+          "last_receive_ns": 93183,
+          "last_source_ack_ns": 99189,
+          "last_producer_ns": 83461,
+          "released_ns": 99189,
+          "post_last_source_ack_ns": 0,
+          "positive_group_wait_ranks": 63,
+          "max_group_wait_ns": 16528,
+          "median_group_wait_ns": 7500.5,
+          "max_local_issue_delay_ns": 0,
+          "last_ack_message_ids": [
+            54152
+          ]
+        },
+        {
+          "graph_id": "g1.w1",
+          "group": 1,
+          "layer": 1,
+          "phase": "dispatch",
+          "last_receive_ns": 110646,
+          "last_source_ack_ns": 116652,
+          "last_producer_ns": 100249,
+          "released_ns": 116652,
+          "post_last_source_ack_ns": 0,
+          "positive_group_wait_ranks": 63,
+          "max_group_wait_ns": 17463,
+          "median_group_wait_ns": 10027.0,
+          "max_local_issue_delay_ns": 0,
+          "last_ack_message_ids": [
+            58196
+          ]
+        },
+        {
+          "graph_id": "g1.w1",
+          "group": 1,
+          "layer": 1,
+          "phase": "combine",
+          "last_receive_ns": 125977,
+          "last_source_ack_ns": 131983,
+          "last_producer_ns": 117152,
+          "released_ns": 131983,
+          "post_last_source_ack_ns": 0,
+          "positive_group_wait_ranks": 63,
+          "max_group_wait_ns": 15331,
+          "median_group_wait_ns": 5977.0,
+          "max_local_issue_delay_ns": 0,
+          "last_ack_message_ids": [
+            61784
+          ]
+        }
+      ],
+      "data_loss": {
+        "available": false
+      },
+      "source_extra_payload_bytes": 0,
+      "pfc_pause_events": 0,
+      "switch_drop_reasons": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "packet_events": 61710,
+      "result_sha256": "cb16c40d6802224824aa57742099ae4d9ccbb346741421d2c17ee80c521fc670"
+    },
+    "local": {
+      "timing": {
+        "timing_status": "complete",
+        "timing_reason": null,
+        "application_finished_ns": 363964,
+        "network_drained_ns": 363964,
+        "network_stopped_ns": 363964,
+        "post_application_drain_ns": 0
+      },
+      "groups": [
+        {
+          "group": 0,
+          "finished_ns": 363964,
+          "graphs": [
+            {
+              "graph_id": "g0.w0",
+              "start_ns": 0,
+              "finished_ns": 301574,
+              "elapsed_ns": 301574
+            },
+            {
+              "graph_id": "g0.w1",
+              "start_ns": 301574,
+              "finished_ns": 363964,
+              "elapsed_ns": 62390
+            }
+          ]
+        },
+        {
+          "group": 1,
+          "finished_ns": 127705,
+          "graphs": [
+            {
+              "graph_id": "g1.w0",
+              "start_ns": 0,
+              "finished_ns": 64676,
+              "elapsed_ns": 64676
+            },
+            {
+              "graph_id": "g1.w1",
+              "start_ns": 64676,
+              "finished_ns": 127705,
+              "elapsed_ns": 63029
+            }
+          ]
+        }
+      ],
+      "accounting": {
+        "messages": 882,
+        "layout_bytes": 12729024,
+        "expert_contributions": 480,
+        "remote_expert_contributions": 474,
+        "remote_token_rank_units": 441,
+        "declared_reduce_work_ns": 3400
+      },
+      "packet": {
+        "source_data_packets": 1784,
+        "source_payload_bytes": 12873664,
+        "group_direct_drops": [
+          20,
+          0
+        ],
+        "group_destination_ce_packets": [
+          3,
+          3
+        ],
+        "group_switch_residence_sum_ns": [
+          283613,
+          244797
+        ],
+        "shared_directed_exits": [
+          {
+            "node": 128,
+            "port": 17,
+            "group0_data_model_bytes": 304552,
+            "group1_data_model_bytes": 333816
+          },
+          {
+            "node": 128,
+            "port": 18,
+            "group0_data_model_bytes": 203440,
+            "group1_data_model_bytes": 232384
+          },
+          {
+            "node": 128,
+            "port": 19,
+            "group0_data_model_bytes": 246664,
+            "group1_data_model_bytes": 188648
+          },
+          {
+            "node": 128,
+            "port": 20,
+            "group0_data_model_bytes": 363080,
+            "group1_data_model_bytes": 275864
+          },
+          {
+            "node": 129,
+            "port": 17,
+            "group0_data_model_bytes": 130248,
+            "group1_data_model_bytes": 130248
+          },
+          {
+            "node": 129,
+            "port": 18,
+            "group0_data_model_bytes": 86832,
+            "group1_data_model_bytes": 72360
+          },
+          {
+            "node": 129,
+            "port": 19,
+            "group0_data_model_bytes": 43416,
+            "group1_data_model_bytes": 115776
+          },
+          {
+            "node": 129,
+            "port": 20,
+            "group0_data_model_bytes": 43416,
+            "group1_data_model_bytes": 86832
+          },
+          {
+            "node": 130,
+            "port": 17,
+            "group0_data_model_bytes": 232320,
+            "group1_data_model_bytes": 232256
+          },
+          {
+            "node": 130,
+            "port": 18,
+            "group0_data_model_bytes": 334008,
+            "group1_data_model_bytes": 305064
+          },
+          {
+            "node": 130,
+            "port": 19,
+            "group0_data_model_bytes": 275928,
+            "group1_data_model_bytes": 362824
+          },
+          {
+            "node": 130,
+            "port": 20,
+            "group0_data_model_bytes": 290016,
+            "group1_data_model_bytes": 159576
+          },
+          {
+            "node": 131,
+            "port": 17,
+            "group0_data_model_bytes": 86832,
+            "group1_data_model_bytes": 57888
+          },
+          {
+            "node": 131,
+            "port": 18,
+            "group0_data_model_bytes": 86832,
+            "group1_data_model_bytes": 101304
+          },
+          {
+            "node": 131,
+            "port": 19,
+            "group0_data_model_bytes": 115776,
+            "group1_data_model_bytes": 188136
+          },
+          {
+            "node": 131,
+            "port": 20,
+            "group0_data_model_bytes": 115776,
+            "group1_data_model_bytes": 188136
+          },
+          {
+            "node": 132,
+            "port": 1,
+            "group0_data_model_bytes": 275416,
+            "group1_data_model_bytes": 260944
+          },
+          {
+            "node": 132,
+            "port": 2,
+            "group0_data_model_bytes": 87216,
+            "group1_data_model_bytes": 72680
+          },
+          {
+            "node": 132,
+            "port": 3,
+            "group0_data_model_bytes": 333432,
+            "group1_data_model_bytes": 304232
+          },
+          {
+            "node": 132,
+            "port": 4,
+            "group0_data_model_bytes": 43608,
+            "group1_data_model_bytes": 72680
+          },
+          {
+            "node": 132,
+            "port": 5,
+            "group0_data_model_bytes": 521952,
+            "group1_data_model_bytes": 333624
+          },
+          {
+            "node": 133,
+            "port": 1,
+            "group0_data_model_bytes": 217464,
+            "group1_data_model_bytes": 260944
+          },
+          {
+            "node": 133,
+            "port": 2,
+            "group0_data_model_bytes": 130824,
+            "group1_data_model_bytes": 87216
+          },
+          {
+            "node": 133,
+            "port": 3,
+            "group0_data_model_bytes": 289568,
+            "group1_data_model_bytes": 275352
+          },
+          {
+            "node": 133,
+            "port": 4,
+            "group0_data_model_bytes": 72680,
+            "group1_data_model_bytes": 203504
+          },
+          {
+            "node": 133,
+            "port": 5,
+            "group0_data_model_bytes": 449976,
+            "group1_data_model_bytes": 261200
+          },
+          {
+            "node": 134,
+            "port": 1,
+            "group0_data_model_bytes": 275480,
+            "group1_data_model_bytes": 304232
+          },
+          {
+            "node": 134,
+            "port": 2,
+            "group0_data_model_bytes": 43608,
+            "group1_data_model_bytes": 87216
+          },
+          {
+            "node": 134,
+            "port": 3,
+            "group0_data_model_bytes": 290016,
+            "group1_data_model_bytes": 217336
+          },
+          {
+            "node": 134,
+            "port": 4,
+            "group0_data_model_bytes": 116288,
+            "group1_data_model_bytes": 72680
+          },
+          {
+            "node": 134,
+            "port": 5,
+            "group0_data_model_bytes": 420712,
+            "group1_data_model_bytes": 478536
+          },
+          {
+            "node": 135,
+            "port": 1,
+            "group0_data_model_bytes": 318576,
+            "group1_data_model_bytes": 202736
+          },
+          {
+            "node": 135,
+            "port": 2,
+            "group0_data_model_bytes": 43608,
+            "group1_data_model_bytes": 159896
+          },
+          {
+            "node": 135,
+            "port": 3,
+            "group0_data_model_bytes": 304552,
+            "group1_data_model_bytes": 260944
+          },
+          {
+            "node": 135,
+            "port": 4,
+            "group0_data_model_bytes": 174432,
+            "group1_data_model_bytes": 188968
+          },
+          {
+            "node": 135,
+            "port": 5,
+            "group0_data_model_bytes": 435120,
+            "group1_data_model_bytes": 449336
+          },
+          {
+            "node": 136,
+            "port": 17,
+            "group0_data_model_bytes": 362888,
+            "group1_data_model_bytes": 43416
+          },
+          {
+            "node": 136,
+            "port": 18,
+            "group0_data_model_bytes": 348096,
+            "group1_data_model_bytes": 101304
+          },
+          {
+            "node": 136,
+            "port": 19,
+            "group0_data_model_bytes": 305000,
+            "group1_data_model_bytes": 86832
+          },
+          {
+            "node": 136,
+            "port": 20,
+            "group0_data_model_bytes": 275608,
+            "group1_data_model_bytes": 28944
+          },
+          {
+            "node": 137,
+            "port": 17,
+            "group0_data_model_bytes": 159192,
+            "group1_data_model_bytes": 261264
+          },
+          {
+            "node": 137,
+            "port": 18,
+            "group0_data_model_bytes": 144720,
+            "group1_data_model_bytes": 174432
+          },
+          {
+            "node": 137,
+            "port": 19,
+            "group0_data_model_bytes": 86832,
+            "group1_data_model_bytes": 174368
+          },
+          {
+            "node": 137,
+            "port": 20,
+            "group0_data_model_bytes": 86832,
+            "group1_data_model_bytes": 305192
+          },
+          {
+            "node": 138,
+            "port": 17,
+            "group0_data_model_bytes": 334136,
+            "group1_data_model_bytes": 72360
+          },
+          {
+            "node": 138,
+            "port": 18,
+            "group0_data_model_bytes": 232192,
+            "group1_data_model_bytes": 86832
+          },
+          {
+            "node": 138,
+            "port": 19,
+            "group0_data_model_bytes": 261072,
+            "group1_data_model_bytes": 72360
+          },
+          {
+            "node": 138,
+            "port": 20,
+            "group0_data_model_bytes": 290464,
+            "group1_data_model_bytes": 173664
+          },
+          {
+            "node": 139,
+            "port": 17,
+            "group0_data_model_bytes": 72360,
+            "group1_data_model_bytes": 130376
+          },
+          {
+            "node": 139,
+            "port": 18,
+            "group0_data_model_bytes": 101304,
+            "group1_data_model_bytes": 174112
+          },
+          {
+            "node": 139,
+            "port": 19,
+            "group0_data_model_bytes": 101304,
+            "group1_data_model_bytes": 145168
+          },
+          {
+            "node": 139,
+            "port": 20,
+            "group0_data_model_bytes": 115776,
+            "group1_data_model_bytes": 188712
+          },
+          {
+            "node": 140,
+            "port": 1,
+            "group0_data_model_bytes": 405920,
+            "group1_data_model_bytes": 29072
+          },
+          {
+            "node": 140,
+            "port": 2,
+            "group0_data_model_bytes": 145360,
+            "group1_data_model_bytes": 159192
+          },
+          {
+            "node": 140,
+            "port": 3,
+            "group0_data_model_bytes": 246216,
+            "group1_data_model_bytes": 174432
+          },
+          {
+            "node": 140,
+            "port": 4,
+            "group0_data_model_bytes": 145360,
+            "group1_data_model_bytes": 188392
+          },
+          {
+            "node": 140,
+            "port": 5,
+            "group0_data_model_bytes": 507672,
+            "group1_data_model_bytes": 289952
+          },
+          {
+            "node": 141,
+            "port": 1,
+            "group0_data_model_bytes": 260944,
+            "group1_data_model_bytes": 29072
+          },
+          {
+            "node": 141,
+            "port": 2,
+            "group0_data_model_bytes": 145360,
+            "group1_data_model_bytes": 188328
+          },
+          {
+            "node": 141,
+            "port": 3,
+            "group0_data_model_bytes": 347904,
+            "group1_data_model_bytes": 72680
+          },
+          {
+            "node": 141,
+            "port": 4,
+            "group0_data_model_bytes": 72680,
+            "group1_data_model_bytes": 130696
+          },
+          {
+            "node": 141,
+            "port": 5,
+            "group0_data_model_bytes": 449400,
+            "group1_data_model_bytes": 377104
+          },
+          {
+            "node": 142,
+            "port": 1,
+            "group0_data_model_bytes": 289824,
+            "group1_data_model_bytes": 130824
+          },
+          {
+            "node": 142,
+            "port": 2,
+            "group0_data_model_bytes": 116288,
+            "group1_data_model_bytes": 260624
+          },
+          {
+            "node": 142,
+            "port": 3,
+            "group0_data_model_bytes": 231808,
+            "group1_data_model_bytes": 116288
+          },
+          {
+            "node": 142,
+            "port": 4,
+            "group0_data_model_bytes": 72680,
+            "group1_data_model_bytes": 144912
+          },
+          {
+            "node": 142,
+            "port": 5,
+            "group0_data_model_bytes": 464320,
+            "group1_data_model_bytes": 304616
+          },
+          {
+            "node": 143,
+            "port": 1,
+            "group0_data_model_bytes": 304488,
+            "group1_data_model_bytes": 72680
+          },
+          {
+            "node": 143,
+            "port": 2,
+            "group0_data_model_bytes": 72680,
+            "group1_data_model_bytes": 304104
+          },
+          {
+            "node": 143,
+            "port": 3,
+            "group0_data_model_bytes": 260880,
+            "group1_data_model_bytes": 43608
+          },
+          {
+            "node": 143,
+            "port": 4,
+            "group0_data_model_bytes": 101752,
+            "group1_data_model_bytes": 173984
+          },
+          {
+            "node": 143,
+            "port": 5,
+            "group0_data_model_bytes": 464000,
+            "group1_data_model_bytes": 551472
+          },
+          {
+            "node": 144,
+            "port": 1,
+            "group0_data_model_bytes": 507672,
+            "group1_data_model_bytes": 289952
+          },
+          {
+            "node": 144,
+            "port": 2,
+            "group0_data_model_bytes": 521952,
+            "group1_data_model_bytes": 333624
+          },
+          {
+            "node": 145,
+            "port": 1,
+            "group0_data_model_bytes": 449400,
+            "group1_data_model_bytes": 377104
+          },
+          {
+            "node": 145,
+            "port": 2,
+            "group0_data_model_bytes": 449976,
+            "group1_data_model_bytes": 261200
+          },
+          {
+            "node": 146,
+            "port": 1,
+            "group0_data_model_bytes": 464320,
+            "group1_data_model_bytes": 304616
+          },
+          {
+            "node": 146,
+            "port": 2,
+            "group0_data_model_bytes": 420712,
+            "group1_data_model_bytes": 478536
+          },
+          {
+            "node": 147,
+            "port": 1,
+            "group0_data_model_bytes": 464000,
+            "group1_data_model_bytes": 551472
+          },
+          {
+            "node": 147,
+            "port": 2,
+            "group0_data_model_bytes": 435120,
+            "group1_data_model_bytes": 449336
+          }
+        ],
+        "destination_data_arrivals": 1784,
+        "destination_data_drops": 20,
+        "all_cluster_destination_observed_loss_fraction": 0.011210762331838564,
+        "critical_first_dispatch_messages": [
+          {
+            "message": {
+              "ack_ns": 254594,
+              "begin": 0,
+              "bytes": 14464,
+              "contributions": 1,
+              "dst": 20,
+              "end": 14464,
+              "id": 3538,
+              "layer": 0,
+              "phase": "dispatch",
+              "plane": 0,
+              "published_ns": 1030,
+              "ready_ns": 1030,
+              "receive_ready_ns": 248588,
+              "src": 112,
+              "stream": 655,
+              "tag": 3538,
+              "transport_tokens": 1
+            },
+            "source_packets": [
+              {
+                "time_ns": 1392,
+                "node": 112,
+                "port": 1,
+                "event": 0,
+                "packet_uid": 37,
+                "message_id": 655,
+                "ip_protocol": 17,
+                "sequence": 0,
+                "model_bytes": 9036,
+                "ecn": 0,
+                "egress_queue_bytes": 0,
+                "data_payload_bytes": 9000
+              },
+              {
+                "time_ns": 2698,
+                "node": 112,
+                "port": 1,
+                "event": 0,
+                "packet_uid": 159,
+                "message_id": 655,
+                "ip_protocol": 17,
+                "sequence": 9000,
+                "model_bytes": 5500,
+                "ecn": 0,
+                "egress_queue_bytes": 0,
+                "data_payload_bytes": 5464
+              },
+              {
+                "time_ns": 81392,
+                "node": 112,
+                "port": 1,
+                "event": 0,
+                "packet_uid": 1334,
+                "message_id": 655,
+                "ip_protocol": 17,
+                "sequence": 0,
+                "model_bytes": 9036,
+                "ecn": 0,
+                "egress_queue_bytes": 0,
+                "data_payload_bytes": 9000
+              },
+              {
+                "time_ns": 81573,
+                "node": 112,
+                "port": 1,
+                "event": 0,
+                "packet_uid": 1345,
+                "message_id": 655,
+                "ip_protocol": 17,
+                "sequence": 9000,
+                "model_bytes": 5500,
+                "ecn": 0,
+                "egress_queue_bytes": 0,
+                "data_payload_bytes": 5464
+              },
+              {
+                "time_ns": 241392,
+                "node": 112,
+                "port": 1,
+                "event": 0,
+                "packet_uid": 1892,
+                "message_id": 655,
+                "ip_protocol": 17,
+                "sequence": 0,
+                "model_bytes": 9036,
+                "ecn": 0,
+                "egress_queue_bytes": 0,
+                "data_payload_bytes": 9000
+              },
+              {
+                "time_ns": 241573,
+                "node": 112,
+                "port": 1,
+                "event": 0,
+                "packet_uid": 1895,
+                "message_id": 655,
+                "ip_protocol": 17,
+                "sequence": 9000,
+                "model_bytes": 5500,
+                "ecn": 0,
+                "egress_queue_bytes": 0,
+                "data_payload_bytes": 5464
+              }
+            ],
+            "endpoint_packets": [
+              {
+                "time_ns": 8840,
+                "node": 20,
+                "port": 1,
+                "event": 2,
+                "packet_uid": 37,
+                "message_id": 655,
+                "ip_protocol": 17,
+                "sequence": 0,
+                "model_bytes": 9036,
+                "ecn": 0,
+                "egress_queue_bytes": 0,
+                "data_payload_bytes": 9000
+              },
+              {
+                "time_ns": 9720,
+                "node": 20,
+                "port": 1,
+                "event": 2,
+                "packet_uid": 159,
+                "message_id": 655,
+                "ip_protocol": 17,
+                "sequence": 9000,
+                "model_bytes": 5500,
+                "ecn": 0,
+                "egress_queue_bytes": 0,
+                "data_payload_bytes": 5464
+              },
+              {
+                "time_ns": 88782,
+                "node": 20,
+                "port": 1,
+                "event": 2,
+                "packet_uid": 1334,
+                "message_id": 655,
+                "ip_protocol": 17,
+                "sequence": 0,
+                "model_bytes": 9036,
+                "ecn": 0,
+                "egress_queue_bytes": 0,
+                "data_payload_bytes": 9000
+              },
+              {
+                "time_ns": 88892,
+                "node": 20,
+                "port": 1,
+                "event": 2,
+                "packet_uid": 1345,
+                "message_id": 655,
+                "ip_protocol": 17,
+                "sequence": 9000,
+                "model_bytes": 5500,
+                "ecn": 0,
+                "egress_queue_bytes": 0,
+                "data_payload_bytes": 5464
+              },
+              {
+                "time_ns": 248478,
+                "node": 20,
+                "port": 1,
+                "event": 1,
+                "packet_uid": 1892,
+                "message_id": 655,
+                "ip_protocol": 17,
+                "sequence": 0,
+                "model_bytes": 9036,
+                "ecn": 0,
+                "egress_queue_bytes": 0,
+                "data_payload_bytes": 9000
+              },
+              {
+                "time_ns": 248588,
+                "node": 20,
+                "port": 1,
+                "event": 1,
+                "packet_uid": 1895,
+                "message_id": 655,
+                "ip_protocol": 17,
+                "sequence": 9000,
+                "model_bytes": 5500,
+                "ecn": 0,
+                "egress_queue_bytes": 0,
+                "data_payload_bytes": 5464
+              }
+            ],
+            "recovery_requests": [
+              {
+                "time_ns": 1030,
+                "event": 5,
+                "source": 112,
+                "message_id": 655,
+                "acknowledged_bytes": 0,
+                "highest_sent_bytes": 0,
+                "retries_since_progress": 0,
+                "rto_ns": 80000,
+                "deadline_ns": -1
+              },
+              {
+                "time_ns": 1392,
+                "event": 0,
+                "source": 112,
+                "message_id": 655,
+                "acknowledged_bytes": 0,
+                "highest_sent_bytes": 9000,
+                "retries_since_progress": 0,
+                "rto_ns": 80000,
+                "deadline_ns": 81392
+              },
+              {
+                "time_ns": 81392,
+                "event": 2,
+                "source": 112,
+                "message_id": 655,
+                "acknowledged_bytes": 0,
+                "highest_sent_bytes": 14464,
+                "retries_since_progress": 1,
+                "rto_ns": 160000,
+                "deadline_ns": 241392
+              },
+              {
+                "time_ns": 241392,
+                "event": 2,
+                "source": 112,
+                "message_id": 655,
+                "acknowledged_bytes": 0,
+                "highest_sent_bytes": 14464,
+                "retries_since_progress": 2,
+                "rto_ns": 320000,
+                "deadline_ns": 561392
+              },
+              {
+                "time_ns": 254484,
+                "event": 1,
+                "source": 112,
+                "message_id": 655,
+                "acknowledged_bytes": 9000,
+                "highest_sent_bytes": 14464,
+                "retries_since_progress": 0,
+                "rto_ns": 80000,
+                "deadline_ns": 334484
+              },
+              {
+                "time_ns": 254594,
+                "event": 3,
+                "source": 112,
+                "message_id": 655,
+                "acknowledged_bytes": 14464,
+                "highest_sent_bytes": 14464,
+                "retries_since_progress": 0,
+                "rto_ns": 80000,
+                "deadline_ns": -1
+              }
+            ],
+            "first_source_tx_after_fault_end_ns": 241392,
+            "fault_end_to_next_source_tx_ns": 141392,
+            "timeout_recovery_requests": 2,
+            "timeout_requests_with_same_time_source_tx": 2
+          }
+        ],
+        "scope": "offline packet lineage and switch RX-to-TX residence; cumulative work is not task latency"
+      },
+      "phases": [
+        {
+          "graph_id": "g0.w0",
+          "group": 0,
+          "layer": 0,
+          "phase": "dispatch",
+          "last_receive_ns": 248588,
+          "last_source_ack_ns": 254594,
+          "last_producer_ns": 1030,
+          "released_ns": 254594,
+          "post_last_source_ack_ns": 0,
+          "positive_group_wait_ranks": 63,
+          "max_group_wait_ns": 254594,
+          "median_group_wait_ns": 247255.5,
+          "max_local_issue_delay_ns": 0,
+          "last_ack_message_ids": [
+            3538
+          ]
+        },
+        {
+          "graph_id": "g0.w0",
+          "group": 0,
+          "layer": 0,
+          "phase": "combine",
+          "last_receive_ns": 263289,
+          "last_source_ack_ns": 269295,
+          "last_producer_ns": 255294,
+          "released_ns": 269295,
+          "post_last_source_ack_ns": 0,
+          "positive_group_wait_ranks": 63,
+          "max_group_wait_ns": 14701,
+          "median_group_wait_ns": 5563.5,
+          "max_local_issue_delay_ns": 0,
+          "last_ack_message_ids": [
+            4717
+          ]
+        },
+        {
+          "graph_id": "g0.w0",
+          "group": 0,
+          "layer": 1,
+          "phase": "dispatch",
+          "last_receive_ns": 279627,
+          "last_source_ack_ns": 285633,
+          "last_producer_ns": 270355,
+          "released_ns": 285633,
+          "post_last_source_ack_ns": 0,
+          "positive_group_wait_ranks": 63,
+          "max_group_wait_ns": 16338,
+          "median_group_wait_ns": 7875.5,
+          "max_local_issue_delay_ns": 0,
+          "last_ack_message_ids": [
+            8121
+          ]
+        },
+        {
+          "graph_id": "g0.w0",
+          "group": 0,
+          "layer": 1,
+          "phase": "combine",
+          "last_receive_ns": 295538,
+          "last_source_ack_ns": 301544,
+          "last_producer_ns": 286733,
+          "released_ns": 301544,
+          "post_last_source_ack_ns": 0,
+          "positive_group_wait_ranks": 63,
+          "max_group_wait_ns": 15911,
+          "median_group_wait_ns": 6620.0,
+          "max_local_issue_delay_ns": 0,
+          "last_ack_message_ids": [
+            13348
+          ]
+        },
+        {
+          "graph_id": "g0.w1",
+          "group": 0,
+          "layer": 0,
+          "phase": "dispatch",
+          "last_receive_ns": 311947,
+          "last_source_ack_ns": 317953,
+          "last_producer_ns": 302604,
+          "released_ns": 317953,
+          "post_last_source_ack_ns": 0,
+          "positive_group_wait_ranks": 63,
+          "max_group_wait_ns": 16379,
+          "median_group_wait_ns": 8730.0,
+          "max_local_issue_delay_ns": 0,
+          "last_ack_message_ids": [
+            32812
+          ]
+        },
+        {
+          "graph_id": "g0.w1",
+          "group": 0,
+          "layer": 0,
+          "phase": "combine",
+          "last_receive_ns": 326988,
+          "last_source_ack_ns": 332994,
+          "last_producer_ns": 318353,
+          "released_ns": 332994,
+          "post_last_source_ack_ns": 0,
+          "positive_group_wait_ranks": 63,
+          "max_group_wait_ns": 15041,
+          "median_group_wait_ns": 5361.5,
+          "max_local_issue_delay_ns": 0,
+          "last_ack_message_ids": [
+            38225
+          ]
+        },
+        {
+          "graph_id": "g0.w1",
+          "group": 0,
+          "layer": 1,
+          "phase": "dispatch",
+          "last_receive_ns": 342996,
+          "last_source_ack_ns": 349002,
+          "last_producer_ns": 334054,
+          "released_ns": 349002,
+          "post_last_source_ack_ns": 0,
+          "positive_group_wait_ranks": 63,
+          "max_group_wait_ns": 16008,
+          "median_group_wait_ns": 8581.0,
+          "max_local_issue_delay_ns": 0,
+          "last_ack_message_ids": [
+            40867
+          ]
+        },
+        {
+          "graph_id": "g0.w1",
+          "group": 0,
+          "layer": 1,
+          "phase": "combine",
+          "last_receive_ns": 357928,
+          "last_source_ack_ns": 363934,
+          "last_producer_ns": 349402,
+          "released_ns": 363934,
+          "post_last_source_ack_ns": 0,
+          "positive_group_wait_ranks": 63,
+          "max_group_wait_ns": 14932,
+          "median_group_wait_ns": 5397.5,
+          "max_local_issue_delay_ns": 0,
+          "last_ack_message_ids": [
+            46817
+          ]
+        },
+        {
+          "graph_id": "g1.w0",
+          "group": 1,
+          "layer": 0,
+          "phase": "dispatch",
+          "last_receive_ns": 11466,
+          "last_source_ack_ns": 17472,
+          "last_producer_ns": 1030,
+          "released_ns": 17472,
+          "post_last_source_ack_ns": 0,
+          "positive_group_wait_ranks": 63,
+          "max_group_wait_ns": 17472,
+          "median_group_wait_ns": 12169.0,
+          "max_local_issue_delay_ns": 0,
+          "last_ack_message_ids": [
+            18425
+          ]
+        },
+        {
+          "graph_id": "g1.w0",
+          "group": 1,
+          "layer": 0,
+          "phase": "combine",
+          "last_receive_ns": 27278,
+          "last_source_ack_ns": 33284,
+          "last_producer_ns": 18272,
+          "released_ns": 33284,
+          "post_last_source_ack_ns": 0,
+          "positive_group_wait_ranks": 63,
+          "max_group_wait_ns": 15812,
+          "median_group_wait_ns": 11148.5,
+          "max_local_issue_delay_ns": 0,
+          "last_ack_message_ids": [
+            21095
+          ]
+        },
+        {
+          "graph_id": "g1.w0",
+          "group": 1,
+          "layer": 1,
+          "phase": "dispatch",
+          "last_receive_ns": 43357,
+          "last_source_ack_ns": 49363,
+          "last_producer_ns": 34344,
+          "released_ns": 49363,
+          "post_last_source_ack_ns": 0,
+          "positive_group_wait_ranks": 63,
+          "max_group_wait_ns": 16079,
+          "median_group_wait_ns": 16079.0,
+          "max_local_issue_delay_ns": 0,
+          "last_ack_message_ids": [
+            24233
+          ]
+        },
+        {
+          "graph_id": "g1.w0",
+          "group": 1,
+          "layer": 1,
+          "phase": "combine",
+          "last_receive_ns": 58640,
+          "last_source_ack_ns": 64646,
+          "last_producer_ns": 50863,
+          "released_ns": 64646,
+          "post_last_source_ack_ns": 0,
+          "positive_group_wait_ranks": 63,
+          "max_group_wait_ns": 15283,
+          "median_group_wait_ns": 15283.0,
+          "max_local_issue_delay_ns": 0,
+          "last_ack_message_ids": [
+            30897
+          ]
+        },
+        {
+          "graph_id": "g1.w1",
+          "group": 1,
+          "layer": 0,
+          "phase": "dispatch",
+          "last_receive_ns": 74538,
+          "last_source_ack_ns": 80544,
+          "last_producer_ns": 65706,
+          "released_ns": 80544,
+          "post_last_source_ack_ns": 0,
+          "positive_group_wait_ranks": 63,
+          "max_group_wait_ns": 15868,
+          "median_group_wait_ns": 9021.0,
+          "max_local_issue_delay_ns": 0,
+          "last_ack_message_ids": [
+            49573
+          ]
+        },
+        {
+          "graph_id": "g1.w1",
+          "group": 1,
+          "layer": 0,
+          "phase": "combine",
+          "last_receive_ns": 89670,
+          "last_source_ack_ns": 95676,
+          "last_producer_ns": 81344,
+          "released_ns": 95676,
+          "post_last_source_ack_ns": 0,
+          "positive_group_wait_ranks": 63,
+          "max_group_wait_ns": 15132,
+          "median_group_wait_ns": 6372.5,
+          "max_local_issue_delay_ns": 0,
+          "last_ack_message_ids": [
+            53918
+          ]
+        },
+        {
+          "graph_id": "g1.w1",
+          "group": 1,
+          "layer": 1,
+          "phase": "dispatch",
+          "last_receive_ns": 106338,
+          "last_source_ack_ns": 112344,
+          "last_producer_ns": 96736,
+          "released_ns": 112344,
+          "post_last_source_ack_ns": 0,
+          "positive_group_wait_ranks": 63,
+          "max_group_wait_ns": 16668,
+          "median_group_wait_ns": 9425.5,
+          "max_local_issue_delay_ns": 0,
+          "last_ack_message_ids": [
+            58196
+          ]
+        },
+        {
+          "graph_id": "g1.w1",
+          "group": 1,
+          "layer": 1,
+          "phase": "combine",
+          "last_receive_ns": 121669,
+          "last_source_ack_ns": 127675,
+          "last_producer_ns": 112844,
+          "released_ns": 127675,
+          "post_last_source_ack_ns": 0,
+          "positive_group_wait_ranks": 63,
+          "max_group_wait_ns": 15331,
+          "median_group_wait_ns": 6009.5,
+          "max_local_issue_delay_ns": 0,
+          "last_ack_message_ids": [
+            61784
+          ]
+        }
+      ],
+      "data_loss": {
+        "available": true,
+        "passed": true,
+        "eligible_data_packets": 40,
+        "window_data_packets": 20,
+        "dropped_packets": 20,
+        "window_loss_fraction": 1.0,
+        "whole_observed_loss_fraction": 0.5,
+        "affected_message_count": 5,
+        "scope": "actual destination data arrivals including retransmissions; deterministic artificial loss; no congestion causality inference"
+      },
+      "source_extra_payload_bytes": 144640,
+      "pfc_pause_events": 0,
+      "switch_drop_reasons": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "packet_events": 61500,
+      "result_sha256": "800cdd75274f6f5ac9d8f6e43e45e2acbcaf99f8637dc57bff1437f1640901f5"
+    }
+  },
+  "contrast": {
+    "application_extra_ns": 231805,
+    "group_extra_ns": [
+      231805,
+      -4308
+    ],
+    "first_dispatch_gate_extra_ns": 237672,
+    "fault_group_change_after_first_dispatch_ns": -5867,
+    "phases": [
+      {
+        "graph_id": "g0.w0",
+        "layer": 0,
+        "phase": "dispatch",
+        "release_extra_ns": 237672,
+        "last_source_ack_extra_ns": 237672,
+        "median_group_wait_extra_ns": 237672.0
+      },
+      {
+        "graph_id": "g0.w0",
+        "layer": 0,
+        "phase": "combine",
+        "release_extra_ns": 236745,
+        "last_source_ack_extra_ns": 236745,
+        "median_group_wait_extra_ns": -834.5
+      },
+      {
+        "graph_id": "g0.w0",
+        "layer": 1,
+        "phase": "dispatch",
+        "release_extra_ns": 236745,
+        "last_source_ack_extra_ns": 236745,
+        "median_group_wait_extra_ns": 35.5
+      },
+      {
+        "graph_id": "g0.w0",
+        "layer": 1,
+        "phase": "combine",
+        "release_extra_ns": 236455,
+        "last_source_ack_extra_ns": 236455,
+        "median_group_wait_extra_ns": -177.5
+      },
+      {
+        "graph_id": "g0.w1",
+        "layer": 0,
+        "phase": "dispatch",
+        "release_extra_ns": 235182,
+        "last_source_ack_extra_ns": 235182,
+        "median_group_wait_extra_ns": -1273.0
+      },
+      {
+        "graph_id": "g0.w1",
+        "layer": 0,
+        "phase": "combine",
+        "release_extra_ns": 233696,
+        "last_source_ack_extra_ns": 233696,
+        "median_group_wait_extra_ns": -1305.0
+      },
+      {
+        "graph_id": "g0.w1",
+        "layer": 1,
+        "phase": "dispatch",
+        "release_extra_ns": 232460,
+        "last_source_ack_extra_ns": 232460,
+        "median_group_wait_extra_ns": -1200.5
+      },
+      {
+        "graph_id": "g0.w1",
+        "layer": 1,
+        "phase": "combine",
+        "release_extra_ns": 231805,
+        "last_source_ack_extra_ns": 231805,
+        "median_group_wait_extra_ns": -655.0
+      },
+      {
+        "graph_id": "g1.w0",
+        "layer": 0,
+        "phase": "dispatch",
+        "release_extra_ns": 0,
+        "last_source_ack_extra_ns": 0,
+        "median_group_wait_extra_ns": 0.0
+      },
+      {
+        "graph_id": "g1.w0",
+        "layer": 0,
+        "phase": "combine",
+        "release_extra_ns": -317,
+        "last_source_ack_extra_ns": -317,
+        "median_group_wait_extra_ns": -317.0
+      },
+      {
+        "graph_id": "g1.w0",
+        "layer": 1,
+        "phase": "dispatch",
+        "release_extra_ns": -366,
+        "last_source_ack_extra_ns": -366,
+        "median_group_wait_extra_ns": -49.0
+      },
+      {
+        "graph_id": "g1.w0",
+        "layer": 1,
+        "phase": "combine",
+        "release_extra_ns": -733,
+        "last_source_ack_extra_ns": -733,
+        "median_group_wait_extra_ns": -367.0
+      },
+      {
+        "graph_id": "g1.w1",
+        "layer": 0,
+        "phase": "dispatch",
+        "release_extra_ns": -2117,
+        "last_source_ack_extra_ns": -2117,
+        "median_group_wait_extra_ns": -1274.0
+      },
+      {
+        "graph_id": "g1.w1",
+        "layer": 0,
+        "phase": "combine",
+        "release_extra_ns": -3513,
+        "last_source_ack_extra_ns": -3513,
+        "median_group_wait_extra_ns": -1128.0
+      },
+      {
+        "graph_id": "g1.w1",
+        "layer": 1,
+        "phase": "dispatch",
+        "release_extra_ns": -4308,
+        "last_source_ack_extra_ns": -4308,
+        "median_group_wait_extra_ns": -601.5
+      },
+      {
+        "graph_id": "g1.w1",
+        "layer": 1,
+        "phase": "combine",
+        "release_extra_ns": -4308,
+        "last_source_ack_extra_ns": -4308,
+        "median_group_wait_extra_ns": 32.5
+      }
+    ],
+    "extra_source_payload_bytes": 144640
+  },
+  "measured_novel_gain": false,
+  "hardware_calibrated": false,
+  "complete_DeepEP": false,
+  "interpretation": "fault costs and actual dependencies, not removable-headroom or calibrated performance claims"
+}

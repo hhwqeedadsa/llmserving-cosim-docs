@@ -1,0 +1,29 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>本轮发现：等待在哪里，下一步研究什么</title>
+<style>body{max-width:1080px;margin:40px auto;padding:0 20px;font:17px/1.8 system-ui,sans-serif;color:#18263b;background:#f7f9fc}h1,h2{line-height:1.4}table{border-collapse:collapse;width:100%;background:white}td,th{border:1px solid #ccd5df;padding:12px;text-align:left}.note{padding:16px;background:#fff2d8;border-left:4px solid #c98613}img{max-width:100%}a{color:#2463b7}</style>
+<h1>本轮发现：等待在哪里，下一步研究什么</h1>
+<p>128模拟端点Clos，两个EP64组，15份不同真实R1-AWQ/MMLU专家选择；两层两步Decode。16服务器×8卡、8 ToR/8 Agg/4 Core，各层400G、每链路1微秒。按目的卡去重、卡内合并，选择性重传和拥塞控制保持相同。</p>
+<table><tr><th>观察</th><th>正常</th><th>局部故障</th></tr>
+<tr><td>有限任务完成</td><td>132.159 μs</td><td>363.964 μs</td></tr>
+<tr><td>未直接丢包的另一组完成</td><td>132.013 μs</td><td>127.705 μs</td></tr>
+<tr><td>故障组首Dispatch释放</td><td>16.922 μs</td><td>254.594 μs</td></tr></table>
+<p class="note">故障多等231.805微秒，但另一组反而提前4.308微秒。目前没有“恢复流量拖慢另一组”的证据。这里的故障代价不是承诺的优化收益。</p>
+<h2>为什么选择性重传没有立即恢复</h2>
+<p>实现包含SACK和NACK快速重传分支；但关键连接112→20的首批数据和第一次重传全部被丢弃，没有早期反馈来触发快速恢复。</p>
+<table><tr><th>同一关键消息</th><th>时刻/μs</th><th>结果</th></tr>
+<tr><td>第一次发送</td><td>1.392 / 2.698</td><td>丢弃</td></tr>
+<tr><td>第一次超时重传</td><td>81.392 / 81.573</td><td>仍在故障窗口内，丢弃</td></tr>
+<tr><td>故障窗口结束</td><td>100.000</td><td>没有自动生成源端可见的恢复信号</td></tr>
+<tr><td>下一次实际重传</td><td>241.392 / 241.573</td><td>成功到达</td></tr>
+<tr><td>首个反馈到达源端</td><td>254.484</td><td>独立解码实际SACK并核对源端MacRx</td></tr>
+<tr><td>消息确认、阶段释放</td><td>254.594</td><td>后续工作继续</td></tr></table>
+<p>正常和故障条件均有63个rank存在组内门限等待，中位等待从9.584增至247.256微秒。第一个阶段晚237.672微秒，之后的时间差缩短5.867微秒；不要把继承偏移或各rank等待重复相加，也不要将等待等同GPU计算或占用。</p>
+<h2>实际累计到达曲线</h2><img src="analysis/arrival-curves.png" alt="两个EP组的累计接受与源确认曲线">
+<p>上排故障组、下排健康组；蓝色正常、橙色故障，实线接受、虚线源确认。载荷包含布局元数据与填充。</p>
+<h2>下一步候选：受损MoE阶段的局部重执行</h2>
+<p>先调研能否利用已有专家副本，仅补齐受损部分，减少未受损专家的重复工作。当前两个组各有完整E256集合，但平台尚不支持跨组备用专家调用，不能简单换目的rank就声称实现。</p>
+<p>先与已有MoE容错、备用请求和专家复制方案比较，再决定是否实现。需要实际可见的故障触发、合法通信域绑定、相同专家权重、共享计算/NIC队列、重复结果去重及迟到包处理；检测、重算、额外发送和备用卡排队都要计入。</p>
+<p class="note">普通重传、SACK/NACK、缩短RTO及尾部探测都不是我们的创新。局部重执行只是待检索和验证的候选；尚无创新性或收益结论。</p>
+<h2>本轮边界</h2><p>局部故障仅丢弃GPU20前100微秒的目的数据，控制包保留；目标窗口20/20包，目标全程20/40包，全网端点观察20/1784包。不是全网50%或100%丢包。</p>
+<p>128端点中117个rank有网络数据，但来源请求只有15份，不能称满载。真实的是专家选择；GPU标签、到达、部署和计算为声明。没有运行GPU、完整R1、Prefill或做硬件校准。功能SR不是IRN或商用RoCE复现；direct投影仍缺完整GIN/CQ/GPU可见性和hybrid。</p>
+<p><a href="interpretation.md">完整判断与候选约束</a> · <a href="analysis/feedback.json">事后反馈核验</a> · <a href="report.html">实验结果</a> · <a href="analysis/report.html">详细曲线与统计</a> · <a href="receipt.json">执行收据</a></p></html>

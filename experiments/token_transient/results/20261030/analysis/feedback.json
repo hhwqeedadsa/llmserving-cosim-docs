@@ -1,0 +1,97 @@
+{
+  "passed": true,
+  "diagnosis_added_after_network_execution": true,
+  "new_network_executions": 0,
+  "actual_SACK_bytes_and_source_RX_checked": true,
+  "same_message_control": [
+    {
+      "case": "normal",
+      "message_id": 3538,
+      "stream": 655,
+      "src": 112,
+      "dst": 20,
+      "first_receiver_data_ns": 8840,
+      "first_source_feedback_ns": 14846,
+      "source_feedback_packets": 2,
+      "nack_feedback_packets": 0,
+      "feedback_before_fault_end": 2,
+      "fast_retransmit_events": 0,
+      "recovered_source_ack_ns": 15726,
+      "actual_feedback": [
+        {
+          "cumulative_ack": 9000,
+          "extension_hex": "4d535231000000000000232800000001",
+          "ip_protocol": 252,
+          "kind": "feedback_received",
+          "model_bytes": 50,
+          "packet_uid": 369,
+          "sack_begin": 0,
+          "sack_end": 9000,
+          "sack_valid": true,
+          "stream": 655,
+          "time_ns": 14846
+        },
+        {
+          "cumulative_ack": 14464,
+          "extension_hex": "4d535231000023280000388000000001",
+          "ip_protocol": 252,
+          "kind": "feedback_received",
+          "model_bytes": 50,
+          "packet_uid": 411,
+          "sack_begin": 9000,
+          "sack_end": 14464,
+          "sack_valid": true,
+          "stream": 655,
+          "time_ns": 15726
+        }
+      ]
+    },
+    {
+      "case": "local",
+      "message_id": 3538,
+      "stream": 655,
+      "src": 112,
+      "dst": 20,
+      "first_receiver_data_ns": 248478,
+      "first_source_feedback_ns": 254484,
+      "source_feedback_packets": 2,
+      "nack_feedback_packets": 0,
+      "feedback_before_fault_end": 0,
+      "fast_retransmit_events": 0,
+      "recovered_source_ack_ns": 254594,
+      "actual_feedback": [
+        {
+          "cumulative_ack": 9000,
+          "extension_hex": "4d535231000000000000232800000001",
+          "ip_protocol": 252,
+          "kind": "feedback_received",
+          "model_bytes": 50,
+          "packet_uid": 1905,
+          "sack_begin": 0,
+          "sack_end": 9000,
+          "sack_valid": true,
+          "stream": 655,
+          "time_ns": 254484
+        },
+        {
+          "cumulative_ack": 14464,
+          "extension_hex": "4d535231000023280000388000000001",
+          "ip_protocol": 252,
+          "kind": "feedback_received",
+          "model_bytes": 50,
+          "packet_uid": 1906,
+          "sack_begin": 9000,
+          "sack_end": 14464,
+          "sack_valid": true,
+          "stream": 655,
+          "time_ns": 254594
+        }
+      ]
+    }
+  ],
+  "source_file": "backend/rdma/persistent_streams.cc",
+  "source_sha256": "0ea6918392f6b65e4a5e135f01a0810cb7fa8e446a28b086d5ec00e85efe903c",
+  "source_basis": "SelectiveReceive emits actual SACK/ACK or NACK; source FastRetry branch is driven by received NACK",
+  "scope": "MSR1 selective-repeat functional reference with NACK fast retry; not IRN or production RoCE reproduction",
+  "interpretation": "No feedback during a full-data blackhole prevents feedback-driven fast retry; this alone is not a novel optimization opportunity"
+}

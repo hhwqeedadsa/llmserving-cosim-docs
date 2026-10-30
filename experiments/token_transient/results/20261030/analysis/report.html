@@ -1,0 +1,18 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>128卡：去重与卡内合并后的局部故障</title><style>body{max-width:1120px;margin:40px auto;padding:0 20px;font:17px/1.8 sans-serif;color:#18263b}
+table{border-collapse:collapse;width:100%}td,th{border:1px solid #ccd5df;padding:10px}img{max-width:100%}.note{padding:14px;background:#fff3d8}a{color:#2463b7}</style>
+<h1>128卡：去重与卡内合并后的局部故障</h1><p>15份不同真实R1-AWQ/MMLU专家选择，两个EP64组、8/7请求。
+128模拟端点，16服务器×8卡，8 ToR/8 Agg/4 Core，各层400G、每链路1us。每rank每层4专家，两层两步Decode；稀疏请求，不是全卡满载。</p>
+<p>两条件均按目的卡去重并在卡内合并，专家工作保留，每份额外贡献声明100ns合并成本。normal无故障；local只在GPU20前100us丢弃目的数据，保留控制包。均开启相同SR与参考DCQCN。</p>
+<table><tr><th>条件</th><th>有限任务/μs</th><th>组0/μs</th><th>组1/μs</th><th>网络排空/μs</th><th>额外源载荷/B</th><th>注入丢包</th></tr><tr><td>normal</td><td>132.159</td><td>132.159</td><td>132.013</td><td>180.957</td><td>0</td><td>0</td></tr><tr><td>local</td><td>363.964</td><td>363.964</td><td>127.705</td><td>363.964</td><td>144640</td><td>20</td></tr></table>
+<p>整体变化+231.805μs；未直接丢包的组1变化-4.308μs。
+组0首Dispatch门限变化+237.672μs，其后到组0任务结束的时间差变化-5.867μs。</p>
+<p class="note">这里测得的是故障代价。门限等待、各rank累计等待和逐跳停留不能相加当任务损失；也不能直接认定可通过新算法消除。</p>
+<h2>累计接受与源确认</h2><p>实线为协议接受，虚线为源确认；蓝色正常、橙色局部故障。载荷包含元数据/填充，不全是激活张量，也不是线上总字节。</p>
+<img src="arrival-curves.png" alt="Cumulative accepted and source-confirmed layout payload">
+<h2>如何追踪等待</h2><p>阶段表保存每个门限的最后接收、源ACK、生产计算完成和释放时刻；成员表保留1024个实际前驱/到达/释放。
+完整JSON保留首Dispatch全部并列最后确认消息、实际源TX、丢弃/到达及恢复请求。它们是事后评价资料，不参与在线算法或调度。</p>
+<p class="note">真实的是专家选择；计算/到达/部署及H100标签均为声明。没有运行完整R1、GPU或Prefill。
+零协调成本门限和direct BF16投影不包含完整GIN控制信号、真实CQ/GPU可见性或hybrid，不能据此宣称生产性能。</p>
+<p><a href="analysis.json">完整核验</a> · <a href="phase-contrast.csv">阶段对比</a> · <a href="local-phase-members.csv">故障门限成员</a>
+ · <a href="normal-messages.csv">正常消息</a> · <a href="local-messages.csv">故障消息</a></p></html>

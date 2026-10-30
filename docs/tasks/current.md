@@ -2,7 +2,15 @@
 
 ## 2026-10-30 去重/卡内合并基线下的真实路由局部故障
 
-状态：`in_progress`（研究对照，整体目标active）。上一目标轮为progress：显式direct BF16投影与两个128卡功能条件已验收并发布。本轮只选128端点Clos、两组EP64、15不同真实原件、层3/4/入口1/2；固定rank去重/卡内合并及100ns声明单位成本、SR和参考DCQCN。先冻结方法/输入，正常与局部故障各一次；独立核算原JSON及实际字节，并沿实际消息/阶段门限解释等待传递。不是完整DeepEP/完整R1/硬件性能或新算法收益实验。
+状态：`completed`（本轮研究对照，整体目标仍active）。上一目标轮为progress：显式direct BF16投影与两个128卡功能条件已验收并发布。本轮只选128端点Clos、两组EP64、15不同真实原件、层3/4/入口1/2；固定rank去重/卡内合并及100ns声明单位成本、SR和参考DCQCN。方法/网络执行固定于`cbe991e774`，正常/局部接收故障各一次，GPU20前100us目的数据丢弃，未运行256/512。不是完整DeepEP/完整R1/硬件性能或新算法收益实验。
+
+各完成882消息/12729024布局字节/480专家贡献/5348节点，normal61710与local61500完整包事件；15来源请求、117数据活跃rank，不是满载。独立原JSON/字节/门限检查通过：每条件16阶段、1024成员。正常任务132.159us、排空180.957us；故障363.964us，新增231.805us。健康组132.013→127.705us，提前4.308us，没有直接丢包；实际共用80有向出口，健康组ECN10→3包、逐跳停留累计390600→244797ns，不能相加当业务收益。
+
+首Dispatch释放16.922→254.594us，差237.672us；正常/故障均63个rank有组内门限等待，中位9.584→247.256us。首Dispatch之后到任务结束的时间差变化-5.867us，分开继承等待与后续执行变化，未重复计时。关键同消息112→20、id3538/stream655首发1.392/2.698us、81.392/81.573us重传仍丢，241.392/241.573us再发成功；首反馈254.484us、源确认/阶段254.594us。事后只读`feedback.py`独立解码实际SACK并对齐源MacRx：实现有SACK/NACK快速重传分支，但该连接故障窗内无反馈/NACK，不能把延迟归因为未集成SR，也不能将141.392us间隔称可消除收益。
+
+局部窗20/20、目标全程20/40、全网端点20/1784分列；额外源数据20包/144640B，无自然交换机丢弃或PFC。未修改恢复参数或重跑成功网络。13依赖及复用服务/8库核对通过；8项受监控命令累计19.158秒、峰值325615616B组RSS，原件约111.5MiB、导出约0.8MiB；零构建/下载/安装/GPU/依赖修改。交付[人话总结与下一候选](../../experiments/token_transient/results/20261030/interpretation.html)、[结果](../../experiments/token_transient/results/20261030/report.html)、[核验与曲线](../../experiments/token_transient/results/20261030/analysis/report.html)、[反馈核对](../../experiments/token_transient/results/20261030/analysis/feedback.json)、[收据](../../experiments/token_transient/results/20261030/receipt.json)、[最终核查](../../experiments/token_transient/results/20261030/final-audit.json)及[完整资源](../../experiments/token_transient/results/20261030/resources.json)。
+
+判定：不把“恢复必然拖慢另一组”作为立项前提，不以缩RTO、普通重传或尾部探测声称创新。待调研候选是利用已有专家副本进行受损部分的局部重执行；先比较已有MoE容错/备用请求/专家复制，核清可见故障触发、合法跨组绑定、共享计算/NIC、迟到包/重复结果及重算成本，再决定实现。当前不支持直接跨组改目的rank，候选尚未实现或证明创新/收益；整体研究不据此完成。
 
 预算：根`runs/token_transient_20261030`，累计900受监控秒/512MiB、卷保留8GiB，CPU每项120秒/RSS1GiB/地址2GiB；最多两个新128卡网络（normal/local，各一次），每native60秒/RSS1GiB/地址2GiB/模拟5ms/产物128MiB/结果32MiB/完整包200000条。零构建/下载/安装/GPU/依赖修改，不重跑既有成功网络；任一网络/完整记录/字节检查失败停止后续网络，不扩限或自动重试。平台能力已固定，研究方法/程序见[实验目录](../../experiments/token_transient/README.md)。
 

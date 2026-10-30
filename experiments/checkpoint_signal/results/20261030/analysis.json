@@ -1,0 +1,553 @@
+{
+  "passed": true,
+  "results": [
+    {
+      "checkpoint": "first_dispatch",
+      "condition": "normal",
+      "view": "all_members",
+      "deadline_ns": 19000,
+      "actual_checkpoint_ns": 18377,
+      "checkpoint_done": true,
+      "whole_done": false,
+      "consider_backup": false,
+      "action": "defer_needs_later_check",
+      "past_events": 2023
+    },
+    {
+      "checkpoint": "first_dispatch",
+      "condition": "normal",
+      "view": "local_member",
+      "deadline_ns": 19000,
+      "actual_checkpoint_ns": 18377,
+      "checkpoint_done": true,
+      "whole_done": false,
+      "consider_backup": false,
+      "action": "defer_needs_later_check",
+      "past_events": 1
+    },
+    {
+      "checkpoint": "first_dispatch",
+      "condition": "normal",
+      "view": "final_only",
+      "deadline_ns": 19000,
+      "actual_checkpoint_ns": 18377,
+      "checkpoint_done": false,
+      "whole_done": false,
+      "consider_backup": true,
+      "action": "consider_subject_to_budget",
+      "past_events": 2023
+    },
+    {
+      "checkpoint": "first_dispatch",
+      "condition": "local",
+      "view": "all_members",
+      "deadline_ns": 19000,
+      "actual_checkpoint_ns": 90631,
+      "checkpoint_done": false,
+      "whole_done": false,
+      "consider_backup": true,
+      "action": "consider_subject_to_budget",
+      "past_events": 1782
+    },
+    {
+      "checkpoint": "first_dispatch",
+      "condition": "local",
+      "view": "local_member",
+      "deadline_ns": 19000,
+      "actual_checkpoint_ns": 90631,
+      "checkpoint_done": false,
+      "whole_done": false,
+      "consider_backup": true,
+      "action": "consider_subject_to_budget",
+      "past_events": 0
+    },
+    {
+      "checkpoint": "first_dispatch",
+      "condition": "local",
+      "view": "final_only",
+      "deadline_ns": 19000,
+      "actual_checkpoint_ns": 90631,
+      "checkpoint_done": false,
+      "whole_done": false,
+      "consider_backup": true,
+      "action": "consider_subject_to_budget",
+      "past_events": 1782
+    },
+    {
+      "checkpoint": "first_decode",
+      "condition": "normal",
+      "view": "all_members",
+      "deadline_ns": 66000,
+      "actual_checkpoint_ns": 65048,
+      "checkpoint_done": true,
+      "whole_done": false,
+      "consider_backup": false,
+      "action": "defer_needs_later_check",
+      "past_events": 5037
+    },
+    {
+      "checkpoint": "first_decode",
+      "condition": "normal",
+      "view": "local_member",
+      "deadline_ns": 66000,
+      "actual_checkpoint_ns": 65048,
+      "checkpoint_done": true,
+      "whole_done": false,
+      "consider_backup": false,
+      "action": "defer_needs_later_check",
+      "past_events": 1
+    },
+    {
+      "checkpoint": "first_decode",
+      "condition": "normal",
+      "view": "final_only",
+      "deadline_ns": 66000,
+      "actual_checkpoint_ns": 65048,
+      "checkpoint_done": false,
+      "whole_done": false,
+      "consider_backup": true,
+      "action": "consider_subject_to_budget",
+      "past_events": 5037
+    },
+    {
+      "checkpoint": "first_decode",
+      "condition": "local",
+      "view": "all_members",
+      "deadline_ns": 66000,
+      "actual_checkpoint_ns": 140340,
+      "checkpoint_done": false,
+      "whole_done": false,
+      "consider_backup": true,
+      "action": "consider_subject_to_budget",
+      "past_events": 3458
+    },
+    {
+      "checkpoint": "first_decode",
+      "condition": "local",
+      "view": "local_member",
+      "deadline_ns": 66000,
+      "actual_checkpoint_ns": 140340,
+      "checkpoint_done": false,
+      "whole_done": false,
+      "consider_backup": true,
+      "action": "consider_subject_to_budget",
+      "past_events": 0
+    },
+    {
+      "checkpoint": "first_decode",
+      "condition": "local",
+      "view": "final_only",
+      "deadline_ns": 66000,
+      "actual_checkpoint_ns": 140340,
+      "checkpoint_done": false,
+      "whole_done": false,
+      "consider_backup": true,
+      "action": "consider_subject_to_budget",
+      "past_events": 3458
+    },
+    {
+      "checkpoint": "complete_segment",
+      "condition": "normal",
+      "view": "all_members",
+      "deadline_ns": 127000,
+      "actual_checkpoint_ns": 126626,
+      "checkpoint_done": true,
+      "whole_done": true,
+      "consider_backup": false,
+      "action": "skip_after_whole_result",
+      "past_events": 9422
+    },
+    {
+      "checkpoint": "complete_segment",
+      "condition": "normal",
+      "view": "local_member",
+      "deadline_ns": 127000,
+      "actual_checkpoint_ns": 126626,
+      "checkpoint_done": true,
+      "whole_done": true,
+      "consider_backup": false,
+      "action": "skip_after_whole_result",
+      "past_events": 1
+    },
+    {
+      "checkpoint": "complete_segment",
+      "condition": "normal",
+      "view": "final_only",
+      "deadline_ns": 127000,
+      "actual_checkpoint_ns": 126626,
+      "checkpoint_done": true,
+      "whole_done": true,
+      "consider_backup": false,
+      "action": "skip_after_whole_result",
+      "past_events": 9422
+    },
+    {
+      "checkpoint": "complete_segment",
+      "condition": "local",
+      "view": "all_members",
+      "deadline_ns": 127000,
+      "actual_checkpoint_ns": 201866,
+      "checkpoint_done": false,
+      "whole_done": false,
+      "consider_backup": true,
+      "action": "consider_subject_to_budget",
+      "past_events": 7425
+    },
+    {
+      "checkpoint": "complete_segment",
+      "condition": "local",
+      "view": "local_member",
+      "deadline_ns": 127000,
+      "actual_checkpoint_ns": 201866,
+      "checkpoint_done": false,
+      "whole_done": false,
+      "consider_backup": true,
+      "action": "consider_subject_to_budget",
+      "past_events": 0
+    },
+    {
+      "checkpoint": "complete_segment",
+      "condition": "local",
+      "view": "final_only",
+      "deadline_ns": 127000,
+      "actual_checkpoint_ns": 201866,
+      "checkpoint_done": false,
+      "whole_done": false,
+      "consider_backup": true,
+      "action": "consider_subject_to_budget",
+      "past_events": 7425
+    }
+  ],
+  "minimal_information_equivalence": [
+    {
+      "checkpoint": "first_dispatch",
+      "condition": "normal",
+      "same_decision": true,
+      "full_past_events": 2023,
+      "minimal_past_events": 1,
+      "scope": "one complete milestone flag, not arbitrary local progress; global zero-cost gate model"
+    },
+    {
+      "checkpoint": "first_dispatch",
+      "condition": "local",
+      "same_decision": true,
+      "full_past_events": 1782,
+      "minimal_past_events": 0,
+      "scope": "one complete milestone flag, not arbitrary local progress; global zero-cost gate model"
+    },
+    {
+      "checkpoint": "first_decode",
+      "condition": "normal",
+      "same_decision": true,
+      "full_past_events": 5037,
+      "minimal_past_events": 1,
+      "scope": "one complete milestone flag, not arbitrary local progress; global zero-cost gate model"
+    },
+    {
+      "checkpoint": "first_decode",
+      "condition": "local",
+      "same_decision": true,
+      "full_past_events": 3458,
+      "minimal_past_events": 0,
+      "scope": "one complete milestone flag, not arbitrary local progress; global zero-cost gate model"
+    },
+    {
+      "checkpoint": "complete_segment",
+      "condition": "normal",
+      "same_decision": true,
+      "full_past_events": 9422,
+      "minimal_past_events": 1,
+      "scope": "one complete milestone flag, not arbitrary local progress; global zero-cost gate model"
+    },
+    {
+      "checkpoint": "complete_segment",
+      "condition": "local",
+      "same_decision": true,
+      "full_past_events": 7425,
+      "minimal_past_events": 0,
+      "scope": "one complete milestone flag, not arbitrary local progress; global zero-cost gate model"
+    }
+  ],
+  "prefix_mutations": [
+    {
+      "name": "first_dispatch-normal-same-time",
+      "rejected": true,
+      "reason": "future, same-time, duplicate or out-of-order observation"
+    },
+    {
+      "name": "first_dispatch-normal-future",
+      "rejected": true,
+      "reason": "future, same-time, duplicate or out-of-order observation"
+    },
+    {
+      "name": "first_dispatch-normal-duplicate",
+      "rejected": true,
+      "reason": "future, same-time, duplicate or out-of-order observation"
+    },
+    {
+      "name": "first_dispatch-normal-missing-prefix",
+      "rejected": true,
+      "reason": "missing observation in complete prefix"
+    },
+    {
+      "name": "first_dispatch-normal-clock-reversal",
+      "rejected": true,
+      "reason": "future, same-time, duplicate or out-of-order observation"
+    },
+    {
+      "name": "first_dispatch-normal-foreign-endpoint",
+      "rejected": true,
+      "reason": "invalid physical endpoint"
+    },
+    {
+      "name": "first_dispatch-normal-bad-graph",
+      "rejected": true,
+      "reason": "invalid graph identity"
+    },
+    {
+      "name": "first_dispatch-local-same-time",
+      "rejected": true,
+      "reason": "future, same-time, duplicate or out-of-order observation"
+    },
+    {
+      "name": "first_dispatch-local-future",
+      "rejected": true,
+      "reason": "future, same-time, duplicate or out-of-order observation"
+    },
+    {
+      "name": "first_dispatch-local-duplicate",
+      "rejected": true,
+      "reason": "future, same-time, duplicate or out-of-order observation"
+    },
+    {
+      "name": "first_dispatch-local-missing-prefix",
+      "rejected": true,
+      "reason": "missing observation in complete prefix"
+    },
+    {
+      "name": "first_dispatch-local-clock-reversal",
+      "rejected": true,
+      "reason": "future, same-time, duplicate or out-of-order observation"
+    },
+    {
+      "name": "first_dispatch-local-foreign-endpoint",
+      "rejected": true,
+      "reason": "invalid physical endpoint"
+    },
+    {
+      "name": "first_dispatch-local-bad-graph",
+      "rejected": true,
+      "reason": "invalid graph identity"
+    },
+    {
+      "name": "first_decode-normal-same-time",
+      "rejected": true,
+      "reason": "future, same-time, duplicate or out-of-order observation"
+    },
+    {
+      "name": "first_decode-normal-future",
+      "rejected": true,
+      "reason": "future, same-time, duplicate or out-of-order observation"
+    },
+    {
+      "name": "first_decode-normal-duplicate",
+      "rejected": true,
+      "reason": "future, same-time, duplicate or out-of-order observation"
+    },
+    {
+      "name": "first_decode-normal-missing-prefix",
+      "rejected": true,
+      "reason": "missing observation in complete prefix"
+    },
+    {
+      "name": "first_decode-normal-clock-reversal",
+      "rejected": true,
+      "reason": "future, same-time, duplicate or out-of-order observation"
+    },
+    {
+      "name": "first_decode-normal-foreign-endpoint",
+      "rejected": true,
+      "reason": "invalid physical endpoint"
+    },
+    {
+      "name": "first_decode-normal-bad-graph",
+      "rejected": true,
+      "reason": "invalid graph identity"
+    },
+    {
+      "name": "first_decode-local-same-time",
+      "rejected": true,
+      "reason": "future, same-time, duplicate or out-of-order observation"
+    },
+    {
+      "name": "first_decode-local-future",
+      "rejected": true,
+      "reason": "future, same-time, duplicate or out-of-order observation"
+    },
+    {
+      "name": "first_decode-local-duplicate",
+      "rejected": true,
+      "reason": "future, same-time, duplicate or out-of-order observation"
+    },
+    {
+      "name": "first_decode-local-missing-prefix",
+      "rejected": true,
+      "reason": "missing observation in complete prefix"
+    },
+    {
+      "name": "first_decode-local-clock-reversal",
+      "rejected": true,
+      "reason": "future, same-time, duplicate or out-of-order observation"
+    },
+    {
+      "name": "first_decode-local-foreign-endpoint",
+      "rejected": true,
+      "reason": "invalid physical endpoint"
+    },
+    {
+      "name": "first_decode-local-bad-graph",
+      "rejected": true,
+      "reason": "invalid graph identity"
+    },
+    {
+      "name": "complete_segment-normal-same-time",
+      "rejected": true,
+      "reason": "future, same-time, duplicate or out-of-order observation"
+    },
+    {
+      "name": "complete_segment-normal-future",
+      "rejected": true,
+      "reason": "future, same-time, duplicate or out-of-order observation"
+    },
+    {
+      "name": "complete_segment-normal-duplicate",
+      "rejected": true,
+      "reason": "future, same-time, duplicate or out-of-order observation"
+    },
+    {
+      "name": "complete_segment-normal-missing-prefix",
+      "rejected": true,
+      "reason": "missing observation in complete prefix"
+    },
+    {
+      "name": "complete_segment-normal-clock-reversal",
+      "rejected": true,
+      "reason": "future, same-time, duplicate or out-of-order observation"
+    },
+    {
+      "name": "complete_segment-normal-foreign-endpoint",
+      "rejected": true,
+      "reason": "invalid physical endpoint"
+    },
+    {
+      "name": "complete_segment-normal-bad-graph",
+      "rejected": true,
+      "reason": "invalid graph identity"
+    },
+    {
+      "name": "complete_segment-local-same-time",
+      "rejected": true,
+      "reason": "future, same-time, duplicate or out-of-order observation"
+    },
+    {
+      "name": "complete_segment-local-future",
+      "rejected": true,
+      "reason": "future, same-time, duplicate or out-of-order observation"
+    },
+    {
+      "name": "complete_segment-local-duplicate",
+      "rejected": true,
+      "reason": "future, same-time, duplicate or out-of-order observation"
+    },
+    {
+      "name": "complete_segment-local-missing-prefix",
+      "rejected": true,
+      "reason": "missing observation in complete prefix"
+    },
+    {
+      "name": "complete_segment-local-clock-reversal",
+      "rejected": true,
+      "reason": "future, same-time, duplicate or out-of-order observation"
+    },
+    {
+      "name": "complete_segment-local-foreign-endpoint",
+      "rejected": true,
+      "reason": "invalid physical endpoint"
+    },
+    {
+      "name": "complete_segment-local-bad-graph",
+      "rejected": true,
+      "reason": "invalid graph identity"
+    }
+  ],
+  "rejected_mutations": 42,
+  "nominal_detection_advance_ns": {
+    "first_dispatch": 108000,
+    "first_decode": 61000,
+    "complete_segment": 0
+  },
+  "checkpoints": {
+    "first_dispatch": {
+      "normal_time_ns": 18377,
+      "deadline_ns": 19000,
+      "conditions": {
+        "normal": {
+          "actual_complete_ns": 18377,
+          "past_events": 2023,
+          "minimal_past_events": 1,
+          "whole_result_ns": 126626
+        },
+        "local": {
+          "actual_complete_ns": 90631,
+          "past_events": 1782,
+          "minimal_past_events": 0,
+          "whole_result_ns": 201866
+        }
+      }
+    },
+    "first_decode": {
+      "normal_time_ns": 65048,
+      "deadline_ns": 66000,
+      "conditions": {
+        "normal": {
+          "actual_complete_ns": 65048,
+          "past_events": 5037,
+          "minimal_past_events": 1,
+          "whole_result_ns": 126626
+        },
+        "local": {
+          "actual_complete_ns": 140340,
+          "past_events": 3458,
+          "minimal_past_events": 0,
+          "whole_result_ns": 201866
+        }
+      }
+    },
+    "complete_segment": {
+      "normal_time_ns": 126626,
+      "deadline_ns": 127000,
+      "conditions": {
+        "normal": {
+          "actual_complete_ns": 126626,
+          "past_events": 9422,
+          "minimal_past_events": 1,
+          "whole_result_ns": 126626
+        },
+        "local": {
+          "actual_complete_ns": 201866,
+          "past_events": 7425,
+          "minimal_past_events": 0,
+          "whole_result_ns": 201866
+        }
+      }
+    }
+  },
+  "classifier_processes": 18,
+  "original_runs_unchanged": 2,
+  "new_network_executions": 0,
+  "new_platform_policy_implemented": false,
+  "recovery_benefit_measured": false,
+  "new_algorithm_benefit_proven": false,
+  "evaluator_sha256": "a79f41700bda0baffa7e7a58cf705e72d2b4190243a0c1b9da7889dccff311d2",
+  "constraints": "One normal trace and one known local fault, no independent holdout; a past milestone bit is sufficient for these decisions under the global zero-coordination phase model. No p99, detection accuracy distribution, GPU calibration or counterfactual speedup."
+}

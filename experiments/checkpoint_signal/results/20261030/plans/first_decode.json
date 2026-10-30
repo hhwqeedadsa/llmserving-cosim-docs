@@ -1,0 +1,15 @@
+{
+  "schema_version": "checkpoint-plan/1",
+  "name": "first_decode",
+  "checkpoint": {
+    "kind": "graph_retired",
+    "graph": "g0.w0"
+  },
+  "final_graph": "g0.w1",
+  "simulated_endpoints": 128,
+  "deadline_ns": 66000,
+  "calibration": {
+    "kind": "single_normal_sample_strict_next_1000ns/1",
+    "normal_time_ns": 65048
+  }
+}

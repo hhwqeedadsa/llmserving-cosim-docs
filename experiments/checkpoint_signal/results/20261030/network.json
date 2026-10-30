@@ -1,0 +1,62 @@
+{
+  "passed": true,
+  "conditions": {
+    "normal": {
+      "deadline_ns": 19000,
+      "initial_pack_nodes": 32,
+      "completed_pack_nodes": 32,
+      "initial_dispatch_messages": 26,
+      "posted_messages": 26,
+      "source_confirmed_messages": 26,
+      "receive_completed_messages": 26,
+      "pending_source_confirmations": 0,
+      "pending_destination_counts": {},
+      "pending_messages": []
+    },
+    "local": {
+      "deadline_ns": 19000,
+      "initial_pack_nodes": 32,
+      "completed_pack_nodes": 32,
+      "initial_dispatch_messages": 26,
+      "posted_messages": 26,
+      "source_confirmed_messages": 23,
+      "receive_completed_messages": 23,
+      "pending_source_confirmations": 3,
+      "pending_destination_counts": {
+        "28": 3
+      },
+      "pending_messages": [
+        {
+          "message": 37,
+          "src": 4,
+          "dst": 28,
+          "bytes": 14464,
+          "send_post_ns": 1030,
+          "recv_complete_ns": null,
+          "send_complete_ns": null
+        },
+        {
+          "message": 68,
+          "src": 8,
+          "dst": 28,
+          "bytes": 14464,
+          "send_post_ns": 1030,
+          "recv_complete_ns": null,
+          "send_complete_ns": null
+        },
+        {
+          "message": 99,
+          "src": 12,
+          "dst": 28,
+          "bytes": 14464,
+          "send_post_ns": 1030,
+          "recv_complete_ns": null,
+          "send_complete_ns": null
+        }
+      ]
+    }
+  },
+  "new_network_executions": 0,
+  "policy_used_this_information": false,
+  "scope": "Initial graph and strictly past callbacks only. A pending source confirmation is not proof of packet loss: data or ACK congestion can give the same signal. Does not measure hardware completion or execute recovery."
+}

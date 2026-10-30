@@ -1,0 +1,149 @@
+{
+  "schema_version": "checkpoint-plan/1",
+  "name": "first_dispatch",
+  "checkpoint": {
+    "kind": "phase_complete",
+    "graph": "g0.w0",
+    "members": [
+      {
+        "rank": 0,
+        "node": 9
+      },
+      {
+        "rank": 4,
+        "node": 12
+      },
+      {
+        "rank": 8,
+        "node": 9
+      },
+      {
+        "rank": 12,
+        "node": 10
+      },
+      {
+        "rank": 16,
+        "node": 4
+      },
+      {
+        "rank": 20,
+        "node": 5
+      },
+      {
+        "rank": 24,
+        "node": 4
+      },
+      {
+        "rank": 28,
+        "node": 6
+      },
+      {
+        "rank": 32,
+        "node": 5
+      },
+      {
+        "rank": 36,
+        "node": 3
+      },
+      {
+        "rank": 40,
+        "node": 4
+      },
+      {
+        "rank": 44,
+        "node": 3
+      },
+      {
+        "rank": 48,
+        "node": 3
+      },
+      {
+        "rank": 52,
+        "node": 3
+      },
+      {
+        "rank": 56,
+        "node": 5
+      },
+      {
+        "rank": 60,
+        "node": 3
+      },
+      {
+        "rank": 64,
+        "node": 6
+      },
+      {
+        "rank": 68,
+        "node": 5
+      },
+      {
+        "rank": 72,
+        "node": 4
+      },
+      {
+        "rank": 76,
+        "node": 4
+      },
+      {
+        "rank": 80,
+        "node": 5
+      },
+      {
+        "rank": 84,
+        "node": 4
+      },
+      {
+        "rank": 88,
+        "node": 3
+      },
+      {
+        "rank": 92,
+        "node": 3
+      },
+      {
+        "rank": 96,
+        "node": 3
+      },
+      {
+        "rank": 100,
+        "node": 4
+      },
+      {
+        "rank": 104,
+        "node": 4
+      },
+      {
+        "rank": 108,
+        "node": 3
+      },
+      {
+        "rank": 112,
+        "node": 3
+      },
+      {
+        "rank": 116,
+        "node": 3
+      },
+      {
+        "rank": 120,
+        "node": 3
+      },
+      {
+        "rank": 124,
+        "node": 3
+      }
+    ],
+    "representative": {
+      "rank": 0,
+      "node": 9
+    }
+  },
+  "final_graph": "g0.w1",
+  "simulated_endpoints": 128,
+  "deadline_ns": 19000,
+  "calibration": {
+    "kind": "single_normal_sample_strict_next_1000ns/1",
+    "normal_time_ns": 18377
+  }
+}

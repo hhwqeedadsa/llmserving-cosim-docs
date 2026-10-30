@@ -1,0 +1,192 @@
+{
+  "passed": true,
+  "old_network_files_unchanged": 2,
+  "new_network_executions": 0,
+  "complete_native_observation_prefixes_checked": true,
+  "strict_past_classifier_processes": 18,
+  "rejected_prefix_mutations": 42,
+  "portable_minimal_examples_checked_in_fresh_cwd": 6,
+  "truth_not_a_classifier_argument": true,
+  "runtime_source_identity_checked": true,
+  "source_watchdog_predicate_only": true,
+  "actual_notifications_generated": 0,
+  "links_checked": 36,
+  "links": [
+    {
+      "file": "experiments/checkpoint_signal/results/20261030/report.html",
+      "target": "figures/signals.png"
+    },
+    {
+      "file": "experiments/checkpoint_signal/results/20261030/report.html",
+      "target": "analysis.json"
+    },
+    {
+      "file": "experiments/checkpoint_signal/results/20261030/report.html",
+      "target": "network.json"
+    },
+    {
+      "file": "experiments/checkpoint_signal/results/20261030/report.html",
+      "target": "watchdog.json"
+    },
+    {
+      "file": "experiments/checkpoint_signal/results/20261030/report.html",
+      "target": "decisions.csv"
+    },
+    {
+      "file": "experiments/checkpoint_signal/results/20261030/report.html",
+      "target": "frozen.json"
+    },
+    {
+      "file": "experiments/checkpoint_signal/results/20261030/report.html",
+      "target": "receipt.json"
+    },
+    {
+      "file": "experiments/checkpoint_signal/results/20261030/report.html",
+      "target": "resources.json"
+    },
+    {
+      "file": "experiments/checkpoint_signal/results/20261030/report.html",
+      "target": "final-audit.json"
+    },
+    {
+      "file": "experiments/checkpoint_signal/results/20261030/report.html",
+      "target": "README.md"
+    },
+    {
+      "file": "experiments/checkpoint_signal/results/20261030/report.html",
+      "target": "../../README.md"
+    },
+    {
+      "file": "experiments/checkpoint_signal/results/20261030/report.html",
+      "target": "../../protocol.md"
+    },
+    {
+      "file": "experiments/checkpoint_signal/results/20261030/report.html",
+      "target": "../../watchdog_protocol.md"
+    },
+    {
+      "file": "experiments/checkpoint_signal/results/20261030/README.md",
+      "target": "report.html"
+    },
+    {
+      "file": "experiments/checkpoint_signal/results/20261030/README.md",
+      "target": "analysis.json"
+    },
+    {
+      "file": "experiments/checkpoint_signal/results/20261030/README.md",
+      "target": "network.json"
+    },
+    {
+      "file": "experiments/checkpoint_signal/results/20261030/README.md",
+      "target": "watchdog.json"
+    },
+    {
+      "file": "experiments/checkpoint_signal/results/20261030/README.md",
+      "target": "decisions.csv"
+    },
+    {
+      "file": "experiments/checkpoint_signal/results/20261030/README.md",
+      "target": "frozen.json"
+    },
+    {
+      "file": "experiments/checkpoint_signal/results/20261030/README.md",
+      "target": "receipt.json"
+    },
+    {
+      "file": "experiments/checkpoint_signal/results/20261030/README.md",
+      "target": "resources.json"
+    },
+    {
+      "file": "experiments/checkpoint_signal/results/20261030/README.md",
+      "target": "final-audit.json"
+    },
+    {
+      "file": "experiments/checkpoint_signal/results/20261030/README.md",
+      "target": "../../README.md"
+    },
+    {
+      "file": "experiments/checkpoint_signal/results/20261030/README.md",
+      "target": "../../protocol.md"
+    },
+    {
+      "file": "experiments/checkpoint_signal/results/20261030/README.md",
+      "target": "../../watchdog_protocol.md"
+    },
+    {
+      "file": "experiments/checkpoint_signal/README.md",
+      "target": "protocol.md"
+    },
+    {
+      "file": "experiments/checkpoint_signal/README.md",
+      "target": "results/20261030/report.html"
+    },
+    {
+      "file": "experiments/checkpoint_signal/README.md",
+      "target": "results/20261030/README.md"
+    },
+    {
+      "file": "experiments/checkpoint_signal/README.md",
+      "target": "watchdog_protocol.md"
+    },
+    {
+      "file": "experiments/checkpoint_signal/README.md",
+      "target": "../sequential_externality/README.md"
+    },
+    {
+      "file": "docs/tasks/current.md",
+      "target": "../../experiments/checkpoint_signal/results/20261030/report.html"
+    },
+    {
+      "file": "docs/tasks/current.md",
+      "target": "../../experiments/checkpoint_signal/results/20261030/README.md"
+    },
+    {
+      "file": "docs/tasks/current.md",
+      "target": "../../experiments/checkpoint_signal/results/20261030/analysis.json"
+    },
+    {
+      "file": "docs/tasks/current.md",
+      "target": "../../experiments/checkpoint_signal/results/20261030/network.json"
+    },
+    {
+      "file": "docs/tasks/current.md",
+      "target": "../../experiments/checkpoint_signal/results/20261030/watchdog.json"
+    },
+    {
+      "file": "docs/tasks/current.md",
+      "target": "../../experiments/checkpoint_signal/README.md"
+    }
+  ],
+  "figure_visually_inspected": 1,
+  "browser_rendering_checked": false,
+  "browser_executables": {
+    "chromium": null,
+    "chromium-browser": null,
+    "google-chrome": null,
+    "firefox": null,
+    "playwright": null
+  },
+  "overall_goal_complete": false,
+  "artifact_sha256": {
+    "README.md": "6a33f1e0ae486baf4f806bf5a821f97c9e601b72eb160424f9058673d1c31d9d",
+    "analysis.json": "fed7a8bc40bc99cb97adb5b3d07a3d4885f1332b8bd4a9e334d67f03d49b5062",
+    "decisions.csv": "7aa3fafc12ff9dbac0e5bf7b32b8680d67c6ad868c2758759beb8a53844698dd",
+    "figures/signals.png": "9950c307d8e029b7c1a3b482dd590308fd95837e0cddc737a628e7647d2a2628",
+    "figures/signals.svg": "3eb64fe0e6cc48c20ab8cfec108375f35f7136036271180bffa7c6f52029f5a4",
+    "frozen.json": "d58ca76a7c5c5e505e826a8dbee878feb3ebd5254af2dc419e1e1c2ef486f0b9",
+    "minimal/complete_segment-local.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "minimal/complete_segment-normal.jsonl": "ea98a29b255151fe5553223e75429e0a8861b4459f4fbcfd0086c57ab38cbdbb",
+    "minimal/first_decode-local.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "minimal/first_decode-normal.jsonl": "9c684e910eff13e0dcabcd0493bf6c092514469ae799b499cbe594968cc27b8f",
+    "minimal/first_dispatch-local.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "minimal/first_dispatch-normal.jsonl": "a7defc9412eff596547795186f6dde401bf4d75492cb2a6a366a289abc3cb0b6",
+    "network.json": "620a620adb322ca993292ec3fe8144e1a0a4171482b3432edc5b113ea8a8387b",
+    "plans/complete_segment.json": "3784bfd2ae65b3d74ed090268626b424dc1fc14ab672c0c5462d7858ceab5625",
+    "plans/first_decode.json": "da83c7b8ddba13dd8b32faaf55b1c459ec859aa74128f61b6ce7019a97098b6c",
+    "plans/first_dispatch.json": "c6636a5e80610c25f6417e8da0201c8940a36a0e02a04e7a6c54978aee50d27b",
+    "receipt.json": "21578dcfc7747689badfc8c01c8f5ef1cc11ee62a5f273fa6e8b34a1268fa223",
+    "report.html": "2e68ccbd81acec7b980820978bc0ca323bdc6073d337a01e97db0cc93d8974a6",
+    "resources.json": "1b0c45f21fb34162b521e687459002dfc4206fcd867c8c714c30ff6bb1214386",
+    "watchdog.json": "8710533cddaa48367f9a7b0c32e29c9dc5b0b21acd94562655a1436ec907c485"
+  }
+}

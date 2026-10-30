@@ -1,0 +1,15 @@
+{
+  "schema_version": "checkpoint-plan/1",
+  "name": "complete_segment",
+  "checkpoint": {
+    "kind": "graph_retired",
+    "graph": "g0.w1"
+  },
+  "final_graph": "g0.w1",
+  "simulated_endpoints": 128,
+  "deadline_ns": 127000,
+  "calibration": {
+    "kind": "single_normal_sample_strict_next_1000ns/1",
+    "normal_time_ns": 126626
+  }
+}

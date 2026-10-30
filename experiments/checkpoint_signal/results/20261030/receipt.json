@@ -1,0 +1,774 @@
+{
+  "passed": true,
+  "preregistration_commit": "e24962ea3e",
+  "watchdog_reference_preregistration_commit": "149b3f1a54",
+  "platform_commit": "0f1cc8bd1f2e70e7a8d623d1e02419b2f62a68ef",
+  "source_sha256": {
+    "experiments/checkpoint_signal/README.md": "03ee90fc08da7b569cbc76e3ddf4c9e352e8f84b6655b8aa1983b3f81f57d978",
+    "experiments/checkpoint_signal/protocol.md": "0b3c288f7c11a53c60b9f9d9e29a1b8593f332067ba46b223befcae7d76e2920",
+    "experiments/checkpoint_signal/classify.py": "369d5ad658dc0667c89d58b2601d6b50c9d79bbc530c67796f110e2c019424a8",
+    "experiments/checkpoint_signal/prepare.py": "85f65aa49d105a87315d4d19233f96ec80f86d9bc7b36e4b65c7acacd8b96c0c",
+    "experiments/checkpoint_signal/run.py": "deab8da2f3976e099d5f0fd41225f8901c8d7c82a26948853fc659683b89402b",
+    "experiments/checkpoint_signal/evaluate.py": "a79f41700bda0baffa7e7a58cf705e72d2b4190243a0c1b9da7889dccff311d2",
+    "experiments/checkpoint_signal/network.py": "3dec5fb5d4b77a20fe925d9a50bfbb69e2acbae2537c315306f93be0474a6ef1",
+    "experiments/checkpoint_signal/watchdog_protocol.md": "d0466f9c99ec48df08fc26ee98864cd72b4ba2556c3e436f4fdefffe35660a7e",
+    "experiments/checkpoint_signal/watchdog_reference.py": "9242614cb7553475422eaf99728e01a52b4995e22a78cde04577381ebdade4fe",
+    "experiments/checkpoint_signal/report.py": "0628f37354c8136271096b1f8601188b62e545fef2d0d2506f074df7ee16fbb8",
+    "experiments/checkpoint_signal/audit.py": "a9b5d448acad7d236ffb8a438ef6a9cc0b513de6e1a8437d16e9edd084746192"
+  },
+  "stage_commands_and_status": {
+    "prepare": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "experiments/checkpoint_signal/prepare.py",
+        "--previous-study",
+        "runs/sequential_whole_20261030/study",
+        "--output",
+        "runs/checkpoint_signal_20261030/study"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-30T17:01:53.514465+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 268435456,
+        "wall_seconds": 120.0
+      },
+      "peak_sampled_group_rss_bytes": 206897152,
+      "peak_sampled_processes": 2,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/experiments/checkpoint_signal",
+        "/home/lry/moe-ub-cosim/runs/checkpoint_signal_20261030"
+      ],
+      "peak_sampled_artifact_bytes": 4681728,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 4635695,
+      "peak_sampled_artifact_allocated_bytes": 4681728,
+      "process_group": 908741,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-30T17:01:58.304313+00:00",
+      "wall_seconds": 4.7898216000176035,
+      "max_waited_child_rss_kib": 135056,
+      "artifact_bytes_before_report": 16355,
+      "aggregate_artifact_bytes_before_report": 4681728,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 4635695,
+        "allocated_bytes": 4681728
+      }
+    },
+    "classify": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "experiments/checkpoint_signal/run.py",
+        "--prepared",
+        "runs/checkpoint_signal_20261030/study",
+        "--output",
+        "runs/checkpoint_signal_20261030/decisions"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-30T17:04:02.159187+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 268435456,
+        "wall_seconds": 120.0
+      },
+      "peak_sampled_group_rss_bytes": 29622272,
+      "peak_sampled_processes": 2,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/experiments/checkpoint_signal",
+        "/home/lry/moe-ub-cosim/runs/checkpoint_signal_20261030"
+      ],
+      "peak_sampled_artifact_bytes": 4870144,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 4743446,
+      "peak_sampled_artifact_allocated_bytes": 4870144,
+      "process_group": 908812,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-30T17:04:03.260209+00:00",
+      "wall_seconds": 1.1010282640345395,
+      "max_waited_child_rss_kib": 17644,
+      "artifact_bytes_before_report": 3226,
+      "aggregate_artifact_bytes_before_report": 4870144,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 4743446,
+        "allocated_bytes": 4870144
+      }
+    },
+    "evaluate": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "experiments/checkpoint_signal/evaluate.py",
+        "--prepared",
+        "runs/checkpoint_signal_20261030/study",
+        "--decisions",
+        "runs/checkpoint_signal_20261030/decisions",
+        "--output",
+        "runs/checkpoint_signal_20261030/analysis"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-30T17:04:23.868995+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 268435456,
+        "wall_seconds": 120.0
+      },
+      "peak_sampled_group_rss_bytes": 51064832,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/experiments/checkpoint_signal",
+        "/home/lry/moe-ub-cosim/runs/checkpoint_signal_20261030"
+      ],
+      "peak_sampled_artifact_bytes": 4902912,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 4768519,
+      "peak_sampled_artifact_allocated_bytes": 4902912,
+      "process_group": 908846,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-30T17:04:25.421408+00:00",
+      "wall_seconds": 1.5524189279531129,
+      "max_waited_child_rss_kib": 53604,
+      "artifact_bytes_before_report": 5403,
+      "aggregate_artifact_bytes_before_report": 4902912,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 4768519,
+        "allocated_bytes": 4902912
+      }
+    },
+    "network-explanation": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "experiments/checkpoint_signal/network.py",
+        "--prepared",
+        "runs/checkpoint_signal_20261030/study",
+        "--output",
+        "runs/checkpoint_signal_20261030/analysis/network.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-30T17:06:31.557294+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 268435456,
+        "wall_seconds": 120.0
+      },
+      "peak_sampled_group_rss_bytes": 7442432,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/runs/checkpoint_signal_20261030",
+        "/home/lry/moe-ub-cosim/experiments/checkpoint_signal"
+      ],
+      "peak_sampled_artifact_bytes": 4923392,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 4776981,
+      "peak_sampled_artifact_allocated_bytes": 4923392,
+      "process_group": 908879,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-30T17:06:31.690113+00:00",
+      "wall_seconds": 0.13282171002356336,
+      "max_waited_child_rss_kib": 16516,
+      "artifact_bytes_before_report": 1795,
+      "aggregate_artifact_bytes_before_report": 4923392,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 4776981,
+        "allocated_bytes": 4923392
+      }
+    },
+    "watchdog-reference": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "experiments/checkpoint_signal/watchdog_reference.py",
+        "--prepared",
+        "runs/checkpoint_signal_20261030/study",
+        "--output",
+        "runs/checkpoint_signal_20261030/analysis/watchdog.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-30T17:09:06.722589+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 268435456,
+        "wall_seconds": 120.0
+      },
+      "peak_sampled_group_rss_bytes": 24399872,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/experiments/checkpoint_signal",
+        "/home/lry/moe-ub-cosim/runs/checkpoint_signal_20261030"
+      ],
+      "peak_sampled_artifact_bytes": 4947968,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 4789499,
+      "peak_sampled_artifact_allocated_bytes": 4947968,
+      "process_group": 908957,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-30T17:09:06.959778+00:00",
+      "wall_seconds": 0.23719226202229038,
+      "max_waited_child_rss_kib": 37744,
+      "artifact_bytes_before_report": 2749,
+      "aggregate_artifact_bytes_before_report": 4947968,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 4789499,
+        "allocated_bytes": 4947968
+      }
+    },
+    "report": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "experiments/checkpoint_signal/report.py",
+        "--prepared",
+        "runs/checkpoint_signal_20261030/study",
+        "--analysis",
+        "runs/checkpoint_signal_20261030/analysis",
+        "--output",
+        "experiments/checkpoint_signal/results/20261030"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-30T17:11:04.758656+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 268435456,
+        "wall_seconds": 120.0
+      },
+      "peak_sampled_group_rss_bytes": 78172160,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/runs/checkpoint_signal_20261030",
+        "/home/lry/moe-ub-cosim/experiments/checkpoint_signal"
+      ],
+      "peak_sampled_artifact_bytes": 5193728,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 4990944,
+      "peak_sampled_artifact_allocated_bytes": 5193728,
+      "process_group": 909066,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-30T17:11:05.669727+00:00",
+      "wall_seconds": 0.9110885720001534,
+      "max_waited_child_rss_kib": 76340,
+      "artifact_bytes_before_report": 2383,
+      "aggregate_artifact_bytes_before_report": 5193728,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 4990944,
+        "allocated_bytes": 5193728
+      }
+    }
+  },
+  "classifier_commands": [
+    {
+      "command": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-B",
+        "/home/lry/moe-ub-cosim/experiments/checkpoint_signal/classify.py",
+        "--plan",
+        "/home/lry/moe-ub-cosim/runs/checkpoint_signal_20261030/study/first_dispatch.json",
+        "--events",
+        "/home/lry/moe-ub-cosim/runs/checkpoint_signal_20261030/study/observed/first_dispatch-normal-full.jsonl",
+        "--view",
+        "all_members",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/checkpoint_signal_20261030/decisions/first_dispatch-normal-all_members.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "stdout": "{\"schema_version\": \"checkpoint-consideration/1\", \"checkpoint_done\": true, \"whole_done\": false, \"consider_backup\": false, \"action\": \"defer_needs_later_check\", \"deadline_ns\": 19000, \"parsed_past_events\": 2023, \"view\": \"all_members\", \"network_executed\": false, \"recovery_benefit_measured\": false}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-B",
+        "/home/lry/moe-ub-cosim/experiments/checkpoint_signal/classify.py",
+        "--plan",
+        "/home/lry/moe-ub-cosim/runs/checkpoint_signal_20261030/study/first_dispatch.json",
+        "--events",
+        "/home/lry/moe-ub-cosim/runs/checkpoint_signal_20261030/study/observed/first_dispatch-normal-minimal.jsonl",
+        "--view",
+        "local_member",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/checkpoint_signal_20261030/decisions/first_dispatch-normal-local_member.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "stdout": "{\"schema_version\": \"checkpoint-consideration/1\", \"checkpoint_done\": true, \"whole_done\": false, \"consider_backup\": false, \"action\": \"defer_needs_later_check\", \"deadline_ns\": 19000, \"parsed_past_events\": 1, \"view\": \"local_member\", \"network_executed\": false, \"recovery_benefit_measured\": false}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-B",
+        "/home/lry/moe-ub-cosim/experiments/checkpoint_signal/classify.py",
+        "--plan",
+        "/home/lry/moe-ub-cosim/runs/checkpoint_signal_20261030/study/first_dispatch.json",
+        "--events",
+        "/home/lry/moe-ub-cosim/runs/checkpoint_signal_20261030/study/observed/first_dispatch-normal-full.jsonl",
+        "--view",
+        "final_only",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/checkpoint_signal_20261030/decisions/first_dispatch-normal-final_only.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "stdout": "{\"schema_version\": \"checkpoint-consideration/1\", \"checkpoint_done\": false, \"whole_done\": false, \"consider_backup\": true, \"action\": \"consider_subject_to_budget\", \"deadline_ns\": 19000, \"parsed_past_events\": 2023, \"view\": \"final_only\", \"network_executed\": false, \"recovery_benefit_measured\": false}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-B",
+        "/home/lry/moe-ub-cosim/experiments/checkpoint_signal/classify.py",
+        "--plan",
+        "/home/lry/moe-ub-cosim/runs/checkpoint_signal_20261030/study/first_dispatch.json",
+        "--events",
+        "/home/lry/moe-ub-cosim/runs/checkpoint_signal_20261030/study/observed/first_dispatch-local-full.jsonl",
+        "--view",
+        "all_members",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/checkpoint_signal_20261030/decisions/first_dispatch-local-all_members.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "stdout": "{\"schema_version\": \"checkpoint-consideration/1\", \"checkpoint_done\": false, \"whole_done\": false, \"consider_backup\": true, \"action\": \"consider_subject_to_budget\", \"deadline_ns\": 19000, \"parsed_past_events\": 1782, \"view\": \"all_members\", \"network_executed\": false, \"recovery_benefit_measured\": false}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-B",
+        "/home/lry/moe-ub-cosim/experiments/checkpoint_signal/classify.py",
+        "--plan",
+        "/home/lry/moe-ub-cosim/runs/checkpoint_signal_20261030/study/first_dispatch.json",
+        "--events",
+        "/home/lry/moe-ub-cosim/runs/checkpoint_signal_20261030/study/observed/first_dispatch-local-minimal.jsonl",
+        "--view",
+        "local_member",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/checkpoint_signal_20261030/decisions/first_dispatch-local-local_member.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "stdout": "{\"schema_version\": \"checkpoint-consideration/1\", \"checkpoint_done\": false, \"whole_done\": false, \"consider_backup\": true, \"action\": \"consider_subject_to_budget\", \"deadline_ns\": 19000, \"parsed_past_events\": 0, \"view\": \"local_member\", \"network_executed\": false, \"recovery_benefit_measured\": false}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-B",
+        "/home/lry/moe-ub-cosim/experiments/checkpoint_signal/classify.py",
+        "--plan",
+        "/home/lry/moe-ub-cosim/runs/checkpoint_signal_20261030/study/first_dispatch.json",
+        "--events",
+        "/home/lry/moe-ub-cosim/runs/checkpoint_signal_20261030/study/observed/first_dispatch-local-full.jsonl",
+        "--view",
+        "final_only",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/checkpoint_signal_20261030/decisions/first_dispatch-local-final_only.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "stdout": "{\"schema_version\": \"checkpoint-consideration/1\", \"checkpoint_done\": false, \"whole_done\": false, \"consider_backup\": true, \"action\": \"consider_subject_to_budget\", \"deadline_ns\": 19000, \"parsed_past_events\": 1782, \"view\": \"final_only\", \"network_executed\": false, \"recovery_benefit_measured\": false}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-B",
+        "/home/lry/moe-ub-cosim/experiments/checkpoint_signal/classify.py",
+        "--plan",
+        "/home/lry/moe-ub-cosim/runs/checkpoint_signal_20261030/study/first_decode.json",
+        "--events",
+        "/home/lry/moe-ub-cosim/runs/checkpoint_signal_20261030/study/observed/first_decode-normal-full.jsonl",
+        "--view",
+        "all_members",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/checkpoint_signal_20261030/decisions/first_decode-normal-all_members.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "stdout": "{\"schema_version\": \"checkpoint-consideration/1\", \"checkpoint_done\": true, \"whole_done\": false, \"consider_backup\": false, \"action\": \"defer_needs_later_check\", \"deadline_ns\": 66000, \"parsed_past_events\": 5037, \"view\": \"all_members\", \"network_executed\": false, \"recovery_benefit_measured\": false}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-B",
+        "/home/lry/moe-ub-cosim/experiments/checkpoint_signal/classify.py",
+        "--plan",
+        "/home/lry/moe-ub-cosim/runs/checkpoint_signal_20261030/study/first_decode.json",
+        "--events",
+        "/home/lry/moe-ub-cosim/runs/checkpoint_signal_20261030/study/observed/first_decode-normal-minimal.jsonl",
+        "--view",
+        "local_member",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/checkpoint_signal_20261030/decisions/first_decode-normal-local_member.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "stdout": "{\"schema_version\": \"checkpoint-consideration/1\", \"checkpoint_done\": true, \"whole_done\": false, \"consider_backup\": false, \"action\": \"defer_needs_later_check\", \"deadline_ns\": 66000, \"parsed_past_events\": 1, \"view\": \"local_member\", \"network_executed\": false, \"recovery_benefit_measured\": false}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-B",
+        "/home/lry/moe-ub-cosim/experiments/checkpoint_signal/classify.py",
+        "--plan",
+        "/home/lry/moe-ub-cosim/runs/checkpoint_signal_20261030/study/first_decode.json",
+        "--events",
+        "/home/lry/moe-ub-cosim/runs/checkpoint_signal_20261030/study/observed/first_decode-normal-full.jsonl",
+        "--view",
+        "final_only",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/checkpoint_signal_20261030/decisions/first_decode-normal-final_only.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "stdout": "{\"schema_version\": \"checkpoint-consideration/1\", \"checkpoint_done\": false, \"whole_done\": false, \"consider_backup\": true, \"action\": \"consider_subject_to_budget\", \"deadline_ns\": 66000, \"parsed_past_events\": 5037, \"view\": \"final_only\", \"network_executed\": false, \"recovery_benefit_measured\": false}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-B",
+        "/home/lry/moe-ub-cosim/experiments/checkpoint_signal/classify.py",
+        "--plan",
+        "/home/lry/moe-ub-cosim/runs/checkpoint_signal_20261030/study/first_decode.json",
+        "--events",
+        "/home/lry/moe-ub-cosim/runs/checkpoint_signal_20261030/study/observed/first_decode-local-full.jsonl",
+        "--view",
+        "all_members",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/checkpoint_signal_20261030/decisions/first_decode-local-all_members.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "stdout": "{\"schema_version\": \"checkpoint-consideration/1\", \"checkpoint_done\": false, \"whole_done\": false, \"consider_backup\": true, \"action\": \"consider_subject_to_budget\", \"deadline_ns\": 66000, \"parsed_past_events\": 3458, \"view\": \"all_members\", \"network_executed\": false, \"recovery_benefit_measured\": false}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-B",
+        "/home/lry/moe-ub-cosim/experiments/checkpoint_signal/classify.py",
+        "--plan",
+        "/home/lry/moe-ub-cosim/runs/checkpoint_signal_20261030/study/first_decode.json",
+        "--events",
+        "/home/lry/moe-ub-cosim/runs/checkpoint_signal_20261030/study/observed/first_decode-local-minimal.jsonl",
+        "--view",
+        "local_member",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/checkpoint_signal_20261030/decisions/first_decode-local-local_member.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "stdout": "{\"schema_version\": \"checkpoint-consideration/1\", \"checkpoint_done\": false, \"whole_done\": false, \"consider_backup\": true, \"action\": \"consider_subject_to_budget\", \"deadline_ns\": 66000, \"parsed_past_events\": 0, \"view\": \"local_member\", \"network_executed\": false, \"recovery_benefit_measured\": false}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-B",
+        "/home/lry/moe-ub-cosim/experiments/checkpoint_signal/classify.py",
+        "--plan",
+        "/home/lry/moe-ub-cosim/runs/checkpoint_signal_20261030/study/first_decode.json",
+        "--events",
+        "/home/lry/moe-ub-cosim/runs/checkpoint_signal_20261030/study/observed/first_decode-local-full.jsonl",
+        "--view",
+        "final_only",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/checkpoint_signal_20261030/decisions/first_decode-local-final_only.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "stdout": "{\"schema_version\": \"checkpoint-consideration/1\", \"checkpoint_done\": false, \"whole_done\": false, \"consider_backup\": true, \"action\": \"consider_subject_to_budget\", \"deadline_ns\": 66000, \"parsed_past_events\": 3458, \"view\": \"final_only\", \"network_executed\": false, \"recovery_benefit_measured\": false}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-B",
+        "/home/lry/moe-ub-cosim/experiments/checkpoint_signal/classify.py",
+        "--plan",
+        "/home/lry/moe-ub-cosim/runs/checkpoint_signal_20261030/study/complete_segment.json",
+        "--events",
+        "/home/lry/moe-ub-cosim/runs/checkpoint_signal_20261030/study/observed/complete_segment-normal-full.jsonl",
+        "--view",
+        "all_members",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/checkpoint_signal_20261030/decisions/complete_segment-normal-all_members.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "stdout": "{\"schema_version\": \"checkpoint-consideration/1\", \"checkpoint_done\": true, \"whole_done\": true, \"consider_backup\": false, \"action\": \"skip_after_whole_result\", \"deadline_ns\": 127000, \"parsed_past_events\": 9422, \"view\": \"all_members\", \"network_executed\": false, \"recovery_benefit_measured\": false}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-B",
+        "/home/lry/moe-ub-cosim/experiments/checkpoint_signal/classify.py",
+        "--plan",
+        "/home/lry/moe-ub-cosim/runs/checkpoint_signal_20261030/study/complete_segment.json",
+        "--events",
+        "/home/lry/moe-ub-cosim/runs/checkpoint_signal_20261030/study/observed/complete_segment-normal-minimal.jsonl",
+        "--view",
+        "local_member",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/checkpoint_signal_20261030/decisions/complete_segment-normal-local_member.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "stdout": "{\"schema_version\": \"checkpoint-consideration/1\", \"checkpoint_done\": true, \"whole_done\": true, \"consider_backup\": false, \"action\": \"skip_after_whole_result\", \"deadline_ns\": 127000, \"parsed_past_events\": 1, \"view\": \"local_member\", \"network_executed\": false, \"recovery_benefit_measured\": false}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-B",
+        "/home/lry/moe-ub-cosim/experiments/checkpoint_signal/classify.py",
+        "--plan",
+        "/home/lry/moe-ub-cosim/runs/checkpoint_signal_20261030/study/complete_segment.json",
+        "--events",
+        "/home/lry/moe-ub-cosim/runs/checkpoint_signal_20261030/study/observed/complete_segment-normal-full.jsonl",
+        "--view",
+        "final_only",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/checkpoint_signal_20261030/decisions/complete_segment-normal-final_only.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "stdout": "{\"schema_version\": \"checkpoint-consideration/1\", \"checkpoint_done\": true, \"whole_done\": true, \"consider_backup\": false, \"action\": \"skip_after_whole_result\", \"deadline_ns\": 127000, \"parsed_past_events\": 9422, \"view\": \"final_only\", \"network_executed\": false, \"recovery_benefit_measured\": false}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-B",
+        "/home/lry/moe-ub-cosim/experiments/checkpoint_signal/classify.py",
+        "--plan",
+        "/home/lry/moe-ub-cosim/runs/checkpoint_signal_20261030/study/complete_segment.json",
+        "--events",
+        "/home/lry/moe-ub-cosim/runs/checkpoint_signal_20261030/study/observed/complete_segment-local-full.jsonl",
+        "--view",
+        "all_members",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/checkpoint_signal_20261030/decisions/complete_segment-local-all_members.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "stdout": "{\"schema_version\": \"checkpoint-consideration/1\", \"checkpoint_done\": false, \"whole_done\": false, \"consider_backup\": true, \"action\": \"consider_subject_to_budget\", \"deadline_ns\": 127000, \"parsed_past_events\": 7425, \"view\": \"all_members\", \"network_executed\": false, \"recovery_benefit_measured\": false}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-B",
+        "/home/lry/moe-ub-cosim/experiments/checkpoint_signal/classify.py",
+        "--plan",
+        "/home/lry/moe-ub-cosim/runs/checkpoint_signal_20261030/study/complete_segment.json",
+        "--events",
+        "/home/lry/moe-ub-cosim/runs/checkpoint_signal_20261030/study/observed/complete_segment-local-minimal.jsonl",
+        "--view",
+        "local_member",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/checkpoint_signal_20261030/decisions/complete_segment-local-local_member.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "stdout": "{\"schema_version\": \"checkpoint-consideration/1\", \"checkpoint_done\": false, \"whole_done\": false, \"consider_backup\": true, \"action\": \"consider_subject_to_budget\", \"deadline_ns\": 127000, \"parsed_past_events\": 0, \"view\": \"local_member\", \"network_executed\": false, \"recovery_benefit_measured\": false}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-B",
+        "/home/lry/moe-ub-cosim/experiments/checkpoint_signal/classify.py",
+        "--plan",
+        "/home/lry/moe-ub-cosim/runs/checkpoint_signal_20261030/study/complete_segment.json",
+        "--events",
+        "/home/lry/moe-ub-cosim/runs/checkpoint_signal_20261030/study/observed/complete_segment-local-full.jsonl",
+        "--view",
+        "final_only",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/checkpoint_signal_20261030/decisions/complete_segment-local-final_only.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "stdout": "{\"schema_version\": \"checkpoint-consideration/1\", \"checkpoint_done\": false, \"whole_done\": false, \"consider_backup\": true, \"action\": \"consider_subject_to_budget\", \"deadline_ns\": 127000, \"parsed_past_events\": 7425, \"view\": \"final_only\", \"network_executed\": false, \"recovery_benefit_measured\": false}\n",
+      "stderr": ""
+    }
+  ],
+  "portable_minimal_commands": [
+    {
+      "command": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-B",
+        "/home/lry/moe-ub-cosim/experiments/checkpoint_signal/classify.py",
+        "--plan",
+        "first_dispatch.json",
+        "--events",
+        "first_dispatch-normal.jsonl",
+        "--view",
+        "local_member",
+        "--output",
+        "first_dispatch-normal-decision.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim/runs/checkpoint_signal_20261030/portable-check",
+      "exit_code": 0,
+      "stdout": "{\"schema_version\": \"checkpoint-consideration/1\", \"checkpoint_done\": true, \"whole_done\": false, \"consider_backup\": false, \"action\": \"defer_needs_later_check\", \"deadline_ns\": 19000, \"parsed_past_events\": 1, \"view\": \"local_member\", \"network_executed\": false, \"recovery_benefit_measured\": false}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-B",
+        "/home/lry/moe-ub-cosim/experiments/checkpoint_signal/classify.py",
+        "--plan",
+        "first_dispatch.json",
+        "--events",
+        "first_dispatch-local.jsonl",
+        "--view",
+        "local_member",
+        "--output",
+        "first_dispatch-local-decision.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim/runs/checkpoint_signal_20261030/portable-check",
+      "exit_code": 0,
+      "stdout": "{\"schema_version\": \"checkpoint-consideration/1\", \"checkpoint_done\": false, \"whole_done\": false, \"consider_backup\": true, \"action\": \"consider_subject_to_budget\", \"deadline_ns\": 19000, \"parsed_past_events\": 0, \"view\": \"local_member\", \"network_executed\": false, \"recovery_benefit_measured\": false}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-B",
+        "/home/lry/moe-ub-cosim/experiments/checkpoint_signal/classify.py",
+        "--plan",
+        "first_decode.json",
+        "--events",
+        "first_decode-normal.jsonl",
+        "--view",
+        "local_member",
+        "--output",
+        "first_decode-normal-decision.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim/runs/checkpoint_signal_20261030/portable-check",
+      "exit_code": 0,
+      "stdout": "{\"schema_version\": \"checkpoint-consideration/1\", \"checkpoint_done\": true, \"whole_done\": false, \"consider_backup\": false, \"action\": \"defer_needs_later_check\", \"deadline_ns\": 66000, \"parsed_past_events\": 1, \"view\": \"local_member\", \"network_executed\": false, \"recovery_benefit_measured\": false}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-B",
+        "/home/lry/moe-ub-cosim/experiments/checkpoint_signal/classify.py",
+        "--plan",
+        "first_decode.json",
+        "--events",
+        "first_decode-local.jsonl",
+        "--view",
+        "local_member",
+        "--output",
+        "first_decode-local-decision.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim/runs/checkpoint_signal_20261030/portable-check",
+      "exit_code": 0,
+      "stdout": "{\"schema_version\": \"checkpoint-consideration/1\", \"checkpoint_done\": false, \"whole_done\": false, \"consider_backup\": true, \"action\": \"consider_subject_to_budget\", \"deadline_ns\": 66000, \"parsed_past_events\": 0, \"view\": \"local_member\", \"network_executed\": false, \"recovery_benefit_measured\": false}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-B",
+        "/home/lry/moe-ub-cosim/experiments/checkpoint_signal/classify.py",
+        "--plan",
+        "complete_segment.json",
+        "--events",
+        "complete_segment-normal.jsonl",
+        "--view",
+        "local_member",
+        "--output",
+        "complete_segment-normal-decision.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim/runs/checkpoint_signal_20261030/portable-check",
+      "exit_code": 0,
+      "stdout": "{\"schema_version\": \"checkpoint-consideration/1\", \"checkpoint_done\": true, \"whole_done\": true, \"consider_backup\": false, \"action\": \"skip_after_whole_result\", \"deadline_ns\": 127000, \"parsed_past_events\": 1, \"view\": \"local_member\", \"network_executed\": false, \"recovery_benefit_measured\": false}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+        "-B",
+        "/home/lry/moe-ub-cosim/experiments/checkpoint_signal/classify.py",
+        "--plan",
+        "complete_segment.json",
+        "--events",
+        "complete_segment-local.jsonl",
+        "--view",
+        "local_member",
+        "--output",
+        "complete_segment-local-decision.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim/runs/checkpoint_signal_20261030/portable-check",
+      "exit_code": 0,
+      "stdout": "{\"schema_version\": \"checkpoint-consideration/1\", \"checkpoint_done\": false, \"whole_done\": false, \"consider_backup\": true, \"action\": \"consider_subject_to_budget\", \"deadline_ns\": 127000, \"parsed_past_events\": 0, \"view\": \"local_member\", \"network_executed\": false, \"recovery_benefit_measured\": false}\n",
+      "stderr": ""
+    }
+  ],
+  "old_networks_unchanged": 2,
+  "new_network_executions": 0,
+  "actual_notifications_generated": 0,
+  "new_platform_policy_implemented": false,
+  "recovery_benefit_measured": false,
+  "new_algorithm_benefit_proven": false,
+  "overall_goal_complete": false
+}

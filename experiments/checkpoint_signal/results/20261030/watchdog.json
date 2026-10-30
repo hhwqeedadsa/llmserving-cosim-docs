@@ -1,0 +1,88 @@
+{
+  "passed": true,
+  "normal_max_post_to_ack_ns": 17347,
+  "normal_calibrated_timeout_ns": 18000,
+  "references": {
+    "documented_example": {
+      "timeout_ns": 20000,
+      "conditions": {
+        "normal": {
+          "considerations": [],
+          "count": 0,
+          "same_time_ambiguous": [],
+          "first_nominal_deadline_ns": null,
+          "delay_from_phase_check_ns": null
+        },
+        "local": {
+          "considerations": [
+            {
+              "message": 37,
+              "send_post_ns": 1030,
+              "deadline_ns": 21030
+            },
+            {
+              "message": 68,
+              "send_post_ns": 1030,
+              "deadline_ns": 21030
+            },
+            {
+              "message": 99,
+              "send_post_ns": 1030,
+              "deadline_ns": 21030
+            }
+          ],
+          "count": 3,
+          "same_time_ambiguous": [],
+          "first_nominal_deadline_ns": 21030,
+          "delay_from_phase_check_ns": 2030
+        }
+      }
+    },
+    "normal_calibrated": {
+      "timeout_ns": 18000,
+      "conditions": {
+        "normal": {
+          "considerations": [],
+          "count": 0,
+          "same_time_ambiguous": [],
+          "first_nominal_deadline_ns": null,
+          "delay_from_phase_check_ns": null
+        },
+        "local": {
+          "considerations": [
+            {
+              "message": 37,
+              "send_post_ns": 1030,
+              "deadline_ns": 19030
+            },
+            {
+              "message": 68,
+              "send_post_ns": 1030,
+              "deadline_ns": 19030
+            },
+            {
+              "message": 99,
+              "send_post_ns": 1030,
+              "deadline_ns": 19030
+            }
+          ],
+          "count": 3,
+          "same_time_ambiguous": [],
+          "first_nominal_deadline_ns": 19030,
+          "delay_from_phase_check_ns": 30
+        }
+      }
+    }
+  },
+  "actual_notifications_generated": 0,
+  "new_network_executions": 0,
+  "complete_call_watchdog_integration_implemented": false,
+  "recovery_benefit_measured": false,
+  "source_sha256": {
+    "backend/rdma/source_ack_watchdog.hh": "d67951515bbaea31f6ec714cf381751062b2365a7a1495dceb23eaae03e1242e",
+    "docs/source_ack_watchdog.md": "4bb6a5dcba4d999ea661fc04db454a53abe9922a781f85000820278569290679",
+    "experiments/checkpoint_signal/watchdog_protocol.md": "d0466f9c99ec48df08fc26ee98864cd72b4ba2556c3e436f4fdefffe35660a7e",
+    "experiments/checkpoint_signal/watchdog_reference.py": "9242614cb7553475422eaf99728e01a52b4995e22a78cde04577381ebdade4fe"
+  },
+  "scope": "Reference predicates over first Dispatch only; no actual watchdog in saved controls, no new notification, no action, no full-service notification budget validation. Whole-call currently rejects watchdog combination."
+}

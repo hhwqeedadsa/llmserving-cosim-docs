@@ -1,0 +1,1553 @@
+{
+  "passed": true,
+  "platform_implementation_commit": "1ae9fc2bc4bffb405a472a435b7de6a8ab968639",
+  "method_and_count_guard_commit": "3a56a099c1",
+  "platform_actual_acceptance_commit": "d2cc72cf28",
+  "source_sha256": {
+    "experiments/multicall_externality/protocol.md": "823c30a8eedea533cdaf3fdd75104f54dac0878e2d0ea6dbe5d6c86a6299f313",
+    "experiments/multicall_externality/prepare.py": "6d520975c771478f439287abc9732973969412a9206c7f07638a9f2ce3e91274",
+    "experiments/multicall_externality/analyze.py": "239e5e7d60024566e0eb9a972b1f4ef0c65f0c085c803b010c7597374dcf31e7",
+    "experiments/multicall_externality/plot.py": "484f5f3c792e2c50df90ce399b5bad51ca98cf83a660594709cea192037b602f",
+    "experiments/multicall_externality/report.py": "c25db0c1b55e9162b71f48f16dcfa311fe60e49d59d9baf5825b02a95d96039b",
+    "experiments/multicall_externality/README.md": "9e921d7c0d33a1ede96b2dd1517b4bc5aeb480d7f13ae9239f9628bd627bcbeb",
+    "tests/integration/check_multicall_run.py": "7487e14dcdf2cf6af5462e5025636a1e9c31cac7fdcfbfbc1cce40465aec055a",
+    "docs/tasks/current.md": "5829e06e84d1c5d647ed1849cbe4e55709d9328584e762f3bfbeb361d6d1e149"
+  },
+  "backend": {
+    "path": "/home/lry/moe-ub-cosim/runs/delayed_whole_20261030/build/ns3.42-moe-rdma-service",
+    "sha256": "6d9680165ba06a7d1e8e15fd166ba2a28babba7902fbb7d761d3d6afafdf01a3"
+  },
+  "loaded_ns3_libraries": {
+    "/dev/shm/moe-heavy-loss-20261028/build/output/lib/libns3.42-applications.so": "25c9ea0548421f52ebf8191c8b662e1ddb0f63c546fd544c5dc405a4e062ed72",
+    "/dev/shm/moe-heavy-loss-20261028/build/output/lib/libns3.42-point-to-point.so": "5113fd7048c367120119d339007550efaf059a25b0e82f6798ba7e523d626839",
+    "/dev/shm/moe-heavy-loss-20261028/build/output/lib/libns3.42-internet.so": "43339f38fb0502c00c5f19537f6ba6771a168200cd7c83529a12a05b3d2e27f0",
+    "/dev/shm/moe-heavy-loss-20261028/build/output/lib/libns3.42-traffic-control.so": "b52a47933b85e2f61f9a94f29a2871aed9e5941e0cec0e9c9f03570ad15ddc99",
+    "/dev/shm/moe-heavy-loss-20261028/build/output/lib/libns3.42-network.so": "b94272a020f3438347a8bde2b3fa10355d40b09e96792232b3198dac87cd4b94",
+    "/dev/shm/moe-heavy-loss-20261028/build/output/lib/libns3.42-core.so": "4e06c366e439e338d6acaa1f5e802c05dcce8df10b1ba500b83dd945ed2e5f35",
+    "/dev/shm/moe-heavy-loss-20261028/build/output/lib/libns3.42-stats.so": "9f211655e5fe19ade99d1419bdcbcb41618dcaa1fbcba6ab4fa8ee65fb9ace98",
+    "/dev/shm/moe-heavy-loss-20261028/build/output/lib/libns3.42-bridge.so": "28f3b410e4f388e13113dee45b4ade98e90da59e99abb56179994d6f0ee797f5"
+  },
+  "old_six_networks_unchanged": {
+    "whole_call_20261030/normal": {
+      "files": 290,
+      "hash_manifest_sha256": "dff75dc88f78cc2dd504f51894751b780395eece53f46223e7e153dbc91685cc"
+    },
+    "whole_call_20261030/local": {
+      "files": 290,
+      "hash_manifest_sha256": "84cfafb486ec87d64648743b908859386f44e05b6032abd9eb0964459be59703"
+    },
+    "whole_control_20261030/normal": {
+      "files": 223,
+      "hash_manifest_sha256": "f0623ac49c47bfa322e9eab49dea0df58695474fea4656bcf70621265f35fdc5"
+    },
+    "whole_control_20261030/local": {
+      "files": 223,
+      "hash_manifest_sha256": "8aa180d149d57d3b2bdd77a720bf06018d9081c350a791a9743d694443084aea"
+    },
+    "delayed_whole_20261030/normal": {
+      "files": 225,
+      "hash_manifest_sha256": "a9422888c01610547457485fef7516f16901778b76bbfdae2169a22547b1b0b6"
+    },
+    "delayed_whole_20261030/local": {
+      "files": 290,
+      "hash_manifest_sha256": "068d21ea616d1694fa006c1c6b06cf62018d43f264f9fe4a7612655d032a7bc6"
+    }
+  },
+  "executions": {
+    "control-normal": {
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--config",
+        "runs/multicall_externality_20261030/study-counted/input/service-control.json",
+        "--protocol",
+        "runs/multicall_externality_20261030/study-counted/input/rdma-multicall-normal.json",
+        "--topology",
+        "runs/multicall_externality_20261030/study-counted/input/topology",
+        "--backend",
+        "runs/delayed_whole_20261030/build/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "runs/multicall_externality_20261030/study-counted/control-normal"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-30T15:34:45.779526+00:00",
+      "ended_utc": "2026-10-30T15:34:49.635437+00:00",
+      "cli_exit_code": 0,
+      "native_exit_code": 0,
+      "status": "completed",
+      "artifact_files": 237,
+      "hash_manifest_sha256": "77ac5fa8da6bedb6fe7e50f0053a5434b549bf6230a3e26961837b61fa14a942",
+      "principal_sha256": {
+        "input.json": "373c4fffb37d4823ee800e7aad7beedb9c9656b05d5af6ae51359f0d3ebc26c0",
+        "rdma.json": "29255ec614da092357b4052de6d9be8fe6b2475de53e0929de3787563efe875c",
+        "topology.json": "5389993e9aa1dfc148b4713b0a2b0c0521de24b41b74060e2db7eb9f048c444f",
+        "frontend.json": "9a749acbf77ef73e869e1cc9a77317863a82bd9ab6911b7375cec8681f9c5462",
+        "result.json": "bf18cde0a3176174b56f88fbc978950edd8e7c29446f5ff5d341d0bcc618b505",
+        "verification.json": "19d7c1153236f8b9cc9c58b97dd3f8f3d54fd75cdb151e223398c6df9b5dd74c"
+      },
+      "native_monitor": {
+        "schema_version": "moe-ub-host-probe/1",
+        "command": [
+          "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+          "-m",
+          "moe_ub_cosim.scaleout_service",
+          "--worker",
+          "/home/lry/moe-ub-cosim/runs/multicall_externality_20261030/study-counted/control-normal/input.json",
+          "/home/lry/moe-ub-cosim/runs/multicall_externality_20261030/study-counted/control-normal",
+          "/home/lry/moe-ub-cosim/runs/multicall_externality_20261030/study-counted/control-normal/rdma.json",
+          "/home/lry/moe-ub-cosim/runs/delayed_whole_20261030/build/ns3.42-moe-rdma-service",
+          "/home/lry/tools/protobuf/bin/protoc",
+          "/home/lry/moe-ub-cosim/runs/multicall_externality_20261030/study-counted/control-normal"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "started_utc": "2026-10-30T15:34:46.477992+00:00",
+        "limits": {
+          "sampled_group_rss_bytes": 1073741824,
+          "per_process_address_bytes": 2147483648,
+          "artifact_bytes": 134217728,
+          "wall_seconds": 60.0
+        },
+        "peak_sampled_group_rss_bytes": 211197952,
+        "peak_sampled_processes": 2,
+        "status": "completed",
+        "workload_semantics_validated": false,
+        "artifact_roots": [
+          "/home/lry/moe-ub-cosim/runs/multicall_externality_20261030/study-counted/control-normal"
+        ],
+        "peak_sampled_artifact_bytes": 38137856,
+        "min_free_bytes": 8589934592,
+        "rss_scope": "owned_process_tree_including_detached_descendants",
+        "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+        "disk_sample_interval_seconds": 1.0,
+        "peak_sampled_artifact_apparent_bytes": 37396611,
+        "peak_sampled_artifact_allocated_bytes": 38137856,
+        "process_group": 903673,
+        "child_exit_code": 0,
+        "remaining_live_group_pids": [],
+        "ended_utc": "2026-10-30T15:34:48.036174+00:00",
+        "wall_seconds": 1.5581992900115438,
+        "max_waited_child_rss_kib": 132620,
+        "artifact_bytes_before_report": 4037,
+        "aggregate_artifact_bytes_before_report": 38137856,
+        "aggregate_artifact_usage_before_report": {
+          "apparent_bytes": 37396611,
+          "allocated_bytes": 38137856
+        }
+      }
+    },
+    "treatment-normal": {
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--config",
+        "runs/multicall_externality_20261030/study-counted/input/service-multicall.json",
+        "--protocol",
+        "runs/multicall_externality_20261030/study-counted/input/rdma-multicall-normal.json",
+        "--topology",
+        "runs/multicall_externality_20261030/study-counted/input/topology",
+        "--backend",
+        "runs/delayed_whole_20261030/build/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "runs/multicall_externality_20261030/study-counted/treatment-normal"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-30T15:36:42.171031+00:00",
+      "ended_utc": "2026-10-30T15:36:46.005811+00:00",
+      "cli_exit_code": 0,
+      "native_exit_code": 0,
+      "status": "completed",
+      "artifact_files": 237,
+      "hash_manifest_sha256": "6915403f4ea8188029ded5c9f5cb0065a83ac2eab3c953a67a419284c510e9f2",
+      "principal_sha256": {
+        "input.json": "430e18532ac5acef03a5b22158e41a904f1c98946a28c42ca91528a5f41cb612",
+        "rdma.json": "29255ec614da092357b4052de6d9be8fe6b2475de53e0929de3787563efe875c",
+        "topology.json": "5389993e9aa1dfc148b4713b0a2b0c0521de24b41b74060e2db7eb9f048c444f",
+        "frontend.json": "3cf20604ac1b30587ff9c6fc54cac03377eadbdb749dd0f8b5bea40f44902545",
+        "result.json": "af720beb82aeb89a450a241b544b49b644a47df9152fc417a0906fd89d46468c",
+        "verification.json": "19d7c1153236f8b9cc9c58b97dd3f8f3d54fd75cdb151e223398c6df9b5dd74c"
+      },
+      "native_monitor": {
+        "schema_version": "moe-ub-host-probe/1",
+        "command": [
+          "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+          "-m",
+          "moe_ub_cosim.scaleout_service",
+          "--worker",
+          "/home/lry/moe-ub-cosim/runs/multicall_externality_20261030/study-counted/treatment-normal/input.json",
+          "/home/lry/moe-ub-cosim/runs/multicall_externality_20261030/study-counted/treatment-normal",
+          "/home/lry/moe-ub-cosim/runs/multicall_externality_20261030/study-counted/treatment-normal/rdma.json",
+          "/home/lry/moe-ub-cosim/runs/delayed_whole_20261030/build/ns3.42-moe-rdma-service",
+          "/home/lry/tools/protobuf/bin/protoc",
+          "/home/lry/moe-ub-cosim/runs/multicall_externality_20261030/study-counted/treatment-normal"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "started_utc": "2026-10-30T15:36:42.860291+00:00",
+        "limits": {
+          "sampled_group_rss_bytes": 1073741824,
+          "per_process_address_bytes": 2147483648,
+          "artifact_bytes": 134217728,
+          "wall_seconds": 60.0
+        },
+        "peak_sampled_group_rss_bytes": 215330816,
+        "peak_sampled_processes": 2,
+        "status": "completed",
+        "workload_semantics_validated": false,
+        "artifact_roots": [
+          "/home/lry/moe-ub-cosim/runs/multicall_externality_20261030/study-counted/treatment-normal"
+        ],
+        "peak_sampled_artifact_bytes": 38137856,
+        "min_free_bytes": 8589934592,
+        "rss_scope": "owned_process_tree_including_detached_descendants",
+        "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+        "disk_sample_interval_seconds": 1.0,
+        "peak_sampled_artifact_apparent_bytes": 37396766,
+        "peak_sampled_artifact_allocated_bytes": 38137856,
+        "process_group": 903712,
+        "child_exit_code": 0,
+        "remaining_live_group_pids": [],
+        "ended_utc": "2026-10-30T15:36:44.395979+00:00",
+        "wall_seconds": 1.5356957520125434,
+        "max_waited_child_rss_kib": 132548,
+        "artifact_bytes_before_report": 4034,
+        "aggregate_artifact_bytes_before_report": 38137856,
+        "aggregate_artifact_usage_before_report": {
+          "apparent_bytes": 37396766,
+          "allocated_bytes": 38137856
+        }
+      }
+    },
+    "control-local": {
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--config",
+        "runs/multicall_externality_20261030/study-counted/input/service-control.json",
+        "--protocol",
+        "runs/multicall_externality_20261030/study-counted/input/rdma-multicall-local.json",
+        "--topology",
+        "runs/multicall_externality_20261030/study-counted/input/topology",
+        "--backend",
+        "runs/delayed_whole_20261030/build/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "runs/multicall_externality_20261030/study-counted/control-local"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-30T15:38:50.771618+00:00",
+      "ended_utc": "2026-10-30T15:38:54.583403+00:00",
+      "cli_exit_code": 0,
+      "native_exit_code": 0,
+      "status": "completed",
+      "artifact_files": 237,
+      "hash_manifest_sha256": "87b2a827d4539e2a94ca10ba6e881bce6cf0878ac97beea968ac0d11c56c1ece",
+      "principal_sha256": {
+        "input.json": "373c4fffb37d4823ee800e7aad7beedb9c9656b05d5af6ae51359f0d3ebc26c0",
+        "rdma.json": "c0c474259d7efcdfb102accb6aba13dcc67e7f1697dfda97437b1665d8329406",
+        "topology.json": "5389993e9aa1dfc148b4713b0a2b0c0521de24b41b74060e2db7eb9f048c444f",
+        "frontend.json": "55be7713607d1bcfcba1d060aa71ede947b8b8e7becf0837c94eff8be942a473",
+        "result.json": "9013f0698b973fcbec08d5a3a2a78c1fcea832a394ae82a2b9984f574cb587f0",
+        "verification.json": "82184db59bfd60faf0013079a3d498fed4fba2e296c44519b24a26a5ed04d8e8"
+      },
+      "native_monitor": {
+        "schema_version": "moe-ub-host-probe/1",
+        "command": [
+          "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+          "-m",
+          "moe_ub_cosim.scaleout_service",
+          "--worker",
+          "/home/lry/moe-ub-cosim/runs/multicall_externality_20261030/study-counted/control-local/input.json",
+          "/home/lry/moe-ub-cosim/runs/multicall_externality_20261030/study-counted/control-local",
+          "/home/lry/moe-ub-cosim/runs/multicall_externality_20261030/study-counted/control-local/rdma.json",
+          "/home/lry/moe-ub-cosim/runs/delayed_whole_20261030/build/ns3.42-moe-rdma-service",
+          "/home/lry/tools/protobuf/bin/protoc",
+          "/home/lry/moe-ub-cosim/runs/multicall_externality_20261030/study-counted/control-local"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "started_utc": "2026-10-30T15:38:51.464300+00:00",
+        "limits": {
+          "sampled_group_rss_bytes": 1073741824,
+          "per_process_address_bytes": 2147483648,
+          "artifact_bytes": 134217728,
+          "wall_seconds": 60.0
+        },
+        "peak_sampled_group_rss_bytes": 212725760,
+        "peak_sampled_processes": 2,
+        "status": "completed",
+        "workload_semantics_validated": false,
+        "artifact_roots": [
+          "/home/lry/moe-ub-cosim/runs/multicall_externality_20261030/study-counted/control-local"
+        ],
+        "peak_sampled_artifact_bytes": 38113280,
+        "min_free_bytes": 8589934592,
+        "rss_scope": "owned_process_tree_including_detached_descendants",
+        "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+        "disk_sample_interval_seconds": 1.0,
+        "peak_sampled_artifact_apparent_bytes": 37373638,
+        "peak_sampled_artifact_allocated_bytes": 38113280,
+        "process_group": 903755,
+        "child_exit_code": 0,
+        "remaining_live_group_pids": [],
+        "ended_utc": "2026-10-30T15:38:53.016337+00:00",
+        "wall_seconds": 1.5520428249728866,
+        "max_waited_child_rss_kib": 131420,
+        "artifact_bytes_before_report": 4035,
+        "aggregate_artifact_bytes_before_report": 38113280,
+        "aggregate_artifact_usage_before_report": {
+          "apparent_bytes": 37373638,
+          "allocated_bytes": 38113280
+        }
+      }
+    },
+    "treatment-local": {
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--config",
+        "runs/multicall_externality_20261030/study-counted/input/service-multicall.json",
+        "--protocol",
+        "runs/multicall_externality_20261030/study-counted/input/rdma-multicall-local.json",
+        "--topology",
+        "runs/multicall_externality_20261030/study-counted/input/topology",
+        "--backend",
+        "runs/delayed_whole_20261030/build/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "runs/multicall_externality_20261030/study-counted/treatment-local"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-30T15:42:18.481380+00:00",
+      "ended_utc": "2026-10-30T15:42:22.747068+00:00",
+      "cli_exit_code": 0,
+      "native_exit_code": 0,
+      "status": "completed",
+      "artifact_files": 270,
+      "hash_manifest_sha256": "7593f776976c7a7a6af7410f900a855f1a05a31bd6dbbd16589ab600297b8b34",
+      "principal_sha256": {
+        "input.json": "430e18532ac5acef03a5b22158e41a904f1c98946a28c42ca91528a5f41cb612",
+        "rdma.json": "c0c474259d7efcdfb102accb6aba13dcc67e7f1697dfda97437b1665d8329406",
+        "topology.json": "5389993e9aa1dfc148b4713b0a2b0c0521de24b41b74060e2db7eb9f048c444f",
+        "frontend.json": "cf9d452eed7f8ebad89153e23524d5861c0a28d17452db4300118d21070b2374",
+        "result.json": "5ada533ff5b0a2e08c0ff7503a09d9b878499905d548a5c723a9904af5eb5e0e",
+        "verification.json": "12b57fb20ff8955acfb44cbe76ac792bcf57ce0e8cfd4936faa0a694e1371577"
+      },
+      "native_monitor": {
+        "schema_version": "moe-ub-host-probe/1",
+        "command": [
+          "/home/lry/moe-ub-cosim/.venv/frontend/bin/python",
+          "-m",
+          "moe_ub_cosim.scaleout_service",
+          "--worker",
+          "/home/lry/moe-ub-cosim/runs/multicall_externality_20261030/study-counted/treatment-local/input.json",
+          "/home/lry/moe-ub-cosim/runs/multicall_externality_20261030/study-counted/treatment-local",
+          "/home/lry/moe-ub-cosim/runs/multicall_externality_20261030/study-counted/treatment-local/rdma.json",
+          "/home/lry/moe-ub-cosim/runs/delayed_whole_20261030/build/ns3.42-moe-rdma-service",
+          "/home/lry/tools/protobuf/bin/protoc",
+          "/home/lry/moe-ub-cosim/runs/multicall_externality_20261030/study-counted/treatment-local"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "started_utc": "2026-10-30T15:42:19.185390+00:00",
+        "limits": {
+          "sampled_group_rss_bytes": 1073741824,
+          "per_process_address_bytes": 2147483648,
+          "artifact_bytes": 134217728,
+          "wall_seconds": 60.0
+        },
+        "peak_sampled_group_rss_bytes": 211120128,
+        "peak_sampled_processes": 2,
+        "status": "completed",
+        "workload_semantics_validated": false,
+        "artifact_roots": [
+          "/home/lry/moe-ub-cosim/runs/multicall_externality_20261030/study-counted/treatment-local"
+        ],
+        "peak_sampled_artifact_bytes": 39919616,
+        "min_free_bytes": 8589934592,
+        "rss_scope": "owned_process_tree_including_detached_descendants",
+        "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+        "disk_sample_interval_seconds": 1.0,
+        "peak_sampled_artifact_apparent_bytes": 39082232,
+        "peak_sampled_artifact_allocated_bytes": 39919616,
+        "process_group": 903828,
+        "child_exit_code": 0,
+        "remaining_live_group_pids": [],
+        "ended_utc": "2026-10-30T15:42:20.927172+00:00",
+        "wall_seconds": 1.7417861829744652,
+        "max_waited_child_rss_kib": 140076,
+        "artifact_bytes_before_report": 4603,
+        "aggregate_artifact_bytes_before_report": 39919616,
+        "aggregate_artifact_usage_before_report": {
+          "apparent_bytes": 39082232,
+          "allocated_bytes": 39919616
+        }
+      }
+    }
+  },
+  "stage_monitors": {
+    "monitors/cpu-initial/probe.json": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "unittest",
+        "-v",
+        "multicall_deadline_test",
+        "delayed_whole_test",
+        "whole_call_test",
+        "sparse_replay_test",
+        "active_groups_test",
+        "service_terminal_test",
+        "service_stream_test",
+        "scaleout_replay_test",
+        "execution_events_test",
+        "native_control_test"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-30T15:26:59.201299+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 1073741824,
+        "wall_seconds": 120.0
+      },
+      "peak_sampled_group_rss_bytes": 79228928,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/runs/multicall_externality_20261030"
+      ],
+      "peak_sampled_artifact_bytes": 20480,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 13516,
+      "peak_sampled_artifact_allocated_bytes": 20480,
+      "process_group": 903349,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-30T15:26:59.861995+00:00",
+      "wall_seconds": 0.6607174120144919,
+      "max_waited_child_rss_kib": 79480,
+      "artifact_bytes_before_report": 12677,
+      "aggregate_artifact_bytes_before_report": 20480,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 13516,
+        "allocated_bytes": 20480
+      }
+    },
+    "monitors/prepare-synthetic/probe.json": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "examples/scaleout_multicall/prepare.py",
+        "--output",
+        "runs/multicall_externality_20261030/synthetic-input"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-30T15:28:09.579529+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 1073741824,
+        "wall_seconds": 120.0
+      },
+      "peak_sampled_group_rss_bytes": 103157760,
+      "peak_sampled_processes": 5,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/runs/multicall_externality_20261030"
+      ],
+      "peak_sampled_artifact_bytes": 294912,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 218882,
+      "peak_sampled_artifact_allocated_bytes": 294912,
+      "process_group": 903369,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-30T15:28:10.125922+00:00",
+      "wall_seconds": 0.5464048500289209,
+      "max_waited_child_rss_kib": 23868,
+      "artifact_bytes_before_report": 2994,
+      "aggregate_artifact_bytes_before_report": 294912,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 218882,
+        "allocated_bytes": 294912
+      }
+    },
+    "monitors/cpu-added/probe.json": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "unittest",
+        "-v",
+        "multicall_deadline_test"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-30T15:29:12.672267+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 1073741824,
+        "wall_seconds": 120.0
+      },
+      "peak_sampled_group_rss_bytes": 77221888,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/runs/multicall_externality_20261030"
+      ],
+      "peak_sampled_artifact_bytes": 307200,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 223296,
+      "peak_sampled_artifact_allocated_bytes": 307200,
+      "process_group": 903411,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-30T15:29:13.225740+00:00",
+      "wall_seconds": 0.5534886349923909,
+      "max_waited_child_rss_kib": 77488,
+      "artifact_bytes_before_report": 2912,
+      "aggregate_artifact_bytes_before_report": 307200,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 223296,
+        "allocated_bytes": 307200
+      }
+    },
+    "monitors/offline-six/probe.json": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "runs/multicall_externality_20261030/offline.py"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-30T15:30:10.693690+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 1073741824,
+        "wall_seconds": 120.0
+      },
+      "peak_sampled_group_rss_bytes": 54665216,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/runs/multicall_externality_20261030"
+      ],
+      "peak_sampled_artifact_bytes": 495616,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 399953,
+      "peak_sampled_artifact_allocated_bytes": 495616,
+      "process_group": 903429,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-30T15:30:13.840825+00:00",
+      "wall_seconds": 3.1471447959775105,
+      "max_waited_child_rss_kib": 54424,
+      "artifact_bytes_before_report": 7673,
+      "aggregate_artifact_bytes_before_report": 495616,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 399953,
+        "allocated_bytes": 495616
+      }
+    },
+    "monitors/seal-platform/probe.json": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "runs/multicall_externality_20261030/seal_platform.py"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-30T15:30:45.436597+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 1073741824,
+        "wall_seconds": 120.0
+      },
+      "peak_sampled_group_rss_bytes": 6455296,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/runs/multicall_externality_20261030"
+      ],
+      "peak_sampled_artifact_bytes": 512000,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 403671,
+      "peak_sampled_artifact_allocated_bytes": 512000,
+      "process_group": 903443,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-30T15:30:45.562095+00:00",
+      "wall_seconds": 0.1255032269982621,
+      "max_waited_child_rss_kib": 21808,
+      "artifact_bytes_before_report": 561,
+      "aggregate_artifact_bytes_before_report": 512000,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 403671,
+        "allocated_bytes": 512000
+      }
+    },
+    "monitors/prepare-real/probe.json": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "experiments/multicall_externality/prepare.py",
+        "--known-manifest",
+        "data/moe-trace-small/manifest.json",
+        "--intake",
+        "experiments/route_coverage/results/local_additions_20261027/intake.json",
+        "--backend",
+        "runs/delayed_whole_20261030/build/ns3.42-moe-rdma-service",
+        "--output",
+        "runs/multicall_externality_20261030/study"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-30T15:32:34.387089+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 1073741824,
+        "wall_seconds": 120.0
+      },
+      "peak_sampled_group_rss_bytes": 109903872,
+      "peak_sampled_processes": 6,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/runs/multicall_externality_20261030"
+      ],
+      "peak_sampled_artifact_bytes": 1085440,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 903919,
+      "peak_sampled_artifact_allocated_bytes": 1085440,
+      "process_group": 903549,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-30T15:32:35.700857+00:00",
+      "wall_seconds": 1.3137743689585477,
+      "max_waited_child_rss_kib": 33568,
+      "artifact_bytes_before_report": 5384,
+      "aggregate_artifact_bytes_before_report": 1085440,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 903919,
+        "allocated_bytes": 1085440
+      }
+    },
+    "monitors/prepare-real-count-check/probe.json": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "experiments/multicall_externality/prepare.py",
+        "--known-manifest",
+        "data/moe-trace-small/manifest.json",
+        "--intake",
+        "experiments/route_coverage/results/local_additions_20261027/intake.json",
+        "--backend",
+        "runs/delayed_whole_20261030/build/ns3.42-moe-rdma-service",
+        "--output",
+        "runs/multicall_externality_20261030/study-counted"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-30T15:33:37.907222+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 1073741824,
+        "wall_seconds": 120.0
+      },
+      "peak_sampled_group_rss_bytes": 109838336,
+      "peak_sampled_processes": 6,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/runs/multicall_externality_20261030"
+      ],
+      "peak_sampled_artifact_bytes": 1662976,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 1404732,
+      "peak_sampled_artifact_allocated_bytes": 1662976,
+      "process_group": 903573,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-30T15:33:39.234042+00:00",
+      "wall_seconds": 1.326825276017189,
+      "max_waited_child_rss_kib": 33592,
+      "artifact_bytes_before_report": 5418,
+      "aggregate_artifact_bytes_before_report": 1662976,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 1404732,
+        "allocated_bytes": 1662976
+      }
+    },
+    "monitors/network-control-normal/probe.json": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--config",
+        "runs/multicall_externality_20261030/study-counted/input/service-control.json",
+        "--protocol",
+        "runs/multicall_externality_20261030/study-counted/input/rdma-multicall-normal.json",
+        "--topology",
+        "runs/multicall_externality_20261030/study-counted/input/topology",
+        "--backend",
+        "runs/delayed_whole_20261030/build/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "runs/multicall_externality_20261030/study-counted/control-normal"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-30T15:34:45.779526+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 1073741824,
+        "wall_seconds": 120.0
+      },
+      "peak_sampled_group_rss_bytes": 255606784,
+      "peak_sampled_processes": 4,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/runs/multicall_externality_20261030"
+      ],
+      "peak_sampled_artifact_bytes": 39829504,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 38817556,
+      "peak_sampled_artifact_allocated_bytes": 39829504,
+      "process_group": 903670,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-30T15:34:49.635437+00:00",
+      "wall_seconds": 3.8559142599697225,
+      "max_waited_child_rss_kib": 132620,
+      "artifact_bytes_before_report": 11230,
+      "aggregate_artifact_bytes_before_report": 39829504,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 38817556,
+        "allocated_bytes": 39829504
+      }
+    },
+    "monitors/network-treatment-normal/probe.json": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--config",
+        "runs/multicall_externality_20261030/study-counted/input/service-multicall.json",
+        "--protocol",
+        "runs/multicall_externality_20261030/study-counted/input/rdma-multicall-normal.json",
+        "--topology",
+        "runs/multicall_externality_20261030/study-counted/input/topology",
+        "--backend",
+        "runs/delayed_whole_20261030/build/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "runs/multicall_externality_20261030/study-counted/treatment-normal"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-30T15:36:42.171031+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 1073741824,
+        "wall_seconds": 120.0
+      },
+      "peak_sampled_group_rss_bytes": 248856576,
+      "peak_sampled_processes": 4,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/runs/multicall_externality_20261030"
+      ],
+      "peak_sampled_artifact_bytes": 77996032,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 76230813,
+      "peak_sampled_artifact_allocated_bytes": 77996032,
+      "process_group": 903710,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-30T15:36:46.005811+00:00",
+      "wall_seconds": 3.834782655991148,
+      "max_waited_child_rss_kib": 132548,
+      "artifact_bytes_before_report": 11268,
+      "aggregate_artifact_bytes_before_report": 77996032,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 76230813,
+        "allocated_bytes": 77996032
+      }
+    },
+    "monitors/network-control-local/probe.json": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--config",
+        "runs/multicall_externality_20261030/study-counted/input/service-control.json",
+        "--protocol",
+        "runs/multicall_externality_20261030/study-counted/input/rdma-multicall-local.json",
+        "--topology",
+        "runs/multicall_externality_20261030/study-counted/input/topology",
+        "--backend",
+        "runs/delayed_whole_20261030/build/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "runs/multicall_externality_20261030/study-counted/control-local"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-30T15:38:50.771618+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 1073741824,
+        "wall_seconds": 120.0
+      },
+      "peak_sampled_group_rss_bytes": 254640128,
+      "peak_sampled_processes": 4,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/runs/multicall_externality_20261030"
+      ],
+      "peak_sampled_artifact_bytes": 116137984,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 113620998,
+      "peak_sampled_artifact_allocated_bytes": 116137984,
+      "process_group": 903753,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-30T15:38:54.583403+00:00",
+      "wall_seconds": 3.8117924809921533,
+      "max_waited_child_rss_kib": 131420,
+      "artifact_bytes_before_report": 11338,
+      "aggregate_artifact_bytes_before_report": 116137984,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 113620998,
+        "allocated_bytes": 116137984
+      }
+    },
+    "monitors/network-treatment-local/probe.json": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--config",
+        "runs/multicall_externality_20261030/study-counted/input/service-multicall.json",
+        "--protocol",
+        "runs/multicall_externality_20261030/study-counted/input/rdma-multicall-local.json",
+        "--topology",
+        "runs/multicall_externality_20261030/study-counted/input/topology",
+        "--backend",
+        "runs/delayed_whole_20261030/build/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "runs/multicall_externality_20261030/study-counted/treatment-local"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-30T15:42:18.481380+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 1073741824,
+        "wall_seconds": 120.0
+      },
+      "peak_sampled_group_rss_bytes": 269545472,
+      "peak_sampled_processes": 4,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/runs/multicall_externality_20261030"
+      ],
+      "peak_sampled_artifact_bytes": 156086272,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 152720698,
+      "peak_sampled_artifact_allocated_bytes": 156086272,
+      "process_group": 903826,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-30T15:42:22.747068+00:00",
+      "wall_seconds": 4.265692986955401,
+      "max_waited_child_rss_kib": 140076,
+      "artifact_bytes_before_report": 12245,
+      "aggregate_artifact_bytes_before_report": 156086272,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 152720698,
+        "allocated_bytes": 156086272
+      }
+    },
+    "monitors/independent-analysis/probe.json": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "experiments/multicall_externality/analyze.py",
+        "--frozen",
+        "runs/multicall_externality_20261030/study-counted/frozen.json",
+        "--output",
+        "runs/multicall_externality_20261030/analysis"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-30T15:43:17.096234+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 1073741824,
+        "wall_seconds": 120.0
+      },
+      "peak_sampled_group_rss_bytes": 88023040,
+      "peak_sampled_processes": 1,
+      "status": "child_failed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/runs/multicall_externality_20261030"
+      ],
+      "peak_sampled_artifact_bytes": 156098560,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 152724965,
+      "peak_sampled_artifact_allocated_bytes": 156098560,
+      "process_group": 903932,
+      "child_exit_code": 1,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-30T15:43:17.719353+00:00",
+      "wall_seconds": 0.6231235129525885,
+      "max_waited_child_rss_kib": 85960,
+      "artifact_bytes_before_report": 2276,
+      "aggregate_artifact_bytes_before_report": 156098560,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 152724965,
+        "allocated_bytes": 156098560
+      }
+    },
+    "monitors/independent-analysis-normalized/probe.json": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "experiments/multicall_externality/analyze.py",
+        "--frozen",
+        "runs/multicall_externality_20261030/study-counted/frozen.json",
+        "--output",
+        "runs/multicall_externality_20261030/analysis-normalized"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-30T15:47:39.980374+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 1073741824,
+        "wall_seconds": 120.0
+      },
+      "peak_sampled_group_rss_bytes": 161386496,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/runs/multicall_externality_20261030"
+      ],
+      "peak_sampled_artifact_bytes": 156811264,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 153415481,
+      "peak_sampled_artifact_allocated_bytes": 156811264,
+      "process_group": 904181,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-30T15:47:41.920077+00:00",
+      "wall_seconds": 1.939705636992585,
+      "max_waited_child_rss_kib": 162724,
+      "artifact_bytes_before_report": 5373,
+      "aggregate_artifact_bytes_before_report": 156811264,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 153415481,
+        "allocated_bytes": 156811264
+      }
+    },
+    "monitors/acceptance-normal/probe.json": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "tests/integration/check_multicall_run.py",
+        "--run",
+        "runs/multicall_externality_20261030/study-counted/treatment-normal",
+        "--output",
+        "runs/multicall_externality_20261030/acceptance-normal"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-30T15:48:42.796731+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 1073741824,
+        "wall_seconds": 120.0
+      },
+      "peak_sampled_group_rss_bytes": 88133632,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/runs/multicall_externality_20261030"
+      ],
+      "peak_sampled_artifact_bytes": 195518464,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 191370522,
+      "peak_sampled_artifact_allocated_bytes": 195518464,
+      "process_group": 904325,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-30T15:48:54.148207+00:00",
+      "wall_seconds": 11.35148706601467,
+      "max_waited_child_rss_kib": 86068,
+      "artifact_bytes_before_report": 26858,
+      "aggregate_artifact_bytes_before_report": 194998272,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 190847124,
+        "allocated_bytes": 194998272
+      }
+    },
+    "monitors/independent-analysis-final/probe.json": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "experiments/multicall_externality/analyze.py",
+        "--frozen",
+        "runs/multicall_externality_20261030/study-counted/frozen.json",
+        "--output",
+        "runs/multicall_externality_20261030/analysis-final"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-30T15:49:10.085886+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 1073741824,
+        "wall_seconds": 120.0
+      },
+      "peak_sampled_group_rss_bytes": 164093952,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/runs/multicall_externality_20261030"
+      ],
+      "peak_sampled_artifact_bytes": 195727360,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 191549159,
+      "peak_sampled_artifact_allocated_bytes": 195727360,
+      "process_group": 904336,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-30T15:49:12.037336+00:00",
+      "wall_seconds": 1.9514547619619407,
+      "max_waited_child_rss_kib": 163320,
+      "artifact_bytes_before_report": 5735,
+      "aggregate_artifact_bytes_before_report": 195727360,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 191549159,
+        "allocated_bytes": 195727360
+      }
+    },
+    "monitors/acceptance-local/probe.json": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "tests/integration/check_multicall_run.py",
+        "--run",
+        "runs/multicall_externality_20261030/study-counted/treatment-local",
+        "--output",
+        "runs/multicall_externality_20261030/acceptance-local"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-30T15:49:19.233145+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 1073741824,
+        "wall_seconds": 120.0
+      },
+      "peak_sampled_group_rss_bytes": 102871040,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/runs/multicall_externality_20261030"
+      ],
+      "peak_sampled_artifact_bytes": 236351488,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 231323805,
+      "peak_sampled_artifact_allocated_bytes": 236351488,
+      "process_group": 904343,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-30T15:49:31.759942+00:00",
+      "wall_seconds": 12.526797467959113,
+      "max_waited_child_rss_kib": 100460,
+      "artifact_bytes_before_report": 29517,
+      "aggregate_artifact_bytes_before_report": 235700224,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 230668930,
+        "allocated_bytes": 235700224
+      }
+    },
+    "monitors/figures/probe.json": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "experiments/multicall_externality/plot.py",
+        "--analysis",
+        "runs/multicall_externality_20261030/analysis-final",
+        "--output",
+        "runs/multicall_externality_20261030/figures"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-30T15:50:55.305651+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 1073741824,
+        "wall_seconds": 120.0
+      },
+      "peak_sampled_group_rss_bytes": 91975680,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/runs/multicall_externality_20261030"
+      ],
+      "peak_sampled_artifact_bytes": 235999232,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 230955218,
+      "peak_sampled_artifact_allocated_bytes": 235999232,
+      "process_group": 904441,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-30T15:50:56.793844+00:00",
+      "wall_seconds": 1.4882004300015979,
+      "max_waited_child_rss_kib": 89820,
+      "artifact_bytes_before_report": 3467,
+      "aggregate_artifact_bytes_before_report": 235999232,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 230955218,
+        "allocated_bytes": 235999232
+      }
+    },
+    "monitors/report/probe.json": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "experiments/multicall_externality/report.py",
+        "--analysis",
+        "runs/multicall_externality_20261030/analysis-final",
+        "--figures",
+        "runs/multicall_externality_20261030/figures",
+        "--frozen",
+        "runs/multicall_externality_20261030/study-counted/frozen.json",
+        "--output",
+        "experiments/multicall_externality/results/20261030"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-30T15:52:34.884409+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 1073741824,
+        "wall_seconds": 120.0
+      },
+      "peak_sampled_group_rss_bytes": 7491584,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/runs/multicall_externality_20261030"
+      ],
+      "peak_sampled_artifact_bytes": 236011520,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 230957371,
+      "peak_sampled_artifact_allocated_bytes": 236011520,
+      "process_group": 904473,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-30T15:52:35.113726+00:00",
+      "wall_seconds": 0.22931924497243017,
+      "max_waited_child_rss_kib": 12468,
+      "artifact_bytes_before_report": 563,
+      "aggregate_artifact_bytes_before_report": 236011520,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 230957371,
+        "allocated_bytes": 236011520
+      }
+    },
+    "monitors/dependencies-final/probe.json": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "scripts/check_deps.py"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-30T15:52:48.684910+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 1073741824,
+        "wall_seconds": 120.0
+      },
+      "peak_sampled_group_rss_bytes": 19111936,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/runs/multicall_externality_20261030"
+      ],
+      "peak_sampled_artifact_bytes": 236023808,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 230962276,
+      "peak_sampled_artifact_allocated_bytes": 236023808,
+      "process_group": 904485,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-30T15:52:49.122233+00:00",
+      "wall_seconds": 0.4373254050151445,
+      "max_waited_child_rss_kib": 19688,
+      "artifact_bytes_before_report": 3154,
+      "aggregate_artifact_bytes_before_report": 236023808,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 230962276,
+        "allocated_bytes": 236023808
+      }
+    },
+    "monitors/report-final/probe.json": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        ".venv/frontend/bin/python",
+        "-B",
+        "experiments/multicall_externality/report.py",
+        "--analysis",
+        "runs/multicall_externality_20261030/analysis-final",
+        "--figures",
+        "runs/multicall_externality_20261030/figures",
+        "--frozen",
+        "runs/multicall_externality_20261030/study-counted/frozen.json",
+        "--output",
+        "runs/multicall_externality_20261030/delivery-final"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-30T15:55:35.156145+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 1073741824,
+        "wall_seconds": 120.0
+      },
+      "peak_sampled_group_rss_bytes": 7499776,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/runs/multicall_externality_20261030"
+      ],
+      "peak_sampled_artifact_bytes": 237060096,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 231961272,
+      "peak_sampled_artifact_allocated_bytes": 237060096,
+      "process_group": 904682,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-30T15:55:35.385441+00:00",
+      "wall_seconds": 0.2292901090113446,
+      "max_waited_child_rss_kib": 12476,
+      "artifact_bytes_before_report": 562,
+      "aggregate_artifact_bytes_before_report": 237060096,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 231961272,
+        "allocated_bytes": 237060096
+      }
+    }
+  },
+  "portable_artifact_sha256": {
+    "analysis.json": "3f3f5dec7e6f0b80fe68807037d16508da1850d116ef6a140b6a1c974fb7a725",
+    "frozen.json": "42a815e2e153f9be41680e82c61751a4eee02aa697aa5463219d350dd9fe80fb",
+    "report.html": "3313d46b49a689f594884e06455cc2ecc1030f5bb347ed34dc28c3fedbd973a7",
+    "README.md": "c5216b5b730c6aac3686838856c60c62e891a47d5c18f60693b8e054a88a8b85",
+    "metrics/control-normal-switch-residence.csv": "9607042277b5ea1bd33605df6a66469f14022465557eea8d7bb16ed0c0d8fb4c",
+    "metrics/control-normal-queue-integrals.csv": "b3cadd6011b345a91844c116c191f6bcd55902f098895dc32341074a3c09407a",
+    "metrics/treatment-normal-switch-residence.csv": "9607042277b5ea1bd33605df6a66469f14022465557eea8d7bb16ed0c0d8fb4c",
+    "metrics/treatment-normal-queue-integrals.csv": "b3cadd6011b345a91844c116c191f6bcd55902f098895dc32341074a3c09407a",
+    "metrics/control-local-switch-residence.csv": "a1d0739b5c81fcf0c4e70e86b10df913c43f627c64140f7b5e72ed1f118ae8fe",
+    "metrics/control-local-queue-integrals.csv": "fa52cf8382aa0074aac5874a9da3a4867a53d39ef65e3e13e38518cdf8acf312",
+    "metrics/treatment-local-switch-residence.csv": "30ff1e2aa7148c576611a3dcf73aa4557c603134dc10b679653a01511e5070a2",
+    "metrics/treatment-local-queue-integrals.csv": "d2299946108f2dcb03cacba954c33e7a05da92329133eac0ed4684c2426ee334",
+    "metrics/normal-healthy-matched.csv": "462c0281a16bc845029aad027c42770b7451f8b0678da48de8c2a5e0f2d41654",
+    "metrics/local-healthy-matched.csv": "5d76b0f3b8741a8a97408ff3daaea49a922d765e5361d74a8e441a470a9d3de7",
+    "figures/completion.png": "34f40b40e281e4e1255ab75eb4ef89f2ec3142713b4d16393e7b0c432b1d5534",
+    "figures/completion.svg": "ff585171f55cce660baf76e24f401edd8127318d86cca689578cb0e1047598fe",
+    "figures/shared-port-activity.png": "44d3fb7e94f79984f78a051188c1d53f95a3e4d2d49f14ce2983d91e0f136736",
+    "figures/shared-port-activity.svg": "dac6148aee672a7652c741fe2de0ba2eb943585d5afad33d159335c3bbe77e24"
+  },
+  "source_lineage": {
+    "files": {
+      "local-1472": {
+        "identity": "known_fixed_revision",
+        "dataset_revision": "27febb7b2d24169560a9f6f83d38eb53f94916cf"
+      },
+      "local-1808": {
+        "identity": "known_fixed_revision",
+        "dataset_revision": "27febb7b2d24169560a9f6f83d38eb53f94916cf"
+      },
+      "local-2675": {
+        "identity": "known_fixed_revision",
+        "dataset_revision": "27febb7b2d24169560a9f6f83d38eb53f94916cf"
+      },
+      "local-6447": {
+        "identity": "known_fixed_revision",
+        "dataset_revision": "27febb7b2d24169560a9f6f83d38eb53f94916cf"
+      },
+      "user-900": {
+        "identity": "user_confirmed_directory_local_SHA256",
+        "dataset_revision": null,
+        "remote_revision_content_verified": false,
+        "original_path_status": "historical_catalog_candidate"
+      },
+      "user-901": {
+        "identity": "user_confirmed_directory_local_SHA256",
+        "dataset_revision": null,
+        "remote_revision_content_verified": false,
+        "original_path_status": "historical_catalog_candidate"
+      },
+      "user-905": {
+        "identity": "user_confirmed_directory_local_SHA256",
+        "dataset_revision": null,
+        "remote_revision_content_verified": false,
+        "original_path_status": "historical_catalog_candidate"
+      },
+      "user-1003": {
+        "identity": "user_confirmed_directory_local_SHA256",
+        "dataset_revision": null,
+        "remote_revision_content_verified": false,
+        "original_path_status": "historical_catalog_candidate"
+      },
+      "user-1004": {
+        "identity": "user_confirmed_directory_local_SHA256",
+        "dataset_revision": null,
+        "remote_revision_content_verified": false,
+        "original_path_status": "historical_catalog_candidate"
+      },
+      "user-1007": {
+        "identity": "user_confirmed_directory_local_SHA256",
+        "dataset_revision": null,
+        "remote_revision_content_verified": false,
+        "original_path_status": "historical_catalog_candidate"
+      },
+      "user-1008": {
+        "identity": "user_confirmed_directory_local_SHA256",
+        "dataset_revision": null,
+        "remote_revision_content_verified": false,
+        "original_path_status": "historical_catalog_candidate"
+      },
+      "user-1011": {
+        "identity": "user_confirmed_directory_local_SHA256",
+        "dataset_revision": null,
+        "remote_revision_content_verified": false,
+        "original_path_status": "historical_catalog_candidate"
+      },
+      "user-1477": {
+        "identity": "user_confirmed_directory_local_SHA256",
+        "dataset_revision": null,
+        "remote_revision_content_verified": false,
+        "original_path_status": "historical_catalog_candidate"
+      },
+      "user-1480": {
+        "identity": "user_confirmed_directory_local_SHA256",
+        "dataset_revision": null,
+        "remote_revision_content_verified": false,
+        "original_path_status": "historical_catalog_candidate"
+      },
+      "user-1481": {
+        "identity": "user_confirmed_directory_local_SHA256",
+        "dataset_revision": null,
+        "remote_revision_content_verified": false,
+        "original_path_status": "historical_catalog_candidate"
+      }
+    },
+    "intake_sha256": "6fb24dd4229bbd42d73900062f769806aecda2b20a78c30c62c564ffe6cda558",
+    "old_manifest_sha256": "caf6870f867e3307c52873a4fa1491c9225ff77f9735742b8a74313f80717a16",
+    "excluded_files": [
+      "899.json",
+      "1479.json"
+    ]
+  },
+  "source_manifest_sha256": "5bc8699f2ecf4f46b8b5c1dbb0bdc00ff74826c26b997d7a5b2cb4c60c3995de",
+  "fixed_prepared_sha256": {
+    "topology-config.json": "6641213d81f08c2be535cebb37eabf73214c7178bb5bea6c9709392b20ce1980",
+    "manifest.json": "0025facfa4c520b29ba0b4dbf8f94d590227ad507ab5a22f39b3ac89a864edca",
+    "service.json": "5419c98d15c22cec4b8e3eb8aec1e08ce3e8a3640e3fb025e8f3e2b3bd378f91",
+    "rdma.json": "2e96b611d1985507bf3eda5816c1cd4595a0c120b4ef5b460ab74c1e0d20b3db",
+    "preparation.json": "8f1d80f86a18e841c4f75c6baef1edfa8fadb6765f6b3d862c742e463d41b096",
+    "service-tracked.json": "f01a03b3cfc0ad77076b34c970f4861b35fa1337a2d12c23b58f12d22a129aba",
+    "rdma-transient.json": "ce4380fe0443dfd8d3026f353f964832980d5ace0f5100fd4dba8c33f9114408",
+    "preparation-tracking.json": "5809ff33af1b4dfd2b27dbfbd7b0d30426cc446ac7225472f921e546a3bce8d1",
+    "service-watchdog.json": "66eb19c0eccac337bd2d6ef1a04247960970065c3f3b60eefa63325487266569",
+    "rdma-whole-local.json": "ce4380fe0443dfd8d3026f353f964832980d5ace0f5100fd4dba8c33f9114408",
+    "service-whole.json": "c62faf83bd1c328f8a56cda2c8bfa8d1b3287463805c4e93fb77bc2d9dc0a5d9",
+    "whole-preparation.json": "e63fe699b1364c0ffb9c59c8e18d77cef3c05c2bcf36201ffb8d23e98a3c6add",
+    "multicall-manifest.json": "5bc8699f2ecf4f46b8b5c1dbb0bdc00ff74826c26b997d7a5b2cb4c60c3995de",
+    "rdma-multicall-normal.json": "29255ec614da092357b4052de6d9be8fe6b2475de53e0929de3787563efe875c",
+    "rdma-multicall-local.json": "c0c474259d7efcdfb102accb6aba13dcc67e7f1697dfda97437b1665d8329406",
+    "service-multicall.json": "94696447fe58cafc59cdcf10248e0eb60d1a79fbed0f2b419c2f54b30c07501d",
+    "service-control.json": "ed5d6817741dc43c3028ac252e5ea28271fe9249e22de7ba460a915c3d6e52ff",
+    "multicall-preparation.json": "dc415d73bb72e49161af5269489d3547b3a1590e13e268a3cdb046c74505eff8",
+    "topology/topology.json": "5389993e9aa1dfc148b4713b0a2b0c0521de24b41b74060e2db7eb9f048c444f",
+    "topology/report.json": "11231d54f55050003858b12378b0abf716e37c47a26abe86b8d68286215a80a5",
+    "sources/0.json": "8bb9dc2e205c4aeccf28d4a374c5aaa5743a16503a38c2d77aac411a5d85479a",
+    "sources/1.json": "cb2358441490177e344dbd0823672dad75a4eecf0c9828dcf94e6f17125b9cb9",
+    "sources/2.json": "0355c2b08b1d3d2ac7e762322dca6e2061a062afbdf3103967692c560f92a2e7",
+    "sources/3.json": "fb46a1c64af569fe6e1805d1e869c077959882b43d1491fe0977c5e47db2e24b"
+  },
+  "cpu_checks": 70,
+  "relocated_runs_checked": 2,
+  "rejected_tampering_cases": 24,
+  "new_network_executions": 4,
+  "network_reruns": 0,
+  "translation_units_built": 0,
+  "dependency_builds": 0,
+  "dependency_changes": 0,
+  "downloads": 0,
+  "installs": 0,
+  "gpu_executions": 0,
+  "dependencies_checked": 13,
+  "failure_retained": {
+    "stage": "monitors/independent-analysis",
+    "status": "child_failed",
+    "stderr": "Traceback (most recent call last):\n  File \"/home/lry/moe-ub-cosim/experiments/multicall_externality/analyze.py\", line 263, in <module>\n    if __name__=='__main__':main()\n                            ^^^^^^\n  File \"/home/lry/moe-ub-cosim/experiments/multicall_externality/analyze.py\", line 232, in main\n    for name,spec in frozen['cases'].items():cases[name],details[name]=inspect(Path(spec['output']),out,name)\n                                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/lry/moe-ub-cosim/experiments/multicall_externality/analyze.py\", line 202, in inspect\n    assert previous==0;queue_area[key]=dict(area_byte_ns=area,peak_bytes=peak)\n           ^^^^^^^^^^^\nAssertionError\n",
+    "explanation": "Analysis interpreted native dequeue-before and enqueue-after samples as post-state. Corrected offline using complete ordered packet hooks and actual packet sizes; every queue drains. No native change or network rerun."
+  },
+  "portable_CSV_normalized_to_LF": true,
+  "images_visually_inspected": 2,
+  "browser_rendering_checked": false,
+  "research_outcome": "Small target benefit, additional physical work, healthy call ends before replica DATA; no healthy externality observed",
+  "new_algorithm_benefit_proven": false,
+  "overall_goal_complete": false,
+  "additional_check_failure_retained": {
+    "log": "runs/multicall_externality_20261030/final-audit-first-failure.txt",
+    "reason": "Final audit mistakenly required the known retained analysis failure to have status completed; corrected audit to permit exactly that failure and require all native runs successful."
+  },
+  "SVG_portability_fix": {
+    "original_git_check_log": "/home/lry/moe-ub-cosim/runs/multicall_externality_20261030/svg-format-first-failure.txt",
+    "reason": "Matplotlib SVG path lines include trailing spaces; normalize them and use fixed SVG hash salt with no timestamp. Re-exported figures from the same saved analysis; both PNGs byte-identical.",
+    "network_reruns": 0
+  }
+}

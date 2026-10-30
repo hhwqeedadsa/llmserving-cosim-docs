@@ -1,0 +1,210 @@
+{
+  "passed": true,
+  "receipt_and_original_source_hashes_verified": true,
+  "new_networks_exactly_once": 4,
+  "matched_healthy_hops_each_condition": 2136,
+  "source_routing_compute_phase_ack_timer_kv_checks": true,
+  "links_checked": 41,
+  "links": [
+    {
+      "file": "experiments/multicall_externality/results/20261030/report.html",
+      "target": "figures/completion.png"
+    },
+    {
+      "file": "experiments/multicall_externality/results/20261030/report.html",
+      "target": "figures/shared-port-activity.png"
+    },
+    {
+      "file": "experiments/multicall_externality/results/20261030/report.html",
+      "target": "../../../../fixtures/multicall_deadline/README.md"
+    },
+    {
+      "file": "experiments/multicall_externality/results/20261030/report.html",
+      "target": "../../../../examples/scaleout_multicall/README.md"
+    },
+    {
+      "file": "experiments/multicall_externality/results/20261030/report.html",
+      "target": "analysis.json"
+    },
+    {
+      "file": "experiments/multicall_externality/results/20261030/report.html",
+      "target": "frozen.json"
+    },
+    {
+      "file": "experiments/multicall_externality/results/20261030/report.html",
+      "target": "receipt.json"
+    },
+    {
+      "file": "experiments/multicall_externality/results/20261030/report.html",
+      "target": "resources.json"
+    },
+    {
+      "file": "experiments/multicall_externality/results/20261030/report.html",
+      "target": "final-audit.json"
+    },
+    {
+      "file": "experiments/multicall_externality/results/20261030/report.html",
+      "target": "../../protocol.md"
+    },
+    {
+      "file": "experiments/multicall_externality/results/20261030/report.html",
+      "target": "README.md"
+    },
+    {
+      "file": "experiments/multicall_externality/results/20261030/report.html",
+      "target": "metrics/control-local-queue-integrals.csv"
+    },
+    {
+      "file": "experiments/multicall_externality/results/20261030/report.html",
+      "target": "metrics/control-local-switch-residence.csv"
+    },
+    {
+      "file": "experiments/multicall_externality/results/20261030/report.html",
+      "target": "metrics/control-normal-queue-integrals.csv"
+    },
+    {
+      "file": "experiments/multicall_externality/results/20261030/report.html",
+      "target": "metrics/control-normal-switch-residence.csv"
+    },
+    {
+      "file": "experiments/multicall_externality/results/20261030/report.html",
+      "target": "metrics/local-healthy-matched.csv"
+    },
+    {
+      "file": "experiments/multicall_externality/results/20261030/report.html",
+      "target": "metrics/normal-healthy-matched.csv"
+    },
+    {
+      "file": "experiments/multicall_externality/results/20261030/report.html",
+      "target": "metrics/treatment-local-queue-integrals.csv"
+    },
+    {
+      "file": "experiments/multicall_externality/results/20261030/report.html",
+      "target": "metrics/treatment-local-switch-residence.csv"
+    },
+    {
+      "file": "experiments/multicall_externality/results/20261030/report.html",
+      "target": "metrics/treatment-normal-queue-integrals.csv"
+    },
+    {
+      "file": "experiments/multicall_externality/results/20261030/report.html",
+      "target": "metrics/treatment-normal-switch-residence.csv"
+    },
+    {
+      "file": "experiments/multicall_externality/results/20261030/README.md",
+      "target": "report.html"
+    },
+    {
+      "file": "experiments/multicall_externality/results/20261030/README.md",
+      "target": "analysis.json"
+    },
+    {
+      "file": "experiments/multicall_externality/results/20261030/README.md",
+      "target": "receipt.json"
+    },
+    {
+      "file": "experiments/multicall_externality/results/20261030/README.md",
+      "target": "resources.json"
+    },
+    {
+      "file": "experiments/multicall_externality/results/20261030/README.md",
+      "target": "final-audit.json"
+    },
+    {
+      "file": "experiments/multicall_externality/results/20261030/README.md",
+      "target": "../../README.md"
+    },
+    {
+      "file": "experiments/multicall_externality/README.md",
+      "target": "protocol.md"
+    },
+    {
+      "file": "experiments/multicall_externality/README.md",
+      "target": "results/20261030/report.html"
+    },
+    {
+      "file": "experiments/multicall_externality/README.md",
+      "target": "results/20261030/README.md"
+    },
+    {
+      "file": "experiments/multicall_externality/README.md",
+      "target": "../../examples/scaleout_multicall/README.md"
+    },
+    {
+      "file": "experiments/multicall_externality/README.md",
+      "target": "protocol.md"
+    },
+    {
+      "file": "fixtures/multicall_deadline/README.md",
+      "target": "pre-network.json"
+    },
+    {
+      "file": "fixtures/multicall_deadline/README.md",
+      "target": "../../docs/whole_call.md#为独立任务设置不同门槛"
+    },
+    {
+      "file": "fixtures/multicall_deadline/README.md",
+      "target": "../../examples/scaleout_multicall/README.md"
+    },
+    {
+      "file": "fixtures/multicall_deadline/README.md",
+      "target": "post-network.json"
+    },
+    {
+      "file": "fixtures/multicall_deadline/README.md",
+      "target": "../../experiments/multicall_externality/results/20261030/README.md"
+    },
+    {
+      "file": "docs/tasks/current.md",
+      "target": "../../fixtures/multicall_deadline/README.md"
+    },
+    {
+      "file": "docs/tasks/current.md",
+      "target": "../../experiments/multicall_externality/results/20261030/report.html"
+    },
+    {
+      "file": "docs/tasks/current.md",
+      "target": "../../experiments/multicall_externality/results/20261030/README.md"
+    },
+    {
+      "file": "docs/tasks/current.md",
+      "target": "../../experiments/multicall_externality/results/20261030/analysis.json"
+    }
+  ],
+  "report_button_script_syntax_checked": true,
+  "browser_rendering_checked": false,
+  "browser_executables_on_path": {
+    "chromium": null,
+    "chromium-browser": null,
+    "google-chrome": null,
+    "firefox": null,
+    "playwright": null
+  },
+  "images_visually_inspected": 2,
+  "csv_files_LF": 10,
+  "platform_acceptance_separate": true,
+  "new_algorithm_benefit_proven": false,
+  "overall_goal_complete": false,
+  "artifact_sha256": {
+    "analysis.json": "3f3f5dec7e6f0b80fe68807037d16508da1850d116ef6a140b6a1c974fb7a725",
+    "frozen.json": "42a815e2e153f9be41680e82c61751a4eee02aa697aa5463219d350dd9fe80fb",
+    "report.html": "3313d46b49a689f594884e06455cc2ecc1030f5bb347ed34dc28c3fedbd973a7",
+    "README.md": "c5216b5b730c6aac3686838856c60c62e891a47d5c18f60693b8e054a88a8b85",
+    "receipt.json": "21974ab829018da2f0fd117f2419a14e3ef54e398d79b7f37df5d1b999aa2ca5",
+    "resources.json": "e161730e75efed3a1156079b92c261885764979eb8fdea9cc02477da53611ab1",
+    "metrics/control-normal-switch-residence.csv": "9607042277b5ea1bd33605df6a66469f14022465557eea8d7bb16ed0c0d8fb4c",
+    "metrics/control-normal-queue-integrals.csv": "b3cadd6011b345a91844c116c191f6bcd55902f098895dc32341074a3c09407a",
+    "metrics/treatment-normal-switch-residence.csv": "9607042277b5ea1bd33605df6a66469f14022465557eea8d7bb16ed0c0d8fb4c",
+    "metrics/treatment-normal-queue-integrals.csv": "b3cadd6011b345a91844c116c191f6bcd55902f098895dc32341074a3c09407a",
+    "metrics/control-local-switch-residence.csv": "a1d0739b5c81fcf0c4e70e86b10df913c43f627c64140f7b5e72ed1f118ae8fe",
+    "metrics/control-local-queue-integrals.csv": "fa52cf8382aa0074aac5874a9da3a4867a53d39ef65e3e13e38518cdf8acf312",
+    "metrics/treatment-local-switch-residence.csv": "30ff1e2aa7148c576611a3dcf73aa4557c603134dc10b679653a01511e5070a2",
+    "metrics/treatment-local-queue-integrals.csv": "d2299946108f2dcb03cacba954c33e7a05da92329133eac0ed4684c2426ee334",
+    "metrics/normal-healthy-matched.csv": "462c0281a16bc845029aad027c42770b7451f8b0678da48de8c2a5e0f2d41654",
+    "metrics/local-healthy-matched.csv": "5d76b0f3b8741a8a97408ff3daaea49a922d765e5361d74a8e441a470a9d3de7",
+    "figures/completion.png": "34f40b40e281e4e1255ab75eb4ef89f2ec3142713b4d16393e7b0c432b1d5534",
+    "figures/completion.svg": "ff585171f55cce660baf76e24f401edd8127318d86cca689578cb0e1047598fe",
+    "figures/shared-port-activity.png": "44d3fb7e94f79984f78a051188c1d53f95a3e4d2d49f14ce2983d91e0f136736",
+    "figures/shared-port-activity.svg": "dac6148aee672a7652c741fe2de0ba2eb943585d5afad33d159335c3bbe77e24"
+  }
+}

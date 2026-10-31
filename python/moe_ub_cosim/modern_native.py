@@ -14,6 +14,7 @@ from .deepep_plan import require
 from .modern_deepep_windows import ModernDeepEPWindowRuntime
 from .modern_native_layout import ModernNativeLayout, MAIN_BASE, SIGNAL_BASE
 from .modern_native_capacity import NATIVE_REMOTE_LIMIT, NATIVE_LOCAL_LIMIT
+from .native_proof_coverage import NativeProofCoverage
 from .scaleout_rdma import checked_json, digest, limits, monitored, save
 from .transaction_session import NativeTransactionSession
 from .host_timing import HostTiming
@@ -27,7 +28,8 @@ class ModernNativeController:
         self.runtime=ModernDeepEPWindowRuntime(config['modern'])
         self.events={e['id']:e for e in self.layout.plan['events']}
         self.operations={o['id']:o for o in self.layout.plan['operations']}
-        self.native_nodes=[];self.tasks={};self.waiting={};self.callbacks={};self.proofs={};self.coverage={}
+        self.native_nodes=[];self.tasks={};self.waiting={};self.callbacks={};self.proofs={};self.coverage=NativeProofCoverage()
+        self._remote_count=0;self._local_count=0
         self.count_preparations={};self.log=[];self.now=0;self.decisions=0
 
     def _proof(self,event):
@@ -36,24 +38,20 @@ class ModernNativeController:
         return self._compact(pairs)
 
     def _compact(self,pairs):
-        merged={}
-        for identity,event in pairs:
-            require(event in ('applied','completed'),'internal unsupported native evidence')
-            merged[identity]=max(merged.get(identity,0),1 if event=='completed' else 0)
-        return [(i,'completed' if level else 'applied') for i,level in sorted(merged.items())
-            if not any(j!=i and self.coverage[j].get(i,-1)>=level for j in merged)]
+        return self.coverage.compact(pairs)
 
     def _schedule(self,node,task,proof):
         identity=len(self.native_nodes);require(identity<65536,'native node identity limit')
         proof=self._compact(proof);require(len(proof)<=32,'native proof frontier exceeds 32 dependencies')
         node=dict(node,id=identity,after=[dict(operation=i,event=e) for i,e in proof])
-        if node['kind']=='remote':require(sum(n['kind']=='remote' for n in self.native_nodes)<NATIVE_REMOTE_LIMIT,'remote operation limit')
-        else:require(sum(n['kind']=='local' for n in self.native_nodes)<NATIVE_LOCAL_LIMIT,'local operation limit')
-        closure={}
-        for i,event in proof:
-            for p,level in self.coverage[i].items():closure[p]=max(closure.get(p,-1),level)
-            closure[i]=max(closure.get(i,-1),int(event=='completed'))
-        self.coverage[identity]=closure;self.native_nodes.append(node);self.tasks[identity]=deepcopy(task)
+        require(node['kind'] in ('remote','local'),'invalid native node kind')
+        if node['kind']=='remote':require(self._remote_count<NATIVE_REMOTE_LIMIT,'remote operation limit')
+        else:require(self._local_count<NATIVE_LOCAL_LIMIT,'local operation limit')
+        require(len(self.coverage)==identity,'native coverage identity mismatch')
+        task=deepcopy(task)
+        self.coverage.append(proof);self.native_nodes.append(node);self.tasks[identity]=task
+        if node['kind']=='remote':self._remote_count+=1
+        else:self._local_count+=1
         return identity
 
     def _local(self,rank,duration,copy=None,wait=None):

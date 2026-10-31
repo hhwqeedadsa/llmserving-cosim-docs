@@ -16,7 +16,8 @@ rows=[]
 for cfg in (example(),expert_matrix()):
     c=declared_callback_drive(cfg)
     rows.append(dict(initial=c.layout.initial,bindings=c.layout.bindings,
-        plan=c.layout.plan,description=c.layout.description,snapshot=c.snapshot()))
+        plan=c.layout.plan,description=c.layout.description,snapshot=c.snapshot(),
+        callbacks=[[i,e,t] for (i,e),t in sorted(c.callbacks.items())],proofs=c.proofs))
 print(json.dumps(rows,sort_keys=True,separators=(',',':')))
 """
 
@@ -46,7 +47,7 @@ def main():
         assert r.returncode==0,r.stderr
     assert (out/'old.json').read_bytes()==(out/'current.json').read_bytes()
     result=dict(passed=True,baseline_commit=commit,commands=commands,byte_identical=True,
-        compared='Two complete declared functional controller transcripts, native initial state, plan, bindings and layout; no actual network',
+        compared='Two complete declared functional controller snapshots, all raw callbacks, event proof frontiers, native initial state, plan, bindings and layout; no actual network',
         bytes=(out/'current.json').stat().st_size,sha256=hashlib.sha256((out/'current.json').read_bytes()).hexdigest(),network_runs=0)
     (out/'verification.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result))
 

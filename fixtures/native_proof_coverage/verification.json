@@ -1,0 +1,568 @@
+{
+  "passed": true,
+  "new_unit_methods": 7,
+  "unit_methods_total": 71,
+  "exhaustive_labelled_dags": 729,
+  "exhaustive_frontier_combinations": 59049,
+  "exhaustive_two_level_queries": 23328,
+  "closed_controller_compatibility": {
+    "passed": true,
+    "baseline_commit": "e55ae45eb16344943afac2a32b11206e73bf99a5",
+    "commands": [
+      {
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-c",
+          "\nimport json\nfrom modern_native_test import example, expert_matrix, declared_callback_drive\nrows=[]\nfor cfg in (example(),expert_matrix()):\n    c=declared_callback_drive(cfg)\n    rows.append(dict(initial=c.layout.initial,bindings=c.layout.bindings,\n        plan=c.layout.plan,description=c.layout.description,snapshot=c.snapshot(),\n        callbacks=[[i,e,t] for (i,e),t in sorted(c.callbacks.items())],proofs=c.proofs))\nprint(json.dumps(rows,sort_keys=True,separators=(',',':')))\n"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim/runs/native_proof_coverage_20261031/callback-compat",
+        "pythonpath": "/home/lry/moe-ub-cosim/runs/native_proof_coverage_20261031/callback-compat/baseline/python:/home/lry/moe-ub-cosim/tests/unit",
+        "exit_code": 0
+      },
+      {
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-c",
+          "\nimport json\nfrom modern_native_test import example, expert_matrix, declared_callback_drive\nrows=[]\nfor cfg in (example(),expert_matrix()):\n    c=declared_callback_drive(cfg)\n    rows.append(dict(initial=c.layout.initial,bindings=c.layout.bindings,\n        plan=c.layout.plan,description=c.layout.description,snapshot=c.snapshot(),\n        callbacks=[[i,e,t] for (i,e),t in sorted(c.callbacks.items())],proofs=c.proofs))\nprint(json.dumps(rows,sort_keys=True,separators=(',',':')))\n"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim/runs/native_proof_coverage_20261031/callback-compat",
+        "pythonpath": "/home/lry/moe-ub-cosim/python:/home/lry/moe-ub-cosim/tests/unit",
+        "exit_code": 0
+      }
+    ],
+    "byte_identical": true,
+    "compared": "Two complete declared functional controller snapshots, all raw callbacks, event proof frontiers, native initial state, plan, bindings and layout; no actual network",
+    "bytes": 661149,
+    "sha256": "146c9ea9feae1917dff0d1100b6d9849433b6fcd8317477bfa4e70f81db8a694",
+    "network_runs": 0
+  },
+  "public_workflow": {
+    "passed": true,
+    "commands": [
+      {
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "modern-deepep-native-capacity",
+          "--config",
+          "/home/lry/moe-ub-cosim/runs/native_proof_coverage_20261031/workflow/input.json",
+          "--output",
+          "/home/lry/moe-ub-cosim/runs/native_proof_coverage_20261031/workflow/first.json"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim/runs/native_proof_coverage_20261031/workflow",
+        "exit_code": 0
+      },
+      {
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "modern-deepep-native-capacity",
+          "--config",
+          "/home/lry/moe-ub-cosim/runs/native_proof_coverage_20261031/workflow/input.json",
+          "--output",
+          "/home/lry/moe-ub-cosim/runs/native_proof_coverage_20261031/workflow/repeat.json"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim/runs/native_proof_coverage_20261031/workflow",
+        "exit_code": 0
+      },
+      {
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "modern-deepep-native-capacity",
+          "--config",
+          "/home/lry/moe-ub-cosim/runs/native_proof_coverage_20261031/workflow/short.json",
+          "--output",
+          "/home/lry/moe-ub-cosim/runs/native_proof_coverage_20261031/workflow/rejected.json"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim/runs/native_proof_coverage_20261031/workflow",
+        "exit_code": 1
+      },
+      {
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "modern-deepep-native-capacity",
+          "--config",
+          "/home/lry/moe-ub-cosim/runs/native_proof_coverage_20261031/workflow/input.json",
+          "--output",
+          "/home/lry/moe-ub-cosim/runs/native_proof_coverage_20261031/workflow/first.json"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim/runs/native_proof_coverage_20261031/workflow",
+        "exit_code": 1
+      },
+      {
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "modern-deepep-native-capacity",
+          "--config",
+          "/home/lry/moe-ub-cosim/runs/native_proof_coverage_20261031/workflow/invalid.json",
+          "--output",
+          "/home/lry/moe-ub-cosim/runs/native_proof_coverage_20261031/workflow/invalid-report.json"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim/runs/native_proof_coverage_20261031/workflow",
+        "exit_code": 1
+      }
+    ],
+    "repeat_bytes_identical": true,
+    "network_runs": 0,
+    "counts": {
+      "logical_ranks": 2,
+      "calls": 2,
+      "modern_operations": 60,
+      "modern_events": 322,
+      "native_nodes": {
+        "remote": 50,
+        "local": 47,
+        "local_operations": 10,
+        "local_events": {
+          "barrier_ready": 16,
+          "counts_ready": 4,
+          "expert_stage_done": 4,
+          "local_expert_reduction_done": 6,
+          "token_prepared": 3
+        },
+        "count_preparations": 4,
+        "paths": {
+          "gin_self": 20,
+          "local": 10,
+          "rdma": 30
+        }
+      },
+      "prospective_connections": 6,
+      "self_connections": 2,
+      "remote_connections": 4,
+      "immutable_operands": [
+        {
+          "rank": 0,
+          "logical_window_bytes": 3072,
+          "initialized_segments": 7,
+          "initialized_bytes": 256
+        },
+        {
+          "rank": 1,
+          "logical_window_bytes": 2496,
+          "initialized_segments": 6,
+          "initialized_bytes": 224
+        }
+      ],
+      "logical_device_ids_used": {
+        "0": [
+          0,
+          1
+        ],
+        "1": [
+          0,
+          1
+        ]
+      }
+    },
+    "negative_failures": [
+      "canonical_plan_bytes"
+    ],
+    "cwd_independent": true
+  },
+  "host_comparison": {
+    "passed": true,
+    "commands": [
+      {
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "/home/lry/moe-ub-cosim/tests/integration/check_native_proof_coverage_host.py",
+          "--worker",
+          "dictionary",
+          "--nodes",
+          "4096"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim/runs/native_proof_coverage_20261031/host",
+        "exit_code": 0
+      },
+      {
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "/home/lry/moe-ub-cosim/tests/integration/check_native_proof_coverage_host.py",
+          "--worker",
+          "compact",
+          "--nodes",
+          "4096"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim/runs/native_proof_coverage_20261031/host",
+        "exit_code": 0
+      }
+    ],
+    "observations": [
+      {
+        "mode": "dictionary",
+        "nodes": 4096,
+        "query_checks": 24570,
+        "semantic_sha256": "a1f4a808c4868af4f68f224ae9c1fd8186e59c4a67b0a4f99f44c0b367e5ad45",
+        "build_wall_seconds": 1.9416761850006878,
+        "build_cpu_seconds": 1.9402597579999998,
+        "retained_index_object_bytes_estimate": 336203940,
+        "peak_process_rss_bytes": 359956480,
+        "scope": "One synthetic labelled causal chain; no controller, modern task, simulation or inference latency"
+      },
+      {
+        "mode": "compact",
+        "nodes": 4096,
+        "query_checks": 24570,
+        "semantic_sha256": "a1f4a808c4868af4f68f224ae9c1fd8186e59c4a67b0a4f99f44c0b367e5ad45",
+        "build_wall_seconds": 0.05897023598663509,
+        "build_cpu_seconds": 0.053627926,
+        "retained_index_object_bytes_estimate": 2711136,
+        "peak_process_rss_bytes": 21258240,
+        "scope": "One synthetic labelled causal chain; no controller, modern task, simulation or inference latency"
+      }
+    ],
+    "semantic_sha256": "a1f4a808c4868af4f68f224ae9c1fd8186e59c4a67b0a4f99f44c0b367e5ad45",
+    "network_runs": 0,
+    "repetitions_per_mode": 1,
+    "performance_threshold_asserted": false,
+    "baseline": "e55ae45eb1 coverage/compact arithmetic; snapshot compatibility checked independently",
+    "source_sha256": "47fc56e31108604858d99c66b46c7533e7906f847e7f4d3beae0a06a4501ec07"
+  },
+  "monitors": {
+    "callback-compat": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "python3",
+        "-B",
+        "tests/integration/check_modern_native_capacity_compat.py",
+        "--baseline-commit",
+        "e55ae45eb1",
+        "--output",
+        "runs/native_proof_coverage_20261031/callback-compat"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-31T07:51:31.573414+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 268435456,
+        "wall_seconds": 120.0
+      },
+      "peak_sampled_group_rss_bytes": 44638208,
+      "peak_sampled_processes": 2,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/runs/native_proof_coverage_20261031"
+      ],
+      "peak_sampled_artifact_bytes": 9916416,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 9197477,
+      "peak_sampled_artifact_allocated_bytes": 9916416,
+      "process_group": 965844,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-31T07:51:32.686793+00:00",
+      "wall_seconds": 1.1133835339569487,
+      "max_waited_child_rss_kib": 26948,
+      "artifact_bytes_before_report": 5036,
+      "aggregate_artifact_bytes_before_report": 9916416,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 9197477,
+        "allocated_bytes": 9916416
+      }
+    },
+    "compat": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "python3",
+        "-B",
+        "tests/integration/check_modern_native_capacity_compat.py",
+        "--baseline-commit",
+        "e55ae45eb1",
+        "--output",
+        "runs/native_proof_coverage_20261031/compat"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-31T07:47:59.529358+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 268435456,
+        "wall_seconds": 120.0
+      },
+      "peak_sampled_group_rss_bytes": 44687360,
+      "peak_sampled_processes": 2,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/runs/native_proof_coverage_20261031"
+      ],
+      "peak_sampled_artifact_bytes": 4939776,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 4560304,
+      "peak_sampled_artifact_allocated_bytes": 4939776,
+      "process_group": 965517,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-31T07:48:00.620774+00:00",
+      "wall_seconds": 1.091423459991347,
+      "max_waited_child_rss_kib": 25916,
+      "artifact_bytes_before_report": 4719,
+      "aggregate_artifact_bytes_before_report": 4939776,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 4560304,
+        "allocated_bytes": 4939776
+      }
+    },
+    "host": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "python3",
+        "-B",
+        "tests/integration/check_native_proof_coverage_host.py",
+        "--nodes",
+        "4096",
+        "--output",
+        "runs/native_proof_coverage_20261031/host"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-31T07:47:59.528727+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 268435456,
+        "wall_seconds": 120.0
+      },
+      "peak_sampled_group_rss_bytes": 378056704,
+      "peak_sampled_processes": 2,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/runs/native_proof_coverage_20261031"
+      ],
+      "peak_sampled_artifact_bytes": 4972544,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 4577581,
+      "peak_sampled_artifact_allocated_bytes": 4972544,
+      "process_group": 965516,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-31T07:48:03.850671+00:00",
+      "wall_seconds": 4.321952274010982,
+      "max_waited_child_rss_kib": 351520,
+      "artifact_bytes_before_report": 13837,
+      "aggregate_artifact_bytes_before_report": 4972544,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 4577581,
+        "allocated_bytes": 4972544
+      }
+    },
+    "regression": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "modern_deepep_plan_test",
+        "modern_deepep_runtime_test",
+        "modern_deepep_windows_test",
+        "batched_callback_replay_test",
+        "modern_plan_storage_test"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-31T07:47:59.532288+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 268435456,
+        "wall_seconds": 120.0
+      },
+      "peak_sampled_group_rss_bytes": 29597696,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/runs/native_proof_coverage_20261031"
+      ],
+      "peak_sampled_artifact_bytes": 4943872,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 4563017,
+      "peak_sampled_artifact_allocated_bytes": 4943872,
+      "process_group": 965518,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-31T07:48:00.859600+00:00",
+      "wall_seconds": 1.3273192810011096,
+      "max_waited_child_rss_kib": 28904,
+      "artifact_bytes_before_report": 3376,
+      "aggregate_artifact_bytes_before_report": 4943872,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 4563017,
+        "allocated_bytes": 4943872
+      }
+    },
+    "unit": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "native_proof_coverage_test",
+        "modern_native_test",
+        "native_callback_batches_test",
+        "modern_native_capacity_test"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-31T07:46:38.000576+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 268435456,
+        "wall_seconds": 120.0
+      },
+      "peak_sampled_group_rss_bytes": 40091648,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/runs/native_proof_coverage_20261031"
+      ],
+      "peak_sampled_artifact_bytes": 12288,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 5469,
+      "peak_sampled_artifact_allocated_bytes": 12288,
+      "process_group": 965429,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-31T07:46:40.246612+00:00",
+      "wall_seconds": 2.2460472999955527,
+      "max_waited_child_rss_kib": 45256,
+      "artifact_bytes_before_report": 5469,
+      "aggregate_artifact_bytes_before_report": 12288,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 5469,
+        "allocated_bytes": 12288
+      }
+    },
+    "workflow": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "python3",
+        "-B",
+        "tests/integration/check_modern_native_capacity.py",
+        "--output",
+        "runs/native_proof_coverage_20261031/workflow"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-31T07:47:59.528367+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 268435456,
+        "wall_seconds": 120.0
+      },
+      "peak_sampled_group_rss_bytes": 31862784,
+      "peak_sampled_processes": 2,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/runs/native_proof_coverage_20261031"
+      ],
+      "peak_sampled_artifact_bytes": 3715072,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 3342182,
+      "peak_sampled_artifact_allocated_bytes": 3715072,
+      "process_group": 965515,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-31T07:48:00.087623+00:00",
+      "wall_seconds": 0.5592650279868394,
+      "max_waited_child_rss_kib": 19784,
+      "artifact_bytes_before_report": 4471,
+      "aggregate_artifact_bytes_before_report": 3715072,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 3342182,
+        "allocated_bytes": 3715072
+      }
+    }
+  },
+  "resource_scope": "Six monitored validation/host stages, including explicit raw callback/proof compatibility supplement; publication and read-only management excluded",
+  "wall_seconds": 10.65939087694278,
+  "peak_sampled_group_rss_bytes": 378056704,
+  "peak_sampled_artifact_bytes": 9916416,
+  "new_network_runs": 0,
+  "source_hashes": {
+    "python/moe_ub_cosim/native_proof_coverage.py": "a85c62e324bb31aa8311061967197117cd15102297a3cc1f45db94acee5ba68e",
+    "python/moe_ub_cosim/modern_native.py": "3cf6c1165ddd939bc40c3a33a7b52d1a293d5ebf88e46297ac4aee0050199ea6",
+    "tests/unit/native_proof_coverage_test.py": "8c4a6c07caf54886f1c703d4d59077fd89690bdfd478cdd7fdf1d47d0a075816",
+    "tests/integration/check_native_proof_coverage_host.py": "47fc56e31108604858d99c66b46c7533e7906f847e7f4d3beae0a06a4501ec07",
+    "tests/integration/check_modern_native_capacity_compat.py": "b8bc60c6647d7a4e7f7ce02d1a90133d357509800ac575aa7b8edd337263312a"
+  },
+  "prior_snapshot_compatibility": {
+    "passed": true,
+    "baseline_commit": "e55ae45eb16344943afac2a32b11206e73bf99a5",
+    "commands": [
+      {
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-c",
+          "\nimport json\nfrom modern_native_test import example, expert_matrix, declared_callback_drive\nrows=[]\nfor cfg in (example(),expert_matrix()):\n    c=declared_callback_drive(cfg)\n    rows.append(dict(initial=c.layout.initial,bindings=c.layout.bindings,\n        plan=c.layout.plan,description=c.layout.description,snapshot=c.snapshot()))\nprint(json.dumps(rows,sort_keys=True,separators=(',',':')))\n"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim/runs/native_proof_coverage_20261031/compat",
+        "pythonpath": "/home/lry/moe-ub-cosim/runs/native_proof_coverage_20261031/compat/baseline/python:/home/lry/moe-ub-cosim/tests/unit",
+        "exit_code": 0
+      },
+      {
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-c",
+          "\nimport json\nfrom modern_native_test import example, expert_matrix, declared_callback_drive\nrows=[]\nfor cfg in (example(),expert_matrix()):\n    c=declared_callback_drive(cfg)\n    rows.append(dict(initial=c.layout.initial,bindings=c.layout.bindings,\n        plan=c.layout.plan,description=c.layout.description,snapshot=c.snapshot()))\nprint(json.dumps(rows,sort_keys=True,separators=(',',':')))\n"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim/runs/native_proof_coverage_20261031/compat",
+        "pythonpath": "/home/lry/moe-ub-cosim/python:/home/lry/moe-ub-cosim/tests/unit",
+        "exit_code": 0
+      }
+    ],
+    "byte_identical": true,
+    "compared": "Two complete declared functional controller transcripts, native initial state, plan, bindings and layout; no actual network",
+    "bytes": 604495,
+    "sha256": "6b2c41fb5c82d66723640c8ac93e922a31a9c0ba06125ffb2ce54747d9c659e3",
+    "network_runs": 0
+  }
+}

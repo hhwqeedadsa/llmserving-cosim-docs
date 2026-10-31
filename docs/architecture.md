@@ -51,6 +51,8 @@ LLMServingSim来源回放的显式`sparse_explicit/1`保留rank/slot请求ID，�
 
 `modern_native_capacity.py`在无后端的公开容量命令中核对完整现代计划的确定性节点数、可能连接和初始化需求；原生布局准入复用连接枚举并提前拒绝完整节点超限。静态报告不替代物理部署、动态回调/缓冲和宿主预算检查，也不提高运行额度；见[容量使用说明](../examples/modern_deepep_native/README.md#先检查完整工作量容量)。
 
+现代控制器的`native_proof_coverage.py`以两份精确位集合保存原生前驱的applied/completed覆盖，不读取完成回调或推断额外先后关系。前驱压缩仍保留较强等级并同时去除已被其他项覆盖的项；节点编号、依赖、公开输出和容量门限不变。远端/本地计数只在成功登记后累计。两级oracle、旧完整控制器比对及宿主开销范围见[验收](../fixtures/native_proof_coverage/README.md)；这不是新的网络恢复机制。
+
 transactions/5的可选`declared_service_fifo/1`为每个self连接调度独立start/apply/complete事件。它沿用源保护和目标NIC权限，释放由实际complete回调触发；不占本地GPU计算槽，也不创建网络载体或ACK。见[混合服务](../examples/scaleout_self_peer/README.md)。
 
 `context_transactions.py`将显式communicator/source/context/peer身份编译成既有MRT1请求/响应载体，保留上下文隔离及声明的物理NIC；执行仍由同一个原生事务网络推进。核查入口对照实际包和连接生命周期，不新增provider。见[上下文绑定](../examples/scaleout_context_transactions/README.md)。

@@ -2,7 +2,11 @@
 
 ## 2026-10-31 显式Scale-Out事务容量
 
-状态：`in_progress`。上一轮0ec0372a30交付精确因果索引，属于progress。本轮按[规范](transaction_scaleout_profile_spec.md)先打通通用事务/会话下层容量，采用transactions/5显式execution_limits.profile，不改变旧schema和默认边界。同步Python/C++解析、窗口/注册/lease/等待/依赖/物理id及会话限额；固定原生库，只编受影响平台单元。先纯准入/内存检查，再最多三个128Clos人工网络；现代EP32完整调用仍待后续独立接入，不以人工例代替真实研究。预算与固定条件见规范，整体目标active。
+状态：`completed`（本通用事务平台增量；现代EP32接入和整体目标仍active）。按[规范](transaction_scaleout_profile_spec.md)交付transactions/5显式`execution_limits.profile="scaleout_ep32/1"`，Python/C++准入、内存核心窗口/注册/源读及输出保护、会话和宿主容量同步，旧输入保持原限制。固定Fabric/ns-3库，只重编四个受影响平台单元，公开`rdma-transaction-build`核验库和实际加载来源。见[验收说明](../../fixtures/transaction_scaleout_profile/README.md)、[网页](../../fixtures/transaction_scaleout_profile/report.html)及[命令/资源](../../fixtures/transaction_scaleout_profile/verification.json)。
+
+7个纯C++程序184,962断言、82个不同Python方法通过，含旧/新边界、安全和纯Fabric前拒绝。三个128Clos新网络各一次：扩展正常/一次首请求丢包/无profile旧事务链；人工例65连接、96窗口、64注册、66远端或self＋3本地，32等待/67前驱及实际回调后追加保留。独立重放窗口、解码所有实际MRT1包及核对678回调；正常/故障最终96窗口逐字节相同。丢包触发已有快重传，任务完成8.036→8.047µs，仅晚11ns；网络排空8.036→10.019µs，后者含反向原子回复ACK，不包装为任务损失。不是MoE/现代GIN/满载128卡或论文算法收益。
+
+顶层受监控累计153.63秒、峰值组RSS855,613,440B、产物59,695,104B；失败原件保留，无自动扩限/成功网络重跑。13固定依赖一致，无GPU、安装、下载、升级或ns-3重编；新cwd公开preflight正例/非法profile拒绝通过，HTML仅静态链接检查。现代包装仍保留旧准入，下一项独立显式接入完整EP32布局/计划/控制记录后再做真实两调用网络验收；此人工测试不替代。仅发布user既有分支，整体目标active。
 
 ## 2026-10-31 现代控制器紧凑因果覆盖
 

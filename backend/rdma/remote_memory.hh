@@ -79,11 +79,20 @@ class RemoteMemory {
   };
   static constexpr uint64_t PageBytes=4096,MaxPages=256,MaxLogicalBytes=64*1024*1024;
   static uint64_t Size(const Window& w) {return w.logical_bytes?w.logical_bytes:w.bytes.size();}
+  // Explicit one-time software capacity selection before any memory state exists.
+  void ConfigureScaleOutCapacity() {
+    MemoryCheck(!scaleout_capacity_ && windows_.empty() && registrations_.empty() &&
+                context_bindings_.empty() && contexts_.empty() && leases_.empty() && writers_.empty() &&
+                !nic_scoped_ && !carrier_once_put_ && !cache_capacity_ && !request_limits_configured_,
+                "scale-out capacity configured after use/repeated");
+    scaleout_capacity_=true;
+  }
   void ConfigureRequestLimits(uint64_t contexts,uint64_t requests,uint64_t readers=48) {
     MemoryCheck(contexts_.empty() && leases_.empty() && writers_.empty() &&
-                contexts>0 && contexts<=64 && requests>0 && requests<=1024 && readers>0 && readers<=1280,
+                contexts>0 && contexts<=(scaleout_capacity_?2048u:64u) && requests>0 && requests<=(scaleout_capacity_?16384u:1024u) &&
+                readers>0 && readers<=(scaleout_capacity_?17408u:1280u),
                 "invalid/live remote request limits");
-    max_contexts_=contexts;max_requests_=requests;max_readers_=readers;
+    max_contexts_=contexts;max_requests_=requests;max_readers_=readers;request_limits_configured_=true;
   }
   void RegisterSparse(unsigned owner,uint32_t key,uint64_t address,bool atomic,uint64_t length,
                       const std::vector<std::pair<uint64_t,std::vector<uint8_t>>>& segments) {
@@ -111,7 +120,7 @@ class RemoteMemory {
     nic_scoped_=true;
   }
   void RegisterAccess(Registration r) {
-    MemoryCheck(nic_scoped_ && contexts_.empty() && registrations_.size()<32 && r.key && r.bytes,
+    MemoryCheck(nic_scoped_ && contexts_.empty() && registrations_.size()<(scaleout_capacity_?256u:32u) && r.key && r.bytes,
                 "invalid registration mode/count/key/extent");
     const auto& w=Range(r.owner,r.window_key,r.address,r.bytes);
     MemoryCheck(!r.atomic || w.atomic,"registration cannot grant storage atomic permission");
@@ -142,7 +151,7 @@ class RemoteMemory {
     return out;
   }
   void Register(Window window) {
-    MemoryCheck(windows_.size()<16 && window.key && Size(window)>0 &&
+    MemoryCheck(windows_.size()<(scaleout_capacity_?128u:16u) && window.key && Size(window)>0 &&
                 (window.logical_bytes?(window.bytes.empty() && window.logical_bytes<=MaxLogicalBytes && window.pages.size()<=MaxPages):
                  (window.bytes.size()<=65536 && window.pages.empty())) &&
                 window.address<=UINT64_MAX-Size(window),"invalid remote memory window");
@@ -247,7 +256,7 @@ class RemoteMemory {
     }
   }
   void AcquireWrite(uint64_t identity,ReadLease lease) {
-    MemoryCheck(!writers_.count(identity) && writers_.size()<16,"invalid local output lease identity/budget");
+    MemoryCheck(!writers_.count(identity) && writers_.size()<(scaleout_capacity_?128u:16u),"invalid local output lease identity/budget");
     MemoryCheck(lease.bytes<=32768,"local output length exceeded");
     CheckWritable(lease.owner,lease.key,lease.address,lease.bytes);
     writers_.emplace(identity,lease);
@@ -341,7 +350,7 @@ class RemoteMemory {
   std::vector<Window> windows_;
   std::vector<Registration> registrations_;
   std::map<uint64_t,std::pair<unsigned,unsigned>> context_bindings_;
-  bool nic_scoped_=false;
+  bool nic_scoped_=false,scaleout_capacity_=false,request_limits_configured_=false;
   std::map<uint64_t,ReadLease> leases_;
   std::map<uint64_t,ReadLease> writers_;
   std::map<uint64_t,Context> contexts_;

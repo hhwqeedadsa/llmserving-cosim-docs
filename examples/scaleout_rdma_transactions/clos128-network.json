@@ -1,0 +1,86 @@
+{
+  "schema_version": "moe-scaleout-topology/2",
+  "deployment": {
+    "pods": 2,
+    "segments_per_pod": 1,
+    "servers_per_segment": 8,
+    "gpus_per_server": 8,
+    "gpu_type": "H100"
+  },
+  "fabric": {
+    "rails": 1,
+    "planes": 1,
+    "tors_per_segment_per_rail": 4,
+    "upper_tier_scope": "shared",
+    "aggs_per_pod_per_group": 4,
+    "cores_per_group": 4,
+    "tor_uplinks": 4,
+    "agg_uplinks": 1,
+    "core_wiring": "grouped"
+  },
+  "nic": {
+    "rails_by_gpu_slot": [
+      [
+        0
+      ],
+      [
+        0
+      ],
+      [
+        0
+      ],
+      [
+        0
+      ],
+      [
+        0
+      ],
+      [
+        0
+      ],
+      [
+        0
+      ],
+      [
+        0
+      ]
+    ],
+    "total_rate_bps": 400000000000
+  },
+  "links": {
+    "access": {
+      "rate_bps": 400000000000,
+      "delay_ns": 1000
+    },
+    "tor_agg": {
+      "rate_bps": 400000000000,
+      "delay_ns": 1000
+    },
+    "agg_core": {
+      "rate_bps": 400000000000,
+      "delay_ns": 1000
+    },
+    "tor_core": {
+      "rate_bps": 400000000000,
+      "delay_ns": 1000
+    }
+  },
+  "port_limits": {
+    "gpu": 16,
+    "tor": 128,
+    "agg": 128,
+    "core": 128
+  },
+  "budget": {
+    "max_nodes": 8192,
+    "max_links": 131072,
+    "max_switches": 1024
+  },
+  "intra_host": {
+    "kind": "nonblocking_chunked_crossbar",
+    "enabled": false,
+    "rate_bps": 3600000000000,
+    "delay_ns": 100,
+    "chunk_bytes": 16384
+  }
+}

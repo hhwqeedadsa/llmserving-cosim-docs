@@ -8,6 +8,7 @@ from .native_identity import locked_native_commit
 from .scaleout_streams import validate as validate_streams
 from .scaleout_topology import fields, integer, require
 from .memory_registrations import validate_registrations
+from .transaction_capacity import execution_limits, capacity, host_budget
 from .application_windows import validate_application_windows
 from .static_stream_validation import StaticStreamValidationCache
 
@@ -37,8 +38,8 @@ def sparse_window_size(window):
     return window['bytes']
 
 
-def _local_waits(waits, owner, registered):
-    require(isinstance(waits, list) and 1 <= len(waits) <= 8, 'require 1..8 local wait conditions')
+def _local_waits(waits, owner, registered, maximum=8):
+    require(isinstance(waits, list) and 1 <= len(waits) <= maximum, 'local wait condition budget exceeded')
     locations, ranges = set(), []
     for wait in waits:
         require(isinstance(wait, dict), 'local wait must be an object')
@@ -62,20 +63,6 @@ def _local_waits(waits, owner, registered):
         ranges.append((wait['key'], wait['address'], wait['address']+bits//8))
 
 
-def execution_limits(config):
-    """Lifetime admission counts; independent of queue depth and byte budgets."""
-    require(isinstance(config, dict), 'transaction input must be an object')
-    defaults = dict(max_connections=8, max_remote_operations=32, max_local_operations=16)
-    if 'execution_limits' not in config:
-        return defaults
-    require(config.get('schema_version') == 'moe-rdma-transactions/5', 'execution limits require transactions/5')
-    value = config['execution_limits']
-    fields(value, 'max_connections max_remote_operations max_local_operations', 'execution limits')
-    for key, low, high in [('max_connections', 1, 64), ('max_remote_operations', 1, 1024), ('max_local_operations', 0, 256)]:
-        integer(value[key], key, low, high)
-    return dict(value)
-
-
 def validate(topology, protocol, config, *, allow_no_remote=False, stream_cache=None):
     require(stream_cache is None or type(stream_cache) is StaticStreamValidationCache,
             'invalid static streams validation cache')
@@ -92,6 +79,7 @@ def validate(topology, protocol, config, *, allow_no_remote=False, stream_cache=
                 'application_window_model' not in config and 'buffer_model' not in config,
                 'peer copy requires v5 enabled topology crossbar without application views/bounded pool')
     counts = execution_limits(config)
+    caps = capacity(config)
     reference = 'dcqcn_reference' in config
     selective = isinstance(config.get('transport_recovery'), dict) and config['transport_recovery'].get('mode') == 'selective_repeat/1'
     if reference or selective:
@@ -127,8 +115,8 @@ def validate(topology, protocol, config, *, allow_no_remote=False, stream_cache=
         fields(c, 'id src dst plane source_nic destination_nic queue_depth '+
                ('self_service' if 'self_service' in c else 'request_port response_port'), 'connection')
         integer(c['id'], 'connection id', 0, counts['max_connections']-1)
-        integer(c['src'], 'transaction source rank', 0, 31)
-        integer(c['dst'], 'transaction destination rank', 0, 31)
+        integer(c['src'], 'transaction source rank', 0, caps['owner'])
+        integer(c['dst'], 'transaction destination rank', 0, caps['owner'])
         integer(c['queue_depth'], 'transaction depth', 1, 32)
         require(c['queue_depth']&(c['queue_depth']-1)==0,'queue depth must be power of two')
         require(c['id'] not in by_id, 'repeated connection id')
@@ -148,6 +136,11 @@ def validate(topology, protocol, config, *, allow_no_remote=False, stream_cache=
     if 'execution_limits' in config:
         descriptor.update(schema_version='moe-rdma-stream-work/2',
             limits=dict(max_streams=2*counts['max_connections'], max_work=2*counts['max_remote_operations']))
+    if caps['scaled']:
+        descriptor['schema_version'] = 'moe-rdma-stream-work/4'
+        descriptor['work'][0]['kind'] = 'write'
+        descriptor['limits']['max_link_transmissions'] = 2000000
+        descriptor['local_model'] = dict(mode='serial_per_gpu/1', duration_source='declared_ns')
     if 'transport_recovery' in config:descriptor['transport_recovery']=config['transport_recovery']
     if reference:descriptor['dcqcn_reference']=config['dcqcn_reference']
     if stream_cache is None:
@@ -155,12 +148,12 @@ def validate(topology, protocol, config, *, allow_no_remote=False, stream_cache=
     else:
         stream_cache.validate(topology, protocol, descriptor, transaction_peer_copies=peer_copy)
     windows = config['windows']
-    require(isinstance(windows, list) and 1 <= len(windows) <= 16, 'require 1..16 remote windows')
+    require(isinstance(windows, list) and 1 <= len(windows) <= caps['windows'], 'remote window budget exceeded')
     gpus = {n['id'] for n in topology['nodes'] if n['kind'] == 'gpu'}
     registered = {}
     for w in windows:
         fields(w, 'owner key address allow_atomic '+('bytes initialization segments' if sparse_mode else 'hex'), 'remote window')
-        integer(w['owner'], 'window owner', 0, 31)
+        integer(w['owner'], 'window owner', 0, caps['owner'])
         integer(w['key'], 'remote key', 1, 2**32-1)
         integer(w['address'], 'window address', 0, 2**64-1)
         require(w['owner'] in gpus and isinstance(w['allow_atomic'], bool), 'invalid window owner/permission')
@@ -185,7 +178,7 @@ def validate(topology, protocol, config, *, allow_no_remote=False, stream_cache=
         require(kind in ('remote', 'local'), 'unsupported transaction node kind')
         integer(op.get('id'), 'operation id', 0, 65535)
         require(op['id'] not in kinds, 'repeated operation id')
-        require(isinstance(op.get('after'), list) and len(op['after']) <= 32, 'invalid operation dependencies')
+        require(isinstance(op.get('after'), list) and len(op['after']) <= caps['dependencies'], 'invalid operation dependencies')
         deps, parents, safe_parents = set(), set(), set()
         for d in op['after']:
             fields(d, 'operation event', 'transaction dependency')
@@ -203,10 +196,10 @@ def validate(topology, protocol, config, *, allow_no_remote=False, stream_cache=
             fields(op, 'id kind rank duration_ns after'+(' local_wait' if 'local_wait' in op else '')+
                    (' copy' if 'copy' in op and memory_mode else '')+(' application_uses' if 'application_uses' in op else '')+
                    (' release_window' if 'release_window' in op else ''), 'local transaction node')
-            integer(op['rank'], 'local rank', 0, 31)
+            integer(op['rank'], 'local rank', 0, caps['owner'])
             require(op['rank'] in gpus, 'local rank is not a topology GPU')
             integer(op['duration_ns'], 'local duration', 0, protocol.get('limits', {}).get('max_sim_ns', 5000000))
-            if 'local_wait' in op: _local_waits(op['local_wait'], op['rank'], registered)
+            if 'local_wait' in op: _local_waits(op['local_wait'], op['rank'], registered, caps['waits'])
             if 'copy' in op:
                 copy = op['copy']; fields(copy, 'source target', 'local copy')
                 source, target = copy['source'], copy['target']
@@ -215,7 +208,7 @@ def validate(topology, protocol, config, *, allow_no_remote=False, stream_cache=
                 fields(target, 'key address'+(' owner' if is_peer else ''), 'local copy target')
                 target_owner = target['owner'] if is_peer else op['rank']
                 if is_peer:
-                    integer(target_owner, 'peer copy target owner', 0, 31)
+                    integer(target_owner, 'peer copy target owner', 0, caps['owner'])
                     nodes = {n['id']: n for n in topology['nodes']}
                     require(peer_copy and target_owner in gpus and target_owner != op['rank'] and
                             nodes[target_owner]['server'] == nodes[op['rank']]['server'] and op['duration_ns'] == 0,
@@ -294,7 +287,7 @@ def validate(topology, protocol, config, *, allow_no_remote=False, stream_cache=
                         'queue fence must select source-owned connections')
             require(len(set(selected)) == len(selected), 'repeated queue fence connection')
         if 'local_wait' in op:
-            _local_waits(op['local_wait'], by_id[op['connection']]['src'], registered)
+            _local_waits(op['local_wait'], by_id[op['connection']]['src'], registered, caps['waits'])
             if from_source:
                 require(all('reset_to' not in w or w['address']+w.get('bits',64)//8 <= source['address'] or
                             source['address']+length <= w['address'] for w in op['local_wait']),
@@ -368,9 +361,7 @@ def probe(topology, protocol, config, backend, output):
     require(w.get('submission_model') != dict(mode='staged_prefix/1'),
             'staged_prefix/1 requires a controller using NativeTransactionSession')
     require(backend.is_file() and os.access(backend, os.X_OK), 'pass the native transaction-probe executable')
-    budget = limits(c)
-    budget.update(wall_seconds=min(60, budget['wall_seconds']), rss_bytes=min(2**30, budget['rss_bytes']),
-                  address_bytes=min(2*2**30, budget['address_bytes']), artifact_bytes=min(64*2**20, budget['artifact_bytes']))
+    budget = host_budget(w, limits(c))
     native_commit = locked_native_commit(ROOT)
     output.mkdir(exist_ok=False)
     command = [backend, topology/'topology.json', protocol, config, output/'result.json']

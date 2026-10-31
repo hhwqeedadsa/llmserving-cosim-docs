@@ -9,7 +9,8 @@ inline std::vector<RemoteMemory::Registration> MemoryRegistrations(const Json& i
   if(!enabled)return {};
   Require((input.at("schema_version")=="moe-rdma-transactions/4" || input.at("schema_version")=="moe-rdma-transactions/5") &&
           input.at("registration_model")==Json{{"mode","nic_scoped_aliases/1"}},"unsupported registration model");
-  const auto& rows=input.at("registrations");Require(rows.is_array() && !rows.empty() && rows.size()<=32,"registration count exceeded");
+  const auto capacity=ReadTransactionLimits(input);
+  const auto& rows=input.at("registrations");Require(rows.is_array() && !rows.empty() && rows.size()<=capacity.Registrations(),"registration count exceeded");
   auto integer=[](const Json& v,uint64_t maximum) {
     Require(v.is_number_integer() && (v.is_number_unsigned() || v.get<int64_t>()>=0),"invalid registration integer");
     const auto n=v.get<uint64_t>();Require(n<=maximum,"registration integer out of bounds");return n;
@@ -23,7 +24,7 @@ inline std::vector<RemoteMemory::Registration> MemoryRegistrations(const Json& i
     Require(row.is_object() && row.size()==8,"wrong registration fields");
     for(const auto* k:{"id","owner","nic","key","window_key","address","bytes","allow_atomic"})Require(row.contains(k),"missing registration field");
     Require(row.at("allow_atomic").is_boolean(),"registration atomic permission must be boolean");
-    RemoteMemory::Registration r{integer(row.at("id"),65535),static_cast<unsigned>(integer(row.at("owner"),31)),
+    RemoteMemory::Registration r{integer(row.at("id"),65535),static_cast<unsigned>(integer(row.at("owner"),capacity.MaxOwner())),
       static_cast<unsigned>(integer(row.at("nic"),1024)),static_cast<uint32_t>(integer(row.at("key"),UINT32_MAX)),
       static_cast<uint32_t>(integer(row.at("window_key"),UINT32_MAX)),integer(row.at("address"),UINT64_MAX),
       integer(row.at("bytes"),RemoteMemory::MaxLogicalBytes),row.at("allow_atomic")};

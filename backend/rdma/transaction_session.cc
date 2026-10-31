@@ -129,7 +129,7 @@ class TransactionSession {
   }
   void Exchange(Json events,bool drained) {
     auto exchange=timing_.Span("session_exchange");
-    Require(decision_<256,"session decision budget exceeded");
+    Require(decision_<ReadTransactionLimits(input_).Decisions(),"session decision budget exceeded");
     {
     auto phase=timing_.Span("session_decide_write");
     Json message={{"type","DECIDE"},{"decision_id",decision_},{"now_ns",Now()},

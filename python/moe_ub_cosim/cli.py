@@ -143,7 +143,10 @@ def parser():
     rp.add_argument('--messages', type=Path, required=True, help='Bounded microprobe message array, not an LLM workload')
     rp.add_argument('--backend', type=Path, required=True, help='Executable returned by rdma-build')
     rp.add_argument('--output', type=Path, required=True, help='New result directory on a volume with at least 8GiB free')
-    rt = sc.add_parser('rdma-transaction-probe', help='Execute native MRT1 put/fetch_add(64)/fetch_add32 with optional local 32/64-bit waits; v4 guarded copy, v5 sparse/prefix, peer service and NIC registrations/local views; not GIN/RoCE timing')
+    tb = sc.add_parser('rdma-transaction-build', help='Incrementally compile transaction probe/session against an explicitly pinned prebuilt native runtime; no dependency build/download')
+    for name in ('runtime', 'identity', 'output'):
+        tb.add_argument('--'+name, type=Path, required=True)
+    rt = sc.add_parser('rdma-transaction-probe', help='Execute native MRT1 put/fetch_add(64)/fetch_add32 with optional local 32/64-bit waits; v4 guarded copy, v5 sparse/prefix, peer service and NIC registrations/local views, optional explicit scaleout_ep32/1 capacity; not GIN/RoCE timing')
     rt.add_argument('--topology', type=Path, required=True)
     rt.add_argument('--protocol', type=Path, required=True)
     rt.add_argument('--config', type=Path, required=True)
@@ -158,7 +161,7 @@ def parser():
     rcf = sc.add_parser('rc-fabric-probe', help='Concurrent RC QPs on one shared native network and target memory; one WQE per QP, fixed rate, zero ICRC placeholder')
     for name in ('topology','protocol','config','backend','output'):
         rcf.add_argument('--'+name,type=Path,required=True)
-    session = sc.add_parser('rdma-transaction-session', help='Submit v4/v5 put/fetch_add(64)/fetch_add32 and local 32/64-bit waits after actual native callbacks; optional NIC registrations/local views, sparse/prefix and peer service; not modern GIN/GPU timing')
+    session = sc.add_parser('rdma-transaction-session', help='Submit v4/v5 put/fetch_add(64)/fetch_add32 and local 32/64-bit waits after actual native callbacks; optional NIC registrations/local views, sparse/prefix, peer service and explicit scaleout_ep32/1 capacity; not modern GIN/GPU timing')
     for name in ('topology', 'protocol', 'config', 'backend', 'output'):
         session.add_argument('--'+name, type=Path, required=True)
     session.add_argument('--reuse-static-validation',action='store_true',help='Reuse an exact type-preserving static streams check within this session; writes host-only static-validation.json')
@@ -346,6 +349,9 @@ def main(argv=None):
             elif args.scaleout_command == 'deepep-audit':
                 from .legacy_audit import run
                 value=run(args.run,args.protocol,args.output)
+            elif args.scaleout_command == 'rdma-transaction-build':
+                from .transaction_profile_build import build
+                value=build(args.runtime,args.identity,args.output)
             elif args.scaleout_command == 'deepep-shared-build':
                 from .legacy_shared_build import build
                 value=build(args.runtime,args.identity,args.output)

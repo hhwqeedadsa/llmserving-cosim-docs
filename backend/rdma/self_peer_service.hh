@@ -1,5 +1,5 @@
 #pragma once
-#include "fabric.hh"
+#include "transaction_limits.hh"
 #include <algorithm>
 
 namespace moe_rdma {
@@ -26,7 +26,7 @@ inline void ValidateSelfServices(const Json& input,const Json& topology,int64_t 
     selves.emplace(c.at("id"),self);if(!self)continue;++count;
     Require(enabled,"self-peer model is missing");
     SelfKeys(c,{"id","src","dst","plane","source_nic","destination_nic","queue_depth","self_service"});
-    const auto owner=SelfInteger(c.at("src"),31),nic=SelfInteger(c.at("source_nic"),1024),plane=SelfInteger(c.at("plane"),15);
+    const auto owner=SelfInteger(c.at("src"),ReadTransactionLimits(input).MaxOwner()),nic=SelfInteger(c.at("source_nic"),1024),plane=SelfInteger(c.at("plane"),15);
     Require(nic>0 && c.at("destination_nic")==nic,"self-peer NIC mismatch");
     const auto gpu=std::find_if(topology.at("nodes").begin(),topology.at("nodes").end(),[&](const auto& n){return n.at("id")==owner && n.at("kind")=="gpu";});
     Require(gpu!=topology.at("nodes").end(),"self-peer owner is not a GPU");

@@ -129,6 +129,8 @@ transactions/2新增顶层`local_model/local_work/completed_local_work/pending_l
 
 `rdma-transaction-probe`的`result.json.transactions`保存操作六种时刻、原子返回值、最终窗口、队列前缀及目标实际应用事件；底层记录在`transport`。payload接收模式另含`source_payload_packets`的实际发出有效载荷hex，可按stream/sequence独立还原MRT1帧。目标事件及操作匹配仅供离线核查，不提供给算法；`applied`不代表GPU可见，`completed`不代表真实GIN CQE。字段、预算和层次见[远端事务输出](../examples/scaleout_rdma_transactions/README.md#输出与完成)。
 
+显式扩展输入在`transactions.execution_limits`中保留三个累计上限及`profile="scaleout_ep32/1"`；旧输入不新增profile。会话的`finish_ns`须等网络排空，可能晚于最后一项应用工作完成。评价任务等待应另取`transactions.operations[].completed_ns`与`local_work[].completed_ns`的最大值，不能把原子回复的后续ACK直接计为任务损失。
+
 v5显式声明`execution_limits`时，`transactions.execution_limits`保存本次生效的`max_connections/max_remote_operations/max_local_operations`；离线入口和在线会话相同。省略声明时不输出该字段，默认行为不变。它们是生命周期准入数量，不是峰值占用、带宽、硬件容量或实测GPU内存；具体独立限制见[执行额度](../examples/scaleout_rdma_transactions/README.md#配置较多连接与较长程序)。
 
 `rdma-stream-probe`的`result.json.persistent_transport`独立保存`streams`、`work`、`source_packets`和列名。工作区间`begin/end`为累计字节序号，`ready/published/accepted/acked_ns`来自同一网络时钟，未发生项为-1；accepted不是GPU可见，acked不是精确GIN本地完成。源包记录含现有packet_uid、端点/NIC/序号/有效负载，不修改包头。`physical_drained`含在途帧与队列检查，`closed`另表连接关闭；顶层messages为空，不能用旧消息诊断器替代本模式核查。输入、预算与完整字段解释见[持久字节小例](../examples/scaleout_rdma_streams/README.md)。

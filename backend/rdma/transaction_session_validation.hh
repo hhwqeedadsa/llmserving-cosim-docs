@@ -64,7 +64,7 @@ inline void ValidateSessionProgram(const Json& input,const Json& topology,int64_
     const bool self=c.contains("self_service");
     SessionKeys(c,self?std::vector<std::string>{"id","src","dst","plane","source_nic","destination_nic","queue_depth","self_service"}:
       std::vector<std::string>{"id","src","dst","plane","request_port","response_port","source_nic","destination_nic","queue_depth"});
-    const auto id=SessionInteger(c.at("id"),execution_limits.connections-1),src=SessionInteger(c.at("src"),31),dst=SessionInteger(c.at("dst"),31);
+    const auto id=SessionInteger(c.at("id"),execution_limits.connections-1),src=SessionInteger(c.at("src"),execution_limits.MaxOwner()),dst=SessionInteger(c.at("dst"),execution_limits.MaxOwner());
     Require((self?src==dst:src!=dst) && gpus.count(src) && gpus.count(dst) && endpoints.emplace(id,std::pair{src,dst}).second,"invalid session endpoints/id");
     SessionInteger(c.at("plane"),31);SessionInteger(c.at("source_nic"),1024);SessionInteger(c.at("destination_nic"),1024);
     destination_nics.emplace(id,c.at("destination_nic"));
@@ -75,11 +75,11 @@ inline void ValidateSessionProgram(const Json& input,const Json& topology,int64_
   }
   struct Window {uint64_t address,bytes;bool atomic;};
   std::map<std::pair<uint64_t,uint64_t>,Window> windows;
-  const auto& ws=input.at("windows");Require(ws.is_array() && !ws.empty() && ws.size()<=16,"session window budget exceeded");
+  const auto& ws=input.at("windows");Require(ws.is_array() && !ws.empty() && ws.size()<=execution_limits.Windows(),"session window budget exceeded");
   for(const auto& w:ws) {
     SessionKeys(w,sparse?std::vector<std::string>{"owner","key","address","allow_atomic","bytes","initialization","segments"}:
       std::vector<std::string>{"owner","key","address","allow_atomic","hex"});
-    const auto owner=SessionInteger(w.at("owner"),31),key=SessionInteger(w.at("key"),UINT32_MAX),address=SessionInteger(w.at("address"));
+    const auto owner=SessionInteger(w.at("owner"),execution_limits.MaxOwner()),key=SessionInteger(w.at("key"),UINT32_MAX),address=SessionInteger(w.at("address"));
     uint64_t size;
     if(sparse) {
       size=SessionInteger(w.at("bytes"),RemoteMemory::MaxLogicalBytes);
@@ -125,7 +125,7 @@ inline void ValidateSessionProgram(const Json& input,const Json& topology,int64_
     if(op.contains("queue_fence")) {Require(!is_local && !op.contains("local_wait"),"invalid session queue fence");keys.push_back("queue_fence");}
     for(const auto* name:{"application_uses","release_window"})if(op.contains(name))keys.push_back(name);
     SessionKeys(op,keys);
-    Require(op.at("after").is_array() && op.at("after").size()<=32,"invalid session dependencies");
+    Require(op.at("after").is_array() && op.at("after").size()<=execution_limits.Dependencies(),"invalid session dependencies");
     std::set<std::pair<uint64_t,std::string>> deps;std::set<uint64_t> parents;
     for(const auto& d:op.at("after")) {
       SessionKeys(d,{"operation","event"});const auto p=SessionInteger(d.at("operation"),65535);
@@ -134,11 +134,11 @@ inline void ValidateSessionProgram(const Json& input,const Json& topology,int64_
       parents.insert(p);parents.insert(ancestors.at(p).begin(),ancestors.at(p).end());
     }
     uint64_t owner;
-    if(is_local) {owner=SessionInteger(op.at("rank"),31);Require(gpus.count(owner),"session local rank absent");SessionInteger(op.at("duration_ns"),max_ns);++local_count;}
+    if(is_local) {owner=SessionInteger(op.at("rank"),execution_limits.MaxOwner());Require(gpus.count(owner),"session local rank absent");SessionInteger(op.at("duration_ns"),max_ns);++local_count;}
     else {const auto c=SessionInteger(op.at("connection"),execution_limits.connections-1);Require(endpoints.count(c),"unknown session connection");owner=endpoints.at(c).first;++remote_count;}
     struct Reset {uint64_t key,address,bytes;};std::vector<Reset> resets,wait_ranges;
     if(op.contains("local_wait")) {
-      const auto& waits=op.at("local_wait");Require(waits.is_array() && !waits.empty() && waits.size()<=8,"invalid session local waits");
+      const auto& waits=op.at("local_wait");Require(waits.is_array() && !waits.empty() && waits.size()<=execution_limits.Waits(),"invalid session local waits");
       std::set<std::pair<uint64_t,uint64_t>> seen;
       for(const auto& w:waits) {
         std::vector<std::string> wk={"key","address","compare","value"};
@@ -163,7 +163,7 @@ inline void ValidateSessionProgram(const Json& input,const Json& topology,int64_
       SessionKeys(s,{"key","address","bytes"});
       const bool peer=t.contains("owner");
       SessionKeys(t,peer?std::vector<std::string>{"owner","key","address"}:std::vector<std::string>{"key","address"});
-      const auto target_owner=peer?SessionInteger(t.at("owner"),31):owner;
+      const auto target_owner=peer?SessionInteger(t.at("owner"),execution_limits.MaxOwner()):owner;
       if(peer)Require(peer_copy && target_owner!=owner && gpus.count(target_owner) &&
         topology.at("nodes").at(owner).at("server")==topology.at("nodes").at(target_owner).at("server") &&
         op.at("duration_ns")==0,"peer copy must target a same-server peer with zero fixed duration");

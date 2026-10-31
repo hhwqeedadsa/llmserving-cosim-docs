@@ -75,7 +75,7 @@ int main(int argc,char** argv) {
         std::vector<std::string> keys={"id","kind","after"};
         if(local[i]) {
           keys.insert(keys.end(),{"rank","duration_ns"});
-          const auto rank=Integer(op.at("rank"),31);
+          const auto rank=Integer(op.at("rank"),execution_limits.MaxOwner());
           Require(gpus.count(static_cast<unsigned>(rank)),"local transaction rank is not a GPU");
           Integer(op.at("duration_ns"),fabric.MaxSimNs());
           if(op.contains("copy")) {Require(local_memory_mode,"copy requires v4");keys.push_back("copy");}
@@ -101,7 +101,7 @@ int main(int argc,char** argv) {
       if(local[i])++local_count;else ++remote_count;
       Require(local_count<=execution_limits.local && remote_count<=execution_limits.remote,"transaction kind count budget exceeded");
       Require(index.emplace(operations[i].at("id"),i).second,"duplicate operation id");
-      Require(operations[i].at("after").is_array() && operations[i].at("after").size()<=32,"invalid operation dependencies");
+      Require(operations[i].at("after").is_array() && operations[i].at("after").size()<=execution_limits.Dependencies(),"invalid operation dependencies");
       std::set<std::pair<uint64_t,std::string>> dependencies;
       for(const auto& d:operations[i].at("after")) {
         if(local_mode) {Keys(d,{"operation","event"});Integer(d.at("operation"),65535);}

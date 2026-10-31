@@ -1,0 +1,28 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>128端点Clos：事务容量扩展验收</title>
+<style>body{font:17px/1.7 system-ui,sans-serif;max-width:1050px;margin:36px auto;padding:0 22px;color:#172d40;background:#f7fafc}h1{line-height:1.3}h2{margin-top:32px}table{border-collapse:collapse;width:100%;background:white}th,td{text-align:left;border-bottom:1px solid #ccd8e2;padding:10px}th{background:#e5eef6}.card{padding:20px;background:white;border-left:5px solid #157269;margin:20px 0}.note{color:#526778}a{color:#086f98}code{background:#e8eef3;padding:2px 5px}</style>
+<h1>先把完整调用需要的底层容量打通</h1>
+<p>本轮交付：通用事务增加显式 <code>scaleout_ep32/1</code> 模式，Python准入、C++会话与内存核心同步扩容。默认输入维持原限制。现代EP32包装入口与完整真实调用，仍需下一独立增量接入。</p>
+<div class="card"><strong>这里验证的是功能正确性。</strong>三个128端点Clos网络各执行一次；逐字节核对最终数据、实际包和回调依赖。人工工作量不是MoE流量，也不代表128卡满载。</div>
+<h2>扩展了哪些软件容量</h2>
+<table><tr><th>资源</th><th>原显式模式</th><th>新增模式上限</th><th>本次网络实际使用</th></tr>
+<tr><td>连接</td><td>64</td><td>2048</td><td>65（含1条self）</td></tr>
+<tr><td>远端/self操作</td><td>1024</td><td>16384</td><td>66</td></tr>
+<tr><td>本地操作</td><td>256</td><td>1024</td><td>3</td></tr>
+<tr><td>窗口 / NIC注册</td><td>16 / 32</td><td>128 / 256</td><td>96 / 64</td></tr>
+<tr><td>每节点等待 / 直接前驱</td><td>8 / 32</td><td>32 / 128</td><td>32 / 67</td></tr>
+<tr><td>会话交互</td><td>256</td><td>1024</td><td>正常23轮；边界另做纯检查</td></tr></table>
+<p class="note">这些值是软件保护上限，不能解释为GPU或NIC的硬件规格。宿主预算显式为180秒、RSS 3GiB、地址6GiB、产物512MiB，并与协议预算取较小值。全部写入顺序、源保护与完成义务保留。</p>
+<h2>同一工作量：正常与一次丢包</h2>
+<p>128端点，16服务器、8 ToR、8 Agg、4 Core；168链路，400Gbps/1000ns。只有端点32—63有任务，机内旁路关闭；self服务成本和本地10ns工作均为功能声明。</p>
+<table><tr><th>场景</th><th>实际丢弃</th><th>最后任务完成</th><th>网络排空</th><th>源payload包捕获</th></tr>
+<tr><td>正常</td><td>0</td><td>8.036µs</td><td>8.036µs</td><td>66</td></tr>
+<tr><td>首请求包丢弃一次</td><td>1</td><td>8.047µs</td><td>10.019µs</td><td>67</td></tr>
+<tr><td>无profile旧事务链</td><td>0</td><td>10.173µs</td><td>12.175µs</td><td>11</td></tr></table>
+<h2>为什么丢包后任务只晚11ns</h2>
+<p>故障例中，第二包先到产生缺口反馈；4.010µs触发快重传，6.014µs补齐首包。受影响的原子事务从4.013µs推迟到8.017µs完成。但正常时其他并行任务本就要到约8.016µs才结束，故障等待大部分被它覆盖，最终任务仅晚11ns。</p>
+<p>10.019µs是反向原子回复的ACK到齐。它保证网络资源排空，不能全部算作推理任务损失。这里没有新恢复算法，也不能由此推断生产推理收益。</p>
+<h2>可以复核的证据</h2>
+<p>7个C++程序共184,962项断言，82个不同Python测试方法。正常/故障各核对96窗口49,152B、339条回调及3项依赖回调后追加；网络唯一payload均为2,632B。所有请求/原子回复从实际包重新解码，正常与故障最终内存相同。</p>
+<p><a href="README.md">验收说明</a> · <a href="verification.json">命令、资源和核验摘要</a> · <a href="audit.py">独立包与内存核验程序</a> · <a href="../../examples/scaleout_rdma_transactions/README.md">公开操作与输入</a> · <a href="../../docs/tasks/transaction_scaleout_profile_spec.md">范围与预算</a></p>
+<p class="note">固定依赖未升级；没有GPU执行或硬件校准。保留失败记录，不重跑成功网络。网页只做静态链接检查。</p></html>

@@ -4,6 +4,7 @@ NativeTransactionSession is a controller-facing API, not a GPU/GIN provider.
 Use the bounded CLI for the dependency frontend, or run a custom Python driver
 under the public host_probe with the same declared group/artifact limits.
 """
+from .transaction_capacity import capacity, host_budget
 from copy import deepcopy
 from contextlib import nullcontext
 import json
@@ -135,7 +136,7 @@ class NativeTransactionSession:
 
     Host controller execution does not advance simulated time. No callback
     equates target applied, request ACK, returned value, or completion to GPU
-    visibility. Cumulative work/connection budgets retain the v4 bounds.
+    visibility. Lifetime capacities are explicit; old inputs retain their bounds.
     """
 
     def __init__(self, topology, protocol, initial, backend, output, *, timing=None, callback_batches=False,
@@ -168,7 +169,7 @@ class NativeTransactionSession:
         self._buffer = b''
         self.selector = selectors.DefaultSelector()
         self.started = time.monotonic()
-        self.deadline = self.started + min(60, limits(self.p)['wall_seconds'])
+        self.deadline = self.started + host_budget(self.config, limits(self.p))['wall_seconds']
         save(self.output/'initial.json', self.config)
         self.errors = (self.output/'native.stderr.log').open('w')
         self.logs = (self.output/'native.stdout.log').open('w', buffering=1)
@@ -250,7 +251,7 @@ class NativeTransactionSession:
             event = json.loads(line[len('MOE_TX_EVENT '):])
             fields(event, 'type decision_id now_ns events drained'+(' batches' if getattr(self,'callback_batches',False) else ''), 'transaction session decision')
             require(event['type'] == 'DECIDE' and type(event['decision_id']) is int and
-                    event['decision_id'] == self.sequence and type(event['now_ns']) is int and
+                    event['decision_id'] == self.sequence and self.sequence < capacity(self.config)['decisions'] and type(event['now_ns']) is int and
                     self.last_ns <= event['now_ns'] <= limits(self.p)['max_sim_ns'] and
                     type(event['drained']) is bool and isinstance(event['events'], list), 'invalid native session decision')
             if getattr(self,'callback_batches',False):_callback_batches(event,self.last_ns)
@@ -394,9 +395,7 @@ def run(topology, protocol, config, backend, output, *, reuse_static_validation=
          native_commit_role='expected_source_checkout_not_binary_build_identity',
          hardware_calibrated=False, modern_deepep_connected=False,
          hashes={str(path): digest(path) for path in (topology/'topology.json', protocol, config, backend, Path(__file__))}))
-    budget = limits(p)
-    budget.update(wall_seconds=min(60, budget['wall_seconds']), rss_bytes=min(2**30, budget['rss_bytes']),
-                  address_bytes=min(2**31, budget['address_bytes']), artifact_bytes=min(64*2**20, budget['artifact_bytes']))
+    budget = host_budget(w, limits(p))
     command = [sys.executable, '-m', 'moe_ub_cosim.transaction_session', '--worker',
                output/'topology.json', output/'protocol.json', output/'input.json', backend, output]
     if reuse_static_validation:

@@ -379,3 +379,6 @@ transactions/5会话可声明staged_prefix/1，以独立COMMIT控制prepare_oper
 ## 完整旧库多组共享执行
 
 `legacy_deepep`同时识别单组`moe-legacy-native-execution/1`及共享`moe-legacy-shared-execution/1`。共享模式有1或2个`LegacyExecutor`，分别持有原rank/专家/事件/内存，一份`PersistentStreams`统一拥有全部网卡回调、全局stream/work身份和物理排空。禁止在同一Fabric创建多个传输控制器覆盖回调。组报告不复制全局传输；只有全部组和共享网络完成后才关闭Simulator。新共享驱动允许显式200,000参考日志，原单组和通用接口仍100,000；范围及准入见[共享示例](../examples/legacy_shared/README.md)。
+
+
+通用事务的transactions/5可显式声明`execution_limits.profile="scaleout_ep32/1"`，通过共享Python/C++准入同步扩展连接、节点、窗口、NIC注册和会话容量；内存核心只允许在使用前显式选择容量。默认输入不扩大，线格式与恢复不变。[128Clos示例和构建操作](../examples/scaleout_rdma_transactions/README.md#显式扩展到scale-out事务容量)说明软件上限与功能边界。现代DeepEP包装入口尚需独立接入，不能由此宣称完整EP32调用已验证。

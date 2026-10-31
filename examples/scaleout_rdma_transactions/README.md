@@ -464,3 +464,40 @@ PYTHONPATH=python PYTHONDONTWRITEBYTECODE=1 python3 -B -m moe_ub_cosim scaleout 
 新模式仅保留每context的下一个合法MRT1序号，拒绝应用层重放、跳号和原子请求；不会把失败误写成完成。`transactions.target_delivery.contexts`报告实际`next_sequence/retained_requests/retained_encoded_bytes`；后两项应为0。解码临时内容、序号元数据、包和观测副本不在这个0中，不能称总目标内存为0。
 
 该模式不撤回晚到包、不释放窗口或失败源lease，不提供跨连接恢复重放或GPU可见性保证。原有32远端操作等预算保持，不宣称无限连续服务。默认差分、真实重传、独立字节审计及迁移证据见[验收](../../fixtures/carrier_once_put/README.md)。
+
+## 显式扩展到Scale-Out事务容量
+
+需要更多连接和窗口时，在transactions/5的`execution_limits`中显式加入`"profile":"scaleout_ep32/1"`，仍逐项声明三个累计数量。该模式的上限如下；没有profile的原输入仍按上文的旧上限检查。
+
+| 软件资源 | 显式扩展模式上限 |
+|---|---:|
+| 连接／远端或self操作／本地操作 | 2048／16384／1024 |
+| 内存窗口／NIC注册 | 128／256 |
+| 单节点本地等待条件／直接前驱 | 32／128 |
+| 物理端点编号 | 0—511，且须存在于输入拓扑 |
+| 并发本地输出写保护 | 128 |
+| 会话同步交互次数 | 1024 |
+
+载体派生双向stream/4额度，最多4096流、32768工作和200万条链路发送记录。只提高软件容量，不改变报文格式、拥塞控制、选路或重传。宿主最多180秒、进程组RSS 3GiB、单进程地址6GiB、产物512MiB；分别与protocol已有预算取较小值。回调和提交单行仍不能超过1MiB，观察额度仍单独检查。
+
+[scaleout-profile.json](scaleout-profile.json)是人工容量验收输入：128端点Clos中只有32个端点参与，建立65条连接（含一条self）、96窗口和64注册，执行65次put、一次32位原子加法及三项本地工作。三项本地工作均由实际完成回调追加，包含67个直接前驱、32项本地等待和复制。不是MoE路由或128卡满载实验。网络禁用未使用的机内旁路，self服务仍采用显式功能成本。
+
+使用已有完整`rdma-build`生成的原生程序，或按下文增量构建后执行：
+
+```bash
+PYTHONPATH=python python3 -B -m moe_ub_cosim scaleout topology \
+  --config examples/scaleout_rdma_transactions/clos128-network.json \
+  --output runs/tx-profile-topology
+PYTHONPATH=python python3 -B -m moe_ub_cosim scaleout rdma-transaction-session \
+  --topology runs/tx-profile-topology \
+  --protocol examples/scaleout_rdma_transactions/scaleout-rdma.json \
+  --config examples/scaleout_rdma_transactions/scaleout-profile.json \
+  --backend build/native-transactions/output/moe-rdma/ns3.42-moe-rdma-transaction-session \
+  --output runs/tx-profile-normal
+```
+
+把protocol换为[scaleout-loss.json](scaleout-loss.json)，在新输出目录运行同例，会在端点33的NIC1丢弃connection0首请求包一次，仍由已集成的选择重传处理。必须核对实际丢弃记录，不能只因配置有fault就声称发生过丢包。
+
+若已持有固定原生Fabric和8个ns-3共享库，可用`scaleout rdma-transaction-build --runtime RUNTIME --identity IDENTITY --output NEW_BUILD`只编事务probe/session四个受影响单元，依赖库不重编、不下载。`RUNTIME`须有原`provenance.json`及`output/include`、`output/lib`；`IDENTITY`须含`native_commit`、`fabric_archive_sha256`、`library_hashes`，若来自先前增量构建还须提供准确的`sources/recompiled_old_paths`。它核对归档成员、未重编源码、库hash及ldd实际加载路径，保存全部命令与预算，返回`transaction_probe/transaction_session`路径。全新检出尚无这些预建库时，使用原有`rdma-build`，不能省略依赖来源核验。
+
+现代DeepEP原生包装入口仍保留原限制；此profile先提供通用事务能力，不代表EP32完整现代调用已验收。验收见[容量功能记录](../../fixtures/transaction_scaleout_profile/README.md)。

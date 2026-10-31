@@ -24,9 +24,10 @@ std::string MemoryHex(const std::vector<uint8_t>& bytes) {
 }
 RemoteTransactions::RemoteTransactions(Fabric& fabric,const Json& input):
     fabric_(fabric),execution_limits_(ReadTransactionLimits(input)),explicit_limits_(input.contains("execution_limits")),
-    transport_(fabric,{2*execution_limits_.connections,2*execution_limits_.remote},input.value("transport_recovery",Json()),input.contains("peer_copy_model")) {
+    transport_(fabric,{2*execution_limits_.connections,2*execution_limits_.remote,execution_limits_.LinkTransmissions()},input.value("transport_recovery",Json()),input.contains("peer_copy_model")) {
   ValidateTransactionTransport(input,fabric.MaxSimNs());
   if(input.contains("dcqcn_reference"))transport_.ConfigureDcqcnReference(input.at("dcqcn_reference"));
+  if(execution_limits_.scaleout)memory_.ConfigureScaleOutCapacity();
   if(explicit_limits_)memory_.ConfigureRequestLimits(execution_limits_.connections,execution_limits_.remote,execution_limits_.Nodes());
   ValidateBoundedBuffers(input);
   bounded_buffers_=input.contains("buffer_model");
@@ -88,7 +89,7 @@ RemoteTransactions::RemoteTransactions(Fabric& fabric,const Json& input):
     });
   }
   transport_.ValidateFaultBindings();
-  Require(input.at("windows").is_array() && !input.at("windows").empty() && input.at("windows").size()<=16,
+  Require(input.at("windows").is_array() && !input.at("windows").empty() && input.at("windows").size()<=execution_limits_.Windows(),
           "invalid remote windows");
   for(const auto& w:input.at("windows")) {
     if(sparse) {
@@ -142,7 +143,7 @@ Json RemoteTransactions::LocalWaits(const Json& input) const {
   if(!input.contains("local_wait"))return out;
   const auto owner=LocalOwner(input);
   const auto& waits=input.at("local_wait");
-  Require(waits.is_array() && !waits.empty() && waits.size()<=8,"invalid local wait budget");
+  Require(waits.is_array() && !waits.empty() && waits.size()<=execution_limits_.Waits(),"invalid local wait budget");
   std::set<std::pair<uint32_t,uint64_t>> seen;
   struct WaitRange {uint32_t key;uint64_t address,bytes;};std::vector<WaitRange> ranges;
   for(const auto& condition:waits) {
@@ -215,7 +216,7 @@ RemoteTransactions::LocalCopy RemoteTransactions::Copy(const Json& input) const 
       Require(v.is_number_integer() && (v.is_number_unsigned() || v.get<int64_t>()>=0),"invalid local copy integer");
       const auto n=v.get<uint64_t>();Require(n<=maximum,"local copy integer out of bounds");return n;
     };
-    const auto target_owner=peer?static_cast<unsigned>(integer("owner",31)):owner;
+    const auto target_owner=peer?static_cast<unsigned>(integer("owner",execution_limits_.MaxOwner())):owner;
     if(peer)Require(peer_copy_mode_ && input.at("duration_ns")==0 && fabric_.IntraHostPeer(owner,target_owner),
       "peer copy requires zero declared duration and enabled same-server crossbar");
     RemoteMemory::ReadLease result{target_owner,static_cast<uint32_t>(integer("key",UINT32_MAX)),integer("address",UINT64_MAX),source?integer("bytes",32768):bytes};
@@ -598,6 +599,7 @@ Json RemoteTransactions::Report() const {
   }
   if(explicit_limits_)out["execution_limits"]={{"max_connections",execution_limits_.connections},
     {"max_remote_operations",execution_limits_.remote},{"max_local_operations",execution_limits_.local}};
+  if(execution_limits_.scaleout)out["execution_limits"]["profile"]="scaleout_ep32/1";
   for(const auto& w:memory_.Windows()) {
     Json row={{"owner",w.owner},{"key",w.key},{"address",w.address},{"allow_atomic",w.atomic}};
     if(w.logical_bytes) {

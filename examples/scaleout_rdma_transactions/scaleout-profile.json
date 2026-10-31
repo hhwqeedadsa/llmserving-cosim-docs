@@ -1,0 +1,3898 @@
+{
+  "schema_version": "moe-rdma-transactions/5",
+  "local_model": {
+    "mode": "serial_per_gpu/1",
+    "duration_source": "declared_ns"
+  },
+  "source_model": {
+    "capture": "registered_window_at_publish/1",
+    "release": "transaction_completed/1"
+  },
+  "local_memory_model": {
+    "mode": "guarded_copy/1",
+    "acquire": "admission/1",
+    "capture": "start/1",
+    "commit": "completion/1"
+  },
+  "dcqcn_reference": {
+    "mode": "figure7_reference/1",
+    "np_interval_ns": 50000,
+    "alpha_interval_ns": 55000,
+    "recovery_interval_ns": 55000,
+    "recovery_bytes": 10000000,
+    "min_rate_bps": 100000000,
+    "additive_bps": 5000000,
+    "hyper_bps": 50000000,
+    "fast_recovery_rounds": 5,
+    "gain": 0.00390625,
+    "cnp_model_bytes": 48,
+    "max_events": 10000
+  },
+  "transport_recovery": {
+    "mode": "selective_repeat/1",
+    "initial_rto_ns": 80000,
+    "max_rto_ns": 640000,
+    "max_retries": 3,
+    "max_events": 10000,
+    "receive_buffer_bytes": 8192,
+    "inflight_bytes": 4000
+  },
+  "execution_limits": {
+    "profile": "scaleout_ep32/1",
+    "max_connections": 65,
+    "max_remote_operations": 66,
+    "max_local_operations": 3
+  },
+  "self_peer_model": {
+    "mode": "declared_service_fifo/1"
+  },
+  "registration_model": {
+    "mode": "nic_scoped_aliases/1"
+  },
+  "connections": [
+    {
+      "id": 0,
+      "src": 32,
+      "dst": 33,
+      "plane": 0,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4,
+      "request_port": 24000,
+      "response_port": 24001
+    },
+    {
+      "id": 1,
+      "src": 33,
+      "dst": 34,
+      "plane": 0,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4,
+      "request_port": 24002,
+      "response_port": 24003
+    },
+    {
+      "id": 2,
+      "src": 34,
+      "dst": 35,
+      "plane": 0,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4,
+      "request_port": 24004,
+      "response_port": 24005
+    },
+    {
+      "id": 3,
+      "src": 35,
+      "dst": 36,
+      "plane": 0,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4,
+      "request_port": 24006,
+      "response_port": 24007
+    },
+    {
+      "id": 4,
+      "src": 36,
+      "dst": 37,
+      "plane": 0,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4,
+      "request_port": 24008,
+      "response_port": 24009
+    },
+    {
+      "id": 5,
+      "src": 37,
+      "dst": 38,
+      "plane": 0,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4,
+      "request_port": 24010,
+      "response_port": 24011
+    },
+    {
+      "id": 6,
+      "src": 38,
+      "dst": 39,
+      "plane": 0,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4,
+      "request_port": 24012,
+      "response_port": 24013
+    },
+    {
+      "id": 7,
+      "src": 39,
+      "dst": 40,
+      "plane": 0,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4,
+      "request_port": 24014,
+      "response_port": 24015
+    },
+    {
+      "id": 8,
+      "src": 40,
+      "dst": 41,
+      "plane": 0,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4,
+      "request_port": 24016,
+      "response_port": 24017
+    },
+    {
+      "id": 9,
+      "src": 41,
+      "dst": 42,
+      "plane": 0,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4,
+      "request_port": 24018,
+      "response_port": 24019
+    },
+    {
+      "id": 10,
+      "src": 42,
+      "dst": 43,
+      "plane": 0,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4,
+      "request_port": 24020,
+      "response_port": 24021
+    },
+    {
+      "id": 11,
+      "src": 43,
+      "dst": 44,
+      "plane": 0,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4,
+      "request_port": 24022,
+      "response_port": 24023
+    },
+    {
+      "id": 12,
+      "src": 44,
+      "dst": 45,
+      "plane": 0,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4,
+      "request_port": 24024,
+      "response_port": 24025
+    },
+    {
+      "id": 13,
+      "src": 45,
+      "dst": 46,
+      "plane": 0,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4,
+      "request_port": 24026,
+      "response_port": 24027
+    },
+    {
+      "id": 14,
+      "src": 46,
+      "dst": 47,
+      "plane": 0,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4,
+      "request_port": 24028,
+      "response_port": 24029
+    },
+    {
+      "id": 15,
+      "src": 47,
+      "dst": 48,
+      "plane": 0,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4,
+      "request_port": 24030,
+      "response_port": 24031
+    },
+    {
+      "id": 16,
+      "src": 48,
+      "dst": 49,
+      "plane": 0,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4,
+      "request_port": 24032,
+      "response_port": 24033
+    },
+    {
+      "id": 17,
+      "src": 49,
+      "dst": 50,
+      "plane": 0,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4,
+      "request_port": 24034,
+      "response_port": 24035
+    },
+    {
+      "id": 18,
+      "src": 50,
+      "dst": 51,
+      "plane": 0,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4,
+      "request_port": 24036,
+      "response_port": 24037
+    },
+    {
+      "id": 19,
+      "src": 51,
+      "dst": 52,
+      "plane": 0,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4,
+      "request_port": 24038,
+      "response_port": 24039
+    },
+    {
+      "id": 20,
+      "src": 52,
+      "dst": 53,
+      "plane": 0,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4,
+      "request_port": 24040,
+      "response_port": 24041
+    },
+    {
+      "id": 21,
+      "src": 53,
+      "dst": 54,
+      "plane": 0,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4,
+      "request_port": 24042,
+      "response_port": 24043
+    },
+    {
+      "id": 22,
+      "src": 54,
+      "dst": 55,
+      "plane": 0,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4,
+      "request_port": 24044,
+      "response_port": 24045
+    },
+    {
+      "id": 23,
+      "src": 55,
+      "dst": 56,
+      "plane": 0,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4,
+      "request_port": 24046,
+      "response_port": 24047
+    },
+    {
+      "id": 24,
+      "src": 56,
+      "dst": 57,
+      "plane": 0,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4,
+      "request_port": 24048,
+      "response_port": 24049
+    },
+    {
+      "id": 25,
+      "src": 57,
+      "dst": 58,
+      "plane": 0,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4,
+      "request_port": 24050,
+      "response_port": 24051
+    },
+    {
+      "id": 26,
+      "src": 58,
+      "dst": 59,
+      "plane": 0,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4,
+      "request_port": 24052,
+      "response_port": 24053
+    },
+    {
+      "id": 27,
+      "src": 59,
+      "dst": 60,
+      "plane": 0,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4,
+      "request_port": 24054,
+      "response_port": 24055
+    },
+    {
+      "id": 28,
+      "src": 60,
+      "dst": 61,
+      "plane": 0,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4,
+      "request_port": 24056,
+      "response_port": 24057
+    },
+    {
+      "id": 29,
+      "src": 61,
+      "dst": 62,
+      "plane": 0,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4,
+      "request_port": 24058,
+      "response_port": 24059
+    },
+    {
+      "id": 30,
+      "src": 62,
+      "dst": 63,
+      "plane": 0,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4,
+      "request_port": 24060,
+      "response_port": 24061
+    },
+    {
+      "id": 31,
+      "src": 63,
+      "dst": 32,
+      "plane": 0,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4,
+      "request_port": 24062,
+      "response_port": 24063
+    },
+    {
+      "id": 32,
+      "src": 32,
+      "dst": 34,
+      "plane": 0,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4,
+      "request_port": 24064,
+      "response_port": 24065
+    },
+    {
+      "id": 33,
+      "src": 33,
+      "dst": 35,
+      "plane": 0,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4,
+      "request_port": 24066,
+      "response_port": 24067
+    },
+    {
+      "id": 34,
+      "src": 34,
+      "dst": 36,
+      "plane": 0,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4,
+      "request_port": 24068,
+      "response_port": 24069
+    },
+    {
+      "id": 35,
+      "src": 35,
+      "dst": 37,
+      "plane": 0,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4,
+      "request_port": 24070,
+      "response_port": 24071
+    },
+    {
+      "id": 36,
+      "src": 36,
+      "dst": 38,
+      "plane": 0,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4,
+      "request_port": 24072,
+      "response_port": 24073
+    },
+    {
+      "id": 37,
+      "src": 37,
+      "dst": 39,
+      "plane": 0,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4,
+      "request_port": 24074,
+      "response_port": 24075
+    },
+    {
+      "id": 38,
+      "src": 38,
+      "dst": 40,
+      "plane": 0,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4,
+      "request_port": 24076,
+      "response_port": 24077
+    },
+    {
+      "id": 39,
+      "src": 39,
+      "dst": 41,
+      "plane": 0,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4,
+      "request_port": 24078,
+      "response_port": 24079
+    },
+    {
+      "id": 40,
+      "src": 40,
+      "dst": 42,
+      "plane": 0,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4,
+      "request_port": 24080,
+      "response_port": 24081
+    },
+    {
+      "id": 41,
+      "src": 41,
+      "dst": 43,
+      "plane": 0,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4,
+      "request_port": 24082,
+      "response_port": 24083
+    },
+    {
+      "id": 42,
+      "src": 42,
+      "dst": 44,
+      "plane": 0,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4,
+      "request_port": 24084,
+      "response_port": 24085
+    },
+    {
+      "id": 43,
+      "src": 43,
+      "dst": 45,
+      "plane": 0,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4,
+      "request_port": 24086,
+      "response_port": 24087
+    },
+    {
+      "id": 44,
+      "src": 44,
+      "dst": 46,
+      "plane": 0,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4,
+      "request_port": 24088,
+      "response_port": 24089
+    },
+    {
+      "id": 45,
+      "src": 45,
+      "dst": 47,
+      "plane": 0,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4,
+      "request_port": 24090,
+      "response_port": 24091
+    },
+    {
+      "id": 46,
+      "src": 46,
+      "dst": 48,
+      "plane": 0,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4,
+      "request_port": 24092,
+      "response_port": 24093
+    },
+    {
+      "id": 47,
+      "src": 47,
+      "dst": 49,
+      "plane": 0,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4,
+      "request_port": 24094,
+      "response_port": 24095
+    },
+    {
+      "id": 48,
+      "src": 48,
+      "dst": 50,
+      "plane": 0,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4,
+      "request_port": 24096,
+      "response_port": 24097
+    },
+    {
+      "id": 49,
+      "src": 49,
+      "dst": 51,
+      "plane": 0,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4,
+      "request_port": 24098,
+      "response_port": 24099
+    },
+    {
+      "id": 50,
+      "src": 50,
+      "dst": 52,
+      "plane": 0,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4,
+      "request_port": 24100,
+      "response_port": 24101
+    },
+    {
+      "id": 51,
+      "src": 51,
+      "dst": 53,
+      "plane": 0,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4,
+      "request_port": 24102,
+      "response_port": 24103
+    },
+    {
+      "id": 52,
+      "src": 52,
+      "dst": 54,
+      "plane": 0,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4,
+      "request_port": 24104,
+      "response_port": 24105
+    },
+    {
+      "id": 53,
+      "src": 53,
+      "dst": 55,
+      "plane": 0,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4,
+      "request_port": 24106,
+      "response_port": 24107
+    },
+    {
+      "id": 54,
+      "src": 54,
+      "dst": 56,
+      "plane": 0,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4,
+      "request_port": 24108,
+      "response_port": 24109
+    },
+    {
+      "id": 55,
+      "src": 55,
+      "dst": 57,
+      "plane": 0,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4,
+      "request_port": 24110,
+      "response_port": 24111
+    },
+    {
+      "id": 56,
+      "src": 56,
+      "dst": 58,
+      "plane": 0,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4,
+      "request_port": 24112,
+      "response_port": 24113
+    },
+    {
+      "id": 57,
+      "src": 57,
+      "dst": 59,
+      "plane": 0,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4,
+      "request_port": 24114,
+      "response_port": 24115
+    },
+    {
+      "id": 58,
+      "src": 58,
+      "dst": 60,
+      "plane": 0,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4,
+      "request_port": 24116,
+      "response_port": 24117
+    },
+    {
+      "id": 59,
+      "src": 59,
+      "dst": 61,
+      "plane": 0,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4,
+      "request_port": 24118,
+      "response_port": 24119
+    },
+    {
+      "id": 60,
+      "src": 60,
+      "dst": 62,
+      "plane": 0,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4,
+      "request_port": 24120,
+      "response_port": 24121
+    },
+    {
+      "id": 61,
+      "src": 61,
+      "dst": 63,
+      "plane": 0,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4,
+      "request_port": 24122,
+      "response_port": 24123
+    },
+    {
+      "id": 62,
+      "src": 62,
+      "dst": 32,
+      "plane": 0,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4,
+      "request_port": 24124,
+      "response_port": 24125
+    },
+    {
+      "id": 63,
+      "src": 63,
+      "dst": 33,
+      "plane": 0,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4,
+      "request_port": 24126,
+      "response_port": 24127
+    },
+    {
+      "id": 64,
+      "src": 32,
+      "dst": 32,
+      "plane": 0,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4,
+      "self_service": {
+        "apply_ns": 10,
+        "complete_ns": 20
+      }
+    }
+  ],
+  "windows": [
+    {
+      "owner": 32,
+      "key": 1,
+      "address": 4096,
+      "allow_atomic": false,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": [
+        {
+          "offset": 0,
+          "hex": "2000000000000000"
+        }
+      ]
+    },
+    {
+      "owner": 32,
+      "key": 2,
+      "address": 8192,
+      "allow_atomic": true,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": []
+    },
+    {
+      "owner": 32,
+      "key": 3,
+      "address": 12288,
+      "allow_atomic": false,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": []
+    },
+    {
+      "owner": 33,
+      "key": 1,
+      "address": 4096,
+      "allow_atomic": false,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": [
+        {
+          "offset": 0,
+          "hex": "2100000000000000"
+        }
+      ]
+    },
+    {
+      "owner": 33,
+      "key": 2,
+      "address": 8192,
+      "allow_atomic": true,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": []
+    },
+    {
+      "owner": 33,
+      "key": 3,
+      "address": 12288,
+      "allow_atomic": false,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": []
+    },
+    {
+      "owner": 34,
+      "key": 1,
+      "address": 4096,
+      "allow_atomic": false,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": [
+        {
+          "offset": 0,
+          "hex": "2200000000000000"
+        }
+      ]
+    },
+    {
+      "owner": 34,
+      "key": 2,
+      "address": 8192,
+      "allow_atomic": true,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": []
+    },
+    {
+      "owner": 34,
+      "key": 3,
+      "address": 12288,
+      "allow_atomic": false,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": []
+    },
+    {
+      "owner": 35,
+      "key": 1,
+      "address": 4096,
+      "allow_atomic": false,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": [
+        {
+          "offset": 0,
+          "hex": "2300000000000000"
+        }
+      ]
+    },
+    {
+      "owner": 35,
+      "key": 2,
+      "address": 8192,
+      "allow_atomic": true,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": []
+    },
+    {
+      "owner": 35,
+      "key": 3,
+      "address": 12288,
+      "allow_atomic": false,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": []
+    },
+    {
+      "owner": 36,
+      "key": 1,
+      "address": 4096,
+      "allow_atomic": false,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": [
+        {
+          "offset": 0,
+          "hex": "2400000000000000"
+        }
+      ]
+    },
+    {
+      "owner": 36,
+      "key": 2,
+      "address": 8192,
+      "allow_atomic": true,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": []
+    },
+    {
+      "owner": 36,
+      "key": 3,
+      "address": 12288,
+      "allow_atomic": false,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": []
+    },
+    {
+      "owner": 37,
+      "key": 1,
+      "address": 4096,
+      "allow_atomic": false,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": [
+        {
+          "offset": 0,
+          "hex": "2500000000000000"
+        }
+      ]
+    },
+    {
+      "owner": 37,
+      "key": 2,
+      "address": 8192,
+      "allow_atomic": true,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": []
+    },
+    {
+      "owner": 37,
+      "key": 3,
+      "address": 12288,
+      "allow_atomic": false,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": []
+    },
+    {
+      "owner": 38,
+      "key": 1,
+      "address": 4096,
+      "allow_atomic": false,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": [
+        {
+          "offset": 0,
+          "hex": "2600000000000000"
+        }
+      ]
+    },
+    {
+      "owner": 38,
+      "key": 2,
+      "address": 8192,
+      "allow_atomic": true,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": []
+    },
+    {
+      "owner": 38,
+      "key": 3,
+      "address": 12288,
+      "allow_atomic": false,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": []
+    },
+    {
+      "owner": 39,
+      "key": 1,
+      "address": 4096,
+      "allow_atomic": false,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": [
+        {
+          "offset": 0,
+          "hex": "2700000000000000"
+        }
+      ]
+    },
+    {
+      "owner": 39,
+      "key": 2,
+      "address": 8192,
+      "allow_atomic": true,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": []
+    },
+    {
+      "owner": 39,
+      "key": 3,
+      "address": 12288,
+      "allow_atomic": false,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": []
+    },
+    {
+      "owner": 40,
+      "key": 1,
+      "address": 4096,
+      "allow_atomic": false,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": [
+        {
+          "offset": 0,
+          "hex": "2800000000000000"
+        }
+      ]
+    },
+    {
+      "owner": 40,
+      "key": 2,
+      "address": 8192,
+      "allow_atomic": true,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": []
+    },
+    {
+      "owner": 40,
+      "key": 3,
+      "address": 12288,
+      "allow_atomic": false,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": []
+    },
+    {
+      "owner": 41,
+      "key": 1,
+      "address": 4096,
+      "allow_atomic": false,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": [
+        {
+          "offset": 0,
+          "hex": "2900000000000000"
+        }
+      ]
+    },
+    {
+      "owner": 41,
+      "key": 2,
+      "address": 8192,
+      "allow_atomic": true,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": []
+    },
+    {
+      "owner": 41,
+      "key": 3,
+      "address": 12288,
+      "allow_atomic": false,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": []
+    },
+    {
+      "owner": 42,
+      "key": 1,
+      "address": 4096,
+      "allow_atomic": false,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": [
+        {
+          "offset": 0,
+          "hex": "2a00000000000000"
+        }
+      ]
+    },
+    {
+      "owner": 42,
+      "key": 2,
+      "address": 8192,
+      "allow_atomic": true,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": []
+    },
+    {
+      "owner": 42,
+      "key": 3,
+      "address": 12288,
+      "allow_atomic": false,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": []
+    },
+    {
+      "owner": 43,
+      "key": 1,
+      "address": 4096,
+      "allow_atomic": false,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": [
+        {
+          "offset": 0,
+          "hex": "2b00000000000000"
+        }
+      ]
+    },
+    {
+      "owner": 43,
+      "key": 2,
+      "address": 8192,
+      "allow_atomic": true,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": []
+    },
+    {
+      "owner": 43,
+      "key": 3,
+      "address": 12288,
+      "allow_atomic": false,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": []
+    },
+    {
+      "owner": 44,
+      "key": 1,
+      "address": 4096,
+      "allow_atomic": false,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": [
+        {
+          "offset": 0,
+          "hex": "2c00000000000000"
+        }
+      ]
+    },
+    {
+      "owner": 44,
+      "key": 2,
+      "address": 8192,
+      "allow_atomic": true,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": []
+    },
+    {
+      "owner": 44,
+      "key": 3,
+      "address": 12288,
+      "allow_atomic": false,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": []
+    },
+    {
+      "owner": 45,
+      "key": 1,
+      "address": 4096,
+      "allow_atomic": false,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": [
+        {
+          "offset": 0,
+          "hex": "2d00000000000000"
+        }
+      ]
+    },
+    {
+      "owner": 45,
+      "key": 2,
+      "address": 8192,
+      "allow_atomic": true,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": []
+    },
+    {
+      "owner": 45,
+      "key": 3,
+      "address": 12288,
+      "allow_atomic": false,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": []
+    },
+    {
+      "owner": 46,
+      "key": 1,
+      "address": 4096,
+      "allow_atomic": false,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": [
+        {
+          "offset": 0,
+          "hex": "2e00000000000000"
+        }
+      ]
+    },
+    {
+      "owner": 46,
+      "key": 2,
+      "address": 8192,
+      "allow_atomic": true,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": []
+    },
+    {
+      "owner": 46,
+      "key": 3,
+      "address": 12288,
+      "allow_atomic": false,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": []
+    },
+    {
+      "owner": 47,
+      "key": 1,
+      "address": 4096,
+      "allow_atomic": false,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": [
+        {
+          "offset": 0,
+          "hex": "2f00000000000000"
+        }
+      ]
+    },
+    {
+      "owner": 47,
+      "key": 2,
+      "address": 8192,
+      "allow_atomic": true,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": []
+    },
+    {
+      "owner": 47,
+      "key": 3,
+      "address": 12288,
+      "allow_atomic": false,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": []
+    },
+    {
+      "owner": 48,
+      "key": 1,
+      "address": 4096,
+      "allow_atomic": false,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": [
+        {
+          "offset": 0,
+          "hex": "3000000000000000"
+        }
+      ]
+    },
+    {
+      "owner": 48,
+      "key": 2,
+      "address": 8192,
+      "allow_atomic": true,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": []
+    },
+    {
+      "owner": 48,
+      "key": 3,
+      "address": 12288,
+      "allow_atomic": false,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": []
+    },
+    {
+      "owner": 49,
+      "key": 1,
+      "address": 4096,
+      "allow_atomic": false,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": [
+        {
+          "offset": 0,
+          "hex": "3100000000000000"
+        }
+      ]
+    },
+    {
+      "owner": 49,
+      "key": 2,
+      "address": 8192,
+      "allow_atomic": true,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": []
+    },
+    {
+      "owner": 49,
+      "key": 3,
+      "address": 12288,
+      "allow_atomic": false,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": []
+    },
+    {
+      "owner": 50,
+      "key": 1,
+      "address": 4096,
+      "allow_atomic": false,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": [
+        {
+          "offset": 0,
+          "hex": "3200000000000000"
+        }
+      ]
+    },
+    {
+      "owner": 50,
+      "key": 2,
+      "address": 8192,
+      "allow_atomic": true,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": []
+    },
+    {
+      "owner": 50,
+      "key": 3,
+      "address": 12288,
+      "allow_atomic": false,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": []
+    },
+    {
+      "owner": 51,
+      "key": 1,
+      "address": 4096,
+      "allow_atomic": false,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": [
+        {
+          "offset": 0,
+          "hex": "3300000000000000"
+        }
+      ]
+    },
+    {
+      "owner": 51,
+      "key": 2,
+      "address": 8192,
+      "allow_atomic": true,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": []
+    },
+    {
+      "owner": 51,
+      "key": 3,
+      "address": 12288,
+      "allow_atomic": false,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": []
+    },
+    {
+      "owner": 52,
+      "key": 1,
+      "address": 4096,
+      "allow_atomic": false,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": [
+        {
+          "offset": 0,
+          "hex": "3400000000000000"
+        }
+      ]
+    },
+    {
+      "owner": 52,
+      "key": 2,
+      "address": 8192,
+      "allow_atomic": true,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": []
+    },
+    {
+      "owner": 52,
+      "key": 3,
+      "address": 12288,
+      "allow_atomic": false,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": []
+    },
+    {
+      "owner": 53,
+      "key": 1,
+      "address": 4096,
+      "allow_atomic": false,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": [
+        {
+          "offset": 0,
+          "hex": "3500000000000000"
+        }
+      ]
+    },
+    {
+      "owner": 53,
+      "key": 2,
+      "address": 8192,
+      "allow_atomic": true,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": []
+    },
+    {
+      "owner": 53,
+      "key": 3,
+      "address": 12288,
+      "allow_atomic": false,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": []
+    },
+    {
+      "owner": 54,
+      "key": 1,
+      "address": 4096,
+      "allow_atomic": false,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": [
+        {
+          "offset": 0,
+          "hex": "3600000000000000"
+        }
+      ]
+    },
+    {
+      "owner": 54,
+      "key": 2,
+      "address": 8192,
+      "allow_atomic": true,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": []
+    },
+    {
+      "owner": 54,
+      "key": 3,
+      "address": 12288,
+      "allow_atomic": false,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": []
+    },
+    {
+      "owner": 55,
+      "key": 1,
+      "address": 4096,
+      "allow_atomic": false,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": [
+        {
+          "offset": 0,
+          "hex": "3700000000000000"
+        }
+      ]
+    },
+    {
+      "owner": 55,
+      "key": 2,
+      "address": 8192,
+      "allow_atomic": true,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": []
+    },
+    {
+      "owner": 55,
+      "key": 3,
+      "address": 12288,
+      "allow_atomic": false,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": []
+    },
+    {
+      "owner": 56,
+      "key": 1,
+      "address": 4096,
+      "allow_atomic": false,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": [
+        {
+          "offset": 0,
+          "hex": "3800000000000000"
+        }
+      ]
+    },
+    {
+      "owner": 56,
+      "key": 2,
+      "address": 8192,
+      "allow_atomic": true,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": []
+    },
+    {
+      "owner": 56,
+      "key": 3,
+      "address": 12288,
+      "allow_atomic": false,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": []
+    },
+    {
+      "owner": 57,
+      "key": 1,
+      "address": 4096,
+      "allow_atomic": false,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": [
+        {
+          "offset": 0,
+          "hex": "3900000000000000"
+        }
+      ]
+    },
+    {
+      "owner": 57,
+      "key": 2,
+      "address": 8192,
+      "allow_atomic": true,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": []
+    },
+    {
+      "owner": 57,
+      "key": 3,
+      "address": 12288,
+      "allow_atomic": false,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": []
+    },
+    {
+      "owner": 58,
+      "key": 1,
+      "address": 4096,
+      "allow_atomic": false,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": [
+        {
+          "offset": 0,
+          "hex": "3a00000000000000"
+        }
+      ]
+    },
+    {
+      "owner": 58,
+      "key": 2,
+      "address": 8192,
+      "allow_atomic": true,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": []
+    },
+    {
+      "owner": 58,
+      "key": 3,
+      "address": 12288,
+      "allow_atomic": false,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": []
+    },
+    {
+      "owner": 59,
+      "key": 1,
+      "address": 4096,
+      "allow_atomic": false,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": [
+        {
+          "offset": 0,
+          "hex": "3b00000000000000"
+        }
+      ]
+    },
+    {
+      "owner": 59,
+      "key": 2,
+      "address": 8192,
+      "allow_atomic": true,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": []
+    },
+    {
+      "owner": 59,
+      "key": 3,
+      "address": 12288,
+      "allow_atomic": false,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": []
+    },
+    {
+      "owner": 60,
+      "key": 1,
+      "address": 4096,
+      "allow_atomic": false,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": [
+        {
+          "offset": 0,
+          "hex": "3c00000000000000"
+        }
+      ]
+    },
+    {
+      "owner": 60,
+      "key": 2,
+      "address": 8192,
+      "allow_atomic": true,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": []
+    },
+    {
+      "owner": 60,
+      "key": 3,
+      "address": 12288,
+      "allow_atomic": false,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": []
+    },
+    {
+      "owner": 61,
+      "key": 1,
+      "address": 4096,
+      "allow_atomic": false,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": [
+        {
+          "offset": 0,
+          "hex": "3d00000000000000"
+        }
+      ]
+    },
+    {
+      "owner": 61,
+      "key": 2,
+      "address": 8192,
+      "allow_atomic": true,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": []
+    },
+    {
+      "owner": 61,
+      "key": 3,
+      "address": 12288,
+      "allow_atomic": false,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": []
+    },
+    {
+      "owner": 62,
+      "key": 1,
+      "address": 4096,
+      "allow_atomic": false,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": [
+        {
+          "offset": 0,
+          "hex": "3e00000000000000"
+        }
+      ]
+    },
+    {
+      "owner": 62,
+      "key": 2,
+      "address": 8192,
+      "allow_atomic": true,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": []
+    },
+    {
+      "owner": 62,
+      "key": 3,
+      "address": 12288,
+      "allow_atomic": false,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": []
+    },
+    {
+      "owner": 63,
+      "key": 1,
+      "address": 4096,
+      "allow_atomic": false,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": [
+        {
+          "offset": 0,
+          "hex": "3f00000000000000"
+        }
+      ]
+    },
+    {
+      "owner": 63,
+      "key": 2,
+      "address": 8192,
+      "allow_atomic": true,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": []
+    },
+    {
+      "owner": 63,
+      "key": 3,
+      "address": 12288,
+      "allow_atomic": false,
+      "bytes": 512,
+      "initialization": "zero_fill/1",
+      "segments": []
+    }
+  ],
+  "registrations": [
+    {
+      "id": 0,
+      "owner": 32,
+      "nic": 1,
+      "key": 101,
+      "window_key": 1,
+      "address": 4096,
+      "bytes": 512,
+      "allow_atomic": false
+    },
+    {
+      "id": 1,
+      "owner": 32,
+      "nic": 1,
+      "key": 102,
+      "window_key": 2,
+      "address": 8192,
+      "bytes": 512,
+      "allow_atomic": true
+    },
+    {
+      "id": 2,
+      "owner": 33,
+      "nic": 1,
+      "key": 101,
+      "window_key": 1,
+      "address": 4096,
+      "bytes": 512,
+      "allow_atomic": false
+    },
+    {
+      "id": 3,
+      "owner": 33,
+      "nic": 1,
+      "key": 102,
+      "window_key": 2,
+      "address": 8192,
+      "bytes": 512,
+      "allow_atomic": true
+    },
+    {
+      "id": 4,
+      "owner": 34,
+      "nic": 1,
+      "key": 101,
+      "window_key": 1,
+      "address": 4096,
+      "bytes": 512,
+      "allow_atomic": false
+    },
+    {
+      "id": 5,
+      "owner": 34,
+      "nic": 1,
+      "key": 102,
+      "window_key": 2,
+      "address": 8192,
+      "bytes": 512,
+      "allow_atomic": true
+    },
+    {
+      "id": 6,
+      "owner": 35,
+      "nic": 1,
+      "key": 101,
+      "window_key": 1,
+      "address": 4096,
+      "bytes": 512,
+      "allow_atomic": false
+    },
+    {
+      "id": 7,
+      "owner": 35,
+      "nic": 1,
+      "key": 102,
+      "window_key": 2,
+      "address": 8192,
+      "bytes": 512,
+      "allow_atomic": true
+    },
+    {
+      "id": 8,
+      "owner": 36,
+      "nic": 1,
+      "key": 101,
+      "window_key": 1,
+      "address": 4096,
+      "bytes": 512,
+      "allow_atomic": false
+    },
+    {
+      "id": 9,
+      "owner": 36,
+      "nic": 1,
+      "key": 102,
+      "window_key": 2,
+      "address": 8192,
+      "bytes": 512,
+      "allow_atomic": true
+    },
+    {
+      "id": 10,
+      "owner": 37,
+      "nic": 1,
+      "key": 101,
+      "window_key": 1,
+      "address": 4096,
+      "bytes": 512,
+      "allow_atomic": false
+    },
+    {
+      "id": 11,
+      "owner": 37,
+      "nic": 1,
+      "key": 102,
+      "window_key": 2,
+      "address": 8192,
+      "bytes": 512,
+      "allow_atomic": true
+    },
+    {
+      "id": 12,
+      "owner": 38,
+      "nic": 1,
+      "key": 101,
+      "window_key": 1,
+      "address": 4096,
+      "bytes": 512,
+      "allow_atomic": false
+    },
+    {
+      "id": 13,
+      "owner": 38,
+      "nic": 1,
+      "key": 102,
+      "window_key": 2,
+      "address": 8192,
+      "bytes": 512,
+      "allow_atomic": true
+    },
+    {
+      "id": 14,
+      "owner": 39,
+      "nic": 1,
+      "key": 101,
+      "window_key": 1,
+      "address": 4096,
+      "bytes": 512,
+      "allow_atomic": false
+    },
+    {
+      "id": 15,
+      "owner": 39,
+      "nic": 1,
+      "key": 102,
+      "window_key": 2,
+      "address": 8192,
+      "bytes": 512,
+      "allow_atomic": true
+    },
+    {
+      "id": 16,
+      "owner": 40,
+      "nic": 1,
+      "key": 101,
+      "window_key": 1,
+      "address": 4096,
+      "bytes": 512,
+      "allow_atomic": false
+    },
+    {
+      "id": 17,
+      "owner": 40,
+      "nic": 1,
+      "key": 102,
+      "window_key": 2,
+      "address": 8192,
+      "bytes": 512,
+      "allow_atomic": true
+    },
+    {
+      "id": 18,
+      "owner": 41,
+      "nic": 1,
+      "key": 101,
+      "window_key": 1,
+      "address": 4096,
+      "bytes": 512,
+      "allow_atomic": false
+    },
+    {
+      "id": 19,
+      "owner": 41,
+      "nic": 1,
+      "key": 102,
+      "window_key": 2,
+      "address": 8192,
+      "bytes": 512,
+      "allow_atomic": true
+    },
+    {
+      "id": 20,
+      "owner": 42,
+      "nic": 1,
+      "key": 101,
+      "window_key": 1,
+      "address": 4096,
+      "bytes": 512,
+      "allow_atomic": false
+    },
+    {
+      "id": 21,
+      "owner": 42,
+      "nic": 1,
+      "key": 102,
+      "window_key": 2,
+      "address": 8192,
+      "bytes": 512,
+      "allow_atomic": true
+    },
+    {
+      "id": 22,
+      "owner": 43,
+      "nic": 1,
+      "key": 101,
+      "window_key": 1,
+      "address": 4096,
+      "bytes": 512,
+      "allow_atomic": false
+    },
+    {
+      "id": 23,
+      "owner": 43,
+      "nic": 1,
+      "key": 102,
+      "window_key": 2,
+      "address": 8192,
+      "bytes": 512,
+      "allow_atomic": true
+    },
+    {
+      "id": 24,
+      "owner": 44,
+      "nic": 1,
+      "key": 101,
+      "window_key": 1,
+      "address": 4096,
+      "bytes": 512,
+      "allow_atomic": false
+    },
+    {
+      "id": 25,
+      "owner": 44,
+      "nic": 1,
+      "key": 102,
+      "window_key": 2,
+      "address": 8192,
+      "bytes": 512,
+      "allow_atomic": true
+    },
+    {
+      "id": 26,
+      "owner": 45,
+      "nic": 1,
+      "key": 101,
+      "window_key": 1,
+      "address": 4096,
+      "bytes": 512,
+      "allow_atomic": false
+    },
+    {
+      "id": 27,
+      "owner": 45,
+      "nic": 1,
+      "key": 102,
+      "window_key": 2,
+      "address": 8192,
+      "bytes": 512,
+      "allow_atomic": true
+    },
+    {
+      "id": 28,
+      "owner": 46,
+      "nic": 1,
+      "key": 101,
+      "window_key": 1,
+      "address": 4096,
+      "bytes": 512,
+      "allow_atomic": false
+    },
+    {
+      "id": 29,
+      "owner": 46,
+      "nic": 1,
+      "key": 102,
+      "window_key": 2,
+      "address": 8192,
+      "bytes": 512,
+      "allow_atomic": true
+    },
+    {
+      "id": 30,
+      "owner": 47,
+      "nic": 1,
+      "key": 101,
+      "window_key": 1,
+      "address": 4096,
+      "bytes": 512,
+      "allow_atomic": false
+    },
+    {
+      "id": 31,
+      "owner": 47,
+      "nic": 1,
+      "key": 102,
+      "window_key": 2,
+      "address": 8192,
+      "bytes": 512,
+      "allow_atomic": true
+    },
+    {
+      "id": 32,
+      "owner": 48,
+      "nic": 1,
+      "key": 101,
+      "window_key": 1,
+      "address": 4096,
+      "bytes": 512,
+      "allow_atomic": false
+    },
+    {
+      "id": 33,
+      "owner": 48,
+      "nic": 1,
+      "key": 102,
+      "window_key": 2,
+      "address": 8192,
+      "bytes": 512,
+      "allow_atomic": true
+    },
+    {
+      "id": 34,
+      "owner": 49,
+      "nic": 1,
+      "key": 101,
+      "window_key": 1,
+      "address": 4096,
+      "bytes": 512,
+      "allow_atomic": false
+    },
+    {
+      "id": 35,
+      "owner": 49,
+      "nic": 1,
+      "key": 102,
+      "window_key": 2,
+      "address": 8192,
+      "bytes": 512,
+      "allow_atomic": true
+    },
+    {
+      "id": 36,
+      "owner": 50,
+      "nic": 1,
+      "key": 101,
+      "window_key": 1,
+      "address": 4096,
+      "bytes": 512,
+      "allow_atomic": false
+    },
+    {
+      "id": 37,
+      "owner": 50,
+      "nic": 1,
+      "key": 102,
+      "window_key": 2,
+      "address": 8192,
+      "bytes": 512,
+      "allow_atomic": true
+    },
+    {
+      "id": 38,
+      "owner": 51,
+      "nic": 1,
+      "key": 101,
+      "window_key": 1,
+      "address": 4096,
+      "bytes": 512,
+      "allow_atomic": false
+    },
+    {
+      "id": 39,
+      "owner": 51,
+      "nic": 1,
+      "key": 102,
+      "window_key": 2,
+      "address": 8192,
+      "bytes": 512,
+      "allow_atomic": true
+    },
+    {
+      "id": 40,
+      "owner": 52,
+      "nic": 1,
+      "key": 101,
+      "window_key": 1,
+      "address": 4096,
+      "bytes": 512,
+      "allow_atomic": false
+    },
+    {
+      "id": 41,
+      "owner": 52,
+      "nic": 1,
+      "key": 102,
+      "window_key": 2,
+      "address": 8192,
+      "bytes": 512,
+      "allow_atomic": true
+    },
+    {
+      "id": 42,
+      "owner": 53,
+      "nic": 1,
+      "key": 101,
+      "window_key": 1,
+      "address": 4096,
+      "bytes": 512,
+      "allow_atomic": false
+    },
+    {
+      "id": 43,
+      "owner": 53,
+      "nic": 1,
+      "key": 102,
+      "window_key": 2,
+      "address": 8192,
+      "bytes": 512,
+      "allow_atomic": true
+    },
+    {
+      "id": 44,
+      "owner": 54,
+      "nic": 1,
+      "key": 101,
+      "window_key": 1,
+      "address": 4096,
+      "bytes": 512,
+      "allow_atomic": false
+    },
+    {
+      "id": 45,
+      "owner": 54,
+      "nic": 1,
+      "key": 102,
+      "window_key": 2,
+      "address": 8192,
+      "bytes": 512,
+      "allow_atomic": true
+    },
+    {
+      "id": 46,
+      "owner": 55,
+      "nic": 1,
+      "key": 101,
+      "window_key": 1,
+      "address": 4096,
+      "bytes": 512,
+      "allow_atomic": false
+    },
+    {
+      "id": 47,
+      "owner": 55,
+      "nic": 1,
+      "key": 102,
+      "window_key": 2,
+      "address": 8192,
+      "bytes": 512,
+      "allow_atomic": true
+    },
+    {
+      "id": 48,
+      "owner": 56,
+      "nic": 1,
+      "key": 101,
+      "window_key": 1,
+      "address": 4096,
+      "bytes": 512,
+      "allow_atomic": false
+    },
+    {
+      "id": 49,
+      "owner": 56,
+      "nic": 1,
+      "key": 102,
+      "window_key": 2,
+      "address": 8192,
+      "bytes": 512,
+      "allow_atomic": true
+    },
+    {
+      "id": 50,
+      "owner": 57,
+      "nic": 1,
+      "key": 101,
+      "window_key": 1,
+      "address": 4096,
+      "bytes": 512,
+      "allow_atomic": false
+    },
+    {
+      "id": 51,
+      "owner": 57,
+      "nic": 1,
+      "key": 102,
+      "window_key": 2,
+      "address": 8192,
+      "bytes": 512,
+      "allow_atomic": true
+    },
+    {
+      "id": 52,
+      "owner": 58,
+      "nic": 1,
+      "key": 101,
+      "window_key": 1,
+      "address": 4096,
+      "bytes": 512,
+      "allow_atomic": false
+    },
+    {
+      "id": 53,
+      "owner": 58,
+      "nic": 1,
+      "key": 102,
+      "window_key": 2,
+      "address": 8192,
+      "bytes": 512,
+      "allow_atomic": true
+    },
+    {
+      "id": 54,
+      "owner": 59,
+      "nic": 1,
+      "key": 101,
+      "window_key": 1,
+      "address": 4096,
+      "bytes": 512,
+      "allow_atomic": false
+    },
+    {
+      "id": 55,
+      "owner": 59,
+      "nic": 1,
+      "key": 102,
+      "window_key": 2,
+      "address": 8192,
+      "bytes": 512,
+      "allow_atomic": true
+    },
+    {
+      "id": 56,
+      "owner": 60,
+      "nic": 1,
+      "key": 101,
+      "window_key": 1,
+      "address": 4096,
+      "bytes": 512,
+      "allow_atomic": false
+    },
+    {
+      "id": 57,
+      "owner": 60,
+      "nic": 1,
+      "key": 102,
+      "window_key": 2,
+      "address": 8192,
+      "bytes": 512,
+      "allow_atomic": true
+    },
+    {
+      "id": 58,
+      "owner": 61,
+      "nic": 1,
+      "key": 101,
+      "window_key": 1,
+      "address": 4096,
+      "bytes": 512,
+      "allow_atomic": false
+    },
+    {
+      "id": 59,
+      "owner": 61,
+      "nic": 1,
+      "key": 102,
+      "window_key": 2,
+      "address": 8192,
+      "bytes": 512,
+      "allow_atomic": true
+    },
+    {
+      "id": 60,
+      "owner": 62,
+      "nic": 1,
+      "key": 101,
+      "window_key": 1,
+      "address": 4096,
+      "bytes": 512,
+      "allow_atomic": false
+    },
+    {
+      "id": 61,
+      "owner": 62,
+      "nic": 1,
+      "key": 102,
+      "window_key": 2,
+      "address": 8192,
+      "bytes": 512,
+      "allow_atomic": true
+    },
+    {
+      "id": 62,
+      "owner": 63,
+      "nic": 1,
+      "key": 101,
+      "window_key": 1,
+      "address": 4096,
+      "bytes": 512,
+      "allow_atomic": false
+    },
+    {
+      "id": 63,
+      "owner": 63,
+      "nic": 1,
+      "key": 102,
+      "window_key": 2,
+      "address": 8192,
+      "bytes": 512,
+      "allow_atomic": true
+    }
+  ],
+  "operations": [
+    {
+      "id": 0,
+      "kind": "remote",
+      "connection": 0,
+      "verb": "put",
+      "key": 102,
+      "address": 8192,
+      "source": {
+        "key": 1,
+        "address": 4096,
+        "bytes": 8
+      },
+      "after": []
+    },
+    {
+      "id": 1,
+      "kind": "remote",
+      "connection": 1,
+      "verb": "put",
+      "key": 102,
+      "address": 8192,
+      "source": {
+        "key": 1,
+        "address": 4096,
+        "bytes": 8
+      },
+      "after": []
+    },
+    {
+      "id": 2,
+      "kind": "remote",
+      "connection": 2,
+      "verb": "put",
+      "key": 102,
+      "address": 8192,
+      "source": {
+        "key": 1,
+        "address": 4096,
+        "bytes": 8
+      },
+      "after": []
+    },
+    {
+      "id": 3,
+      "kind": "remote",
+      "connection": 3,
+      "verb": "put",
+      "key": 102,
+      "address": 8192,
+      "source": {
+        "key": 1,
+        "address": 4096,
+        "bytes": 8
+      },
+      "after": []
+    },
+    {
+      "id": 4,
+      "kind": "remote",
+      "connection": 4,
+      "verb": "put",
+      "key": 102,
+      "address": 8192,
+      "source": {
+        "key": 1,
+        "address": 4096,
+        "bytes": 8
+      },
+      "after": []
+    },
+    {
+      "id": 5,
+      "kind": "remote",
+      "connection": 5,
+      "verb": "put",
+      "key": 102,
+      "address": 8192,
+      "source": {
+        "key": 1,
+        "address": 4096,
+        "bytes": 8
+      },
+      "after": []
+    },
+    {
+      "id": 6,
+      "kind": "remote",
+      "connection": 6,
+      "verb": "put",
+      "key": 102,
+      "address": 8192,
+      "source": {
+        "key": 1,
+        "address": 4096,
+        "bytes": 8
+      },
+      "after": []
+    },
+    {
+      "id": 7,
+      "kind": "remote",
+      "connection": 7,
+      "verb": "put",
+      "key": 102,
+      "address": 8192,
+      "source": {
+        "key": 1,
+        "address": 4096,
+        "bytes": 8
+      },
+      "after": []
+    },
+    {
+      "id": 8,
+      "kind": "remote",
+      "connection": 8,
+      "verb": "put",
+      "key": 102,
+      "address": 8192,
+      "source": {
+        "key": 1,
+        "address": 4096,
+        "bytes": 8
+      },
+      "after": []
+    },
+    {
+      "id": 9,
+      "kind": "remote",
+      "connection": 9,
+      "verb": "put",
+      "key": 102,
+      "address": 8192,
+      "source": {
+        "key": 1,
+        "address": 4096,
+        "bytes": 8
+      },
+      "after": []
+    },
+    {
+      "id": 10,
+      "kind": "remote",
+      "connection": 10,
+      "verb": "put",
+      "key": 102,
+      "address": 8192,
+      "source": {
+        "key": 1,
+        "address": 4096,
+        "bytes": 8
+      },
+      "after": []
+    },
+    {
+      "id": 11,
+      "kind": "remote",
+      "connection": 11,
+      "verb": "put",
+      "key": 102,
+      "address": 8192,
+      "source": {
+        "key": 1,
+        "address": 4096,
+        "bytes": 8
+      },
+      "after": []
+    },
+    {
+      "id": 12,
+      "kind": "remote",
+      "connection": 12,
+      "verb": "put",
+      "key": 102,
+      "address": 8192,
+      "source": {
+        "key": 1,
+        "address": 4096,
+        "bytes": 8
+      },
+      "after": []
+    },
+    {
+      "id": 13,
+      "kind": "remote",
+      "connection": 13,
+      "verb": "put",
+      "key": 102,
+      "address": 8192,
+      "source": {
+        "key": 1,
+        "address": 4096,
+        "bytes": 8
+      },
+      "after": []
+    },
+    {
+      "id": 14,
+      "kind": "remote",
+      "connection": 14,
+      "verb": "put",
+      "key": 102,
+      "address": 8192,
+      "source": {
+        "key": 1,
+        "address": 4096,
+        "bytes": 8
+      },
+      "after": []
+    },
+    {
+      "id": 15,
+      "kind": "remote",
+      "connection": 15,
+      "verb": "put",
+      "key": 102,
+      "address": 8192,
+      "source": {
+        "key": 1,
+        "address": 4096,
+        "bytes": 8
+      },
+      "after": []
+    },
+    {
+      "id": 16,
+      "kind": "remote",
+      "connection": 16,
+      "verb": "put",
+      "key": 102,
+      "address": 8192,
+      "source": {
+        "key": 1,
+        "address": 4096,
+        "bytes": 8
+      },
+      "after": []
+    },
+    {
+      "id": 17,
+      "kind": "remote",
+      "connection": 17,
+      "verb": "put",
+      "key": 102,
+      "address": 8192,
+      "source": {
+        "key": 1,
+        "address": 4096,
+        "bytes": 8
+      },
+      "after": []
+    },
+    {
+      "id": 18,
+      "kind": "remote",
+      "connection": 18,
+      "verb": "put",
+      "key": 102,
+      "address": 8192,
+      "source": {
+        "key": 1,
+        "address": 4096,
+        "bytes": 8
+      },
+      "after": []
+    },
+    {
+      "id": 19,
+      "kind": "remote",
+      "connection": 19,
+      "verb": "put",
+      "key": 102,
+      "address": 8192,
+      "source": {
+        "key": 1,
+        "address": 4096,
+        "bytes": 8
+      },
+      "after": []
+    },
+    {
+      "id": 20,
+      "kind": "remote",
+      "connection": 20,
+      "verb": "put",
+      "key": 102,
+      "address": 8192,
+      "source": {
+        "key": 1,
+        "address": 4096,
+        "bytes": 8
+      },
+      "after": []
+    },
+    {
+      "id": 21,
+      "kind": "remote",
+      "connection": 21,
+      "verb": "put",
+      "key": 102,
+      "address": 8192,
+      "source": {
+        "key": 1,
+        "address": 4096,
+        "bytes": 8
+      },
+      "after": []
+    },
+    {
+      "id": 22,
+      "kind": "remote",
+      "connection": 22,
+      "verb": "put",
+      "key": 102,
+      "address": 8192,
+      "source": {
+        "key": 1,
+        "address": 4096,
+        "bytes": 8
+      },
+      "after": []
+    },
+    {
+      "id": 23,
+      "kind": "remote",
+      "connection": 23,
+      "verb": "put",
+      "key": 102,
+      "address": 8192,
+      "source": {
+        "key": 1,
+        "address": 4096,
+        "bytes": 8
+      },
+      "after": []
+    },
+    {
+      "id": 24,
+      "kind": "remote",
+      "connection": 24,
+      "verb": "put",
+      "key": 102,
+      "address": 8192,
+      "source": {
+        "key": 1,
+        "address": 4096,
+        "bytes": 8
+      },
+      "after": []
+    },
+    {
+      "id": 25,
+      "kind": "remote",
+      "connection": 25,
+      "verb": "put",
+      "key": 102,
+      "address": 8192,
+      "source": {
+        "key": 1,
+        "address": 4096,
+        "bytes": 8
+      },
+      "after": []
+    },
+    {
+      "id": 26,
+      "kind": "remote",
+      "connection": 26,
+      "verb": "put",
+      "key": 102,
+      "address": 8192,
+      "source": {
+        "key": 1,
+        "address": 4096,
+        "bytes": 8
+      },
+      "after": []
+    },
+    {
+      "id": 27,
+      "kind": "remote",
+      "connection": 27,
+      "verb": "put",
+      "key": 102,
+      "address": 8192,
+      "source": {
+        "key": 1,
+        "address": 4096,
+        "bytes": 8
+      },
+      "after": []
+    },
+    {
+      "id": 28,
+      "kind": "remote",
+      "connection": 28,
+      "verb": "put",
+      "key": 102,
+      "address": 8192,
+      "source": {
+        "key": 1,
+        "address": 4096,
+        "bytes": 8
+      },
+      "after": []
+    },
+    {
+      "id": 29,
+      "kind": "remote",
+      "connection": 29,
+      "verb": "put",
+      "key": 102,
+      "address": 8192,
+      "source": {
+        "key": 1,
+        "address": 4096,
+        "bytes": 8
+      },
+      "after": []
+    },
+    {
+      "id": 30,
+      "kind": "remote",
+      "connection": 30,
+      "verb": "put",
+      "key": 102,
+      "address": 8192,
+      "source": {
+        "key": 1,
+        "address": 4096,
+        "bytes": 8
+      },
+      "after": []
+    },
+    {
+      "id": 31,
+      "kind": "remote",
+      "connection": 31,
+      "verb": "put",
+      "key": 102,
+      "address": 8192,
+      "source": {
+        "key": 1,
+        "address": 4096,
+        "bytes": 8
+      },
+      "after": []
+    },
+    {
+      "id": 32,
+      "kind": "remote",
+      "connection": 32,
+      "verb": "put",
+      "key": 102,
+      "address": 8200,
+      "source": {
+        "key": 1,
+        "address": 4096,
+        "bytes": 8
+      },
+      "after": []
+    },
+    {
+      "id": 33,
+      "kind": "remote",
+      "connection": 33,
+      "verb": "put",
+      "key": 102,
+      "address": 8200,
+      "source": {
+        "key": 1,
+        "address": 4096,
+        "bytes": 8
+      },
+      "after": []
+    },
+    {
+      "id": 34,
+      "kind": "remote",
+      "connection": 34,
+      "verb": "put",
+      "key": 102,
+      "address": 8200,
+      "source": {
+        "key": 1,
+        "address": 4096,
+        "bytes": 8
+      },
+      "after": []
+    },
+    {
+      "id": 35,
+      "kind": "remote",
+      "connection": 35,
+      "verb": "put",
+      "key": 102,
+      "address": 8200,
+      "source": {
+        "key": 1,
+        "address": 4096,
+        "bytes": 8
+      },
+      "after": []
+    },
+    {
+      "id": 36,
+      "kind": "remote",
+      "connection": 36,
+      "verb": "put",
+      "key": 102,
+      "address": 8200,
+      "source": {
+        "key": 1,
+        "address": 4096,
+        "bytes": 8
+      },
+      "after": []
+    },
+    {
+      "id": 37,
+      "kind": "remote",
+      "connection": 37,
+      "verb": "put",
+      "key": 102,
+      "address": 8200,
+      "source": {
+        "key": 1,
+        "address": 4096,
+        "bytes": 8
+      },
+      "after": []
+    },
+    {
+      "id": 38,
+      "kind": "remote",
+      "connection": 38,
+      "verb": "put",
+      "key": 102,
+      "address": 8200,
+      "source": {
+        "key": 1,
+        "address": 4096,
+        "bytes": 8
+      },
+      "after": []
+    },
+    {
+      "id": 39,
+      "kind": "remote",
+      "connection": 39,
+      "verb": "put",
+      "key": 102,
+      "address": 8200,
+      "source": {
+        "key": 1,
+        "address": 4096,
+        "bytes": 8
+      },
+      "after": []
+    },
+    {
+      "id": 40,
+      "kind": "remote",
+      "connection": 40,
+      "verb": "put",
+      "key": 102,
+      "address": 8200,
+      "source": {
+        "key": 1,
+        "address": 4096,
+        "bytes": 8
+      },
+      "after": []
+    },
+    {
+      "id": 41,
+      "kind": "remote",
+      "connection": 41,
+      "verb": "put",
+      "key": 102,
+      "address": 8200,
+      "source": {
+        "key": 1,
+        "address": 4096,
+        "bytes": 8
+      },
+      "after": []
+    },
+    {
+      "id": 42,
+      "kind": "remote",
+      "connection": 42,
+      "verb": "put",
+      "key": 102,
+      "address": 8200,
+      "source": {
+        "key": 1,
+        "address": 4096,
+        "bytes": 8
+      },
+      "after": []
+    },
+    {
+      "id": 43,
+      "kind": "remote",
+      "connection": 43,
+      "verb": "put",
+      "key": 102,
+      "address": 8200,
+      "source": {
+        "key": 1,
+        "address": 4096,
+        "bytes": 8
+      },
+      "after": []
+    },
+    {
+      "id": 44,
+      "kind": "remote",
+      "connection": 44,
+      "verb": "put",
+      "key": 102,
+      "address": 8200,
+      "source": {
+        "key": 1,
+        "address": 4096,
+        "bytes": 8
+      },
+      "after": []
+    },
+    {
+      "id": 45,
+      "kind": "remote",
+      "connection": 45,
+      "verb": "put",
+      "key": 102,
+      "address": 8200,
+      "source": {
+        "key": 1,
+        "address": 4096,
+        "bytes": 8
+      },
+      "after": []
+    },
+    {
+      "id": 46,
+      "kind": "remote",
+      "connection": 46,
+      "verb": "put",
+      "key": 102,
+      "address": 8200,
+      "source": {
+        "key": 1,
+        "address": 4096,
+        "bytes": 8
+      },
+      "after": []
+    },
+    {
+      "id": 47,
+      "kind": "remote",
+      "connection": 47,
+      "verb": "put",
+      "key": 102,
+      "address": 8200,
+      "source": {
+        "key": 1,
+        "address": 4096,
+        "bytes": 8
+      },
+      "after": []
+    },
+    {
+      "id": 48,
+      "kind": "remote",
+      "connection": 48,
+      "verb": "put",
+      "key": 102,
+      "address": 8200,
+      "source": {
+        "key": 1,
+        "address": 4096,
+        "bytes": 8
+      },
+      "after": []
+    },
+    {
+      "id": 49,
+      "kind": "remote",
+      "connection": 49,
+      "verb": "put",
+      "key": 102,
+      "address": 8200,
+      "source": {
+        "key": 1,
+        "address": 4096,
+        "bytes": 8
+      },
+      "after": []
+    },
+    {
+      "id": 50,
+      "kind": "remote",
+      "connection": 50,
+      "verb": "put",
+      "key": 102,
+      "address": 8200,
+      "source": {
+        "key": 1,
+        "address": 4096,
+        "bytes": 8
+      },
+      "after": []
+    },
+    {
+      "id": 51,
+      "kind": "remote",
+      "connection": 51,
+      "verb": "put",
+      "key": 102,
+      "address": 8200,
+      "source": {
+        "key": 1,
+        "address": 4096,
+        "bytes": 8
+      },
+      "after": []
+    },
+    {
+      "id": 52,
+      "kind": "remote",
+      "connection": 52,
+      "verb": "put",
+      "key": 102,
+      "address": 8200,
+      "source": {
+        "key": 1,
+        "address": 4096,
+        "bytes": 8
+      },
+      "after": []
+    },
+    {
+      "id": 53,
+      "kind": "remote",
+      "connection": 53,
+      "verb": "put",
+      "key": 102,
+      "address": 8200,
+      "source": {
+        "key": 1,
+        "address": 4096,
+        "bytes": 8
+      },
+      "after": []
+    },
+    {
+      "id": 54,
+      "kind": "remote",
+      "connection": 54,
+      "verb": "put",
+      "key": 102,
+      "address": 8200,
+      "source": {
+        "key": 1,
+        "address": 4096,
+        "bytes": 8
+      },
+      "after": []
+    },
+    {
+      "id": 55,
+      "kind": "remote",
+      "connection": 55,
+      "verb": "put",
+      "key": 102,
+      "address": 8200,
+      "source": {
+        "key": 1,
+        "address": 4096,
+        "bytes": 8
+      },
+      "after": []
+    },
+    {
+      "id": 56,
+      "kind": "remote",
+      "connection": 56,
+      "verb": "put",
+      "key": 102,
+      "address": 8200,
+      "source": {
+        "key": 1,
+        "address": 4096,
+        "bytes": 8
+      },
+      "after": []
+    },
+    {
+      "id": 57,
+      "kind": "remote",
+      "connection": 57,
+      "verb": "put",
+      "key": 102,
+      "address": 8200,
+      "source": {
+        "key": 1,
+        "address": 4096,
+        "bytes": 8
+      },
+      "after": []
+    },
+    {
+      "id": 58,
+      "kind": "remote",
+      "connection": 58,
+      "verb": "put",
+      "key": 102,
+      "address": 8200,
+      "source": {
+        "key": 1,
+        "address": 4096,
+        "bytes": 8
+      },
+      "after": []
+    },
+    {
+      "id": 59,
+      "kind": "remote",
+      "connection": 59,
+      "verb": "put",
+      "key": 102,
+      "address": 8200,
+      "source": {
+        "key": 1,
+        "address": 4096,
+        "bytes": 8
+      },
+      "after": []
+    },
+    {
+      "id": 60,
+      "kind": "remote",
+      "connection": 60,
+      "verb": "put",
+      "key": 102,
+      "address": 8200,
+      "source": {
+        "key": 1,
+        "address": 4096,
+        "bytes": 8
+      },
+      "after": []
+    },
+    {
+      "id": 61,
+      "kind": "remote",
+      "connection": 61,
+      "verb": "put",
+      "key": 102,
+      "address": 8200,
+      "source": {
+        "key": 1,
+        "address": 4096,
+        "bytes": 8
+      },
+      "after": []
+    },
+    {
+      "id": 62,
+      "kind": "remote",
+      "connection": 62,
+      "verb": "put",
+      "key": 102,
+      "address": 8200,
+      "source": {
+        "key": 1,
+        "address": 4096,
+        "bytes": 8
+      },
+      "after": []
+    },
+    {
+      "id": 63,
+      "kind": "remote",
+      "connection": 63,
+      "verb": "put",
+      "key": 102,
+      "address": 8200,
+      "source": {
+        "key": 1,
+        "address": 4096,
+        "bytes": 8
+      },
+      "after": []
+    },
+    {
+      "id": 64,
+      "kind": "remote",
+      "connection": 64,
+      "verb": "put",
+      "key": 102,
+      "address": 8208,
+      "source": {
+        "key": 1,
+        "address": 4096,
+        "bytes": 8
+      },
+      "after": []
+    },
+    {
+      "id": 65,
+      "kind": "remote",
+      "connection": 0,
+      "verb": "fetch_add32",
+      "key": 102,
+      "address": 8448,
+      "value": 1,
+      "after": []
+    },
+    {
+      "id": 66,
+      "kind": "local",
+      "rank": 33,
+      "duration_ns": 10,
+      "after": [
+        {
+          "operation": 65,
+          "event": "completed"
+        }
+      ],
+      "local_wait": [
+        {
+          "key": 2,
+          "address": 8448,
+          "bits": 32,
+          "compare": "eq",
+          "value": 1
+        },
+        {
+          "key": 2,
+          "address": 8452,
+          "bits": 32,
+          "compare": "eq",
+          "value": 0
+        },
+        {
+          "key": 2,
+          "address": 8456,
+          "bits": 32,
+          "compare": "eq",
+          "value": 0
+        },
+        {
+          "key": 2,
+          "address": 8460,
+          "bits": 32,
+          "compare": "eq",
+          "value": 0
+        },
+        {
+          "key": 2,
+          "address": 8464,
+          "bits": 32,
+          "compare": "eq",
+          "value": 0
+        },
+        {
+          "key": 2,
+          "address": 8468,
+          "bits": 32,
+          "compare": "eq",
+          "value": 0
+        },
+        {
+          "key": 2,
+          "address": 8472,
+          "bits": 32,
+          "compare": "eq",
+          "value": 0
+        },
+        {
+          "key": 2,
+          "address": 8476,
+          "bits": 32,
+          "compare": "eq",
+          "value": 0
+        },
+        {
+          "key": 2,
+          "address": 8480,
+          "bits": 32,
+          "compare": "eq",
+          "value": 0
+        },
+        {
+          "key": 2,
+          "address": 8484,
+          "bits": 32,
+          "compare": "eq",
+          "value": 0
+        },
+        {
+          "key": 2,
+          "address": 8488,
+          "bits": 32,
+          "compare": "eq",
+          "value": 0
+        },
+        {
+          "key": 2,
+          "address": 8492,
+          "bits": 32,
+          "compare": "eq",
+          "value": 0
+        },
+        {
+          "key": 2,
+          "address": 8496,
+          "bits": 32,
+          "compare": "eq",
+          "value": 0
+        },
+        {
+          "key": 2,
+          "address": 8500,
+          "bits": 32,
+          "compare": "eq",
+          "value": 0
+        },
+        {
+          "key": 2,
+          "address": 8504,
+          "bits": 32,
+          "compare": "eq",
+          "value": 0
+        },
+        {
+          "key": 2,
+          "address": 8508,
+          "bits": 32,
+          "compare": "eq",
+          "value": 0
+        },
+        {
+          "key": 2,
+          "address": 8512,
+          "bits": 32,
+          "compare": "eq",
+          "value": 0
+        },
+        {
+          "key": 2,
+          "address": 8516,
+          "bits": 32,
+          "compare": "eq",
+          "value": 0
+        },
+        {
+          "key": 2,
+          "address": 8520,
+          "bits": 32,
+          "compare": "eq",
+          "value": 0
+        },
+        {
+          "key": 2,
+          "address": 8524,
+          "bits": 32,
+          "compare": "eq",
+          "value": 0
+        },
+        {
+          "key": 2,
+          "address": 8528,
+          "bits": 32,
+          "compare": "eq",
+          "value": 0
+        },
+        {
+          "key": 2,
+          "address": 8532,
+          "bits": 32,
+          "compare": "eq",
+          "value": 0
+        },
+        {
+          "key": 2,
+          "address": 8536,
+          "bits": 32,
+          "compare": "eq",
+          "value": 0
+        },
+        {
+          "key": 2,
+          "address": 8540,
+          "bits": 32,
+          "compare": "eq",
+          "value": 0
+        },
+        {
+          "key": 2,
+          "address": 8544,
+          "bits": 32,
+          "compare": "eq",
+          "value": 0
+        },
+        {
+          "key": 2,
+          "address": 8548,
+          "bits": 32,
+          "compare": "eq",
+          "value": 0
+        },
+        {
+          "key": 2,
+          "address": 8552,
+          "bits": 32,
+          "compare": "eq",
+          "value": 0
+        },
+        {
+          "key": 2,
+          "address": 8556,
+          "bits": 32,
+          "compare": "eq",
+          "value": 0
+        },
+        {
+          "key": 2,
+          "address": 8560,
+          "bits": 32,
+          "compare": "eq",
+          "value": 0
+        },
+        {
+          "key": 2,
+          "address": 8564,
+          "bits": 32,
+          "compare": "eq",
+          "value": 0
+        },
+        {
+          "key": 2,
+          "address": 8568,
+          "bits": 32,
+          "compare": "eq",
+          "value": 0
+        },
+        {
+          "key": 2,
+          "address": 8572,
+          "bits": 32,
+          "compare": "eq",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": 67,
+      "kind": "local",
+      "rank": 32,
+      "duration_ns": 10,
+      "after": [
+        {
+          "operation": 0,
+          "event": "completed"
+        },
+        {
+          "operation": 1,
+          "event": "completed"
+        },
+        {
+          "operation": 2,
+          "event": "completed"
+        },
+        {
+          "operation": 3,
+          "event": "completed"
+        },
+        {
+          "operation": 4,
+          "event": "completed"
+        },
+        {
+          "operation": 5,
+          "event": "completed"
+        },
+        {
+          "operation": 6,
+          "event": "completed"
+        },
+        {
+          "operation": 7,
+          "event": "completed"
+        },
+        {
+          "operation": 8,
+          "event": "completed"
+        },
+        {
+          "operation": 9,
+          "event": "completed"
+        },
+        {
+          "operation": 10,
+          "event": "completed"
+        },
+        {
+          "operation": 11,
+          "event": "completed"
+        },
+        {
+          "operation": 12,
+          "event": "completed"
+        },
+        {
+          "operation": 13,
+          "event": "completed"
+        },
+        {
+          "operation": 14,
+          "event": "completed"
+        },
+        {
+          "operation": 15,
+          "event": "completed"
+        },
+        {
+          "operation": 16,
+          "event": "completed"
+        },
+        {
+          "operation": 17,
+          "event": "completed"
+        },
+        {
+          "operation": 18,
+          "event": "completed"
+        },
+        {
+          "operation": 19,
+          "event": "completed"
+        },
+        {
+          "operation": 20,
+          "event": "completed"
+        },
+        {
+          "operation": 21,
+          "event": "completed"
+        },
+        {
+          "operation": 22,
+          "event": "completed"
+        },
+        {
+          "operation": 23,
+          "event": "completed"
+        },
+        {
+          "operation": 24,
+          "event": "completed"
+        },
+        {
+          "operation": 25,
+          "event": "completed"
+        },
+        {
+          "operation": 26,
+          "event": "completed"
+        },
+        {
+          "operation": 27,
+          "event": "completed"
+        },
+        {
+          "operation": 28,
+          "event": "completed"
+        },
+        {
+          "operation": 29,
+          "event": "completed"
+        },
+        {
+          "operation": 30,
+          "event": "completed"
+        },
+        {
+          "operation": 31,
+          "event": "completed"
+        },
+        {
+          "operation": 32,
+          "event": "completed"
+        },
+        {
+          "operation": 33,
+          "event": "completed"
+        },
+        {
+          "operation": 34,
+          "event": "completed"
+        },
+        {
+          "operation": 35,
+          "event": "completed"
+        },
+        {
+          "operation": 36,
+          "event": "completed"
+        },
+        {
+          "operation": 37,
+          "event": "completed"
+        },
+        {
+          "operation": 38,
+          "event": "completed"
+        },
+        {
+          "operation": 39,
+          "event": "completed"
+        },
+        {
+          "operation": 40,
+          "event": "completed"
+        },
+        {
+          "operation": 41,
+          "event": "completed"
+        },
+        {
+          "operation": 42,
+          "event": "completed"
+        },
+        {
+          "operation": 43,
+          "event": "completed"
+        },
+        {
+          "operation": 44,
+          "event": "completed"
+        },
+        {
+          "operation": 45,
+          "event": "completed"
+        },
+        {
+          "operation": 46,
+          "event": "completed"
+        },
+        {
+          "operation": 47,
+          "event": "completed"
+        },
+        {
+          "operation": 48,
+          "event": "completed"
+        },
+        {
+          "operation": 49,
+          "event": "completed"
+        },
+        {
+          "operation": 50,
+          "event": "completed"
+        },
+        {
+          "operation": 51,
+          "event": "completed"
+        },
+        {
+          "operation": 52,
+          "event": "completed"
+        },
+        {
+          "operation": 53,
+          "event": "completed"
+        },
+        {
+          "operation": 54,
+          "event": "completed"
+        },
+        {
+          "operation": 55,
+          "event": "completed"
+        },
+        {
+          "operation": 56,
+          "event": "completed"
+        },
+        {
+          "operation": 57,
+          "event": "completed"
+        },
+        {
+          "operation": 58,
+          "event": "completed"
+        },
+        {
+          "operation": 59,
+          "event": "completed"
+        },
+        {
+          "operation": 60,
+          "event": "completed"
+        },
+        {
+          "operation": 61,
+          "event": "completed"
+        },
+        {
+          "operation": 62,
+          "event": "completed"
+        },
+        {
+          "operation": 63,
+          "event": "completed"
+        },
+        {
+          "operation": 64,
+          "event": "completed"
+        },
+        {
+          "operation": 65,
+          "event": "completed"
+        },
+        {
+          "operation": 66,
+          "event": "completed"
+        }
+      ]
+    },
+    {
+      "id": 68,
+      "kind": "local",
+      "rank": 33,
+      "duration_ns": 10,
+      "after": [
+        {
+          "operation": 67,
+          "event": "completed"
+        }
+      ],
+      "copy": {
+        "source": {
+          "key": 2,
+          "address": 8192,
+          "bytes": 8
+        },
+        "target": {
+          "key": 3,
+          "address": 12288
+        }
+      }
+    }
+  ]
+}

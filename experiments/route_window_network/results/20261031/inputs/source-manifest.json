@@ -1,0 +1,535 @@
+{
+  "schema_version": "moe-ub-route-manifest/1",
+  "source": {
+    "kind": "user_provided_model_routes",
+    "dataset_id": "core12345/MoE_expert_selection_trace",
+    "dataset_revision": null,
+    "collector_model_id": "cognitivecomputations/DeepSeek-R1-AWQ",
+    "collector_model_revision": null,
+    "runtime_revision": null,
+    "precision": "awq_4bit",
+    "usage_terms": "User-supplied R1-AWQ/MMLU routes; four known fixed-revision files and11 directory-confirmed additions. Local hashes preserved. Added remote revision/content identity is unknown; no credentials or terms accepted by agent.",
+    "source_url": "https://huggingface.co/datasets/core12345/MoE_expert_selection_trace",
+    "unknown_fields": [
+      "activation_dtype",
+      "added_remote_content_identity",
+      "collector_hardware",
+      "collector_model_revision",
+      "dataset_revision",
+      "license",
+      "request_eos_reason",
+      "runtime_revision"
+    ]
+  },
+  "model": {
+    "name": "deepseek-ai/DeepSeek-R1",
+    "hidden_dim": 7168,
+    "num_layers": 61,
+    "routing_precision": "awq_4bit"
+  },
+  "layers": [
+    {
+      "layer_id": 0,
+      "kind": "dense",
+      "num_experts": 0,
+      "top_k": 0
+    },
+    {
+      "layer_id": 1,
+      "kind": "dense",
+      "num_experts": 0,
+      "top_k": 0
+    },
+    {
+      "layer_id": 2,
+      "kind": "dense",
+      "num_experts": 0,
+      "top_k": 0
+    },
+    {
+      "layer_id": 3,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 4,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 5,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 6,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 7,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 8,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 9,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 10,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 11,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 12,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 13,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 14,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 15,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 16,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 17,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 18,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 19,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 20,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 21,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 22,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 23,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 24,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 25,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 26,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 27,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 28,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 29,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 30,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 31,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 32,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 33,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 34,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 35,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 36,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 37,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 38,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 39,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 40,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 41,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 42,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 43,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 44,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 45,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 46,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 47,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 48,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 49,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 50,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 51,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 52,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 53,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 54,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 55,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 56,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 57,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 58,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 59,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 60,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    }
+  ],
+  "files": [
+    {
+      "file_id": "local-1472",
+      "original_path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/computer_security/1472.json",
+      "file": {
+        "path": "data/moe-trace-small/1472.json",
+        "sha256": "3085c39e9b9950a7e68f30eed8517eaecbfe3d0ad75d813925ff788a1c164255"
+      },
+      "format": "token_layer_map_v1"
+    },
+    {
+      "file_id": "local-1808",
+      "original_path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/econometrics/1808.json",
+      "file": {
+        "path": "data/moe-trace-small/1808.json",
+        "sha256": "c8c9cf4917498a2195960dbd9c65e9efe027af6606db098d40b0db8f7c266092"
+      },
+      "format": "token_layer_map_v1"
+    },
+    {
+      "file_id": "local-2675",
+      "original_path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/high_school_biology/2675.json",
+      "file": {
+        "path": "data/moe-trace-small/2675.json",
+        "sha256": "848633cf8afa1c9247d9cdaf5968bb09a5f2e2d409387f4a333ce7a6e35390cd"
+      },
+      "format": "token_layer_map_v1"
+    },
+    {
+      "file_id": "local-6447",
+      "original_path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/international_law/6447.json",
+      "file": {
+        "path": "data/moe-trace-small/6447.json",
+        "sha256": "265c8e66cfb49da12be0d8037cd7a8be6997f4207bcb0a48ca3c616bbe253b96"
+      },
+      "format": "token_layer_map_v1"
+    },
+    {
+      "file_id": "user-900",
+      "original_path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/college_chemistry/900.json",
+      "file": {
+        "path": "data/moe-trace-small/900.json",
+        "sha256": "cee894cf6401b3b518b8bd8784762fd629528006c660a91383069bc80146163d"
+      },
+      "format": "token_layer_map_v1"
+    },
+    {
+      "file_id": "user-901",
+      "original_path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/college_chemistry/901.json",
+      "file": {
+        "path": "data/moe-trace-small/901.json",
+        "sha256": "8a6a2620152ce43255c7243f16a9a05f17a7cc9df993e5da4923e1ae4f1221e5"
+      },
+      "format": "token_layer_map_v1"
+    },
+    {
+      "file_id": "user-905",
+      "original_path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/college_chemistry/905.json",
+      "file": {
+        "path": "data/moe-trace-small/905.json",
+        "sha256": "abab099e678cb7fad8d9dbba30d06fa4099410d32d11f766c30c2426daac2851"
+      },
+      "format": "token_layer_map_v1"
+    },
+    {
+      "file_id": "user-1003",
+      "original_path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/college_computer_science/1003.json",
+      "file": {
+        "path": "data/moe-trace-small/1003.json",
+        "sha256": "f57f4047a5813f8f0c02b0a0eea52c914ef4cec3b9bed890791c686ad6995187"
+      },
+      "format": "token_layer_map_v1"
+    },
+    {
+      "file_id": "user-1004",
+      "original_path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/college_computer_science/1004.json",
+      "file": {
+        "path": "data/moe-trace-small/1004.json",
+        "sha256": "b4666178efd2472f056e631728980b37d572e4a74147471d2c3dde66a7642b40"
+      },
+      "format": "token_layer_map_v1"
+    },
+    {
+      "file_id": "user-1007",
+      "original_path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/college_computer_science/1007.json",
+      "file": {
+        "path": "data/moe-trace-small/1007.json",
+        "sha256": "fe6242fe706a21168c1775a2697bf84e4f45357fd34263d5638e2e92789ab179"
+      },
+      "format": "token_layer_map_v1"
+    },
+    {
+      "file_id": "user-1008",
+      "original_path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/college_computer_science/1008.json",
+      "file": {
+        "path": "data/moe-trace-small/1008.json",
+        "sha256": "adca5765840be6c91bc24e6904361a3f8d0207620f6a590bab415e2638b1d75c"
+      },
+      "format": "token_layer_map_v1"
+    },
+    {
+      "file_id": "user-1011",
+      "original_path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/college_computer_science/1011.json",
+      "file": {
+        "path": "data/moe-trace-small/1011.json",
+        "sha256": "e0e7ea297df844c59bb90bdf7806f601d3ddaf99ab18ccd641db2c6e81f933bb"
+      },
+      "format": "token_layer_map_v1"
+    },
+    {
+      "file_id": "user-1477",
+      "original_path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/computer_security/1477.json",
+      "file": {
+        "path": "data/moe-trace-small/1477.json",
+        "sha256": "0dd8cd33c9a2d0175f222e36274cbbf873cc5de9b3abbc024c6a81895d88c048"
+      },
+      "format": "token_layer_map_v1"
+    },
+    {
+      "file_id": "user-1480",
+      "original_path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/computer_security/1480.json",
+      "file": {
+        "path": "data/moe-trace-small/1480.json",
+        "sha256": "adef7e2065576fae3a5db8eea07966e819b4428447209253d2cc2861f6d3485f"
+      },
+      "format": "token_layer_map_v1"
+    },
+    {
+      "file_id": "user-1481",
+      "original_path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/computer_security/1481.json",
+      "file": {
+        "path": "data/moe-trace-small/1481.json",
+        "sha256": "4035bb389e7e7b0c10325de3df3491bee2c22ac9ff575b5e5d2a8ccf2db3fc84"
+      },
+      "format": "token_layer_map_v1"
+    }
+  ]
+}

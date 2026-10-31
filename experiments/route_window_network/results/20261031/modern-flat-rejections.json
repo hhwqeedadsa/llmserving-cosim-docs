@@ -1,0 +1,26 @@
+{
+  "passed": true,
+  "groups": [
+    {
+      "group": 0,
+      "plan_accepted": false,
+      "exit_code": 1,
+      "input_sha256": "00cc1ab187b7ba7f83df6849fe32379a0525abe37e10ccbada270b80908ddf51",
+      "same_choices_as_legacy": true,
+      "network_executed": false,
+      "rejection": "moe-ub: DeepEP plan: modern output budget exceeded"
+    },
+    {
+      "group": 1,
+      "plan_accepted": false,
+      "exit_code": 1,
+      "input_sha256": "f4c3f7dd5817700a5fb16b3cce615dfdfa1d1e2a2177dd4ef32dcb93000cde22",
+      "same_choices_as_legacy": true,
+      "network_executed": false,
+      "rejection": "moe-ub: DeepEP plan: modern output budget exceeded"
+    }
+  ],
+  "new_network_runs": 0,
+  "hardware_calibrated": false,
+  "scope": "Two independent untimed representations; not shared-network execution, runtime slot/callback acceptance or latency"
+}

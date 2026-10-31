@@ -1,0 +1,38 @@
+{
+  "passed": true,
+  "groups": [
+    {
+      "group": 0,
+      "passed": true,
+      "operations": 12508,
+      "events": 51308,
+      "plain_bytes": 21842925,
+      "stored_bytes": 988190,
+      "stored_reduction_fraction": 0.9547592641553272,
+      "canonical_sha256": "bde737bc44908a7eddada499b4b6cbd74fc6a5c5584f7d191797f5bad5834b29",
+      "stored_sha256": "bea11dc013dc3868dec6bca08ed86ebc5d04578fe6a41711adfd6ecb7883685a",
+      "preserved_self_peer_control_operations": 320,
+      "zero_rank_count_operations": 1938,
+      "zero_expert_count_elements": 16256,
+      "all_events_in_independent_topological_closure": true
+    },
+    {
+      "group": 1,
+      "passed": true,
+      "operations": 12478,
+      "events": 51154,
+      "plain_bytes": 21785503,
+      "stored_bytes": 984016,
+      "stored_reduction_fraction": 0.9548316143997226,
+      "canonical_sha256": "16d8a4eafef2bd5b956e95a3ae003cf6df2d1ab70231ea27d35c7cf6caf0c6d7",
+      "stored_sha256": "fdf700fb1c7ad91047a28608f369c9199175056c00303cd90baee0e721b1d163",
+      "preserved_self_peer_control_operations": 320,
+      "zero_rank_count_operations": 1953,
+      "zero_expert_count_elements": 16272,
+      "all_events_in_independent_topological_closure": true
+    }
+  ],
+  "new_network_runs": 0,
+  "native_runtime_acceptance_proven": false,
+  "shared_fabric_execution_proven": false
+}

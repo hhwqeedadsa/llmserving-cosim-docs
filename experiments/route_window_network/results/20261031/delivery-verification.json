@@ -1,0 +1,44 @@
+{
+  "passed": true,
+  "local_html_links": 8,
+  "empty_cwd_public_commands": [
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "modern-deepep-plan",
+        "--format",
+        "compressed-json",
+        "--config",
+        "/home/lry/moe-ub-cosim/experiments/route_window_network/results/20261031/inputs/modern-group-0/input.json",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/route_window_network_20261031/delivery/plan"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim/runs/route_window_network_20261031/delivery/empty-cwd",
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "modern-deepep-check",
+        "--plan",
+        "/home/lry/moe-ub-cosim/runs/route_window_network_20261031/delivery/plan",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/route_window_network_20261031/delivery/check.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim/runs/route_window_network_20261031/delivery/empty-cwd",
+      "exit_code": 0
+    }
+  ],
+  "published_manifest_identical": true,
+  "raw_routes_required": false,
+  "old_run_artifacts_required": false,
+  "new_network_runs": 0
+}

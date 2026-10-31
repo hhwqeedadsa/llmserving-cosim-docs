@@ -1,0 +1,18 @@
+{
+  "original_frozen_sha256": "28ddccc3a1cf4a057851153505979d2044434881c548751ce7f6592025bc2a58",
+  "previous_preparation_sha256": "b290b2d6b82c62b77712f1a9edd4d11f07b453b63f186834f54336bdf1450327",
+  "preparation_sha256": "f3619a0fd0298fd33c6e3d78a5ff49a0c2465ca5bda74d89542b669d2b27096b",
+  "reason": "First CPU admission inherited9000B payload incompatible with8192B receiver; explicitly retain prior1024B/4096B payload/chunk.",
+  "protocol_changes": {
+    "payload_bytes": [
+      9000,
+      1024
+    ],
+    "chunk_bytes": [
+      36000,
+      4096
+    ]
+  },
+  "original_inputs_unchanged": true,
+  "native_network_runs": 0
+}

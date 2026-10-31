@@ -1,0 +1,226 @@
+{
+  "passed": true,
+  "published_shanghai": "2026-10-31T15:19:23.978028+08:00",
+  "completed_monitors_at_publication": [
+    {
+      "stage": "admission",
+      "status": "child_failed",
+      "seconds": 8.299446811026428,
+      "peak_rss_bytes": 73547776,
+      "peak_artifact_bytes": 62001152,
+      "command": [
+        "python3",
+        "-B",
+        "experiments/route_window_network/study.py",
+        "admission",
+        "--study",
+        "runs/route_window_network_20261031/input",
+        "--output",
+        "runs/route_window_network_20261031/admission"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "probe_sha256": "a71c8578c80c5af7ed1b62cf5d932dba3302abe11b7b0fb8ca46c37aa1679cd8"
+    },
+    {
+      "stage": "admission-corrected",
+      "status": "completed",
+      "seconds": 10.803279054001905,
+      "peak_rss_bytes": 110899200,
+      "peak_artifact_bytes": 91103232,
+      "command": [
+        "python3",
+        "-B",
+        "experiments/route_window_network/study.py",
+        "admission",
+        "--study",
+        "runs/route_window_network_20261031/input",
+        "--output",
+        "runs/route_window_network_20261031/admission-corrected"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "probe_sha256": "4e08e36309f45048daaf80cbc8c0f9967bb2b61e51ac5432e7178cb9b1b58a6e"
+    },
+    {
+      "stage": "analyze",
+      "status": "completed",
+      "seconds": 1.0785944430390373,
+      "peak_rss_bytes": 20721664,
+      "peak_artifact_bytes": 64163840,
+      "command": [
+        "python3",
+        "-B",
+        "experiments/route_window_network/analyze.py",
+        "--study",
+        "runs/route_window_network_20261031/input",
+        "--output",
+        "runs/route_window_network_20261031/analysis"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "probe_sha256": "9e16c625613e10cf32b6be0903051b138ff1fc09b2921ab3aa743f0b4961d057"
+    },
+    {
+      "stage": "modern-capacity",
+      "status": "completed",
+      "seconds": 1.4420150400255807,
+      "peak_rss_bytes": 93302784,
+      "peak_artifact_bytes": 91168768,
+      "command": [
+        "python3",
+        "-B",
+        "experiments/route_window_network/modern_capacity.py",
+        "--admission",
+        "runs/route_window_network_20261031/admission-corrected",
+        "--output",
+        "runs/route_window_network_20261031/modern"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "probe_sha256": "49947313a9ed1dc4fce437e229b2c58244b36273622d95aa9259b1620e50f057"
+    },
+    {
+      "stage": "modern-compressed",
+      "status": "completed",
+      "seconds": 4.341412715963088,
+      "peak_rss_bytes": 188850176,
+      "peak_artifact_bytes": 93302784,
+      "command": [
+        "python3",
+        "-B",
+        "experiments/route_window_network/modern_capacity.py",
+        "--storage",
+        "compressed-json",
+        "--admission",
+        "runs/route_window_network_20261031/admission-corrected",
+        "--output",
+        "runs/route_window_network_20261031/modern-compressed"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "probe_sha256": "4a13742826e76f65ea3c5ad0ec61628e229e694fa01024cca80f4700a3e83ae4"
+    },
+    {
+      "stage": "modern-size",
+      "status": "completed",
+      "seconds": 1.4385572909959592,
+      "peak_rss_bytes": 139685888,
+      "peak_artifact_bytes": 91185152,
+      "command": [
+        "python3",
+        "-B",
+        "-c",
+        "import json,zlib,pathlib; from moe_ub_cosim.modern_deepep_plan import compile_plan; from moe_ub_cosim.deepep_plan import encoded; root=pathlib.Path(\"runs/route_window_network_20261031/modern\"); rows=[]\nfor group in (0,1):\n config=json.loads((root/f\"group-{group}/input.json\").read_bytes()); plan=compile_plan(config); raw=encoded(plan); rows.append(dict(group=group,operations=len(plan[\"operations\"]),events=len(plan[\"events\"]),plain_bytes=len(raw),zlib_bytes=len(zlib.compress(raw)),zero_tokens_omitted=False))\n(root/\"size-diagnosis.json\").write_text(json.dumps(rows,indent=2)+\"\\n\"); print(rows)"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "probe_sha256": "a5cb615d327d146f5f62c0d25d917d1a1c4dd8055a4b3f3755940d0e5a56fa10"
+    },
+    {
+      "stage": "prepare",
+      "status": "completed",
+      "seconds": 1.511627507978119,
+      "peak_rss_bytes": 52244480,
+      "peak_artifact_bytes": 35090432,
+      "command": [
+        "python3",
+        "-B",
+        "experiments/route_window_network/study.py",
+        "prepare",
+        "--manifest",
+        "experiments/legacy_real_routes/results/20261031/source-manifest.json",
+        "--backend-identity",
+        "runs/legacy_shared_20261031/build-v2/backend.json",
+        "--output",
+        "runs/route_window_network_20261031/input"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "probe_sha256": "8ab8a23b225678133a7832756b265642c4dfd8c7d4155bf710554ce29abaeaf4"
+    },
+    {
+      "stage": "revise",
+      "status": "completed",
+      "seconds": 0.12517175800167024,
+      "peak_rss_bytes": 7438336,
+      "peak_artifact_bytes": 64176128,
+      "command": [
+        "python3",
+        "-B",
+        "experiments/route_window_network/study.py",
+        "revise",
+        "--study",
+        "runs/route_window_network_20261031/input"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "probe_sha256": "558decea7767ead89c12138e19759ca435ed3cf6bb47f82c436b4d98f45e7cb5"
+    },
+    {
+      "stage": "verify",
+      "status": "completed",
+      "seconds": 1.2144080610014498,
+      "peak_rss_bytes": 38780928,
+      "peak_artifact_bytes": 91119616,
+      "command": [
+        "python3",
+        "-B",
+        "experiments/route_window_network/verify.py",
+        "--study",
+        "runs/route_window_network_20261031/input",
+        "--analysis",
+        "runs/route_window_network_20261031/analysis",
+        "--admission",
+        "runs/route_window_network_20261031/admission-corrected",
+        "--output",
+        "runs/route_window_network_20261031/analysis/verification.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "probe_sha256": "b83c510d76e5df2b8565c723188d199f978ebc9e21ef53f2f098ca64c86af9c5"
+    },
+    {
+      "stage": "verify-modern",
+      "status": "completed",
+      "seconds": 1.0051069989567623,
+      "peak_rss_bytes": 214302720,
+      "peak_artifact_bytes": 93319168,
+      "command": [
+        "python3",
+        "-B",
+        "experiments/route_window_network/verify_modern.py",
+        "--modern",
+        "runs/route_window_network_20261031/modern-compressed",
+        "--admission",
+        "runs/route_window_network_20261031/admission-corrected",
+        "--diagnosis",
+        "runs/route_window_network_20261031/modern",
+        "--output",
+        "runs/route_window_network_20261031/analysis/modern-verification.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "probe_sha256": "88182ff0eaceab14cec14cc75c41dc07baa39b2140fdeba90631f60326a1fc56"
+    }
+  ],
+  "monitored_seconds": 31.25961968099,
+  "peak_rss_bytes": 214302720,
+  "peak_artifact_bytes": 93319168,
+  "unexpected_failed_stages": [
+    "admission"
+  ],
+  "unexpected_failure": "Initial packet9000B/receiver8192B mismatch; old attempt retained; only payload/chunk corrected with frozen-v2 lineage.",
+  "ordinary_flat_plan_rejections": 2,
+  "old_native_lifetime_rejection_expected": true,
+  "new_network_runs": 0,
+  "network_reruns": 0,
+  "builds": 0,
+  "downloads": 0,
+  "hardware_calibrated": false,
+  "prospective_method_commit": "ba1543b8ac",
+  "packet_correction_commit": "b8914fec71",
+  "modern_capacity_method_commit": "d24bcde89f",
+  "platform_storage_commit": "1422ba2073",
+  "compressed_followup_commit": "15a5bb8456",
+  "code_sha256": {
+    "experiments/route_window_network/monitor.py": "242930c23edf35c829a7a77dd4777666099e68a2157ad5f9c1a0d79239339ce9",
+    "experiments/route_window_network/study.py": "f3619a0fd0298fd33c6e3d78a5ff49a0c2465ca5bda74d89542b669d2b27096b",
+    "experiments/route_window_network/analyze.py": "f1dfa0678310fd53b210b1589853c5e836ab3db4cd71711707a51c0f7c40ac70",
+    "experiments/route_window_network/verify.py": "61d812341a4f8fd99392cde5576c282f0f84ccc7fbf91946603229c9d5955494",
+    "experiments/route_window_network/modern_capacity.py": "2a8a8a5a76e770ef5ee3c1f9f698bed8881b327135c7fd9ae51a622457706f7a",
+    "experiments/route_window_network/verify_modern.py": "b46ea9f09a09275c8884220412b6420c0dd9dd954faa0ddca6c9be651ae51de3",
+    "experiments/route_window_network/publish.py": "5a768de254ac8d4f0640a161dfd1c49863a83f51249ab5a837bd0d8d0f6596b2"
+  },
+  "scope": "Completed monitor reports at publication time; publisher itself excluded; native runtime not executed"
+}

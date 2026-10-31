@@ -2,11 +2,17 @@
 
 ## 2026-10-31 现代计划压缩存储
 
-状态：`completed`（平台保存/检查增量，真实EP32压缩研究待独立验收）。连续窗口研究中两现代EP32两调用的逻辑数合法，但约21.8MB规范JSON超过旧16MiB保存上限。按[规范](modern_plan_storage_spec.md)新增显式modern-deepep-plan --format compressed-json及自动检查，旧flat三个产物与改动前逐字节一致。压缩保留全部规范字节/依赖/self-peer/未解析slot；逻辑和16MiB实际产物上限保持，新格式展开限64MiB，拒绝异常流及重算hash后的语义篡改。见[操作](../../examples/modern_deepep_partial_order/README.md#可选压缩存储)和[验收](../../fixtures/modern_plan_storage/verification.json)。7项新方法（含交付复查的非对象清单拒绝）、24项旧计划/事件/窗口方法及六个公开CLI新目录流程通过；人工EP4规范370,403B→24,346B，暂扣零计数闭包与flat相同。根runs/modern_plan_storage_20261031累计300秒/256MiB/留8GiB，阶段120秒/RSS1GiB/地址2GiB；无网络、构建安装下载依赖变更GPU，不宣称新运行期规模或算法收益。平台单独提交，整体目标active。
+状态：`completed`（平台保存/检查增量；真实EP32压缩研究已另行验收，未执行网络）。连续窗口研究中两现代EP32两调用的逻辑数合法，但约21.8MB规范JSON超过旧16MiB保存上限。按[规范](modern_plan_storage_spec.md)新增显式modern-deepep-plan --format compressed-json及自动检查，旧flat三个产物与改动前逐字节一致。压缩保留全部规范字节/依赖/self-peer/未解析slot；逻辑和16MiB实际产物上限保持，新格式展开限64MiB，拒绝异常流及重算hash后的语义篡改。见[操作](../../examples/modern_deepep_partial_order/README.md#可选压缩存储)和[验收](../../fixtures/modern_plan_storage/verification.json)。7项新方法（含交付复查的非对象清单拒绝）、24项旧计划/事件/窗口方法及六个公开CLI新目录流程通过；人工EP4规范370,403B→24,346B，暂扣零计数闭包与flat相同。根runs/modern_plan_storage_20261031累计300秒/256MiB/留8GiB，阶段120秒/RSS1GiB/地址2GiB；无网络、构建安装下载依赖变更GPU，不宣称新运行期规模或算法收益。平台单独提交，整体目标active。
 
 ## 2026-10-31 连续Decode热点与系统容量判别
 
-状态：`in_progress`。上一目标轮为progress：2aa7415fbd交付真实双EP32共享恢复，成熟方法已收回98.52%额外等待且旁观组仅晚24ns。本轮按[冻结方法](../../experiments/route_window_network/README.md)检查15份真实来源的连续64步、原层3/31/60，保持8/7独立请求，不把同一请求未来token并入当前batch。比较专家与端点偏斜、保边际时序打乱参考，并用公开两调用计划/validate-only核查完整旧库寿命边界。固定128Clos，仅CPU离线/准入，不运行新网络。根runs/route_window_network_20261031累计900秒/512MiB/留8GiB，单阶段120秒/RSS1GiB/地址2GiB；无构建、安装、下载、GPU、依赖变更或旧成功网络重跑，失败保留。平台能力和研究结果分别验收，不把热点直方图当新算法收益，整体目标active。
+状态：`completed`（本轮来源/需求/容量判别；现代连续调用网络执行及整体目标仍active）。上一目标轮为progress：2aa7415fbd交付真实双EP32共享恢复。本轮按ba1543b8ac[方法](../../experiments/route_window_network/README.md)检查15份真实来源连续64步、层3/31/60，保持8/7独立请求，不把未来token并入当前batch。见[结果](../../experiments/route_window_network/RESULTS.md)、[网页](../../experiments/route_window_network/results/20261031/report.html)、[原件核验](../../experiments/route_window_network/results/20261031/verification.json)、[现代计划核验](../../experiments/route_window_network/results/20261031/modern-verification.json)和[交付复现](../../experiments/route_window_network/results/20261031/delivery-verification.json)。
+
+专家峰均比3.50–9.36，归属rank（含本地）1.53–1.87，不能等同端口拥塞；同一选择按目的rank去重少13.36%–16.27%远端激活本体，属于现成表示，不是新收益。4步前窗Top8覆盖后窗约6.5%–12.3%，保边际打乱常相近，不能直接称时序预测创新。独立重算23,040选择、768矩阵、2,040窗口。
+
+旧两调用完整计划33,024/32,992操作，公开Python准入拒绝每组32,768寿命预算，无原生或网络。初次预检9000B载荷/8192B接收不匹配失败保留，b8914fec71仅改1024/4096并存frozen-v2。d24bcde89f补查现代：逻辑12,508/12,478操作及51,308/51,154事件合法，约21.8MB明文超16MiB保存预算，两拒绝保留。平台1422ba2073/6e2e7b0d21独立交付压缩存储后，15a5bb8456先补方法再在新目录完成两真实plan/check，规范字节压至988,190/984,016B（约95.48%）；全部控制、self-peer、零值和符号slot保留。空cwd仅发布配置复现第一组，manifest一致。保存成功不等于modern-native运行，现代native本来直接消费配置。
+
+固定128Clos仅作部署与需求对象，本轮零新网络/构建安装下载GPU依赖变更。研究根runs/route_window_network_20261031累计900秒/512MiB/留8GiB，阶段120秒/RSS1GiB/地址2GiB；12阶段33.59秒、峰值214,302,720B、产物95,948,800B，一次配置失败保留，两次flat拒绝按方法正常记录。HTML静态链接通过，无浏览器渲染。下一项先核查现代连续两调用运行期回调/逻辑步/原生节点/缓冲及共享支持，补真实执行后再判断剩余收益，不默认重写已支持功能或提高故障强度。仅发布user既有分支，整体研究active。
 
 ## 2026-10-31 真实来源双EP32共享网络研究
 

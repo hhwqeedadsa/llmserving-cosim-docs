@@ -1,5 +1,9 @@
 # 当前任务与交接
 
+## 2026-10-31 现代连续调用运行容量
+
+状态：`in_progress`（先做平台容量检查；EP32原生执行未完成）。上一目标轮完成交付/远端核对并查到现代入口额外硬限，属于progress。本轮按[规范](modern_native_capacity_spec.md)核对完整现代工作量：2–4 rank、64连接、1024远端/256本地、16窗口、8项本地条件及明文计划上限分别位于不同层，不能仅提高宿主限时。先增加公开静态核算及确定性完整节点数的启动前拒绝，保持全部控制/self/零值/动态slot。平台单独验收提交，再用公开入口核对原两组真实两调用，不把静态结果称为网络执行。研究对象仍为一种128Clos；本轮平台阶段零新网络、GPU、构建安装下载或依赖变更。预算与验收边界见规范；整体目标active。
+
 ## 2026-10-31 现代计划压缩存储
 
 状态：`completed`（平台保存/检查增量；真实EP32压缩研究已另行验收，未执行网络）。连续窗口研究中两现代EP32两调用的逻辑数合法，但约21.8MB规范JSON超过旧16MiB保存上限。按[规范](modern_plan_storage_spec.md)新增显式modern-deepep-plan --format compressed-json及自动检查，旧flat三个产物与改动前逐字节一致。压缩保留全部规范字节/依赖/self-peer/未解析slot；逻辑和16MiB实际产物上限保持，新格式展开限64MiB，拒绝异常流及重算hash后的语义篡改。见[操作](../../examples/modern_deepep_partial_order/README.md#可选压缩存储)和[验收](../../fixtures/modern_plan_storage/verification.json)。7项新方法（含交付复查的非对象清单拒绝）、24项旧计划/事件/窗口方法及六个公开CLI新目录流程通过；人工EP4规范370,403B→24,346B，暂扣零计数闭包与flat相同。根runs/modern_plan_storage_20261031累计300秒/256MiB/留8GiB，阶段120秒/RSS1GiB/地址2GiB；无网络、构建安装下载依赖变更GPU，不宣称新运行期规模或算法收益。平台单独提交，整体目标active。

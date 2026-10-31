@@ -76,7 +76,9 @@ def prepare(a):
     for case,mode in [('local','live_ecmp/1'),('prefix','explicit_prefix/1')]:
         p=deepcopy(protocol);p['link_failures']=dict(mode='switch_links/2',events=[dict(src=128,dst=132,
             time_ns=4000,route_update_delay_ns=60000,restore_time_ns=24000,restore_route_update_delay_ns=60000)])
-        p['local_failover']=dict(mode=mode,max_events=100000);save(out/(case+'.json'),p)
+        p['local_failover']=dict(mode=mode)
+        if mode=='explicit_prefix/1':p['local_failover']['max_events']=100000
+        save(out/(case+'.json'),p)
     source=load(ROOT/'examples/scaleout_rdma_transactions/selective-chain.json')
     transport={key:source[key] for key in ('transport_recovery','dcqcn_reference')}
     transport['transport_recovery'].update(initial_rto_ns=17000,max_events=500000,inflight_bytes=4096,receive_buffer_bytes=8192)
@@ -97,7 +99,7 @@ def prepare(a):
 
 
 def verify(study):
-    frozen=load(study/'frozen.json')
+    frozen=load(study/('frozen-v2.json' if (study/'frozen-v2.json').exists() else 'frozen.json'))
     assert sha(Path(__file__))==frozen['study_source_sha256']
     assert sha(ROOT/'python/moe_ub_cosim/legacy_audit.py')==frozen['auditor_sha256']
     assert sha(frozen['backend'])==frozen['backend_sha256']
@@ -110,8 +112,10 @@ def verify(study):
 def run(a):
     study=a.study.resolve();frozen=verify(study)
     assert a.case in frozen['cases'] and not (study/('run-'+a.case)).exists()
-    cli(study,'run-'+a.case,['deepep-run','--plan',study/'plan','--binding',study/'binding.json',
-        '--topology',study/'topology','--protocol',study/(a.case+'.json'),'--transport',study/'transport.json',
+    protocol=frozen.get('protocol_files',{}).get(a.case,a.case+'.json')
+    log_name='run-'+a.case+('-corrected' if protocol!=a.case+'.json' else '')
+    cli(study,log_name,['deepep-run','--plan',study/'plan','--binding',study/'binding.json',
+        '--topology',study/'topology','--protocol',study/protocol,'--transport',study/'transport.json',
         '--backend',frozen['backend'],'--output',study/('run-'+a.case)])
 
 
@@ -122,7 +126,7 @@ def analyze(a):
     assert tokens==load(study/'plan-input.json')['calls'][0]['tokens'] and records==load(study/'selection.json')['records']
     summaries={};receipts={};execution_sha=None
     for case in frozen['cases']:
-        run=study/('run-'+case);protocol=study/(case+'.json');audit_path=out/(case+'-audit.json')
+        run=study/('run-'+case);protocol=study/frozen.get('protocol_files',{}).get(case,case+'.json');audit_path=out/(case+'-audit.json')
         cli(out,'audit-'+case,['deepep-audit','--run',run,'--protocol',protocol,'--output',audit_path])
         summary=load(audit_path);assert summary['passed'] and not summary['route_source_verified']
         actual=sha(run/'execution.json')
@@ -151,7 +155,8 @@ def analyze(a):
         prefix_relative_improvement_vs_local=(local-prefix)/local,
         recovered_local_extra_wait_fraction=(local-prefix)/(local-normal) if local>normal else None,
         algorithm_innovation_validated=False,full_inference_executed=False,physical_gpu_executed=False,
-        source_manifest_sha256=frozen['source_manifest_sha256'],frozen_sha256=sha(study/'frozen.json'),
+        source_manifest_sha256=frozen['source_manifest_sha256'],
+        frozen_sha256=sha(study/('frozen-v2.json' if (study/'frozen-v2.json').exists() else 'frozen.json')),
         scope='15 recorded expert selections with declared rank mapping and functional old-library communication; one EP32 group, not full-cluster load')
     save(out/'analysis.json',evidence)
     print(json.dumps({key:evidence[key] for key in ('passed','normal_task_ns','local_task_ns','prefix_task_ns','prefix_improvement_vs_local_ns')}))

@@ -1,0 +1,65 @@
+"""Publish static capacity evidence; never start a simulator or alter inputs."""
+import argparse
+from html import escape
+import json
+from pathlib import Path
+import shutil
+
+ROOT=Path(__file__).resolve().parents[2]
+
+
+def main():
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--run',type=Path,required=True)
+    p.add_argument('--output',type=Path,required=True);a=p.parse_args()
+    out=a.output.resolve();out.mkdir(parents=True,exist_ok=False)
+    s=json.loads((a.run/'study/summary.json').read_text())
+    v=json.loads((a.run/'verification.json').read_text())
+    if not s['passed'] or not v['passed']:raise ValueError('Incomplete study/independent verification')
+    shutil.copyfile(a.run/'verification.json',out/'verification.json')
+    shutil.copyfile(a.run/'study/frozen.json',out/'frozen.json')
+    shutil.copyfile(a.run/'study/summary.json',out/'summary.json')
+    for g in (0,1):
+        folder=out/f'group-{g}';folder.mkdir()
+        for name in ('input.json','capacity.json','command.json','stderr.log'):
+            shutil.copyfile(a.run/f'study/group-{g}'/name,folder/name)
+    monitors={q.parent.name:json.loads(q.read_text()) for q in sorted((a.run/'monitors').glob('*/probe.json'))}
+    completed={name:r for name,r in monitors.items() if r['status']=='completed'}
+    receipt=dict(scope='Completed monitored study/verify phases at publication time; publisher itself and management excluded',
+        monitors=completed,wall_seconds=sum(r['wall_seconds'] for r in completed.values()),
+        peak_sampled_group_rss_bytes=max(r['peak_sampled_group_rss_bytes'] for r in completed.values()),
+        peak_sampled_artifact_bytes=max(r['peak_sampled_artifact_bytes'] for r in completed.values()),new_network_runs=0)
+    (out/'receipt.json').write_text(json.dumps(receipt,indent=2)+'\n')
+    names={
+        'logical_ranks':'逻辑rank数', 'canonical_plan_bytes':'展开规范计划/B',
+        'prospective_connections':'预留连接身份', 'remote_nodes':'远端或self操作',
+        'local_nodes':'本地操作', 'physical_windows':'注册内存窗口',
+        'barrier_wait_terms':'单个屏障等待项', 'registrations_minimum':'NIC注册条数下界'}
+    groups=s['groups'];checks=[{r['name']:r for r in g['checks']} for g in groups]
+    rows=[]
+    for key,label in names.items():
+        r0,r1=(c[key] for c in checks)
+        rows.append(f"<tr><th>{escape(label)}</th><td>{r0['required']:,}</td><td>{r1['required']:,}</td><td>{r0['maximum']:,}</td><td class='fail'>超限</td></tr>")
+    html='''<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>现代EP32连续调用：运行容量核查</title><style>
+body{margin:0;background:#f4f6fa;color:#17233a;font:16px/1.8 system-ui,sans-serif}main{max-width:1060px;margin:auto;padding:36px 24px 64px}
+h1{font-size:32px;line-height:1.4}h2{margin-top:36px;font-size:23px}.lead{font-size:19px}section{background:white;border:1px solid #d9e1ed;border-radius:12px;padding:22px;margin:24px 0}
+.tag{display:inline-block;background:#e6edff;color:#234494;padding:3px 12px;border-radius:20px;font-size:14px}.warn{border-left:4px solid #c86b19;background:#fff5e8;padding:16px}
+table{border-collapse:collapse;width:100%;font-size:15px}th,td{padding:11px;border-bottom:1px solid #dce3ef;text-align:right}th:first-child{text-align:left}.fail{color:#a33720}.scroll{overflow:auto}a{color:#2459ac}code{font-size:14px;background:#eef2f8;padding:2px 4px}li{margin:12px 0}.small{font-size:14px;color:#52607a}</style>
+<main><span class="tag">128端点Clos部署对象 · 零新网络</span><h1>现代EP32连续调用<br>为什么还不能直接运行？</h1>
+<p class="lead">完整任务同时超过多项软件容量门限。只延长运行时间，仍不能让这两份现代计划进入完整网络执行。</p>
+<p>本轮已经增加公开容量检查，并将可提前确定的完整远端、本地节点超限改为启动前拒绝。计划压缩解决保存空间；本页核查的是另一层问题：执行入口能否容纳完整任务。</p>
+<section><h2>同一份真实输入，需要多少容量</h2><p>15份不同R1-AWQ/MMLU路由按8/7请求分为两组。每组EP32，256专家，每rank8专家，取原层3的两个顺序Decode调用；每步仅8或7个源rank持有token。128是拓扑端点数，不是128个并发真实请求。</p><div class="scroll"><table><thead><tr><th>检查项</th><th>组0需求</th><th>组1需求</th><th>现有上限</th><th>结果</th></tr></thead><tbody>'''+''.join(rows)+'''</tbody></table></div>
+<p class="small">远端操作包含self服务，不能全部算为跨交换机流量；连接为可能slot绑定的预留集合，不能当成活跃QP或拥塞程度。注册条数为下界，完整NIC部署可能要求更多。</p></section>
+<section><h2>这些数字意味着什么</h2><p>每调用完整控制操作为6×32²=6,144项，包含四个全rank屏障及rank/专家计数。两调用控制操作共12,288项；数据操作另为组0的220项、组1的190项。操作数不等于包数、字节或耗时，不能据此声称控制通信已经成为瓶颈。</p>
+<p>两组实际需要12,436/12,408个远端或self节点，646/627个本地节点；现代逻辑计划本身仍满足已验证的操作和事件数量限制。问题出在现代运行桥接入口及其下层会话容量，不能归因为Clos规模限制或ns-3无法仿真128端点。</p></section>
+<section><h2>接下来怎样扩展</h2><ol><li><b>先减少宿主状态开销。</b>当前依赖覆盖保存全量祖先字典；连续调用会反复复制。用等价的紧凑因果索引替换，并以原控制器逐项核对，保留全部先后关系。</li>
+<li><b>再成套扩展运行容量。</b>现代布局、Python事务验证、C++会话、内存窗口和传输声明共同增加显式扩展模式。旧模式默认值保持，不能只改最外层数字。</li>
+<li><b>最后运行实际连续调用。</b>保持这两步的真实选择、完整通知、self和动态slot，先在同一128Clos验证一个EP32组的连续两调用，再验证多组共享；不将独立仿真耗时相加。</li></ol><p>具体修改顺序和未实现边界见<a href="../../SCALE_PLAN.md">执行扩展方案</a>。</p></section>
+<p class="warn"><b>本轮没有新的网络时延或算法收益结论。</b>没有执行GPU、完整R1数值计算、LLMServingSim服务调度或现代GIN硬件。公开容量报告始终保留runtime_admitted=false；静态通过也不保证实际运行成功。</p>
+<h2>复核与复现</h2><p><a href="summary.json">两组完整结果</a> · <a href="verification.json">独立集合/字节核验</a> · <a href="frozen.json">来源与版本</a> · <a href="receipt.json">资源记录</a> · <a href="../../RESULTS.md">详细说明</a></p>
+<p>直接修改本目录的<code>group-0/input.json</code>副本，再使用公开<code>scaleout modern-deepep-native-capacity</code>生成新报告；原件保留，输出路径必须是新的。容量超限报告保存后退出1。</p></main></html>'''
+    (out/'report.html').write_text(html)
+    print(json.dumps(dict(passed=True,output=str(out),network_runs=0,html_rendered=False)))
+
+
+if __name__=='__main__':main()

@@ -1,0 +1,16 @@
+{
+  "command": [
+    "/usr/bin/python3",
+    "-B",
+    "-m",
+    "moe_ub_cosim",
+    "scaleout",
+    "modern-deepep-native-capacity",
+    "--config",
+    "/home/lry/moe-ub-cosim/runs/modern_runtime_capacity_20261031/study/group-1/input.json",
+    "--output",
+    "/home/lry/moe-ub-cosim/runs/modern_runtime_capacity_20261031/study/group-1/capacity.json"
+  ],
+  "cwd": "/home/lry/moe-ub-cosim/runs/modern_runtime_capacity_20261031/study",
+  "exit_code": 1
+}

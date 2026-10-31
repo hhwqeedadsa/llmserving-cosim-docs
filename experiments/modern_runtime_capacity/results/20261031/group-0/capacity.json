@@ -1,0 +1,459 @@
+{
+  "schema_version": "moe-modern-native-capacity/1",
+  "passed": false,
+  "scope": "Static complete-workload requirements only; not native admission, execution, GPU/GIN timing or a latency prediction",
+  "network_executed": false,
+  "runtime_admitted": false,
+  "hardware_calibrated": false,
+  "counts": {
+    "logical_ranks": 32,
+    "calls": 2,
+    "modern_operations": 12508,
+    "modern_events": 51308,
+    "native_nodes": {
+      "remote": 12436,
+      "local": 646,
+      "local_operations": 72,
+      "local_events": {
+        "barrier_ready": 256,
+        "counts_ready": 64,
+        "expert_stage_done": 64,
+        "local_expert_reduction_done": 110,
+        "token_prepared": 16
+      },
+      "count_preparations": 64,
+      "paths": {
+        "gin_self": 320,
+        "local": 72,
+        "rdma": 12116
+      }
+    },
+    "prospective_connections": 1162,
+    "self_connections": 32,
+    "remote_connections": 1130,
+    "immutable_operands": [
+      {
+        "rank": 0,
+        "logical_window_bytes": 79040,
+        "initialized_segments": 7,
+        "initialized_bytes": 4768
+      },
+      {
+        "rank": 1,
+        "logical_window_bytes": 136640,
+        "initialized_segments": 11,
+        "initialized_bytes": 4896
+      },
+      {
+        "rank": 2,
+        "logical_window_bytes": 93440,
+        "initialized_segments": 8,
+        "initialized_bytes": 4800
+      },
+      {
+        "rank": 3,
+        "logical_window_bytes": 79040,
+        "initialized_segments": 7,
+        "initialized_bytes": 4768
+      },
+      {
+        "rank": 4,
+        "logical_window_bytes": 64640,
+        "initialized_segments": 6,
+        "initialized_bytes": 4736
+      },
+      {
+        "rank": 5,
+        "logical_window_bytes": 122240,
+        "initialized_segments": 10,
+        "initialized_bytes": 4864
+      },
+      {
+        "rank": 6,
+        "logical_window_bytes": 107840,
+        "initialized_segments": 9,
+        "initialized_bytes": 4832
+      },
+      {
+        "rank": 7,
+        "logical_window_bytes": 122240,
+        "initialized_segments": 10,
+        "initialized_bytes": 4864
+      },
+      {
+        "rank": 8,
+        "logical_window_bytes": 64512,
+        "initialized_segments": 6,
+        "initialized_bytes": 4736
+      },
+      {
+        "rank": 9,
+        "logical_window_bytes": 35712,
+        "initialized_segments": 4,
+        "initialized_bytes": 4672
+      },
+      {
+        "rank": 10,
+        "logical_window_bytes": 64512,
+        "initialized_segments": 6,
+        "initialized_bytes": 4736
+      },
+      {
+        "rank": 11,
+        "logical_window_bytes": 50112,
+        "initialized_segments": 5,
+        "initialized_bytes": 4704
+      },
+      {
+        "rank": 12,
+        "logical_window_bytes": 35712,
+        "initialized_segments": 4,
+        "initialized_bytes": 4672
+      },
+      {
+        "rank": 13,
+        "logical_window_bytes": 50112,
+        "initialized_segments": 5,
+        "initialized_bytes": 4704
+      },
+      {
+        "rank": 14,
+        "logical_window_bytes": 50112,
+        "initialized_segments": 5,
+        "initialized_bytes": 4704
+      },
+      {
+        "rank": 15,
+        "logical_window_bytes": 78912,
+        "initialized_segments": 7,
+        "initialized_bytes": 4768
+      },
+      {
+        "rank": 16,
+        "logical_window_bytes": 107712,
+        "initialized_segments": 9,
+        "initialized_bytes": 4832
+      },
+      {
+        "rank": 17,
+        "logical_window_bytes": 64512,
+        "initialized_segments": 6,
+        "initialized_bytes": 4736
+      },
+      {
+        "rank": 18,
+        "logical_window_bytes": 64512,
+        "initialized_segments": 6,
+        "initialized_bytes": 4736
+      },
+      {
+        "rank": 19,
+        "logical_window_bytes": 35712,
+        "initialized_segments": 4,
+        "initialized_bytes": 4672
+      },
+      {
+        "rank": 20,
+        "logical_window_bytes": 64512,
+        "initialized_segments": 6,
+        "initialized_bytes": 4736
+      },
+      {
+        "rank": 21,
+        "logical_window_bytes": 64512,
+        "initialized_segments": 6,
+        "initialized_bytes": 4736
+      },
+      {
+        "rank": 22,
+        "logical_window_bytes": 21312,
+        "initialized_segments": 3,
+        "initialized_bytes": 4640
+      },
+      {
+        "rank": 23,
+        "logical_window_bytes": 21312,
+        "initialized_segments": 3,
+        "initialized_bytes": 4640
+      },
+      {
+        "rank": 24,
+        "logical_window_bytes": 35712,
+        "initialized_segments": 4,
+        "initialized_bytes": 4672
+      },
+      {
+        "rank": 25,
+        "logical_window_bytes": 50112,
+        "initialized_segments": 5,
+        "initialized_bytes": 4704
+      },
+      {
+        "rank": 26,
+        "logical_window_bytes": 78912,
+        "initialized_segments": 7,
+        "initialized_bytes": 4768
+      },
+      {
+        "rank": 27,
+        "logical_window_bytes": 50112,
+        "initialized_segments": 5,
+        "initialized_bytes": 4704
+      },
+      {
+        "rank": 28,
+        "logical_window_bytes": 21312,
+        "initialized_segments": 3,
+        "initialized_bytes": 4640
+      },
+      {
+        "rank": 29,
+        "logical_window_bytes": 35712,
+        "initialized_segments": 4,
+        "initialized_bytes": 4672
+      },
+      {
+        "rank": 30,
+        "logical_window_bytes": 21312,
+        "initialized_segments": 3,
+        "initialized_bytes": 4640
+      },
+      {
+        "rank": 31,
+        "logical_window_bytes": 64512,
+        "initialized_segments": 6,
+        "initialized_bytes": 4736
+      }
+    ],
+    "logical_device_ids_used": {
+      "0": [
+        0
+      ],
+      "1": [
+        0
+      ],
+      "2": [
+        0
+      ],
+      "3": [
+        0
+      ],
+      "4": [
+        0
+      ],
+      "5": [
+        0
+      ],
+      "6": [
+        0
+      ],
+      "7": [
+        0
+      ],
+      "8": [
+        0
+      ],
+      "9": [
+        0
+      ],
+      "10": [
+        0
+      ],
+      "11": [
+        0
+      ],
+      "12": [
+        0
+      ],
+      "13": [
+        0
+      ],
+      "14": [
+        0
+      ],
+      "15": [
+        0
+      ],
+      "16": [
+        0
+      ],
+      "17": [
+        0
+      ],
+      "18": [
+        0
+      ],
+      "19": [
+        0
+      ],
+      "20": [
+        0
+      ],
+      "21": [
+        0
+      ],
+      "22": [
+        0
+      ],
+      "23": [
+        0
+      ],
+      "24": [
+        0
+      ],
+      "25": [
+        0
+      ],
+      "26": [
+        0
+      ],
+      "27": [
+        0
+      ],
+      "28": [
+        0
+      ],
+      "29": [
+        0
+      ],
+      "30": [
+        0
+      ],
+      "31": [
+        0
+      ]
+    }
+  },
+  "checks": [
+    {
+      "name": "logical_ranks",
+      "required": 32,
+      "maximum": 4,
+      "requirement_kind": "exact",
+      "passed": false,
+      "enforced_by": "modern_native_layout.py"
+    },
+    {
+      "name": "canonical_plan_bytes",
+      "required": 21842925,
+      "maximum": 16777216,
+      "requirement_kind": "exact",
+      "passed": false,
+      "enforced_by": "modern_native_layout.py"
+    },
+    {
+      "name": "canonical_input_bytes",
+      "required": 1432,
+      "maximum": 1048576,
+      "requirement_kind": "exact",
+      "passed": true,
+      "enforced_by": "modern_native_layout.py"
+    },
+    {
+      "name": "prospective_connections",
+      "required": 1162,
+      "maximum": 64,
+      "requirement_kind": "exact",
+      "passed": false,
+      "enforced_by": "modern_native_layout.py; transaction_limits.hh"
+    },
+    {
+      "name": "remote_nodes",
+      "required": 12436,
+      "maximum": 1024,
+      "requirement_kind": "exact",
+      "passed": false,
+      "enforced_by": "modern_native.py; transaction_limits.hh"
+    },
+    {
+      "name": "local_nodes",
+      "required": 646,
+      "maximum": 256,
+      "requirement_kind": "exact",
+      "passed": false,
+      "enforced_by": "modern_native.py; transaction_limits.hh"
+    },
+    {
+      "name": "native_node_ids",
+      "required": 13082,
+      "maximum": 65536,
+      "requirement_kind": "exact",
+      "passed": true,
+      "enforced_by": "modern_native.py"
+    },
+    {
+      "name": "physical_windows",
+      "required": 96,
+      "maximum": 16,
+      "requirement_kind": "exact",
+      "passed": false,
+      "enforced_by": "scaleout_transactions.py; transaction_session_validation.hh"
+    },
+    {
+      "name": "barrier_wait_terms",
+      "required": 32,
+      "maximum": 8,
+      "requirement_kind": "exact",
+      "passed": false,
+      "enforced_by": "scaleout_transactions.py; remote_memory.hh"
+    },
+    {
+      "name": "registrations_minimum",
+      "required": 64,
+      "maximum": 32,
+      "requirement_kind": "lower_bound",
+      "passed": false,
+      "enforced_by": "memory_registrations.py"
+    },
+    {
+      "name": "maximum_initialized_segments_per_rank",
+      "required": 11,
+      "maximum": 32,
+      "requirement_kind": "exact",
+      "passed": true,
+      "enforced_by": "modern_native_layout.py; scaleout_transactions.py"
+    },
+    {
+      "name": "maximum_initialized_bytes_per_rank",
+      "required": 4896,
+      "maximum": 65536,
+      "requirement_kind": "exact",
+      "passed": true,
+      "enforced_by": "modern_native_layout.py; scaleout_transactions.py"
+    },
+    {
+      "name": "maximum_immutable_window_bytes",
+      "required": 136640,
+      "maximum": 67108864,
+      "requirement_kind": "exact",
+      "passed": true,
+      "enforced_by": "modern_native_layout.py"
+    }
+  ],
+  "failures": [
+    "logical_ranks",
+    "canonical_plan_bytes",
+    "prospective_connections",
+    "remote_nodes",
+    "local_nodes",
+    "physical_windows",
+    "barrier_wait_terms",
+    "registrations_minimum"
+  ],
+  "unverified": [
+    "physical endpoint/NIC/plane mapping and actual registration count",
+    "main/signal window size, address overlap and memory permissions",
+    "dynamic proof frontier (maximum 32 dependencies)",
+    "physical control interactions (256), logical callback batches (16384), callback envelope bounds",
+    "packet/queue/recovery/host logs, result size and simulated cutoff",
+    "host wall time, RSS and address-space budget",
+    "binary/source/library identity and all runtime memory/buffer checks"
+  ],
+  "input_sha256": "00cc1ab187b7ba7f83df6849fe32379a0525abe37e10ccbada270b80908ddf51",
+  "source_hashes": {
+    "modern_native_capacity.py": "8668dc94532cc8091f49aefc4b3ab55ec4cc645a7ac452bbd9c444747b39063c",
+    "modern_native_layout.py": "5db5ad9e611421623b9873ea2060a417877c5bc6615e037851b72238055c6dfa",
+    "modern_native.py": "6c999e5f51da4293f2f4093c742fb09e9e37ff625e0abd9d56595a9f00aadc16",
+    "modern_deepep_plan.py": "dc1e268f5a774f24ae6f331c7045d7912a895f6710a76b1e744a13226d838100"
+  }
+}

@@ -1,5 +1,11 @@
 # 当前任务与交接
 
+## 2026-10-31 真实现代EP32连续调用容量判别
+
+状态：`completed`（静态需求判别和网页；实际连续调用网络及整体目标仍active）。平台e35abe397d独立验收后，62cf3ef08c先冻结[方法](../../experiments/modern_runtime_capacity/README.md)，用公开容量CLI读取原两份真实配置，字节不变，两个负报告如期保存，零原生启动。见[结果](../../experiments/modern_runtime_capacity/RESULTS.md)、[网页](../../experiments/modern_runtime_capacity/results/20261031/report.html)、[独立核验](../../experiments/modern_runtime_capacity/results/20261031/verification.json)及[执行扩展方案](../../experiments/modern_runtime_capacity/SCALE_PLAN.md)。组0/1分别需要1,162/1,140连接、12,436/12,408远端或self节点、646/627本地节点；96窗口、32屏障条件、注册下界64及约21.8MB展开计划也超现有限制。不能仅靠wall_seconds解决，不把软件限制归为Clos或ns-3能力上限。独立集合计数未导入平台/旧研究/tests；两组320个self保留，控制操作12,288项不等于包数或时延占比。
+
+研究三阶段均完成，零新网络/GPU/构建安装下载依赖变化，资源统计范围及静态HTML边界见结果。下一增量先以精确紧凑因果索引替代控制器全量祖先字典，保持全部前驱与applied/completed区别；独立验收后再同步扩展现代布局、Python/C++事务/会话/窗口/记录，随后在同一128Clos验证真实EP32两调用。扩展方案仍未实现，不作为当前能力；没有新论文算法收益。仅发布user既有分支，整体目标active。
+
 ## 2026-10-31 现代连续调用运行容量
 
 状态：`completed`（本平台容量检查增量；EP32原生执行和整体目标未完成）。按[规范](modern_native_capacity_spec.md)交付公开modern-deepep-native-capacity及完整确定性节点数的启动前拒绝，保持全部控制/self/零值/动态slot。见[操作](../../examples/modern_deepep_native/README.md#先检查完整工作量容量)及[验收](../../fixtures/modern_native_capacity/verification.json)。6项新方法、21项旧原生/批次、37项计划/事件/窗口等回归通过；两个完整人工回调控制器与改动前源码计划/连接/窗口/快照字节相同，五个空cwd公开CLI正例/重复/容量拒绝/覆盖/非法检查通过。首次兼容脚本错拒Git归档顶层目录，原件保留后仅修该条件，在新目录验证；无网络重跑。五阶段宿主资源见验收，零新网络、GPU、构建安装下载或依赖变更，13依赖一致。此检查没有提高2–4 rank、64连接、1024远端/256本地等原运行上限，也不证明实际准入。后续研究单独使用公开入口核对原两组真实两调用，在一种128Clos需求下扩展执行能力；整体目标active。

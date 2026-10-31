@@ -13,6 +13,7 @@ import sys
 from .deepep_plan import require
 from .modern_deepep_windows import ModernDeepEPWindowRuntime
 from .modern_native_layout import ModernNativeLayout, MAIN_BASE, SIGNAL_BASE
+from .modern_native_capacity import NATIVE_REMOTE_LIMIT, NATIVE_LOCAL_LIMIT
 from .scaleout_rdma import checked_json, digest, limits, monitored, save
 from .transaction_session import NativeTransactionSession
 from .host_timing import HostTiming
@@ -46,8 +47,8 @@ class ModernNativeController:
         identity=len(self.native_nodes);require(identity<65536,'native node identity limit')
         proof=self._compact(proof);require(len(proof)<=32,'native proof frontier exceeds 32 dependencies')
         node=dict(node,id=identity,after=[dict(operation=i,event=e) for i,e in proof])
-        if node['kind']=='remote':require(sum(n['kind']=='remote' for n in self.native_nodes)<1024,'remote operation limit')
-        else:require(sum(n['kind']=='local' for n in self.native_nodes)<256,'local operation limit')
+        if node['kind']=='remote':require(sum(n['kind']=='remote' for n in self.native_nodes)<NATIVE_REMOTE_LIMIT,'remote operation limit')
+        else:require(sum(n['kind']=='local' for n in self.native_nodes)<NATIVE_LOCAL_LIMIT,'local operation limit')
         closure={}
         for i,event in proof:
             for p,level in self.coverage[i].items():closure[p]=max(closure.get(p,-1),level)

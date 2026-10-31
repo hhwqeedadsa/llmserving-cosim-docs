@@ -1,0 +1,370 @@
+{
+  "passed": true,
+  "unit_methods": 64,
+  "new_unit_methods": 6,
+  "public_cli_commands": [
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "modern-deepep-native-capacity",
+        "--config",
+        "/home/lry/moe-ub-cosim/runs/modern_native_capacity_20261031/workflow/input.json",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/modern_native_capacity_20261031/workflow/first.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim/runs/modern_native_capacity_20261031/workflow",
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "modern-deepep-native-capacity",
+        "--config",
+        "/home/lry/moe-ub-cosim/runs/modern_native_capacity_20261031/workflow/input.json",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/modern_native_capacity_20261031/workflow/repeat.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim/runs/modern_native_capacity_20261031/workflow",
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "modern-deepep-native-capacity",
+        "--config",
+        "/home/lry/moe-ub-cosim/runs/modern_native_capacity_20261031/workflow/short.json",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/modern_native_capacity_20261031/workflow/rejected.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim/runs/modern_native_capacity_20261031/workflow",
+      "exit_code": 1
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "modern-deepep-native-capacity",
+        "--config",
+        "/home/lry/moe-ub-cosim/runs/modern_native_capacity_20261031/workflow/input.json",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/modern_native_capacity_20261031/workflow/first.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim/runs/modern_native_capacity_20261031/workflow",
+      "exit_code": 1
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "modern-deepep-native-capacity",
+        "--config",
+        "/home/lry/moe-ub-cosim/runs/modern_native_capacity_20261031/workflow/invalid.json",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/modern_native_capacity_20261031/workflow/invalid-report.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim/runs/modern_native_capacity_20261031/workflow",
+      "exit_code": 1
+    }
+  ],
+  "complete_functional_transcripts_byte_identical": {
+    "passed": true,
+    "baseline_commit": "cccdcd3773f02afdb69a38f11f3a46838dc44779",
+    "commands": [
+      {
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-c",
+          "\nimport json\nfrom modern_native_test import example, expert_matrix, declared_callback_drive\nrows=[]\nfor cfg in (example(),expert_matrix()):\n    c=declared_callback_drive(cfg)\n    rows.append(dict(initial=c.layout.initial,bindings=c.layout.bindings,\n        plan=c.layout.plan,description=c.layout.description,snapshot=c.snapshot()))\nprint(json.dumps(rows,sort_keys=True,separators=(',',':')))\n"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim/runs/modern_native_capacity_20261031/compat-corrected",
+        "pythonpath": "/home/lry/moe-ub-cosim/runs/modern_native_capacity_20261031/compat-corrected/baseline/python:/home/lry/moe-ub-cosim/tests/unit",
+        "exit_code": 0
+      },
+      {
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-c",
+          "\nimport json\nfrom modern_native_test import example, expert_matrix, declared_callback_drive\nrows=[]\nfor cfg in (example(),expert_matrix()):\n    c=declared_callback_drive(cfg)\n    rows.append(dict(initial=c.layout.initial,bindings=c.layout.bindings,\n        plan=c.layout.plan,description=c.layout.description,snapshot=c.snapshot()))\nprint(json.dumps(rows,sort_keys=True,separators=(',',':')))\n"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim/runs/modern_native_capacity_20261031/compat-corrected",
+        "pythonpath": "/home/lry/moe-ub-cosim/python:/home/lry/moe-ub-cosim/tests/unit",
+        "exit_code": 0
+      }
+    ],
+    "byte_identical": true,
+    "compared": "Two complete declared functional controller transcripts, native initial state, plan, bindings and layout; no actual network",
+    "bytes": 604495,
+    "sha256": "6b2c41fb5c82d66723640c8ac93e922a31a9c0ba06125ffb2ce54747d9c659e3",
+    "network_runs": 0
+  },
+  "public_cli_repeat_bytes_identical": true,
+  "new_network_runs": 0,
+  "failure": {
+    "stage": "compat",
+    "cause": "archive validator rejected the python root directory entry",
+    "correction": "explicitly permit only that root directory; rerun corrected script in a new directory",
+    "original_preserved": true
+  },
+  "resource_scope": "Five monitored stages; publication/management and dependency inspection excluded",
+  "wall_seconds": 4.863167378003709,
+  "peak_sampled_group_rss_bytes": 45637632,
+  "peak_sampled_artifact_bytes": 6623232,
+  "monitors": {
+    "compat": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "python3",
+        "-B",
+        "tests/integration/check_modern_native_capacity_compat.py",
+        "--baseline-commit",
+        "cccdcd3773",
+        "--output",
+        "runs/modern_native_capacity_20261031/compat"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-31T07:33:25.756411+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 268435456,
+        "wall_seconds": 120.0
+      },
+      "peak_sampled_group_rss_bytes": 18137088,
+      "peak_sampled_processes": 1,
+      "status": "child_failed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/runs/modern_native_capacity_20261031"
+      ],
+      "peak_sampled_artifact_bytes": 1818624,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 1750401,
+      "peak_sampled_artifact_allocated_bytes": 1818624,
+      "process_group": 964289,
+      "child_exit_code": 1,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-31T07:33:25.983336+00:00",
+      "wall_seconds": 0.22692540503339842,
+      "max_waited_child_rss_kib": 17712,
+      "artifact_bytes_before_report": 1237,
+      "aggregate_artifact_bytes_before_report": 1818624,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 1750401,
+        "allocated_bytes": 1818624
+      }
+    },
+    "compat-corrected": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "python3",
+        "-B",
+        "tests/integration/check_modern_native_capacity_compat.py",
+        "--baseline-commit",
+        "cccdcd3773",
+        "--output",
+        "runs/modern_native_capacity_20261031/compat-corrected"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-31T07:33:45.753312+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 268435456,
+        "wall_seconds": 120.0
+      },
+      "peak_sampled_group_rss_bytes": 45637632,
+      "peak_sampled_processes": 2,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/runs/modern_native_capacity_20261031"
+      ],
+      "peak_sampled_artifact_bytes": 6623232,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 6241405,
+      "peak_sampled_artifact_allocated_bytes": 6623232,
+      "process_group": 964389,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-31T07:33:46.845783+00:00",
+      "wall_seconds": 1.0924869140144438,
+      "max_waited_child_rss_kib": 26900,
+      "artifact_bytes_before_report": 4821,
+      "aggregate_artifact_bytes_before_report": 6623232,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 6241405,
+        "allocated_bytes": 6623232
+      }
+    },
+    "regression": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "modern_deepep_plan_test",
+        "modern_deepep_runtime_test",
+        "modern_deepep_windows_test",
+        "batched_callback_replay_test",
+        "modern_plan_storage_test"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-31T07:33:25.757971+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 268435456,
+        "wall_seconds": 120.0
+      },
+      "peak_sampled_group_rss_bytes": 29597696,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/runs/modern_native_capacity_20261031"
+      ],
+      "peak_sampled_artifact_bytes": 1822720,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 1754579,
+      "peak_sampled_artifact_allocated_bytes": 1822720,
+      "process_group": 964290,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-31T07:33:27.043816+00:00",
+      "wall_seconds": 1.2858557739527896,
+      "max_waited_child_rss_kib": 28904,
+      "artifact_bytes_before_report": 3406,
+      "aggregate_artifact_bytes_before_report": 1822720,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 1754579,
+        "allocated_bytes": 1822720
+      }
+    },
+    "unit": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "modern_native_capacity_test",
+        "modern_native_test",
+        "native_callback_batches_test"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-31T07:31:19.682367+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 268435456,
+        "wall_seconds": 120.0
+      },
+      "peak_sampled_group_rss_bytes": 40886272,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/runs/modern_native_capacity_20261031"
+      ],
+      "peak_sampled_artifact_bytes": 12288,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 4223,
+      "peak_sampled_artifact_allocated_bytes": 12288,
+      "process_group": 964161,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-31T07:31:21.405114+00:00",
+      "wall_seconds": 1.7227527750073932,
+      "max_waited_child_rss_kib": 45292,
+      "artifact_bytes_before_report": 4223,
+      "aggregate_artifact_bytes_before_report": 12288,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 4223,
+        "allocated_bytes": 12288
+      }
+    },
+    "workflow": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "python3",
+        "-B",
+        "tests/integration/check_modern_native_capacity.py",
+        "--output",
+        "runs/modern_native_capacity_20261031/workflow"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-31T07:32:51.225234+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 268435456,
+        "wall_seconds": 120.0
+      },
+      "peak_sampled_group_rss_bytes": 31875072,
+      "peak_sampled_processes": 2,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/runs/modern_native_capacity_20261031"
+      ],
+      "peak_sampled_artifact_bytes": 98304,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 47069,
+      "peak_sampled_artifact_allocated_bytes": 98304,
+      "process_group": 964267,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-31T07:32:51.760379+00:00",
+      "wall_seconds": 0.535146509995684,
+      "max_waited_child_rss_kib": 19788,
+      "artifact_bytes_before_report": 4479,
+      "aggregate_artifact_bytes_before_report": 98304,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 47069,
+        "allocated_bytes": 98304
+      }
+    }
+  },
+  "source_hashes": {
+    "python/moe_ub_cosim/modern_native_capacity.py": "8668dc94532cc8091f49aefc4b3ab55ec4cc645a7ac452bbd9c444747b39063c",
+    "python/moe_ub_cosim/modern_native_layout.py": "5db5ad9e611421623b9873ea2060a417877c5bc6615e037851b72238055c6dfa",
+    "python/moe_ub_cosim/modern_native.py": "6c999e5f51da4293f2f4093c742fb09e9e37ff625e0abd9d56595a9f00aadc16",
+    "python/moe_ub_cosim/cli.py": "32a08b483b9418bf05b76df3be7534c2522fd72cd266767a9b28fe9bc6a04831"
+  }
+}

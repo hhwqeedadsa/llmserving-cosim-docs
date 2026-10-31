@@ -116,6 +116,9 @@ def parser():
     mw.add_argument('--config', type=Path, required=True, help='Same bounded input as modern-deepep-plan')
     mw.add_argument('--actions', type=Path, required=True, help='Explicit event IDs; callbacks are declarations, not network observations')
     mw.add_argument('--output', type=Path, required=True, help='New JSON file with execution, relative window map and shadow state')
+    mcap = sc.add_parser('modern-deepep-native-capacity', help='Audit complete modern workload static requirements and current bridge limits; no backend, network or timing prediction')
+    mcap.add_argument('--config', type=Path, required=True, help='Same complete modern input as modern-deepep-plan; not a native deployment wrapper')
+    mcap.add_argument('--output', type=Path, required=True, help='New JSON report; static capacity failure is saved and exits 1; success is not runtime admission')
     mn = sc.add_parser('modern-deepep-native', help='Drive the complete modern functional graph with actual native transaction callbacks and synthetic operands; no GPU/GIN timing claim')
     for name in ('topology','protocol','config','backend','output'):
         mn.add_argument('--'+name,type=Path,required=True,**(
@@ -266,6 +269,9 @@ def main(argv=None):
             if args.scaleout_command == 'simai-prepare':
                 from .simai_frontend import prepare
                 value=prepare(args.source_root,args.output)
+            elif args.scaleout_command == 'modern-deepep-native-capacity':
+                from .modern_native_capacity import execute
+                value=execute(args.config,args.output)
             elif args.scaleout_command == 'modern-deepep-native':
                 from .modern_native import run
                 value=run(args.topology,args.protocol,args.config,args.backend,args.output,callback_wakeups=args.callback_wakeups,host_timing=args.host_timing,callback_batches=args.callback_batches,reuse_static_validation=args.reuse_static_validation)

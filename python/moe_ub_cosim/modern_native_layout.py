@@ -8,7 +8,9 @@ from copy import deepcopy
 import hashlib
 
 from .deepep_plan import encoded, fields, integer, require
-from .modern_deepep_plan import compile_plan, resolve_combine_channel
+from .modern_deepep_plan import compile_plan
+from .modern_native_capacity import (connection_keys, require_node_capacity,
+    NATIVE_RANK_LIMIT, NATIVE_CONNECTION_LIMIT, NATIVE_REMOTE_LIMIT, NATIVE_LOCAL_LIMIT)
 from .modern_deepep_windows import ModernDeepEPWindows
 from .scaleout_transactions import validate
 
@@ -29,7 +31,8 @@ class ModernNativeLayout:
         require(len(encoded(self.plan))<=self.modern['limits']['max_output_bytes'],'modern serialized plan budget exceeded')
         self.windows=ModernDeepEPWindows(self.modern);self.description=self.windows.describe()
         x=self.modern['execution'];self.ranks=x['ranks']
-        require(2<=self.ranks<=4,'functional native bridge currently supports 2..4 ranks')
+        require(2<=self.ranks<=NATIVE_RANK_LIMIT,'functional native bridge currently supports 2..4 ranks')
+        require_node_capacity(self.plan)
         fields(config['provider'],'mode target_visibility queue_depth self_service transport_recovery'+
                (' dcqcn_reference' if 'dcqcn_reference' in config['provider'] else ''),'functional provider')
         p=config['provider'];require(p['mode']=='functional_mrt1/1' and p['target_visibility']=='native_apply_functional/1',
@@ -72,15 +75,8 @@ class ModernNativeLayout:
                 require(device['device'] not in devices,'repeated physical device id');devices[device['device']]=device
             require(set(x['local_devices'][row['rank']])<=devices.keys(),'logical device lacks physical NIC declaration')
             self.deployment[row['rank']]=dict(node=row['node'],devices=devices);nodes.add(row['node'])
-        keys=set()
-        for op in self.plan['operations']:
-            if op['path']=='local':continue
-            if op['phase']=='combine' and op['kind']=='token_data':
-                for slot in range(op['binding']['source_to_owner_count']):
-                    binding=resolve_combine_channel(op['binding'],slot,x,op['src'])
-                    keys.add((op['src'],binding['context_index'],op['dst']))
-            else:keys.add((op['src'],op['binding']['context_index'],op['dst']))
-        require(1<=len(keys)<=64,'prospective context connections exceed 64; no silent merging')
+        keys=connection_keys(self.plan,x)
+        require(1<=len(keys)<=NATIVE_CONNECTION_LIMIT,'prospective context connections exceed 64; no silent merging')
         self.connections=[];self.bindings=[];self.by_identity={}
         for src,context,dst in sorted(keys):
             identity=len(self.connections);connection=context%x['connections']
@@ -136,7 +132,8 @@ class ModernNativeLayout:
             submission_model=dict(mode='explicit_prefix/1'),self_peer_model=dict(mode='declared_service_fifo/1'),
             transport_recovery=deepcopy(p['transport_recovery']),
             registration_model=dict(mode='nic_scoped_aliases/1'),registrations=registrations,
-            execution_limits=dict(max_connections=64,max_remote_operations=1024,max_local_operations=256))
+            execution_limits=dict(max_connections=NATIVE_CONNECTION_LIMIT,
+                max_remote_operations=NATIVE_REMOTE_LIMIT,max_local_operations=NATIVE_LOCAL_LIMIT))
         if 'dcqcn_reference' in p:
             self.initial['dcqcn_reference']=deepcopy(p['dcqcn_reference'])
         validate(topology,protocol,self.initial,allow_no_remote=True)

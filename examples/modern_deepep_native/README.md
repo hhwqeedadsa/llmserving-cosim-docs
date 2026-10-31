@@ -6,6 +6,23 @@
 
 ## 运行
 
+### 先检查完整工作量容量
+
+对与`modern-deepep-plan`相同的现代配置执行：
+
+```bash
+PYTHONPATH=python python3 -B -m moe_ub_cosim scaleout modern-deepep-native-capacity \
+  --config examples/modern_deepep_partial_order/input.json --output runs/my-modern-capacity.json
+```
+
+这里的`--config`是现代计划输入，不是本目录带`modern/deployment/provider/costs`的原生包装输入。报告列出全部调用所需远端/本地节点、所有可能slot绑定的连接、self连接、窗口数及不可变输入初始化容量，并逐项比较当前入口限制。实际NIC部署可能合并逻辑设备，因此注册条数只给出下界。连接是预留的可能身份，不是活跃流量；初始化字节也不是线上通信量。
+
+已知静态条件超限时仍保存报告并退出1；输入非法则报错，拒绝覆盖结果。`passed=true`只代表所列静态条件满足，`runtime_admitted=false`始终保留：物理NIC/plane、动态前驱宽度、回调次数、完整缓冲与记录容量、宿主时间/内存仍须检查。此命令不启动后端、不运行网络，也不证明某输入能完成推理。
+
+原生入口现在还会在启动前核算完整计划的确定性远端/本地操作数，超过1024/256直接拒绝，避免执行中途才遇到已可预见的额度错误。所有原上限保持，压缩保存计划不会放宽原生运行对明文计划的检查。
+
+### 执行实际原生网络
+
 需要现有`transaction-session`原生程序或已核对库路径的配套启动器；不自动构建、下载或执行GPU。输出目录必须尚不存在。
 
 ```bash

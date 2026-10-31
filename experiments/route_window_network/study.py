@@ -75,7 +75,9 @@ def admission(a):
     study=a.study.resolve();out=a.output.resolve();out.mkdir(parents=True,exist_ok=False)
     frozen=load(study/'frozen.json')
     for name,digest in frozen['input_sha256'].items():assert sha(study/name)==digest
-    assert sha(Path(__file__))==frozen['preparation_sha256']
+    revision=load(study/'frozen-v2.json') if (study/'frozen-v2.json').exists() else frozen
+    if revision is not frozen:assert revision['original_frozen_sha256']==sha(study/'frozen.json')
+    assert sha(Path(__file__))==revision['preparation_sha256']
     policy=load(study/'policy.json');data={}
     with (study/'normalized/normalized_decode.jsonl').open() as stream:
         for line in stream:
@@ -98,7 +100,7 @@ def admission(a):
         groups.append(dict(id=f'group-{group}',plan=f'group-{group}/plan',binding=f'group-{group}/binding.json'))
     save(out/'shared.json',dict(schema_version='moe-legacy-shared-input/1',groups=groups))
     protocol=load(ROOT/'examples/scaleout_clos128/rdma.json')
-    protocol.update(switch_counter_storage='port_dense',queue_metrics=False)
+    protocol.update(payload_bytes=1024,chunk_bytes=4096,switch_counter_storage='port_dense',queue_metrics=False)
     protocol['limits'].update(max_messages=65536,max_queue_events=2000000,queue_capture='summary',
         wall_seconds=120,rss_bytes=2*2**30,address_bytes=4*2**30,result_json_bytes=256*2**20)
     save(out/'normal.json',protocol)
@@ -121,12 +123,23 @@ def admission(a):
     print((out/'admission-summary.json').read_text())
 
 
+def revise(a):
+    study=a.study.resolve();original=load(study/'frozen.json');assert not (study/'frozen-v2.json').exists()
+    for name,digest in original['input_sha256'].items():assert sha(study/name)==digest
+    save(study/'frozen-v2.json',dict(original_frozen_sha256=sha(study/'frozen.json'),
+        previous_preparation_sha256=original['preparation_sha256'],preparation_sha256=sha(Path(__file__)),
+        reason='First CPU admission inherited9000B payload incompatible with8192B receiver; explicitly retain prior1024B/4096B payload/chunk.',
+        protocol_changes=dict(payload_bytes=[9000,1024],chunk_bytes=[36000,4096]),
+        original_inputs_unchanged=True,native_network_runs=0))
+
+
 def main():
     p=argparse.ArgumentParser(description=__doc__);s=p.add_subparsers(dest='action',required=True)
     x=s.add_parser('prepare');x.add_argument('--manifest',type=Path,required=True)
     x.add_argument('--backend-identity',type=Path,required=True);x.add_argument('--output',type=Path,required=True)
     x=s.add_parser('admission');x.add_argument('--study',type=Path,required=True);x.add_argument('--output',type=Path,required=True)
-    a=p.parse_args();prepare(a) if a.action=='prepare' else admission(a)
+    x=s.add_parser('revise');x.add_argument('--study',type=Path,required=True)
+    a=p.parse_args();{'prepare':prepare,'admission':admission,'revise':revise}[a.action](a)
 
 
 if __name__=='__main__':main()

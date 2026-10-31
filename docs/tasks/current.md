@@ -1,5 +1,9 @@
 # 当前任务与交接
 
+## 2026-10-31 连续Decode热点与系统容量判别
+
+状态：`in_progress`。上一目标轮为progress：2aa7415fbd交付真实双EP32共享恢复，成熟方法已收回98.52%额外等待且旁观组仅晚24ns。本轮按[冻结方法](../../experiments/route_window_network/README.md)检查15份真实来源的连续64步、原层3/31/60，保持8/7独立请求，不把同一请求未来token并入当前batch。比较专家与端点偏斜、保边际时序打乱参考，并用公开两调用计划/validate-only核查完整旧库寿命边界。固定128Clos，仅CPU离线/准入，不运行新网络。根runs/route_window_network_20261031累计900秒/512MiB/留8GiB，单阶段120秒/RSS1GiB/地址2GiB；无构建、安装、下载、GPU、依赖变更或旧成功网络重跑，失败保留。平台能力和研究结果分别验收，不把热点直方图当新算法收益，整体目标active。
+
 ## 2026-10-31 真实来源双EP32共享网络研究
 
 状态：`completed`（本轮判别与网页交付；整体研究目标仍active）。平台70b996b69e按用户授权放宽共享宿主预算，研究725c1d3129先冻结[方法](../../experiments/legacy_shared_routes/README.md)，再独立执行三个128Clos网络各一次。15份不同真实文件按顺序8/7划分，两EP32/E256/H7168保留完整33,008操作/132,736事件/32,768通知；第二组部署排除ToR128及第一组端点。结果见[说明](../../experiments/legacy_shared_routes/RESULTS.md)、[网页](../../experiments/legacy_shared_routes/results/20261031/report.html)、[独立核验](../../experiments/legacy_shared_routes/results/20261031/verification.json)和[资源](../../experiments/legacy_shared_routes/results/20261031/receipt.json)。

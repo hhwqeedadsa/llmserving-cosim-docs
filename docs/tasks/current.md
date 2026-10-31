@@ -1,5 +1,9 @@
 # 当前任务与交接
 
+## 2026-10-31 现代控制器紧凑因果覆盖
+
+状态：`in_progress`。上一轮e55ae45eb1交付容量核算与启动前拒绝，属于progress。本轮按[规范](native_proof_coverage_spec.md)以精确两级位集合替代全量祖先字典，保留applied/completed区别及前驱压缩规则；成功插入后累计远端/本地节点，消除逐次全表扫描。先独立oracle和旧完整功能回调比对，再做同输入宿主存储/RSS/CPU比较；不修改现有执行范围、不启动新网络、不把宿主优化当网络算法收益。预算及证据范围见规范，EP32实际连续调用和整体目标仍active。
+
 ## 2026-10-31 真实现代EP32连续调用容量判别
 
 状态：`completed`（静态需求判别和网页；实际连续调用网络及整体目标仍active）。平台e35abe397d独立验收后，62cf3ef08c先冻结[方法](../../experiments/modern_runtime_capacity/README.md)，用公开容量CLI读取原两份真实配置，字节不变，两个负报告如期保存，零原生启动。见[结果](../../experiments/modern_runtime_capacity/RESULTS.md)、[网页](../../experiments/modern_runtime_capacity/results/20261031/report.html)、[独立核验](../../experiments/modern_runtime_capacity/results/20261031/verification.json)及[执行扩展方案](../../experiments/modern_runtime_capacity/SCALE_PLAN.md)。组0/1分别需要1,162/1,140连接、12,436/12,408远端或self节点、646/627本地节点；96窗口、32屏障条件、注册下界64及约21.8MB展开计划也超现有限制。不能仅靠wall_seconds解决，不把软件限制归为Clos或ns-3能力上限。独立集合计数未导入平台/旧研究/tests；两组320个self保留，控制操作12,288项不等于包数或时延占比。

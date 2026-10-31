@@ -188,7 +188,7 @@ def build(directory, *, cmake='cmake', ninja='ninja', protobuf_prefix=None, resu
     previous = lock.read_bytes() if lock.exists() else None
     try:
         for name, cmd in [('configure', configure), ('compile', [cmake, '--build', directory / 'cmake',
-                  '--target', 'moe-rdma-probe', 'moe-rdma-rc-probe', 'moe-rdma-stream-probe', 'moe-rdma-transaction-probe', 'moe-rdma-transaction-session', 'moe-rdma-service', '--parallel', '2'])]:
+                  '--target', 'moe-rdma-probe', 'moe-rdma-rc-probe', 'moe-rdma-stream-probe', 'moe-rdma-transaction-probe', 'moe-rdma-transaction-session', 'moe-rdma-legacy-deepep', 'moe-rdma-service', '--parallel', '2'])]:
             provenance['commands'].append(dict(cwd=str(ROOT), argv=list(map(str, cmd))))
             save(directory / 'provenance.json', provenance)
             monitored(cmd, logs / name, [directory], build=True, wall_seconds=60 if name == 'configure' else compile_wall_seconds)

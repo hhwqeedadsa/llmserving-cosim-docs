@@ -71,6 +71,11 @@ def parser():
                     help='flat keeps the historical limits; indexed-jsonl requires indexed-input/1 and bounded streaming storage')
     dc = sc.add_parser('deepep-check', help='Check plan integrity and untimed event reachability; withholding is not packet loss simulation')
     dc.add_argument('--plan', type=Path, required=True, help='Flat or indexed-jsonl directory from deepep-plan; selected by manifest schema')
+    dn = sc.add_parser('deepep-run', help='Execute a complete indexed legacy BF16 plan on one native Clos with explicit functional local visibility and synchronous batch-four posting; not GIN/GPU timing')
+    for name in ('plan', 'binding', 'topology', 'protocol', 'transport', 'backend', 'output'):
+        dn.add_argument('--'+name, type=Path, required=True)
+    dn.add_argument('--validate-only',action='store_true',
+                    help='Check complete source plan, mapping and Python budgets; save planned input without invoking native admission or the network')
     dc.add_argument('--output', type=Path, required=True, help='New JSON file with dependency closure and blocked device kernel completions')
     dc.add_argument('--withhold', action='append', default=[], help='Exact event ID to withhold from closure; repeatable')
     hp = sc.add_parser('hybrid-deepep-plan', help='Compile bounded server/rail routing, counts and Dispatch tail obligations; not a complete Hybrid DAG or network execution')
@@ -316,6 +321,10 @@ def main(argv=None):
             elif args.scaleout_command == 'deepep-check':
                 from .deepep_plan import check
                 value = check(args.plan, args.output, args.withhold)
+            elif args.scaleout_command == 'deepep-run':
+                from .legacy_native import run
+                value = run(args.plan, args.binding, args.topology, args.protocol, args.transport, args.backend, args.output,
+                            validate_only=args.validate_only)
             elif args.scaleout_command == 'sweep':
                 from .scaleout_sweep import run
                 value=run(args.config,args.backend,args.output,args.protoc)

@@ -1,5 +1,11 @@
 # 观测记录与存储格式
 
+新增旧库原生入口在`result.json.legacy`记录`event_times_ns/event_order/operations/contexts/counters/final_data/memory_events/publications/transport`。`operation_columns`解释操作数组；全部时间来自同一Simulator，未发生为−1。`event_order`与`memory_events`共享严格递增order，用于重放清理、实际目标写入和功能专家拷贝；`publications`按time/op/context/eligible/requested/previous/exclusive解释，发布前缀并非ACK。context数组按src/dst/local_expert/remote_index/reserved/prepared/published/consumed/completed/closed解释，remote_index为−1表示本地上下文。计数器是目标4B字节的LE32读数；实际源载体含32B MRT1帧头，原子回复还产生独立反向流。输入/运行文件与当前未完成验收边界见[专用示例](../examples/legacy_native/README.md)。
+
+该入口新增`legacy.local_operations_bypass_posting_queue=true`：本地context队列五个前缀均为0，本地操作`begin_wqe/end_wqe/published_ns/request_acked_ns/response_ns`均为−1，`returned_value`为null；源issued、目标applied及本地completed仍由功能事件记录。远端数据put没有返回值，远端原子仅在实际源回复后给出非null值。`memory_events`记录的目标旧值是评价用内存事实，不构成源已收到回复。修复前失败原件没有此标记，不得套用修复后字段含义。
+
+`deepep-run --validate-only`只写源计划核验、拟执行输入及Python检查摘要，没有`result.json`或原生执行监控。`inputs.json`以`planned_native_command`替代`command`，明确`validation_only=true/native_network_executed=false`；`validation.json`另记录`native_admission_executed=false`及每调用输入规模。其`passed`不表示原生准入、通信完成或故障恢复。详见[仅检查输入](../examples/legacy_native/README.md#仅检查输入不启动网络)。
+
 可选`explicit_prefix/1`在`result.json.explicit_repair`保存`moe-explicit-repair/1`。`events`按`columns`给出纳秒时刻、交换机、动作（1封装/2转发/3合流）、物理出口、包UID、原目的IP、下一个段序号、合流点、封装字节、当前model_bytes和内层协议；合流记录的model_bytes已拆封，encapsulation_bytes表示刚移除的字节。它记录转发意图，需实际TX/RX佐证。`complete`只表示该数组未超max_events；`packet_metadata`与保留的`packet_capture.events`逐行对齐，给出封装字节与实际外层协议。原逐包/线头记录的ip_protocol及地址/端口仍指内层，model_bytes指实际包大小；data_payload_bytes已扣外层，不把封装计入业务字节。无封装元数据为0/原协议，原模式不新增这些字段，见[执行示例](../examples/scaleout_explicit_prefix/README.md)。
 
 `scaleout repair-plan`另存`plan.json/summary.json/topology.json/manifest.json`，状态恒为`planned_not_executed`、`network_executed=false`。summary覆盖计数单位为“故障两端交换机×目的GPU”，不是卡数或包数；plan的`original_hops/failed_graph_hops`为hop距离，`LFA_candidates`是不等式两侧与严格判断，`repair_prefix_nodes/edges/merge`为待执行修复段，`all_old_suffix_edges`覆盖合流后的全部旧ECMP分支。SHA-256用于输入和结果身份，不提供网络时延/恢复成功的执行证据。范围见[修复规划](../examples/scaleout_repair_plan/README.md)。

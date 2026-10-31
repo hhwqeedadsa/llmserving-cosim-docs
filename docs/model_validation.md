@@ -72,6 +72,8 @@ stream-work/3的本地阶段使用输入显式声明的ns耗时，每GPU单个�
 
 旧低延迟的可选[索引计划](../examples/deepep_indexed/README.md)与flat共用语义构造，保留零token通知；流式存储和依赖闭包验收不增加WQE、NIC、GPU或时延依据。完整EP32输入支持只表示计划能够生成和检查，不证明旧库或现代库已在线执行。
 
+新增[旧库原生入口](../examples/legacy_native/README.md)已在128端点Clos通过EP32/E256完整正常及一次零token通知丢包的功能验收，另以EP32/E128两次调用验证双buffer清理和复用。第一次10,000条参考日志触限失败保留；经用户授权采用100,000条后完成新条件。源码依据明确BF16 Dispatch头占16B，功能专家只拷贝其后2H字节，内容为人工标记而非数值激活。独立审计核对实际内存、通知、请求ACK、原子回复、完整DAG、发布和排空；未验证E256连续多调用、GPU可见性/耗时、现代GIN或RoCE线协议，不改变其他入口的独立边界。
+
 现代plan/1的同rank路径分类已发现错误：固定源码的signal与非NVLink专家计数块仍走GIN，GDAKI为self-peer创建回环QP；token与rank count才有本地指针旁路。plan/2已纠正分类并保留专家块发送区信息。物理回环路径与成本仍未知，不能推为交换机负载或零成本；历史结论的引用须附此[更正依据](../fixtures/modern_self_gin/README.md)。
 
 窗口核心按固定源码将workspace与EP buffer映射到同一相对注册区，将GIN索引信号保留在provider独立域。原始BarrierSignals/EPSignals数据声明经替换CUDA限定词的宿主C++编译核对全部8个成员偏移；这只证明所选32/64位ABI的数据布局，未编译CUDA或测量硬件。事件驱动的计数/信号是影子状态，token数值、实际负载、GPU内存序及完整buffer寿命仍未验证；证据与检查边界见[窗口核心](../fixtures/modern_windows/README.md)。

@@ -1,0 +1,999 @@
+{
+  "failure_verified": true,
+  "complete_execution_accepted": false,
+  "endpoints": 128,
+  "ep_size": 32,
+  "experts": 256,
+  "experts_per_rank": 8,
+  "artificial_tokens": 4,
+  "logical_operations": 16448,
+  "logical_events": 66144,
+  "registered_contexts": 8192,
+  "carrier_streams": 15872,
+  "carrier_work": 31792,
+  "minimum_source_sent_events": 32464,
+  "configured_reference_events": 10000,
+  "actual_reference_events": {
+    "source_sent": 10000
+  },
+  "failed_at_sim_ns": 4237,
+  "normal_status": "failed_capacity",
+  "fault_status": "not_run",
+  "admission": {
+    "passed": true,
+    "public_rejections": 1,
+    "native_rejections": 8,
+    "valid_network_executed": false,
+    "limits_increased": false
+  },
+  "source_hashes": {
+    "backend/rdma/legacy_deepep_probe.cc": "7bfe1cf4ed50408a8a8712f7658168e468456071d91429608d879ec316fc7ddc",
+    "backend/rdma/legacy_event_graph.hh": "b1234b5f210aeb71573f917052af81c6936f09c9f4f535e26ef8921a770cb540",
+    "backend/rdma/legacy_execution_validation.hh": "37b7454070ff7dedfd40b2679e933df26c9100285aeadd4198fe1dd6570a5c51",
+    "python/moe_ub_cosim/legacy_native.py": "b8c28b2010202f2c380be6b0a85866082845cf20968c1a11d211494532ef655f",
+    "backend/rdma/legacy_posting_admission.hh": "698e62fbfc1f1dfb09f8638cd73372fb2929c755362aeba3516195aac882bfc4",
+    "tests/integration/summarize_legacy_failure.py": "6b215dca5344ae7a483b7860c8ef1c7a5841815daf90fb17b25bbc93246dd96e",
+    "tests/integration/check_legacy_admission.py": "07e22310d87eb45c767aabeb47294974beb7eaa018e00991345eb5c76afc406c",
+    "tests/integration/check_legacy_posting_cpu.py": "d7acbc9c634167f004f17222974b092ee1a7888240fe2f1d0e45458ea76ed3b1",
+    "tests/unit/legacy_posting_capacity_test.cc": "042aad33277629cead22a5691a52f5af46d48a5b9f4fd81913491a8731d35647",
+    "tests/integration/check_legacy_posting_rejections.py": "ab19e175a1192ae07393f356c0286f62f022aa6bc89832a4ccddc35028be37e5",
+    "tests/integration/check_legacy_packet_records.py": "fecaaa27c0d3e93d3750623efceb512ea3f90b819054c432c95603b71d35f9c8",
+    "tests/unit/legacy_packet_audit_test.py": "17a47c81223f10c0edd389fd031fa9670548bf1d6859c908c02edb6a02588ca6",
+    "tests/integration/audit_legacy_native.py": "5bece0453bddc7b36566c0b8dc377e0fc64db62ff2f71a875a22d4e6ccfca0e6",
+    "examples/legacy_native/prepare.py": "ac4045de58ad8be26c2094bae74259673f513376f041b354fbb69a8ee33ea17a",
+    "tests/integration/check_legacy_validate_only.py": "0ad14802d9d38a8bc615e41b7fe3739f5e152f1f9c672df4a7f4550587860ed0",
+    "tests/unit/legacy_native_test.py": "590b3bc2ee8ee0637e95127bc303895e9d0bbcba493d920a7692d8a7dcd06de0",
+    "python/moe_ub_cosim/cli.py": "92295e18a478d271703b49b0c1710e7be117fa0f4efe11822f024b78c3cbf188"
+  },
+  "posting_cpu": {
+    "passed": true,
+    "checks": 1384,
+    "scenarios": 816,
+    "network_executed": false,
+    "completions": "explicit synthetic callbacks after consumption",
+    "old_posting_regression": {
+      "passed": true,
+      "checks": 1461,
+      "oracle_states": 108,
+      "network_execution": false,
+      "hardware_calibrated": false
+    },
+    "lowering_methods": 5
+  },
+  "posting_rejections": {
+    "passed": true,
+    "mandatory_posting_span": 2,
+    "configured_depth": 32,
+    "rejected_depth": 1,
+    "public_rejections": 1,
+    "native_rejections": 1,
+    "valid_network_executed": false,
+    "limits_increased": false
+  },
+  "current_admission": {
+    "passed": true,
+    "public_rejections": 1,
+    "native_rejections": 8,
+    "valid_network_executed": false,
+    "limits_increased": false
+  },
+  "local_path_diagnosis": {
+    "retained_failure_local_applied_operations": 264,
+    "local_operations_with_queue_tickets": 264,
+    "local_operations_with_network_ack_time": 264,
+    "local_operations_with_reply_time": 256,
+    "interpretation": "Old executor assigned queue tickets and ACK/reply times to self copy/store; not physical network evidence.",
+    "fixed_native_execution_validated": false
+  },
+  "local_path_changed_since_retained_failure": true,
+  "native_local_execution_validated": false,
+  "packet_record_audit": {
+    "passed": true,
+    "new_network_executions": 0,
+    "original_files_unchanged": true,
+    "complete_legacy_application_verified": false,
+    "source_sha256": "5bece0453bddc7b36566c0b8dc377e0fc64db62ff2f71a875a22d4e6ccfca0e6",
+    "cases": [
+      {
+        "name": "legacy-failed",
+        "original_result_sha256": "09357ed3e9ce788a931b76c2477c5398efc36ef6c298fac5fe36a7ce1706f6e3",
+        "original_network_passed": false,
+        "native_run_executed_now": false,
+        "packet_prefix_check": {
+          "transmitted_payload_bytes": 454884,
+          "unique_transmitted_payload_bytes": 454884,
+          "duplicate_payload_bytes": 0,
+          "source_packets": 10001,
+          "verified_delivered_packets": 3562,
+          "delivered_prefix_bytes": 175656,
+          "complete_application_proven": false
+        }
+      },
+      {
+        "name": "normal",
+        "original_result_sha256": "4b8e3e409abd9f87cfb542a226e83a291789ac9f7b62b9ee4bbed801f65209c3",
+        "original_network_passed": true,
+        "native_run_executed_now": false,
+        "packet_prefix_check": {
+          "transmitted_payload_bytes": 608,
+          "unique_transmitted_payload_bytes": 608,
+          "duplicate_payload_bytes": 0,
+          "source_packets": 16,
+          "verified_delivered_packets": 16,
+          "delivered_prefix_bytes": 608,
+          "complete_application_proven": false
+        }
+      },
+      {
+        "name": "recovery",
+        "original_result_sha256": "c96ae55cded71b0220f5a52b9df956e938226955e5d18a39788eb96e06d59e81",
+        "original_network_passed": true,
+        "native_run_executed_now": false,
+        "packet_prefix_check": {
+          "transmitted_payload_bytes": 792,
+          "unique_transmitted_payload_bytes": 608,
+          "duplicate_payload_bytes": 184,
+          "source_packets": 21,
+          "verified_delivered_packets": 16,
+          "delivered_prefix_bytes": 608,
+          "complete_application_proven": false
+        }
+      },
+      {
+        "name": "session-recovery",
+        "original_result_sha256": "2f42d7588cb386a8931a70a820a5f2cf1bbf8e7cf742216869f163f2ee5ed96b",
+        "original_network_passed": true,
+        "native_run_executed_now": false,
+        "packet_prefix_check": {
+          "transmitted_payload_bytes": 792,
+          "unique_transmitted_payload_bytes": 608,
+          "duplicate_payload_bytes": 184,
+          "source_packets": 21,
+          "verified_delivered_packets": 16,
+          "delivered_prefix_bytes": 608,
+          "complete_application_proven": false
+        }
+      }
+    ]
+  },
+  "packet_audit_unit_methods": 4,
+  "validation_only": {
+    "passed": true,
+    "capacity_change_approved": false,
+    "proposal_activated": false,
+    "original_reference_events": 10000,
+    "proposed_reference_events": 100000,
+    "changed_input_files": [
+      "transport.json"
+    ],
+    "original_inputs_unchanged": true,
+    "retained_failure_unchanged": true,
+    "native_admission_executed": false,
+    "new_network_executions": 0,
+    "complete_legacy_execution_accepted": false,
+    "validation": {
+      "normal": {
+        "schema_version": "moe-legacy-native-validation/1",
+        "passed": true,
+        "validation_only": true,
+        "native_admission_executed": false,
+        "native_network_executed": false,
+        "endpoints": 128,
+        "ep_size": 32,
+        "experts": 256,
+        "experts_per_rank": 8,
+        "hidden_size": 7168,
+        "dispatch_format": "bf16",
+        "calls": 1,
+        "per_call_tokens": [
+          4
+        ],
+        "per_call_data_active_ranks": [
+          4
+        ],
+        "rank_to_gpu": [
+          0,
+          4,
+          8,
+          12,
+          16,
+          20,
+          24,
+          28,
+          32,
+          36,
+          40,
+          44,
+          48,
+          52,
+          56,
+          60,
+          64,
+          68,
+          72,
+          76,
+          80,
+          84,
+          88,
+          92,
+          96,
+          100,
+          104,
+          108,
+          112,
+          116,
+          120,
+          124
+        ],
+        "queue_depth": 32,
+        "logical_operations": 16448,
+        "logical_events": 66144,
+        "carrier_streams": 15872,
+        "carrier_work": 31792,
+        "minimum_reference_source_events": 32464,
+        "configured_reference_events": 100000,
+        "minimum_posting_span": 2,
+        "scope": "Python/source-plan checks only; no native admission, Simulator, packets, completion or hardware calibration"
+      },
+      "fault": {
+        "schema_version": "moe-legacy-native-validation/1",
+        "passed": true,
+        "validation_only": true,
+        "native_admission_executed": false,
+        "native_network_executed": false,
+        "endpoints": 128,
+        "ep_size": 32,
+        "experts": 256,
+        "experts_per_rank": 8,
+        "hidden_size": 7168,
+        "dispatch_format": "bf16",
+        "calls": 1,
+        "per_call_tokens": [
+          4
+        ],
+        "per_call_data_active_ranks": [
+          4
+        ],
+        "rank_to_gpu": [
+          0,
+          4,
+          8,
+          12,
+          16,
+          20,
+          24,
+          28,
+          32,
+          36,
+          40,
+          44,
+          48,
+          52,
+          56,
+          60,
+          64,
+          68,
+          72,
+          76,
+          80,
+          84,
+          88,
+          92,
+          96,
+          100,
+          104,
+          108,
+          112,
+          116,
+          120,
+          124
+        ],
+        "queue_depth": 32,
+        "logical_operations": 16448,
+        "logical_events": 66144,
+        "carrier_streams": 15872,
+        "carrier_work": 31792,
+        "minimum_reference_source_events": 32464,
+        "configured_reference_events": 100000,
+        "minimum_posting_span": 2,
+        "scope": "Python/source-plan checks only; no native admission, Simulator, packets, completion or hardware calibration"
+      }
+    },
+    "original_input_sha256": {
+      "topology-config.json": "a298cc6b4cc5bb0a9cd59dfacf73256cc6185f6922d3216422e8140537fc7991",
+      "normal.json": "207aa917697e31bf3d82cc36fad7b8fd214b6609eee3c57374ca8dbf0d2d4064",
+      "fault.json": "d6802f5cc123ccf50ef05a8d3d45d196b88160ef1da5e393d3cb8003319420f6",
+      "transport.json": "f068fff5a3080a855492e95f962ef5ffab9cae34fd164487720e4fff85bb1729",
+      "binding.json": "4e4e5cf64d4f2820c182d98ac4d17a6f93f4e075006044bb0e039f7d50d737d4",
+      "plan-input.json": "51e00779f8f579a53b4de656ff1eaf5f30d964df69daf0bcd965636001abe331",
+      "topology/config.json": "a298cc6b4cc5bb0a9cd59dfacf73256cc6185f6922d3216422e8140537fc7991",
+      "topology/topology.json": "5389993e9aa1dfc148b4713b0a2b0c0521de24b41b74060e2db7eb9f048c444f",
+      "topology/audit.json": "11231d54f55050003858b12378b0abf716e37c47a26abe86b8d68286215a80a5",
+      "topology/topology.astra.txt": "1092741a4b23772deb6ff170e5c50d9789e3bcf41bd7b83c54f4396b171f66f4",
+      "topology/topology.simai.txt": "fafcf2064e37e0238a1448955f4e248827d908f3104fc9bcd1088a9233a8c889",
+      "topology/gpu_nic_ports.csv": "af330824a4f135c4d9ebfeb6585243088ff34adee2804f8dd32bc5acf7cf8bbd",
+      "topology/manifest.json": "a30306e298c4a119b9305391610ff722d94ef4389d4cf8ed2f8354e47120116d",
+      "plan/events.jsonl": "df718385c8afdff31ea898be0fa4f97e91bf117d677492e090cfd5cc76d2a381",
+      "plan/operations.jsonl": "2c62099ffaba9887f8ac3d1dafb9932dcd3013021561c588949147f2755de11b",
+      "plan/input.json": "51e00779f8f579a53b4de656ff1eaf5f30d964df69daf0bcd965636001abe331",
+      "plan/plan.json": "30eb96e9a963b547e6514e206f131dbf17b38f66f3ed5baf28c81541ec4b88c3",
+      "plan/manifest.json": "f8e05c5dc286261240d50abe85ba85a442bc858c1c86bcc00038182869e85d6d"
+    },
+    "proposed_input_sha256": {
+      "topology-config.json": "a298cc6b4cc5bb0a9cd59dfacf73256cc6185f6922d3216422e8140537fc7991",
+      "normal.json": "207aa917697e31bf3d82cc36fad7b8fd214b6609eee3c57374ca8dbf0d2d4064",
+      "fault.json": "d6802f5cc123ccf50ef05a8d3d45d196b88160ef1da5e393d3cb8003319420f6",
+      "transport.json": "d445bb1ed5752780ea2b8e4f50c833b4240194132f83f747dcd0712b2a11a701",
+      "binding.json": "4e4e5cf64d4f2820c182d98ac4d17a6f93f4e075006044bb0e039f7d50d737d4",
+      "plan-input.json": "51e00779f8f579a53b4de656ff1eaf5f30d964df69daf0bcd965636001abe331",
+      "topology/config.json": "a298cc6b4cc5bb0a9cd59dfacf73256cc6185f6922d3216422e8140537fc7991",
+      "topology/topology.json": "5389993e9aa1dfc148b4713b0a2b0c0521de24b41b74060e2db7eb9f048c444f",
+      "topology/audit.json": "11231d54f55050003858b12378b0abf716e37c47a26abe86b8d68286215a80a5",
+      "topology/topology.astra.txt": "1092741a4b23772deb6ff170e5c50d9789e3bcf41bd7b83c54f4396b171f66f4",
+      "topology/topology.simai.txt": "fafcf2064e37e0238a1448955f4e248827d908f3104fc9bcd1088a9233a8c889",
+      "topology/gpu_nic_ports.csv": "af330824a4f135c4d9ebfeb6585243088ff34adee2804f8dd32bc5acf7cf8bbd",
+      "topology/manifest.json": "a30306e298c4a119b9305391610ff722d94ef4389d4cf8ed2f8354e47120116d",
+      "plan/events.jsonl": "df718385c8afdff31ea898be0fa4f97e91bf117d677492e090cfd5cc76d2a381",
+      "plan/operations.jsonl": "2c62099ffaba9887f8ac3d1dafb9932dcd3013021561c588949147f2755de11b",
+      "plan/input.json": "51e00779f8f579a53b4de656ff1eaf5f30d964df69daf0bcd965636001abe331",
+      "plan/plan.json": "30eb96e9a963b547e6514e206f131dbf17b38f66f3ed5baf28c81541ec4b88c3",
+      "plan/manifest.json": "f8e05c5dc286261240d50abe85ba85a442bc858c1c86bcc00038182869e85d6d"
+    },
+    "retained_result_sha256": "09357ed3e9ce788a931b76c2477c5398efc36ef6c298fac5fe36a7ce1706f6e3",
+    "backend_sha256": "f41b73f9e4a31380c127d33350e2980e164d4436adb58f0560a3ac7a333ab1d5",
+    "source_sha256": {
+      "python/moe_ub_cosim/legacy_native.py": "b8c28b2010202f2c380be6b0a85866082845cf20968c1a11d211494532ef655f",
+      "python/moe_ub_cosim/cli.py": "92295e18a478d271703b49b0c1710e7be117fa0f4efe11822f024b78c3cbf188",
+      "tests/unit/legacy_native_test.py": "590b3bc2ee8ee0637e95127bc303895e9d0bbcba493d920a7692d8a7dcd06de0",
+      "tests/integration/check_legacy_validate_only.py": "0ad14802d9d38a8bc615e41b7fe3739f5e152f1f9c672df4a7f4550587860ed0"
+    },
+    "scope": "Python/source-plan checks only; proposed inputs are inactive pending explicit confirmation"
+  },
+  "validation_only_unit_methods": 8,
+  "original_failed_binary_sha256": "dfc6451e4eb02e8a70c42fec6349181155716dbe3212cef8fcb414a3400b941c",
+  "current_admission_fixed_binary_sha256": "f41b73f9e4a31380c127d33350e2980e164d4436adb58f0560a3ac7a333ab1d5",
+  "native_commit": "69cb14764c0c5de2c7ad31599ee5b3999dddc154",
+  "compiler_options": {
+    "schema_version": "moe-native-compilation/1",
+    "passed": true,
+    "compile_commands_sha256": "c79e6bbb21c3b1a458a69835ded57c6e46b00407ec269e3aa1ef7d8c08b1f986",
+    "translation_units": 444,
+    "effective_optimization": "-O3",
+    "retained_warnings": [
+      "-Wall",
+      "-Wpedantic"
+    ],
+    "optimization_sequences": [
+      {
+        "flags": [
+          "-O3"
+        ],
+        "units": 444
+      }
+    ],
+    "critical_units": [
+      {
+        "source": "fabric.cc",
+        "optimization": "-O3",
+        "warnings": [
+          "-Wall",
+          "-Wpedantic"
+        ]
+      },
+      {
+        "source": "persistent_streams.cc",
+        "optimization": "-O3",
+        "warnings": [
+          "-Wall",
+          "-Wpedantic"
+        ]
+      },
+      {
+        "source": "remote_transactions.cc",
+        "optimization": "-O3",
+        "warnings": [
+          "-Wall",
+          "-Wpedantic"
+        ]
+      },
+      {
+        "source": "persistent_streams.cc",
+        "optimization": "-O3",
+        "warnings": [
+          "-Wall",
+          "-Wpedantic"
+        ]
+      },
+      {
+        "source": "transaction_session.cc",
+        "optimization": "-O3",
+        "warnings": [
+          "-Wall",
+          "-Wpedantic"
+        ]
+      },
+      {
+        "source": "remote_transactions.cc",
+        "optimization": "-O3",
+        "warnings": [
+          "-Wall",
+          "-Wpedantic"
+        ]
+      },
+      {
+        "source": "persistent_streams.cc",
+        "optimization": "-O3",
+        "warnings": [
+          "-Wall",
+          "-Wpedantic"
+        ]
+      },
+      {
+        "source": "persistent_streams.cc",
+        "optimization": "-O3",
+        "warnings": [
+          "-Wall",
+          "-Wpedantic"
+        ]
+      },
+      {
+        "source": "persistent_streams.cc",
+        "optimization": "-O3",
+        "warnings": [
+          "-Wall",
+          "-Wpedantic"
+        ]
+      },
+      {
+        "source": "simulator.cc",
+        "optimization": "-O3",
+        "warnings": [
+          "-Wall",
+          "-Wpedantic"
+        ]
+      },
+      {
+        "source": "default-simulator-impl.cc",
+        "optimization": "-O3",
+        "warnings": [
+          "-Wall",
+          "-Wpedantic"
+        ]
+      },
+      {
+        "source": "qbb-net-device.cc",
+        "optimization": "-O3",
+        "warnings": [
+          "-Wall",
+          "-Wpedantic"
+        ]
+      },
+      {
+        "source": "rdma-hw.cc",
+        "optimization": "-O3",
+        "warnings": [
+          "-Wall",
+          "-Wpedantic"
+        ]
+      },
+      {
+        "source": "switch-node.cc",
+        "optimization": "-O3",
+        "warnings": [
+          "-Wall",
+          "-Wpedantic"
+        ]
+      }
+    ],
+    "progress_full_scan_development_oracle": false,
+    "scope": "generated command verification; not runtime performance or hardware calibration"
+  },
+  "library_hashes": {
+    "libns3.42-applications.so": "b078022e64138b72b03fa74bc7e7620394fa24dc3d0aa704564a3f7051c149cd",
+    "libns3.42-point-to-point.so": "62b9403338c1d79c73c0ef3463a38eff7578d55b26bf15f3d60cdd14ab9e6f70",
+    "libns3.42-internet.so": "779371917409ec3fee9fd618bb1ab7cd38099f3afbc53fa767780b04496b8563",
+    "libns3.42-network.so": "fcadf923cff952814df4a878de80b970013414cca4a8d96c78f2a33f7f4ea4af",
+    "libns3.42-core.so": "cd53c20ef28e8e264b264b90c637f838df08aee6c0231e6959a6125db57cd49a",
+    "libns3.42-stats.so": "61ea70d0e4080569b3316106a3edeeec010e5a6437cf645c6c2e90929d529a9d",
+    "libns3.42-bridge.so": "2c687d8ada8b6f0bb72ccaf2f32889dc73cc4b902391b3b8dbcedbd59020fafb",
+    "libns3.42-traffic-control.so": "a8ac2a434c0e14c35c6bb4e1d08cb831f6b84cdd19610e4ec40919dfe1985c32"
+  },
+  "stages": [
+    {
+      "stage": "admission",
+      "status": "completed",
+      "wall_seconds": 7.444458151992876,
+      "peak_rss_bytes": 183238656,
+      "command": [
+        "python3",
+        "-B",
+        "tests/integration/check_legacy_admission.py",
+        "--inputs",
+        "runs/legacy_native_20261030/inputs",
+        "--execution",
+        "runs/legacy_native_20261030/normal/execution.json",
+        "--backend",
+        "runs/legacy_native_20261030/build/output/moe-rdma/ns3.42-moe-rdma-legacy-deepep",
+        "--output",
+        "runs/legacy_native_20261030/admission"
+      ]
+    },
+    {
+      "stage": "admission-current",
+      "status": "completed",
+      "wall_seconds": 7.456182153022382,
+      "peak_rss_bytes": 183554048,
+      "command": [
+        "python3",
+        "-B",
+        "tests/integration/check_legacy_admission.py",
+        "--inputs",
+        "runs/legacy_native_20261030/inputs",
+        "--execution",
+        "runs/legacy_native_20261030/normal/execution.json",
+        "--backend",
+        "runs/legacy_native_20261030/build/output/moe-rdma/ns3.42-moe-rdma-legacy-deepep",
+        "--output",
+        "runs/legacy_native_20261030/admission-current"
+      ]
+    },
+    {
+      "stage": "build",
+      "status": "completed",
+      "wall_seconds": 443.2327266659704,
+      "peak_rss_bytes": 1774891008,
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-build",
+        "--output",
+        "runs/legacy_native_20261030/build",
+        "--cmake",
+        "/home/lry/tools/venv/bin/cmake",
+        "--ninja",
+        "/home/lry/tools/venv/bin/ninja",
+        "--protobuf-prefix",
+        "/home/lry/tools/protobuf",
+        "--compile-wall-seconds",
+        "600"
+      ]
+    },
+    {
+      "stage": "build-capacity",
+      "status": "completed",
+      "wall_seconds": 13.226282427029219,
+      "peak_rss_bytes": 731004928,
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-build",
+        "--output",
+        "runs/legacy_native_20261030/build",
+        "--resume",
+        "--cmake",
+        "/home/lry/tools/venv/bin/cmake",
+        "--ninja",
+        "/home/lry/tools/venv/bin/ninja",
+        "--protobuf-prefix",
+        "/home/lry/tools/protobuf",
+        "--compile-wall-seconds",
+        "600"
+      ]
+    },
+    {
+      "stage": "build-local-report",
+      "status": "completed",
+      "wall_seconds": 13.0100185360061,
+      "peak_rss_bytes": 740773888,
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-build",
+        "--output",
+        "runs/legacy_native_20261030/build",
+        "--resume",
+        "--cmake",
+        "/home/lry/tools/venv/bin/cmake",
+        "--ninja",
+        "/home/lry/tools/venv/bin/ninja",
+        "--protobuf-prefix",
+        "/home/lry/tools/protobuf",
+        "--compile-wall-seconds",
+        "600"
+      ]
+    },
+    {
+      "stage": "build-posting",
+      "status": "completed",
+      "wall_seconds": 13.166112812992651,
+      "peak_rss_bytes": 746995712,
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-build",
+        "--output",
+        "runs/legacy_native_20261030/build",
+        "--resume",
+        "--cmake",
+        "/home/lry/tools/venv/bin/cmake",
+        "--ninja",
+        "/home/lry/tools/venv/bin/ninja",
+        "--protobuf-prefix",
+        "/home/lry/tools/protobuf",
+        "--compile-wall-seconds",
+        "600"
+      ]
+    },
+    {
+      "stage": "build-resume",
+      "status": "completed",
+      "wall_seconds": 12.979996313981246,
+      "peak_rss_bytes": 731508736,
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-build",
+        "--output",
+        "runs/legacy_native_20261030/build",
+        "--resume",
+        "--cmake",
+        "/home/lry/tools/venv/bin/cmake",
+        "--ninja",
+        "/home/lry/tools/venv/bin/ninja",
+        "--protobuf-prefix",
+        "/home/lry/tools/protobuf",
+        "--compile-wall-seconds",
+        "600"
+      ]
+    },
+    {
+      "stage": "capacity-unit",
+      "status": "completed",
+      "wall_seconds": 0.21520224900450557,
+      "peak_rss_bytes": 6438912,
+      "command": [
+        "python3",
+        "-B",
+        "tests/unit/legacy_native_test.py"
+      ]
+    },
+    {
+      "stage": "cpu",
+      "status": "completed",
+      "wall_seconds": 11.946257180999964,
+      "peak_rss_bytes": 100282368,
+      "command": [
+        "python3",
+        "-B",
+        "-"
+      ]
+    },
+    {
+      "stage": "failure-report",
+      "status": "completed",
+      "wall_seconds": 0.7548449119785801,
+      "peak_rss_bytes": 147124224,
+      "command": [
+        "python3",
+        "-B",
+        "tests/integration/summarize_legacy_failure.py",
+        "--root",
+        "runs/legacy_native_20261030",
+        "--output",
+        "fixtures/legacy_native"
+      ]
+    },
+    {
+      "stage": "lowering-unit",
+      "status": "completed",
+      "wall_seconds": 0.2116488330066204,
+      "peak_rss_bytes": 7475200,
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/unit",
+        "-p",
+        "legacy_native_test.py",
+        "-v"
+      ]
+    },
+    {
+      "stage": "lowering-unit-v2",
+      "status": "completed",
+      "wall_seconds": 0.22350574599113315,
+      "peak_rss_bytes": 7442432,
+      "command": [
+        "python3",
+        "-B",
+        "tests/unit/legacy_native_test.py"
+      ]
+    },
+    {
+      "stage": "normal",
+      "status": "child_failed",
+      "wall_seconds": 3.7531336750253104,
+      "peak_rss_bytes": 552316928,
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "deepep-run",
+        "--plan",
+        "runs/legacy_native_20261030/inputs/plan",
+        "--binding",
+        "runs/legacy_native_20261030/inputs/binding.json",
+        "--topology",
+        "runs/legacy_native_20261030/inputs/topology",
+        "--protocol",
+        "runs/legacy_native_20261030/inputs/normal.json",
+        "--transport",
+        "runs/legacy_native_20261030/inputs/transport.json",
+        "--backend",
+        "runs/legacy_native_20261030/build/output/moe-rdma/ns3.42-moe-rdma-legacy-deepep",
+        "--output",
+        "runs/legacy_native_20261030/normal"
+      ]
+    },
+    {
+      "stage": "packet-audit-unit",
+      "status": "completed",
+      "wall_seconds": 0.22926022700266913,
+      "peak_rss_bytes": 7475200,
+      "command": [
+        "python3",
+        "-B",
+        "tests/unit/legacy_packet_audit_test.py"
+      ]
+    },
+    {
+      "stage": "packet-audit-unit-v2",
+      "status": "completed",
+      "wall_seconds": 0.2310827289475128,
+      "peak_rss_bytes": 7479296,
+      "command": [
+        "python3",
+        "-B",
+        "tests/unit/legacy_packet_audit_test.py"
+      ]
+    },
+    {
+      "stage": "packet-records",
+      "status": "completed",
+      "wall_seconds": 0.876200235041324,
+      "peak_rss_bytes": 188579840,
+      "command": [
+        "python3",
+        "-B",
+        "tests/integration/check_legacy_packet_records.py",
+        "--legacy-run",
+        "runs/legacy_native_20261030/normal",
+        "--atomic-root",
+        "runs/atomic32_transactions_20261030",
+        "--output",
+        "runs/legacy_native_20261030/packet-records"
+      ]
+    },
+    {
+      "stage": "packet-records-v2",
+      "status": "completed",
+      "wall_seconds": 0.8774253820301965,
+      "peak_rss_bytes": 191270912,
+      "command": [
+        "python3",
+        "-B",
+        "tests/integration/check_legacy_packet_records.py",
+        "--legacy-run",
+        "runs/legacy_native_20261030/normal",
+        "--atomic-root",
+        "runs/atomic32_transactions_20261030",
+        "--output",
+        "runs/legacy_native_20261030/packet-records-v2"
+      ]
+    },
+    {
+      "stage": "packet-report",
+      "status": "completed",
+      "wall_seconds": 0.7743777399882674,
+      "peak_rss_bytes": 146604032,
+      "command": [
+        "python3",
+        "-B",
+        "tests/integration/summarize_legacy_failure.py",
+        "--root",
+        "runs/legacy_native_20261030",
+        "--output",
+        "runs/legacy_native_20261030/report-packet",
+        "--publish-dir",
+        "fixtures/legacy_native"
+      ]
+    },
+    {
+      "stage": "posting-cpu",
+      "status": "completed",
+      "wall_seconds": 2.425576739013195,
+      "peak_rss_bytes": 159936512,
+      "command": [
+        "python3",
+        "-B",
+        "tests/integration/check_legacy_posting_cpu.py",
+        "--output",
+        "runs/legacy_native_20261030/posting-cpu"
+      ]
+    },
+    {
+      "stage": "posting-rejections",
+      "status": "completed",
+      "wall_seconds": 2.503964976000134,
+      "peak_rss_bytes": 162074624,
+      "command": [
+        "python3",
+        "-B",
+        "tests/integration/check_legacy_posting_rejections.py",
+        "--inputs",
+        "runs/legacy_native_20261030/inputs",
+        "--execution",
+        "runs/legacy_native_20261030/normal/execution.json",
+        "--backend",
+        "runs/legacy_native_20261030/build/output/moe-rdma/ns3.42-moe-rdma-legacy-deepep",
+        "--output",
+        "runs/legacy_native_20261030/posting-rejections"
+      ]
+    },
+    {
+      "stage": "posting-report",
+      "status": "completed",
+      "wall_seconds": 0.7589805650059134,
+      "peak_rss_bytes": 162885632,
+      "command": [
+        "python3",
+        "-B",
+        "tests/integration/summarize_legacy_failure.py",
+        "--root",
+        "runs/legacy_native_20261030",
+        "--output",
+        "runs/legacy_native_20261030/report-posting"
+      ]
+    },
+    {
+      "stage": "preflight",
+      "status": "completed",
+      "wall_seconds": 0.5368544919765554,
+      "peak_rss_bytes": 20209664,
+      "command": [
+        "bash",
+        "scripts/check_deps.sh"
+      ]
+    },
+    {
+      "stage": "prepare",
+      "status": "completed",
+      "wall_seconds": 2.060536271019373,
+      "peak_rss_bytes": 54824960,
+      "command": [
+        "python3",
+        "-B",
+        "examples/legacy_native/prepare.py",
+        "--output",
+        "runs/legacy_native_20261030/inputs"
+      ]
+    },
+    {
+      "stage": "prepare-explicit",
+      "status": "completed",
+      "wall_seconds": 2.1923612609971315,
+      "peak_rss_bytes": 56004608,
+      "command": [
+        "python3",
+        "-B",
+        "examples/legacy_native/prepare.py",
+        "--reference-events",
+        "10000",
+        "--output",
+        "runs/legacy_native_20261030/inputs-explicit"
+      ]
+    },
+    {
+      "stage": "stream-regression",
+      "status": "completed",
+      "wall_seconds": 0.32405244500841945,
+      "peak_rss_bytes": 27500544,
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/unit",
+        "-p",
+        "*stream*test.py"
+      ]
+    },
+    {
+      "stage": "syntax",
+      "status": "child_failed",
+      "wall_seconds": 4.514959737018216,
+      "peak_rss_bytes": 555208704,
+      "command": [
+        "python3",
+        "-B",
+        "-"
+      ]
+    },
+    {
+      "stage": "syntax-v2",
+      "status": "completed",
+      "wall_seconds": 4.497874941967893,
+      "peak_rss_bytes": 560467968,
+      "command": [
+        "python3",
+        "-B",
+        "-"
+      ]
+    },
+    {
+      "stage": "validate-only-public",
+      "status": "completed",
+      "wall_seconds": 7.587904852989595,
+      "peak_rss_bytes": 144257024,
+      "command": [
+        "python3",
+        "-B",
+        "tests/integration/check_legacy_validate_only.py",
+        "--root",
+        "runs/legacy_native_20261030",
+        "--backend",
+        "runs/legacy_native_20261030/build/output/moe-rdma/ns3.42-moe-rdma-legacy-deepep",
+        "--output",
+        "runs/legacy_native_20261030/pending-capacity-proposal"
+      ]
+    },
+    {
+      "stage": "validate-only-unit",
+      "status": "child_failed",
+      "wall_seconds": 0.3369121910072863,
+      "peak_rss_bytes": 26492928,
+      "command": [
+        "python3",
+        "-B",
+        "tests/unit/legacy_native_test.py"
+      ]
+    },
+    {
+      "stage": "validate-only-unit-v2",
+      "status": "completed",
+      "wall_seconds": 0.33919887599768117,
+      "peak_rss_bytes": 26546176,
+      "command": [
+        "python3",
+        "-B",
+        "tests/unit/legacy_native_test.py"
+      ]
+    }
+  ],
+  "monitored_wall_seconds": 558.6878933180124,
+  "peak_sampled_group_rss_bytes": 1774891008,
+  "raw_result_sha256": "09357ed3e9ce788a931b76c2477c5398efc36ef6c298fac5fe36a7ce1706f6e3",
+  "scope": "人工路由、功能字节；非完整推理、GPU性能或新算法收益。"
+}

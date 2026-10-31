@@ -111,11 +111,15 @@ transactions/3在同一持久网络中串接“实际接收窗口→后续put”
 
 `backend/rdma/gin_work_queue.hh`是独立的无时间资源核心，验证持久工作队列的槽复用、提交前缀和累计完成；`PersistentStreams`已将它用于实际工作发布并按累计ACK推进。这个接入不提供现代GIN provider、GPU可见性或源buffer安全复用保证，不能以功能队列代替现代库性能依据，详见[后端接口](../backend/README.md#gin工作队列功能核心)。
 
-`LowLatencyPostingQueue`复用该资源核心，增加旧DeepEP v1.2.1同步put的多WQE关联、四次put条件发布及通知强制发布。它保留准备空洞，允许较后的完整前缀先发布、较早生产者随后返回；完成仍由外部累计回调提供。它仅用于独立CPU功能检查，尚未加入`PersistentStreams`/`RemoteTransactions`，不会改变现代GIN或服务网络默认路径，见[同步策略示例](../examples/low_latency_posting/README.md)。
+`LowLatencyPostingQueue`复用该资源核心，增加旧DeepEP v1.2.1同步put的多WQE关联、四次put条件发布及通知强制发布。它保留准备空洞，允许较后的完整前缀先发布、较早生产者随后返回；完成仍由外部累计回调提供。独立CPU检查见[同步策略示例](../examples/low_latency_posting/README.md)。新专用旧库入口复用此核心，原服务与现代GIN默认路径不改变。
 
 离线的`scaleout deepep-plan`由`deepep_plan.py`生成固定DeepEP低延迟路径的应用部分顺序，区分逐专家数据、零token通知、逻辑QP上下文和计算流事件。`deepep-check`检查保存表示并计算无时间依赖闭包；它不调用前端调度、ASTRA或网络，不改变下述在线服务。接口与尚未建模的队列、完成和缓冲语义见[操作计划示例](../examples/deepep_partial_order/README.md)。
 
 可选`indexed-jsonl`由`deepep_indexed.py`复用同一语义生成器，以事件/操作行及整数依赖保存完整计划，不构造完整事件数组和后继图。按生成的拓扑顺序检查闭包，仍保存有界事件ID索引与阶段关系；其预算和字段见[流式计划](../examples/deepep_indexed/README.md)。这是表示增量，不会将计划自动注入网络或改变已有在线流量。
+
+显式`deepep-run`经`legacy_native.py`逐行校验完整索引源，编译有界运行数组，交给独立`legacy_deepep_probe.cc`。它将跨rank逻辑上下文映射到持久请求/回复流；真实请求字节应用后释放accepted，实际请求ACK/原子回复及同上下文前序退休后释放sender_done。visible与专家拷贝采用显式零成本功能假设。准入同时核算无重传时必需的源发送日志下界；不足在Fabric前拒绝，不保证额外恢复日志足够。完整EP32首次运行因旧10,000条日志配置失败；经授权改用100,000条后，E256正常/故障及E128连续两调用均完成原生功能验收，操作与当前证据见[专用示例](../examples/legacy_native/README.md)。
+
+上述流映射只应用于跨rank上下文；同rank copy/store绕过远端发布队列，不产生网络ACK/回复。远端队列准入另要求能容纳下次发布前的完整跨度，防止尚未发布却等待ACK释放槽的循环等待。源原子返回值只由实际反向流回调填写，目标内存日志与源反馈分开；这些修复已构建并做CPU/非法输入检查，完整网络路径尚待验证。
 
 非 UB Scale-Out 的可选 `recovery.mode=go_back_n` 在原生 NIC 协议回调上维护源端 ACK 进展计时，超时经原生发送调度重传，接收端重复数据用真实反向 ACK 响应。数据就绪、完整确认、QP 清理和软件额度释放保持分开；全部图完成后等待尾部网络流量排空。重试耗尽停止整个共享仿真，保留业务与资源状态供离线诊断，不返回正常完成。默认原生模式与依赖保持原行为；详细机制与参数见[恢复示例](../examples/scaleout_rdma_recovery/README.md)。
 

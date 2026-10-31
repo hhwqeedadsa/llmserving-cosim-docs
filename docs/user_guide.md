@@ -1,5 +1,9 @@
 # 用户指南
 
+将完整旧DeepEP低延迟索引计划交给原生网络，可使用新增的`scaleout deepep-run`与[独立128Clos示例](../examples/legacy_native/README.md)。该入口已在128端点Clos上通过EP32/E256完整正常及一次通知丢包验收，另以E128两调用检查跨调用复用；仅验证人工输入下的功能通信，不能作为硬件性能基准。它与LLMServingSim服务、现代direct入口分别使用。
+
+审阅输入时可加`--validate-only`，只做Python及完整源计划检查，保存拟执行命令和输入摘要，不启动原生后端或网络。通过不表示原生准入或任务完成；不足的日志容量仍会被拒绝。
+
 判断一个备用结果提前是否真正提前了全部专家贡献就绪，可对已完成的贡献/helper服务运行[就绪与消费窗口诊断](contribution_frontier.md)。公开`scaleout contribution-frontier`只读核查并输出原件/赢家前沿、门限/FIFO和缓冲寿命；固定记录的提前量不等于重新仿真的请求加速。
 
 检查原/备用消息的实际字节写入、迟到包与缓冲复用，可显式开启[主服务消息缓冲](message_buffers.md)，按[128端点Clos示例](../examples/scaleout_message_buffers/README.md)执行既有`rdma-run/rdma-check`。内容是标记字节，不是数值激活；源确认与graph/helper退出分别约束释放。

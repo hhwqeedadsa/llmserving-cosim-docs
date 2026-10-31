@@ -1,0 +1,10 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>完整旧低延迟计划：实现与容量问题</title><style>
+body{font:17px/1.7 system-ui,sans-serif;max-width:1040px;margin:40px auto;padding:0 22px;color:#182d43;background:#f5f8fc}
+h1{line-height:1.3} .state{padding:18px;background:#fff0d8;border-left:6px solid #b56a09}
+table{border-collapse:collapse;width:100%;background:white;margin-top:24px}th,td{padding:14px;border-bottom:1px solid #dde4ed;text-align:left;vertical-align:top}th{width:130px}a{color:#0659a8}
+</style><h1>完整旧低延迟计划：实现与容量问题</h1>
+<p class="state"><b>当前状态：尚未验收完整网络执行。</b><br>首次失败已保留，已补运行前容量检查；没有自动增加限额或重跑。</p><table><tr><th>模拟网络</th><td>128端点 Clos；EP32；每rank8专家</td></tr><tr><th>输入</th><td>4个人工token、Top8、H7168/BF16；完整Dispatch和Combine计划</td></tr><tr><th>计划</th><td>16,448操作 / 66,144事件；不删除零token通知</td></tr><tr><th>载体</th><td>15,872有向流 / 31,792请求及回复工作</td></tr><tr><th>发现</th><td>正常条件在4,237ns触发10,000条拥塞控制日志上限</td></tr><tr><th>容量依据</th><td>无丢包也至少需要32,464条源发送日志；重传/反馈另占容量</td></tr><tr><th>修复</th><td>Python与原生入口在创建网络前拒绝不可能的配置</td></tr><tr><th>队列问题</th><td>未发布批次不能收到ACK；新增最小发布跨度准入，本例至少2槽，配置32槽</td></tr><tr><th>本地路径修复</th><td>本地拷贝/存储绕开发送队列，不生成WQE、门铃或网络ACK；原生完整执行待验收</td></tr><tr><th>验证</th><td>816种CPU队列情形 / 1,384断言；5项Python方法；新增公开/原生队列拒绝各1类</td></tr><tr><th>逐包核对</th><td>旧EP32失败原件：10,001源包 / 3,562已交付包；只证明中断前的记录一致</td></tr><tr><th>重传口径</th><td>已有事务恢复原件：608B唯一数据 / 792B实际发送 / 184B重复发送；没有新跑网络</td></tr><tr><th>审计修正</th><td>核对实际TX/RX与负载、拒绝缺失最终存储记录；正常条件不预设零重传</td></tr><tr><th>仅检查模式</th><td>公开--validate-only；8项CPU方法及完整正常/故障输入检查通过，不调用原生后端</td></tr><tr><th>未启用提案</th><td>独立目录拟分配100,000条日志，仅transport.json不同；原配置仍10,000条，等待确认</td></tr><tr><th>尚未完成</th><td>完整正常执行、故障执行、独立全量字节/DAG审计</td></tr><tr><th>下一步</th><td>等待日志容量调整确认，保持其余时间、内存和磁盘预算</td></tr></table>
+<p>本页区分代码已实现、检查已通过和实际网络已完成。4,237ns是异常停止时刻，不是推理完成时间。816种情形是CPU队列核心检查，采用消费后显式给定的完成回调，不是816次网络实验。完整专家数值、GPU可见性、RoCE硬件和研究收益均未验证。</p>
+<p><a href="verification.json">核验与资源摘要</a> · <a href="../../../examples/legacy_native/README.md">公开命令</a></p></html>

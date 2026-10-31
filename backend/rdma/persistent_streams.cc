@@ -14,7 +14,7 @@ static CustomHeader StreamHeader(Ptr<const Packet> packet) {
 PersistentStreams::PersistentStreams(Fabric& fabric):PersistentStreams(fabric,Limits{}) {}
 PersistentStreams::PersistentStreams(Fabric& fabric,Limits limits):PersistentStreams(fabric,limits,Json()) {}
 PersistentStreams::PersistentStreams(Fabric& fabric,Limits limits,const Json& recovery,bool transaction_peer_copies):fabric_(fabric),limits_(limits) {
-  Require(limits.streams>0 && limits.streams<=4096 && limits.work>0 && limits.work<=65536 &&
+  Require(limits.streams>0 && limits.streams<=16384 && limits.work>0 && limits.work<=65536 &&
           limits.link_transmissions>0 && limits.link_transmissions<=2000000,
           "persistent stream count limits out of supported range");
   Require(!fabric_.persistent_stream_mode_ && fabric_.flows_.empty() && !fabric_.resource_tracking_ && !fabric_.recovery_ &&
@@ -36,7 +36,7 @@ PersistentStreams::PersistentStreams(Fabric& fabric,Limits limits,const Json& re
     };
     const auto initial=integer("initial_rto_ns",1,fabric_.MaxSimNs());
     const auto maximum=integer("max_rto_ns",initial,1000000000);
-    integer("max_retries",1,16);integer("max_events",0,100000);
+    integer("max_retries",1,16);integer("max_events",0,500000);
     if(selective_mode_) {
       const auto mtu=fabric_.config_.at("payload_bytes").get<uint64_t>();
       selective_capacity_=integer("receive_buffer_bytes",mtu,2*1024*1024);

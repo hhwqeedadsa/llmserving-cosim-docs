@@ -65,7 +65,9 @@ transactions/3的put可从注册源窗口读取实际字节。`RemoteMemory`按o
 
 深度显式取1—4096内的2的幂，单对象最多记录65,536个工作；每次reservation长度1—depth，超出明确拒绝。后一限制是当前支持边界，避免整段等待自身尚未发布前缀；不是provider或硬件上限的声明。`Reserve`等价单条`ReserveBatch`，旧调用保持其行为。`ResolveGinContext`按声明的连接数分解应用索引，并用传入设备表映射本地设备；它不探测NIC、验证拓扑或创建物理QP。在线QP和字节进度由`PersistentStreams`等调用方负责，原子协议由独立事务层负责；这个资源核心本身不实现现代DeepEP。接口阶段与功能复核见[独立检查](../fixtures/gin_work_queue/README.md)。
 
-另有[low_latency_posting.hh](rdma/low_latency_posting.hh)，在上述核心上表达固定DeepEP v1.2.1的条件同步发布策略。`ReservePut`显式接收一条逻辑put的1—32条WQE及message index；`Post`在完整就绪前缀可用后，按`(message_index+1)%4==0`判断发布，通知则强制发布。较后工作已发布时，迟到请求取max，不倒退或再次消费。`SplitRegisteredPut`只按调用方声明的注册区边界拆分，不从真实路由推测地址。正常availability检查仍是有界功能约束；不是低延迟库跳过槽检查、物理门铃、异步代理或现代GIN实现。该独立核心尚未接入两个网络适配器，公开CPU操作与范围见[示例](../examples/low_latency_posting/README.md)。
+另有[low_latency_posting.hh](rdma/low_latency_posting.hh)，在上述核心上表达固定DeepEP v1.2.1的条件同步发布策略。`ReservePut`显式接收一条逻辑put的1—32条WQE及message index；`Post`在完整就绪前缀可用后，按`(message_index+1)%4==0`判断发布，通知则强制发布。较后工作已发布时，迟到请求取max，不倒退或再次消费。`SplitRegisteredPut`只按调用方声明的注册区边界拆分，不从真实路由推测地址。正常availability检查仍是有界功能约束；不是低延迟库跳过槽检查、物理门铃、异步代理或现代GIN实现。专用旧库入口已复用此核心，两个通用适配器的默认提交规则不变，公开CPU操作与范围见[示例](../examples/low_latency_posting/README.md)。
+
+`moe-rdma-legacy-deepep TOPOLOGY PROTOCOL EXECUTION NEW_RESULT`为完整旧索引计划的专用驱动，构建清单名`legacy_deepep`。它使用一套原生Fabric/Simulator、每专家上下文的32位目标内存与双向MRT1载体，不经过ASTRA或LLMServingSim请求调度器。公共`deepep-run`先核验原计划；原生内部EXECUTION并非完整源语义认证接口。流内部容量16,384及SR记录500,000只为新有界驱动提供能力；原通用Python入口的限制不变。原生准入先检查必需源发送日志下界，避免已知不可能的配置建网。首次完整网络因日志容量失败；经授权分配100,000条参考日志后，EP32/E256正常/故障和EP32/E128连续两调用均通过功能审计。范围与复现见[旧库示例](../examples/legacy_native/README.md)。
 
 ## 现有原生服务扩展
 

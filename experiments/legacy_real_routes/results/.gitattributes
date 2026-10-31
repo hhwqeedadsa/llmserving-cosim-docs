@@ -1,2 +1,2 @@
 # Keep packet-curve CSV bytes identical to their recorded SHA-256 values.
-*.csv -text
+*.csv -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol

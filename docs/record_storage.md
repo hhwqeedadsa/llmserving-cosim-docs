@@ -1,3 +1,5 @@
+公开`deepep-audit`输出`moe-legacy-native-audit/1`，记录完整功能审计及`input_sha256`。`route_source_verified=false`只表示该审计未校验真实专家选择来源；与数据是否来自真实路由分别判断。拒绝未完成原生结果、已有输出及关闭断言的Python优化模式。该命令只读，不启动网络。
+
 # 观测记录与存储格式
 
 新增旧库原生入口在`result.json.legacy`记录`event_times_ns/event_order/operations/contexts/counters/final_data/memory_events/publications/transport`。`operation_columns`解释操作数组；全部时间来自同一Simulator，未发生为−1。`event_order`与`memory_events`共享严格递增order，用于重放清理、实际目标写入和功能专家拷贝；`publications`按time/op/context/eligible/requested/previous/exclusive解释，发布前缀并非ACK。context数组按src/dst/local_expert/remote_index/reserved/prepared/published/consumed/completed/closed解释，remote_index为−1表示本地上下文。计数器是目标4B字节的LE32读数；实际源载体含32B MRT1帧头，原子回复还产生独立反向流。输入/运行文件与当前未完成验收边界见[专用示例](../examples/legacy_native/README.md)。

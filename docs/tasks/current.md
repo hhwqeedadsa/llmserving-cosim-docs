@@ -1,5 +1,13 @@
 # 当前任务与交接
 
+## 2026-10-31 真实专家选择下的完整旧库通信研究
+
+状态：`in_progress`。上一轮c35721160c完成并发布人工输入功能验收，分类progress。本轮先将完整只读审计整理为公开命令，再通过既有hash来源清单接入15份R1-AWQ/MMLU专家选择，制定独立网络对照。所有新网络仍为128端点Clos、EP32；不把15份来源、数据活动rank、网络端点或物理GPU混为同一计数。AWQ选择与BF16功能载体分别说明，未知采集版本/激活精度保留。
+
+公开审计增量已完成：4个检查函数与c35721160c AST等价，3份完整原件标准化输出一致，hash保持，零新网络；4项逐包方法、未完成/覆盖/-O拒绝通过。证据见[公开审计验收](../../fixtures/legacy_public_audit/README.md)。真实路由网络对照尚未执行，接续制定并冻结方法。
+
+预算根`runs/legacy_route_study_20261031`：累计900受监控秒/1GiB产物/卷留8GiB；阶段120秒/RSS2GiB/地址4GiB。参考日志沿用已授权100,000条；无构建、下载、依赖或GPU。先公开审计等价检查和真实输入校验，再冻结normal/local/成熟修复对照方法，最多3个新网络各一次；失败保留，不重复已成功网络。平台公开接口与研究方法分别提交，仅发布已授权user分支，整体目标active。
+
 ## 2026-10-31 完整旧低延迟索引计划接入原生网络
 
 状态：`completed`（指定功能验收；整体研究目标active）。用户明确允许适度提高限额后，采用100,000条参考日志，其他时间/内存/磁盘预算保持；此前容量确认阻塞已解除。按[规范](legacy_native_spec.md)完成旧DeepEP v1.2.1 BF16、同步四条发布、零token通知及源/目标分层完成的原生绑定，保留现代GIN/RoCE/GPU边界。交付[操作](../../examples/legacy_native/README.md)、[验收](../../fixtures/legacy_native/README.md)、[网页](../../fixtures/legacy_native/report.html)和[来源核验](../../fixtures/legacy_native/verification.json)。

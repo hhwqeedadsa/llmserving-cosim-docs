@@ -50,10 +50,12 @@ PYTHONPATH=python python3 -B -m moe_ub_cosim scaleout deepep-run \
 成功执行后的独立审计入口是：
 
 ```bash
-python3 -B tests/integration/audit_legacy_native.py \
+PYTHONPATH=python python3 -B -m moe_ub_cosim scaleout deepep-audit \
   --run runs/my-legacy-normal --protocol runs/my-legacy-inputs/normal.json \
   --output runs/my-legacy-normal-audit.json
 ```
+
+公开审计是只读操作，拒绝已有输出、未完成运行和`python -O`（该模式会关闭断言）。输出附输入SHA256和`route_source_verified=false`，表示它不验证专家选择的采集来源；真实路由来源须由实验准备及独立来源核验提供。原测试脚本保留兼容入口，历史输出中的`real_routes=false`也不应作为新真实来源的判定依据。
 
 审计按包UID、端点/NIC、序号和负载长度将实际TX、目的RX及交付字节绑定，区分唯一载体数据和重复发送，再解码MRT1，核对通知、DAG、发布、目标内存、清理和退休。未额外注入故障不保证零重传；审计统计实际重复字节，不因正常条件出现重传而直接拒绝。最终计数器和数据记录须完整覆盖所有应有项，不能用缺失记录绕过检查。当前三份完整原生结果均已通过此审计；包核验子摘要的`complete_application_proven=false`指该子检查自身不证明业务完成，顶层审计还检查全部操作、事件、最终内存和排空。
 

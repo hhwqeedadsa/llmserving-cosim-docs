@@ -76,6 +76,10 @@ def parser():
         dn.add_argument('--'+name, type=Path, required=True)
     dn.add_argument('--validate-only',action='store_true',
                     help='Check complete source plan, mapping and Python budgets; save planned input without invoking native admission or the network')
+    da=sc.add_parser('deepep-audit',help='Read-only complete legacy packet/DAG/memory/retirement audit; route provenance and GPU calibration remain separate')
+    da.add_argument('--run',type=Path,required=True)
+    da.add_argument('--protocol',type=Path,required=True)
+    da.add_argument('--output',type=Path,required=True,help='New JSON file with complete functional audit and input hashes; never executes a network')
     dc.add_argument('--output', type=Path, required=True, help='New JSON file with dependency closure and blocked device kernel completions')
     dc.add_argument('--withhold', action='append', default=[], help='Exact event ID to withhold from closure; repeatable')
     hp = sc.add_parser('hybrid-deepep-plan', help='Compile bounded server/rail routing, counts and Dispatch tail obligations; not a complete Hybrid DAG or network execution')
@@ -325,6 +329,9 @@ def main(argv=None):
                 from .legacy_native import run
                 value = run(args.plan, args.binding, args.topology, args.protocol, args.transport, args.backend, args.output,
                             validate_only=args.validate_only)
+            elif args.scaleout_command == 'deepep-audit':
+                from .legacy_audit import run
+                value=run(args.run,args.protocol,args.output)
             elif args.scaleout_command == 'sweep':
                 from .scaleout_sweep import run
                 value=run(args.config,args.backend,args.output,args.protoc)

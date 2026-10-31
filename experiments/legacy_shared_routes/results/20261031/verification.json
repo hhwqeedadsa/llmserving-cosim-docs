@@ -1,0 +1,35 @@
+{
+  "passed": true,
+  "source_files": 15,
+  "real_route_selection_verified": true,
+  "cases": [
+    {
+      "case": "normal",
+      "passed": true,
+      "queue_pairs": 64062,
+      "second_group_bad_edge_events": 0,
+      "source_packets": 66998,
+      "result_sha256": "5a000e145cf17b68291a7b2765487249bd33421364a44cf2f60c88420d7a9f49"
+    },
+    {
+      "case": "local",
+      "passed": true,
+      "queue_pairs": 64563,
+      "second_group_bad_edge_events": 0,
+      "source_packets": 68323,
+      "result_sha256": "b3f60cf9ee1ead5f313e5bd7586bbafbc10c92301ecdf3f89e3526c881d77ef1"
+    },
+    {
+      "case": "prefix",
+      "passed": true,
+      "queue_pairs": 64312,
+      "second_group_bad_edge_events": 0,
+      "source_packets": 67003,
+      "result_sha256": "e40c65cfd4a3f2c4d96f53cdd3da23b74fd7595d8c11abc97d3ddba8a29192c5"
+    }
+  ],
+  "independent_byte_range_union": true,
+  "independent_queue_pairing": true,
+  "hardware_calibrated": false,
+  "new_network_runs": 0
+}

@@ -1,0 +1,89 @@
+{
+  "passed": true,
+  "groups": [
+    {
+      "passed": true,
+      "operations": 16512,
+      "events": 66400,
+      "contexts": 8192,
+      "streams": 15872,
+      "logical_transport_bytes": 2925408,
+      "transmitted_payload_bytes": 3010652,
+      "retransmitted_payload_bytes": 85244,
+      "zero_token_count_operations": 8128,
+      "zero_token_flag_operations": 8128,
+      "actual_notification_reads": 16384,
+      "last_kernel_complete_ns": 102927,
+      "physical_finish_ns": 114941,
+      "final_memory_sha256": "fbc974639cad5684e756c72f1800ca50339b2a2d3dd9d0fbaf58521fa0adc722",
+      "packet_verification": {
+        "transmitted_payload_bytes": 3010652,
+        "unique_transmitted_payload_bytes": 2925408,
+        "duplicate_payload_bytes": 85244,
+        "source_packets": 34929,
+        "verified_delivered_packets": 33604,
+        "delivered_prefix_bytes": 2925408,
+        "complete_application_proven": false
+      },
+      "route_source_verified": false,
+      "hardware_calibrated": false,
+      "numerical_experts_executed": false,
+      "id": "group-0",
+      "stream_offset": 0,
+      "group_physical_drain_measured": false
+    },
+    {
+      "passed": true,
+      "operations": 16496,
+      "events": 66336,
+      "contexts": 8192,
+      "streams": 15872,
+      "logical_transport_bytes": 2724144,
+      "transmitted_payload_bytes": 2724144,
+      "retransmitted_payload_bytes": 0,
+      "zero_token_count_operations": 8136,
+      "zero_token_flag_operations": 8136,
+      "actual_notification_reads": 16384,
+      "last_kernel_complete_ns": 89532,
+      "physical_finish_ns": 114941,
+      "final_memory_sha256": "ca510d736d82416d1ce192233cc8391fd81cfb7026aaf3e03a1c385032beb6ab",
+      "packet_verification": {
+        "transmitted_payload_bytes": 2724144,
+        "unique_transmitted_payload_bytes": 2724144,
+        "duplicate_payload_bytes": 0,
+        "source_packets": 33394,
+        "verified_delivered_packets": 33394,
+        "delivered_prefix_bytes": 2724144,
+        "complete_application_proven": false
+      },
+      "route_source_verified": false,
+      "hardware_calibrated": false,
+      "numerical_experts_executed": false,
+      "id": "group-1",
+      "stream_offset": 15872,
+      "group_physical_drain_measured": false
+    }
+  ],
+  "shared_transport_packet_verification": {
+    "transmitted_payload_bytes": 5734796,
+    "unique_transmitted_payload_bytes": 5649552,
+    "duplicate_payload_bytes": 85244,
+    "source_packets": 68323,
+    "verified_delivered_packets": 66998,
+    "delivered_prefix_bytes": 5649552,
+    "complete_application_proven": false
+  },
+  "global_carrier_work": 63722,
+  "global_streams": 31744,
+  "physical_finish_ns": 114941,
+  "route_source_verified": false,
+  "hardware_calibrated": false,
+  "numerical_experts_executed": false,
+  "scope": "Complete independent groups on one shared network; per-group times use the global clock and physical finish is global; no isolated-task counterfactual",
+  "schema_version": "moe-legacy-shared-audit/1",
+  "input_sha256": {
+    "/home/lry/moe-ub-cosim/runs/legacy_shared_routes_20261031/run-local/execution.json": "4ffc2faf15039d1ae75b1a8fb4d1fe69539619550d7eab99ac8ce9545231d06c",
+    "/home/lry/moe-ub-cosim/runs/legacy_shared_routes_20261031/run-local/result.json": "b3f60cf9ee1ead5f313e5bd7586bbafbc10c92301ecdf3f89e3526c881d77ef1",
+    "/home/lry/moe-ub-cosim/runs/legacy_shared_routes_20261031/input/local.json": "fbed569ba64fdc7c87ceebe9b6037c89e34e920d8fb1554d9c5ae1d85b24f0f3"
+  }
+}

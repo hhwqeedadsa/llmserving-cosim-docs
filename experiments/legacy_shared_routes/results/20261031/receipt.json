@@ -1,0 +1,210 @@
+{
+  "passed": true,
+  "published_shanghai": "2026-10-31T14:52:54.803421+08:00",
+  "completed_stages": [
+    {
+      "stage": "analyze",
+      "status": "completed",
+      "wall_seconds": 12.76604292698903,
+      "peak_rss_bytes": 1225990144,
+      "command": [
+        "python3",
+        "-B",
+        "experiments/legacy_shared_routes/analyze.py",
+        "--study",
+        "runs/legacy_shared_routes_20261031/input",
+        "--output",
+        "runs/legacy_shared_routes_20261031/analysis"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "probe_sha256": "aa6bffda1ea8540d2e2669828f9b58696a6afdc159a9f1d1bcbed8879d6c871f"
+    },
+    {
+      "stage": "audit-local",
+      "status": "completed",
+      "wall_seconds": 9.925106109003536,
+      "peak_rss_bytes": 1408016384,
+      "command": [
+        "python3",
+        "-B",
+        "experiments/legacy_shared_routes/study.py",
+        "audit",
+        "--study",
+        "runs/legacy_shared_routes_20261031/input",
+        "--case",
+        "local"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "probe_sha256": "d42eb06387cbdfcc073acf13f6540440f148b59e5f8d7c9d2c70a5b74a0d9d12"
+    },
+    {
+      "stage": "audit-normal",
+      "status": "completed",
+      "wall_seconds": 9.896202708012424,
+      "peak_rss_bytes": 1416093696,
+      "command": [
+        "python3",
+        "-B",
+        "experiments/legacy_shared_routes/study.py",
+        "audit",
+        "--study",
+        "runs/legacy_shared_routes_20261031/input",
+        "--case",
+        "normal"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "probe_sha256": "90cc175618c3a8ee41e37f7761e007bb7af333d2c266cf3dff4b584fec62ef99"
+    },
+    {
+      "stage": "audit-prefix",
+      "status": "completed",
+      "wall_seconds": 9.834285111981444,
+      "peak_rss_bytes": 1449459712,
+      "command": [
+        "python3",
+        "-B",
+        "experiments/legacy_shared_routes/study.py",
+        "audit",
+        "--study",
+        "runs/legacy_shared_routes_20261031/input",
+        "--case",
+        "prefix"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "probe_sha256": "5198414279fa789eaeab6c90559b6aa47942a90cde35dead2642563265282890"
+    },
+    {
+      "stage": "diagnose",
+      "status": "completed",
+      "wall_seconds": 8.376079595007468,
+      "peak_rss_bytes": 1052975104,
+      "command": [
+        "python3",
+        "-B",
+        "experiments/legacy_shared_routes/diagnose.py",
+        "--study",
+        "runs/legacy_shared_routes_20261031/input",
+        "--analysis",
+        "runs/legacy_shared_routes_20261031/analysis"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "probe_sha256": "450582a3045c6b9a50e7a9d06ca950cea3109e1694b17dcba8c05dd646c01d03"
+    },
+    {
+      "stage": "prepare",
+      "status": "completed",
+      "wall_seconds": 8.376052896957844,
+      "peak_rss_bytes": 242708480,
+      "command": [
+        "python3",
+        "-B",
+        "experiments/legacy_shared_routes/study.py",
+        "prepare",
+        "--source-manifest",
+        "experiments/legacy_real_routes/results/20261031/source-manifest.json",
+        "--build",
+        "runs/legacy_shared_20261031/build-v2/backend.json",
+        "--output",
+        "runs/legacy_shared_routes_20261031/input"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "probe_sha256": "bb0f00c809cca60af2307aa2c4a95b5af116dc9e78a4aeeacb1fb7ed4b4f8a34"
+    },
+    {
+      "stage": "run-local",
+      "status": "completed",
+      "wall_seconds": 21.30692464800086,
+      "peak_rss_bytes": 3016966144,
+      "command": [
+        "python3",
+        "-B",
+        "experiments/legacy_shared_routes/study.py",
+        "run",
+        "--study",
+        "runs/legacy_shared_routes_20261031/input",
+        "--case",
+        "local"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "probe_sha256": "c909e85256f5885bc4c2fc23ec74c610b70d8dfaf9025d64202702f0c50242d5"
+    },
+    {
+      "stage": "run-normal",
+      "status": "completed",
+      "wall_seconds": 20.954991053033154,
+      "peak_rss_bytes": 3001552896,
+      "command": [
+        "python3",
+        "-B",
+        "experiments/legacy_shared_routes/study.py",
+        "run",
+        "--study",
+        "runs/legacy_shared_routes_20261031/input",
+        "--case",
+        "normal"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "probe_sha256": "93923c3c43dbdc9286e857770e0e4c36cb7e5d077b48dfb4523546d1ac473f72"
+    },
+    {
+      "stage": "run-prefix",
+      "status": "completed",
+      "wall_seconds": 21.162502307037357,
+      "peak_rss_bytes": 3071619072,
+      "command": [
+        "python3",
+        "-B",
+        "experiments/legacy_shared_routes/study.py",
+        "run",
+        "--study",
+        "runs/legacy_shared_routes_20261031/input",
+        "--case",
+        "prefix"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "probe_sha256": "9d8a3f6929aa8004e632df405ec33a7a43b15005b16c63e7eda26f906a2c0752"
+    },
+    {
+      "stage": "verify",
+      "status": "completed",
+      "wall_seconds": 14.260436232027132,
+      "peak_rss_bytes": 1197080576,
+      "command": [
+        "python3",
+        "-B",
+        "experiments/legacy_shared_routes/verify.py",
+        "--study",
+        "runs/legacy_shared_routes_20261031/input",
+        "--analysis",
+        "runs/legacy_shared_routes_20261031/analysis",
+        "--output",
+        "runs/legacy_shared_routes_20261031/analysis/verification.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "probe_sha256": "56283a0e6d164706593b310ac737ed67f35101eeb8e7d98cef3f4106aa7533b5"
+    }
+  ],
+  "monitored_seconds": 136.85862358805025,
+  "peak_rss_bytes": 3071619072,
+  "cumulative_budget": {
+    "seconds": 2400,
+    "artifacts_bytes": 3221225472,
+    "min_free_bytes": 8589934592
+  },
+  "new_network_runs": 3,
+  "network_reruns": 0,
+  "builds": 0,
+  "downloads": 0,
+  "physical_gpu_executed": false,
+  "platform_resource_commit": "70b996b69e",
+  "prospective_method_commit": "725c1d3129",
+  "scope": "Completed monitor reports at publication time; publisher and later delivery check excluded from this subtotal",
+  "code_sha256": {
+    "experiments/legacy_shared_routes/monitor.py": "e81f917f8d44d344787c8fde7ea606b26483d60d3d5d279b5d8a6cea22f47848",
+    "experiments/legacy_shared_routes/study.py": "53cded0abf159c61c48b82c05b16b6e126318ae1e1a0aa3912cbfd7f23814bdd",
+    "experiments/legacy_shared_routes/analyze.py": "0366131c7dd4058c43c0593ccd1fe3e9e675bed64bf533d8ee7fd7ffe2686d7b",
+    "experiments/legacy_shared_routes/verify.py": "87c2d515ebca7ce926fe56430f3720d7bc261295349863f2a4596747196d13db",
+    "experiments/legacy_shared_routes/diagnose.py": "b7d02e6bb2dd0da9ffe4f2d7e7359a3279a3487e5a2116b9567d704845e2c021",
+    "experiments/legacy_shared_routes/publish.py": "7cb383cf05000689e6c13645b05ab6b1909e924ddc562db1d72e4534d2dd5a3c"
+  }
+}

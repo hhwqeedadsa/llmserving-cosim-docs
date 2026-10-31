@@ -1,0 +1,373 @@
+{
+  "passed": true,
+  "network_endpoints": 128,
+  "ep_sizes": [
+    32,
+    32
+  ],
+  "requests": [
+    8,
+    7
+  ],
+  "choices": 120,
+  "comparisons": [
+    {
+      "group": 0,
+      "normal_ns": 89815,
+      "local_ns": 102927,
+      "prefix_ns": 90009,
+      "local_extra_ns": 13112,
+      "prefix_extra_ns": 194,
+      "mature_repair_improvement_ns": 12918,
+      "mature_repair_improvement_fraction": 0.12550642688507388,
+      "recovered_local_extra_fraction": 0.9852043929225137
+    },
+    {
+      "group": 1,
+      "normal_ns": 89711,
+      "local_ns": 89532,
+      "prefix_ns": 89735,
+      "local_extra_ns": -179,
+      "prefix_extra_ns": 24,
+      "mature_repair_improvement_ns": -203,
+      "mature_repair_improvement_fraction": -0.002267345753473618,
+      "recovered_local_extra_fraction": null
+    }
+  ],
+  "cases": {
+    "normal": {
+      "task_ns": [
+        89815,
+        89711
+      ],
+      "physical_finish_ns": 101828,
+      "repeated_bytes": [
+        0,
+        0
+      ],
+      "capture_events": 524240,
+      "bad_edge_exposure": [
+        {
+          "event_3_protocol_17": 2008,
+          "event_4_protocol_17": 2008,
+          "event_0_protocol_17": 2008,
+          "event_1_protocol_17": 2008,
+          "during_outage_event_3_protocol_17": 904,
+          "during_outage_event_4_protocol_17": 904,
+          "during_outage_event_0_protocol_17": 904,
+          "during_outage_event_1_protocol_17": 906,
+          "event_3_protocol_252": 2040,
+          "during_outage_event_3_protocol_252": 1170,
+          "event_4_protocol_252": 2040,
+          "during_outage_event_4_protocol_252": 1170,
+          "event_0_protocol_252": 2040,
+          "during_outage_event_0_protocol_252": 1170,
+          "event_1_protocol_252": 2040,
+          "during_outage_event_1_protocol_252": 1143
+        },
+        {}
+      ],
+      "shared_captured_ports": [
+        {
+          "node": 132,
+          "port": 2,
+          "peer": 129,
+          "group_model_bytes": [
+            164200,
+            343564
+          ]
+        },
+        {
+          "node": 132,
+          "port": 3,
+          "peer": 130,
+          "group_model_bytes": [
+            192220,
+            259592
+          ]
+        },
+        {
+          "node": 132,
+          "port": 4,
+          "peer": 131,
+          "group_model_bytes": [
+            190602,
+            114314
+          ]
+        },
+        {
+          "node": 132,
+          "port": 5,
+          "peer": 144,
+          "group_model_bytes": [
+            338854,
+            329082
+          ]
+        },
+        {
+          "node": 133,
+          "port": 2,
+          "peer": 129,
+          "group_model_bytes": [
+            309580,
+            271346
+          ]
+        },
+        {
+          "node": 133,
+          "port": 3,
+          "peer": 130,
+          "group_model_bytes": [
+            171750,
+            254232
+          ]
+        },
+        {
+          "node": 133,
+          "port": 4,
+          "peer": 131,
+          "group_model_bytes": [
+            274796,
+            154676
+          ]
+        },
+        {
+          "node": 133,
+          "port": 5,
+          "peer": 145,
+          "group_model_bytes": [
+            372782,
+            303096
+          ]
+        }
+      ],
+      "identity": {
+        "execution_sha256": "4ffc2faf15039d1ae75b1a8fb4d1fe69539619550d7eab99ac8ce9545231d06c",
+        "result_sha256": "5a000e145cf17b68291a7b2765487249bd33421364a44cf2f60c88420d7a9f49",
+        "audit_sha256": "850fcd735f48790c37d3b683db968d45df5b831e5207ec6a7e43bb51ec38801e"
+      }
+    },
+    "local": {
+      "task_ns": [
+        102927,
+        89532
+      ],
+      "physical_finish_ns": 114941,
+      "repeated_bytes": [
+        85244,
+        0
+      ],
+      "capture_events": 531500,
+      "bad_edge_exposure": [
+        {
+          "event_3_protocol_17": 1720,
+          "event_4_protocol_17": 1720,
+          "event_0_protocol_17": 1720,
+          "event_1_protocol_17": 1718,
+          "event_2_protocol_17": 2,
+          "during_outage_event_2_protocol_17": 2,
+          "event_3_protocol_252": 1130,
+          "event_4_protocol_252": 1130,
+          "event_0_protocol_252": 1130,
+          "event_1_protocol_252": 1130,
+          "event_3_protocol_253": 12,
+          "event_4_protocol_253": 12,
+          "event_0_protocol_253": 12,
+          "event_1_protocol_253": 12
+        },
+        {}
+      ],
+      "shared_captured_ports": [
+        {
+          "node": 132,
+          "port": 2,
+          "peer": 129,
+          "group_model_bytes": [
+            137602,
+            343564
+          ]
+        },
+        {
+          "node": 132,
+          "port": 3,
+          "peer": 130,
+          "group_model_bytes": [
+            174450,
+            259592
+          ]
+        },
+        {
+          "node": 132,
+          "port": 4,
+          "peer": 131,
+          "group_model_bytes": [
+            183984,
+            114314
+          ]
+        },
+        {
+          "node": 132,
+          "port": 5,
+          "peer": 144,
+          "group_model_bytes": [
+            298672,
+            329082
+          ]
+        },
+        {
+          "node": 133,
+          "port": 2,
+          "peer": 129,
+          "group_model_bytes": [
+            307552,
+            271346
+          ]
+        },
+        {
+          "node": 133,
+          "port": 3,
+          "peer": 130,
+          "group_model_bytes": [
+            196216,
+            254232
+          ]
+        },
+        {
+          "node": 133,
+          "port": 4,
+          "peer": 131,
+          "group_model_bytes": [
+            289898,
+            154676
+          ]
+        },
+        {
+          "node": 133,
+          "port": 5,
+          "peer": 145,
+          "group_model_bytes": [
+            399876,
+            303096
+          ]
+        }
+      ],
+      "identity": {
+        "execution_sha256": "4ffc2faf15039d1ae75b1a8fb4d1fe69539619550d7eab99ac8ce9545231d06c",
+        "result_sha256": "b3f60cf9ee1ead5f313e5bd7586bbafbc10c92301ecdf3f89e3526c881d77ef1",
+        "audit_sha256": "14ae825a00ae360abe60332a369c3577be773baa064672ea61209708836e0d8e"
+      }
+    },
+    "prefix": {
+      "task_ns": [
+        90009,
+        89735
+      ],
+      "physical_finish_ns": 102022,
+      "repeated_bytes": [
+        5120,
+        0
+      ],
+      "capture_events": 525256,
+      "bad_edge_exposure": [
+        {
+          "event_3_protocol_17": 1079,
+          "event_4_protocol_17": 1079,
+          "event_0_protocol_17": 1079,
+          "event_1_protocol_17": 1077,
+          "event_2_protocol_17": 2,
+          "during_outage_event_2_protocol_17": 2,
+          "event_3_protocol_252": 847,
+          "event_4_protocol_252": 847,
+          "event_0_protocol_252": 847,
+          "event_1_protocol_252": 847
+        },
+        {}
+      ],
+      "shared_captured_ports": [
+        {
+          "node": 132,
+          "port": 2,
+          "peer": 129,
+          "group_model_bytes": [
+            262850,
+            343564
+          ]
+        },
+        {
+          "node": 132,
+          "port": 3,
+          "peer": 130,
+          "group_model_bytes": [
+            177046,
+            259592
+          ]
+        },
+        {
+          "node": 132,
+          "port": 4,
+          "peer": 131,
+          "group_model_bytes": [
+            182068,
+            114314
+          ]
+        },
+        {
+          "node": 132,
+          "port": 5,
+          "peer": 144,
+          "group_model_bytes": [
+            288128,
+            329082
+          ]
+        },
+        {
+          "node": 133,
+          "port": 2,
+          "peer": 129,
+          "group_model_bytes": [
+            301444,
+            271346
+          ]
+        },
+        {
+          "node": 133,
+          "port": 3,
+          "peer": 130,
+          "group_model_bytes": [
+            189710,
+            254232
+          ]
+        },
+        {
+          "node": 133,
+          "port": 4,
+          "peer": 131,
+          "group_model_bytes": [
+            283508,
+            154676
+          ]
+        },
+        {
+          "node": 133,
+          "port": 5,
+          "peer": 145,
+          "group_model_bytes": [
+            384200,
+            303096
+          ]
+        }
+      ],
+      "identity": {
+        "execution_sha256": "4ffc2faf15039d1ae75b1a8fb4d1fe69539619550d7eab99ac8ce9545231d06c",
+        "result_sha256": "e40c65cfd4a3f2c4d96f53cdd3da23b74fd7595d8c11abc97d3ddba8a29192c5",
+        "audit_sha256": "df90fa99ef89cb56a8cf8abca7438809ce89f98edd67db9388fee3d27818d565"
+      }
+    }
+  },
+  "frozen_sha256": "73baf54f349b169ebcf16c5e54d89d8a8353d9e9b1281f4c01fb3e34bcde32bd",
+  "source_manifest_sha256": "e949a8bdaa14298de5d153205a7e43981baefd747cac273ebb7d617de0762389",
+  "algorithm_innovation_validated": false,
+  "full_inference_executed": false,
+  "hardware_calibrated": false,
+  "scope": "Two complete functional legacy groups driven by15 real recorded selections; single deterministic case, not full-cluster load or modern RoCE performance"
+}

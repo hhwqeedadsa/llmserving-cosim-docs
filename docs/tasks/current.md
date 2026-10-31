@@ -2,7 +2,11 @@
 
 ## 2026-10-31 真实来源双EP32共享网络研究
 
-状态：`in_progress`。上一轮18367f9ec1交付共享执行平台，70b996b69e按用户授权放宽共享宿主预算；本轮独立研究见[方法](../../experiments/legacy_shared_routes/README.md)。固定128端点Clos、两EP32/E256/H7168，15份不同真实文件按来源顺序8/7划分，第二组排除ToR128及第一组端点。normal/local/prefix各一次，比较成熟恢复后的剩余干扰，坏边128–132于4–24µs中断，不按结果调故障或负载。先冻结并准入，尚无新网络结果。根runs/legacy_shared_routes_20261031：累计2400受监控秒/3GiB新增/留8GiB，每阶段180秒/RSS3GiB/地址6GiB；网络结果512MiB。复用固定后端，无构建、安装、下载、GPU或依赖变更；失败保留，不重跑成功网络，只发布user既有分支，整体目标active。
+状态：`completed`（本轮判别与网页交付；整体研究目标仍active）。平台70b996b69e按用户授权放宽共享宿主预算，研究725c1d3129先冻结[方法](../../experiments/legacy_shared_routes/README.md)，再独立执行三个128Clos网络各一次。15份不同真实文件按顺序8/7划分，两EP32/E256/H7168保留完整33,008操作/132,736事件/32,768通知；第二组部署排除ToR128及第一组端点。结果见[说明](../../experiments/legacy_shared_routes/RESULTS.md)、[网页](../../experiments/legacy_shared_routes/results/20261031/report.html)、[独立核验](../../experiments/legacy_shared_routes/results/20261031/verification.json)和[资源](../../experiments/legacy_shared_routes/results/20261031/receipt.json)。
+
+normal/local/prefix组0为89.815/102.927/90.009µs，组1为89.711/89.532/89.735µs。成熟显式绕路收回组0故障额外等待98.52%，不是新算法收益；194ns残差不是可消除上限。组1无坏边包和其他已捕获直接丢弃，共享8个已捕获端口但没有明显拖累（prefix仅晚24ns）。最大队列低于起标门限且ECN/PFC均零，当前不能据此实现或宣称有必要的恢复优先级算法。相同末端数据前驱发起+671ns、发起至接受跨度−477ns，解释194ns差；跨度不全归交换机，组1前驱切换保留。
+
+三份公共审计及独立来源/区间并集/192,937队列对核验通过，最终内存逐组一致，13固定依赖一致；HTML静态链接通过，无浏览器渲染验收。11受监控阶段136.99秒、峰值RSS3,071,619,072B、产物峰值791,592,960B；预算根runs/legacy_shared_routes_20261031累计2400秒/3GiB/留8GiB，每阶段180秒/RSS3GiB/地址6GiB，结果512MiB。零失败、零网络重跑、无构建安装下载GPU或依赖修改，仅发布user既有分支。后续先确认更大真实连续token负载和现代通信基线能否形成持续共享瓶颈，并改进全量记录内存开销，不增加故障强度制造收益；不把本轮通信调用称为LLMServingSim完整服务或128卡满载。
 
 ## 2026-10-31 共享入口宿主预算扩展
 

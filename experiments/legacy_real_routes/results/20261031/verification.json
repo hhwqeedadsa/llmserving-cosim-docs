@@ -1,0 +1,359 @@
+{
+  "passed": true,
+  "source_files_independently_verified": 15,
+  "selected_choices": 120,
+  "unique_dispatch_activation_bytes": 1677312,
+  "independent_curve_cases": 3,
+  "curve_tamper_rejections": 4,
+  "method_correction_preserved": true,
+  "normal_not_reexecuted": true,
+  "new_network_executions": 3,
+  "selected_predecessor_chains": {
+    "normal": [
+      {
+        "event": 66784,
+        "kind": "kernel_complete",
+        "rank": 10,
+        "time_ns": 88458,
+        "operation": null,
+        "equally_late_declared_dependencies": [
+          66783
+        ]
+      },
+      {
+        "event": 66783,
+        "kind": "combine_merged",
+        "rank": 10,
+        "time_ns": 88458,
+        "operation": null,
+        "equally_late_declared_dependencies": [
+          44794
+        ]
+      },
+      {
+        "event": 44794,
+        "kind": "visible",
+        "rank": 10,
+        "time_ns": 88458,
+        "operation": "m0.c.flag.d10.e142",
+        "equally_late_declared_dependencies": [
+          44793
+        ]
+      },
+      {
+        "event": 44793,
+        "kind": "accepted",
+        "rank": 10,
+        "time_ns": 88458,
+        "operation": "m0.c.flag.d10.e142",
+        "equally_late_declared_dependencies": [
+          33837
+        ]
+      },
+      {
+        "event": 33837,
+        "kind": "accepted",
+        "rank": 10,
+        "time_ns": 88457,
+        "operation": "m0.c.data.d10.t0.e142",
+        "equally_late_declared_dependencies": [
+          33836
+        ]
+      },
+      {
+        "event": 33836,
+        "kind": "issued",
+        "rank": 17,
+        "time_ns": 44430,
+        "operation": "m0.c.data.d10.t0.e142",
+        "equally_late_declared_dependencies": [
+          33457
+        ]
+      },
+      {
+        "event": 33457,
+        "kind": "kernel_begin",
+        "rank": 17,
+        "time_ns": 44430,
+        "operation": null,
+        "equally_late_declared_dependencies": [
+          33425
+        ]
+      },
+      {
+        "event": 33425,
+        "kind": "expert_stage_done",
+        "rank": 17,
+        "time_ns": 44430,
+        "operation": null,
+        "equally_late_declared_dependencies": [
+          33365
+        ]
+      },
+      {
+        "event": 33365,
+        "kind": "kernel_complete",
+        "rank": 17,
+        "time_ns": 44430,
+        "operation": null,
+        "equally_late_declared_dependencies": [
+          33364
+        ]
+      }
+    ],
+    "local": [
+      {
+        "event": 66784,
+        "kind": "kernel_complete",
+        "rank": 10,
+        "time_ns": 108717,
+        "operation": null,
+        "equally_late_declared_dependencies": [
+          66783
+        ]
+      },
+      {
+        "event": 66783,
+        "kind": "combine_merged",
+        "rank": 10,
+        "time_ns": 108717,
+        "operation": null,
+        "equally_late_declared_dependencies": [
+          44394
+        ]
+      },
+      {
+        "event": 44394,
+        "kind": "visible",
+        "rank": 10,
+        "time_ns": 108717,
+        "operation": "m0.c.flag.d10.e42",
+        "equally_late_declared_dependencies": [
+          44393
+        ]
+      },
+      {
+        "event": 44393,
+        "kind": "accepted",
+        "rank": 10,
+        "time_ns": 108717,
+        "operation": "m0.c.flag.d10.e42",
+        "equally_late_declared_dependencies": [
+          33829
+        ]
+      },
+      {
+        "event": 33829,
+        "kind": "accepted",
+        "rank": 10,
+        "time_ns": 108716,
+        "operation": "m0.c.data.d10.t0.e42",
+        "equally_late_declared_dependencies": [
+          33828
+        ]
+      },
+      {
+        "event": 33828,
+        "kind": "issued",
+        "rank": 5,
+        "time_ns": 79739,
+        "operation": "m0.c.data.d10.t0.e42",
+        "equally_late_declared_dependencies": [
+          33445
+        ]
+      },
+      {
+        "event": 33445,
+        "kind": "kernel_begin",
+        "rank": 5,
+        "time_ns": 79739,
+        "operation": null,
+        "equally_late_declared_dependencies": [
+          33413
+        ]
+      },
+      {
+        "event": 33413,
+        "kind": "expert_stage_done",
+        "rank": 5,
+        "time_ns": 79739,
+        "operation": null,
+        "equally_late_declared_dependencies": [
+          33329
+        ]
+      },
+      {
+        "event": 33329,
+        "kind": "kernel_complete",
+        "rank": 5,
+        "time_ns": 79739,
+        "operation": null,
+        "equally_late_declared_dependencies": [
+          33328
+        ]
+      }
+    ],
+    "prefix": [
+      {
+        "event": 66793,
+        "kind": "kernel_complete",
+        "rank": 13,
+        "time_ns": 88733,
+        "operation": null,
+        "equally_late_declared_dependencies": [
+          66792
+        ]
+      },
+      {
+        "event": 66792,
+        "kind": "combine_merged",
+        "rank": 13,
+        "time_ns": 88733,
+        "operation": null,
+        "equally_late_declared_dependencies": [
+          47926
+        ]
+      },
+      {
+        "event": 47926,
+        "kind": "visible",
+        "rank": 13,
+        "time_ns": 88733,
+        "operation": "m0.c.flag.d13.e157",
+        "equally_late_declared_dependencies": [
+          47925
+        ]
+      },
+      {
+        "event": 47925,
+        "kind": "accepted",
+        "rank": 13,
+        "time_ns": 88733,
+        "operation": "m0.c.flag.d13.e157",
+        "equally_late_declared_dependencies": [
+          33929
+        ]
+      },
+      {
+        "event": 33929,
+        "kind": "accepted",
+        "rank": 13,
+        "time_ns": 88732,
+        "operation": "m0.c.data.d13.t0.e157",
+        "equally_late_declared_dependencies": [
+          33928
+        ]
+      },
+      {
+        "event": 33928,
+        "kind": "issued",
+        "rank": 19,
+        "time_ns": 45777,
+        "operation": "m0.c.data.d13.t0.e157",
+        "equally_late_declared_dependencies": [
+          33459
+        ]
+      },
+      {
+        "event": 33459,
+        "kind": "kernel_begin",
+        "rank": 19,
+        "time_ns": 45777,
+        "operation": null,
+        "equally_late_declared_dependencies": [
+          33427
+        ]
+      },
+      {
+        "event": 33427,
+        "kind": "expert_stage_done",
+        "rank": 19,
+        "time_ns": 45777,
+        "operation": null,
+        "equally_late_declared_dependencies": [
+          33371
+        ]
+      },
+      {
+        "event": 33371,
+        "kind": "kernel_complete",
+        "rank": 19,
+        "time_ns": 45777,
+        "operation": null,
+        "equally_late_declared_dependencies": [
+          33370
+        ]
+      }
+    ]
+  },
+  "same_message_cross_condition_witnesses": {
+    "m0.c.data.d10.t0.e142": {
+      "normal": {
+        "issued_ns": 44430,
+        "published_ns": 44430,
+        "applied_ns": 88457,
+        "source_completed_ns": 94463
+      },
+      "local": {
+        "issued_ns": 44485,
+        "published_ns": 44485,
+        "applied_ns": 88007,
+        "source_completed_ns": 94013
+      },
+      "prefix": {
+        "issued_ns": 44486,
+        "published_ns": 44486,
+        "applied_ns": 88233,
+        "source_completed_ns": 94239
+      }
+    },
+    "m0.c.data.d10.t0.e42": {
+      "normal": {
+        "issued_ns": 29160,
+        "published_ns": 29160,
+        "applied_ns": 58207,
+        "source_completed_ns": 62211
+      },
+      "local": {
+        "issued_ns": 79739,
+        "published_ns": 79739,
+        "applied_ns": 108716,
+        "source_completed_ns": 112720
+      },
+      "prefix": {
+        "issued_ns": 32986,
+        "published_ns": 32986,
+        "applied_ns": 62096,
+        "source_completed_ns": 66100
+      }
+    },
+    "m0.c.data.d13.t0.e157": {
+      "normal": {
+        "issued_ns": 44220,
+        "published_ns": 44220,
+        "applied_ns": 87384,
+        "source_completed_ns": 93390
+      },
+      "local": {
+        "issued_ns": 59983,
+        "published_ns": 59983,
+        "applied_ns": 102877,
+        "source_completed_ns": 108883
+      },
+      "prefix": {
+        "issued_ns": 45777,
+        "published_ns": 45777,
+        "applied_ns": 88732,
+        "source_completed_ns": 94738
+      }
+    }
+  },
+  "predecessor_scope": "One selected declared-dependency chain with ties retained; not a unique critical path or removable-delay proof",
+  "monitored_wall_seconds_before_verification": 92.83194708189694,
+  "peak_sampled_group_rss_bytes": 1574969344,
+  "source_sha256": "05a605030f4ec05977e1d54a1ae5dc0a8f7fe8655f321f5f18764f9b8d264082",
+  "analysis_sha256": "07ab16d4fd9c04243412ec1710dd665220f64acfe38babcac99b4baf5a0739cf",
+  "delivery_sha256": "d93f16b92dd5ca6f657afe68042f24a6365d06aff3bc9c951b8834f1a15524df",
+  "algorithm_innovation_validated": false,
+  "goal_complete": false
+}

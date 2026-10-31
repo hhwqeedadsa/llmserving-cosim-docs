@@ -47,4 +47,6 @@ python3 -B tests/integration/summarize_legacy_acceptance.py \
 
 该脚本绑定三份原生结果、已有独立审计、公开执行清单、授权和源码/输入/二进制/库hash，不启动网络。`audit_legacy_native.py`的独立审计用法见公开示例。大原件仅保存在`runs/legacy_native_20261030/authorized-capacity-100k/`，仓库保存代码、输入及必要摘要；未备份原件的检出仍须按公开操作重新生成运行结果。
 
+以上历史汇总冻结了c35721160c的源码hash，完整重算该旧汇总应检出该提交。后续公开审计迁移改变了源码身份；当前版本可通过`scaleout deepep-audit`直接只读复核保留的原件，迁移等价证据见[公开审计验收](../legacy_public_audit/README.md)，不能为通过旧hash检查改写旧报告。
+
 网页仅完成静态资源检查，不声称浏览器渲染已验收。该平台增量已取得功能证据，整体研究及新算法贡献尚未完成。

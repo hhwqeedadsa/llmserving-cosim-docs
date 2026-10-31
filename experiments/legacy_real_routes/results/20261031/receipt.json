@@ -1,0 +1,197 @@
+{
+  "created_at": "2026-10-31T14:04:56.282310+08:00",
+  "packaging_command": [
+    "python3",
+    "-B",
+    "runs/legacy_route_study_20261031/package-results.py"
+  ],
+  "cwd": "/home/lry/moe-ub-cosim",
+  "package_source_sha256": "8b712af0217268485bd42a40d7cb6221e0ad593fd680c9ef95a3692b6bf91e30",
+  "originals_relative": "runs/legacy_route_study_20261031",
+  "monitored_wall_seconds_before_packaging": 98.32481034792727,
+  "sampled_peak_group_rss_bytes": 1574969344,
+  "allocated_artifact_peak_before_packaging": 402468864,
+  "monitors": {
+    "analyze": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 17.700495426019188,
+      "peak_sampled_group_rss_bytes": 883609600
+    },
+    "check-delivery": {
+      "status": "child_failed",
+      "child_exit_code": 1,
+      "wall_seconds": 2.4049638269934803,
+      "peak_sampled_group_rss_bytes": 122269696
+    },
+    "check-delivery-v2": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 2.510410047019832,
+      "peak_sampled_group_rss_bytes": 121794560
+    },
+    "local": {
+      "status": "child_failed",
+      "child_exit_code": 1,
+      "wall_seconds": 0.23217707400908694,
+      "peak_sampled_group_rss_bytes": 33042432
+    },
+    "local-corrected": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 10.099086667993106,
+      "peak_sampled_group_rss_bytes": 1574969344
+    },
+    "normal": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 10.195105467981193,
+      "peak_sampled_group_rss_bytes": 1567944704
+    },
+    "package": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.13644509902223945,
+      "peak_sampled_group_rss_bytes": 6447104
+    },
+    "prefix": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 10.133908863994293,
+      "peak_sampled_group_rss_bytes": 1574629376
+    },
+    "prepare": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 2.7334665459929965,
+      "peak_sampled_group_rss_bytes": 72724480
+    },
+    "public-audit": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 11.38461583701428,
+      "peak_sampled_group_rss_bytes": 618627072
+    },
+    "publish": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 5.779500686971005,
+      "peak_sampled_group_rss_bytes": 633606144
+    },
+    "publish-v2": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 5.918130382953677,
+      "peak_sampled_group_rss_bytes": 636092416
+    },
+    "publish-v3": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 5.675054433988407,
+      "peak_sampled_group_rss_bytes": 635527168
+    },
+    "validate-local-corrected": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 1.984263024001848,
+      "peak_sampled_group_rss_bytes": 116690944
+    },
+    "verify": {
+      "status": "child_failed",
+      "child_exit_code": 1,
+      "wall_seconds": 0.1344861999968998,
+      "peak_sampled_group_rss_bytes": 7483392
+    },
+    "verify-v2": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 5.388611926988233,
+      "peak_sampled_group_rss_bytes": 586805248
+    },
+    "verify-v3": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 5.473044543992728,
+      "peak_sampled_group_rss_bytes": 586416128
+    },
+    "verify-v4": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 5.4928632660303265,
+      "peak_sampled_group_rss_bytes": 585555968
+    }
+  },
+  "network_executions": 3,
+  "successful_network_reexecutions": 0,
+  "original_local_failed_before_network": true,
+  "source_manifest_portable_sha256": "e949a8bdaa14298de5d153205a7e43981baefd747cac273ebb7d617de0762389",
+  "source_files_copied": false,
+  "raw_network_results_copied": false,
+  "dependency_check": {
+    "command": [
+      "bash",
+      "scripts/check_deps.sh"
+    ],
+    "exit_code": 0,
+    "checkouts": 13
+  },
+  "static_html_links_checked": 7,
+  "browser_render_validated": false,
+  "sources": {
+    "experiments/legacy_real_routes/study.py": "1f928fea6f468826b0a7e7609de0aadea09e73ddaa52ee09d66718a45f771681",
+    "experiments/legacy_real_routes/publish.py": "31d86d4ebf3e13689df2082a0ee84e6036cc0b939a6e8b2a9a5362a33cb5213e",
+    "experiments/legacy_real_routes/verify.py": "05a605030f4ec05977e1d54a1ae5dc0a8f7fe8655f321f5f18764f9b8d264082"
+  },
+  "files": {
+    "normal-dispatch.csv": "fd72a21e5a4e34e8d6d4263aa9a0fc3669937d2bc5f128ba1544894005c624ff",
+    "local-dispatch.csv": "d29df6a06ef7160ff1554ef797f97e2657c2bd98ee3c956fa4f0cdd49166a024",
+    "prefix-dispatch.csv": "7a5234747efe3ec0ac802cded49c0f0c4bfaa734176ece843bd262b7afc328d2",
+    "dispatch-delivery.png": "9e1e164cf93b0f06bdd02a29faa0b4a98cc92e9a4f07621b2d602edffeae9c25",
+    "completion.png": "785e80b3dff9b1371a3332c5661ee6a18903ca8b4631917d4686cd7ecc03d50e",
+    "delivery.json": "d93f16b92dd5ca6f657afe68042f24a6365d06aff3bc9c951b8834f1a15524df",
+    "report.html": "e82eba648ad7d893e5c77b2076a4b316d7deac114d2a4915e6c003d1c3e9a618",
+    "analysis.json": "07ab16d4fd9c04243412ec1710dd665220f64acfe38babcac99b4baf5a0739cf",
+    "verification.json": "c2e377e79984a615d5fb21ffae882a0a09b4c8c8fb14cca8445ebb7089b7921b",
+    "normal-audit.json": "3bb0831ee60c58919647d033f952cbce49d1a8c7a3d232e652376688694576b4",
+    "local-audit.json": "933e9bd3a80bff1f423a515f9f7e724c563ee1a7c089de073128c67ecca8e834",
+    "prefix-audit.json": "e948af3343b79e4446bacd294940275399e54dab5fb921fac89fba3b3db373cc",
+    "source-manifest.json": "e949a8bdaa14298de5d153205a7e43981baefd747cac273ebb7d617de0762389",
+    "execution-identity.json": "6dbb14cf4e5abe81c4e02e52136c87910975b44992bf67b7001ce72536a526de",
+    "inputs/topology-config.json": "a298cc6b4cc5bb0a9cd59dfacf73256cc6185f6922d3216422e8140537fc7991",
+    "inputs/plan-input.json": "5ad519f4d1ace97161845f9a7519fe5106ff5df5e3e4a0f0ac658cbd0400b46d",
+    "inputs/binding.json": "4e4e5cf64d4f2820c182d98ac4d17a6f93f4e075006044bb0e039f7d50d737d4",
+    "inputs/normal.json": "207aa917697e31bf3d82cc36fad7b8fd214b6609eee3c57374ca8dbf0d2d4064",
+    "inputs/local.json": "4fb9c7489ba2b9860ae92b7ef7166790012a933760ebda4e0b698198f5a91057",
+    "inputs/local-corrected.json": "250f59c2e0eeaafea2b2def61bb467c3708e3a0f9f5ca92e67d54a6d7b469760",
+    "inputs/prefix.json": "d162b9e79a6fdf45b781ccfb18704f133ad72054017137e16b8fc884f4086cfe",
+    "inputs/transport.json": "d445bb1ed5752780ea2b8e4f50c833b4240194132f83f747dcd0712b2a11a701",
+    "retained-failures/local/probe.json": "0f9f22329aa78204dc5134637e3ca74889fb744dc9582ff5fb778dd7e31a1975",
+    "retained-failures/local/stderr.log": "b1a1295e8aacb13e3005f954a07150d12777df59c7f4f21709cb1881fbf5b0cd",
+    "retained-failures/local/stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retained-failures/verify/probe.json": "9414907f90954ca37f2dec16f39253448b379ca2f2a0348244f21f0170a70a53",
+    "retained-failures/verify/stderr.log": "191e7ca4396c1fa765fc534b97aceb765f77d86f3e9790be6a12c9e68ab793a0",
+    "retained-failures/verify/stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retained-failures/check-delivery/probe.json": "a2c1072bc1f3d6e277251046b865bdde7365efd36d174ead70391dc7fbda2242",
+    "retained-failures/check-delivery/stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retained-failures/check-delivery/stderr.log": "bb4c2bbc217dd25e5e02b673c8b378b4d1ebc3e231c945936e8ece740fb0b0d8"
+  },
+  "overall_research_complete": false,
+  "algorithm_innovation_validated": false,
+  "delivery_check": {
+    "passed": true,
+    "command": [
+      "python3",
+      "-B",
+      "runs/legacy_route_study_20261031/check-delivery-v2.py"
+    ],
+    "exit_code": 0,
+    "checks": [
+      "published_file_hashes",
+      "portable_manifest_full_structure_and_15_file_hashes",
+      "two_python_optimized_mode_rejections"
+    ],
+    "retained_initial_checker_failure": "Matched one rejection message too narrowly; both scripts correctly rejected -O"
+  },
+  "monitored_wall_seconds_through_delivery_check": 103.37662932096282,
+  "allocated_artifact_peak_through_delivery_check": 402894848
+}

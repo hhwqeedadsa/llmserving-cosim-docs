@@ -1,0 +1,371 @@
+{
+  "analysis_sha256": "07ab16d4fd9c04243412ec1710dd665220f64acfe38babcac99b4baf5a0739cf",
+  "postrun_source_sha256": "31d86d4ebf3e13689df2082a0ee84e6036cc0b939a6e8b2a9a5362a33cb5213e",
+  "details": {
+    "normal": {
+      "network_dispatch_contributions": 117,
+      "effective_dispatch_bytes": 1677312,
+      "last_effective_contiguous_delivery_ns": 44503,
+      "last_dispatch_receive_barrier_ns": 44572,
+      "selected_latest_dependency_kind": "visible",
+      "selected_latest_operation": "m0.d.count.s1.e169",
+      "network_physical_finish_ns": 100471,
+      "task_complete_ns": 88458,
+      "repeated_carrier_bytes": 0,
+      "link_failures": null,
+      "source_packets": 35254
+    },
+    "local": {
+      "network_dispatch_contributions": 117,
+      "effective_dispatch_bytes": 1677312,
+      "last_effective_contiguous_delivery_ns": 79738,
+      "last_dispatch_receive_barrier_ns": 79739,
+      "selected_latest_dependency_kind": "visible",
+      "selected_latest_operation": "m0.d.count.s9.e42",
+      "network_physical_finish_ns": 116726,
+      "task_complete_ns": 108717,
+      "repeated_carrier_bytes": 105900,
+      "link_failures": {
+        "configuration": {
+          "events": [
+            {
+              "dst": 132,
+              "restore_route_update_delay_ns": 60000,
+              "restore_time_ns": 24000,
+              "route_update_delay_ns": 60000,
+              "src": 128,
+              "time_ns": 4000
+            }
+          ],
+          "mode": "switch_links/2"
+        },
+        "events": [
+          {
+            "buffer_after": [
+              {
+                "failed_port_queued_data_bytes": 0,
+                "node": 128,
+                "switch_egress_mmu_bytes": 3180,
+                "switch_ingress_and_headroom_bytes": 3180,
+                "switch_shared_used_bytes": 0
+              },
+              {
+                "failed_port_queued_data_bytes": 0,
+                "node": 132,
+                "switch_egress_mmu_bytes": 0,
+                "switch_ingress_and_headroom_bytes": 0,
+                "switch_shared_used_bytes": 0
+              }
+            ],
+            "buffer_before": [
+              {
+                "failed_port_queued_data_bytes": 0,
+                "node": 128,
+                "switch_egress_mmu_bytes": 3180,
+                "switch_ingress_and_headroom_bytes": 3180,
+                "switch_shared_used_bytes": 0
+              },
+              {
+                "failed_port_queued_data_bytes": 0,
+                "node": 132,
+                "switch_egress_mmu_bytes": 0,
+                "switch_ingress_and_headroom_bytes": 0,
+                "switch_shared_used_bytes": 0
+              }
+            ],
+            "dst": 132,
+            "dst_port": 1,
+            "event_index": 0,
+            "kind": "link_down",
+            "local_drops_during_close": 0,
+            "queued_bytes_before": 0,
+            "route_epoch": 0,
+            "src": 128,
+            "src_port": 17,
+            "time_ns": 4000
+          },
+          {
+            "dst": 132,
+            "dst_port": 1,
+            "event_index": 0,
+            "kind": "link_up",
+            "route_epoch": 0,
+            "src": 128,
+            "src_port": 17,
+            "time_ns": 24000
+          },
+          {
+            "event_index": 0,
+            "excluded_directed_ports": 2,
+            "kind": "routes_updated",
+            "known_state": "down",
+            "notification_revision": 1,
+            "route_epoch": 1,
+            "time_ns": 64000
+          },
+          {
+            "event_index": 0,
+            "excluded_directed_ports": 0,
+            "kind": "routes_updated",
+            "known_state": "up",
+            "notification_revision": 2,
+            "route_epoch": 2,
+            "time_ns": 84000
+          }
+        ],
+        "local_drops": 1076,
+        "local_failover": {
+          "configuration": {
+            "mode": "live_ecmp/1"
+          },
+          "events": [
+            {
+              "candidate_destinations": 128,
+              "candidate_next_hops": 464,
+              "empty_destinations": 0,
+              "event_index": 0,
+              "installed_next_hops": 352,
+              "node": 128,
+              "physical_state": "down",
+              "removed_by_port": [
+                {
+                  "destination_entries": 112,
+                  "port": 17
+                }
+              ],
+              "time_ns": 4000
+            },
+            {
+              "candidate_destinations": 128,
+              "candidate_next_hops": 128,
+              "empty_destinations": 16,
+              "event_index": 0,
+              "installed_next_hops": 112,
+              "node": 132,
+              "physical_state": "down",
+              "removed_by_port": [
+                {
+                  "destination_entries": 16,
+                  "port": 1
+                }
+              ],
+              "time_ns": 4000
+            },
+            {
+              "candidate_destinations": 128,
+              "candidate_next_hops": 464,
+              "empty_destinations": 0,
+              "event_index": 0,
+              "installed_next_hops": 464,
+              "node": 128,
+              "physical_state": "up",
+              "removed_by_port": [],
+              "time_ns": 24000
+            },
+            {
+              "candidate_destinations": 128,
+              "candidate_next_hops": 128,
+              "empty_destinations": 0,
+              "event_index": 0,
+              "installed_next_hops": 128,
+              "node": 132,
+              "physical_state": "up",
+              "removed_by_port": [],
+              "time_ns": 24000
+            }
+          ],
+          "scope": "immediate local pruning of existing equal-cost candidates using own actual link state; no new paths, remote notification, control cost or hardware calibration"
+        },
+        "pending_events": 0,
+        "route_epoch": 2,
+        "scope": "temporary bidirectional switch shutdown/up on the same ports; delayed versioned state notifications only; no controller physical-state oracle, control packets or hardware calibration; QPs, current transmission and retry state retained"
+      },
+      "source_packets": 36549
+    },
+    "prefix": {
+      "network_dispatch_contributions": 117,
+      "effective_dispatch_bytes": 1677312,
+      "last_effective_contiguous_delivery_ns": 45776,
+      "last_dispatch_receive_barrier_ns": 45777,
+      "selected_latest_dependency_kind": "visible",
+      "selected_latest_operation": "m0.d.count.s0.e153",
+      "network_physical_finish_ns": 100746,
+      "task_complete_ns": 88733,
+      "repeated_carrier_bytes": 0,
+      "link_failures": {
+        "configuration": {
+          "events": [
+            {
+              "dst": 132,
+              "restore_route_update_delay_ns": 60000,
+              "restore_time_ns": 24000,
+              "route_update_delay_ns": 60000,
+              "src": 128,
+              "time_ns": 4000
+            }
+          ],
+          "mode": "switch_links/2"
+        },
+        "events": [
+          {
+            "buffer_after": [
+              {
+                "failed_port_queued_data_bytes": 0,
+                "node": 128,
+                "switch_egress_mmu_bytes": 3180,
+                "switch_ingress_and_headroom_bytes": 3180,
+                "switch_shared_used_bytes": 0
+              },
+              {
+                "failed_port_queued_data_bytes": 0,
+                "node": 132,
+                "switch_egress_mmu_bytes": 0,
+                "switch_ingress_and_headroom_bytes": 0,
+                "switch_shared_used_bytes": 0
+              }
+            ],
+            "buffer_before": [
+              {
+                "failed_port_queued_data_bytes": 0,
+                "node": 128,
+                "switch_egress_mmu_bytes": 3180,
+                "switch_ingress_and_headroom_bytes": 3180,
+                "switch_shared_used_bytes": 0
+              },
+              {
+                "failed_port_queued_data_bytes": 0,
+                "node": 132,
+                "switch_egress_mmu_bytes": 0,
+                "switch_ingress_and_headroom_bytes": 0,
+                "switch_shared_used_bytes": 0
+              }
+            ],
+            "dst": 132,
+            "dst_port": 1,
+            "event_index": 0,
+            "kind": "link_down",
+            "local_drops_during_close": 0,
+            "queued_bytes_before": 0,
+            "route_epoch": 0,
+            "src": 128,
+            "src_port": 17,
+            "time_ns": 4000
+          },
+          {
+            "dst": 132,
+            "dst_port": 1,
+            "event_index": 0,
+            "kind": "link_up",
+            "route_epoch": 0,
+            "src": 128,
+            "src_port": 17,
+            "time_ns": 24000
+          },
+          {
+            "event_index": 0,
+            "excluded_directed_ports": 2,
+            "kind": "routes_updated",
+            "known_state": "down",
+            "notification_revision": 1,
+            "route_epoch": 1,
+            "time_ns": 64000
+          },
+          {
+            "event_index": 0,
+            "excluded_directed_ports": 0,
+            "kind": "routes_updated",
+            "known_state": "up",
+            "notification_revision": 2,
+            "route_epoch": 2,
+            "time_ns": 84000
+          }
+        ],
+        "local_drops": 0,
+        "local_failover": {
+          "configuration": {
+            "max_events": 100000,
+            "mode": "explicit_prefix/1"
+          },
+          "events": [
+            {
+              "candidate_destinations": 128,
+              "candidate_next_hops": 464,
+              "empty_destinations": 0,
+              "event_index": 0,
+              "installed_next_hops": 352,
+              "node": 128,
+              "physical_state": "down",
+              "removed_by_port": [
+                {
+                  "destination_entries": 112,
+                  "port": 17
+                }
+              ],
+              "time_ns": 4000
+            },
+            {
+              "candidate_destinations": 128,
+              "candidate_next_hops": 128,
+              "empty_destinations": 16,
+              "event_index": 0,
+              "installed_next_hops": 112,
+              "node": 132,
+              "physical_state": "down",
+              "removed_by_port": [
+                {
+                  "destination_entries": 16,
+                  "port": 1
+                }
+              ],
+              "time_ns": 4000
+            },
+            {
+              "candidate_destinations": 128,
+              "candidate_next_hops": 464,
+              "empty_destinations": 0,
+              "event_index": 0,
+              "installed_next_hops": 464,
+              "node": 128,
+              "physical_state": "up",
+              "removed_by_port": [],
+              "time_ns": 24000
+            },
+            {
+              "candidate_destinations": 128,
+              "candidate_next_hops": 128,
+              "empty_destinations": 0,
+              "event_index": 0,
+              "installed_next_hops": 128,
+              "node": 132,
+              "physical_state": "up",
+              "removed_by_port": [],
+              "time_ns": 24000
+            }
+          ],
+          "scope": "local live ECMP pruning plus precomputed explicit repair when no primary survives; project-local IPv4 protocol250, real encapsulated bytes, native queues/MMU and wire service; no hardware processing/detection calibration"
+        },
+        "pending_events": 0,
+        "route_epoch": 2,
+        "scope": "temporary bidirectional switch shutdown/up on the same ports; delayed versioned state notifications only; no controller physical-state oracle, control packets or hardware calibration; QPs, current transmission and retry state retained"
+      },
+      "source_packets": 35254
+    }
+  },
+  "curves": {
+    "normal": {
+      "rows": 1756,
+      "csv_sha256": "fd72a21e5a4e34e8d6d4263aa9a0fc3669937d2bc5f128ba1544894005c624ff"
+    },
+    "local": {
+      "rows": 1756,
+      "csv_sha256": "d29df6a06ef7160ff1554ef797f97e2657c2bd98ee3c956fa4f0cdd49166a024"
+    },
+    "prefix": {
+      "rows": 1756,
+      "csv_sha256": "7a5234747efe3ec0ac802cded49c0f0c4bfaa734176ece843bd262b7afc328d2"
+    }
+  },
+  "packet_delivery_scope": "Unique contiguous delivery of remote Dispatch activation bytes; excludes 32B carrier and 16B Dispatch metadata, local copies, Combine, and ACKs",
+  "new_network_executions": 0,
+  "algorithm_innovation_validated": false
+}

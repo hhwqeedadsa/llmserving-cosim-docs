@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "/home/lry/moe-ub-cosim/experiments/legacy_real_routes/verify.py", line 117, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "/home/lry/moe-ub-cosim/experiments/legacy_real_routes/verify.py", line 32, in main
+    source=load(frozen['source_manifest']);tokens=load(study/'plan-input.json')['calls'][0]['tokens']
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/lry/moe-ub-cosim/experiments/legacy_real_routes/verify.py", line 27, in <lambda>
+    load=lambda path:json.loads(path.read_bytes());sha=lambda path:hashlib.sha256(path.read_bytes()).hexdigest()
+                                ^^^^^^^^^^^^^^^
+AttributeError: 'str' object has no attribute 'read_bytes'

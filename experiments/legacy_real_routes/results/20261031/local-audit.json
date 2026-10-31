@@ -1,0 +1,35 @@
+{
+  "passed": true,
+  "operations": 16624,
+  "events": 66848,
+  "contexts": 8192,
+  "streams": 15872,
+  "logical_transport_bytes": 4506768,
+  "transmitted_payload_bytes": 4612668,
+  "retransmitted_payload_bytes": 105900,
+  "zero_token_count_operations": 8072,
+  "zero_token_flag_operations": 8072,
+  "actual_notification_reads": 16384,
+  "last_kernel_complete_ns": 108717,
+  "physical_finish_ns": 116726,
+  "final_memory_sha256": "4f9c8aee8462e058fd03ad96f5b3c3f684818edbe6b990a1245ee36521cd9f13",
+  "packet_verification": {
+    "transmitted_payload_bytes": 4612668,
+    "unique_transmitted_payload_bytes": 4506768,
+    "duplicate_payload_bytes": 105900,
+    "source_packets": 36549,
+    "verified_delivered_packets": 35254,
+    "delivered_prefix_bytes": 4506768,
+    "complete_application_proven": false
+  },
+  "route_source_verified": false,
+  "hardware_calibrated": false,
+  "numerical_experts_executed": false,
+  "input_sha256": {
+    "/home/lry/moe-ub-cosim/runs/legacy_route_study_20261031/study/run-local/execution.json": "3bf0b8fc492510181f642f59d3dbf0fd6de16df57fc53d6af1ee4ac8ac03ca92",
+    "/home/lry/moe-ub-cosim/runs/legacy_route_study_20261031/study/run-local/result.json": "fc1d1837cdcba4af489611ebcb562e11771af2a1a69447a8830e9b7f1e3f2cd0",
+    "/home/lry/moe-ub-cosim/runs/legacy_route_study_20261031/study/local-corrected.json": "250f59c2e0eeaafea2b2def61bb467c3708e3a0f9f5ca92e67d54a6d7b469760"
+  },
+  "schema_version": "moe-legacy-native-audit/1",
+  "scope": "Complete functional network execution; does not verify route source, numerical experts or GPU timing"
+}

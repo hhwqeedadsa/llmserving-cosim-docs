@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/home/lry/moe-ub-cosim/runs/legacy_route_study_20261031/check-delivery.py", line 14, in <module>
+    assert result.returncode!=0 and 'do not use Python -O' in result.stderr
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

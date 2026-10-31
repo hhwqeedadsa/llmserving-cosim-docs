@@ -77,7 +77,7 @@ def run(directory,protocol,output):
     directory,protocol,output=map(lambda p:Path(p).resolve(),(directory,protocol,output))
     if output.exists() or not output.parent.is_dir():raise ValueError('Shared audit output must be new with an existing parent')
     summary=audit(checked_json(directory/'execution.json',64*2**20),
-                  checked_json(directory/'result.json',256*2**20),checked_json(protocol,65536))
+                  checked_json(directory/'result.json',512*2**20),checked_json(protocol,65536))
     summary.update(schema_version='moe-legacy-shared-audit/1',input_sha256={str(path):hashlib.sha256(path.read_bytes()).hexdigest()
         for path in (directory/'execution.json',directory/'result.json',protocol)})
     output.write_text(json.dumps(summary,indent=2)+'\n');return summary

@@ -77,6 +77,24 @@ class SharedLegacyInput(unittest.TestCase):
             self.invoke('bad-fault',protocol=path)
         native.assert_not_called()
 
+    def test_shared_host_budget_is_explicit_and_keeps_single_limits(self):
+        load=lambda name:json.loads((self.input/name).read_bytes())
+        topology=load('topology/topology.json');protocol=load('normal.json')
+        binding=load('group-0/binding.json');transport=load('transport-single.json')
+        protocol['limits'].update(wall_seconds=180,rss_bytes=3*2**30,address_bytes=6*2**30,
+                                  result_json_bytes=512*2**20)
+        with self.assertRaisesRegex(ValueError,'single120s'):
+            validate_native_inputs(topology,protocol,binding,transport)
+        validate_native_inputs(topology,protocol,binding,transport,shared_resources=True)
+        path=self.root/'larger-host.json';path.write_text(json.dumps(protocol))
+        with patch('moe_ub_cosim.legacy_shared.monitored',side_effect=AssertionError('network launch')):
+            self.assertTrue(self.invoke('larger-host',protocol=path)['passed'])
+        for key,value in [('wall_seconds',181),('rss_bytes',3*2**30+1),
+                          ('address_bytes',6*2**30+1),('result_json_bytes',512*2**20+1)]:
+            oversized=deepcopy(protocol);oversized['limits'][key]=value
+            with self.assertRaisesRegex(ValueError,'shared180s'):
+                validate_native_inputs(topology,oversized,binding,transport,shared_resources=True)
+
     def test_source_plan_tampering_rejected(self):
         path,source=self.source('tampered');folder=self.root/'tampered-plan';folder.mkdir()
         import shutil

@@ -115,8 +115,9 @@ def lower(directory, binding, topology, protocol):
     return work
 
 
-def validate_native_inputs(t,p,b,recovery, *, reference_event_cap=100000):
-    """Validate common declarations; only the shared driver raises record capacity."""
+def validate_native_inputs(t,p,b,recovery, *, reference_event_cap=100000, shared_resources=False):
+    """Validate declarations with an explicit, bounded shared host budget."""
+    require(type(shared_resources) is bool,'shared_resources must be boolean')
     fields(b, 'schema_version rank_to_gpu queue_depth publication memory_model', 'legacy binding')
     require(isinstance(b['rank_to_gpu'], list) and len(b['rank_to_gpu']) >= 2 and
             all(type(g) is int for g in b['rank_to_gpu']), 'rank_to_gpu needs at least two integer GPU IDs')
@@ -141,9 +142,11 @@ def validate_native_inputs(t,p,b,recovery, *, reference_event_cap=100000):
     descriptor_protocol.pop('faults', None)
     validate_streams(t, descriptor_protocol, descriptor)
     budget = limits(p)
-    require(budget['wall_seconds'] <= 120 and budget['rss_bytes'] <= 2*2**30 and
-            budget['address_bytes'] <= 4*2**30 and budget['result_json_bytes'] <= 256*2**20,
-            'legacy native requires bounded120s/2GiB RSS/4GiB address/256MiB result')
+    maximum=(180,3*2**30,6*2**30,512*2**20) if shared_resources else (120,2*2**30,4*2**30,256*2**20)
+    require(all(budget[key]<=bound for key,bound in zip(
+        ('wall_seconds','rss_bytes','address_bytes','result_json_bytes'),maximum)),
+        'legacy host budget exceeds '+('shared180s/3GiB RSS/6GiB address/512MiB result' if shared_resources
+                                     else 'single120s/2GiB RSS/4GiB address/256MiB result'))
     return budget
 
 

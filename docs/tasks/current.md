@@ -1,5 +1,9 @@
 # 当前任务与交接
 
+## 2026-10-31 共享入口宿主预算扩展
+
+状态：`completed`（预算准入与读取容量；没有新增网络执行）。按用户“可以适当提高限额”，仅共享入口允许显式180秒/RSS3GiB/地址6GiB/结果512MiB；原单组120秒/2GiB/4GiB/256MiB不变。协议未覆盖时保留原配置，共享审计同步512MiB上界；C++、后端二进制、链路、包与模拟成本均未修改。7项共享及8项旧单组单元检查通过，涵盖新边界、逐项越界、旧入口拒绝与不启动网络。操作见[共享示例](../../examples/legacy_shared/README.md)。真实双EP32实验另立方法和预算，不把容量放宽称为研究收益。
+
 ## 2026-10-31 完整旧库多组共享网络能力
 
 状态：`completed`（共享平台功能；真实双EP32研究和整体目标仍active）。上一目标轮为progress：发布8a5e6da088，真实选择单组对照表明成熟绕路收回98.64%故障额外等待。本轮新增公开`deepep-shared-build/run/audit`，各组保留原EP、专家、通知、缓冲和退休，共用唯一Fabric/Simulator/持久传输。操作见[共享示例](../../examples/legacy_shared/README.md)，结果见[验收](../../fixtures/legacy_shared/README.md)、[网页](../../fixtures/legacy_shared/report.html)和[核验](../../fixtures/legacy_shared/verification.json)。

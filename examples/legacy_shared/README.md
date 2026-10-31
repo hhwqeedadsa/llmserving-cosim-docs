@@ -19,7 +19,7 @@ PYTHONPATH=python python3 -B -m moe_ub_cosim scaleout deepep-shared-build \
 
 ## 准备和执行
 
-先设置明确的运行预算。本例每CLI最多120秒、RSS2GiB、地址4GiB、结果256MiB，卷预留8GiB；正式研究还需用`moe_ub_cosim.host_probe`限制整个实验根的累计产物和时间。
+先设置明确的运行预算。本例使用120秒、RSS2GiB、地址4GiB、结果256MiB，卷预留8GiB。共享入口允许在协议`limits`中显式提高到180秒、RSS3GiB、地址6GiB、结果512MiB；默认不会自动提高，原单组入口仍为120秒/2GiB/4GiB/256MiB。增加的是宿主执行与记录容量，不改变链路、包、重传或任务成本；审计入口最多读取512MiB结果。正式研究还需用`moe_ub_cosim.host_probe`限制整个实验根的累计产物和时间。
 
 ```bash
 PYTHONPATH=python python3 -B examples/legacy_shared/prepare.py \

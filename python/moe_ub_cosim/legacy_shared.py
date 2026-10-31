@@ -51,7 +51,7 @@ def run(config,topology,protocol,transport,backend,output, *, validate_only=Fals
                 'shared plan/binding paths must be nonempty strings')
         plan=(config.parent/group['plan']).resolve();binding=(config.parent/group['binding']).resolve()
         b=checked_json(binding,65536)
-        budget=validate_native_inputs(t,p,b,recovery,reference_event_cap=200000)
+        budget=validate_native_inputs(t,p,b,recovery,reference_event_cap=200000,shared_resources=True)
         checked=check_indexed(plan,output/f'group-{index}-plan-check.json')
         require(checked['passed'],'shared source plan check failed')
         execution=lower(plan,b,t,local_protocol);execution.update(deepcopy(recovery))

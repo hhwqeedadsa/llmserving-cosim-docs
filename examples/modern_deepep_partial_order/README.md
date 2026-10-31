@@ -13,6 +13,12 @@ PYTHONPATH=python python3 -m moe_ub_cosim scaleout modern-deepep-check \
 
 CLI路径相对当前工作目录；输出目录/文件必须不存在，父目录必须已存在。输入不含外部路径。三个输出是原样输入`input.json`、规范化`plan.json`和hash/数量清单`manifest.json`，可以整体复制后检查。重复编译相同输入应逐字节一致；检查会重新编译核对表示，这不是独立源码或硬件验证。
 
+## 可选压缩存储
+
+完整计划超出明文16MiB时，可在上述`modern-deepep-plan`加入`--format compressed-json`并指定新输出目录。生成`plan.json.zlib`和manifest/3；`modern-deepep-check`自动识别，不需要额外参数。标准Python的`zlib.decompress`可读取内容；输入文件原样保留。解压后与相同配置的flat规范计划逐字节相同，含全部零计数、屏障、self-peer和未解析slot。
+
+默认`flat`仍为原schema/2及`plan.json`。两种格式的逻辑操作/事件上限与总保存产物16MiB上限相同；新格式展开JSON另外限64MiB，检查拒绝截断、额外流/尾部、越界、错误声明和重算hash后的语义篡改。保存空间减少不等于运行期内存、原生执行规模或网络性能提升；现代native仍使用输入配置重新编译，未获得新的运行期预算。新目录公开验收见[压缩格式证据](../../fixtures/modern_plan_storage/README.md)。
+
 ## 支持范围和输入
 
 固定DeepEP `f6aa38fe06cd4a0489e7730365d4e0114970a2f3`及NCCL `12df1a11afad322be5a204a2db890161cbf8131d`。选择fresh direct、跨rank全部RDMA、FULL连接能力由使用者声明、BF16、expanded layout、本地多专家归约、expert alignment=1、计算流等待且不推迟epilogue。所有跨rank端点可达及Hopper+等库/设备条件未由本命令验证。hybrid、缓存路由、FP8、屏蔽专家和其他归约分支明确拒绝。
@@ -33,7 +39,7 @@ CLI路径相对当前工作目录；输出目录/文件必须不存在，父目�
 
 每个`operations`记录包含数据或控制操作、源/目标rank、操作数字节、逻辑region/epoch/偏移、上下文绑定及issued/accepted/visible/local_complete事件。四种事件是未来后端的语义义务，不是已测时间点；local_complete不自动等同远端GPU可见。barrier signal的8B是信号值宽度，不能当线上包长。
 
-当前输出为`moe-modern-deepep-partial-order/2`、清单为`moe-modern-deepep-manifest/2`，输入格式不变。`path`分为`local`（显式本地指针/存储旁路）、`gin_self`（发给自己但经过GIN及self-peer QP）和`rdma`（经过GIN发给其他rank）。固定源码中的屏障signal和专家计数块即使src=dst也走GIN；rank计数的put_value及token本地复制才旁路。self-peer的物理回环路径和服务成本尚未建模，不能直接略去，也不能按普通跨rank链路发包。expert计数块另保留`source`的发送区region、epoch和元素偏移，目标区与源区分开。
+默认flat输出为`moe-modern-deepep-partial-order/2`、清单为`moe-modern-deepep-manifest/2`，输入格式不变。`path`分为`local`（显式本地指针/存储旁路）、`gin_self`（发给自己但经过GIN及self-peer QP）和`rdma`（经过GIN发给其他rank）。固定源码中的屏障signal和专家计数块即使src=dst也走GIN；rank计数的put_value及token本地复制才旁路。self-peer的物理回环路径和服务成本尚未建模，不能直接略去，也不能按普通跨rank链路发包。expert计数块另保留`source`的发送区region、epoch和元素偏移，目标区与源区分开。
 
 旧版`/1`将所有同rank操作归为local，遗漏了provider资源分类。`modern-deepep-check`明确拒绝旧清单，请用保存的`input.json`重新执行plan；不自动修改历史结果或把旧性能结论迁移到新版本。更正依据及新流程见[自发GIN语义验收](../../fixtures/modern_self_gin/README.md)。
 

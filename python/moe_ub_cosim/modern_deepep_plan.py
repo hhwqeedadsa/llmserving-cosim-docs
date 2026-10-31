@@ -5,14 +5,30 @@ and completion events are obligations for a future provider, not observations.
 """
 from collections import Counter, defaultdict
 import hashlib
+import json
 from pathlib import Path
 import shutil
+import zlib
 
-from .deepep_plan import read, encoded, reachable, fields, integer, require
+from .deepep_plan import read, encoded, reachable, fields, integer, require, unique
 
 REVISION = 'f6aa38fe06cd4a0489e7730365d4e0114970a2f3'
 NCCL_REVISION = '12df1a11afad322be5a204a2db890161cbf8131d'
 MAX_INPUT, MAX_OUTPUT = 2**20, 16*2**20
+MAX_EXPANDED_PLAN = 64*2**20
+
+
+def expand_saved_plan(stored, expected_bytes):
+    """Decode one bounded zlib stream; reject trailing bytes and concatenation."""
+    integer(expected_bytes,1,MAX_EXPANDED_PLAN,'expanded modern plan bytes')
+    decoder=zlib.decompressobj()
+    try:
+        raw=decoder.decompress(stored,expected_bytes+1)
+    except zlib.error as error:
+        raise ValueError('DeepEP plan: invalid compressed modern plan') from error
+    require(len(raw)==expected_bytes and decoder.eof and not decoder.unused_data and
+            not decoder.unconsumed_tail,'truncated, trailing or oversized compressed modern plan')
+    return raw
 
 
 def align(n, multiple):
@@ -291,12 +307,13 @@ def compile_plan(config):
                       'self-peer GIN loopback service and physical path']))
 
 
-def execute(config_path, output):
+def execute(config_path, output, *, format='flat'):
     config_path, output = Path(config_path).resolve(), Path(output).resolve()
     raw, config = read(config_path, MAX_INPUT);validate(config)
     require(len(raw) <= config['limits']['max_input_bytes'], 'modern input budget exceeded')
     require(not output.exists() and output.parent.is_dir(), 'require new output directory with existing parent')
     require(shutil.disk_usage(output.parent).free >= 8*2**30+MAX_OUTPUT, 'reserve 8GiB')
+    require(format in ('flat','compressed-json'),'unsupported modern plan format')
     plan = compile_plan(config)
     require(len(reachable(plan)) == len(plan['events']), 'cyclic modern plan')
     plan_raw = encoded(plan)
@@ -304,29 +321,47 @@ def execute(config_path, output):
                     input_sha256=hashlib.sha256(raw).hexdigest(),plan_sha256=hashlib.sha256(plan_raw).hexdigest(),
                     event_count=len(plan['events']),operation_count=len(plan['operations']),slot_count=len(plan['slots']),
                     plan_bytes=len(plan_raw),summary=plan['summary'],simulated_packets=False)
+    stored=plan_raw;filename='plan.json'
+    if format=='compressed-json':
+        require(len(plan_raw)<=MAX_EXPANDED_PLAN,'expanded modern plan budget exceeded')
+        stored=zlib.compress(plan_raw);filename='plan.json.zlib'
+        manifest.update(schema_version='moe-modern-deepep-manifest/3',encoding='zlib-json/1',
+            plan_file=filename,stored_plan_bytes=len(stored),stored_plan_sha256=hashlib.sha256(stored).hexdigest())
     manifest_raw = encoded(manifest)
-    require(len(raw)+len(plan_raw)+len(manifest_raw) <= config['limits']['max_output_bytes'], 'modern output budget exceeded')
+    require(len(raw)+len(stored)+len(manifest_raw) <= config['limits']['max_output_bytes'], 'modern output budget exceeded')
     output.mkdir();(output/'input.json').write_bytes(raw)
-    (output/'plan.json').write_bytes(plan_raw);(output/'manifest.json').write_bytes(manifest_raw)
+    (output/filename).write_bytes(stored);(output/'manifest.json').write_bytes(manifest_raw)
     return dict(passed=True,output=str(output),**manifest)
 
 
 def check(directory, output, withheld=()):
     directory, output = Path(directory).resolve(), Path(output).resolve()
     require(not output.exists() and output.parent.is_dir(), 'require new check file with existing parent')
-    raw, plan = read(directory/'plan.json',MAX_OUTPUT)
     original, config = read(directory/'input.json',MAX_INPUT)
     manifest_raw, manifest = read(directory/'manifest.json',MAX_INPUT)
+    compressed=manifest.get('schema_version')=='moe-modern-deepep-manifest/3'
     fields(manifest,'schema_version state input_sha256 plan_sha256 event_count operation_count slot_count '
-           'plan_bytes summary simulated_packets','modern manifest')
-    require(manifest['schema_version'] == 'moe-modern-deepep-manifest/2',
-            'require modern manifest/2; recompile saved input to include self-peer GIN operations')
+           'plan_bytes summary simulated_packets'+
+           (' encoding plan_file stored_plan_bytes stored_plan_sha256' if compressed else ''),'modern manifest')
+    require(manifest['schema_version'] in ('moe-modern-deepep-manifest/2','moe-modern-deepep-manifest/3'),
+            'require modern manifest/2 or /3; recompile saved input to include self-peer GIN operations')
+    if compressed:
+        require(manifest['encoding']=='zlib-json/1' and manifest['plan_file']=='plan.json.zlib',
+                'unsupported modern encoding or plan filename')
+        path=directory/'plan.json.zlib'
+        require(path.is_file() and path.stat().st_size<=MAX_OUTPUT,'missing or oversized stored modern plan')
+        stored=path.read_bytes()
+        require(len(stored)<=MAX_OUTPUT and len(stored)==manifest['stored_plan_bytes'] and
+                hashlib.sha256(stored).hexdigest()==manifest['stored_plan_sha256'],'compressed modern stored hash/size mismatch')
+        raw=expand_saved_plan(stored,manifest['plan_bytes']);plan=json.loads(raw,object_pairs_hook=unique)
+    else:
+        raw, plan = read(directory/'plan.json',MAX_OUTPUT);stored=raw
     require(manifest['state']=='offline_symbolic_partial_order_only' and manifest['simulated_packets'] is False,
             'modern manifest must declare offline, unsimulated scope')
     require(hashlib.sha256(raw).hexdigest()==manifest['plan_sha256'] and
             hashlib.sha256(original).hexdigest()==manifest['input_sha256'],'modern saved hash mismatch')
     require(encoded(compile_plan(config))==raw,'modern plan differs from compiler')
-    require(len(raw)+len(original)+len(manifest_raw)<=config['limits']['max_output_bytes'] and
+    require(len(stored)+len(original)+len(manifest_raw)<=config['limits']['max_output_bytes'] and
             len(original)<=config['limits']['max_input_bytes'],'modern saved budget exceeded')
     require(manifest['event_count']==len(plan['events']) and manifest['operation_count']==len(plan['operations'])
             and manifest['slot_count']==len(plan['slots']) and manifest['plan_bytes']==len(raw)

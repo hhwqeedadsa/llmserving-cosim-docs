@@ -103,6 +103,7 @@ def parser():
     mp = sc.add_parser('modern-deepep-plan', help='Compile pinned modern direct BF16 operations with symbolic Dispatch slots; no network/GPU execution')
     mp.add_argument('--config', type=Path, required=True, help='Fresh direct RDMA-only, expanded/local reduction and explicit launch/context declarations')
     mp.add_argument('--output', type=Path, required=True, help='New directory for input, symbolic operation/event plan and hash manifest')
+    mp.add_argument('--format', choices=('flat','compressed-json'), default='flat', help='Storage only: compressed-json keeps the complete canonical plan with bounded64MiB expansion; no runtime change')
     mc = sc.add_parser('modern-deepep-check', help='Check modern symbolic plan integrity and untimed closure; does not resolve slots or execute queues')
     mc.add_argument('--plan', type=Path, required=True)
     mc.add_argument('--output', type=Path, required=True, help='New JSON file')
@@ -319,7 +320,7 @@ def main(argv=None):
                 value = replay(args.plan, args.actions, args.output)
             elif args.scaleout_command == 'modern-deepep-plan':
                 from .modern_deepep_plan import execute
-                value = execute(args.config, args.output)
+                value = execute(args.config, args.output,format=args.format)
             elif args.scaleout_command == 'modern-deepep-check':
                 from .modern_deepep_plan import check
                 value = check(args.plan, args.output, args.withhold)

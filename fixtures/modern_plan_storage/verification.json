@@ -1,0 +1,152 @@
+{
+  "passed": true,
+  "public_cli_commands": [
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "modern-deepep-plan",
+        "--config",
+        "/home/lry/moe-ub-cosim/examples/modern_deepep_partial_order/input.json",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/modern_plan_storage_20261031/workflow/flat"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "modern-deepep-check",
+        "--plan",
+        "/home/lry/moe-ub-cosim/runs/modern_plan_storage_20261031/workflow/flat",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/modern_plan_storage_20261031/workflow/flat-all.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "modern-deepep-check",
+        "--plan",
+        "/home/lry/moe-ub-cosim/runs/modern_plan_storage_20261031/workflow/flat",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/modern_plan_storage_20261031/workflow/flat-withheld.json",
+        "--withhold",
+        "m0.dispatch.expert_count.s2.d1.visible"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "modern-deepep-plan",
+        "--config",
+        "/home/lry/moe-ub-cosim/examples/modern_deepep_partial_order/input.json",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/modern_plan_storage_20261031/workflow/compressed",
+        "--format",
+        "compressed-json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "modern-deepep-check",
+        "--plan",
+        "/home/lry/moe-ub-cosim/runs/modern_plan_storage_20261031/workflow/compressed",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/modern_plan_storage_20261031/workflow/compressed-all.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "modern-deepep-check",
+        "--plan",
+        "/home/lry/moe-ub-cosim/runs/modern_plan_storage_20261031/workflow/compressed",
+        "--output",
+        "/home/lry/moe-ub-cosim/runs/modern_plan_storage_20261031/workflow/compressed-withheld.json",
+        "--withhold",
+        "m0.dispatch.expert_count.s2.d1.visible"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0
+    }
+  ],
+  "canonical_bytes": 370403,
+  "stored_bytes": 24346,
+  "canonical_sha256": "b4648c8503f8cbe9e8236034099a8ddd62b27d473f55538c3c37042fa79f985b",
+  "old_default_bytes_identical": true,
+  "both_closures_identical": true,
+  "new_network_runs": 0,
+  "hardware_calibrated": false,
+  "new_unit_methods": 6,
+  "existing_unit_methods": 24,
+  "monitors": [
+    {
+      "stage": "baseline-monitor",
+      "peak_sampled_group_rss_bytes": 5390336,
+      "status": "completed",
+      "peak_sampled_artifact_bytes": 389120,
+      "wall_seconds": 0.11969310900894925
+    },
+    {
+      "stage": "tests-monitor",
+      "peak_sampled_group_rss_bytes": 26566656,
+      "status": "completed",
+      "peak_sampled_artifact_bytes": 401408,
+      "wall_seconds": 0.4322590579977259
+    },
+    {
+      "stage": "workflow-monitor",
+      "peak_sampled_group_rss_bytes": 36167680,
+      "status": "completed",
+      "peak_sampled_artifact_bytes": 872448,
+      "wall_seconds": 0.6595135299721733
+    },
+    {
+      "stage": "regression-monitor",
+      "peak_sampled_group_rss_bytes": 27500544,
+      "status": "completed",
+      "peak_sampled_artifact_bytes": 884736,
+      "wall_seconds": 1.0791767429909669
+    }
+  ],
+  "source_sha256": {
+    "python/moe_ub_cosim/modern_deepep_plan.py": "d23befca8412bf6cef8404fd4c0879b7feb6d53bf3338ac47da049520fcea58a",
+    "python/moe_ub_cosim/cli.py": "4c19bfb1078240800108858214a24ecc5104385672c73ce93e71f1216f10b8de",
+    "tests/unit/modern_plan_storage_test.py": "9c5ef5136de2a89d624cbdfce4788563201fba5fa3e7d7c8ac07ec4490e3acd3",
+    "tests/integration/check_modern_plan_storage.py": "c83e7bb2b6695f4a80a89fb90455066adf111372561d1f717756cf38e5849692"
+  }
+}

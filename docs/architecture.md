@@ -101,6 +101,8 @@ transactions/3在同一持久网络中串接“实际接收窗口→后续put”
 
 现代plan/manifest现为`/2`，将显式本地旁路、GIN self-peer和跨rank GIN分开。屏障和专家计数块的self-peer操作保留provider资源与完成义务；不能按src==dst直接跳过。旧清单拒绝并要求从保存输入重新编译，依据见[自发GIN更正](../fixtures/modern_self_gin/README.md)。
 
+现代计划可显式保存为`compressed-json`：规范部分顺序原样zlib压缩，独立64MiB展开上限及存储/展开hash，公开check自动识别；默认flat及其字节不变。这不改变现代native从输入重新编译的路径或运行期预算，见[存储格式](../examples/modern_deepep_partial_order/README.md#可选压缩存储)。
+
 `modern_deepep_runtime.py`提供独立的`ModernDeepEPRuntime`事件核心与`modern-deepep-replay`。调用者逐项触发已满足依赖的事件，核心不自动完成操作；实际触发slot分配时才增加计数，取得同一owner的全部slot后建立Combine通道内顺序。它额外保留Dispatch同token全部目标slot原子分配后的warp同步。事件日志可以离线核验，独立replay不接C++队列或网络；新增native入口单独提供有界的实际回调接入。
 
 运行时及窗口包装器的 `pending_dependencies()` 返回未完成事件和其未完成直接前驱的副本，包含上述动态顺序；空前驱只表示依赖满足，不能制造完成。`modern_native_wakeups.py` 的及时事件条件通过可选 `--callback-wakeups` 接入实际会话，256 次上限保持。原生端积累全部回调，订阅事件、闹钟或新排空才唤醒；该判别不新增仿真事件，缺省仍逐批交互。

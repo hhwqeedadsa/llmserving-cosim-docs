@@ -59,6 +59,11 @@ class ModernPlanStorage(unittest.TestCase):
         with self.assertRaises(ValueError):expand_saved_plan(zlib.compress(b'a'*1000000),16)
         with self.assertRaises(ValueError):expand_saved_plan(zlib.compress(b'{}'),MAX_EXPANDED_PLAN+1)
 
+    def test_non_object_manifest_rejected_as_input_error(self):
+        (self.root/'compressed/manifest.json').write_text('[]\n')
+        with self.assertRaises(ValueError):check(self.root/'compressed',self.root/'bad-object.json')
+        self.assertFalse((self.root/'bad-object.json').exists())
+
     def test_semantic_tampering_with_all_hashes_recomputed_is_rejected(self):
         raw=json.loads((self.root/'flat/plan.json').read_bytes());raw['operations'].pop()
         changed=(json.dumps(raw,separators=(',',':'))+'\n').encode();stored=zlib.compress(changed)

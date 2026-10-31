@@ -339,7 +339,7 @@ def check(directory, output, withheld=()):
     require(not output.exists() and output.parent.is_dir(), 'require new check file with existing parent')
     original, config = read(directory/'input.json',MAX_INPUT)
     manifest_raw, manifest = read(directory/'manifest.json',MAX_INPUT)
-    compressed=manifest.get('schema_version')=='moe-modern-deepep-manifest/3'
+    compressed=isinstance(manifest,dict) and manifest.get('schema_version')=='moe-modern-deepep-manifest/3'
     fields(manifest,'schema_version state input_sha256 plan_sha256 event_count operation_count slot_count '
            'plan_bytes summary simulated_packets'+
            (' encoding plan_file stored_plan_bytes stored_plan_sha256' if compressed else ''),'modern manifest')

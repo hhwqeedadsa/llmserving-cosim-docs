@@ -2,7 +2,7 @@
 
 ## 2026-10-31 现代计划压缩存储
 
-状态：`completed`（平台保存/检查增量，真实EP32压缩研究待独立验收）。连续窗口研究中两现代EP32两调用的逻辑数合法，但约21.8MB规范JSON超过旧16MiB保存上限。按[规范](modern_plan_storage_spec.md)新增显式modern-deepep-plan --format compressed-json及自动检查，旧flat三个产物与改动前逐字节一致。压缩保留全部规范字节/依赖/self-peer/未解析slot；逻辑和16MiB实际产物上限保持，新格式展开限64MiB，拒绝异常流及重算hash后的语义篡改。见[操作](../../examples/modern_deepep_partial_order/README.md#可选压缩存储)和[验收](../../fixtures/modern_plan_storage/verification.json)。6项新方法、24项旧计划/事件/窗口方法及六个公开CLI新目录流程通过；人工EP4规范370,403B→24,346B，暂扣零计数闭包与flat相同。根runs/modern_plan_storage_20261031累计300秒/256MiB/留8GiB，阶段120秒/RSS1GiB/地址2GiB；无网络、构建安装下载依赖变更GPU，不宣称新运行期规模或算法收益。平台单独提交，整体目标active。
+状态：`completed`（平台保存/检查增量，真实EP32压缩研究待独立验收）。连续窗口研究中两现代EP32两调用的逻辑数合法，但约21.8MB规范JSON超过旧16MiB保存上限。按[规范](modern_plan_storage_spec.md)新增显式modern-deepep-plan --format compressed-json及自动检查，旧flat三个产物与改动前逐字节一致。压缩保留全部规范字节/依赖/self-peer/未解析slot；逻辑和16MiB实际产物上限保持，新格式展开限64MiB，拒绝异常流及重算hash后的语义篡改。见[操作](../../examples/modern_deepep_partial_order/README.md#可选压缩存储)和[验收](../../fixtures/modern_plan_storage/verification.json)。7项新方法（含交付复查的非对象清单拒绝）、24项旧计划/事件/窗口方法及六个公开CLI新目录流程通过；人工EP4规范370,403B→24,346B，暂扣零计数闭包与flat相同。根runs/modern_plan_storage_20261031累计300秒/256MiB/留8GiB，阶段120秒/RSS1GiB/地址2GiB；无网络、构建安装下载依赖变更GPU，不宣称新运行期规模或算法收益。平台单独提交，整体目标active。
 
 ## 2026-10-31 连续Decode热点与系统容量判别
 

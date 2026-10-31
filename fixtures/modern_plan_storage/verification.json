@@ -111,7 +111,7 @@
   "both_closures_identical": true,
   "new_network_runs": 0,
   "hardware_calibrated": false,
-  "new_unit_methods": 6,
+  "new_unit_methods": 7,
   "existing_unit_methods": 24,
   "monitors": [
     {
@@ -144,9 +144,14 @@
     }
   ],
   "source_sha256": {
-    "python/moe_ub_cosim/modern_deepep_plan.py": "d23befca8412bf6cef8404fd4c0879b7feb6d53bf3338ac47da049520fcea58a",
+    "python/moe_ub_cosim/modern_deepep_plan.py": "dc1e268f5a774f24ae6f331c7045d7912a895f6710a76b1e744a13226d838100",
     "python/moe_ub_cosim/cli.py": "4c19bfb1078240800108858214a24ecc5104385672c73ce93e71f1216f10b8de",
-    "tests/unit/modern_plan_storage_test.py": "9c5ef5136de2a89d624cbdfce4788563201fba5fa3e7d7c8ac07ec4490e3acd3",
+    "tests/unit/modern_plan_storage_test.py": "178f1e024683a9acddd096f24db69afecc9af15c0e9b563203f241f520bf3b3b",
     "tests/integration/check_modern_plan_storage.py": "c83e7bb2b6695f4a80a89fb90455066adf111372561d1f717756cf38e5849692"
+  },
+  "final_manifest_boundary_check": {
+    "status": "completed",
+    "wall_seconds": 0.44243405701126903,
+    "peak_sampled_group_rss_bytes": 25513984
   }
 }

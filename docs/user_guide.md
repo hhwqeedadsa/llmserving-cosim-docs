@@ -317,3 +317,7 @@ CM384 与 DeepSeek-R1 的参数来源、当前可用数据和未校准部分见[
 需要把描述符准备和实际发布分开时，v5可选显式前缀模式，并用真实prepared回调驱动后续工作。两事务入口都支持；配置、队列阻塞及不自动补发布的规则见[准备后统一发布](../examples/scaleout_rdma_transactions/README.md#准备工作后统一发布)。
 
 选择重传可选[固定NACK等待](../examples/scaleout_nack_grace/README.md)。真实包级核对覆盖确认推进取消、重复不续期、丢包/无反馈恢复、RTO抢占、源流隔离和v5事务probe。默认省略时保持原恢复行为；同ns集成竞争/在线session等边界见示例，该经典参考不提供现代推理、硬件校准或优化收益证据。
+
+## 多个完整旧库组共享网络
+
+`scaleout deepep-shared-run`支持1或2个完整旧库组共用一套原生网络；`deepep-shared-audit`只读核验全局包及逐组DAG/内存/退休。原单组入口保持，源计划和GPU映射逐组检查，操作见[共享旧库示例](../examples/legacy_shared/README.md)。这是功能通信模型，当前验收是128端点上的人工双EP2，不表示真实双EP32/完整推理已完成。

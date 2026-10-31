@@ -565,3 +565,9 @@ v5事务启用同一模式时记录位于`transactions.transport.selective_repea
 ## 物理NIC地址输出
 
 持久网络在同GPU/plane有多个NIC时，`result.json`增加`physical_nic_addressing`，`mode=gpu_nic/1`，`bindings`逐GPU/NIC/plane保存数值IPv4和`physical_alias`。地址按`0x0c000000 + GPU*2048 + NIC`定位物理网卡，不包含任务、stream或专家标签。相应`persistent_transport.streams`（事务为`transactions.transport.streams`）增加`source_ipv4/destination_ipv4`。单NIC输入没有这些新增字段；原包捕获的`wire_headers`保存实际线上IP，ACK/CNP为反向地址。说明和范围见[共享rail示例](../examples/scaleout_multirail_native/README.md)。
+
+## 完整旧库共享结果
+
+`deepep-shared-run`保存`moe-legacy-shared-execution/1`及输入清单。实际结果的`legacy_shared.groups`按输入组顺序保存`id/stream_offset/legacy`；每组legacy内的context、操作、事件和remote_index保持局部索引，实际请求stream为`stream_offset+2*remote_index`，回复再加1。`legacy_shared.transport`是唯一全局传输，work ID、packet UID及原生时钟全局有效。顶层`finish_ns`是共享物理排空；不能作为某组隔离运行的排空。
+
+`deepep-shared-audit`输出`moe-legacy-shared-audit/1`，同时保存全局包核验、逐组完整审计及输入hash。组摘要的`group_physical_drain_measured=false`表示只测得全局排空，`route_source_verified=false`不判断源数据真假。输入检查模式只生成`validation.json`并明确没有原生准入/网络执行；详情见[共享示例](../examples/legacy_shared/README.md)。

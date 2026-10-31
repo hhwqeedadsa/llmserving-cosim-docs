@@ -14,7 +14,7 @@ namespace moe_rdma {
 // GPU source-buffer reuse. All callbacks execute on the existing ns-3 clock.
 class PersistentStreams {
  public:
-  struct Limits { unsigned streams=16, work=64, link_transmissions=200000; };
+  struct Limits { unsigned streams=16, work=64, link_transmissions=200000, reference_events=100000; };
   using Done = std::function<void()>;
   explicit PersistentStreams(Fabric& fabric);
   PersistentStreams(Fabric& fabric, Limits limits);
@@ -23,7 +23,7 @@ class PersistentStreams {
   // Passive samples in existing callbacks; no timers or periodic polling.
   void ConfigureRateCapture(const Json& config);
   void ConfigureDcqcnReference(const Json& config);
-  static void ValidateDcqcnReference(const Json& config,int64_t max_ns);
+  static void ValidateDcqcnReference(const Json& config,int64_t max_ns,unsigned event_limit=100000);
   // Called by native entry points before Fabric allocates a network.
   static void ValidateReordering(const Json& recovery,int64_t max_ns);
   void ValidateFaultBindings() const;

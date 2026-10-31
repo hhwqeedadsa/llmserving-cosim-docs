@@ -1,0 +1,69 @@
+In file included from /home/lry/moe-ub-cosim/runs/legacy_native_20261030/build/output/include/ns3/int-header.h:1,
+                 from /home/lry/moe-ub-cosim/third_party/LLMServingSim/astra-sim/extern/network_backend/ns-3/src/network/utils/custom-header.h:25,
+                 from /home/lry/moe-ub-cosim/runs/legacy_native_20261030/build/output/include/ns3/custom-header.h:1,
+                 from /home/lry/moe-ub-cosim/third_party/LLMServingSim/astra-sim/extern/network_backend/ns-3/src/network/model/net-device.h:31,
+                 from /home/lry/moe-ub-cosim/third_party/LLMServingSim/astra-sim/extern/network_backend/ns-3/src/network/model/socket.h:26,
+                 from /home/lry/moe-ub-cosim/runs/legacy_native_20261030/build/output/include/ns3/socket.h:1,
+                 from /home/lry/moe-ub-cosim/third_party/LLMServingSim/astra-sim/extern/network_backend/ns-3/src/internet/model/ipv4.h:29,
+                 from /home/lry/moe-ub-cosim/runs/legacy_native_20261030/build/output/include/ns3/ipv4.h:1,
+                 from /home/lry/moe-ub-cosim/third_party/LLMServingSim/astra-sim/extern/network_backend/ns-3/src/internet/helper/ipv4-interface-container.h:24,
+                 from /home/lry/moe-ub-cosim/third_party/LLMServingSim/astra-sim/extern/network_backend/ns-3/src/internet/helper/internet-trace-helper.h:21,
+                 from /home/lry/moe-ub-cosim/third_party/LLMServingSim/astra-sim/extern/network_backend/ns-3/src/internet/helper/internet-stack-helper.h:23,
+                 from /home/lry/moe-ub-cosim/runs/legacy_native_20261030/build/output/include/ns3/internet-stack-helper.h:1,
+                 from /home/lry/moe-ub-cosim/runs/legacy_native_20261030/build/output/include/ns3/internet-module.h:6,
+                 from /home/lry/moe-ub-cosim/backend/rdma/fabric.hh:4,
+                 from /home/lry/moe-ub-cosim/backend/rdma/persistent_streams.hh:2,
+                 from /home/lry/moe-ub-cosim/backend/rdma/legacy_executor.hh:2,
+                 from /home/lry/moe-ub-cosim/backend/rdma/legacy_deepep_probe.cc:1:
+/home/lry/moe-ub-cosim/third_party/LLMServingSim/astra-sim/extern/network_backend/ns-3/src/network/utils/int-header.h:17:24: warning: ISO C++ prohibits anonymous structs [-Wpedantic]
+   17 |                 struct {
+      |                        ^
+/home/lry/moe-ub-cosim/third_party/LLMServingSim/astra-sim/extern/network_backend/ns-3/src/network/utils/int-header.h:94:24: warning: ISO C++ prohibits anonymous structs [-Wpedantic]
+   94 |                 struct {
+      |                        ^
+/home/lry/moe-ub-cosim/third_party/LLMServingSim/astra-sim/extern/network_backend/ns-3/src/network/utils/int-header.h:101:31: warning: ISO C++ prohibits anonymous structs [-Wpedantic]
+  101 |                         struct{
+      |                               ^
+In file included from /home/lry/moe-ub-cosim/runs/legacy_native_20261030/build/output/include/ns3/trace-format.h:1,
+                 from /home/lry/moe-ub-cosim/third_party/LLMServingSim/astra-sim/extern/network_backend/ns-3/src/point-to-point/helper/qbb-helper.h:30,
+                 from /home/lry/moe-ub-cosim/runs/legacy_native_20261030/build/output/include/ns3/qbb-helper.h:1,
+                 from /home/lry/moe-ub-cosim/runs/legacy_native_20261030/build/output/include/ns3/point-to-point-module.h:7,
+                 from /home/lry/moe-ub-cosim/backend/rdma/fabric.hh:5:
+/home/lry/moe-ub-cosim/third_party/LLMServingSim/astra-sim/extern/network_backend/ns-3/src/point-to-point/model/trace-format.h:43:40: warning: ISO C++ prohibits anonymous structs [-Wpedantic]
+   43 |                                 struct {
+      |                                        ^
+In file included from /home/lry/moe-ub-cosim/runs/legacy_native_20261030/build/output/include/ns3/point-to-point-channel.h:1,
+                 from /home/lry/moe-ub-cosim/third_party/LLMServingSim/astra-sim/extern/network_backend/ns-3/src/point-to-point/model/qbb-channel.h:24,
+                 from /home/lry/moe-ub-cosim/runs/legacy_native_20261030/build/output/include/ns3/qbb-channel.h:1,
+                 from /home/lry/moe-ub-cosim/third_party/LLMServingSim/astra-sim/extern/network_backend/ns-3/src/point-to-point/model/qbb-net-device.h:24,
+                 from /home/lry/moe-ub-cosim/runs/legacy_native_20261030/build/output/include/ns3/qbb-net-device.h:1,
+                 from /home/lry/moe-ub-cosim/third_party/LLMServingSim/astra-sim/extern/network_backend/ns-3/src/point-to-point/helper/qbb-helper.h:31:
+/home/lry/moe-ub-cosim/third_party/LLMServingSim/astra-sim/extern/network_backend/ns-3/src/point-to-point/model/point-to-point-channel.h:82:18: warning: ‘virtual bool ns3::PointToPointChannel::TransmitStart(ns3::Ptr<const ns3::Packet>, ns3::Ptr<ns3::PointToPointNetDevice>, ns3::Time)’ was hidden [-Woverloaded-virtual=]
+   82 |     virtual bool TransmitStart(Ptr<const Packet> p, Ptr<PointToPointNetDevice> src, Time txTime);
+      |                  ^~~~~~~~~~~~~
+/home/lry/moe-ub-cosim/third_party/LLMServingSim/astra-sim/extern/network_backend/ns-3/src/point-to-point/model/qbb-channel.h:74:16: note:   by ‘virtual bool ns3::QbbChannel::TransmitStart(ns3::Ptr<ns3::Packet>, ns3::Ptr<ns3::QbbNetDevice>, ns3::Time)’
+   74 |   virtual bool TransmitStart (Ptr<Packet> p, Ptr<QbbNetDevice> src, Time txTime);
+      |                ^~~~~~~~~~~~~
+In file included from /home/lry/moe-ub-cosim/runs/legacy_native_20261030/build/output/include/ns3/sim-setting.h:1,
+                 from /home/lry/moe-ub-cosim/runs/legacy_native_20261030/build/output/include/ns3/point-to-point-module.h:8:
+/home/lry/moe-ub-cosim/third_party/LLMServingSim/astra-sim/extern/network_backend/ns-3/src/point-to-point/helper/sim-setting.h: In member function ‘void SimSetting::Serialize(FILE*)’:
+/home/lry/moe-ub-cosim/third_party/LLMServingSim/astra-sim/extern/network_backend/ns-3/src/point-to-point/helper/sim-setting.h:19:35: warning: variable ‘j’ set but not used [-Wunused-but-set-variable]
+   19 |                         for (auto j : i.second)
+      |                                   ^
+In file included from /home/lry/moe-ub-cosim/runs/legacy_native_20261030/build/output/include/ns3/cn-header.h:1,
+                 from /home/lry/moe-ub-cosim/runs/legacy_native_20261030/build/output/include/ns3/point-to-point-module.h:9:
+/home/lry/moe-ub-cosim/third_party/LLMServingSim/astra-sim/extern/network_backend/ns-3/src/point-to-point/model/cn-header.h: At global scope:
+/home/lry/moe-ub-cosim/third_party/LLMServingSim/astra-sim/extern/network_backend/ns-3/src/point-to-point/model/cn-header.h:92:18: warning: ISO C++ prohibits anonymous structs [-Wpedantic]
+   92 |           struct {
+      |                  ^
+/home/lry/moe-ub-cosim/backend/rdma/legacy_executor.hh: In constructor ‘moe_rdma::Context::Context(unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, uint64_t, unsigned int)’:
+/home/lry/moe-ub-cosim/backend/rdma/legacy_executor.hh:32:21: error: ‘LegacyUsesPostingQueue’ was not declared in this scope
+   32 |     Require(remote==LegacyUsesPostingQueue(s,d),"legacy local queue classification mismatch");
+      |                     ^~~~~~~~~~~~~~~~~~~~~~
+/home/lry/moe-ub-cosim/backend/rdma/legacy_executor.hh: In member function ‘void moe_rdma::LegacyExecutor::Retire(moe_rdma::Context&)’:
+/home/lry/moe-ub-cosim/backend/rdma/legacy_executor.hh:193:7: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+  193 |       if(c.remote)c.queue.CompleteThrough(o.end);graph_.Release(o.events[3]);
+      |       ^~
+/home/lry/moe-ub-cosim/backend/rdma/legacy_executor.hh:193:50: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+  193 |       if(c.remote)c.queue.CompleteThrough(o.end);graph_.Release(o.events[3]);
+      |                                                  ^~~~~~

@@ -1,0 +1,125 @@
+{
+  "passed": true,
+  "new_network_executions": 4,
+  "network_endpoints": 128,
+  "synthetic_only": true,
+  "per_group_ep_size": 2,
+  "experts_per_group": 4,
+  "shared_group_spans": [
+    {
+      "id": "group-0",
+      "start_ns": 0,
+      "finish_ns": 12097
+    },
+    {
+      "id": "group-1",
+      "start_ns": 0,
+      "finish_ns": 12084
+    }
+  ],
+  "shared_single_matches_original_single": true,
+  "only_capture_capacity_difference": [
+    33554432,
+    67108864
+  ],
+  "global_packet_capture_identical_in_single_mode": true,
+  "group_final_memory_unchanged_under_loss": true,
+  "fault_was_one_zero_token_count_packet": true,
+  "unfaulted_group_change_ns": 0,
+  "shared_audit_tamper_rejections": [
+    "id",
+    "offset",
+    "missing-group",
+    "incomplete",
+    "foreign-work",
+    "source-uid",
+    "memory",
+    "kernel-time"
+  ],
+  "native_before_fabric_rejections": [
+    {
+      "case": "overlap",
+      "command": [
+        "/home/lry/moe-ub-cosim/runs/legacy_shared_20261031/build-v2/moe-rdma-legacy-deepep",
+        "/home/lry/moe-ub-cosim/runs/legacy_shared_20261031/input/topology/topology.json",
+        "/home/lry/moe-ub-cosim/runs/legacy_shared_20261031/input/normal.json",
+        "/home/lry/moe-ub-cosim/runs/legacy_shared_20261031/verification-v2/overlap.json",
+        "/home/lry/moe-ub-cosim/runs/legacy_shared_20261031/verification-v2/overlap-result.json"
+      ],
+      "exit_code": 1,
+      "stderr": "RDMA: shared legacy groups overlap physical endpoints\n"
+    },
+    {
+      "case": "identity",
+      "command": [
+        "/home/lry/moe-ub-cosim/runs/legacy_shared_20261031/build-v2/moe-rdma-legacy-deepep",
+        "/home/lry/moe-ub-cosim/runs/legacy_shared_20261031/input/topology/topology.json",
+        "/home/lry/moe-ub-cosim/runs/legacy_shared_20261031/input/normal.json",
+        "/home/lry/moe-ub-cosim/runs/legacy_shared_20261031/verification-v2/identity.json",
+        "/home/lry/moe-ub-cosim/runs/legacy_shared_20261031/verification-v2/identity-result.json"
+      ],
+      "exit_code": 1,
+      "stderr": "RDMA: duplicate/invalid shared legacy group id\n"
+    },
+    {
+      "case": "stream-count",
+      "command": [
+        "/home/lry/moe-ub-cosim/runs/legacy_shared_20261031/build-v2/moe-rdma-legacy-deepep",
+        "/home/lry/moe-ub-cosim/runs/legacy_shared_20261031/input/topology/topology.json",
+        "/home/lry/moe-ub-cosim/runs/legacy_shared_20261031/input/normal.json",
+        "/home/lry/moe-ub-cosim/runs/legacy_shared_20261031/verification-v2/stream-count.json",
+        "/home/lry/moe-ub-cosim/runs/legacy_shared_20261031/verification-v2/stream-count-result.json"
+      ],
+      "exit_code": 1,
+      "stderr": "RDMA: legacy context count mismatch\n"
+    },
+    {
+      "case": "reference-cap",
+      "command": [
+        "/home/lry/moe-ub-cosim/runs/legacy_shared_20261031/build-v2/moe-rdma-legacy-deepep",
+        "/home/lry/moe-ub-cosim/runs/legacy_shared_20261031/input/topology/topology.json",
+        "/home/lry/moe-ub-cosim/runs/legacy_shared_20261031/input/normal.json",
+        "/home/lry/moe-ub-cosim/runs/legacy_shared_20261031/verification-v2/reference-cap.json",
+        "/home/lry/moe-ub-cosim/runs/legacy_shared_20261031/verification-v2/reference-cap-result.json"
+      ],
+      "exit_code": 1,
+      "stderr": "RDMA: legacy integer outside supported range\n"
+    },
+    {
+      "case": "transport",
+      "command": [
+        "/home/lry/moe-ub-cosim/runs/legacy_shared_20261031/build-v2/moe-rdma-legacy-deepep",
+        "/home/lry/moe-ub-cosim/runs/legacy_shared_20261031/input/topology/topology.json",
+        "/home/lry/moe-ub-cosim/runs/legacy_shared_20261031/input/normal.json",
+        "/home/lry/moe-ub-cosim/runs/legacy_shared_20261031/verification-v2/transport.json",
+        "/home/lry/moe-ub-cosim/runs/legacy_shared_20261031/verification-v2/transport-result.json"
+      ],
+      "exit_code": 1,
+      "stderr": "RDMA: shared groups must use the declared common transport\n"
+    },
+    {
+      "case": "fields",
+      "command": [
+        "/home/lry/moe-ub-cosim/runs/legacy_shared_20261031/build-v2/moe-rdma-legacy-deepep",
+        "/home/lry/moe-ub-cosim/runs/legacy_shared_20261031/input/topology/topology.json",
+        "/home/lry/moe-ub-cosim/runs/legacy_shared_20261031/input/normal.json",
+        "/home/lry/moe-ub-cosim/runs/legacy_shared_20261031/verification-v2/fields.json",
+        "/home/lry/moe-ub-cosim/runs/legacy_shared_20261031/verification-v2/fields-result.json"
+      ],
+      "exit_code": 1,
+      "stderr": "RDMA: invalid shared legacy schema/fields\n"
+    }
+  ],
+  "old_study_backend_unmodified": true,
+  "backend_sha256": "0f47a53fabb5a89d3e3d140b5831c329865a331dfcdabe35ceb6090c229629a2",
+  "inputs": {
+    "shared-single/execution.json": "adefbd1b00ef3323f0075ab414fb30d6c2efae803dfa0cd9d069a07b3741d7ae",
+    "old-single/execution.json": "74522607532d7df3ab76cf3b3ded0619d42027a4e0375f4b9dfa5ed193ac8e21",
+    "shared-two/execution.json": "1c05c44c52b14874da010b347697579a2dcf85a1cff140a9d14a7318eb827aa5",
+    "shared-fault/execution.json": "1c05c44c52b14874da010b347697579a2dcf85a1cff140a9d14a7318eb827aa5"
+  },
+  "source_sha256": "7c4db286cc99d7b3e12ff108311f5920f443cf3d9031286afbb16f8136cd61df",
+  "algorithm_innovation_validated": false,
+  "real_ep32_shared_execution_validated": false,
+  "scope": "Functional platform evidence only; no inference/model/GPU performance or shared-load benefit claim"
+}

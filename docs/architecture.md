@@ -241,3 +241,7 @@ A3 局部资源模板为通信核分别分配计算资源，普通模型计算�
 公开准备入口从完整模型服务输入选择一个 Decode 步骤和连续原始 MoE 块，容量仍覆盖完整部署。前端将所有声明请求提交为初始批次，各层依赖在同一次 ASTRA/ns-3 执行中自然推进；空网络从 0 ns 开始，首块输入与该步骤 KV 声明已就绪。块内相关计算保留，模型前后处理与采样不执行。完成后的结果和保存包明确标记有限范围，不能作为完整生成 Token 或任意中途快照。接口见[用户指南](user_guide.md)，事件与记录见[输出数据](record_storage.md)。
 
 持久传输的可选恢复与工作提交共享原有ns-3时钟。应用发布扩展合法字节范围，实际TX才启动源计时，真实ACK/NACK推进信用；完整重复数据仅补发ACK，不再次向事务解析器交付。连接空闲后可继续追加，排空与显式关闭分别检查。当前行为与输入见[持久恢复](../examples/scaleout_rdma_streams/README.md#可选的持久连接丢包恢复)，不涉及连接重建或现代GPU可见性。
+
+## 完整旧库的多组执行
+
+`legacy_shared.py`逐组核验原索引计划与binding，再生成`moe-legacy-shared-execution/1`。同一`legacy_deepep_probe.cc`在共享模式中仅创建一个Fabric和一个PersistentStreams；各`LegacyExecutor`保留自己的事件图、窗口、专家拷贝及退休，stream区间不交叠，全局work ID只分配一次。各组kernel完成可早于共享网络排空，不将排空时间相加。公开操作和当前功能验收范围见[共享示例](../examples/legacy_shared/README.md)。

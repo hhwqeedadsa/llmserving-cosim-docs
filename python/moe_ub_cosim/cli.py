@@ -80,6 +80,13 @@ def parser():
     da.add_argument('--run',type=Path,required=True)
     da.add_argument('--protocol',type=Path,required=True)
     da.add_argument('--output',type=Path,required=True,help='New JSON file with complete functional audit and input hashes; never executes a network')
+    dsb=sc.add_parser('deepep-shared-build',help='Compile the complete legacy driver/stream adapter against a pinned prebuilt Fabric and ns-3 runtime; no download or ns-3 rebuild')
+    for name in ('runtime','identity','output'):dsb.add_argument('--'+name,type=Path,required=True)
+    ds=sc.add_parser('deepep-shared-run',help='Run one or two complete independent legacy groups on one shared native Clos, clock and transport; functional BF16 only')
+    for name in ('config','topology','protocol','transport','backend','output'):ds.add_argument('--'+name,type=Path,required=True)
+    ds.add_argument('--validate-only',action='store_true',help='Verify all source plans and aggregate Python budgets; never invoke native admission/network')
+    dsa=sc.add_parser('deepep-shared-audit',help='Read-only global packet and per-group complete legacy audit; no route provenance or GPU calibration claim')
+    for name in ('run','protocol','output'):dsa.add_argument('--'+name,type=Path,required=True)
     dc.add_argument('--output', type=Path, required=True, help='New JSON file with dependency closure and blocked device kernel completions')
     dc.add_argument('--withhold', action='append', default=[], help='Exact event ID to withhold from closure; repeatable')
     hp = sc.add_parser('hybrid-deepep-plan', help='Compile bounded server/rail routing, counts and Dispatch tail obligations; not a complete Hybrid DAG or network execution')
@@ -331,6 +338,16 @@ def main(argv=None):
                             validate_only=args.validate_only)
             elif args.scaleout_command == 'deepep-audit':
                 from .legacy_audit import run
+                value=run(args.run,args.protocol,args.output)
+            elif args.scaleout_command == 'deepep-shared-build':
+                from .legacy_shared_build import build
+                value=build(args.runtime,args.identity,args.output)
+            elif args.scaleout_command == 'deepep-shared-run':
+                from .legacy_shared import run
+                value=run(args.config,args.topology,args.protocol,args.transport,args.backend,args.output,
+                          validate_only=args.validate_only)
+            elif args.scaleout_command == 'deepep-shared-audit':
+                from .legacy_shared_audit import run
                 value=run(args.run,args.protocol,args.output)
             elif args.scaleout_command == 'sweep':
                 from .scaleout_sweep import run

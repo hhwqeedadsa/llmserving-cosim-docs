@@ -14,7 +14,8 @@ static CustomHeader StreamHeader(Ptr<const Packet> packet) {
 PersistentStreams::PersistentStreams(Fabric& fabric):PersistentStreams(fabric,Limits{}) {}
 PersistentStreams::PersistentStreams(Fabric& fabric,Limits limits):PersistentStreams(fabric,limits,Json()) {}
 PersistentStreams::PersistentStreams(Fabric& fabric,Limits limits,const Json& recovery,bool transaction_peer_copies):fabric_(fabric),limits_(limits) {
-  Require(limits.streams>0 && limits.streams<=16384 && limits.work>0 && limits.work<=65536 &&
+  Require(limits.streams>0 && limits.streams<=32768 && limits.work>0 && limits.work<=65536 &&
+          limits.reference_events>0 && limits.reference_events<=200000 &&
           limits.link_transmissions>0 && limits.link_transmissions<=2000000,
           "persistent stream count limits out of supported range");
   Require(!fabric_.persistent_stream_mode_ && fabric_.flows_.empty() && !fabric_.resource_tracking_ && !fabric_.recovery_ &&
@@ -118,7 +119,8 @@ void PersistentStreams::ConfigureRateCapture(const Json& config) {
           "invalid source_rate_capture window or event budget");
   rate_start_=config.at("start_ns");rate_end_=config.at("end_ns");rate_limit_=config.at("max_events");
 }
-void PersistentStreams::ValidateDcqcnReference(const Json& c,int64_t max_ns) {
+void PersistentStreams::ValidateDcqcnReference(const Json& c,int64_t max_ns,unsigned event_limit) {
+  Require(event_limit>0 && event_limit<=200000,"invalid reference event capacity");
   Require(c.is_object() && c.size()==12 && c.at("mode")=="figure7_reference/1","invalid dcqcn_reference mode/fields");
   for(const auto* key:{"np_interval_ns","alpha_interval_ns","recovery_interval_ns","recovery_bytes",
       "min_rate_bps","additive_bps","hyper_bps","fast_recovery_rounds","cnp_model_bytes","max_events"})
@@ -128,7 +130,7 @@ void PersistentStreams::ValidateDcqcnReference(const Json& c,int64_t max_ns) {
   Require(c.at("alpha_interval_ns")>c.at("np_interval_ns") &&
           c.at("recovery_bytes")>=512 && c.at("recovery_bytes")<=1073741824 &&
           c.at("fast_recovery_rounds")<=100 && c.at("cnp_model_bytes")>=30 && c.at("cnp_model_bytes")<=512 &&
-          c.at("max_events")<=100000,"reference parameters out of supported range");
+          c.at("max_events")<=event_limit,"reference parameters out of supported range");
   for(const auto* key:{"min_rate_bps","additive_bps","hyper_bps"})
     Require(c.at(key)<=1000000000000000ull,"reference rate parameter exceeds supported range");
   const auto& gain=c.at("gain");
@@ -136,7 +138,7 @@ void PersistentStreams::ValidateDcqcnReference(const Json& c,int64_t max_ns) {
 }
 void PersistentStreams::ConfigureDcqcnReference(const Json& c) {
   Require(streams_.empty() && !reference_limit_,"late or duplicate dcqcn_reference configuration");
-  ValidateDcqcnReference(c,fabric_.MaxSimNs());
+  ValidateDcqcnReference(c,fabric_.MaxSimNs(),limits_.reference_events);
   reference_config_=c;reference_limit_=c.at("max_events");
   for(unsigned node=0;node<fabric_.drivers_.size();++node)
     for(auto& nic:fabric_.drivers_[node]->m_rdma->m_nic)if(nic.dev)

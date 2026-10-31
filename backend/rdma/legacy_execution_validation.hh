@@ -3,7 +3,7 @@
 #include "legacy_posting_admission.hh"
 #include <set>
 namespace moe_rdma {
-inline void ValidateLegacyExecution(const Json& input,const Json& topology,const Json& protocol) {
+inline void ValidateLegacyExecution(const Json& input,const Json& topology,const Json& protocol,unsigned reference_cap=100000) {
   auto integer=[](const Json& value,uint64_t low,uint64_t high) {
     Require(value.is_number_integer() && !value.is_boolean() && value>=low && value<=high,"legacy integer outside supported range");return value.get<uint64_t>();
   };
@@ -57,7 +57,7 @@ inline void ValidateLegacyExecution(const Json& input,const Json& topology,const
   Require(posting.AllPublished(),"legacy plan leaves an unpublished posting tail");
   Require(depth>=posting.MinimumDepth(),"legacy queue depth cannot hold next publication span: need at least "+
     std::to_string(posting.MinimumDepth())+"; ACK cannot free unpublished work; rejected before Fabric");
-  const auto configured=integer(input.at("dcqcn_reference").at("max_events"),1,100000);
+  const auto configured=integer(input.at("dcqcn_reference").at("max_events"),1,reference_cap);
   Require(configured>=minimum_reference_events,
     "legacy reference max_events below mandatory source sends: need at least "+std::to_string(minimum_reference_events)+
     "; retries and feedback require more; rejected before Fabric");

@@ -115,19 +115,13 @@ def lower(directory, binding, topology, protocol):
     return work
 
 
-def run(plan, binding, topology, protocol, transport, backend, output, *, validate_only=False):
-    require(type(validate_only) is bool, 'validate_only must be boolean')
-    plan, binding, topology, protocol, transport, backend, output = map(lambda p: Path(p).resolve(),
-        (plan, binding, topology, protocol, transport, backend, output))
-    require(not output.exists() and output.parent.is_dir(), 'legacy output must be a new directory with existing parent')
-    require(backend.is_file() and os.access(backend, os.X_OK), 'pass legacy_deepep executable from rdma-build')
-    require(shutil.disk_usage(output.parent).free >= 8*2**30+512*2**20, 'legacy output needs 8GiB reserve')
-    t = checked_json(topology/'topology.json', 8388608); p = checked_json(protocol, 65536)
-    b = checked_json(binding, 65536); recovery = checked_json(transport, 65536)
+def validate_native_inputs(t,p,b,recovery, *, reference_event_cap=100000):
+    """Validate common declarations; only the shared driver raises record capacity."""
     fields(b, 'schema_version rank_to_gpu queue_depth publication memory_model', 'legacy binding')
     require(isinstance(b['rank_to_gpu'], list) and len(b['rank_to_gpu']) >= 2 and
             all(type(g) is int for g in b['rank_to_gpu']), 'rank_to_gpu needs at least two integer GPU IDs')
     fields(recovery, 'transport_recovery dcqcn_reference', 'legacy native transport')
+    integer(recovery['dcqcn_reference'].get('max_events'), 1, reference_event_cap, 'reference max_events')
     require(recovery['transport_recovery'].get('mode') == 'selective_repeat/1', 'legacy native requires selective repeat')
     r = recovery['transport_recovery']
     require(type(r.get('max_events')) is int and 1 <= r['max_events'] <= 500000, 'legacy recovery event budget')
@@ -141,6 +135,7 @@ def run(plan, binding, topology, protocol, transport, backend, output, *, valida
         source_nic=1, destination_nic=1, wire_port=20000+i, queue_depth=b['queue_depth']) for i in range(2)]
     from copy import deepcopy
     descriptor.update(deepcopy(recovery)); descriptor['transport_recovery']['max_events'] = min(100000, r['max_events'])
+    descriptor['dcqcn_reference']['max_events']=min(100000,recovery['dcqcn_reference']['max_events'])
     from .scaleout_streams import validate as validate_streams
     descriptor_protocol = dict(p)
     descriptor_protocol.pop('faults', None)
@@ -149,6 +144,19 @@ def run(plan, binding, topology, protocol, transport, backend, output, *, valida
     require(budget['wall_seconds'] <= 120 and budget['rss_bytes'] <= 2*2**30 and
             budget['address_bytes'] <= 4*2**30 and budget['result_json_bytes'] <= 256*2**20,
             'legacy native requires bounded120s/2GiB RSS/4GiB address/256MiB result')
+    return budget
+
+
+def run(plan, binding, topology, protocol, transport, backend, output, *, validate_only=False):
+    require(type(validate_only) is bool, 'validate_only must be boolean')
+    plan, binding, topology, protocol, transport, backend, output = map(lambda p: Path(p).resolve(),
+        (plan, binding, topology, protocol, transport, backend, output))
+    require(not output.exists() and output.parent.is_dir(), 'legacy output must be a new directory with existing parent')
+    require(backend.is_file() and os.access(backend, os.X_OK), 'pass legacy_deepep executable from rdma-build')
+    require(shutil.disk_usage(output.parent).free >= 8*2**30+512*2**20, 'legacy output needs 8GiB reserve')
+    t = checked_json(topology/'topology.json', 8388608); p = checked_json(protocol, 65536)
+    b = checked_json(binding, 65536); recovery = checked_json(transport, 65536)
+    budget=validate_native_inputs(t,p,b,recovery)
     output.mkdir()
     # The existing checker compares every generated line, not hashes alone.
     checked = check_indexed(plan, output/'plan-check.json')

@@ -1,0 +1,10 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>完整旧库的多组共享网络</title><style>body{font:17px/1.8 system-ui,sans-serif;max-width:1000px;margin:36px auto;padding:0 20px;color:#183047;background:#f5f8fc}table{width:100%;border-collapse:collapse;background:white}td,th{text-align:left;padding:12px;border-bottom:1px solid #ddd}.callout{padding:18px;background:#eaf1fb;border-left:5px solid #4377ad}a{color:#075ba6}</style>
+<h1>完整旧库的多组共享网络</h1><p class="callout">本轮补齐系统能力：两个独立完整调用使用同一套交换机、时钟和可靠传输，各自保留通知、缓冲和完成条件。四个128端点Clos功能网络均通过完整审计；这还不是新算法或真实多任务性能实验。</p>
+<p>每组EP2、4专家、H128、3个人工Top1 token，映射分别为[0,64]与[4,68]。只有4个端点参与双组，其余124端点无该组工作；不能称128卡满载。它们是明确的人工功能输入，不是R1真实路由。</p>
+<table><tr><th>条件</th><th>各组完整调用 µs</th><th>共享物理排空 µs</th></tr><tr><td>old-single</td><td>12.097</td><td>24.111</td></tr><tr><td>shared-single</td><td>12.097</td><td>24.111</td></tr><tr><td>shared-two</td><td>12.097 / 12.084</td><td>24.111</td></tr><tr><td>shared-fault</td><td>29.049 / 12.084</td><td>41.062</td></tr></table>
+<h2>系统正确性得到了哪些证据</h2><p>共享单组与原单组的全部应用事件、操作、内存及物理包记录一致；传输记录仅允许32MiB/64MiB捕获容量字段不同。双组都从0开始，真实执行区间重叠，使用不同全局stream区间；并非把两个独立网络的时间相加。</p>
+<p>故障条件只丢弃第一组的一包36B零token count通知。第一组调用由12.097µs拖到29.049µs，第二组为12.084µs；最终两组内存与正常条件相同。当前小例没有观察到第二组调用变慢，不能将该功能测试作为组间优化收益证据。</p>
+<h2>为什么只丢36B，却多发432B</h2><p>实际源端记录有5次重复发送，均在stream6：17.000µs重复36B；17.001µs重复288B；17.007µs重复36B；18.095µs重复36B；18.096µs重复36B，总432B。丢包数量、重复载体字节与有效激活字节不是同一口径；通知与后续数据共用持久流，不能用“丢一包就只重传一包”代替实际协议记录。这里不推断网卡硬件行为或把它称为新漏洞。</p>
+<p>独立核验拒绝8类共享审计篡改；原生在Fabric前拒绝6类非法组合。18项Python相关检查通过。编译初次因抽取执行器后缺少直接头文件引用失败，已修正并保留日志，旧运行库未被改写。无下载、安装、依赖升级、GPU或ns-3重编。</p>
+<p>下一步仍需独立制定真实来源双EP32及成熟恢复对照，先证明共享干扰和收益空间，再进入算法设计。本轮只验收人工双EP2功能，不预报真实推理收益。</p>
+<p><a href="analysis.json">逐条件审计及重复包</a> · <a href="verification.json">独立核验</a> · <a href="receipt.json">资源与源码身份</a> · <a href="../../examples/legacy_shared/README.md">公开操作</a></p></html>

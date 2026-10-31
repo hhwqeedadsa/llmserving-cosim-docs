@@ -1,0 +1,57 @@
+{
+  "schema_version": "moe-scaleout-rdma/2",
+  "cc_mode": 1,
+  "payload_bytes": 1024,
+  "chunk_bytes": 4096,
+  "ack_interval_bytes": 1,
+  "base_rtt_ns": 14000,
+  "switch_buffer_bytes": 8388608,
+  "ecn_by_rate": {
+    "400000000000": {
+      "kmin_bytes": 131072,
+      "kmax_bytes": 524288,
+      "pmax": 1.0
+    }
+  },
+  "seed": 11,
+  "limits": {
+    "max_gpus": 128,
+    "max_switches": 32,
+    "max_links": 1024,
+    "max_messages": 65536,
+    "max_queue_events": 2000000,
+    "queue_capture": "summary",
+    "max_sim_ns": 5000000,
+    "wall_seconds": 120,
+    "rss_bytes": 2147483648,
+    "address_bytes": 4294967296,
+    "artifact_bytes": 536870912,
+    "result_json_bytes": 268435456
+  },
+  "switch_counter_storage": "port_dense",
+  "queue_metrics": false,
+  "packet_capture": {
+    "nodes": [
+      0,
+      4,
+      64,
+      68
+    ],
+    "start_ns": 0,
+    "end_ns": 5000000,
+    "max_events": 200000,
+    "wire_headers": true
+  },
+  "faults": [
+    {
+      "node": 0,
+      "port": 1,
+      "message_id": 6,
+      "kind": "data",
+      "sequence": 0,
+      "start_ns": 0,
+      "end_ns": 5000000,
+      "count": 1
+    }
+  ]
+}

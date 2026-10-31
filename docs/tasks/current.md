@@ -1,5 +1,15 @@
 # 当前任务与交接
 
+## 2026-10-31 完整旧库多组共享网络能力
+
+状态：`completed`（共享平台功能；真实双EP32研究和整体目标仍active）。上一目标轮为progress：发布8a5e6da088，真实选择单组对照表明成熟绕路收回98.64%故障额外等待。本轮新增公开`deepep-shared-build/run/audit`，各组保留原EP、专家、通知、缓冲和退休，共用唯一Fabric/Simulator/持久传输。操作见[共享示例](../../examples/legacy_shared/README.md)，结果见[验收](../../fixtures/legacy_shared/README.md)、[网页](../../fixtures/legacy_shared/report.html)和[核验](../../fixtures/legacy_shared/verification.json)。
+
+四个128Clos网络各一次：原/共享单组均12.097µs，共享双组12.097/12.084µs，精确丢一包零token通知后29.049/12.084µs，物理排空24.111/41.062µs。每组EP2/E4/H128/3个人工Top1 token，完整22操作/110事件，不是满载、R1真实流量或双EP32性能。第二组未变慢，不能称新算法收益。重复5次432B与一包36B丢失分别核算，两组最终内存一致。
+
+18项Python方法、8类共享审计篡改和6类Fabric前拒绝通过，旧单组应用/包一致，旧二进制hash保持。首次编译缺直接头文件引用、首版汇总相对链接检查失败保留并修正，无网络重跑。只重编两个平台单元，固定库复制并核hash，未重编ns-3。
+
+按[规范](legacy_shared_spec.md)验收，预算根`runs/legacy_shared_20261031`累计1800受监控秒/2GiB/卷留8GiB；构建900秒，其余120秒/RSS2GiB/地址4GiB，实际资源见[摘要](../../fixtures/legacy_shared/receipt.json)。新共享入口参考日志至多200,000，原单组/通用仍100,000。无安装、下载、GPU或依赖升级，发布只到user分支。下一步独立冻结真实来源双EP32的请求划分、共享/直接故障路径及成熟恢复对照，先判别干扰和收益空间，不将本次功能验收当论文贡献。
+
 ## 2026-10-31 真实专家选择下的完整旧库通信研究
 
 状态：`completed`（本轮研究判别和网页交付；整体研究目标active）。上一轮c35721160c完成人工输入功能验收；本轮独立接入15份R1-AWQ/MMLU原件，每份固定取layer3/entry1一个Decode token。三个128端点Clos/EP32网络各一次，完整旧库调用16,624操作/66,848事件，保留全部通知。15个源rank与其余96个空闲端点分别说明；AWQ来源与BF16功能载体不混同，不执行服务调度、数值模型或GPU。

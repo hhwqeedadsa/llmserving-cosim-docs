@@ -67,7 +67,7 @@ transactions/3的put可从注册源窗口读取实际字节。`RemoteMemory`按o
 
 另有[low_latency_posting.hh](rdma/low_latency_posting.hh)，在上述核心上表达固定DeepEP v1.2.1的条件同步发布策略。`ReservePut`显式接收一条逻辑put的1—32条WQE及message index；`Post`在完整就绪前缀可用后，按`(message_index+1)%4==0`判断发布，通知则强制发布。较后工作已发布时，迟到请求取max，不倒退或再次消费。`SplitRegisteredPut`只按调用方声明的注册区边界拆分，不从真实路由推测地址。正常availability检查仍是有界功能约束；不是低延迟库跳过槽检查、物理门铃、异步代理或现代GIN实现。专用旧库入口已复用此核心，两个通用适配器的默认提交规则不变，公开CPU操作与范围见[示例](../examples/low_latency_posting/README.md)。
 
-`moe-rdma-legacy-deepep TOPOLOGY PROTOCOL EXECUTION NEW_RESULT`为完整旧索引计划的专用驱动，构建清单名`legacy_deepep`。它使用一套原生Fabric/Simulator、每专家上下文的32位目标内存与双向MRT1载体，不经过ASTRA或LLMServingSim请求调度器。公共`deepep-run`先核验原计划；原生内部EXECUTION并非完整源语义认证接口。流内部容量16,384及SR记录500,000只为新有界驱动提供能力；原通用Python入口的限制不变。原生准入先检查必需源发送日志下界，避免已知不可能的配置建网。首次完整网络因日志容量失败；经授权分配100,000条参考日志后，EP32/E256正常/故障和EP32/E128连续两调用均通过功能审计。范围与复现见[旧库示例](../examples/legacy_native/README.md)。
+`moe-rdma-legacy-deepep TOPOLOGY PROTOCOL EXECUTION NEW_RESULT`为完整旧索引计划的专用驱动，构建清单名`legacy_deepep`。它使用一套原生Fabric/Simulator、每专家上下文的32位目标内存与双向MRT1载体，不经过ASTRA或LLMServingSim请求调度器。公共`deepep-run`先核验原计划；原生内部EXECUTION并非完整源语义认证接口。单组有向流上限16,384，新增共享驱动总上限32,768；SR记录仍最多500,000，原通用Python入口的限制不变。原生准入先检查必需源发送日志下界，避免已知不可能的配置建网。首次完整网络因日志容量失败；经授权分配100,000条参考日志后，EP32/E256正常/故障和EP32/E128连续两调用均通过功能审计。范围与复现见[旧库示例](../examples/legacy_native/README.md)。
 
 ## 现有原生服务扩展
 
@@ -375,3 +375,7 @@ transactions/5在两事务入口上支持RemoteMemory稀疏窗口：逻辑范围
 ## 分阶段发送队列
 
 transactions/5会话可声明staged_prefix/1，以独立COMMIT控制prepare_operations和publish_operations。先纯校验完整命令，再准备、更新连续ready前缀并发布；原生ACK/回复仍决定资源释放。descriptor_ready与prepared分别回调，晚发布用max保持单调，不占GPU串行lane、不自动flush。静态probe拒绝该模式；见[用户示例](../examples/scaleout_staged_publication/README.md)及[规范](../docs/tasks/staged_publication_spec.md)。
+
+## 完整旧库多组共享执行
+
+`legacy_deepep`同时识别单组`moe-legacy-native-execution/1`及共享`moe-legacy-shared-execution/1`。共享模式有1或2个`LegacyExecutor`，分别持有原rank/专家/事件/内存，一份`PersistentStreams`统一拥有全部网卡回调、全局stream/work身份和物理排空。禁止在同一Fabric创建多个传输控制器覆盖回调。组报告不复制全局传输；只有全部组和共享网络完成后才关闭Simulator。新共享驱动允许显式200,000参考日志，原单组和通用接口仍100,000；范围及准入见[共享示例](../examples/legacy_shared/README.md)。
